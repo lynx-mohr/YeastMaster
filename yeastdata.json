@@ -1,0 +1,25 @@
+{
+  "v": 1,
+  "yeasts": [
+    {
+      "n": "WLP001 California Ale",
+      "s": "Cali Ale",
+      "l": false,
+      "steps": [
+        {"d": 4, "t": 18.5, "st": "Primary"},
+        {"d": 7, "t": 21.0, "st": "D-Rest"},
+        {"d": 14, "t": 2.0, "st": "Crash"}
+      ]
+    },
+    {
+      "n": "WLP833 German Bock",
+      "s": "Bavarian",
+      "l": true,
+      "steps": [
+        {"d": 10, "t": 10.5, "st": "Cold Ferm"},
+        {"d": 14, "t": 16.0, "st": "D-Rest"},
+        {"d": 28, "t": 2.0, "st": "Lagering"}
+      ]
+    }
+  ]
+}
