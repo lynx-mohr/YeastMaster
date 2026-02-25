@@ -1,25 +1,56 @@
 {
-  "v": 1,
   "yeasts": [
-    {
-      "n": "WLP001 California Ale",
-      "s": "Cali Ale",
-      "l": false,
-      "steps": [
-        {"d": 4, "t": 18.5, "st": "Primary"},
-        {"d": 7, "t": 21.0, "st": "D-Rest"},
-        {"d": 14, "t": 2.0, "st": "Crash"}
-      ]
-    },
-    {
-      "n": "WLP833 German Bock",
-      "s": "Bavarian",
-      "l": true,
-      "steps": [
-        {"d": 10, "t": 10.5, "st": "Cold Ferm"},
-        {"d": 14, "t": 16.0, "st": "D-Rest"},
-        {"d": 28, "t": 2.0, "st": "Lagering"}
-      ]
-    }
+    { "n": "1968: Standard Ale", "s": "London Ale", "steps": [{"d":3,"t":19.0,"st":"Primary"},{"d":7,"t":21.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "1968: High Ester", "s": "London Ale", "steps": [{"d":3,"t":21.0,"st":"Primary"},{"d":7,"t":23.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "1968: Low Ester", "s": "London Ale", "steps": [{"d":3,"t":18.0,"st":"Primary"},{"d":7,"t":20.0,"st":"Ramp"},{"d":14,"t":5.0,"st":"Crash"}] },
+    { "n": "1968: ESB Fruity", "s": "London Ale", "steps": [{"d":3,"t":22.0,"st":"Primary"},{"d":7,"t":23.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "1968: ESB Clean", "s": "London Ale", "steps": [{"d":3,"t":18.5,"st":"Primary"},{"d":7,"t":21.0,"st":"Ramp"},{"d":14,"t":3.0,"st":"Crash"}] },
+    
+    { "n": "WLP920: Bavarian Lager", "s": "Old Bavarian", "steps": [{"d":10,"t":10.5,"st":"Primary"},{"d":14,"t":16.0,"st":"Ramp"},{"d":28,"t":2.0,"st":"Lager"}] },
+    { "n": "WLP920: Quick Lager", "s": "Old Bavarian", "steps": [{"d":6,"t":12.5,"st":"Primary"},{"d":10,"t":16.5,"st":"Ramp"},{"d":21,"t":3.0,"st":"Lager"}] },
+    { "n": "WLP920: Brulosophy Lager", "s": "Old Bavarian", "steps": [{"d":4,"t":19.0,"st":"Primary"},{"d":7,"t":21.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+
+    { "n": "B45: Standard Ale", "s": "Imp. Gnome", "steps": [{"d":3,"t":19.0,"st":"Primary"},{"d":7,"t":21.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "B45: High Ester", "s": "Imp. Gnome", "steps": [{"d":3,"t":21.0,"st":"Primary"},{"d":7,"t":23.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "B45: Low Ester", "s": "Imp. Gnome", "steps": [{"d":3,"t":18.0,"st":"Primary"},{"d":7,"t":20.0,"st":"Ramp"},{"d":14,"t":5.0,"st":"Crash"}] },
+    { "n": "B45: Classic Gnome", "s": "Imp. Gnome", "steps": [{"d":4,"t":20.0,"st":"Primary"},{"d":8,"t":23.5,"st":"Ramp"},{"d":14,"t":3.0,"st":"Crash"}] },
+    { "n": "B45: Spicy Gnome", "s": "Imp. Gnome", "steps": [{"d":3,"t":22.0,"st":"Primary"},{"d":7,"t":25.0,"st":"Ramp"},{"d":14,"t":3.0,"st":"Crash"}] },
+
+    { "n": "1084: Standard Ale", "s": "Irish Ale", "steps": [{"d":3,"t":19.0,"st":"Primary"},{"d":7,"t":21.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "1084: High Ester", "s": "Irish Ale", "steps": [{"d":3,"t":21.0,"st":"Primary"},{"d":7,"t":23.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "1084: Low Ester", "s": "Irish Ale", "steps": [{"d":3,"t":18.0,"st":"Primary"},{"d":7,"t":20.0,"st":"Ramp"},{"d":14,"t":5.0,"st":"Crash"}] },
+    { "n": "1084: Irish Dry Stout", "s": "Irish Ale", "steps": [{"d":5,"t":18.0,"st":"Primary"},{"d":10,"t":20.0,"st":"Ramp"},{"d":14,"t":3.0,"st":"Crash"}] },
+    { "n": "1084: Irish Red/Malty", "s": "Irish Ale", "steps": [{"d":4,"t":20.0,"st":"Primary"},{"d":9,"t":21.5,"st":"Ramp"},{"d":14,"t":3.0,"st":"Crash"}] },
+
+    { "n": "3944: Standard Ale", "s": "Belgian Wit", "steps": [{"d":3,"t":19.0,"st":"Primary"},{"d":7,"t":21.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "3944: High Ester", "s": "Belgian Wit", "steps": [{"d":3,"t":21.0,"st":"Primary"},{"d":7,"t":23.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "3944: Low Ester", "s": "Belgian Wit", "steps": [{"d":3,"t":18.0,"st":"Primary"},{"d":7,"t":20.0,"st":"Ramp"},{"d":14,"t":5.0,"st":"Crash"}] },
+    { "n": "3944: Classic Wit", "s": "Belgian Wit", "steps": [{"d":4,"t":18.0,"st":"Primary"},{"d":9,"t":21.5,"st":"Ramp"},{"d":14,"t":6.0,"st":"Crash"}] },
+    { "n": "3944: Summer Wit", "s": "Belgian Wit", "steps": [{"d":3,"t":20.0,"st":"Primary"},{"d":8,"t":23.0,"st":"Ramp"},{"d":14,"t":6.0,"st":"Crash"}] },
+
+    { "n": "WLP833: Trad. Bock", "s": "German Bock", "steps": [{"d":12,"t":10.0,"st":"Primary"},{"d":16,"t":16.0,"st":"Ramp"},{"d":35,"t":2.0,"st":"Lager"}] },
+    { "n": "WLP833: Fast Bock", "s": "German Bock", "steps": [{"d":7,"t":12.0,"st":"Primary"},{"d":11,"t":17.0,"st":"Ramp"},{"d":24,"t":3.0,"st":"Lager"}] },
+
+    { "n": "WLP007: Standard Ale", "s": "Dry English", "steps": [{"d":3,"t":19.0,"st":"Primary"},{"d":7,"t":21.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "WLP007: High Ester", "s": "Dry English", "steps": [{"d":3,"t":21.0,"st":"Primary"},{"d":7,"t":23.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "WLP007: Low Ester", "s": "Dry English", "steps": [{"d":3,"t":18.0,"st":"Primary"},{"d":7,"t":20.0,"st":"Ramp"},{"d":14,"t":5.0,"st":"Crash"}] },
+    { "n": "WLP007: Dry West Coast", "s": "Dry English", "steps": [{"d":3,"t":18.5,"st":"Primary"},{"d":7,"t":21.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "WLP007: Monster Stout", "s": "Dry English", "steps": [{"d":3,"t":20.0,"st":"Primary"},{"d":7,"t":21.5,"st":"Ramp"},{"d":14,"t":3.0,"st":"Crash"}] },
+
+    { "n": "1318: Standard Ale", "s": "London III", "steps": [{"d":3,"t":19.0,"st":"Primary"},{"d":7,"t":21.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "1318: High Ester", "s": "London III", "steps": [{"d":3,"t":21.0,"st":"Primary"},{"d":7,"t":23.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "1318: Low Ester", "s": "London III", "steps": [{"d":3,"t":18.0,"st":"Primary"},{"d":7,"t":20.0,"st":"Ramp"},{"d":14,"t":5.0,"st":"Crash"}] },
+
+    { "n": "2565: Standard Ale", "s": "Kolsch", "steps": [{"d":3,"t":19.0,"st":"Primary"},{"d":7,"t":21.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "2565: High Ester", "s": "Kolsch", "steps": [{"d":3,"t":21.0,"st":"Primary"},{"d":7,"t":23.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "2565: Low Ester", "s": "Kolsch", "steps": [{"d":3,"t":18.0,"st":"Primary"},{"d":7,"t":20.0,"st":"Ramp"},{"d":14,"t":5.0,"st":"Crash"}] },
+    { "n": "2565: Authentic Kölsch", "s": "Kolsch", "steps": [{"d":7,"t":14.5,"st":"Primary"},{"d":11,"t":18.0,"st":"Ramp"},{"d":25,"t":2.0,"st":"Lager"}] },
+    { "n": "2565: Hybrid Ale/Alt", "s": "Kolsch", "steps": [{"d":5,"t":18.0,"st":"Primary"},{"d":9,"t":20.0,"st":"Ramp"},{"d":21,"t":3.0,"st":"Crash"}] },
+
+    { "n": "WLP095: Standard Ale", "s": "Burlington", "steps": [{"d":3,"t":19.0,"st":"Primary"},{"d":7,"t":21.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "WLP095: High Ester", "s": "Burlington", "steps": [{"d":3,"t":21.0,"st":"Primary"},{"d":7,"t":23.0,"st":"Ramp"},{"d":14,"t":2.0,"st":"Crash"}] },
+    { "n": "WLP095: Low Ester", "s": "Burlington", "steps": [{"d":3,"t":18.0,"st":"Primary"},{"d":7,"t":20.0,"st":"Ramp"},{"d":14,"t":5.0,"st":"Crash"}] },
+    { "n": "WLP095: Burlington Hazy", "s": "Burlington", "steps": [{"d":4,"t":20.0,"st":"Primary"},{"d":8,"t":22.0,"st":"Ramp"},{"d":14,"t":5.0,"st":"Crash"}] },
+    { "n": "WLP095: Conan Style IPA", "s": "Burlington", "steps": [{"d":3,"t":19.5,"st":"Primary"},{"d":7,"t":21.0,"st":"Ramp"},{"d":14,"t":3.0,"st":"Crash"}] }
   ]
 }
