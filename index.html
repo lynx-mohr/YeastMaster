@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YeastMaster Live</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="oled-screen">
+        
+        <div class="main-display">
+            <div class="left-col">
+                <div class="wifi-icon">
+                    <div class="bar bar1"></div> <div class="bar bar2"></div> <div class="bar bar3"></div> <div class="bar bar4"></div>
+                </div>
+
+                <div class="carboy-wrapper">
+                    <svg viewBox="0 0 100 100" class="carboy-svg">
+                        <line x1="35" y1="5" x2="65" y2="5" class="glass-line" />
+                        <line x1="42" y1="5" x2="42" y2="15" class="glass-line" />
+                        <line x1="58" y1="5" x2="58" y2="15" class="glass-line" />
+                        <circle cx="50" cy="55" r="40" class="glass-line" />
+
+                        <g id="bubble-stream" clip-path="url(#mask-flask)"></g>
+
+                        <defs>
+                            <clipPath id="mask-flask">
+                                <circle cx="50" cy="55" r="40" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+                    <div class="beer-temp"><span id="temp-beer-val">--.-</span>C</div>
+                </div>
+            </div>
+
+            <div class="right-col">
+                <div class="highlight-box" id="yeast-strain">Old Bavarian</div>
+                <div class="profile-name" id="yeast-profile">Brulosophy</div>
+                <div class="action-status">
+                    <span id="action-icon">▼</span> <span id="cooling-status">COOLING</span>
+                </div>
+                <div class="air-temp">Air: <span id="air-temp-val">--.-</span>C</div>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <hr class="separator-line">
+            <div class="system-status">Status: <span id="status-text">INIT...</span></div>
+        </div>
+
+        <div class="ferm-data-section">
+            <div class="ferm-header">FERM. DATA</div>
+            <hr class="separator-line">
+            <div class="ferm-row">Day:  <span id="ferm-day-val">--.-</span></div>
+            <div class="ferm-row">Goal: <span id="ferm-goal-val">21.0</span>C</div>
+        </div>
+
+        <div class="chart-section">
+            <div class="chart-header">TEMP HISTORY</div>
+            <hr class="separator-line">
+            <div class="chart-container">
+                <canvas id="beer-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Äkta OLED Monokrom (Ljusgrå/Vit mot Svart) */
+:root {
+    --oled-color: #e0e0e0; /* Krispigt ljusgrå/vit */
+    --oled-bg: #000000;
+}
+
+body {
+    background-color: #111; 
+    color: var(--oled-color);
+    font-family: 'VT323', monospace; 
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Låt den börja i toppen istället för mitten på mobilen */
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Anpassad för mobil-proportioner */
+.oled-screen {
+    width: 100%;
+    max-width: 450px; /* Perfekt bredd för mobil/surfplatta */
+    background-color: var(--oled-bg);
+    border: 3px solid #333; 
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Lite luft mellan sektionerna */
+    
+    /* En mycket subtil vit glow för att det ska se ut som en skärm, inte papper */
+    text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* --- DEL 1: HUVUDVYN --- */
+.main-display {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-col {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.wifi-icon {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 25px;
+    margin-bottom: 10px;
+}
+.wifi-icon .bar {
+    width: 6px;
+    background-color: var(--oled-color);
+}
+.bar1 { height: 25%; }
+.bar2 { height: 50%; }
+.bar3 { height: 75%; }
+.bar4 { height: 100%; }
+
+.carboy-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
+.carboy-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.glass-line {
+    fill: none;
+    stroke: var(--oled-color);
+    stroke-width: 3;
+    stroke-dasharray: 6 3; /* Pixlig känsla */
+    stroke-linecap: square;
+}
+
+.beer-temp {
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.right-col {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; 
+    text-align: right;
+}
+
+.highlight-box {
+    background-color: var(--oled-color);
+    color: var(--oled-bg);
+    font-size: 2rem;
+    padding: 2px 10px;
+    text-shadow: none; 
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.profile-name {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.action-status {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+
+.air-temp {
+    font-size: 1.8rem;
+}
+
+/* --- DEL 2: STATUS OCH LINJER --- */
+.bottom-section {
+    margin-top: 5px;
+}
+
+.separator-line {
+    border: none;
+    border-top: 3px solid var(--oled-color);
+    margin-bottom: 8px;
+}
+
+.system-status {
+    font-size: 2.2rem;
+}
+
+/* --- DEL 3: FERM DATA --- */
+.ferm-data-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px dashed #444; /* Avgränsare mellan skärmvyerna */
+}
+
+.ferm-header {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.ferm-row {
+    font-size: 2.2rem;
+    margin-top: 5px;
+}
+
+/* Animationer */
+/* --- NY STYLING FÖR DE NYA BUBBLORNA --- */
+.bubble-particle {
+    fill: var(--oled-color);
+    /* En subtil glow gör att de ser mer ut som äkta lysande pixlar */
+    filter: drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.6));
+    opacity: 0.9;
+}
+
+/* ... (Hela din tidigare style.css är kvar, vi lägger bara till detta i slutet) ... */
+
+/* --- DEL 4: TEMP HISTORIK GRAF --- */
+.chart-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px dashed #444; /* Avgränsare */
+}
+
+.chart-header {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.chart-container {
+    width: 100%;
+    height: 120px; /* Håll grafen ganska låg för rätt känsla */
+    position: relative;
+}
+
+/* Vi stylar själva "canvas" elementet som biblioteket ritar på */
+#beer-chart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* --- ANIMATION FÖR BLINKANDE IKON --- */
+@keyframes blink-hardware {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
+.blinking-icon {
+    animation: blink-hardware 1s infinite;
+    display: inline-block;
+}
+
+/* Själva rörelsen för blinket */
+@keyframes blink-hardware {
+    0% { opacity: 1; }
+    49% { opacity: 1; }
+    50% { opacity: 0; }
+    99% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* --- MOBILANPASSNING: VERSION "THE SWEET SPOT" --- */
+@media (max-width: 600px) {
+    #wifi-status, .wifi-status, .wifi-icon, .drawWifiIcon, svg[id*="wifi"], [id*="wifi"] {
+        display: none !important;
+    }
+
+    .carboy-wrapper {
+        width: 160px;
+        margin: 0;
+        position: relative;
+        height: 160px; 
+    }
+
+    /* 1. JUSTERA TEMP I FLASKAN (Sänkt från 35% till 45%) */
+    .beer-temp {
+        font-size: 32px;
+        font-weight: bold;
+        position: absolute;
+        /* 45% från toppen bör placera den mitt i magen */
+        top: 53% !important; 
+        left: 50%;
+        transform: translate(-50%, -50%) !important;
+        bottom: auto !important;
+    }
+
+    .right-col {
+        flex: 1;
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        padding-right: 5px;
+    }
+
+    /* Vi behåller de "kaxiga" storlekarna på texterna */
+    .highlight-box {
+        font-size: 21px; 
+        padding: 5px 10px;
+        margin-bottom: 6px;
+    }
+
+    .profile-name {
+        font-size: 22px; 
+        margin-bottom: 10px;
+    }
+
+    .action-status {
+        font-size: 25px; 
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    .air-temp {
+        font-size: 25px; 
+        color: #ccc;
+    }
+
+    .chart-container {
+        height: 150px;
+    }
+}
