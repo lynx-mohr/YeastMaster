@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const PORT = 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server körs på http://192.168.1.188:${PORT}`);
 });
@@ -47,4 +46,5 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`YeastMaster Server körs på port ${PORT}`);
+
 });
