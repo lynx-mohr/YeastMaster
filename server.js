@@ -12,6 +12,9 @@ app.use(express.json());
 const cors = require('cors'); 
 app.use(cors()); 
 
+// Använd miljövariabeln PORT om den finns, annars 3000 (för lokalt bruk)
+const PORT = process.env.PORT || 3000;
+
 // 1. MOTTAGARE (Från ESP32)
 app.post('/api/update', (req, res) => {
     // Lägg till strain och profile här
@@ -41,10 +44,10 @@ app.get('/api/data', (req, res) => {
     res.json(tempHistory);
 });
 
-// Använd miljövariabeln PORT om den finns, annars 3000 (för lokalt bruk)
-const PORT = process.env.PORT || 3000;
+
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`YeastMaster Server körs på port ${PORT}`);
 
 });
+
