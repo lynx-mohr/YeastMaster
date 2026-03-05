@@ -1,66 +1,70 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs'); // Behövs för att spara filer
-const path = require('path');
+const { MongoClient } = require('mongodb');
 
 const app = express();
-
-// 1. DEFINIERA PORTEN HÖGST UPP
 const PORT = process.env.PORT || 3000;
 
-// 2. FILNAMN FÖR SPARAD DATA
-const DATA_FILE = 'data.json';
+// Hämta din Connection String från Render's miljövariabler (vi fixar detta i nästa steg)
+const uri = process.env.MONGO_URI;
+const client = new MongoClient(uri);
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.static('.')); // Gör att din index.html kan visas på nätet
+let db, logsCollection;
 
-// Ladda befintlig data om filen finns
-let tempHistory = [];
-if (fs.existsSync(DATA_FILE)) {
+// Anslut till databasen
+async function connectDB() {
     try {
-        const fileData = fs.readFileSync(DATA_FILE, 'utf8');
-        tempHistory = JSON.parse(fileData);
+        await client.connect();
+        db = client.db('yeastMasterDB');
+        logsCollection = db.collection('fermentationLogs');
+        console.log("Ansluten till MongoDB!");
     } catch (e) {
-        tempHistory = [];
+        console.error("Kunde inte ansluta till MongoDB:", e);
     }
 }
+connectDB();
+
+app.use(cors());
+app.use(express.json());
+app.use(express.static('.'));
 
 // 1. MOTTAGARE (Från ESP32)
-app.post('/api/update', (req, res) => {
+app.post('/api/update', async (req, res) => {
     const { temp, air_temp, day, status, token, strain, profile } = req.body;
 
-    // Säkerhetskoll
     if (token !== "YeastMaster-Super-Secret-2024") {
         return res.status(401).send({ error: "Obehörig!" });
     }
 
     const newEntry = {
-        time: new Date().toISOString(),
+        time: new Date(), // Spara som riktigt datum-objekt
         temp,
         air_temp,
         day,
         status,
-        strain, 
-        profile 
+        strain,
+        profile
     };
 
-    tempHistory.push(newEntry);
-    
-    // Spara till filen
-    fs.writeFileSync(DATA_FILE, JSON.stringify(tempHistory, null, 2));
-    
-    console.log(`Ny mätning sparad: ${temp}°C`);
-    res.status(200).send({ message: "Data sparad!" });
+    try {
+        await logsCollection.insertOne(newEntry);
+        res.status(200).send({ message: "Data sparad i molnet!" });
+    } catch (e) {
+        res.status(500).send({ error: "Kunde inte spara till databasen" });
+    }
 });
 
 // 2. SÄNDARE (Till din Webb-dashboard)
-app.get('/api/data', (req, res) => {
-    res.json(tempHistory);
+app.get('/api/data', async (req, res) => {
+    try {
+        // Hämta de senaste 1000 mätningarna, sorterade efter tid
+        const history = await logsCollection.find().sort({ time: 1 }).limit(1000).toArray();
+        res.json(history);
+    } catch (e) {
+        res.status(500).send({ error: "Kunde inte hämta data" });
+    }
 });
 
-// 3. STARTA SERVER (Bara en gång, och längst ner!)
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`YeastMaster Server är live på port ${PORT}`);
+    console.log(`Server körs på port ${PORT}`);
 });
