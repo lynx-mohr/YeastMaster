@@ -7,148 +7,204 @@
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Kraftfull inloggningsskärm som täcker allt */
+        #login-container { 
+            display: none; /* Styrs av JS */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000; 
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'VT323', monospace;
+        }
+
+        .login-box { 
+            background: #1a1a1a; 
+            padding: 2.5rem; 
+            border-radius: 12px; 
+            border: 2px solid #f39c12;
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.2);
+            width: 320px;
+            text-align: center;
+        }
+
+        .login-box h2 { color: #f39c12; margin-bottom: 1.5rem; letter-spacing: 2px; }
+
+        input { 
+            display: block; 
+            width: 100%; 
+            margin: 15px 0; 
+            padding: 12px; 
+            background: #000;
+            border: 1px solid #444; 
+            color: #fff;
+            border-radius: 4px; 
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            box-sizing: border-box;
+        }
+
+        button#login-btn { 
+            width: 100%; 
+            padding: 12px; 
+            background: #f39c12; 
+            border: none; 
+            color: black; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+        }
+
+        button#login-btn:hover { background: #e67e22; }
+
+        /* Dashboard Wrapper - Dold tills man loggat in */
+        #dashboard-wrapper { display: none; }
+
+        #logout-btn { 
+            position: fixed; 
+            top: 10px; 
+            right: 10px; 
+            padding: 5px 15px; 
+            background: #333; 
+            color: #999; 
+            border: 1px solid #444; 
+            cursor: pointer; 
+            font-family: 'VT323', monospace;
+            z-index: 1000;
+        }
+        #logout-btn:hover { background: #444; color: #fff; }
+    </style>
 </head>
 <body>
-    <div class="oled-screen">
+
+    <div id="login-container">
+        <div class="login-box">
+            <h2>YEASTMASTER CLOUD</h2>
+            <input type="email" id="login-email" placeholder="USER EMAIL">
+            <input type="password" id="login-password" placeholder="PASSWORD">
+            <button id="login-btn">ACCESS SYSTEM</button>
+            <p id="error-msg" style="color: #ff4444; margin-top: 15px;"></p>
+        </div>
+    </div>
+
+    <div id="dashboard-wrapper">
+        <button id="logout-btn">LOGOUT</button>
         
-        <div class="main-display">
-            <div class="left-col">
-                <div class="wifi-icon">
-                    <div class="bar bar1"></div> <div class="bar bar2"></div> <div class="bar bar3"></div> <div class="bar bar4"></div>
+        <div class="oled-screen">
+            <div class="main-display">
+                <div class="left-col">
+                    <div class="wifi-icon">
+                        <div class="bar bar1"></div> <div class="bar bar2"></div> <div class="bar bar3"></div> <div class="bar bar4"></div>
+                    </div>
+                    <div class="carboy-wrapper">
+                        <svg viewBox="0 0 100 100" class="carboy-svg">
+                            <line x1="35" y1="5" x2="65" y2="5" class="glass-line" />
+                            <line x1="42" y1="5" x2="42" y2="15" class="glass-line" />
+                            <line x1="58" y1="5" x2="58" y2="15" class="glass-line" />
+                            <circle cx="50" cy="55" r="40" class="glass-line" />
+                            <g id="bubble-stream" clip-path="url(#mask-flask)"></g>
+                            <defs>
+                                <clipPath id="mask-flask">
+                                    <circle cx="50" cy="55" r="40" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <div class="beer-temp"><span id="temp-beer-val">--.-</span>C</div>
+                    </div>
                 </div>
 
-                <div class="carboy-wrapper">
-                    <svg viewBox="0 0 100 100" class="carboy-svg">
-                        <line x1="35" y1="5" x2="65" y2="5" class="glass-line" />
-                        <line x1="42" y1="5" x2="42" y2="15" class="glass-line" />
-                        <line x1="58" y1="5" x2="58" y2="15" class="glass-line" />
-                        <circle cx="50" cy="55" r="40" class="glass-line" />
-
-                        <g id="bubble-stream" clip-path="url(#mask-flask)"></g>
-
-                        <defs>
-                            <clipPath id="mask-flask">
-                                <circle cx="50" cy="55" r="40" />
-                            </clipPath>
-                        </defs>
-                    </svg>
-                    <div class="beer-temp"><span id="temp-beer-val">--.-</span>C</div>
+                <div class="right-col">
+                    <div class="highlight-box" id="yeast-strain">Old Bavarian</div>
+                    <div class="profile-name" id="yeast-profile">Brulosophy</div>
+                    <div class="action-status">
+                        <span id="action-icon">▼</span> <span id="cooling-status">COOLING</span>
+                    </div>
+                    <div class="air-temp">Air: <span id="air-temp-val">--.-</span>C</div>
                 </div>
             </div>
 
-            <div class="right-col">
-                <div class="highlight-box" id="yeast-strain">Old Bavarian</div>
-                <div class="profile-name" id="yeast-profile">Brulosophy</div>
-                <div class="action-status">
-                    <span id="action-icon">▼</span> <span id="cooling-status">COOLING</span>
-                </div>
-                <div class="air-temp">Air: <span id="air-temp-val">--.-</span>C</div>
+            <div class="bottom-section">
+                <hr class="separator-line">
+                <div class="system-status">Status: <span id="status-text">INIT...</span></div>
             </div>
-        </div>
 
-        <div class="bottom-section">
-            <hr class="separator-line">
-            <div class="system-status">Status: <span id="status-text">INIT...</span></div>
-        </div>
+            <div class="ferm-data-section">
+                <div class="ferm-header">FERM. DATA</div>
+                <hr class="separator-line">
+                <div class="ferm-row">Day:  <span id="ferm-day-val">--.-</span></div>
+                <div class="ferm-row">Goal: <span id="ferm-goal-val">21.0</span>C</div>
+            </div>
 
-        <div class="ferm-data-section">
-            <div class="ferm-header">FERM. DATA</div>
-            <hr class="separator-line">
-            <div class="ferm-row">Day:  <span id="ferm-day-val">--.-</span></div>
-            <div class="ferm-row">Goal: <span id="ferm-goal-val">21.0</span>C</div>
-        </div>
-
-        <div class="chart-section">
-            <div class="chart-header">TEMP HISTORY</div>
-            <hr class="separator-line">
-            <div class="chart-container">
-                <canvas id="beer-chart"></canvas>
+            <div class="chart-section">
+                <div class="chart-header">TEMP HISTORY</div>
+                <hr class="separator-line">
+                <div class="chart-container">
+                    <canvas id="beer-chart"></canvas>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="app.js"></script>
 
-<style>
-  #login-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; }
-  .login-box { background: #f4f4f4; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-  input { display: block; width: 100%; margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
-  button { width: 100%; padding: 10px; background: #f39c12; border: none; color: white; border-radius: 4px; cursor: pointer; font-weight: bold; }
-  button:hover { background: #e67e22; }
-  #dashboard-wrapper { display: none; } /* Dold som standard */
-</style>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-<div id="login-container">
-  <div class="login-box">
-    <h2>YeastMaster Login</h2>
-    <input type="email" id="login-email" placeholder="Din e-post">
-    <input type="password" id="login-password" placeholder="Ditt lösenord">
-    <button id="login-btn">Logga in</button>
-    <p id="error-msg" style="color: red; font-size: 12px;"></p>
-  </div>
-</div>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBjxNijHivEY4u4bBIiXCR1hbUBdMxrq0Q",
+            authDomain: "yeastmaster-cloud.firebaseapp.com",
+            projectId: "yeastmaster-cloud",
+            storageBucket: "yeastmaster-cloud.firebasestorage.app",
+            messagingSenderId: "395831218175",
+            appId: "1:395831218175:web:66bd69450b8325c9f361ca",
+            measurementId: "G-LFNPE9EHXB"
+        };
 
-<div id="dashboard-wrapper">
-  <button id="logout-btn" style="width: auto; position: absolute; top: 10px; right: 10px; font-size: 12px; background: #666;">Logga ut</button>
-  <h1 style="text-align: center;">Välkommen till YeastMaster Cloud</h1>
-  </div>
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        const loginContainer = document.getElementById('login-container');
+        const dashboardWrapper = document.getElementById('dashboard-wrapper');
+        const errorMsg = document.getElementById('error-msg');
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBjxNijHivEY4u4bBIiXCR1hbUBdMxrq0Q",
-    authDomain: "yeastmaster-cloud.firebaseapp.com",
-    projectId: "yeastmaster-cloud",
-    storageBucket: "yeastmaster-cloud.firebasestorage.app",
-    messagingSenderId: "395831218175",
-    appId: "1:395831218175:web:66bd69450b8325c9f361ca",
-    measurementId: "G-LFNPE9EHXB"
-  };
+        // Lyssna på inloggning
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginContainer.style.display = 'none';
+                dashboardWrapper.style.display = 'block';
+                logEvent(analytics, 'login_success');
+            } else {
+                loginContainer.style.display = 'flex';
+                dashboardWrapper.style.display = 'none';
+            }
+        });
 
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const auth = getAuth(app);
+        // Logga in-knapp
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            signInWithEmailAndPassword(auth, email, password)
+                .catch((error) => {
+                    errorMsg.innerText = "ACCESS DENIED: INVALID CREDENTIALS";
+                });
+        });
 
-  const loginContainer = document.getElementById('login-container');
-  const dashboardWrapper = document.getElementById('dashboard-wrapper');
-
-  // 1. LYSSNA PÅ INLOGGNINGSSTATUS
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // ANVÄNDARE ÄR INLOGGAD
-      loginContainer.style.display = 'none';
-      dashboardWrapper.style.display = 'block';
-      logEvent(analytics, 'login_success');
-    } else {
-      // INGEN INLOGGAD
-      loginContainer.style.display = 'flex';
-      dashboardWrapper.style.display = 'none';
-    }
-  });
-
-  // 2. LOGIK FÖR ATT LOGGA IN
-  document.getElementById('login-btn').addEventListener('click', () => {
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-    
-    signInWithEmailAndPassword(auth, email, password)
-      .catch((error) => {
-        document.getElementById('error-msg').innerText = "Fel e-post eller lösenord!";
-      });
-  });
-
-  // 3. LOGIK FÖR ATT LOGGA UT
-  document.getElementById('logout-btn').addEventListener('click', () => {
-    signOut(auth);
-  });
-</script>
-
+        // Logga ut-knapp
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            signOut(auth);
+        });
+    </script>
 </body>
-
 </html>
-
-
-
