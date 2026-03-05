@@ -69,4 +69,35 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  // Din konfiguration (klistra in den här)
+  const firebaseConfig = {
+    apiKey: "AIzaSyBjxNijHivEY4u4bBIiXCR1hbUBdMxrq0Q",
+    authDomain: "yeastmaster-cloud.firebaseapp.com",
+    projectId: "yeastmaster-cloud",
+    storageBucket: "yeastmaster-cloud.firebasestorage.app",
+    messagingSenderId: "395831218175",
+    appId: "1:395831218175:web:66bd69450b8325c9f361ca",
+    measurementId: "G-LFNPE9EHXB"
+  };
+
+  // Starta Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const auth = getAuth(app);
+
+  // SKICKA DATA TILL KARTAN:
+  // Vi loggar att någon har öppnat dashboarden
+  logEvent(analytics, 'dashboard_visit', {
+    device: 'web'
+  });
+
+  console.log("Firebase är laddat och kartan bör lysa upp snart!");
+</script>
