@@ -1,156 +1,92 @@
-// 1. ÄNDRING: Vi tar bort den fasta IP-adressen. 
-// Genom att bara skriva '/api/data' letar webbläsaren på samma server som sidan körs ifrån.
-const SERVER_URL = '/api/data'; 
-let myChart;
+// Byt ut adressen till din riktiga Render-adress
+const SERVER_URL = 'https://soulofbeer-live.onrender.com/api/data';
 
-async function fetchData() {
+async function updateDashboard() {
     try {
         const response = await fetch(SERVER_URL);
         const data = await response.json();
 
-        if (data && data.length > 0) {
+        if (data.length > 0) {
             const latest = data[data.length - 1];
-            updateDashboard(latest);
-            updateGraph(data); 
+
+            // 1. Temperaturer
+            document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
+            document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
+
+            // 2. Jäst och Profil
+            document.getElementById('yeast-strain').innerText = latest.strain || "Unknown";
+            document.getElementById('yeast-profile').innerText = latest.profile || "Standard";
+
+            // 3. Status (Fasen längst ner)
+            document.getElementById('status-text').innerText = latest.status || "RUNNING";
+
+            // 4. Action (Kyla/Värme vid pilen)
+            const actionLabel = document.getElementById('cooling-status');
+            const actionIcon = document.getElementById('action-icon');
+            const action = latest.action || "IDLE";
+            
+            actionLabel.innerText = action;
+
+            if (action === "COOLING") {
+                actionIcon.innerText = "▼";
+                actionIcon.style.color = "#00aaff"; // Blå pil ner
+            } else if (action === "HEATING") {
+                actionIcon.innerText = "▲";
+                actionIcon.style.color = "#ff4400"; // Röd pil upp
+            } else {
+                actionIcon.innerText = "-";
+                actionIcon.style.color = "#888";
+            }
+
+            // 5. Framsteg
+            document.getElementById('ferm-day-val').innerText = latest.day ? latest.day.toFixed(1) : "0.0";
+
+            // 6. Uppdatera Grafen
+            updateChart(data);
         }
     } catch (error) {
-        console.error('Kunde inte hämta data:', error);
+        console.error("Kunde inte hämta data:", error);
     }
 }
 
-function updateDashboard(latest) {
-    document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
-    document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
-    document.getElementById('ferm-day-val').innerText = latest.day.toFixed(1);
-    
-    const rawStatus = latest.status ? latest.status.toUpperCase() : "IDLE";
-    document.getElementById('status-text').innerText = rawStatus;
+// Kör uppdatering var 20:e sekund
+setInterval(updateDashboard, 20000);
+updateDashboard(); // Kör en gång direkt vid start
 
-    const icon = document.getElementById('action-icon');
-    const coolingLabel = document.getElementById('cooling-status');
-
-    icon.classList.remove('blinking-icon');
-    coolingLabel.classList.remove('blinking-icon');
-
-    if (rawStatus.includes("COOL") || rawStatus.includes("CRASH")) {
-        icon.innerText = "▼";
-        coolingLabel.innerText = "COOLING";
-        icon.classList.add('blinking-icon');
-    } 
-    else if (rawStatus.includes("HEAT") || rawStatus.includes("RAMP")) {
-        icon.innerText = "▲";
-        coolingLabel.innerText = "HEATING";
-        icon.classList.add('blinking-icon');
-    } 
-    else {
-        icon.innerText = "-";
-        coolingLabel.innerText = "IDLE";
-    }
-
-    if (latest.strain) document.getElementById('yeast-strain').innerText = latest.strain;
-    if (latest.profile) document.getElementById('yeast-profile').innerText = latest.profile;
-}
-
-function updateGraph(allData) {
+// --- GRAF-FUNKTION (Enkel version) ---
+let beerChart;
+function updateChart(data) {
     const ctx = document.getElementById('beer-chart').getContext('2d');
-    const now = new Date();
-    const twentyFourHoursAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
-    const sliceData = allData.filter(d => new Date(d.time) >= twentyFourHoursAgo);
+    const labels = data.map(d => new Date(d.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const temps = data.map(d => d.temp);
 
-    const labels = sliceData.map(d => {
-        const date = new Date(d.time);
-        return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    });
-    
-    const temps = sliceData.map(d => d.temp);
-
-    if (!myChart) {
-        myChart = new Chart(ctx, {
+    if (beerChart) {
+        beerChart.data.labels = labels;
+        beerChart.data.datasets[0].data = temps;
+        beerChart.update();
+    } else {
+        beerChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Temp',
+                    label: 'Beer Temp',
                     data: temps,
-                    borderColor: '#fff',
+                    borderColor: '#f39c12',
                     borderWidth: 2,
-                    pointRadius: 0,
-                    tension: 0.3,
-                    fill: false
+                    fill: false,
+                    pointRadius: 0
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
                 scales: {
-                    x: {
-                        display: true,
-                        grid: { color: '#222' },
-                        ticks: { 
-                            color: '#888',
-                            font: { family: 'VT323', size: 12 },
-                            maxTicksLimit: 6,
-                            maxRotation: 0
-                        }
-                    },
-                    y: {
-                        display: true,
-                        grid: { color: '#333' },
-                        ticks: { 
-                            color: '#fff', 
-                            font: { family: 'VT323', size: 14 } 
-                        }
-                    }
+                    x: { ticks: { color: '#888', maxRotation: 0 } },
+                    y: { ticks: { color: '#888' } }
                 },
-                animation: { duration: 0 }
+                plugins: { legend: { display: false } }
             }
         });
-    } else {
-        myChart.data.labels = labels;
-        myChart.data.datasets[0].data = temps;
-        myChart.update();
     }
 }
-
-// 2. ÄNDRING: Fixade stavfelet här. 
-// Tidigare stod det 'Data', men funktionen heter 'fetchData'.
-setInterval(fetchData, 5000); 
-fetchData();
-
-function startBubbles() {
-    const stream = document.getElementById('bubble-stream');
-    if (!stream) return;
-
-    setInterval(() => {
-        const statusElement = document.getElementById('status-text');
-        if (!statusElement) return;
-        const status = statusElement.innerText.toUpperCase();
-        
-        const idleStatuses = ["IDLE", "FINISHED", "READY", "SYNC ERROR", "UNKNOWN", "-", ""];
-        if (idleStatuses.includes(status)) return;
-
-        const bubble = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        const x = 40 + Math.random() * 20; 
-        
-        bubble.setAttribute("cx", x);
-        bubble.setAttribute("cy", "90");
-        bubble.setAttribute("r", 0.5 + Math.random() * 1.5);
-        bubble.setAttribute("fill", "none");
-        bubble.setAttribute("stroke", "white");
-        bubble.setAttribute("stroke-width", "0.3");
-        
-        bubble.style.transition = "all 2s ease-in";
-        bubble.style.opacity = "0.8";
-        stream.appendChild(bubble);
-
-        setTimeout(() => {
-            bubble.style.transform = "translateY(-75px)";
-            bubble.style.opacity = "0";
-        }, 50);
-
-        setTimeout(() => bubble.remove(), 2500);
-    }, 450); 
-}
-
-startBubbles();
