@@ -53,10 +53,15 @@ async function updateDashboard() {
 setInterval(updateDashboard, 20000);
 updateDashboard(); // Kör en gång direkt vid start
 
-// --- GRAF-FUNKTION (Enkel version) ---
 let beerChart;
 function updateChart(data) {
     const ctx = document.getElementById('beer-chart').getContext('2d');
+    
+    // Vi skapar en snygg gradient för ytan under linjen
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(243, 156, 18, 0.4)'); // Halvgenomskinlig orange i toppen
+    gradient.addColorStop(1, 'rgba(243, 156, 18, 0)');   // Helt genomskinlig i botten
+
     const labels = data.map(d => new Date(d.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
     const temps = data.map(d => d.temp);
 
@@ -73,20 +78,46 @@ function updateChart(data) {
                     label: 'Beer Temp',
                     data: temps,
                     borderColor: '#f39c12',
-                    borderWidth: 2,
-                    fill: false,
-                    pointRadius: 0
+                    backgroundColor: gradient, // Använder gradienten vi skapade
+                    borderWidth: 3,
+                    fill: true,           // Fyller i ytan under linjen
+                    tension: 0.4,         // Gör linjen mjukt kurvad (istället för hackig)
+                    pointRadius: 0,       // Inga prickar på varje mätvärde
+                    pointHitRadius: 10    // Men gör det lätt att hovra över dem
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: { ticks: { color: '#888', maxRotation: 0 } },
-                    y: { ticks: { color: '#888' } }
+                    x: {
+                        ticks: {
+                            color: '#888',
+                            maxRotation: 0,
+                            autoSkip: true,    // VIKTIGT: Hoppar över etiketter så de inte krockar
+                            maxTicksLimit: 6   // Visar max 6 klockslag på hela axeln
+                        },
+                        grid: {
+                            display: false     // Tar bort vertikala streck för renare look
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#888',
+                            callback: function(value) { return value + '°'; } // Lägger till gradtecken
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)' // Väldigt svaga horisontella streck
+                        }
+                    }
                 },
-                plugins: { legend: { display: false } }
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
             }
         });
     }
 }
+
