@@ -57,10 +57,19 @@ app.post('/api/update', async (req, res) => {
 // 2. SÄNDARE (Till din Webb-dashboard)
 app.get('/api/data', async (req, res) => {
     try {
-        // Hämta de senaste 1000 mätningarna, sorterade efter tid
-        const history = await logsCollection.find().sort({ time: 1 }).limit(1000).toArray();
-        res.json(history);
+        // 1. Hämta de 1000 NYASTE mätningarna ({ time: -1 })
+        const history = await logsCollection
+            .find()
+            .sort({ time: -1 }) 
+            .limit(1000) 
+            .toArray();
+            
+        // 2. Vänd på listan så att den äldsta av de 1000 mätningarna kommer först 
+        // Detta krävs för att grafen ska ritas rätt (vänster till höger)
+        res.json(history.reverse()); 
+        
     } catch (e) {
+        console.error("Fel vid hämtning:", e);
         res.status(500).send({ error: "Kunde inte hämta data" });
     }
 });
@@ -68,3 +77,4 @@ app.get('/api/data', async (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server körs på port ${PORT}`);
 });
+
