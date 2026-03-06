@@ -118,44 +118,70 @@ function updateChart(data) {
     }
 }
 
-// --- BUBBEL-MOTOR ---
+// --- BUBBEL-MOTOR (Äkta och jämn jäsning) ---
 function startBubbles() {
     const stream = document.getElementById('bubble-stream');
     if (!stream) return;
 
-    setInterval(() => {
-        const statusElement = document.getElementById('status-text');
-        if (!statusElement) return;
-        
-        const statusText = statusElement.innerText.toUpperCase();
-        
-        // Pausa bubblorna om jäsningen är klar eller vid cold crash
-        if (statusText === 'FINISHED' || statusText.includes('CRASH')) return;
+    let bubbles = [];
+    let lastSpawn = 0;
 
-        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        const size = Math.random() * 2.5 + 1; 
-        const startX = 50 + (Math.random() * 20 - 10); 
+    function animate(timestamp) {
+        const statusElement = document.getElementById('status-text');
+        const statusText = statusElement ? statusElement.innerText.toUpperCase() : '';
         
-        circle.setAttribute("cx", startX);
-        circle.setAttribute("cy", "90"); 
-        circle.setAttribute("r", size);
-        circle.setAttribute("fill", "rgba(255, 255, 255, 0.5)");
-        
-        stream.appendChild(circle);
-        
-        let y = 90;
-        const floatUp = setInterval(() => {
-            y -= 0.5; 
-            circle.setAttribute("cy", y);
-            circle.setAttribute("cx", startX + Math.sin(y * 0.1) * 2); // Lite wobble
+        // Bubbla bara om vi inte är färdiga eller cold crashar
+        const isActive = !(statusText === 'FINISHED' || statusText.includes('CRASH'));
+
+        // Skapa en ny, liten bubbla i ett exakt och jämnt intervall (var 250:e millisekund)
+        if (isActive && timestamp - lastSpawn > 250) {
+            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             
-            if (y < 30) {
-                clearInterval(floatUp);
-                circle.remove();
+            // Mycket små bubblor (radie mellan 0.5 och 1.2)
+            const size = Math.random() * 0.7 + 0.5; 
+            
+            // Centrerad ström från botten
+            const startX = 50 + (Math.random() * 12 - 6); 
+            
+            circle.setAttribute("r", size);
+            circle.setAttribute("fill", "rgba(255, 255, 255, 0.7)");
+            stream.appendChild(circle);
+            
+            bubbles.push({
+                element: circle,
+                x: startX,
+                y: 90,
+                // Lugn och jämn hastighet uppåt
+                speed: Math.random() * 0.2 + 0.3, 
+                // Pyttelite förskjutning i sidled så det inte ser maskinellt ut
+                wobbleOffset: Math.random() * Math.PI * 2
+            });
+            
+            lastSpawn = timestamp;
+        }
+
+        // Flytta alla befintliga bubblor mjukt (60 frames per sekund)
+        for (let i = bubbles.length - 1; i >= 0; i--) {
+            let b = bubbles[i];
+            b.y -= b.speed;
+            
+            // Extremt subtil rörelse i sidled (nästan rak linje)
+            let currentX = b.x + Math.sin((b.y * 0.05) + b.wobbleOffset) * 0.4;
+            
+            b.element.setAttribute("cx", currentX);
+            b.element.setAttribute("cy", b.y);
+
+            // Ta bort bubblan när den når ytan
+            if (b.y < 30) {
+                b.element.remove();
+                bubbles.splice(i, 1);
             }
-        }, 30); 
-    }, 600);
+        }
+
+        requestAnimationFrame(animate); // Kör nästa bildruta
+    }
+
+    requestAnimationFrame(animate); // Starta motorn
 }
 
-// Starta bubblorna!
 startBubbles();
