@@ -62,7 +62,6 @@ auth.onAuthStateChanged(async (user) => {
     }
 });
 
-// --- 3. DIN GULD-KOD (Update Dashboard) ---
 async function updateDashboard() {
     if (!activeDeviceId) return; 
 
@@ -70,28 +69,33 @@ async function updateDashboard() {
         const response = await fetch(`${API_BASE}/data?device_id=${activeDeviceId}`);
         const data = await response.json();
 
-// Inuti updateDashboard-funktionen i app.js
-if (data.length > 0) {
-    const latest = data[data.length - 1];
+        if (data.length > 0) {
+            const latest = data[data.length - 1];
 
-    // 1. Temperaturer
-    document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
-    document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
+            // 1. Temperaturer
+            document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
+            document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
 
-    // 2. Status (CLEANING UP hamnar i boxen)
-    document.getElementById('status-text').innerText = latest.status.toUpperCase();
-    
-    // 3. Jäststam (Visar BARA namnet, t.ex. IRISH ALE)
-    document.getElementById('profile-val').innerText = (latest.strain || "").toUpperCase();
-    
-    // 4. Action (Visar BARA COOLING/HEATING eller ingenting)
-    document.getElementById('action-val').innerText = (latest.action || "").toUpperCase();
+            // 2. Jäststam (I den vita boxen högst upp till höger)
+            document.getElementById('profile-val').innerText = (latest.strain || "ORIGINAL").toUpperCase();
+            
+            // 3. Fas/Status (t.ex. CLEANING UP)
+            document.getElementById('status-text').innerText = latest.status.toUpperCase();
+            
+            // 4. Action (t.ex. COOLING) och Pilen
+            const actionVal = (latest.action || "IDLE").toUpperCase();
+            document.getElementById('action-val').innerText = actionVal;
+            
+            const arrow = document.getElementById('status-arrow');
+            if (actionVal === "COOLING") arrow.innerText = "▼";
+            else if (actionVal === "HEATING") arrow.innerText = "▲";
+            else arrow.innerText = "▶";
 
-    // 5. Dag
-    document.getElementById('day-val').innerText = latest.day.toFixed(1);
+            // 5. Dag (Under flaskan)
+            document.getElementById('day-val').innerText = latest.day.toFixed(1);
 
-    updateChart(data);
-}
+            updateChart(data);
+        }
     } catch (error) {
         console.error("Kunde inte hämta data:", error);
     }
@@ -232,6 +236,7 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
 
 
 
