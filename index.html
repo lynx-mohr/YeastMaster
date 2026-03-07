@@ -33,20 +33,23 @@
         <div class="main-display">
             <div class="left-col">
                 <div class="wifi-icon">
-                    <div class="bar bar1"></div><div class="bar bar2"></div><div class="bar bar3"></div><div class="bar bar4"></div>
+                    <div class="bar bar1"></div>
+                    <div class="bar bar2"></div>
+                    <div class="bar bar3"></div>
+                    <div class="bar bar4"></div>
                 </div>
                 
                 <div class="carboy-wrapper">
                     <svg viewBox="0 0 100 100" class="carboy-svg">
-                        <rect class="glass-line" x="45" y="2" width="10" height="6" />
-                        <rect class="glass-line" x="42" y="8" width="16" height="15" />
-                        <circle class="glass-line" cx="50" cy="62" r="35" />
+                        <rect class="glass-line" x="45" y="8" width="10" height="8" />
+                        <rect class="glass-line" x="42" y="16" width="16" height="14" />
+                        <circle class="glass-line" cx="50" cy="65" r="32" />
                         <g id="bubble-stream"></g>
                     </svg>
                     <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
                 </div>
 
-                <div class="ferm-row" style="margin-top: 20px; font-size: 2.5rem;">
+                <div class="ferm-row" style="margin-top: 15px;">
                     Day: <span id="day-val">0.0</span>
                 </div>
             </div>
@@ -54,11 +57,11 @@
             <div class="right-col">
                 <div class="highlight-box" id="profile-val">--</div>
                 
-                <div id="status-text" style="font-size: 1.8rem; margin-bottom: 10px;">--</div>
-
+                <div class="profile-name" id="status-text">--</div>
+                
                 <div class="action-status">
                     <span id="action-val">--</span>
-                    <span id="status-arrow" class="blink-blue">▶</span>
+                    <span id="status-arrow" class="blink-active" style="color: #0088ff; margin-left: 5px;">▶</span>
                 </div>
                 
                 <div class="air-temp" style="margin-top: 15px;">
@@ -67,7 +70,7 @@
             </div>
         </div>
 
-        <hr class="separator-line" style="border-top: 2px dashed #444; margin: 25px 0;">
+        <hr class="separator-line" style="border-top: 2px dashed #444; margin: 25px 0 15px 0;">
 
         <div class="chart-section">
             <div class="chart-container">
@@ -75,6 +78,7 @@
             </div>
         </div>
     </div>
+    
     <button id="btn-logout" style="margin-top: 20px; opacity: 0.2; background: none; border: 1px solid #444; color: #fff; font-family: 'VT323'; cursor: pointer;">LOGOUT</button>
 </div>
 
@@ -85,6 +89,7 @@
 
 </body>
 </html>
+
 
 
 
