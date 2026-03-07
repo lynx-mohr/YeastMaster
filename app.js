@@ -70,7 +70,7 @@ async function updateDashboard() {
         const response = await fetch(`${API_BASE}/data?device_id=${activeDeviceId}`);
         const data = await response.json();
 
-// Inuti din updateDashboard-funktion:
+// Inuti updateDashboard-funktionen i app.js
 if (data.length > 0) {
     const latest = data[data.length - 1];
 
@@ -78,16 +78,16 @@ if (data.length > 0) {
     document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
     document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
 
-    // 2. Fas (Högst upp till höger i boxen)
+    // 2. Status (CLEANING UP hamnar i boxen)
     document.getElementById('status-text').innerText = latest.status.toUpperCase();
     
-    // 3. Jäststam (Under boxen)
-    document.getElementById('profile-val').innerText = (latest.strain || "BREW").toUpperCase();
+    // 3. Jäststam (Visar BARA namnet, t.ex. IRISH ALE)
+    document.getElementById('profile-val').innerText = (latest.strain || "").toUpperCase();
     
-    // 4. Action (t.ex. COOLING eller HEATING)
-    document.getElementById('action-val').innerText = (latest.action || "STABLE").toUpperCase();
+    // 4. Action (Visar BARA COOLING/HEATING eller ingenting)
+    document.getElementById('action-val').innerText = (latest.action || "").toUpperCase();
 
-    // 5. Dag (Under flaskan)
+    // 5. Dag
     document.getElementById('day-val').innerText = latest.day.toFixed(1);
 
     updateChart(data);
@@ -232,6 +232,7 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
 
 
 
