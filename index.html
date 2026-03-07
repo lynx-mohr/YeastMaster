@@ -39,13 +39,25 @@
                     <div class="bar bar4"></div>
                 </div>
                 
-                <div class="carboy-wrapper">
-                    <svg viewBox="0 0 100 100" class="carboy-svg">
-                        <path class="glass-line" d="M42,10 H58 V20 C78,20 88,32 88,55 V82 C88,95 75,98 50,98 C25,98 12,95 12,82 V55 C12,32 22,20 42,20 Z" />
-                        <g id="bubble-stream"></g>
-                    </svg>
-                    <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
-                </div>
+       <div class="carboy-wrapper">
+    <svg viewBox="0 0 100 100" class="carboy-svg">
+        <path class="glass-line" d="
+            /* Korken på toppen */
+            M44,2 H56 V8 H44 Z 
+            /* Halsen */
+            M42,8 H58 V20 H42 Z
+            /* Den runda kroppen (Använder Arcs för kurvatur) */
+            M50,20 
+            C20,20 15,35 15,60 
+            C15,85 30,98 50,98 
+            C70,98 85,85 85,60 
+            C85,35 80,20 50,20 Z" />
+        
+        <g id="bubble-stream"></g>
+    </svg>
+    
+    <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
+</div>
 
                 <div class="ferm-row" style="margin-top: 15px; font-size: 2.2rem;">
                     Day: <span id="day-val">0.0</span>
@@ -84,6 +96,7 @@
 
 </body>
 </html>
+
 
 
 
