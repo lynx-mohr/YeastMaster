@@ -26,40 +26,55 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('.'));
 
-// 1. MOTTAGARE (Från ESP32)
+// 1. MOTTAGAREN (Från ESP32)
 app.post('/api/update', async (req, res) => {
-    // Vi hämtar nu även 'action' från ESP32
-    const { temp, air_temp, day, status, action, token, strain, profile } = req.body;
+    // NYTT: Vi plockar nu ut device_id från paketet
+    const { device_id, temp, air_temp, day, status, action, token, strain, profile } = req.body;
 
+    // Vi behåller din globala token som ett första säkerhetslager tills vi bygger inloggningen helt
     if (token !== "YeastMaster-Super-Secret-2024") {
         return res.status(401).send({ error: "Obehörig!" });
     }
 
+    // NYTT: Kolla så att ESP32:an faktiskt skickade med vem den är
+    if (!device_id) {
+        return res.status(400).send({ error: "Saknar device_id!" });
+    }
+
     const newEntry = {
         time: new Date(),
+        device_id, // <--- Här sparas MAC-adressen i databasen!
         temp,
         air_temp,
         day,
-        status, // Här hamnar t.ex. "Primary" eller "Cold Crash"
-        action: action || "IDLE", // Här hamnar "COOLING", "HEATING" eller "IDLE"
+        status, 
+        action: action || "IDLE", 
         strain,
         profile
     };
 
     try {
         await logsCollection.insertOne(newEntry);
-        res.status(200).send({ message: "Data sparad i molnet!" });
+        res.status(200).send({ message: "Data sparad med device_id!" });
     } catch (e) {
-        res.status(500).send({ error: "Kunde inte spara" });
+        res.status(500).send({ error: "Kunde inte spara i databasen" });
     }
 });
 
-// 2. SÄNDARE (Till din Webb-dashboard)
+// 2. SÄNDAREN (Till din mobil/dashboard)
 app.get('/api/data', async (req, res) => {
+    // NYTT: Webbappen kan nu be om en specifik enhet
+    const requestedDevice = req.query.device_id;
+    
+    // Om webbappen frågar efter en specifik enhet, sök bara efter den. 
+    // Annars (som en tillfällig livlina) hämtar vi allt så att din nuvarande app inte går sönder direkt.
+    let query = {};
+    if (requestedDevice) {
+        query.device_id = requestedDevice;
+    }
+
     try {
-        // Hämta de 1000 senaste mätningarna (nyast först)
-        const history = await logsCollection.find().sort({ time: -1 }).limit(1000).toArray();
-        // Vänd dem så de kommer i tidsordning för grafen
+        const history = await logsCollection.find(query).sort({ time: -1 }).limit(1000).toArray();
         res.json(history.reverse());
     } catch (e) {
         res.status(500).send({ error: "Kunde inte hämta data" });
