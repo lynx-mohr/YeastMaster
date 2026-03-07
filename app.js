@@ -6,6 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- KONFIGURATION ---
 let activeDeviceId = null;
 const API_BASE = "https://soulofbeer-live.onrender.com/api";
+const firebaseConfig = {
+  apiKey: "AIzaSyBjxNijHivEY4u4bBIiXCR1hbUBdMxrq0Q",
+  authDomain: "yeastmaster-cloud.firebaseapp.com",
+  projectId: "yeastmaster-cloud",
+  storageBucket: "yeastmaster-cloud.firebasestorage.app",
+  messagingSenderId: "395831218175",
+  appId: "1:395831218175:web:66bd69450b8325c9f361ca",
+  measurementId: "G-LFNPE9EHXB"
+};
+
 const auth = firebase.auth(); // Se till att Firebase är länkat i index.html!
 
 // --- 1. VY-HANTERARE (Viktig för att tända sidan!) ---
@@ -213,6 +223,7 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
 
 
 
