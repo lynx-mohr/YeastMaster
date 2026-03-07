@@ -1,59 +1,56 @@
-// Din unika YeastMaster! (Senare kommer inloggningen låta användaren välja detta)
-const DEVICE_MAC = "E4:B0:63:AE:1C:25"; 
 
-// Vi lägger till ?device_id=... i slutet av anropet
-const SERVER_URL = `https://soulofbeer-live.onrender.com/api/data?device_id=${DEVICE_MAC}`;
+
+// 1. Din gamla konfiguration (men med dynamiskt ID)
+let activeDeviceId = null;
+const API_BASE = "https://soulofbeer-live.onrender.com/api";
+
+// 2. INLOGGNINGS-LOGIKEN (Den nya vaktmästaren)
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        // Kolla i databasen vilken enhet denna användare äger
+        const res = await fetch(`${API_BASE}/my-devices?uid=${user.uid}`);
+        const devices = await res.json();
+
+        if (devices.length > 0) {
+            activeDeviceId = devices[0].device_id;
+            showView('dashboard'); // Visa din snygga dashboard
+            initEverything();      // <--- HÄR STARTAR VI DIN GAMLA KOD!
+        } else {
+            showView('claim');     // Visa "Koppla enhet"-vyn
+        }
+    } else {
+        showView('login');
+    }
+});
 
 async function updateDashboard() {
+    // VIKTIGT: Kör bara om vi faktiskt har hittat en enhet efter inloggning
+    if (!activeDeviceId) return; 
+
     try {
-        const response = await fetch(SERVER_URL);
+        // Vi bygger URL:en dynamiskt med det ID vi fick från Firebase/MongoDB
+        const response = await fetch(`${API_BASE}/data?device_id=${activeDeviceId}`);
         const data = await response.json();
 
         if (data.length > 0) {
             const latest = data[data.length - 1];
 
+            // --- DIN GULD-KOD FORTSÄTTER HÄR ---
             // 1. Temperaturer
             document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
             document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
-
-            // 2. Jäst och Profil
-            document.getElementById('yeast-strain').innerText = latest.strain || "Unknown";
-            document.getElementById('yeast-profile').innerText = latest.profile || "Standard";
-
-            // 3. Status (Fasen längst ner)
-            document.getElementById('status-text').innerText = latest.status || "RUNNING";
-
-            // 4. Action (Kyla/Värme vid pilen)
-            const actionLabel = document.getElementById('cooling-status');
-            const actionIcon = document.getElementById('action-icon');
-            const action = latest.action || "IDLE";
             
-            actionLabel.innerText = action;
+            // 2. Status & Dag
+            document.getElementById('status-text').innerText = latest.status;
+            document.getElementById('day-val').innerText = latest.day.toFixed(1);
 
-            // Rensa gamla CSS-klasser för blink
-            actionIcon.classList.remove('blink-active');
-
-            if (action === "COOLING") {
-                actionIcon.innerText = "▼";
-                actionIcon.style.color = "#00aaff";
-                actionIcon.classList.add('blink-active');
-            } else if (action === "HEATING") {
-                actionIcon.innerText = "▲";
-                actionIcon.style.color = "#ff4400";
-                actionIcon.classList.add('blink-active');
-            } else {
-                actionIcon.innerText = "-";
-                actionIcon.style.color = "#888";
-            }
-
-            // 5. Framsteg (Dagar)
-            document.getElementById('ferm-day-val').innerText = latest.day ? latest.day.toFixed(1) : "0.0";
-
-            // 6. Uppdatera Grafen
-            updateChart(data);
+            // 3. Rita grafen och damejeannen (dina gamla funktioner)
+            renderChart(data);
+            updateGlassAnimation(latest); 
         }
     } catch (error) {
-        console.error("Kunde inte hämta data:", error);
+        console.error("Hoppsan! Kunde inte nå Render-servern:", error);
+        // Här kan du t.ex. visa ett rött utropstecken på skärmen om du vill
     }
 }
 
@@ -189,5 +186,6 @@ function startBubbles() {
 }
 
 startBubbles();
+
 
 
