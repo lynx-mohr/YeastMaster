@@ -62,6 +62,12 @@ auth.onAuthStateChanged(async (user) => {
     }
 });
 
+// Denna behövs för att slutföra inloggningen efter en redirect (på mobil)
+auth.getRedirectResult().catch((error) => {
+    console.error("Redirect-fel:", error);
+});
+
+
 async function updateDashboard() {
     if (!activeDeviceId) return; 
 
@@ -258,6 +264,7 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
 
 
 
