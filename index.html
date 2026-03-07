@@ -32,9 +32,15 @@
         <div class="oled-screen">
             <div class="main-display">
                 <div class="left-col">
-                    <div class="carboy-wrapper">
-                        <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
-                    </div>
+                 <div class="carboy-wrapper">
+    <svg viewBox="0 0 100 100" class="carboy-svg">
+        <path class="glass-line" d="M30,20 Q20,20 20,35 L20,80 Q20,95 50,95 Q80,95 80,80 L80,35 Q80,20 70,20 L60,20 L60,5 L40,5 L40,20 Z" />
+        
+        <g id="bubble-stream"></g>
+    </svg>
+
+    <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
+</div>
                 </div>
                 <div class="right-col">
                     <div class="highlight-box" id="status-text">CONNECTING...</div>
@@ -63,4 +69,5 @@
 
 </body>
 </html>
+
 
