@@ -18,7 +18,9 @@ function showView(viewName) {
     
     Object.keys(views).forEach(key => {
         if (views[key]) {
-            views[key].style.display = (key === viewName) ? 'block' : 'none';
+            // Om vyn ska visas, sätt den till 'flex' (eftersom din CSS kräver det)
+            // Annars sätt den till 'none' för att dölja den helt.
+            views[key].style.display = (key === viewName) ? 'flex' : 'none';
         }
     });
 }
@@ -205,5 +207,6 @@ if(document.getElementById('btn-claim')) {
         }
     });
 }
+
 
 
