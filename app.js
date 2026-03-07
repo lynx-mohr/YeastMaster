@@ -208,5 +208,11 @@ if(document.getElementById('btn-claim')) {
     });
 }
 
+if(document.getElementById('btn-logout')) {
+    document.getElementById('btn-logout').addEventListener('click', () => {
+        auth.signOut();
+    });
+}
+
 
 
