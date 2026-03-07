@@ -16,6 +16,8 @@ const firebaseConfig = {
   measurementId: "G-LFNPE9EHXB"
 };
 
+firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth(); // Se till att Firebase är länkat i index.html!
 
 // --- 1. VY-HANTERARE (Viktig för att tända sidan!) ---
@@ -223,6 +225,7 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
 
 
 
