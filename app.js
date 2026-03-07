@@ -201,10 +201,23 @@ function startBubbles() {
 startBubbles();
 
 // --- 6. KNAPPAR FÖR LOGIN/LOGOUT (Viktigt!) ---
-if(document.getElementById('btn-login')) {
-    document.getElementById('btn-login').addEventListener('click', () => {
+// --- KNAPPAR FÖR LOGIN ---
+const loginBtn = document.getElementById('btn-login');
+
+if (loginBtn) {
+    loginBtn.addEventListener('click', () => {
         const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithPopup(provider);
+        
+        // Försök med Popup först, men fånga upp om mobilen blockerar den
+        auth.signInWithPopup(provider).catch((error) => {
+            if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
+                // Om popup blockeras (vanligt på mobil), kör redirect istället
+                auth.signInWithRedirect(provider);
+            } else {
+                console.error("Inloggningsfel:", error);
+                alert("Kunde inte logga in: " + error.message);
+            }
+        });
     });
 }
 
@@ -245,6 +258,7 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
 
 
 
