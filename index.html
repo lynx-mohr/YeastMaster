@@ -33,51 +33,41 @@
         <div class="main-display">
             <div class="left-col">
                 <div class="wifi-icon">
-                    <div class="bar bar1"></div>
-                    <div class="bar bar2"></div>
-                    <div class="bar bar3"></div>
-                    <div class="bar bar4"></div>
+                    <div class="bar bar1"></div><div class="bar bar2"></div><div class="bar bar3"></div><div class="bar bar4"></div>
                 </div>
                 
-       <div class="carboy-wrapper">
-    <svg viewBox="0 0 100 100" class="carboy-svg">
-        <path class="glass-line" d="
-            /* Korken på toppen */
-            M44,2 H56 V8 H44 Z 
-            /* Halsen */
-            M42,8 H58 V20 H42 Z
-            /* Den runda kroppen (Använder Arcs för kurvatur) */
-            M50,20 
-            C20,20 15,35 15,60 
-            C15,85 30,98 50,98 
-            C70,98 85,85 85,60 
-            C85,35 80,20 50,20 Z" />
-        
-        <g id="bubble-stream"></g>
-    </svg>
-    
-    <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
-</div>
+                <div class="carboy-wrapper">
+                    <svg viewBox="0 0 100 100" class="carboy-svg">
+                        <rect class="glass-line" x="45" y="2" width="10" height="6" />
+                        <rect class="glass-line" x="42" y="8" width="16" height="15" />
+                        <circle class="glass-line" cx="50" cy="62" r="35" />
+                        <g id="bubble-stream"></g>
+                    </svg>
+                    <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
+                </div>
 
-                <div class="ferm-row" style="margin-top: 15px; font-size: 2.2rem;">
+                <div class="ferm-row" style="margin-top: 20px; font-size: 2.5rem;">
                     Day: <span id="day-val">0.0</span>
                 </div>
             </div>
 
             <div class="right-col">
-                <div class="highlight-box" id="status-text">--</div>
+                <div class="highlight-box" id="profile-val">--</div>
                 
-                <div class="profile-name" id="profile-val">--</div>
+                <div id="status-text" style="font-size: 1.8rem; margin-bottom: 10px;">--</div>
+
+                <div class="action-status">
+                    <span id="action-val">--</span>
+                    <span id="status-arrow" class="blink-blue">▶</span>
+                </div>
                 
-                <div class="action-status" id="action-val">--</div>
-                
-                <div class="air-temp" style="margin-top: 10px;">
+                <div class="air-temp" style="margin-top: 15px;">
                     Air: <span id="air-temp-val">--</span>°C
                 </div>
             </div>
         </div>
 
-        <hr class="separator-line" style="border-top: 2px dashed #444; margin: 20px 0;">
+        <hr class="separator-line" style="border-top: 2px dashed #444; margin: 25px 0;">
 
         <div class="chart-section">
             <div class="chart-container">
@@ -85,8 +75,7 @@
             </div>
         </div>
     </div>
-    
-    <button id="btn-logout" style="margin-top: 20px; opacity: 0.3; background: none; border: 1px solid #444; color: #888; padding: 5px 10px; font-family: 'VT323'; cursor: pointer;">Logga ut</button>
+    <button id="btn-logout" style="margin-top: 20px; opacity: 0.2; background: none; border: 1px solid #444; color: #fff; font-family: 'VT323'; cursor: pointer;">LOGOUT</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -96,6 +85,7 @@
 
 </body>
 </html>
+
 
 
 
