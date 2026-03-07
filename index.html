@@ -84,37 +84,45 @@
     </style>
 </head>
 <body>
-    <div id="login-container" class="container">
-        <h1>YeastMaster Cloud</h1>
-        <p>Logga in för att se din jäsning</p>
-        <button id="btn-login" class="btn-primary">Logga in med Google</button>
-    </div>
 
-    <div id="claim-container" class="container" style="display: none;">
-        <h2>Välkommen!</h2>
-        <p>Vi hittar ingen YeastMaster kopplad till ditt konto.</p>
-        <input type="text" id="input-mac" placeholder="Ange Device ID (t.ex. E4:B0...)">
-        <button id="btn-claim" class="btn-primary">Koppla enhet</button>
-        <p class="hint">Du hittar ditt ID i Action-menyn på din YeastMaster.</p>
-    </div>
-
-    <div id="dashboard-container" style="display: none;">
-        <header>
-            <span id="user-email"></span>
-            <button id="btn-logout">Logga ut</button>
-        </header>
-        <div id="status-bar">Enhet: <span id="active-device"></span></div>
-        <div id="chart-container">
-            <canvas id="tempChart"></canvas>
+    <div id="login-container">
+        <div class="auth-box">
+            <h1>YeastMaster</h1>
+            <p>Vittnesskyddat moln</p>
+            <button id="btn-login" class="btn-primary">Logga in via Google</button>
         </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-auth.js"></script>
+    <div id="claim-container">
+        <div class="auth-box">
+            <h2>Koppla enhet</h2>
+            <p>Ange ID från OLED-menyn</p>
+            <input type="text" id="input-mac" placeholder="E4:B0:63:AE:1C:25">
+            <button id="btn-claim" class="btn-primary">Aktivera Bryggverk</button>
+            <p class="hint">Action-meny -> Device ID</p>
+        </div>
+    </div>
+
+    <div id="dashboard-container">
+        <div class="oled-screen">
+            <div class="main-display">
+                </div>
+            
+            <div class="chart-section">
+                </div>
+        </div>
+        
+        <button id="btn-logout" style="margin-top: 20px; opacity: 0.5;">Logga ut</button>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-auth-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>
+
 </body>
 </html>
+
 
 
 
