@@ -28,39 +28,54 @@
         </div>
     </div>
 
-    <div id="dashboard-container">
-        <div class="oled-screen">
-            <div class="main-display">
-                <div class="left-col">
-                 <div class="carboy-wrapper">
-    <svg viewBox="0 0 100 100" class="carboy-svg">
-        <path class="glass-line" d="M30,20 Q20,20 20,35 L20,80 Q20,95 50,95 Q80,95 80,80 L80,35 Q80,20 70,20 L60,20 L60,5 L40,5 L40,20 Z" />
-        
-        <g id="bubble-stream"></g>
-    </svg>
-
-    <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
-</div>
+<div id="dashboard-container">
+    <div class="oled-screen">
+        <div class="main-display">
+            <div class="left-col">
+                <div class="wifi-icon">
+                    <div class="bar bar1"></div>
+                    <div class="bar bar2"></div>
+                    <div class="bar bar3"></div>
+                    <div class="bar bar4"></div>
                 </div>
-                <div class="right-col">
-                    <div class="highlight-box" id="status-text">CONNECTING...</div>
-                    <div class="air-temp">Air: <span id="air-temp-val">--</span>°C</div>
+                
+                <div class="carboy-wrapper">
+                    <svg viewBox="0 0 100 100" class="carboy-svg">
+                        <path class="glass-line" d="M30,20 Q20,20 20,35 L20,80 Q20,95 50,95 Q80,95 80,80 L80,35 Q80,20 70,20 L60,20 L60,5 L40,5 L40,20 Z" />
+                        <g id="bubble-stream"></g>
+                    </svg>
+                    <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
                 </div>
             </div>
 
-            <div class="bottom-section">
-                <div class="ferm-row">Day: <span id="day-val">0.0</span></div>
-            </div>
-            
-            <div class="chart-section">
-                <div class="chart-container">
-                    <canvas id="beer-chart"></canvas>
-                </div>
+            <div class="right-col">
+                <div class="highlight-box" id="status-text">CONNECTING</div>
+                <div class="profile-name" id="profile-val">YEASTMASTER</div>
+                <div class="action-status" id="action-val">IDLE</div>
+                <div class="air-temp">Air: <span id="air-temp-val">--</span>°C</div>
             </div>
         </div>
-        
-        <button id="btn-logout" style="margin-top: 20px; opacity: 0.5;">Logga ut</button>
+
+        <div class="bottom-section">
+            <hr class="separator-line">
+            <div class="system-status">SYSTEM ONLINE</div>
+        </div>
+
+        <div class="ferm-data-section">
+            <div class="ferm-header">FERM. DATA</div>
+            <div class="ferm-row">Day: <span id="day-val">0.0</span></div>
+        </div>
+
+        <div class="chart-section">
+            <div class="chart-header">TEMP HISTORY</div>
+            <div class="chart-container">
+                <canvas id="beer-chart"></canvas>
+            </div>
+        </div>
     </div>
+    
+    <button id="btn-logout" style="margin-top: 20px; opacity: 0.3; background: none; border: 1px solid #444; color: #888; padding: 5px 10px; font-family: 'VT323'; cursor: pointer;">LOGOUT</button>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -69,5 +84,6 @@
 
 </body>
 </html>
+
 
 
