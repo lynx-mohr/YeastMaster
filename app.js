@@ -174,3 +174,36 @@ if(document.getElementById('btn-login')) {
     });
 }
 
+// --- 7. KOPPLA ENHET (CLAIM) ---
+if(document.getElementById('btn-claim')) {
+    document.getElementById('btn-claim').addEventListener('click', async () => {
+        const macInput = document.getElementById('input-mac').value.trim().toUpperCase();
+        const user = auth.currentUser;
+
+        if (macInput.length < 12 || !user) {
+            alert("Ange ett giltigt ID!");
+            return;
+        }
+
+        try {
+            const res = await fetch(`${API_BASE}/claim-device`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    uid: user.uid,
+                    device_id: macInput,
+                    name: "Min YeastMaster"
+                })
+            });
+
+            if (res.ok) {
+                alert("Enhet kopplad! Laddar om...");
+                location.reload(); // Enkelt sätt att uppdatera vyn
+            }
+        } catch (err) {
+            console.error("Claim failed:", err);
+        }
+    });
+}
+
+
