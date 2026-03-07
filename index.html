@@ -33,52 +33,46 @@
         <div class="main-display">
             <div class="left-col">
                 <div class="wifi-icon">
-                    <div class="bar bar1"></div>
-                    <div class="bar bar2"></div>
-                    <div class="bar bar3"></div>
-                    <div class="bar bar4"></div>
+                    <div class="bar bar1"></div><div class="bar bar2"></div><div class="bar bar3"></div><div class="bar bar4"></div>
                 </div>
                 
                 <div class="carboy-wrapper">
                     <svg viewBox="0 0 100 100" class="carboy-svg">
-                        <rect class="glass-line" x="45" y="8" width="10" height="8" />
-                        <rect class="glass-line" x="42" y="16" width="16" height="14" />
-                        <circle class="glass-line" cx="50" cy="65" r="32" />
+                        <path class="glass-line" d="M44,18 H56 M46,18 V25 M54,25 V18" />
+                        <circle class="glass-line" cx="50" cy="60" r="30" />
                         <g id="bubble-stream"></g>
                     </svg>
                     <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
                 </div>
-
-                <div class="ferm-row" style="margin-top: 15px;">
-                    Day: <span id="day-val">0.0</span>
-                </div>
             </div>
 
             <div class="right-col">
-                <div class="highlight-box" id="profile-val">--</div>
+                <div class="highlight-box" id="strain-val">--</div>
                 
-                <div class="profile-name" id="status-text">--</div>
-                
-                <div class="action-status">
+                <div id="profile-val" style="font-size: 1.6rem; margin-bottom: 5px;">--</div>
+
+                <div class="action-status" style="display: flex; align-items: center; justify-content: flex-end;">
+                    <span id="status-arrow" class="blink-active" style="margin-right: 8px;"></span>
                     <span id="action-val">--</span>
-                    <span id="status-arrow" class="blink-active" style="color: #0088ff; margin-left: 5px;">▶</span>
                 </div>
                 
-                <div class="air-temp" style="margin-top: 15px;">
+                <div class="air-temp" style="margin-top: 10px;">
                     Air: <span id="air-temp-val">--</span>°C
                 </div>
             </div>
         </div>
 
-        <hr class="separator-line" style="border-top: 2px dashed #444; margin: 25px 0 15px 0;">
+        <hr class="separator-line" style="border-top: 2px solid var(--oled-color); margin: 15px 0 5px 0;">
+        <div class="system-status" style="font-size: 1.8rem;">
+            Status: <span id="status-text">--</span>
+        </div>
 
-        <div class="chart-section">
+        <div class="chart-section" style="border-top: 1px dashed #444; margin-top: 10px; padding-top: 10px;">
             <div class="chart-container">
                 <canvas id="beer-chart"></canvas>
             </div>
         </div>
     </div>
-    
     <button id="btn-logout" style="margin-top: 20px; opacity: 0.2; background: none; border: 1px solid #444; color: #fff; font-family: 'VT323'; cursor: pointer;">LOGOUT</button>
 </div>
 
@@ -89,6 +83,7 @@
 
 </body>
 </html>
+
 
 
 
