@@ -76,22 +76,31 @@ async function updateDashboard() {
             document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
             document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
 
-            // 2. Jäststam (I den vita boxen högst upp till höger)
-            document.getElementById('profile-val').innerText = (latest.strain || "ORIGINAL").toUpperCase();
+            // 2. Höger kolumn (Hierarki enligt din OLED)
+            document.getElementById('strain-val').innerText = (latest.strain || "IRISH ALE").toUpperCase();
+            document.getElementById('profile-val').innerText = latest.profile || "LOW ESTER";
             
-            // 3. Fas/Status (t.ex. CLEANING UP)
+            const action = (latest.action || "IDLE").toUpperCase();
+            document.getElementById('action-val').innerText = action;
+
+            // 3. Pil-logik (Vänster om texten, färg och riktning)
+            const arrow = document.getElementById('status-arrow');
+            if (action === "COOLING") {
+                arrow.innerText = "▼";
+                arrow.style.color = "#0088ff"; // Blå
+                arrow.style.display = "inline";
+            } else if (action === "HEATING") {
+                arrow.innerText = "▲";
+                arrow.style.color = "#ff4444"; // Röd
+                arrow.style.display = "inline";
+            } else {
+                arrow.style.display = "none"; // Ingen pil vid IDLE
+            }
+
+            // 4. Statusrad längst ner
             document.getElementById('status-text').innerText = latest.status.toUpperCase();
             
-            // 4. Action (t.ex. COOLING) och Pilen
-            const actionVal = (latest.action || "IDLE").toUpperCase();
-            document.getElementById('action-val').innerText = actionVal;
-            
-            const arrow = document.getElementById('status-arrow');
-            if (actionVal === "COOLING") arrow.innerText = "▼";
-            else if (actionVal === "HEATING") arrow.innerText = "▲";
-            else arrow.innerText = "▶";
-
-            // 5. Dag (Under flaskan)
+            // 5. Dag
             document.getElementById('day-val').innerText = latest.day.toFixed(1);
 
             updateChart(data);
@@ -236,6 +245,7 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
 
 
 
