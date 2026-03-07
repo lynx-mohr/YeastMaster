@@ -8,13 +8,15 @@ const PORT = process.env.PORT || 3000;
 const uri = process.env.MONGO_URI; 
 const client = new MongoClient(uri);
 
-let db, logsCollection;
+let db, logsCollection, userDevicesCollection;
 
 async function connectDB() {
     try {
         await client.connect();
         db = client.db('yeastMasterDB');
         logsCollection = db.collection('fermentationLogs');
+        // NYTT: Samlingen som håller koll på vem som äger vilken enhet
+        userDevicesCollection = db.collection('userDevices'); 
         console.log("Ansluten till MongoDB!");
     } catch (e) {
         console.error("Kunde inte ansluta till MongoDB:", e);
@@ -26,24 +28,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('.'));
 
-// 1. MOTTAGAREN (Från ESP32)
+// --- 1. MOTTAGAREN (Från ESP32) ---
 app.post('/api/update', async (req, res) => {
-    // NYTT: Vi plockar nu ut device_id från paketet
     const { device_id, temp, air_temp, day, status, action, token, strain, profile } = req.body;
 
-    // Vi behåller din globala token som ett första säkerhetslager tills vi bygger inloggningen helt
     if (token !== "YeastMaster-Super-Secret-2024") {
         return res.status(401).send({ error: "Obehörig!" });
     }
-
-    // NYTT: Kolla så att ESP32:an faktiskt skickade med vem den är
     if (!device_id) {
         return res.status(400).send({ error: "Saknar device_id!" });
     }
 
     const newEntry = {
         time: new Date(),
-        device_id, // <--- Här sparas MAC-adressen i databasen!
+        device_id, 
         temp,
         air_temp,
         day,
@@ -61,13 +59,9 @@ app.post('/api/update', async (req, res) => {
     }
 });
 
-// 2. SÄNDAREN (Till din mobil/dashboard)
+// --- 2. SÄNDAREN (Till din mobil/dashboard) ---
 app.get('/api/data', async (req, res) => {
-    // NYTT: Webbappen kan nu be om en specifik enhet
     const requestedDevice = req.query.device_id;
-    
-    // Om webbappen frågar efter en specifik enhet, sök bara efter den. 
-    // Annars (som en tillfällig livlina) hämtar vi allt så att din nuvarande app inte går sönder direkt.
     let query = {};
     if (requestedDevice) {
         query.device_id = requestedDevice;
@@ -78,6 +72,48 @@ app.get('/api/data', async (req, res) => {
         res.json(history.reverse());
     } catch (e) {
         res.status(500).send({ error: "Kunde inte hämta data" });
+    }
+});
+
+
+// ==========================================
+// NYA FUNKTIONER FÖR FLERANVÄNDAR-SYSTEMET
+// ==========================================
+
+// --- 3. CLAIM DEVICE (Knyt en enhet till en användare) ---
+app.post('/api/claim-device', async (req, res) => {
+    const { uid, device_id, name } = req.body;
+
+    if (!uid || !device_id) {
+        return res.status(400).send({ error: "Saknar uid eller device_id" });
+    }
+
+    try {
+        // Upsert: Skapa länken om den inte finns, annars uppdatera namnet
+        await userDevicesCollection.updateOne(
+            { device_id: device_id },
+            { $set: { uid: uid, name: name || "Min YeastMaster", claimed_at: new Date() } },
+            { upsert: true }
+        );
+        res.status(200).send({ message: "Enhet tillagd!" });
+    } catch (e) {
+        res.status(500).send({ error: "Kunde inte spara enheten" });
+    }
+});
+
+// --- 4. MY DEVICES (Hämta användarens enheter) ---
+app.get('/api/my-devices', async (req, res) => {
+    const { uid } = req.query;
+
+    if (!uid) {
+        return res.status(400).send({ error: "Saknar uid" });
+    }
+
+    try {
+        const devices = await userDevicesCollection.find({ uid: uid }).toArray();
+        res.status(200).json(devices);
+    } catch (e) {
+        res.status(500).send({ error: "Kunde inte hämta enheter" });
     }
 });
 
