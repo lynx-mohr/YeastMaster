@@ -78,16 +78,16 @@ if (data.length > 0) {
     document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
     document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
 
-    // 2. Status (Här hamnar "CLEANING UP" i highlight-boxen)
+    // 2. Fas (Högst upp till höger i boxen)
     document.getElementById('status-text').innerText = latest.status.toUpperCase();
     
-    // 3. Profil/Jäststam (Vi hämtar 'strain' från datan, annars default)
-    document.getElementById('profile-val').innerText = (latest.strain || "ORIGINAL").toUpperCase();
+    // 3. Jäststam (Under boxen)
+    document.getElementById('profile-val').innerText = (latest.strain || "BREW").toUpperCase();
     
-    // 4. Action (t.ex. "HEATING" eller "COOLING")
+    // 4. Action (t.ex. COOLING eller HEATING)
     document.getElementById('action-val').innerText = (latest.action || "STABLE").toUpperCase();
 
-    // 5. Dag
+    // 5. Dag (Under flaskan)
     document.getElementById('day-val').innerText = latest.day.toFixed(1);
 
     updateChart(data);
@@ -232,6 +232,7 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
 
 
 
