@@ -30,43 +30,29 @@
 
 <div id="dashboard-container">
     <div class="oled-screen">
-<div class="main-display">
-    <div class="left-col">
-        <div class="wifi-icon">
-            <div class="bar bar1"></div>
-            <div class="bar bar2"></div>
-            <div class="bar bar3"></div>
-            <div class="bar bar4"></div>
-        </div>
         
-        <div class="carboy-wrapper">
-            <svg viewBox="0 0 100 100" class="carboy-svg">
-                <path class="glass-line" d="M38,10 H62 V22 L82,42 V88 H18 V42 L38,22 Z" />
-                <g id="bubble-stream"></g>
-            </svg>
-            <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
-        </div>
-        
-        <div class="ferm-row" style="margin-top: 10px;">
-            Day: <span id="day-val">0.0</span>
-        </div>
-    </div>
-
-    <div class="right-col">
-        <div class="highlight-box" id="status-text">--</div>
-        
-        <div class="profile-name" id="profile-val">YEASTMASTER</div>
-        
-        <div class="action-status" id="action-val">IDLE</div>
-        
-        <div class="air-temp">Air: <span id="air-temp-val">--</span>°C</div>
-    </div>
-</div>
+        <div class="main-display">
+            <div class="left-col">
+                <div class="wifi-icon">
+                    <div class="bar bar1"></div>
+                    <div class="bar bar2"></div>
+                    <div class="bar bar3"></div>
+                    <div class="bar bar4"></div>
+                </div>
+                
+                <div class="carboy-wrapper">
+                    <svg viewBox="0 0 100 100" class="carboy-svg">
+                        <path class="glass-line" d="M38,10 H62 V22 L82,42 V88 H18 V42 L38,22 Z" />
+                        <g id="bubble-stream"></g>
+                    </svg>
+                    <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
+                </div>
+            </div>
 
             <div class="right-col">
                 <div class="highlight-box" id="status-text">IDLE</div>
-                <div class="profile-name">YEASTMASTER</div>
-                <div class="action-status">BREWING</div>
+                <div class="profile-name" id="profile-val">YEASTMASTER</div>
+                <div class="action-status" id="action-val">STABLE</div>
                 <div class="air-temp">Air: <span id="air-temp-val">--</span>°C</div>
             </div>
         </div>
@@ -99,6 +85,7 @@
 
 </body>
 </html>
+
 
 
 
