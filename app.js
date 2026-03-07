@@ -1,6 +1,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Här kan du anropa showView('login') manuellt om auth inte hunnit reagera
+    // Om vi inte vet statusen än, visa login-vyn som default
+    if (!activeDeviceId) showView('login');
 });
 
 // --- KONFIGURATION ---
@@ -225,6 +226,7 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
 
 
 
