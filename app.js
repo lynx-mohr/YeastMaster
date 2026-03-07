@@ -73,18 +73,13 @@ async function updateDashboard() {
         if (data.length > 0) {
             const latest = data[data.length - 1];
 
-            // Uppdatera texter
-            if(document.getElementById('temp-beer-val')) 
-                document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
-            if(document.getElementById('air-temp-val')) 
-                document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
-            if(document.getElementById('status-text')) 
-                document.getElementById('status-text').innerText = latest.status;
-            if(document.getElementById('day-val')) 
-                document.getElementById('day-val').innerText = latest.day.toFixed(1);
+            document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
+            document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
+            document.getElementById('status-text').innerText = latest.status;
+            document.getElementById('day-val').innerText = latest.day.toFixed(1);
 
-            // Anropa din graf-funktion (Fixat namn här!)
             updateChart(data);
+            // Ingen updateGlassAnimation här – bara ren och skär jäsning!
         }
     } catch (error) {
         console.error("Kunde inte hämta data:", error);
@@ -226,6 +221,7 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
 
 
 
