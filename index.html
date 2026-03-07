@@ -42,33 +42,33 @@
                 
                 <div class="carboy-wrapper">
                     <svg viewBox="0 0 100 100" class="carboy-svg">
-                        <path class="glass-line" d="M38,10 H62 V22 L82,42 V88 H18 V42 L38,22 Z" />
+                        <path class="glass-line" d="M30,20 Q20,20 20,35 L20,80 Q20,95 50,95 Q80,95 80,80 L80,35 Q80,20 70,20 L60,20 L60,5 L40,5 L40,20 Z" />
                         <g id="bubble-stream"></g>
                     </svg>
                     <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
                 </div>
+
+                <div class="ferm-row" style="margin-top: 15px;">
+                    Day: <span id="day-val">0.0</span>
+                </div>
             </div>
 
             <div class="right-col">
-                <div class="highlight-box" id="status-text">IDLE</div>
-                <div class="profile-name" id="profile-val">YEASTMASTER</div>
-                <div class="action-status" id="action-val">STABLE</div>
-                <div class="air-temp">Air: <span id="air-temp-val">--</span>°C</div>
+                <div class="highlight-box" id="status-text">--</div>
+                
+                <div class="profile-name" id="profile-val">--</div>
+                
+                <div class="action-status" id="action-val">--</div>
+                
+                <div class="air-temp" style="margin-top: 10px;">
+                    Air: <span id="air-temp-val">--</span>°C
+                </div>
             </div>
         </div>
 
-        <div class="bottom-section">
-            <hr class="separator-line">
-            <div class="system-status">SYSTEM ONLINE</div>
-        </div>
-
-        <div class="ferm-data-section">
-            <div class="ferm-header">FERM. DATA</div>
-            <div class="ferm-row">Day: <span id="day-val">0.0</span></div>
-        </div>
+        <hr class="separator-line">
 
         <div class="chart-section">
-            <div class="chart-header">TEMP HISTORY</div>
             <div class="chart-container">
                 <canvas id="beer-chart"></canvas>
             </div>
@@ -85,6 +85,7 @@
 
 </body>
 </html>
+
 
 
 
