@@ -30,7 +30,6 @@
 
 <div id="dashboard-container">
     <div class="oled-screen">
-        
         <div class="main-display">
             <div class="left-col">
                 <div class="wifi-icon">
@@ -42,13 +41,13 @@
                 
                 <div class="carboy-wrapper">
                     <svg viewBox="0 0 100 100" class="carboy-svg">
-                        <path class="glass-line" d="M30,20 Q20,20 20,35 L20,80 Q20,95 50,95 Q80,95 80,80 L80,35 Q80,20 70,20 L60,20 L60,5 L40,5 L40,20 Z" />
+                        <path class="glass-line" d="M42,10 H58 V20 C78,20 88,32 88,55 V82 C88,95 75,98 50,98 C25,98 12,95 12,82 V55 C12,32 22,20 42,20 Z" />
                         <g id="bubble-stream"></g>
                     </svg>
                     <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
                 </div>
 
-                <div class="ferm-row" style="margin-top: 15px;">
+                <div class="ferm-row" style="margin-top: 15px; font-size: 2.2rem;">
                     Day: <span id="day-val">0.0</span>
                 </div>
             </div>
@@ -66,7 +65,7 @@
             </div>
         </div>
 
-        <hr class="separator-line">
+        <hr class="separator-line" style="border-top: 2px dashed #444; margin: 20px 0;">
 
         <div class="chart-section">
             <div class="chart-container">
@@ -75,7 +74,7 @@
         </div>
     </div>
     
-    <button id="btn-logout" style="margin-top: 20px; opacity: 0.2; background: none; border: 1px solid #444; color: #fff; font-family: 'VT323'; cursor: pointer;">LOGOUT</button>
+    <button id="btn-logout" style="margin-top: 20px; opacity: 0.3; background: none; border: 1px solid #444; color: #888; padding: 5px 10px; font-family: 'VT323'; cursor: pointer;">Logga ut</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -85,6 +84,7 @@
 
 </body>
 </html>
+
 
 
 
