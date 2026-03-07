@@ -1,3 +1,8 @@
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Här kan du anropa showView('login') manuellt om auth inte hunnit reagera
+});
+
 // --- KONFIGURATION ---
 let activeDeviceId = null;
 const API_BASE = "https://soulofbeer-live.onrender.com/api";
@@ -168,3 +173,4 @@ if(document.getElementById('btn-login')) {
         auth.signInWithPopup(provider);
     });
 }
+
