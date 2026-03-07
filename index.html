@@ -38,25 +38,29 @@
                 
                 <div class="carboy-wrapper">
                     <svg viewBox="0 0 100 100" class="carboy-svg">
-                        <path class="glass-line" d="M44,18 H56 M46,18 V25 M54,25 V18" />
-                        <circle class="glass-line" cx="50" cy="60" r="30" />
+                        <path class="glass-line" d="M47,20 V25 M53,20 V25 M45,20 H55" />
+                        <circle class="glass-line" cx="50" cy="60" r="28" />
                         <g id="bubble-stream"></g>
                     </svg>
                     <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
+                </div>
+
+                <div class="ferm-row" style="margin-top: 10px; font-size: 2.2rem;">
+                    Day: <span id="day-val">0.0</span>
                 </div>
             </div>
 
             <div class="right-col">
                 <div class="highlight-box" id="strain-val">--</div>
                 
-                <div id="profile-val" style="font-size: 1.6rem; margin-bottom: 5px;">--</div>
+                <div id="profile-val" style="font-size: 1.6rem; margin-bottom: 8px;">--</div>
 
-                <div class="action-status" style="display: flex; align-items: center; justify-content: flex-end;">
-                    <span id="status-arrow" class="blink-active" style="margin-right: 8px;"></span>
+                <div class="action-status" style="display: flex; align-items: center; justify-content: flex-end; font-size: 2rem;">
+                    <span id="status-arrow" class="blink-active" style="margin-right: 8px; font-size: 1.5rem;"></span>
                     <span id="action-val">--</span>
                 </div>
                 
-                <div class="air-temp" style="margin-top: 10px;">
+                <div class="air-temp" style="margin-top: 12px;">
                     Air: <span id="air-temp-val">--</span>°C
                 </div>
             </div>
@@ -64,7 +68,7 @@
 
         <hr class="separator-line" style="border-top: 2px solid var(--oled-color); margin: 15px 0 5px 0;">
         <div class="system-status" style="font-size: 1.8rem;">
-            Status: <span id="status-text">--</span>
+            Fermentation phase: <span id="status-text">--</span>
         </div>
 
         <div class="chart-section" style="border-top: 1px dashed #444; margin-top: 10px; padding-top: 10px;">
@@ -73,6 +77,7 @@
             </div>
         </div>
     </div>
+    
     <button id="btn-logout" style="margin-top: 20px; opacity: 0.2; background: none; border: 1px solid #444; color: #fff; font-family: 'VT323'; cursor: pointer;">LOGOUT</button>
 </div>
 
@@ -83,6 +88,7 @@
 
 </body>
 </html>
+
 
 
 
