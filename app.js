@@ -70,17 +70,28 @@ async function updateDashboard() {
         const response = await fetch(`${API_BASE}/data?device_id=${activeDeviceId}`);
         const data = await response.json();
 
-        if (data.length > 0) {
-            const latest = data[data.length - 1];
+// Inuti din updateDashboard-funktion:
+if (data.length > 0) {
+    const latest = data[data.length - 1];
 
-            document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
-            document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
-            document.getElementById('status-text').innerText = latest.status;
-            document.getElementById('day-val').innerText = latest.day.toFixed(1);
+    // 1. Temperaturer
+    document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
+    document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
 
-            updateChart(data);
-            // Ingen updateGlassAnimation här – bara ren och skär jäsning!
-        }
+    // 2. Status (Här hamnar "CLEANING UP" i highlight-boxen)
+    document.getElementById('status-text').innerText = latest.status.toUpperCase();
+    
+    // 3. Profil/Jäststam (Vi hämtar 'strain' från datan, annars default)
+    document.getElementById('profile-val').innerText = (latest.strain || "ORIGINAL").toUpperCase();
+    
+    // 4. Action (t.ex. "HEATING" eller "COOLING")
+    document.getElementById('action-val').innerText = (latest.action || "STABLE").toUpperCase();
+
+    // 5. Dag
+    document.getElementById('day-val').innerText = latest.day.toFixed(1);
+
+    updateChart(data);
+}
     } catch (error) {
         console.error("Kunde inte hämta data:", error);
     }
@@ -221,6 +232,7 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
 
 
 
