@@ -1,5 +1,5 @@
 // Din unika YeastMaster! (Senare kommer inloggningen låta användaren välja detta)
-const DEVICE_MAC = "E4:B0:63:AE:1C:24"; 
+const DEVICE_MAC = "E4:B0:63:AE:1C:25"; 
 
 // Vi lägger till ?device_id=... i slutet av anropet
 const SERVER_URL = `https://soulofbeer-live.onrender.com/api/data?device_id=${DEVICE_MAC}`;
@@ -189,4 +189,5 @@ function startBubbles() {
 }
 
 startBubbles();
+
 
