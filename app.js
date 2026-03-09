@@ -123,10 +123,9 @@ function updateChart(data) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     
-    // SKAPA EN LJUSGRÅ GRADIENT (Matchar damejeangens innehåll)
-    // Den börjar halvgenomskinlig i toppen och tonar ut till helt osynlig i botten
+    // TYDLIGARE GRÅ GRADIENT (Ökad opacitet till 0.3)
     const gradient = ctx.createLinearGradient(0, 0, 0, 120);
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)'); 
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)'); 
     gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');   
 
     const labels = data.map(d => new Date(d.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
@@ -144,10 +143,10 @@ function updateChart(data) {
                 datasets: [{
                     label: 'Beer Temp',
                     data: temps,
-                    borderColor: '#f39c12', // DEN ORANGEA LINJEN (Kaxig kontrast!)
+                    borderColor: '#f39c12', // Orange kaxig linje
                     borderWidth: 2,
                     fill: true, 
-                    backgroundColor: gradient, // DEN LJUSGRÅA GRADIENTEN
+                    backgroundColor: gradient, // Tydligare grå skugga
                     tension: 0.3,
                     pointRadius: 0 
                 }]
@@ -157,15 +156,18 @@ function updateChart(data) {
                 maintainAspectRatio: false,
                 scales: {
                     x: { 
-                        ticks: { color: '#666', maxTicksLimit: 5, font: { family: 'Inter' } }, 
+                        ticks: { color: '#666', maxTicksLimit: 5, font: { family: 'Inter', size: 10 } }, 
                         grid: { display: false } 
                     },
                     y: { 
-                        ticks: { color: '#666', font: { family: 'Inter' }, callback: v => v + '°' }, 
+                        ticks: { color: '#666', font: { family: 'Inter', size: 10 }, callback: v => v + '°' }, 
                         grid: { color: 'rgba(255, 255, 255, 0.05)' } 
                     }
                 },
-                plugins: { legend: { display: false } }
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: { enabled: true }
+                }
             }
         });
     }

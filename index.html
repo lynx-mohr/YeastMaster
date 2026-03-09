@@ -39,7 +39,7 @@
                         <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
                         <path class="glass-line" 
                               d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" 
-                              fill="#4a4a4a" 
+                              fill="#5a5a5a" 
                               stroke="var(--oled-color)" 
                               stroke-width="2.5" 
                               stroke-linejoin="round" />
@@ -67,15 +67,18 @@
 
         <hr class="separator-line" style="border-top: 3px solid var(--oled-color); margin: 0px 0 10px 0; opacity: 1;">
 
-        <div style="text-align: left; padding: 0 10px;">
-            <div style="font-size: 1.4rem; font-weight: 800; color: var(--oled-color); margin-bottom: 2px;">Progress:</div>
-            <hr style="border-top: 1px dashed #555; margin: 0 0 8px 0; width: 80px;"> <div style="font-size: 1.1rem; line-height: 1.6; font-weight: 600;">
+        <div style="text-align: left; padding: 0 5px;">
+            <div style="font-size: 1.3rem; font-weight: 800; color: var(--oled-color); letter-spacing: 1px;">PROGRESS</div>
+            <hr style="border-top: 1px dashed #555; margin: 4px 0 10px 0; width: 100%; opacity: 0.6;">
+            
+            <div style="font-size: 1.1rem; line-height: 1.6; font-weight: 600; padding-left: 5px;">
                 <div>Day: <span id="day-val" style="color: var(--oled-color);">0.0</span></div>
                 <div>Fermentation phase: <span id="status-text" style="font-weight: 800; color: var(--oled-color);">--</span></div>
             </div>
         </div>
 
-        <div class="chart-section" style="margin-top: 10px; border-top: 1px solid #333; padding-top: 10px;">
+        <div class="chart-section" style="margin-top: 15px; border-top: 1px solid #333; padding-top: 10px;">
+            <div style="font-size: 0.9rem; font-weight: 800; color: #888; margin-bottom: 5px; padding-left: 5px; letter-spacing: 1px;">TEMP HISTORY</div>
             <div class="chart-container" style="height: 120px;">
                 <canvas id="beer-chart"></canvas>
             </div>
