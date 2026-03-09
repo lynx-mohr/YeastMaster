@@ -29,67 +29,72 @@
     </div>
 
 <div id="dashboard-container">
-    <div class="oled-screen">
-        
-        <div class="main-display" style="display: flex; align-items: flex-end; margin-bottom: 0; padding-bottom: 0;">
+    <div class="oled-screen" style="padding-top: 10px;"> <div class="main-display" style="display: flex; align-items: flex-end; margin-bottom: -15px; position: relative; z-index: 2;">
             
             <div class="left-col" style="width: 50%; display: flex; justify-content: center;"> 
-                <div class="carboy-wrapper" style="transform: scale(1.15); transform-origin: bottom center; margin: 10px 0 -20px 0;">
+                <div class="carboy-wrapper" style="transform: scale(1.15); transform-origin: bottom center; margin-bottom: -10px;">
                     <svg viewBox="0 0 100 92" class="carboy-svg" style="display: block;">
                         <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
-                        
                         <path class="glass-line" 
                               d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" 
-                              fill="#5a5a5a" 
+                              fill="#4a4a4a" 
                               stroke="var(--oled-color)" 
                               stroke-width="2.5" 
                               stroke-linejoin="round" />
-                              
                         <g id="bubble-stream"></g>
                     </svg>
                     <div class="beer-temp outlined-text" style="top: 55%; font-size: 1.7rem;"><span id="temp-beer-val">--</span>°C</div>
                 </div>
             </div> 
 
-            <div class="right-col" style="width: 50%; display: flex; flex-direction: column; justify-content: space-between; height: 160px; padding-bottom: 5px; align-items: flex-end;">
+            <div class="right-col" style="width: 50%; display: flex; flex-direction: column; justify-content: space-between; height: 140px; align-items: flex-end;">
+                <div class="highlight-box" id="strain-val" style="border-radius: 4px;">--</div>
                 
-                <div style="display: flex; flex-direction: column; align-items: flex-end; width: 100%;">
-                    <div class="highlight-box" id="strain-val" style="border-radius: 4px;">--</div>
-                    <div id="profile-val" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 12px; opacity: 0.8;">--</div>
-                    <div class="action-status" style="display: flex; align-items: center; justify-content: flex-end; font-size: 1.6rem; font-weight: 800; margin-bottom: 8px;">
-                        <span id="status-arrow" class="blink-active" style="margin-right: 8px; font-size: 1.2rem;">▼</span>
+                <div style="text-align: right; width: 100%;">
+                    <div id="profile-val" style="font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; opacity: 0.8;">--</div>
+                    <div class="action-status" style="display: flex; align-items: center; justify-content: flex-end; font-size: 1.5rem; font-weight: 800; margin-bottom: 2px;">
+                        <span id="status-arrow" class="blink-active" style="margin-right: 6px; font-size: 1.1rem;">▼</span>
                         <span id="action-val">--</span>
                     </div>
-                </div>
-                
-                <div class="air-temp" style="width: 100%; text-align: left; font-size: 1.2rem; opacity: 0.8; padding-left: 10px;">
-                    Air: <span id="air-temp-val">--</span>°C
+                    <div class="air-temp" style="font-size: 1.1rem; opacity: 0.8;">
+                        Air: <span id="air-temp-val">--</span>°C
+                    </div>
                 </div>
             </div>
         </div>
 
-        <hr class="separator-line" style="border-top: 3px solid var(--oled-color); margin: 0px 0 15px 0; opacity: 1;">
+        <hr class="separator-line" style="border-top: 3px solid var(--oled-color); margin: 0; position: relative; z-index: 1; opacity: 1;">
 
-        <div style="text-align: left; margin-bottom: 5px; padding-left: 5px;">
-            <div style="font-size: 1.3rem; font-weight: 800; color: var(--oled-color); letter-spacing: 1px;">PROGRESS</div>
-            <hr style="border-top: 1px dashed #555; margin: 4px 0 10px 0; width: 100%; opacity: 0.6;">
+        <div style="text-align: left; padding: 10px 5px 0 5px;">
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--oled-color); letter-spacing: 1px;">PROGRESS</div>
+            <hr style="border-top: 1px dashed #555; margin: 4px 0 8px 0; width: 100%; opacity: 0.6;">
             
-            <div style="font-size: 1.1rem; line-height: 1.6; font-weight: 600; padding-left: 5px;">
+            <div style="margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; color: #888; font-weight: 600;">
+                    <span>START</span>
+                    <span id="progress-percent">0%</span>
+                    <span>READY</span>
+                </div>
+                <div style="width: 100%; height: 6px; border: 1px solid #444; border-radius: 10px; overflow: hidden; background: rgba(255,255,255,0.05);">
+                    <div id="progress-fill" style="width: 0%; height: 100%; background-color: #f39c12; box-shadow: 0 0 8px rgba(243, 156, 18, 0.3); transition: width 1s ease-in-out;"></div>
+                </div>
+            </div>
+
+            <div style="font-size: 1.0rem; line-height: 1.4; font-weight: 600;">
                 <div>Day: <span id="day-val" style="color: var(--oled-color);">0.0</span></div>
-                <div>Fermentation phase: <span id="status-text" style="font-weight: 800; color: var(--oled-color);">--</span></div>
+                <div>Phase: <span id="status-text" style="font-weight: 800; color: var(--oled-color);">--</span></div>
             </div>
         </div>
 
-        <div class="chart-section" style="margin-top: 10px; border-top: 1px solid #333; padding-top: 10px;">
-            <div style="font-size: 0.9rem; font-weight: 800; color: #888; margin-bottom: 5px; padding-left: 5px; letter-spacing: 1px;">TEMP HISTORY</div>
-            <div class="chart-container" style="height: 120px;">
+        <div class="chart-section" style="margin-top: 10px; border-top: 1px solid #333; padding-top: 8px;">
+            <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 5px; padding-left: 5px; letter-spacing: 1px;">TEMP HISTORY</div>
+            <div class="chart-container" style="height: 110px; width: 100%;">
                 <canvas id="beer-chart"></canvas>
             </div>
         </div>
         
     </div> 
-    
-    <button id="btn-logout" style="display: block; margin: 20px auto 0 auto; opacity: 0.3; background: none; border: 1px solid #666; color: #fff; font-family: 'Inter', sans-serif; padding: 5px 15px; border-radius: 4px; cursor: pointer;">LOGOUT</button>
+    <button id="btn-logout" style="display: block; margin: 15px auto 0 auto; opacity: 0.3; background: none; border: 1px solid #666; color: #fff; padding: 5px 15px; border-radius: 4px; cursor: pointer;">LOGOUT</button>
 </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
