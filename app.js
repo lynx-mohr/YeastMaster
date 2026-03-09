@@ -103,11 +103,20 @@ async function updateDashboard() {
                 arrow.style.display = "none"; // Ingen pil vid IDLE
             }
 
-            // 4. Statusrad längst ner
+// 4. Statusrad (Fas)
             document.getElementById('status-text').innerText = latest.status.toUpperCase();
             
-            // 5. Dag
-            document.getElementById('day-val').innerText = latest.day.toFixed(1);
+            // 5. Dag och Progress-mätare (Logiken för den orangea mätaren)
+            const currentDay = latest.day || 0;
+            const targetDays = 14; // Här sätter vi målet för mätaren (t.ex. 14 dagar)
+            
+            // Räkna ut procenten (0-100%)
+            const percent = Math.min((currentDay / targetDays) * 100, 100).toFixed(0);
+
+            // Uppdatera värdena i HTML
+            document.getElementById('day-val').innerText = currentDay.toFixed(1);
+            document.getElementById('progress-percent').innerText = percent + "%";
+            document.getElementById('progress-fill').style.width = percent + "%";
 
             updateChart(data);
         }
