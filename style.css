@@ -62,15 +62,15 @@ body {
     flex-direction: column;
     align-items: flex-end; 
     text-align: right;
-    /* Denna padding styr hur nära linjen texten hamnar på PC */
-    padding-bottom: 35px; 
+    /* VIKTIGT: Denna padding (60px) pareras med marginalen i HTML (-55px) 
+       så att texten hamnar precis ovanför linjen */
+    padding-bottom: 60px !important; 
 }
-
-/* --- DAMEJEANG --- */
+/* --- DAMEJEANG (PC) --- */
 .carboy-wrapper {
     position: relative;
-    width: 180px; 
-    height: 180px;
+    width: 210px; /* Större flaska */
+    height: 210px;
 }
 
 .glass-line {
@@ -91,16 +91,15 @@ body {
     top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2rem;
+    font-size: 1.8rem; /* Något mindre text för att inte krocka med glaset */
     width: 100%;
     text-align: center;
 }
 
-/* Denna placerar Air-texten fritt vid flaskans axel */
 .air-floating {
     position: absolute;
-    top: 35px;      /* PC: Höjd från toppen av flaskan */
-    right: -25px;   /* PC: Avstånd till höger om halsen */
+    top: 40px;      /* Justerad för den större flaskan */
+    right: -20px; 
     font-size: 0.85rem;
     font-weight: 600;
     opacity: 0.6;

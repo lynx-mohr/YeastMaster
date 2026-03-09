@@ -31,11 +31,10 @@
 <div id="dashboard-container">
     <div class="oled-screen" style="padding-top: 5px; gap: 0;"> 
         
-<div class="main-display" style="display: flex; align-items: flex-end; margin-top: -10px; margin-bottom: -48px; position: relative; z-index: 2;">
+<div class="main-display" style="display: flex; align-items: flex-end; margin-top: -10px; margin-bottom: -55px; position: relative; z-index: 2;">
     
-    <div class="left-col" style="width: 40%;"> 
-        <div class="carboy-wrapper" style="position: relative;">
-            
+    <div class="left-col" style="width: 45%;"> 
+        <div class="carboy-wrapper">
             <div class="air-floating">Air: <span id="air-temp-val">--</span>°C</div>
 
             <svg viewBox="0 0 100 92" class="carboy-svg" style="display: block;">
@@ -48,18 +47,16 @@
                       stroke-linejoin="round" />
                 <g id="bubble-stream"></g>
             </svg>
-            <div class="beer-temp outlined-text" style="position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); width: 100%; text-align: center;">
-                <span id="temp-beer-val">--</span>°C
-            </div>
+            <div class="beer-temp outlined-text"><span id="temp-beer-val">--</span>°C</div>
         </div>
     </div> 
 
-    <div class="right-col" style="width: 60%; height: 145px; justify-content: flex-end; padding-bottom: 55px;">
-        <div class="highlight-box" id="strain-val" style="margin-bottom: 12px;">--</div>
+    <div class="right-col">
+        <div class="highlight-box" id="strain-val" style="margin-bottom: 8px;">--</div>
         
         <div style="text-align: right; width: 100%;">
             <div id="profile-val" style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; opacity: 0.7;">--</div>
-            <div class="action-status" style="margin-bottom: 0;">
+            <div class="action-status">
                 <span id="status-arrow" class="blink-active" style="margin-right: 6px; font-size: 1.1rem;">▼</span>
                 <span id="action-val">--</span>
             </div>
