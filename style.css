@@ -218,22 +218,39 @@ body {
     display: inline-block;
 }
 
-/* --- MOBILANPASSNING: VERSION "THE SWEET SPOT" --- */
+/* --- MOBILANPASSNING: VERSION "THE SWEET SPOT" (Uppdaterad för 2.0) --- */
 @media (max-width: 600px) {
     #wifi-status, .wifi-status, .wifi-icon, .drawWifiIcon, svg[id*="wifi"], [id*="wifi"] {
         display: none !important;
     }
 
+    /* 1. FÖRDELA UTRYMMET (Tvinga över HTML-kodens 50/50) */
+    .left-col {
+        width: 40% !important; /* Ger glaset lite mindre plats... */
+    }
+    .right-col {
+        width: 60% !important; /* ...och texten lite mer plats, så de inte krockar */
+        flex: 1;
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        padding-right: 5px;
+    }
+
+    /* 2. DAMEJEANNEN (Stoppa HTML-skalningen från att svälla över) */
     .carboy-wrapper {
         width: 160px;
         margin: 0;
         position: relative;
         height: 160px; 
+        transform: scale(0.9) !important; /* Krymper hela glaset något på mobilen */
+        transform-origin: top center !important;
     }
 
-    /* 1. JUSTERA TEMP I FLASKAN (MOBIL) */
-    .beer-temp {
-        font-size: 32px;
+    /* 3. JUSTERA TEMP I FLASKAN (Krympt något för att passa den krispiga stilen) */
+    .beer-temp, .outlined-text {
+        font-size: 24px !important; /* 32px blir för grötigt med outlinen på mobil */
         font-weight: bold;
         position: absolute;
         top: 55% !important; 
@@ -244,37 +261,35 @@ body {
         bottom: auto !important;
     }
 
-    .right-col {
-        flex: 1;
-        text-align: right;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        padding-right: 5px;
-    }
-
-    /* Vi behåller de "kaxiga" storlekarna på texterna */
+    /* 4. BEHÅLL KAXIGHETEN PÅ TEXTERNA (Men marginellt justerade för 60%-kolumnen) */
     .highlight-box {
-        font-size: 21px; 
+        font-size: 18px !important; 
         padding: 5px 10px;
         margin-bottom: 6px;
     }
 
-    .profile-name {
-        font-size: 22px; 
+    #profile-val, .profile-name {
+        font-size: 18px !important; 
         margin-bottom: 10px;
     }
 
     .action-status {
-        font-size: 25px; 
+        font-size: 20px !important; /* Tillräckligt stort för att vara kaxigt, litet nog att inte krocka */
         margin-bottom: 8px;
         font-weight: bold;
     }
 
-    .air-temp {
-        font-size: 25px; 
-        color: #ccc;
+.air-temp {
+        font-size: 18px !important; 
+        text-align: left !important; /* Tvinga vänsterjustering även på mobil */
+        padding-left: 10px !important;
+        width: 100% !important;
     }
+    
+    .separator-line {
+        margin-top: 0px !important; /* Tajtare golv på mobilen */
+    }
+}   
 
     .chart-container {
         height: 150px;
