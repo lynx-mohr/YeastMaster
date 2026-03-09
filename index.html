@@ -32,16 +32,18 @@
     <div class="oled-screen">
         <div class="main-display">
             <div class="left-col" style="width: 50%;"> <div class="carboy-wrapper" style="transform: scale(1.15); transform-origin: top center; margin-top: 10px;">
-                    <svg viewBox="0 0 100 100" class="carboy-svg">
-                        <rect x="40" y="5" width="20" height="8" fill="var(--oled-color)" />
-                        <rect x="44" y="13" width="12" height="12" fill="var(--oled-color)" />
-                        <circle class="glass-line" cx="50" cy="55" r="35" />
-                        
-                        <g id="bubble-stream"></g>
-                    </svg>
-                    <div class="beer-temp" style="top: 55%; font-size: 2.2rem; letter-spacing: -1px;"><span id="temp-beer-val">--</span>°C</div>
-                </div>
-            </div>
+    <svg viewBox="0 0 100 100" class="carboy-svg">
+        <rect x="40" y="6" width="20" height="5" fill="var(--oled-color)" />
+        
+        <polygon points="43,11 57,11 54,20 46,20" fill="rgba(255,255,255,0.4)" />
+        
+        <circle class="glass-line" cx="50" cy="55" r="35" fill="rgba(255, 255, 255, 0.15)" />
+        
+        <g id="bubble-stream"></g>
+    </svg>
+    
+    <div class="beer-temp outlined-text" style="top: 55%;"><span id="temp-beer-val">--</span>°C</div>
+</div>
 
             <div class="right-col" style="width: 50%;">
                 <div class="highlight-box" id="strain-val">IRISH ALE</div>
@@ -83,6 +85,7 @@
 
 </body>
 </html>
+
 
 
 
