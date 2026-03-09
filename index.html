@@ -29,9 +29,9 @@
     </div>
 
 <div id="dashboard-container">
-    <div class="oled-screen" style="padding-top: 0; gap: 0;"> 
+    <div class="oled-screen" style="padding-top: 20px; gap: 20px;"> 
         
-        <div class="main-display" style="display: flex; align-items: flex-end; margin-top: -15px; margin-bottom: -48px; position: relative; z-index: 2;">
+        <div class="main-display" style="display: flex; align-items: flex-end; margin-top: -10px; margin-bottom: -48px; position: relative; z-index: 2;">
             
             <div class="left-col"> 
                 <div class="carboy-wrapper">
@@ -49,17 +49,19 @@
                 </div>
             </div> 
 
-            <div class="right-col" style="height: 135px; justify-content: space-between; padding-bottom: 12px;">
+            <div class="right-col" style="height: 160px; justify-content: space-between; padding-bottom: 48px;">
                 <div class="highlight-box" id="strain-val">--</div>
                 
                 <div style="text-align: right; width: 100%;">
-                    <div id="profile-val" style="font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; opacity: 0.8;">--</div>
-                    <div class="action-status">
+                    <div id="profile-val" style="font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; opacity: 0.8;">--</div>
+                    
+                    <div class="air-temp" style="font-size: 0.9rem; opacity: 0.6; margin-bottom: 8px;">
+                        Air: <span id="air-temp-val">--</span>°C
+                    </div>
+
+                    <div class="action-status" style="margin-bottom: 0;">
                         <span id="status-arrow" class="blink-active" style="margin-right: 8px; font-size: 1.2rem;">▼</span>
                         <span id="action-val">--</span>
-                    </div>
-                    <div class="air-temp" style="font-size: 1.1rem;">
-                        Air: <span id="air-temp-val">--</span>°C
                     </div>
                 </div>
             </div>
@@ -88,7 +90,7 @@
             </div>
         </div>
 
-        <div class="chart-section" style="margin-top: 15px;">
+        <div class="chart-section" style="margin-top: 10px;">
             <div style="font-size: 0.9rem; font-weight: 800; color: #888; margin-bottom: 5px; padding-left: 5px; letter-spacing: 1px;">TEMP HISTORY</div>
             <div class="chart-container">
                 <canvas id="beer-chart"></canvas>
