@@ -50,6 +50,16 @@ body {
     position: relative;
 }
 
+/* Ger texten en svart kärna med en skarp vit linje runt om */
+.outlined-text {
+    font-size: 2.8rem; /* Lite större och kaxigare */
+    letter-spacing: -1px;
+    color: var(--oled-bg); /* Svart insida */
+    -webkit-text-stroke: 1.5px var(--oled-color); /* Vit kant */
+    text-shadow: none; /* Ta bort den vanliga glöden för ökad kontrast */
+    font-weight: bold;
+}
+
 .wifi-icon {
     display: flex;
     align-items: flex-end;
@@ -343,3 +353,4 @@ body {
     margin-top: 15px;
     color: #555 !important;
 }
+
