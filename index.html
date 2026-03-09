@@ -31,33 +31,26 @@
 <div id="dashboard-container">
     <div class="oled-screen">
         <div class="main-display">
-            <div class="left-col">
-                <div class="wifi-icon">
-                    <div class="bar bar1"></div><div class="bar bar2"></div><div class="bar bar3"></div><div class="bar bar4"></div>
-                </div>
-                
-                <div class="carboy-wrapper">
+            <div class="left-col" style="width: 50%;"> <div class="carboy-wrapper" style="transform: scale(1.15); transform-origin: top center; margin-top: 10px;">
                     <svg viewBox="0 0 100 100" class="carboy-svg">
-                        <path class="glass-line" d="M47,20 V25 M53,20 V25 M45,20 H55" />
-                        <circle class="glass-line" cx="50" cy="60" r="28" />
+                        <rect x="40" y="5" width="20" height="8" fill="var(--oled-color)" />
+                        <rect x="44" y="13" width="12" height="12" fill="var(--oled-color)" />
+                        <circle class="glass-line" cx="50" cy="55" r="35" />
+                        
                         <g id="bubble-stream"></g>
                     </svg>
-                    <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
-                </div>
-
-                <div class="ferm-row" style="margin-top: 10px; font-size: 2.2rem;">
-                    Day: <span id="day-val">0.0</span>
+                    <div class="beer-temp" style="top: 55%; font-size: 2.2rem; letter-spacing: -1px;"><span id="temp-beer-val">--</span>°C</div>
                 </div>
             </div>
 
-            <div class="right-col">
-                <div class="highlight-box" id="strain-val">--</div>
+            <div class="right-col" style="width: 50%;">
+                <div class="highlight-box" id="strain-val">IRISH ALE</div>
                 
-                <div id="profile-val" style="font-size: 1.6rem; margin-bottom: 8px;">--</div>
+                <div id="profile-val" style="font-size: 1.6rem; margin-bottom: 8px;">Low Ester</div>
 
                 <div class="action-status" style="display: flex; align-items: center; justify-content: flex-end; font-size: 2rem;">
-                    <span id="status-arrow" class="blink-active" style="margin-right: 8px; font-size: 1.5rem;"></span>
-                    <span id="action-val">--</span>
+                    <span id="status-arrow" class="blink-active" style="margin-right: 8px; font-size: 1.5rem;">▼</span>
+                    <span id="action-val">COOLING</span>
                 </div>
                 
                 <div class="air-temp" style="margin-top: 12px;">
@@ -66,12 +59,14 @@
             </div>
         </div>
 
-        <hr class="separator-line" style="border-top: 2px solid var(--oled-color); margin: 15px 0 5px 0;">
-        <div class="system-status" style="font-size: 1.8rem;">
-            Fermentation phase: <span id="status-text">--</span>
+        <hr class="separator-line" style="border-top: 3px solid var(--oled-color); margin: 25px 0 10px 0;">
+
+        <div style="display: flex; justify-content: space-between; font-size: 1.8rem; margin-bottom: 10px;">
+            <div>Day: <span id="day-val">0.0</span></div>
+            <div id="status-text">SYSTEM ONLINE</div>
         </div>
 
-        <div class="chart-section" style="border-top: 1px dashed #444; margin-top: 10px; padding-top: 10px;">
+        <div class="chart-section" style="border-top: 1px dashed #444; padding-top: 10px;">
             <div class="chart-container">
                 <canvas id="beer-chart"></canvas>
             </div>
@@ -88,6 +83,7 @@
 
 </body>
 </html>
+
 
 
 
