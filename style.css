@@ -95,9 +95,10 @@ body {
 
 /* Denna regel tillåter nu HTML-koden att bestämma fyllningen */
 .glass-line {
-    stroke-dasharray: none !important; 
+    stroke: var(--oled-color);
     stroke-width: 2.5;
-    fill: inherit; /* Gör att den lyssnar på färgen vi sätter i HTML */
+    stroke-dasharray: none !important;
+    /* Ingen fill-regel här, vi låter HTML styra helt! */
 }
 
 /* EXAKT CENTRERING AV TEMP */

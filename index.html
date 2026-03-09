@@ -35,15 +35,19 @@
             
             <div class="left-col" style="width: 50%; display: flex; justify-content: center;"> 
                 <div class="carboy-wrapper" style="transform: scale(1.15); transform-origin: bottom center; margin: 10px 0 -15px 0;">
-                  <svg viewBox="0 0 100 92" class="carboy-svg" style="display: block;">
-    <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
+     <svg viewBox="0 0 100 92" class="carboy-svg" style="display: block;">
+    <g id="stopper">
+        <rect x="36" y="2" width="28" height="5" fill="var(--oled-color)" rx="1" />
+        <path d="M39,7 L61,7 L58,15 L42,15 Z" fill="var(--oled-color)" />
+        <rect x="42" y="13" width="16" height="2" fill="rgba(0,0,0,0.3)" />
+    </g>
     
-  <path class="glass-line" 
-      d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" 
-      fill="#5a5a5a" 
-      stroke="var(--oled-color)" 
-      stroke-width="2.5" 
-      stroke-linejoin="round" />
+    <path class="glass-line" 
+          d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" 
+          style="fill: #5a5a5a !important; fill-opacity: 1 !important;"
+          stroke="var(--oled-color)" 
+          stroke-width="2.5" 
+          stroke-linejoin="round" />
           
     <g id="bubble-stream"></g>
 </svg>
