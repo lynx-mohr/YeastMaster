@@ -1,19 +1,18 @@
+/* --- GRUNDLÄGGANDE RESET --- */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-/* Äkta OLED Monokrom (Ljusgrå/Vit mot Svart) */
 :root {
-    --oled-color: #e0e0e0; /* Krispigt ljusgrå/vit */
+    --oled-color: #e0e0e0; 
     --oled-bg: #000000;
 }
 
 body {
     background-color: #111; 
     color: var(--oled-color);
-    /* Modernt typsnitt istället för VT323 */
     font-family: 'Inter', sans-serif; 
     display: flex;
     justify-content: center;
@@ -22,31 +21,28 @@ body {
     padding: 20px;
 }
 
-/* Anpassad för mobil-proportioner */
+/* --- DASHBOARD CONTAINERS --- */
+#dashboard-container {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;    
+    width: 100%;
+}
+
 .oled-screen {
     width: 100%;
-    max-width: 450px; /* Perfekt bredd för mobil/surfplatta */
+    max-width: 450px; 
     background-color: var(--oled-bg);
     border: 3px solid #333; 
     border-radius: 8px;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Lite luft mellan sektionerna */
-    
-    /* En mycket subtil vit glow för att det ska se ut som en skärm, inte papper */
+    gap: 15px; 
     text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3);
 }
 
-/* Tvingar dashboarden och logga ut-knappen att staplas vertikalt */
-#dashboard-container {
-    display: flex;
-    flex-direction: column; /* Staplar uppifrån och ner */
-    align-items: center;    /* Centrerar knappen prydligt under skärmen */
-    width: 100%;
-}
-
-/* --- DEL 1: HUVUDVYN --- */
+/* --- HUVUDVY (TOPPEN) --- */
 .main-display {
     display: flex;
     justify-content: space-between;
@@ -55,62 +51,8 @@ body {
 .left-col {
     width: 45%;
     display: flex;
-    flex-direction: column;
+    justify-content: center; /* Centrerar flaskan på PC */
     position: relative;
-}
-
-/* Ger texten en svart kärna med en skarp vit linje runt om (Krispigt OLED) */
-.outlined-text {
-    font-size: 2.2rem; /* Minskad storlek */
-    letter-spacing: -1px;
-    color: var(--oled-bg); /* Svart insida */
-    -webkit-text-stroke: 1.5px var(--oled-color); /* Vit kontur */
-    text-shadow: none; /* Ingen suddig skugga */
-    font-weight: bold; /* Tydligare kontur */
-}
-
-
-.wifi-icon {
-    display: flex;
-    align-items: flex-end;
-    gap: 4px;
-    height: 25px;
-    margin-bottom: 10px;
-}
-.wifi-icon .bar {
-    width: 6px;
-    background-color: var(--oled-color);
-}
-.bar1 { height: 25%; }
-.bar2 { height: 50%; }
-.bar3 { height: 75%; }
-.bar4 { height: 100%; }
-
-.carboy-wrapper {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1/1;
-}
-
-
-/* Denna regel tillåter nu HTML-koden att bestämma fyllningen */
-.glass-line {
-    stroke: var(--oled-color);
-    stroke-width: 2.5;
-    stroke-dasharray: none !important;
-    /* Ingen fill-regel här, vi låter HTML styra helt! */
-}
-
-/* EXAKT CENTRERING AV TEMP */
-.beer-temp {
-    position: absolute;
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2.5rem;
-    font-weight: bold;
-    width: 100%;
-    text-align: center;
 }
 
 .right-col {
@@ -121,7 +63,41 @@ body {
     text-align: right;
 }
 
-/* Snyggar till den vita boxen uppe till höger */
+/* --- DAMEJEANG & TEXT --- */
+.carboy-wrapper {
+    position: relative;
+    width: 180px; /* Fast storlek på PC för stabilitet */
+    height: 180px;
+    margin-bottom: 0;
+}
+
+.glass-line {
+    stroke: var(--oled-color);
+    stroke-width: 2.5;
+    stroke-dasharray: none !important;
+    /* Ingen fill här, styrs av HTML fill="#5a5a5a" */
+}
+
+.outlined-text {
+    letter-spacing: -1px;
+    color: var(--oled-bg); 
+    -webkit-text-stroke: 1.5px var(--oled-color); 
+    text-shadow: none; 
+    font-weight: bold; 
+}
+
+.beer-temp {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem; /* Lite mer balanserad storlek inuti flaskan */
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+}
+
+/* --- KOMPONENTER --- */
 .highlight-box {
     background-color: var(--oled-color);
     color: var(--oled-bg);
@@ -131,23 +107,14 @@ body {
     display: inline-block;
 }
 
-.profile-name {
-    font-size: 2rem;
-    margin-bottom: 5px;
-}
-
 .action-status {
     font-size: 1.8rem;
     margin-bottom: 5px;
 }
 
 .air-temp {
-    font-size: 1.8rem;
-}
-
-/* --- DEL 2: STATUS OCH LINJER --- */
-.bottom-section {
-    margin-top: 5px;
+    font-size: 1.2rem;
+    opacity: 0.8;
 }
 
 .separator-line {
@@ -156,62 +123,31 @@ body {
     margin-bottom: 8px;
 }
 
-.system-status {
-    font-size: 2.2rem;
+/* --- PROGRESS WIDGET --- */
+.progress-fill-anim {
+    transition: width 1s ease-in-out;
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.4);
 }
 
-/* --- DEL 3: FERM DATA --- */
-.ferm-data-section {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 2px dashed #444; /* Avgränsare mellan skärmvyerna */
-}
-
-.ferm-header {
-    font-size: 2rem;
-    margin-bottom: 5px;
-}
-
-.ferm-row {
-    font-size: 2.2rem;
-    margin-top: 5px;
-}
-
-/* Animationer */
-/* --- NY STYLING FÖR DE NYA BUBBLORNA --- */
-.bubble-particle {
-    fill: var(--oled-color);
-    /* En subtil glow gör att de ser mer ut som äkta lysande pixlar */
-    filter: drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.6));
-    opacity: 0.9;
-}
-
-
-/* --- DEL 4: TEMP HISTORIK GRAF --- */
+/* --- GRAF SEKTION --- */
 .chart-section {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 2px dashed #444; /* Avgränsare */
-}
-
-.chart-header {
-    font-size: 2rem;
-    margin-bottom: 5px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #333;
 }
 
 .chart-container {
     width: 100%;
-    height: 120px; /* Håll grafen ganska låg för rätt känsla */
+    height: 120px;
     position: relative;
 }
 
-/* Vi stylar själva "canvas" elementet som biblioteket ritar på */
 #beer-chart {
     width: 100% !important;
     height: 100% !important;
 }
 
-/* --- ANIMATION FÖR BLINKANDE IKON --- */
+/* --- ANIMATIONER & PARTIKLAR --- */
 @keyframes blinker {
     50% { opacity: 0; }
 }
@@ -221,86 +157,59 @@ body {
     display: inline-block;
 }
 
-/* --- MOBILANPASSNING: VERSION "THE SWEET SPOT" (Uppdaterad för 2.0) --- */
+.bubble-particle {
+    fill: var(--oled-color);
+    filter: drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.6));
+    opacity: 0.9;
+}
+
+/* --- MOBILANPASSNING (FIXAD & JUSTERAD) --- */
 @media (max-width: 600px) {
-    #wifi-status, .wifi-status, .wifi-icon, .drawWifiIcon, svg[id*="wifi"], [id*="wifi"] {
-        display: none !important;
+    .wifi-icon { display: none !important; }
+
+    /* Flyttar damejeangen åt vänster och ger texten mer plats */
+    .left-col {
+        width: 35% !important; 
+        justify-content: flex-start !important;
     }
 
-  .left-col {
-        width: 45% !important; /* Ger lite mer plats åt vänster */
-        display: flex;
-        justify-content: flex-start !important; /* Tvingar den mot vänsterkanten */
-        padding-left: 0;
-    }
- .right-col {
-        width: 55% !important;
-        padding-top: 5px; /* Matchar den nya höjden på flaskan */
+    .right-col {
+        width: 65% !important;
+        padding-top: 10px;
     }
 
-.carboy-wrapper {
-        /* VIKTIGT: Vi ökar scale från 0.9 till 1.25 för att göra den stor */
-        transform: scale(1.25) !important; 
-        transform-origin: top left !important; /* Skalar utifrån övre vänstra hörnet */
-        margin-top: -10px !important;  /* Lyfter upp den närmare toppen */
-        margin-left: -5px !important;  /* Flyttar ut den mot kanten */
+    .carboy-wrapper {
+        transform: scale(1.35) !important; /* Stor och kaxig */
+        transform-origin: top left !important; 
+        margin-top: -25px !important;  /* Lyfter upp mot toppen */
+        margin-left: -15px !important; /* Drar ut mot kanten */
+        margin-bottom: 25px !important; /* Skapar luft mot PROGRESS */
         height: 140px; 
         width: 140px;
+    }
 
-/* Justera texten inuti flaskan så den inte blir gigantisk */
     .beer-temp.outlined-text {
-        font-size: 1.5rem !important; 
-        top: 55% !important;
+        font-size: 1.6rem !important; 
     }
 
-    /* 4. BEHÅLL KAXIGHETEN PÅ TEXTERNA (Men marginellt justerade för 60%-kolumnen) */
-    .highlight-box {
-        font-size: 18px !important; 
-        padding: 5px 10px;
-        margin-bottom: 6px;
-    }
+    .highlight-box { font-size: 1.1rem !important; }
+    .action-status { font-size: 1.4rem !important; }
+    .air-temp { font-size: 1rem !important; }
 
-    #profile-val, .profile-name {
-        font-size: 18px !important; 
-        margin-bottom: 10px;
-    }
-
-    .action-status {
-        font-size: 20px !important; /* Tillräckligt stort för att vara kaxigt, litet nog att inte krocka */
-        margin-bottom: 8px;
-        font-weight: bold;
-    }
-
-.air-temp {
-        font-size: 18px !important; 
-        text-align: left !important; /* Tvinga vänsterjustering även på mobil */
-        padding-left: 10px !important;
-        width: 100% !important;
-    }
-    
-   /* Flytta ner separator-linjen (golvet) lite så den inte krockar med den förstorade flaskan */
     .separator-line {
-        margin-top: 20px !important; 
-    }
-}   
-
-    .chart-container {
-        height: 150px;
+        margin-top: 10px !important; 
     }
 }
 
-/* --- NYA SEKTIONER FÖR INLOGGNING & CLAIM --- */
-
-/* Se till att containrarna är dolda som standard men använder flex när JS aktiverar dem */
+/* --- AUTH (LOGIN / CLAIM) --- */
 #login-container, #claim-container, #dashboard-container {
-    display: none; /* JS kommer ändra detta till 'flex' */
+    display: none; 
     flex-direction: column;
     align-items: center;
     width: 100%;
     max-width: 450px;
 }
 
-/* Styling för inloggnings- och claim-boxarna */
 .auth-box {
     background-color: var(--oled-bg);
     border: 3px solid var(--oled-color);
@@ -310,60 +219,26 @@ body {
     width: 100%;
 }
 
-.auth-box h1, .auth-box h2 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-}
-
-.auth-box p {
-    font-size: 1.5rem;
-    margin-bottom: 25px;
-    color: #888;
-}
-
-/* Den stora kaxiga OLED-knappen */
 .btn-primary {
     background-color: var(--oled-color);
     color: var(--oled-bg);
     border: none;
     padding: 15px 30px;
-    font-family: 'VT323', monospace;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
+    font-weight: 800;
     cursor: pointer;
     text-transform: uppercase;
-    transition: all 0.2s;
     width: 100%;
+    border-radius: 4px;
 }
 
-.btn-primary:hover {
-    background-color: #ffffff;
-    transform: scale(1.02);
-}
-
-/* Input-fältet för MAC-adress */
 #input-mac {
     background: transparent;
     border: 2px solid #444;
     color: var(--oled-color);
-    font-family: 'VT323', monospace;
-    font-size: 1.8rem;
+    font-size: 1.2rem;
     padding: 10px;
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
-    outline: none;
 }
-
-#input-mac:focus {
-    border-color: var(--oled-color);
-}
-
-.hint {
-    font-size: 1.2rem !important;
-    margin-top: 15px;
-    color: #555 !important;
-}
-
-
-
