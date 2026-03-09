@@ -96,6 +96,41 @@ body {
     text-align: center;
 }
 
+/* Denna placerar Air-texten fritt vid flaskans axel */
+.air-floating {
+    position: absolute;
+    top: 35px;      /* PC: Höjd från toppen av flaskan */
+    right: -25px;   /* PC: Avstånd till höger om halsen */
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.6;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+/* --- MOBILANPASSNING (Endast för små skärmar) --- */
+@media (max-width: 600px) {
+    .carboy-wrapper {
+        transform: scale(1.6) !important; /* Gör damejeangen kaxigt stor */
+        transform-origin: center left !important;
+        margin-top: 25px !important;
+        margin-left: 15px !important;
+    }
+
+    .air-floating {
+        top: 20px;    /* Mobil: Justerad höjd */
+        right: -10px; /* Mobil: Justerat sidled */
+        font-size: 0.7rem;
+    }
+
+    .right-col {
+        /* Viktigt: padding-bottom måste vara mer än 48px för att texten 
+           ska hamna OVANFÖR linjen som dras upp med -48px */
+        padding-bottom: 58px !important; 
+    }
+}
+
+
 /* --- KOMPONENTER --- */
 .highlight-box {
     background-color: var(--oled-color);
