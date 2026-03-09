@@ -116,16 +116,18 @@ async function updateDashboard() {
     }
 }
 
-// --- 4. DIN GRAF-FUNKTION ---
+//Grafen
 let beerChart;
 function updateChart(data) {
     const canvas = document.getElementById('beer-chart');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(243, 156, 18, 0.4)'); 
-    gradient.addColorStop(1, 'rgba(243, 156, 18, 0)');   
+    // SKAPA EN LJUSGRÅ GRADIENT (Matchar damejeangens innehåll)
+    // Den börjar halvgenomskinlig i toppen och tonar ut till helt osynlig i botten
+    const gradient = ctx.createLinearGradient(0, 0, 0, 120);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)'); 
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');   
 
     const labels = data.map(d => new Date(d.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
     const temps = data.map(d => d.temp);
@@ -139,24 +141,29 @@ function updateChart(data) {
             type: 'line',
             data: {
                 labels: labels,
-               // Inuti din chart-config i app.js:
-datasets: [{
-    label: 'Öl Temp',
-    data: tempValues,
-    borderColor: '#e0e0e0',
-    borderWidth: 2,
-    fill: true, // SÄTT DENNA TILL TRUE
-    backgroundColor: 'rgba(255, 255, 255, 0.15)', // Samma ljusgrå som i flaskan
-    tension: 0.1,
-    pointRadius: 0 // Tar bort pluttarna på linjen för ett renare utseende
-}]
+                datasets: [{
+                    label: 'Beer Temp',
+                    data: temps,
+                    borderColor: '#f39c12', // DEN ORANGEA LINJEN (Kaxig kontrast!)
+                    borderWidth: 2,
+                    fill: true, 
+                    backgroundColor: gradient, // DEN LJUSGRÅA GRADIENTEN
+                    tension: 0.3,
+                    pointRadius: 0 
+                }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: { ticks: { color: '#888', maxTicksLimit: 6 }, grid: { display: false } },
-                    y: { ticks: { color: '#888', callback: v => v + '°' }, grid: { color: 'rgba(255, 255, 255, 0.05)' } }
+                    x: { 
+                        ticks: { color: '#666', maxTicksLimit: 5, font: { family: 'Inter' } }, 
+                        grid: { display: false } 
+                    },
+                    y: { 
+                        ticks: { color: '#666', font: { family: 'Inter' }, callback: v => v + '°' }, 
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' } 
+                    }
                 },
                 plugins: { legend: { display: false } }
             }
