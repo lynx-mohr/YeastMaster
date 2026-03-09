@@ -13,10 +13,11 @@
 body {
     background-color: #111; 
     color: var(--oled-color);
-    font-family: 'VT323', monospace; 
+    /* Modernt typsnitt istället för VT323 */
+    font-family: 'Inter', sans-serif; 
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Låt den börja i toppen istället för mitten på mobilen */
+    align-items: flex-start;
     min-height: 100vh;
     padding: 20px;
 }
@@ -50,14 +51,14 @@ body {
     position: relative;
 }
 
-/* Ger texten en svart kärna med en skarp vit linje runt om (Krispigt OLED) */
+/* Kärnan i YeastMaster 2.0: Knivskarp svart text med vit kant inuti glaset */
 .outlined-text {
-    font-size: 2.8rem; /* Lite större för krispighet */
-    letter-spacing: -1px;
-    color: var(--oled-bg); /* Svart insida */
-    -webkit-text-stroke: 1.5px var(--oled-color); /* Vit kontur */
-    text-shadow: none; /* Ingen suddig skugga */
-    font-weight: bold; /* Tydligare kontur */
+    font-size: 2.2rem; /* Lite mindre för att rymmas snyggt i den moderna formen */
+    letter-spacing: -0.5px;
+    color: #000000; /* Stenhårt svart inuti */
+    -webkit-text-stroke: 1.5px var(--oled-color); /* Krispig vit/ljusgrå kant */
+    text-shadow: none !important; /* Absolut ingen suddighet */
+    font-weight: 800; /* Extra bold för tydlighet */
 }
 
 /* Tvingar flaskan att ha en solid, krispig linje utan streck (dashes) */
@@ -117,13 +118,13 @@ body {
     text-align: right;
 }
 
+/* Snyggar till den vita boxen uppe till höger */
 .highlight-box {
     background-color: var(--oled-color);
     color: var(--oled-bg);
-    font-size: 2rem;
-    padding: 2px 10px;
-    text-shadow: none; 
-    margin-bottom: 10px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    padding: 4px 12px;
     display: inline-block;
 }
 
