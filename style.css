@@ -38,7 +38,7 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 15px; 
+    /* gap: 15px;  <-- BORTTAGEN FÖR ATT TILLÅTA ÖVERLAPPNING */
     text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3);
 }
 
@@ -46,12 +46,13 @@ body {
 .main-display {
     display: flex;
     justify-content: space-between;
+    position: relative;
 }
 
 .left-col {
     width: 45%;
     display: flex;
-    justify-content: center; /* Centrerar flaskan på PC */
+    justify-content: center;
     position: relative;
 }
 
@@ -63,27 +64,24 @@ body {
     text-align: right;
 }
 
-/* --- DAMEJEANG & TEXT --- */
+/* --- DAMEJEANG --- */
 .carboy-wrapper {
     position: relative;
-    width: 180px; /* Fast storlek på PC för stabilitet */
+    width: 180px; 
     height: 180px;
-    margin-bottom: 0;
 }
 
 .glass-line {
     stroke: var(--oled-color);
     stroke-width: 2.5;
     stroke-dasharray: none !important;
-    /* Ingen fill här, styrs av HTML fill="#5a5a5a" */
 }
 
 .outlined-text {
     letter-spacing: -1px;
     color: var(--oled-bg); 
-    -webkit-text-stroke: 1.5px var(--oled-color); 
-    text-shadow: none; 
-    font-weight: bold; 
+    -webkit-text-stroke: 1.3px var(--oled-color); 
+    font-weight: 800; 
 }
 
 .beer-temp {
@@ -91,8 +89,7 @@ body {
     top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2rem; /* Lite mer balanserad storlek inuti flaskan */
-    font-weight: bold;
+    font-size: 2rem;
     width: 100%;
     text-align: center;
 }
@@ -110,6 +107,7 @@ body {
 .action-status {
     font-size: 1.8rem;
     margin-bottom: 5px;
+    font-weight: 800;
 }
 
 .air-temp {
@@ -120,7 +118,6 @@ body {
 .separator-line {
     border: none;
     border-top: 3px solid var(--oled-color);
-    margin-bottom: 8px;
 }
 
 /* --- PROGRESS WIDGET --- */
@@ -131,7 +128,6 @@ body {
 
 /* --- GRAF SEKTION --- */
 .chart-section {
-    margin-top: 10px;
     padding-top: 10px;
     border-top: 1px solid #333;
 }
@@ -142,72 +138,45 @@ body {
     position: relative;
 }
 
-#beer-chart {
-    width: 100% !important;
-    height: 100% !important;
-}
-
-/* --- ANIMATIONER & PARTIKLAR --- */
-@keyframes blinker {
-    50% { opacity: 0; }
-}
-
-.blink-active {
-    animation: blinker 1s step-start infinite;
-    display: inline-block;
-}
-
-.bubble-particle {
-    fill: var(--oled-color);
-    filter: drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.6));
-    opacity: 0.9;
-}
-
-/* --- MOBILANPASSNING (FIXAD & JUSTERAD) --- */
+/* --- MOBILANPASSNING (NYA POSITIONER) --- */
 @media (max-width: 600px) {
-    .wifi-icon { display: none !important; }
-
-    /* Flyttar damejeangen åt vänster och ger texten mer plats */
     .left-col {
-        width: 35% !important; 
+        width: 30% !important; 
         justify-content: flex-start !important;
     }
 
     .right-col {
-        width: 65% !important;
-        padding-top: 10px;
+        width: 70% !important;
+        padding-top: 5px;
+        padding-bottom: 45px !important; /* Ger plats åt överlappningen */
     }
 
     .carboy-wrapper {
-        transform: scale(1.35) !important; /* Stor och kaxig */
+        transform: scale(1.45) !important; 
         transform-origin: top left !important; 
-        margin-top: -25px !important;  /* Lyfter upp mot toppen */
-        margin-left: -15px !important; /* Drar ut mot kanten */
-        margin-bottom: 25px !important; /* Skapar luft mot PROGRESS */
-        height: 140px; 
-        width: 140px;
+        margin-top: -30px !important;  /* Flyttar upp kraftigt */
+        margin-left: -25px !important; /* Flyttar ut mot kanten */
+        margin-bottom: 0 !important;
+    }
+
+    .main-display {
+        margin-bottom: -45px !important; /* Tvingar linjen bakom på mobil */
     }
 
     .beer-temp.outlined-text {
-        font-size: 1.6rem !important; 
+        font-size: 1.5rem !important; 
     }
 
     .highlight-box { font-size: 1.1rem !important; }
     .action-status { font-size: 1.4rem !important; }
-    .air-temp { font-size: 1rem !important; }
-
-    .separator-line {
-        margin-top: 10px !important; 
-    }
 }
 
-/* --- AUTH (LOGIN / CLAIM) --- */
+/* --- AUTH --- */
 #login-container, #claim-container, #dashboard-container {
     display: none; 
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 450px;
 }
 
 .auth-box {
@@ -216,7 +185,6 @@ body {
     padding: 30px;
     border-radius: 8px;
     text-align: center;
-    width: 100%;
 }
 
 .btn-primary {
@@ -224,21 +192,9 @@ body {
     color: var(--oled-bg);
     border: none;
     padding: 15px 30px;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 800;
     cursor: pointer;
     text-transform: uppercase;
     width: 100%;
-    border-radius: 4px;
-}
-
-#input-mac {
-    background: transparent;
-    border: 2px solid #444;
-    color: var(--oled-color);
-    font-size: 1.2rem;
-    padding: 10px;
-    width: 100%;
-    text-align: center;
-    margin-bottom: 20px;
 }

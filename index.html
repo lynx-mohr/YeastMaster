@@ -29,7 +29,9 @@
     </div>
 
 <div id="dashboard-container">
-    <div class="oled-screen" style="padding-top: 5px;"> <div class="main-display" style="display: flex; align-items: flex-end; margin-bottom: -25px; position: relative; z-index: 2;">
+    <div class="oled-screen" style="padding-top: 5px; gap: 0;"> 
+        
+        <div class="main-display" style="display: flex; align-items: flex-end; margin-bottom: -28px; position: relative; z-index: 2;">
             
             <div class="left-col"> 
                 <div class="carboy-wrapper">
@@ -47,7 +49,7 @@
                 </div>
             </div> 
 
-            <div class="right-col" style="height: 150px; justify-content: space-between; padding-bottom: 30px;">
+            <div class="right-col" style="height: 150px; justify-content: space-between; padding-bottom: 35px;">
                 <div class="highlight-box" id="strain-val">--</div>
                 
                 <div style="text-align: right; width: 100%;">
@@ -63,9 +65,9 @@
             </div>
         </div>
 
-        <hr class="separator-line" style="position: relative; z-index: 1; margin: 0;">
+        <hr class="separator-line" style="position: relative; z-index: 1; margin: 0; border-top: 3px solid var(--oled-color); opacity: 1;">
 
-        <div style="text-align: left; padding: 15px 5px 0 5px;">
+        <div style="text-align: left; padding: 20px 5px 0 5px;">
             <div style="font-size: 1.3rem; font-weight: 800; color: var(--oled-color); letter-spacing: 1px;">PROGRESS</div>
             <hr style="border-top: 1px dashed #555; margin: 4px 0 10px 0; width: 100%; opacity: 0.6;">
             
@@ -86,7 +88,7 @@
             </div>
         </div>
 
-        <div class="chart-section">
+        <div class="chart-section" style="margin-top: 15px;">
             <div style="font-size: 0.9rem; font-weight: 800; color: #888; margin-bottom: 5px; padding-left: 5px; letter-spacing: 1px;">TEMP HISTORY</div>
             <div class="chart-container">
                 <canvas id="beer-chart"></canvas>
