@@ -187,7 +187,7 @@ function startBubbles() {
             circle.setAttribute("r", size);
             circle.setAttribute("fill", "rgba(255, 255, 255, 0.7)");
             stream.appendChild(circle);
-            bubbles.push({ element: circle, x: startX, y: 90, speed: Math.random() * 0.2 + 0.3, wobbleOffset: Math.random() * Math.PI * 2 });
+            bubbles.push({ element: circle, x: startX, y: 85, speed: Math.random() * 0.2 + 0.3, wobbleOffset: Math.random() * Math.PI * 2 });
             lastSpawn = timestamp;
         }
 
@@ -197,7 +197,7 @@ function startBubbles() {
             let currentX = b.x + Math.sin((b.y * 0.05) + b.wobbleOffset) * 0.4;
             b.element.setAttribute("cx", currentX);
             b.element.setAttribute("cy", b.y);
-            if (b.y < 30) { b.element.remove(); bubbles.splice(i, 1); }
+            if (b.y < 15) { b.element.remove(); bubbles.splice(i, 1); }
         }
         requestAnimationFrame(animate);
     }
@@ -265,6 +265,7 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
 
 
 
