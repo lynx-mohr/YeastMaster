@@ -227,41 +227,30 @@ body {
         display: none !important;
     }
 
-    /* 1. FÖRDELA UTRYMMET (Tvinga över HTML-kodens 50/50) */
-    .left-col {
-        width: 40% !important; /* Ger glaset lite mindre plats... */
-    }
-    .right-col {
-        width: 60% !important; /* ...och texten lite mer plats, så de inte krockar */
-        flex: 1;
-        text-align: right;
+  .left-col {
+        width: 45% !important; /* Ger lite mer plats åt vänster */
         display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        padding-right: 5px;
+        justify-content: flex-start !important; /* Tvingar den mot vänsterkanten */
+        padding-left: 0;
+    }
+ .right-col {
+        width: 55% !important;
+        padding-top: 5px; /* Matchar den nya höjden på flaskan */
     }
 
-    /* 2. DAMEJEANNEN (Stoppa HTML-skalningen från att svälla över) */
-    .carboy-wrapper {
-        width: 160px;
-        margin: 0;
-        position: relative;
-        height: 160px; 
-        transform: scale(0.9) !important; /* Krymper hela glaset något på mobilen */
-        transform-origin: top center !important;
-    }
+.carboy-wrapper {
+        /* VIKTIGT: Vi ökar scale från 0.9 till 1.25 för att göra den stor */
+        transform: scale(1.25) !important; 
+        transform-origin: top left !important; /* Skalar utifrån övre vänstra hörnet */
+        margin-top: -10px !important;  /* Lyfter upp den närmare toppen */
+        margin-left: -5px !important;  /* Flyttar ut den mot kanten */
+        height: 140px; 
+        width: 140px;
 
-    /* 3. JUSTERA TEMP I FLASKAN (Krympt något för att passa den krispiga stilen) */
-    .beer-temp, .outlined-text {
-        font-size: 24px !important; /* 32px blir för grötigt med outlinen på mobil */
-        font-weight: bold;
-        position: absolute;
-        top: 55% !important; 
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
-        width: 100% !important;
-        text-align: center !important;
-        bottom: auto !important;
+/* Justera texten inuti flaskan så den inte blir gigantisk */
+    .beer-temp.outlined-text {
+        font-size: 1.5rem !important; 
+        top: 55% !important;
     }
 
     /* 4. BEHÅLL KAXIGHETEN PÅ TEXTERNA (Men marginellt justerade för 60%-kolumnen) */
@@ -289,8 +278,9 @@ body {
         width: 100% !important;
     }
     
+   /* Flytta ner separator-linjen (golvet) lite så den inte krockar med den förstorade flaskan */
     .separator-line {
-        margin-top: 0px !important; /* Tajtare golv på mobilen */
+        margin-top: 20px !important; 
     }
 }   
 
