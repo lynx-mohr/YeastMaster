@@ -31,38 +31,35 @@
 <div id="dashboard-container">
     <div class="oled-screen">
         
-        <div class="main-display" style="margin-bottom: 0; padding-bottom: 0;">
+        <div class="main-display" style="display: flex; align-items: flex-end; margin-bottom: 0; padding-bottom: 0;">
             
-            <div class="left-col" style="width: 50%;"> 
-                <div class="carboy-wrapper" style="transform: scale(1.15); transform-origin: bottom center; margin-bottom: 0;">
-                    
+            <div class="left-col" style="width: 50%; display: flex; justify-content: center;"> 
+                <div class="carboy-wrapper" style="transform: scale(1.15); transform-origin: bottom center; margin: 10px 0 0 0;">
                     <svg viewBox="0 0 100 92" class="carboy-svg" style="display: block;">
-                        <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="2" />
+                        <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
                         
                         <path class="glass-line" 
                               d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" 
-                              fill="#5a5a5a" 
+                              fill="rgba(255, 255, 255, 0.25)" 
                               stroke="var(--oled-color)" 
                               stroke-width="2.5" 
                               stroke-linejoin="round" />
                               
                         <g id="bubble-stream"></g>
                     </svg>
-                    <div class="beer-temp outlined-text" style="top: 55%; font-size: 2.2rem;"><span id="temp-beer-val">--</span>°C</div>
+                    <div class="beer-temp outlined-text" style="top: 55%; font-size: 1.7rem;"><span id="temp-beer-val">--</span>°C</div>
                 </div>
             </div> 
 
-            <div class="right-col" style="width: 50%; display: flex; flex-direction: column; justify-content: flex-end;">
-                
+            <div class="right-col" style="width: 50%; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 5px;">
                 <div style="display: flex; flex-direction: column; align-items: flex-end; width: 100%;">
                     <div class="highlight-box" id="strain-val" style="border-radius: 4px;">--</div>
                     <div id="profile-val" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 12px; opacity: 0.8;">--</div>
-                    <div class="action-status" style="display: flex; align-items: center; justify-content: flex-end; font-size: 1.6rem; font-weight: 800; margin-bottom: 10px;">
+                    <div class="action-status" style="display: flex; align-items: center; justify-content: flex-end; font-size: 1.6rem; font-weight: 800; margin-bottom: 8px;">
                         <span id="status-arrow" class="blink-active" style="margin-right: 8px; font-size: 1.2rem;">▼</span>
                         <span id="action-val">--</span>
                     </div>
                 </div>
-                
                 <div class="air-temp" style="width: 100%; text-align: left; font-size: 1.2rem; opacity: 0.8; padding-left: 10px;">
                     Air: <span id="air-temp-val">--</span>°C
                 </div>
@@ -71,7 +68,13 @@
 
         <hr class="separator-line" style="border-top: 3px solid var(--oled-color); margin: 0px 0 15px 0; opacity: 1;">
 
-        <div style="display: flex; justify-content: space-between; font-size: 1.3rem; margin-bottom: 15px; font-weight: 600;">
+        <div style="text-align: left; margin-bottom: 5px; padding-left: 5px;">
+            <span style="font-size: 1.4rem; font-weight: 800; color: var(--oled-color);">Progress:</span>
+        </div>
+        
+        <hr style="border-top: 1px dashed #555; margin: 5px 0 12px 0;">
+
+        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; margin-bottom: 15px; font-weight: 600; padding: 0 5px;">
             <div>Day: <span id="day-val">0.0</span></div>
             <div style="text-align: right;">
                 Fermentation phase: <span id="status-text" style="font-weight: 800; color: var(--oled-color);">--</span>
@@ -86,7 +89,7 @@
         
     </div> 
     
-    <button id="btn-logout" style="display: block; margin: 20px auto 0 auto; opacity: 0.3; background: none; border: 1px solid #666; color: #fff; font-family: 'Inter', sans-serif; padding: 5px 15px; border-radius: 4px; cursor: pointer; transition: opacity 0.2s;">LOGOUT</button>
+    <button id="btn-logout" style="display: block; margin: 20px auto 0 auto; opacity: 0.3; background: none; border: 1px solid #666; color: #fff; font-family: 'Inter', sans-serif; padding: 5px 15px; border-radius: 4px; cursor: pointer;">LOGOUT</button>
 </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
