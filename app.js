@@ -139,16 +139,17 @@ function updateChart(data) {
             type: 'line',
             data: {
                 labels: labels,
-                datasets: [{
-                    label: 'Beer Temp',
-                    data: temps,
-                    borderColor: '#f39c12',
-                    backgroundColor: gradient,
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 0
-                }]
+               // Inuti din chart-config i app.js:
+datasets: [{
+    label: 'Öl Temp',
+    data: tempValues,
+    borderColor: '#e0e0e0',
+    borderWidth: 2,
+    fill: true, // SÄTT DENNA TILL TRUE
+    backgroundColor: 'rgba(255, 255, 255, 0.15)', // Samma ljusgrå som i flaskan
+    tension: 0.1,
+    pointRadius: 0 // Tar bort pluttarna på linjen för ett renare utseende
+}]
             },
             options: {
                 responsive: true,
@@ -264,6 +265,7 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
 
 
 
