@@ -29,44 +29,44 @@
     </div>
 
 <div id="dashboard-container">
-    <div class="oled-screen" style="padding-top: 5px; gap: 0;"> 
+    <div class="oled-screen" style="padding-top: 15px; gap: 0;"> 
         
-<div class="main-display" style="display: flex; align-items: flex-end; margin-top: -10px; margin-bottom: -55px; position: relative; z-index: 2;">
-    
-    <div class="left-col" style="width: 45%;"> 
-        <div class="carboy-wrapper">
-            <div class="air-floating">Air: <span id="air-temp-val">--</span>°C</div>
+        <div class="main-display" style="display: flex; align-items: flex-end; position: relative;">
+            
+            <div class="left-col"> 
+                <div class="carboy-wrapper">
+                    <div class="air-floating">Air: <span id="air-temp-val">--</span>°C</div>
 
-            <svg viewBox="0 0 100 92" class="carboy-svg" style="display: block;">
-                <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
-                <path class="glass-line" 
-                      d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" 
-                      style="fill: #4a4a4a !important; fill-opacity: 1 !important;"
-                      stroke="var(--oled-color)" 
-                      stroke-width="2.5" 
-                      stroke-linejoin="round" />
-                <g id="bubble-stream"></g>
-            </svg>
-            <div class="beer-temp outlined-text"><span id="temp-beer-val">--</span>°C</div>
-        </div>
-    </div> 
+                    <svg viewBox="0 0 100 92" class="carboy-svg" style="display: block;">
+                        <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
+                        <path class="glass-line" 
+                              d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" 
+                              style="fill: #4a4a4a !important; fill-opacity: 1 !important;"
+                              stroke="var(--oled-color)" 
+                              stroke-width="2.5" 
+                              stroke-linejoin="round" />
+                        <g id="bubble-stream"></g>
+                    </svg>
+                    <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
+                </div>
+            </div> 
 
-    <div class="right-col">
-        <div class="highlight-box" id="strain-val" style="margin-bottom: 8px;">--</div>
-        
-        <div style="text-align: right; width: 100%;">
-            <div id="profile-val" style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; opacity: 0.7;">--</div>
-            <div class="action-status">
-                <span id="status-arrow" class="blink-active" style="margin-right: 6px; font-size: 1.1rem;">▼</span>
-                <span id="action-val">--</span>
+            <div class="right-col">
+                <div class="highlight-box" id="strain-val" style="margin-bottom: 8px;">--</div>
+                
+                <div style="text-align: right; width: 100%;">
+                    <div id="profile-val" style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; opacity: 0.7;">--</div>
+                    <div class="action-status">
+                        <span id="status-arrow" class="blink-active" style="margin-right: 6px; font-size: 1.1rem;">▼</span>
+                        <span id="action-val">--</span>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-        <hr class="separator-line" style="position: relative; z-index: 1; margin: 0; border-top: 3px solid var(--oled-color); opacity: 1;">
+        <hr class="separator-line" style="margin: 0;">
 
-        <div style="text-align: left; padding: 25px 5px 0 5px;">
+        <div style="text-align: left; padding: 35px 5px 0 5px;">
             <div style="font-size: 1.2rem; font-weight: 800; color: var(--oled-color); letter-spacing: 1px;">PROGRESS</div>
             <hr style="border-top: 1px dashed #555; margin: 4px 0 10px 0; width: 100%; opacity: 0.6;">
             
@@ -87,9 +87,9 @@
             </div>
         </div>
 
-        <div class="chart-section" style="margin-top: 10px;">
+        <div class="chart-section">
             <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 4px; padding-left: 5px; letter-spacing: 1px;">TEMP HISTORY</div>
-            <div class="chart-container" style="height: 110px;">
+            <div class="chart-container">
                 <canvas id="beer-chart"></canvas>
             </div>
         </div>
