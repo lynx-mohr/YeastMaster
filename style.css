@@ -69,11 +69,6 @@ body {
     font-weight: bold; /* Tydligare kontur */
 }
 
-/* Tvingar flaskan att ha en solid, krispig linje utan streck (dashes) */
-.carboy-svg .glass-line {
-    stroke-dasharray: none !important; 
-    stroke-width: 3.5; /* Lite tjockare linje som i målbilden */
-}
 
 .wifi-icon {
     display: flex;
@@ -98,12 +93,11 @@ body {
 }
 
 
+/* Denna regel tillåter nu HTML-koden att bestämma fyllningen */
 .glass-line {
-    fill: none;
-    stroke: var(--oled-color);
-    stroke-width: 3;
-    stroke-dasharray: 6 3; /* Pixlig känsla */
-    stroke-linecap: square;
+    stroke-dasharray: none !important; 
+    stroke-width: 2.5;
+    fill: inherit; /* Gör att den lyssnar på färgen vi sätter i HTML */
 }
 
 /* EXAKT CENTRERING AV TEMP */
