@@ -35,12 +35,17 @@
                 
                 <div class="left-col" style="width: 50%;"> 
                     <div class="carboy-wrapper" style="transform: scale(1.15); transform-origin: top center; margin-top: 10px;">
-                        <svg viewBox="0 0 100 100" class="carboy-svg">
-                            <rect x="40" y="6" width="20" height="5" fill="var(--oled-color)" />
-                            <polygon points="43,11 57,11 54,20 46,20" fill="var(--oled-color)" style="opacity: 0.6;" />
-                            <circle class="glass-line" cx="50" cy="55" r="35" fill="var(--oled-color)" style="opacity: 0.25;" />
-                            <g id="bubble-stream"></g>
-                        </svg>
+                      <svg viewBox="0 0 100 100" class="carboy-svg">
+    <rect x="36" y="8" width="28" height="6" fill="var(--oled-color)" rx="1" />
+    
+    <polygon points="40,14 60,14 56,26 44,26" fill="var(--oled-color)" style="opacity: 0.4;" />
+    
+    <path class="glass-line" 
+          d="M42,24 V30 A 32 32 0 1 0 58 30 V24 Z" 
+          fill="rgba(255, 255, 255, 0.25)" />
+    
+    <g id="bubble-stream"></g>
+</svg>
                         <div class="beer-temp outlined-text" style="top: 55%;"><span id="temp-beer-val">--</span>°C</div>
                     </div>
                 </div> 
@@ -83,3 +88,4 @@
 
 </body>
 </html>
+
