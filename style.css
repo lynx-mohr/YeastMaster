@@ -38,7 +38,7 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    /* gap: 15px;  <-- BORTTAGEN FÖR ATT TILLÅTA ÖVERLAPPNING */
+    /* gap: 0 sätts i HTML för att tillåta överlappning av linjen */
     text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3);
 }
 
@@ -62,6 +62,8 @@ body {
     flex-direction: column;
     align-items: flex-end; 
     text-align: right;
+    /* Denna padding styr hur nära linjen texten hamnar på PC */
+    padding-bottom: 35px; 
 }
 
 /* --- DAMEJEANG --- */
@@ -106,13 +108,14 @@ body {
 
 .action-status {
     font-size: 1.8rem;
-    margin-bottom: 5px;
     font-weight: 800;
+    margin-bottom: 0; /* Tajtare mot linjen */
 }
 
 .air-temp {
-    font-size: 1.2rem;
-    opacity: 0.8;
+    font-size: 0.9rem; /* Mindre och diskret enligt din "röda cirkel" */
+    opacity: 0.6;
+    margin-bottom: 4px;
 }
 
 .separator-line {
@@ -130,6 +133,7 @@ body {
 .chart-section {
     padding-top: 10px;
     border-top: 1px solid #333;
+    margin-top: 10px;
 }
 
 .chart-container {
@@ -138,29 +142,44 @@ body {
     position: relative;
 }
 
-/* --- MOBILANPASSNING (NYA POSITIONER) --- */
+#beer-chart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* --- ANIMATION FÖR BLINKANDE PIL (FIXAD) --- */
+@keyframes blinker {
+    50% { opacity: 0; }
+}
+
+.blink-active {
+    animation: blinker 1s step-start infinite;
+    display: inline-block;
+}
+
+/* --- MOBILANPASSNING (UPPDATERAD) --- */
 @media (max-width: 600px) {
     .left-col {
-        width: 30% !important; 
+        width: 35% !important; 
         justify-content: flex-start !important;
+        padding-left: 0 !important;
     }
 
     .right-col {
-        width: 70% !important;
+        width: 65% !important;
         padding-top: 5px;
-        padding-bottom: 45px !important; /* Ger plats åt överlappningen */
+        /* Tajtare padding på mobil för att linjen ska ligga snyggt */
+        padding-bottom: 30px !important; 
     }
 
     .carboy-wrapper {
-        transform: scale(1.45) !important; 
+        transform: scale(1.35) !important; 
         transform-origin: top left !important; 
-        margin-top: -30px !important;  /* Flyttar upp kraftigt */
-        margin-left: -25px !important; /* Flyttar ut mot kanten */
-        margin-bottom: 0 !important;
-    }
-
-    .main-display {
-        margin-bottom: -45px !important; /* Tvingar linjen bakom på mobil */
+        margin-top: -25px !important;  /* Flyttar upp ordentligt */
+        margin-left: -15px !important; /* Flyttar ut mot vänsterkanten */
+        margin-bottom: 25px !important; /* Skapar luft ner mot PROGRESS-texten */
+        height: 140px; 
+        width: 140px;
     }
 
     .beer-temp.outlined-text {
@@ -169,6 +188,10 @@ body {
 
     .highlight-box { font-size: 1.1rem !important; }
     .action-status { font-size: 1.4rem !important; }
+    
+    .main-display {
+        margin-bottom: -48px !important; /* Behåller den perfekta linje-höjden */
+    }
 }
 
 /* --- AUTH --- */

@@ -29,7 +29,7 @@
     </div>
 
 <div id="dashboard-container">
-    <div class="oled-screen" style="padding-top: 20px; gap: 20px;"> 
+    <div class="oled-screen" style="padding-top: 10px; gap: 8px;"> 
         
         <div class="main-display" style="display: flex; align-items: flex-end; margin-top: -10px; margin-bottom: -48px; position: relative; z-index: 2;">
             
@@ -49,18 +49,18 @@
                 </div>
             </div> 
 
-            <div class="right-col" style="height: 160px; justify-content: space-between; padding-bottom: 48px;">
-                <div class="highlight-box" id="strain-val">--</div>
+            <div class="right-col" style="height: 155px; justify-content: flex-end; padding-bottom: 38px;">
+                <div class="highlight-box" id="strain-val" style="margin-bottom: 8px;">--</div>
                 
                 <div style="text-align: right; width: 100%;">
-                    <div id="profile-val" style="font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; opacity: 0.8;">--</div>
+                    <div id="profile-val" style="font-size: 1rem; font-weight: 600; margin-bottom: 2px; opacity: 0.7;">--</div>
                     
                     <div class="air-temp" style="font-size: 0.9rem; opacity: 0.6; margin-bottom: 8px;">
                         Air: <span id="air-temp-val">--</span>°C
                     </div>
 
                     <div class="action-status" style="margin-bottom: 0;">
-                        <span id="status-arrow" class="blink-active" style="margin-right: 8px; font-size: 1.2rem;">▼</span>
+                        <span id="status-arrow" class="blink-active" style="margin-right: 6px; font-size: 1.1rem; color: #3498db;">▼</span>
                         <span id="action-val">--</span>
                     </div>
                 </div>
@@ -70,29 +70,29 @@
         <hr class="separator-line" style="position: relative; z-index: 1; margin: 0; border-top: 3px solid var(--oled-color); opacity: 1;">
 
         <div style="text-align: left; padding: 25px 5px 0 5px;">
-            <div style="font-size: 1.3rem; font-weight: 800; color: var(--oled-color); letter-spacing: 1px;">PROGRESS</div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--oled-color); letter-spacing: 1px;">PROGRESS</div>
             <hr style="border-top: 1px dashed #555; margin: 4px 0 10px 0; width: 100%; opacity: 0.6;">
             
             <div class="progress-widget" style="margin-bottom: 15px;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; color: #888; font-weight: 600;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; color: #888; font-weight: 600;">
                     <span>START</span>
                     <span id="progress-percent">0%</span>
                     <span>READY</span>
                 </div>
-                <div style="width: 100%; height: 8px; border: 1px solid #444; border-radius: 10px; overflow: hidden; background: rgba(255,255,255,0.05);">
+                <div style="width: 100%; height: 7px; border: 1px solid #444; border-radius: 10px; overflow: hidden; background: rgba(255,255,255,0.05);">
                     <div id="progress-fill" class="progress-fill-anim" style="width: 0%; height: 100%; background-color: #f39c12;"></div>
                 </div>
             </div>
 
-            <div style="font-size: 1.1rem; line-height: 1.6; font-weight: 600;">
+            <div style="font-size: 1rem; line-height: 1.5; font-weight: 600;">
                 <div>Day: <span id="day-val" style="color: var(--oled-color);">0.0</span></div>
                 <div>Phase: <span id="status-text" style="font-weight: 800; color: var(--oled-color);">--</span></div>
             </div>
         </div>
 
         <div class="chart-section" style="margin-top: 10px;">
-            <div style="font-size: 0.9rem; font-weight: 800; color: #888; margin-bottom: 5px; padding-left: 5px; letter-spacing: 1px;">TEMP HISTORY</div>
-            <div class="chart-container">
+            <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 4px; padding-left: 5px; letter-spacing: 1px;">TEMP HISTORY</div>
+            <div class="chart-container" style="height: 110px;">
                 <canvas id="beer-chart"></canvas>
             </div>
         </div>
