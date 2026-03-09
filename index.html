@@ -31,21 +31,18 @@
 <div id="dashboard-container">
     <div class="oled-screen">
         <div class="main-display">
-            <div class="left-col" style="width: 50%;"> <div class="carboy-wrapper" style="transform: scale(1.15); transform-origin: top center; margin-top: 10px;">
-    <svg viewBox="0 0 100 100" class="carboy-svg">
-        <rect x="40" y="6" width="20" height="5" fill="var(--oled-color)" />
-        
-        <polygon points="43,11 57,11 54,20 46,20" fill="var(--oled-color)" style="opacity: 0.6;" />
-        
-        <circle class="glass-line" cx="50" cy="55" r="35" fill="var(--oled-color)" style="opacity: 0.25;" />
-        
-        <g id="bubble-stream"></g>
-    </svg>
-    
-    <div class="beer-temp outlined-text" style="top: 55%;"><span id="temp-beer-val">--</span>°C</div>
-</div>
-
-            <div class="right-col" style="width: 50%;">
+<div class="left-col" style="width: 50%;"> 
+                <div class="carboy-wrapper" style="transform: scale(1.15); transform-origin: top center; margin-top: 10px;">
+                    <svg viewBox="0 0 100 100" class="carboy-svg">
+                        <rect x="40" y="6" width="20" height="5" fill="var(--oled-color)" />
+                        <polygon points="43,11 57,11 54,20 46,20" fill="var(--oled-color)" style="opacity: 0.6;" />
+                        <circle class="glass-line" cx="50" cy="55" r="35" fill="var(--oled-color)" style="opacity: 0.25;" />
+                        <g id="bubble-stream"></g>
+                    </svg>
+                    <div class="beer-temp outlined-text" style="top: 55%;"><span id="temp-beer-val">--</span>°C</div>
+                </div>
+            </div> <div class="right-col" style="width: 50%;">
+                
                 <div class="highlight-box" id="strain-val">IRISH ALE</div>
                 
                 <div id="profile-val" style="font-size: 1.6rem; margin-bottom: 8px;">Low Ester</div>
@@ -65,8 +62,9 @@
 
         <div style="display: flex; justify-content: space-between; font-size: 1.8rem; margin-bottom: 10px;">
             <div>Day: <span id="day-val">0.0</span></div>
-            <div id="status-text">SYSTEM ONLINE</div>
-        </div>
+           <div style="font-size: 1.8rem; text-align: right;">
+    Fermentation phase: <span id="status-text">--</span>
+</div>
 
         <div class="chart-section" style="border-top: 1px dashed #444; padding-top: 10px;">
             <div class="chart-container">
@@ -85,6 +83,7 @@
 
 </body>
 </html>
+
 
 
 
