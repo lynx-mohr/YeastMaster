@@ -28,64 +28,61 @@
         </div>
     </div>
 
-    <div id="dashboard-container">
-        <div class="oled-screen">
-            
-            <div class="main-display">
-                
-                <div class="left-col" style="width: 50%;"> 
-                    <div class="carboy-wrapper" style="transform: scale(1.15); transform-origin: top center; margin-top: 10px;">
-                        <svg viewBox="0 0 100 100" class="carboy-svg">
-                            <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="2" />
-                            
-                            <path class="glass-line" 
-                                  d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" 
-                                  fill="rgba(255, 255, 255, 0.2)" 
-                                  stroke="var(--oled-color)" 
-                                  stroke-width="3" 
-                                  stroke-linejoin="round" />
-                                  
-                            <g id="bubble-stream"></g>
-                        </svg>
-                        <div class="beer-temp outlined-text" style="top: 55%;"><span id="temp-beer-val">--</span>°C</div>
-                    </div>
-                </div> 
-
-                <div class="right-col" style="width: 50%;">
-                    <div class="highlight-box" id="strain-val" style="border-radius: 4px;">--</div>
-                    
-                    <div id="profile-val" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 12px; opacity: 0.8;">--</div>
-
-                    <div class="action-status" style="display: flex; align-items: center; justify-content: flex-end; font-size: 1.6rem; font-weight: 800;">
-                        <span id="status-arrow" class="blink-active" style="margin-right: 8px; font-size: 1.2rem;">▼</span>
-                        <span id="action-val">--</span>
-                    </div>
-                    
-                    <div class="air-temp" style="margin-top: 8px; font-size: 1.2rem; opacity: 0.8;">
-                        Air: <span id="air-temp-val">--</span>°C
-                    </div>
-                </div>
-            </div>
-
-            <hr class="separator-line" style="border-top: 2px solid var(--oled-color); margin: 30px 0 15px 0; opacity: 0.8;">
-
-            <div style="display: flex; justify-content: space-between; font-size: 1.3rem; margin-bottom: 15px; font-weight: 600;">
-                <div>Day: <span id="day-val">0.0</span></div>
-                <div style="text-align: right;">
-                    Fermentation phase: <span id="status-text" style="font-weight: 800; color: var(--oled-color);">--</span>
-                </div>
-            </div>
-
-            <div class="chart-section" style="border-top: 1px solid #333; padding-top: 15px;">
-                <div class="chart-container" style="height: 140px;">
-                    <canvas id="beer-chart"></canvas>
-                </div>
-            </div>
-            
-        </div> 
+<div id="dashboard-container">
+    <div class="oled-screen">
         
-        <button id="btn-logout" style="margin-top: 20px; opacity: 0.3; background: none; border: 1px solid #666; color: #fff; font-family: 'Inter', sans-serif; padding: 5px 15px; border-radius: 4px; cursor: pointer;">LOGOUT</button>
-    </div>
+        <div class="main-display">
+            
+            <div class="left-col" style="width: 50%;"> 
+                <div class="carboy-wrapper" style="transform: scale(1.15); transform-origin: top center; margin-top: 10px;">
+                    <svg viewBox="0 0 100 100" class="carboy-svg">
+                        <rect x="40" y="7" width="20" height="4" fill="var(--oled-color)" rx="0.5" />
+                        
+                        <rect x="44" y="11" width="12" height="9" fill="var(--oled-color)" />
+                        
+                        <circle class="glass-line" cx="50" cy="55" r="35" fill="var(--oled-color)" style="opacity: 0.3;" stroke="var(--oled-color)" stroke-width="3" stroke-linejoin="round" />
+                              
+                        <g id="bubble-stream"></g>
+                    </svg>
+                    <div class="beer-temp outlined-text" style="top: 55%; font-size: 2.2rem;"><span id="temp-beer-val">--</span>°C</div>
+                </div>
+            </div> 
+
+            <div class="right-col" style="width: 50%;">
+                <div class="highlight-box" id="strain-val" style="border-radius: 4px;">--</div>
+                
+                <div id="profile-val" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 12px; opacity: 0.8;">--</div>
+
+                <div class="action-status" style="display: flex; align-items: center; justify-content: flex-end; font-size: 1.6rem; font-weight: 800;">
+                    <span id="status-arrow" class="blink-active" style="margin-right: 8px; font-size: 1.2rem;">▼</span>
+                    <span id="action-val">--</span>
+                </div>
+                
+                <div class="air-temp" style="margin-top: 8px; font-size: 1.2rem; opacity: 0.8;">
+                    Air: <span id="air-temp-val">--</span>°C
+                </div>
+            </div>
+        </div>
+
+        <hr class="separator-line" style="border-top: 3px solid var(--oled-color); margin: 30px 0 15px 0; opacity: 0.8;">
+
+        <div style="display: flex; justify-content: space-between; font-size: 1.3rem; margin-bottom: 15px; font-weight: 600;">
+            <div>Day: <span id="day-val">0.0</span></div>
+            <div style="text-align: right;">
+                Fermentation phase: <span id="status-text" style="font-weight: 800; color: var(--oled-color);">--</span>
+            </div>
+        </div>
+
+        <div class="chart-section" style="border-top: 1px solid #333; padding-top: 15px;">
+            <div class="chart-container" style="height: 140px;">
+                <canvas id="beer-chart"></canvas>
+            </div>
+        </div>
+        
+    </div> 
+    
+    <button id="btn-logout" style="margin-top: 20px; opacity: 0.3; background: none; border: 1px solid #666; color: #fff; font-family: 'Inter', sans-serif; padding: 5px 15px; border-radius: 4px; cursor: pointer;">LOGOUT</button>
+</div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>

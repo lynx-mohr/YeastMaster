@@ -51,14 +51,14 @@ body {
     position: relative;
 }
 
-/* Kärnan i YeastMaster 2.0: Knivskarp svart text med vit kant inuti glaset */
+/* Ger texten en svart kärna med en skarp vit linje runt om (Krispigt OLED) */
 .outlined-text {
-    font-size: 2.2rem; /* Lite mindre för att rymmas snyggt i den moderna formen */
-    letter-spacing: -0.5px;
-    color: #000000; /* Stenhårt svart inuti */
-    -webkit-text-stroke: 1.5px var(--oled-color); /* Krispig vit/ljusgrå kant */
-    text-shadow: none !important; /* Absolut ingen suddighet */
-    font-weight: 800; /* Extra bold för tydlighet */
+    font-size: 2.2rem; /* Minskad storlek */
+    letter-spacing: -1px;
+    color: var(--oled-bg); /* Svart insida */
+    -webkit-text-stroke: 1.5px var(--oled-color); /* Vit kontur */
+    text-shadow: none; /* Ingen suddig skugga */
+    font-weight: bold; /* Tydligare kontur */
 }
 
 /* Tvingar flaskan att ha en solid, krispig linje utan streck (dashes) */

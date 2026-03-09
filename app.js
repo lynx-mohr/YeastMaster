@@ -197,7 +197,7 @@ function startBubbles() {
             let currentX = b.x + Math.sin((b.y * 0.05) + b.wobbleOffset) * 0.4;
             b.element.setAttribute("cx", currentX);
             b.element.setAttribute("cy", b.y);
-            if (b.y < 20) { b.element.remove(); bubbles.splice(i, 1); }
+            if (b.y < 15) { b.element.remove(); bubbles.splice(i, 1); }
         }
         requestAnimationFrame(animate);
     }
