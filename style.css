@@ -208,7 +208,7 @@ body {
         width: 100px;             /* Ge den gott om plats att växa åt höger */
         text-align: left;         /* Texten skriver nu från vänster till höger */
         white-space: nowrap;
-        font-size: 0.75rem !important;
+        font-size: 0.70rem !important;
     }
     /* 4. SYNKRONISERA HÖGERKOLUMNEN (Matchar -65px ovan) */
     .right-col {
@@ -278,6 +278,7 @@ body {
     font-size: 0.9rem;
     font-weight: 600;
 }
+
 
 
 
