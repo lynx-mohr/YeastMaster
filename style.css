@@ -1,31 +1,88 @@
 /* --- GRUNDLÄGGANDE RESET --- */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-:root { --oled-color: #e0e0e0; --oled-bg: #000000; }
-body { background-color: #111; color: var(--oled-color); font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 20px; }
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
 
-/* --- PC-VY (Dina favoritinställningar) --- */
+:root { 
+    --oled-color: #e0e0e0; 
+    --oled-bg: #000000; 
+}
+
+body { 
+    background-color: #111; 
+    color: var(--oled-color); 
+    font-family: 'Inter', sans-serif; 
+    display: flex; 
+    flex-direction: column; /* Staplar allt vertikalt */
+    align-items: center; 
+    min-height: 100vh; 
+    padding: 20px;
+}
+
+/* --- HUVUDCONTAINER (Fixar Logout-pelaren) --- */
+#dashboard-container { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    width: 100%; 
+}
+
+.oled-screen { 
+    width: 100%; 
+    max-width: 450px; 
+    background-color: var(--oled-bg); 
+    border: 3px solid #333; 
+    border-radius: 8px; 
+    padding: 20px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0; 
+    text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* --- HUVUDVY (PC-MÅTT) --- */
 .main-display {
     display: flex;
     justify-content: space-between;
     position: relative;
-    margin-bottom: -65px; /* Linjens höjd på PC */
+    margin-bottom: -65px; /* Drar upp linjen bakom glaset */
     z-index: 2;
 }
 
-.right-col {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    padding-bottom: 75px !important; /* 10px marginal till linjen */
+.left-col { 
+    width: 45%; 
+    display: flex; 
+    justify-content: center; 
+    position: relative; 
 }
 
-.carboy-wrapper { position: relative; width: 230px; height: 230px; }
+.right-col { 
+    width: 50%; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-end; 
+    text-align: right;
+    padding-bottom: 75px !important; /* Ger 10px luft ovanför linjen */
+}
 
-/* Gemensam stil för siffran - vi sätter top: 58% för att pricka "magen" på båda */
+/* --- DAMEJEANG (PC) --- */
+.carboy-wrapper { 
+    position: relative; 
+    width: 230px; 
+    height: 230px; 
+}
+
+.carboy-svg { 
+    display: block; 
+    width: 100%; 
+    height: 100%; 
+}
+
 .beer-temp {
     position: absolute;
-    top: 58%; 
+    top: 58%; /* Siktar mitt i magen på flaskan */
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 1.65rem;
@@ -36,42 +93,123 @@ body { background-color: #111; color: var(--oled-color); font-family: 'Inter', s
     -webkit-text-stroke: 1.3px var(--oled-color);
 }
 
-/* --- MOBILANPASSNING (Här lagar vi bilden!) --- */
+.air-floating {
+    position: absolute;
+    top: 45px; /* Vid axeln på PC */
+    right: -10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.6;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+/* --- KOMPONENTER --- */
+.separator-line { 
+    border: none; 
+    border-top: 3px solid var(--oled-color); 
+    position: relative; 
+    z-index: 1; 
+    margin: 0; 
+}
+
+.highlight-box { 
+    background-color: var(--oled-color); 
+    color: var(--oled-bg); 
+    font-size: 1.4rem; 
+    font-weight: 800; 
+    padding: 4px 12px; 
+    margin-bottom: 12px; 
+    display: inline-block;
+}
+
+.action-status { 
+    font-size: 1.8rem; 
+    font-weight: 800; 
+}
+
+/* --- PROGRESS & CHART --- */
+.progress-section { 
+    text-align: left; 
+    padding: 35px 5px 0 5px; 
+}
+
+.progress-bar-bg { 
+    width: 100%; 
+    height: 7px; 
+    border: 1px solid #444; 
+    border-radius: 10px; 
+    overflow: hidden; 
+    background: rgba(255,255,255,0.05); 
+}
+
+.progress-fill-anim { 
+    height: 100%; 
+    background-color: #f39c12; 
+    transition: width 1s ease-in-out; 
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.4);
+}
+
+.chart-section { 
+    margin-top: 15px; 
+    padding-top: 10px; 
+    border-top: 1px solid #333; 
+}
+
+.chart-container { 
+    height: 110px; 
+    position: relative; 
+}
+
+@keyframes blinker { 50% { opacity: 0; } }
+.blink-active { animation: blinker 1s step-start infinite; }
+
+/* --- MOBILANPASSNING (LÅST & ISOLERAD) --- */
 @media (max-width: 600px) {
-    .main-display {
-        margin-bottom: -75px !important; /* Vi drar upp linjen lite extra på mobil */
-    }
-
-    .right-col {
-        padding-bottom: 85px !important; /* Vi håller 10px glipan (85 - 75) */
-    }
-
     .carboy-wrapper {
-        /* Vi gör damejeangen större optiskt genom att öka skalan */
-        transform: scale(1.5) !important; 
+        transform: scale(1.4) !important; 
         transform-origin: center left !important;
-        margin-top: 30px !important;
-        margin-left: 15px !important;
+        margin-top: 15px !important;
+        margin-left: 10px !important;
     }
 
     .beer-temp {
-        font-size: 1.3rem !important; /* Sänker textstorlek så den garanterat får plats */
-        top: 60% !important; /* Tvingar ner den ännu mer i magen på mobil */
+        font-size: 1.3rem !important;
+        top: 60% !important; /* Tvingar ner den ytterligare i magen på mobil */
+    }
+
+    .main-display {
+        margin-bottom: -65px !important; /* Matchar PC för konsekvent djupeffekt */
+    }
+
+    .right-col {
+        padding-bottom: 75px !important; 
+        width: 60% !important;
     }
 
     .air-floating {
-        top: 25px; 
-        right: -10px;
+        top: 20px;
+        right: -5px;
         font-size: 0.75rem;
     }
 }
 
-/* --- ÖVRIGT (Bubblor, separator, etc) --- */
-.separator-line { border: none; border-top: 3px solid var(--oled-color); position: relative; z-index: 1; }
-.air-floating { position: absolute; top: 45px; right: -15px; font-size: 0.85rem; opacity: 0.6; z-index: 10; }
-.highlight-box { background-color: var(--oled-color); color: var(--oled-bg); font-size: 1.4rem; font-weight: 800; padding: 4px 12px; margin-bottom: 12px; }
-.profile-text { font-size: 1rem; font-weight: 600; margin-bottom: 15px; opacity: 0.7; }
-.action-status { font-size: 1.8rem; font-weight: 800; }
-.progress-section { text-align: left; padding: 45px 5px 0 5px; } /* Ökad padding för att parera linjen */
-@keyframes blinker { 50% { opacity: 0; } }
-.blink-active { animation: blinker 1s step-start infinite; }
+/* --- LOGOUT KNAPP (Snygg och centrerad underst) --- */
+.logout-btn { 
+    display: block; 
+    margin: 30px auto; 
+    opacity: 0.4; 
+    background: none; 
+    border: 1px solid #666; 
+    color: #fff; 
+    padding: 8px 20px; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+
+.logout-btn:hover {
+    opacity: 1;
+}
