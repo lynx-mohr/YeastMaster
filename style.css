@@ -164,54 +164,42 @@ body {
 @keyframes blinker { 50% { opacity: 0; } }
 .blink-active { animation: blinker 1s step-start infinite; }
 
-/* --- MOBILANPASSNING (FIXAR HÖJD OCH TEXTSTORLEK) --- */
+/* --- MOBILANPASSNING (DE SISTA JUSTERINGARNA) --- */
 @media (max-width: 600px) {
-    /* 1. Lyft upp flaskan och gör den lagom stor */
+    /* 1. Flytta ner flaskan från Air-texten */
     .carboy-wrapper {
         transform: scale(1.3) !important; 
         transform-origin: center left !important;
-        margin-top: -5px !important;    /* Lyfter upp flaskan från linjen */
+        margin-top: 10px !important;    /* Flyttad ner från -5px för att slippa krock */
         margin-left: 5px !important;
         height: 140px; 
         width: 140px;
     }
 
-    /* 2. Fixa temperaturen inuti flaskan */
-    .beer-temp { 
-        font-size: 1.2rem !important; 
-        top: 58% !important; 
-    }
-
-    /* 3. Dra upp linjen så den skär snyggt i botten av glaset */
+    /* 2. Sänk linjen så den ligger lägre på flaskans mage */
     .main-display { 
-        margin-bottom: -45px !important; 
+        margin-bottom: -38px !important; /* Justerad från -45px för att sänka linjen */
     }
 
-    /* 4. Minska "COOLING" och högerkolumnen */
+    /* 3. Justera högerkolumnen så COOLING fortfarande flyter ovanför */
     .right-col { 
         width: 65% !important;
-        padding-bottom: 55px !important; /* Håller texten ovanför linjen */
+        padding-bottom: 48px !important; /* Sänkt i takt med linjen */
     }
 
-    .action-status { 
-        font-size: 1.1rem !important; /* Mycket mindre och proffsigare text */
-        font-weight: 800;
-        letter-spacing: 0.5px;
-    }
-
-    /* 5. Justera Air-temp så den inte krockar */
+    /* 4. Lyft Air-texten en aning från halsen */
     .air-floating { 
-        top: 25px; 
+        top: 18px !important;   /* Lyfter upp den lite extra från flaskhalsen */
         right: -5px; 
         font-size: 0.7rem; 
+        opacity: 0.6;
     }
 
-    /* 6. Minska IRISH ALE-boxen för mobil */
-    .highlight-box {
-        font-size: 1rem !important;
-        padding: 3px 10px !important;
-        margin-bottom: 8px !important;
-    }
+    /* Behåll resten av mobil-inställningarna som de var */
+    .beer-temp { font-size: 1.2rem !important; top: 58% !important; }
+    .action-status { font-size: 1.1rem !important; font-weight: 800; }
+    .highlight-box { font-size: 1rem !important; padding: 3px 10px !important; }
+}
 }
 /* --- LOGOUT KNAPP (Snygg och centrerad underst) --- */
 .logout-btn { 
@@ -232,5 +220,6 @@ body {
 .logout-btn:hover {
     opacity: 1;
 }
+
 
 
