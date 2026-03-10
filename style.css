@@ -190,22 +190,23 @@ body {
         margin-top: -15px !important; 
         margin-left: -10px !important; /* <--- Detta drar flaskan mot vänsterkanten */
     }
-   /* 3. Behåll "mag-snittet" för linjen */
-    .main-display {
-        margin-bottom: -30px !important; 
+   .main-display {
+        /* Vi ökar det negativa värdet för att dra upp linjen bakom flaskans mage */
+        margin-bottom: -100px !important; 
     }
 
     /* 4. Ge högerkolumnen lite mer utrymme nu när flaskan flyttat på sig */
+/* 4. Justera padding så COOLING inte krockar med den upphöjda linjen */
     .right-col {
-        width: 65% !important;
-        padding-bottom: 40px !important; 
+        padding-bottom: 100px !important;
     }
 
-    .air-floating { 
-        top: 18px !important; 
-        right: -5px; 
-        font-size: 0.7rem; 
-        opacity: 0.6;
+/* 2. Tvinga ner Air-temp från "taket" till flaskans axel */
+    .air-floating {
+        /* Ett högre värde här flyttar texten neråt */
+        top: 65px !important; 
+        right: -10px !important;
+        font-size: 0.75rem !important;
     }
 
     .action-status { 
@@ -270,6 +271,7 @@ body {
     font-size: 0.9rem;
     font-weight: 600;
 }
+
 
 
 
