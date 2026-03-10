@@ -184,29 +184,31 @@ body {
 
 /* --- 7. MOBILANPASSNING (De sista fixarna!) --- */
 @media (max-width: 600px) {
-  .carboy-wrapper {
+/* 1. LYFT FLASKAN (Drar upp den från ordet Progress) */
+    .carboy-wrapper {
         transform: scale(1.3) !important;
         transform-origin: center left !important;
-        margin-top: -15px !important; 
-        margin-left: -10px !important; /* <--- Detta drar flaskan mot vänsterkanten */
-    }
-   .main-display {
-        /* Vi ökar det negativa värdet för att dra upp linjen bakom flaskans mage */
-        margin-bottom: -100px !important; 
+        margin-top: -45px !important;    /* Ändrat från -15px till -45px för att lyfta flaskan */
+        margin-left: -10px !important; 
     }
 
-    /* 4. Ge högerkolumnen lite mer utrymme nu när flaskan flyttat på sig */
-/* 4. Justera padding så COOLING inte krockar med den upphöjda linjen */
-    .right-col {
-        padding-bottom: 100px !important;
+    /* 2. SLÄPP NER PROGRESS (Minskar suget uppåt så texten syns) */
+    .main-display {
+        /* Vi ändrar från -105px till -75px. Det gör att Progress-sektionen åker NER 30px */
+        margin-bottom: -75px !important; 
     }
 
-/* 2. Tvinga ner Air-temp från "taket" till flaskans axel */
+    /* 3. JUSTERA AIR-TEMP (Eftersom flaskan åkte upp måste texten följa med) */
     .air-floating {
-        /* Ett högre värde här flyttar texten neråt */
-        top: 65px !important; 
+        top: 40px !important;            /* Flyttad för att matcha flaskans nya höjd */
         right: -10px !important;
         font-size: 0.75rem !important;
+    }
+
+    /* 4. SYNKRONISERA HÖGERKOLUMNEN */
+    .right-col {
+        width: 65% !important;
+        padding-bottom: 75px !important; /* Måste matcha margin-bottom på -75px */
     }
 
     .action-status { 
@@ -271,6 +273,7 @@ body {
     font-size: 0.9rem;
     font-weight: 600;
 }
+
 
 
 
