@@ -184,31 +184,32 @@ body {
 
 /* --- 7. MOBILANPASSNING (De sista fixarna!) --- */
 @media (max-width: 600px) {
-/* 1. LYFT FLASKAN (Drar upp den från ordet Progress) */
+/* 1. BEHÅLL DIN BRA PLACERING (Drar upp flaskan snyggt) */
     .carboy-wrapper {
         transform: scale(1.3) !important;
         transform-origin: center left !important;
-        margin-top: -45px !important;    /* Ändrat från -15px till -45px för att lyfta flaskan */
+        margin-top: -45px !important;    
         margin-left: -10px !important; 
     }
 
-    /* 2. SLÄPP NER PROGRESS (Minskar suget uppåt så texten syns) */
+    /* 2. SÄNK LINJEN (Vi går från -75px till -65px för att flytta ner den) */
     .main-display {
-        /* Vi ändrar från -105px till -75px. Det gör att Progress-sektionen åker NER 30px */
-        margin-bottom: -75px !important; 
+        /* En lägre negativ siffra flyttar ner linjen och Progress-sektionen */
+        margin-bottom: -65px !important; 
     }
 
-    /* 3. JUSTERA AIR-TEMP (Eftersom flaskan åkte upp måste texten följa med) */
+    /* 3. FLYTTA NER AIR-TEMP (Går från 40px till 85px för att hamna vid axeln) */
     .air-floating {
-        top: 40px !important;            /* Flyttad för att matcha flaskans nya höjd */
+        /* Detta trycker ner texten från taket så den inte hamnar utanför ramen */
+        top: 85px !important;            
         right: -10px !important;
         font-size: 0.75rem !important;
     }
 
-    /* 4. SYNKRONISERA HÖGERKOLUMNEN */
+    /* 4. SYNKRONISERA HÖGERKOLUMNEN (Matchar -65px ovan) */
     .right-col {
         width: 65% !important;
-        padding-bottom: 75px !important; /* Måste matcha margin-bottom på -75px */
+        padding-bottom: 65px !important; 
     }
 
     .action-status { 
@@ -273,6 +274,7 @@ body {
     font-size: 0.9rem;
     font-weight: 600;
 }
+
 
 
 
