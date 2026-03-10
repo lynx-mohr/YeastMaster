@@ -170,6 +170,7 @@ body {
     background-color: #f39c12; 
     transition: width 1s ease-in-out; 
     box-shadow: 0 0 10px rgba(243, 156, 18, 0.4);
+    width: 0%;
      margin-bottom: 20px;
 }
 
