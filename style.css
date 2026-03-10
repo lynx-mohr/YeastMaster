@@ -160,13 +160,17 @@ body {
     border-radius: 10px; 
     overflow: hidden; 
     background: rgba(255,255,255,0.05); 
+    margin-bottom: 50px;
 }
+
+
 
 .progress-fill-anim { 
     height: 100%; 
     background-color: #f39c12; 
     transition: width 1s ease-in-out; 
     box-shadow: 0 0 10px rgba(243, 156, 18, 0.4);
+     margin-bottom: 20px;
 }
 
 .chart-section { 
