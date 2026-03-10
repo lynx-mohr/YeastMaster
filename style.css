@@ -200,7 +200,7 @@ body {
     .action-status { font-size: 1.1rem !important; font-weight: 800; }
     .highlight-box { font-size: 1rem !important; padding: 3px 10px !important; }
 }
-}
+
 /* --- LOGOUT KNAPP (Snygg och centrerad underst) --- */
 .logout-btn { 
     display: block; 
@@ -220,6 +220,7 @@ body {
 .logout-btn:hover {
     opacity: 1;
 }
+
 
 
 
