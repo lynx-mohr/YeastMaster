@@ -37,6 +37,16 @@ body {
     padding-top: 50px;
 }
 
+.auth-box {
+    background-color: #000;
+    border: 3px solid #e0e0e0;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    width: 90%;
+    max-width: 350px;
+}
+
 .oled-screen { 
     width: 100%; 
     max-width: 450px; 
@@ -256,3 +266,4 @@ body {
     font-size: 0.9rem;
     font-weight: 600;
 }
+
