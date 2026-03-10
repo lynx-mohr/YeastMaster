@@ -65,7 +65,7 @@ body {
     display: flex;
     justify-content: space-between;
     position: relative;
-    margin-bottom: -65px; 
+    margin-bottom: -75px; 
     z-index: 2;
 }
 
@@ -114,7 +114,7 @@ body {
 
 .air-floating {
     position: absolute;
-    top: 60px; 
+    top: 65px; 
     right: -10px;
     font-size: 0.85rem;
     font-weight: 600;
@@ -196,7 +196,7 @@ body {
     /* 2. SÄNK LINJEN (Vi går från -75px till -65px för att flytta ner den) */
     .main-display {
         /* En lägre negativ siffra flyttar ner linjen och Progress-sektionen */
-        margin-bottom: -75px !important; 
+        margin-bottom: -65px !important; 
     }
 
 .air-floating {
