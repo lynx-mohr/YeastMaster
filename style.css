@@ -1,4 +1,4 @@
-/* --- GRUNDLÄGGANDE RESET --- */
+/* --- 1. GRUNDLÄGGANDE RESET & BODY --- */
 * { 
     box-sizing: border-box; 
     margin: 0; 
@@ -18,15 +18,23 @@ body {
     flex-direction: column; 
     align-items: center; 
     min-height: 100vh; 
-    padding: 20px;
+    padding: 15px; /* Lite mindre padding på mobil */
 }
 
-/* --- DASHBOARD CONTAINER --- */
+/* --- 2. CONTAINERS (Felsäkra inställningar) --- */
 #dashboard-container { 
-    display: none; /* Döljs vid start, visas av JavaScript när inloggad */
+    display: flex; /* Visas som standard för att undvika svart skärm */
     flex-direction: column; 
     align-items: center; 
     width: 100%; 
+}
+
+#login-container, #claim-container {
+    display: none; /* JavaScript tänder dessa vid behov */
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-top: 50px;
 }
 
 .oled-screen { 
@@ -42,12 +50,12 @@ body {
     text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3);
 }
 
-/* --- HUVUDVY (PC-STANDARD) --- */
+/* --- 3. HUVUDVY PC (Dina favorit-mått) --- */
 .main-display {
     display: flex;
     justify-content: space-between;
     position: relative;
-    margin-bottom: -65px; /* PC: Linjens höjd bakom glaset */
+    margin-bottom: -65px; 
     z-index: 2;
 }
 
@@ -64,10 +72,10 @@ body {
     flex-direction: column; 
     align-items: flex-end; 
     text-align: right;
-    padding-bottom: 75px !important; /* PC: Luft ovanför linjen */
+    padding-bottom: 75px !important; 
 }
 
-/* --- DAMEJEANG (PC) --- */
+/* --- 4. DAMEJEANG & TEMPERATUR (PC) --- */
 .carboy-wrapper { 
     position: relative; 
     width: 230px; 
@@ -82,7 +90,7 @@ body {
 
 .beer-temp {
     position: absolute;
-    top: 58%; /* Siktar mitt i magen */
+    top: 58%; 
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 1.65rem;
@@ -104,7 +112,7 @@ body {
     z-index: 10;
 }
 
-/* --- KOMPONENTER --- */
+/* --- 5. KOMPONENTER --- */
 .separator-line { 
     border: none; 
     border-top: 3px solid var(--oled-color); 
@@ -128,7 +136,7 @@ body {
     font-weight: 800; 
 }
 
-/* --- PROGRESS & CHART --- */
+/* --- 6. PROGRESS & CHART --- */
 .progress-section { 
     text-align: left; 
     padding: 35px 5px 0 5px; 
@@ -164,7 +172,7 @@ body {
 @keyframes blinker { 50% { opacity: 0; } }
 .blink-active { animation: blinker 1s step-start infinite; }
 
-/* --- MOBILANPASSNING (FINJUSTERAD) --- */
+/* --- 7. MOBILANPASSNING (De sista fixarna!) --- */
 @media (max-width: 600px) {
     .carboy-wrapper {
         transform: scale(1.3) !important; 
@@ -176,37 +184,31 @@ body {
     }
 
     .main-display { 
-        margin-bottom: -38px !important; /* Flyttar ner linjen på magen */
+        margin-bottom: -38px !important; 
     }
 
     .right-col { 
         width: 65% !important;
-        padding-bottom: 48px !important; /* Håller texten ovanför sänkt linje */
+        padding-bottom: 48px !important; 
     }
 
     .air-floating { 
-        top: 18px !important; /* Fri från flaskhalsen */
+        top: 18px !important; 
         right: -5px; 
         font-size: 0.7rem; 
         opacity: 0.6;
     }
 
     .action-status { 
-        font-size: 1.1rem !important; /* Minskar "COOLING" */
+        font-size: 1.1rem !important; 
+        font-weight: 800;
     }
 
     .beer-temp { font-size: 1.2rem !important; top: 58% !important; }
     .highlight-box { font-size: 1rem !important; padding: 3px 10px !important; }
 }
 
-/* --- AUTH SEKTION (Fixar svart skärm) --- */
-#login-container, #claim-container {
-    display: none; 
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
+/* --- 8. AUTH BOXES (Fixar så de faktiskt syns) --- */
 .auth-box {
     background-color: var(--oled-bg);
     border: 3px solid var(--oled-color);
@@ -215,34 +217,32 @@ body {
     text-align: center;
     width: 100%;
     max-width: 400px;
-    margin-top: 50px;
 }
 
 .btn-primary {
     background-color: var(--oled-color);
     color: var(--oled-bg);
     border: none;
-    padding: 15px 30px;
+    padding: 15px;
     font-size: 1.2rem;
     font-weight: 800;
-    cursor: pointer;
-    text-transform: uppercase;
     width: 100%;
     margin-top: 20px;
+    cursor: pointer;
 }
 
 #input-mac {
     background: transparent;
     border: 2px solid #444;
     color: var(--oled-color);
-    font-size: 1.2rem;
-    padding: 10px;
     width: 100%;
+    padding: 10px;
     text-align: center;
-    margin-top: 15px;
+    margin-top: 10px;
+    font-size: 1.1rem;
 }
 
-/* --- LOGOUT KNAPP --- */
+/* --- 9. LOGOUT KNAPP --- */
 .logout-btn { 
     display: block; 
     margin: 30px auto; 
@@ -255,9 +255,4 @@ body {
     cursor: pointer; 
     font-size: 0.9rem;
     font-weight: 600;
-    transition: opacity 0.2s;
-}
-
-.logout-btn:hover {
-    opacity: 1;
 }
