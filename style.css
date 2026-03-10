@@ -189,7 +189,7 @@ body {
         transform: scale(1.3) !important;
         transform-origin: center left !important;
         margin-top: -45px !important;    
-        margin-left: -15px !important; 
+        margin-left: -20px !important; 
     }
 
     /* 2. SÄNK LINJEN (Vi går från -75px till -65px för att flytta ner den) */
@@ -202,7 +202,7 @@ body {
         top: 85px !important;
         
         /* FIXEN: Vi slutar styra från höger och låser vänsterkanten istället */
-        left: 110px !important;   /* Prova dig fram mellan 105px och 120px */
+        left: 100px !important;   /* Prova dig fram mellan 105px och 120px */
         right: auto !important;    /* VIKTIGT: Detta "stänger av" den gamla högerstyrningen */
         
         width: 100px;             /* Ge den gott om plats att växa åt höger */
@@ -278,6 +278,7 @@ body {
     font-size: 0.9rem;
     font-weight: 600;
 }
+
 
 
 
