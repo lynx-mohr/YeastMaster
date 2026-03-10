@@ -15,15 +15,15 @@ body {
     color: var(--oled-color); 
     font-family: 'Inter', sans-serif; 
     display: flex; 
-    flex-direction: column; /* Staplar allt vertikalt */
+    flex-direction: column; 
     align-items: center; 
     min-height: 100vh; 
     padding: 20px;
 }
 
-/* --- HUVUDCONTAINER (Fixar Logout-pelaren) --- */
+/* --- DASHBOARD CONTAINER --- */
 #dashboard-container { 
-    display: flex; 
+    display: none; /* Döljs vid start, visas av JavaScript när inloggad */
     flex-direction: column; 
     align-items: center; 
     width: 100%; 
@@ -42,12 +42,12 @@ body {
     text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3);
 }
 
-/* --- HUVUDVY (PC-MÅTT) --- */
+/* --- HUVUDVY (PC-STANDARD) --- */
 .main-display {
     display: flex;
     justify-content: space-between;
     position: relative;
-    margin-bottom: -65px; /* Drar upp linjen bakom glaset */
+    margin-bottom: -65px; /* PC: Linjens höjd bakom glaset */
     z-index: 2;
 }
 
@@ -64,7 +64,7 @@ body {
     flex-direction: column; 
     align-items: flex-end; 
     text-align: right;
-    padding-bottom: 75px !important; /* Ger 10px luft ovanför linjen */
+    padding-bottom: 75px !important; /* PC: Luft ovanför linjen */
 }
 
 /* --- DAMEJEANG (PC) --- */
@@ -82,7 +82,7 @@ body {
 
 .beer-temp {
     position: absolute;
-    top: 58%; /* Siktar mitt i magen på flaskan */
+    top: 58%; /* Siktar mitt i magen */
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 1.65rem;
@@ -95,7 +95,7 @@ body {
 
 .air-floating {
     position: absolute;
-    top: 45px; /* Vid axeln på PC */
+    top: 45px; 
     right: -10px;
     font-size: 0.85rem;
     font-weight: 600;
@@ -164,44 +164,85 @@ body {
 @keyframes blinker { 50% { opacity: 0; } }
 .blink-active { animation: blinker 1s step-start infinite; }
 
-/* --- MOBILANPASSNING (DE SISTA JUSTERINGARNA) --- */
+/* --- MOBILANPASSNING (FINJUSTERAD) --- */
 @media (max-width: 600px) {
-    /* 1. Flytta ner flaskan från Air-texten */
     .carboy-wrapper {
         transform: scale(1.3) !important; 
         transform-origin: center left !important;
-        margin-top: 10px !important;    /* Flyttad ner från -5px för att slippa krock */
+        margin-top: 10px !important; 
         margin-left: 5px !important;
         height: 140px; 
         width: 140px;
     }
 
-    /* 2. Sänk linjen så den ligger lägre på flaskans mage */
     .main-display { 
-        margin-bottom: -38px !important; /* Justerad från -45px för att sänka linjen */
+        margin-bottom: -38px !important; /* Flyttar ner linjen på magen */
     }
 
-    /* 3. Justera högerkolumnen så COOLING fortfarande flyter ovanför */
     .right-col { 
         width: 65% !important;
-        padding-bottom: 48px !important; /* Sänkt i takt med linjen */
+        padding-bottom: 48px !important; /* Håller texten ovanför sänkt linje */
     }
 
-    /* 4. Lyft Air-texten en aning från halsen */
     .air-floating { 
-        top: 18px !important;   /* Lyfter upp den lite extra från flaskhalsen */
+        top: 18px !important; /* Fri från flaskhalsen */
         right: -5px; 
         font-size: 0.7rem; 
         opacity: 0.6;
     }
 
-    /* Behåll resten av mobil-inställningarna som de var */
+    .action-status { 
+        font-size: 1.1rem !important; /* Minskar "COOLING" */
+    }
+
     .beer-temp { font-size: 1.2rem !important; top: 58% !important; }
-    .action-status { font-size: 1.1rem !important; font-weight: 800; }
     .highlight-box { font-size: 1rem !important; padding: 3px 10px !important; }
 }
 
-/* --- LOGOUT KNAPP (Snygg och centrerad underst) --- */
+/* --- AUTH SEKTION (Fixar svart skärm) --- */
+#login-container, #claim-container {
+    display: none; 
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.auth-box {
+    background-color: var(--oled-bg);
+    border: 3px solid var(--oled-color);
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 50px;
+}
+
+.btn-primary {
+    background-color: var(--oled-color);
+    color: var(--oled-bg);
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    cursor: pointer;
+    text-transform: uppercase;
+    width: 100%;
+    margin-top: 20px;
+}
+
+#input-mac {
+    background: transparent;
+    border: 2px solid #444;
+    color: var(--oled-color);
+    font-size: 1.2rem;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+}
+
+/* --- LOGOUT KNAPP --- */
 .logout-btn { 
     display: block; 
     margin: 30px auto; 
@@ -220,7 +261,3 @@ body {
 .logout-btn:hover {
     opacity: 1;
 }
-
-
-
-
