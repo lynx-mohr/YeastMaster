@@ -114,6 +114,10 @@ const targetDays = 14;
 
 const percent = Math.min((currentDay / targetDays) * 100, 100).toFixed(0);
 
+const fillElement = document.getElementById('progress-fill');
+if (fillElement) {
+    fillElement.style.width = percent + "%";
+    
 // Uppdatera värdena i HTML
 document.getElementById('day-val').innerText = currentDay.toFixed(1);
 document.getElementById('phase-day-val').innerText = phaseDay.toFixed(1); // Den nya raden!
