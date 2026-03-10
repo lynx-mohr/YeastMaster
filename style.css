@@ -198,12 +198,14 @@ body {
         margin-bottom: -65px !important; 
     }
 
-    /* 3. FLYTTA NER AIR-TEMP (Går från 40px till 85px för att hamna vid axeln) */
-    .air-floating {
-        /* Detta trycker ner texten från taket så den inte hamnar utanför ramen */
-        top: 85px !important;            
-        right: -15px !important;
-        font-size: 0.75rem !important;
+.air-floating {
+        /* Dina andra värden... */
+        top: 85px !important;
+        right: -18px !important; 
+        
+        /* FIXEN: Förbjud animationer vid laddning på mobil */
+        transition: none !important; 
+        animation: none !important;
     }
 
     /* 4. SYNKRONISERA HÖGERKOLUMNEN (Matchar -65px ovan) */
@@ -274,6 +276,7 @@ body {
     font-size: 0.9rem;
     font-weight: 600;
 }
+
 
 
 
