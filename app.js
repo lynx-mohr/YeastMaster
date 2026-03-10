@@ -193,30 +193,53 @@ function startBubbles() {
     let bubbles = [];
     let lastSpawn = 0;
 
-    function animate(timestamp) {
+function animate(timestamp) {
         const statusElement = document.getElementById('status-text');
         const statusText = statusElement ? statusElement.innerText.toUpperCase() : '';
-        const isActive = !(statusText === 'FINISHED' || statusText.includes('CRASH'));
+        
+        // 1. Bestäm spawn-hastighet baserat på status
+        let spawnInterval = 250; 
+        if (statusText.includes('CRASH')) {
+            spawnInterval = 20000; // En bubbla var 20:e sekund
+        } else if (statusText === 'FINISHED') {
+            spawnInterval = 9999999; // Aldrig
+        }
 
-        if (isActive && timestamp - lastSpawn > 250) {
+        // 2. Skapa ny bubbla om det är dags
+        if (timestamp - lastSpawn > spawnInterval) {
             const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             const size = Math.random() * 0.7 + 0.5; 
             const startX = 50 + (Math.random() * 12 - 6); 
             circle.setAttribute("r", size);
             circle.setAttribute("fill", "rgba(255, 255, 255, 0.7)");
             stream.appendChild(circle);
-            bubbles.push({ element: circle, x: startX, y: 85, speed: Math.random() * 0.2 + 0.3, wobbleOffset: Math.random() * Math.PI * 2 });
+            
+            bubbles.push({ 
+                element: circle, 
+                x: startX, 
+                y: 85, 
+                speed: Math.random() * 0.2 + 0.3, 
+                wobbleOffset: Math.random() * Math.PI * 2 
+            });
             lastSpawn = timestamp;
         }
 
+        // 3. Flytta existerande bubblor (Denna del får inte tas bort!)
         for (let i = bubbles.length - 1; i >= 0; i--) {
             let b = bubbles[i];
             b.y -= b.speed;
             let currentX = b.x + Math.sin((b.y * 0.05) + b.wobbleOffset) * 0.4;
             b.element.setAttribute("cx", currentX);
             b.element.setAttribute("cy", b.y);
-            if (b.y < 15) { b.element.remove(); bubbles.splice(i, 1); }
+            
+            // Ta bort bubblan när den når toppen
+            if (b.y < 15) { 
+                b.element.remove(); 
+                bubbles.splice(i, 1); 
+            }
         }
+
+        // 4. Fortsätt animera (Motorn i alltihop!)
         requestAnimationFrame(animate);
     }
     requestAnimationFrame(animate);
