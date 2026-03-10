@@ -184,22 +184,21 @@ body {
 
 /* --- 7. MOBILANPASSNING (De sista fixarna!) --- */
 @media (max-width: 600px) {
-    .carboy-wrapper {
-        transform: scale(1.3) !important; 
+  .carboy-wrapper {
+        transform: scale(1.3) !important;
         transform-origin: center left !important;
-        margin-top: 10px !important; 
-        margin-left: 5px !important;
-        height: 140px; 
-        width: 140px;
+        margin-top: -15px !important; 
+        margin-left: -10px !important; /* <--- Detta drar flaskan mot vänsterkanten */
+    }
+   /* 3. Behåll "mag-snittet" för linjen */
+    .main-display {
+        margin-bottom: -30px !important; 
     }
 
-    .main-display { 
-        margin-bottom: -38px !important; 
-    }
-
-    .right-col { 
+    /* 4. Ge högerkolumnen lite mer utrymme nu när flaskan flyttat på sig */
+    .right-col {
         width: 65% !important;
-        padding-bottom: 48px !important; 
+        padding-bottom: 40px !important; 
     }
 
     .air-floating { 
@@ -214,7 +213,12 @@ body {
         font-weight: 800;
     }
 
-    .beer-temp { font-size: 1.2rem !important; top: 58% !important; }
+/* 5. Säkra temperaturen i magen */
+    .beer-temp { 
+        font-size: 1.25rem !important; 
+        top: 58% !important; 
+    }
+    
     .highlight-box { font-size: 1rem !important; padding: 3px 10px !important; }
 }
 
@@ -266,5 +270,6 @@ body {
     font-size: 0.9rem;
     font-weight: 600;
 }
+
 
 
