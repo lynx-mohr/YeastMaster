@@ -178,9 +178,10 @@ body {
     margin-bottom: 25px; /* Justera detta för avståndet till Day */
 }
 
-/* Detta skapar luft mellan Day-raden och Phase-raden */
 .phase-info div {
-    margin-bottom: 12px; /* Justera detta för mer/mindre luft mellan raderna */
+    margin-bottom: 12px; /* Skapar exakt det avstånd du ville ha mellan raderna */
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
 }
 
 /* Ta bort marginalen på sista raden så den inte förstör balansen nedåt */
@@ -188,11 +189,16 @@ body {
     margin-bottom: 0;
 }
 
+/* Gör labels lite diskretare om du vill att värdena ska poppa */
+.phase-info span {
+    margin-left: 5px;
+}
+
 /* Om du vill att texterna ska se lite krispigare ut (som på OLED) */
 .phase-info {
-    font-size: 1.1rem;
-    line-height: 1.4;
+    margin-top: 20px; /* Avstånd upp till progress bar */
 }
+
 
 .chart-section { 
     margin-top: 15px; 
