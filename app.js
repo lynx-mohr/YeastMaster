@@ -106,22 +106,17 @@ async function updateDashboard() {
 // 4. Statusrad (Fas)
             document.getElementById('status-text').innerText = latest.status.toUpperCase();
             
-           
-    // 5. Dag och Progress-mätare
-const currentDay = latest.day || 0;
-const phaseDay = latest.phase_day || 0; // Se till att ditt API skickar detta, annars kan vi räkna ut det sen
-const targetDays = 14; 
+            // 5. Dag och Progress-mätare (Logiken för den orangea mätaren)
+            const currentDay = latest.day || 0;
+            const targetDays = 14; // Här sätter vi målet för mätaren (t.ex. 14 dagar)
+            
+            // Räkna ut procenten (0-100%)
+            const percent = Math.min((currentDay / targetDays) * 100, 100).toFixed(0);
 
-const percent = Math.min((currentDay / targetDays) * 100, 100).toFixed(0);
-
-const fillElement = document.getElementById('progress-fill');
-if (fillElement) {
-    fillElement.style.width = percent + "%";
-    
-// Uppdatera värdena i HTML
-document.getElementById('day-val').innerText = currentDay.toFixed(1);
-document.getElementById('phase-day-val').innerText = phaseDay.toFixed(1); // Den nya raden!
-document.getElementById('status-text').innerText = latest.status.toUpperCase();
+            // Uppdatera värdena i HTML
+            document.getElementById('day-val').innerText = currentDay.toFixed(1);
+            document.getElementById('progress-percent').innerText = percent + "%";
+            document.getElementById('progress-fill').style.width = percent + "%";
 
             updateChart(data);
         }
