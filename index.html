@@ -10,95 +10,73 @@
 </head>
 <body>
 
-    <div id="login-container">
-        <div class="auth-box">
-            <h1>YeastMaster</h1>
-            <p>Vittnesskyddat moln</p>
-            <button id="btn-login" class="btn-primary">Logga in via Google</button>
-        </div>
-    </div>
+<div id="dashboard-container">
+    <div class="oled-screen"> 
+        
+        <div class="main-display">
+            <div class="left-col"> 
+                <div class="carboy-wrapper">
+                    <div class="air-floating">Air: <span id="air-temp-val">--</span>°C</div>
+                    <svg viewBox="0 0 100 92" class="carboy-svg">
+                        <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
+                        <path class="glass-line" 
+                              d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" 
+                              style="fill: #4a4a4a !important; fill-opacity: 1 !important;"
+                              stroke="var(--oled-color)" 
+                              stroke-width="2.5" />
+                        <g id="bubble-stream"></g>
+                    </svg>
+                    <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
+                </div>
+            </div> 
 
-    <div id="claim-container">
-        <div class="auth-box">
-            <h2>Koppla enhet</h2>
-            <p>Ange ID från OLED-menyn</p>
-            <input type="text" id="input-mac" placeholder="E4:B0:63:AE:1C:25">
-            <button id="btn-claim" class="btn-primary">Aktivera Bryggverk</button>
-            <p class="hint">Action-meny -> Device ID</p>
+            <div class="right-col">
+                <div class="highlight-box" id="strain-val">--</div>
+                <div id="profile-val" style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; opacity: 0.7;">--</div>
+                <div class="action-status">
+                    <span id="status-arrow" class="blink-active">▼</span>
+                    <span id="action-val">--</span>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div id="dashboard-container">
-        <div class="oled-screen"> 
+        <hr class="separator-line">
+
+        <div class="progress-section">
+            <div style="font-size: 1.2rem; font-weight: 800; letter-spacing: 1px;">PROGRESS</div>
+            <hr style="border-top: 1px dashed #555; margin: 4px 0 10px 0; opacity: 0.6;">
             
-            <div class="main-display">
-                <div class="left-col"> 
-                    <div class="carboy-wrapper">
-                        <div class="air-floating">Air: <span id="air-temp-val">--</span>°C</div>
-
-                        <svg viewBox="0 0 100 92" class="carboy-svg">
-                            <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
-                            <path class="glass-line" 
-                                  d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" 
-                                  style="fill: #4a4a4a !important;"
-                                  stroke="var(--oled-color)" 
-                                  stroke-width="2.5" 
-                                  stroke-linejoin="round" />
-                            <g id="bubble-stream"></g>
-                        </svg>
-                        <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
-                    </div>
-                </div> 
-
-                <div class="right-col">
-                    <div class="highlight-box" id="strain-val">--</div>
-                    
-                    <div class="status-info-wrapper">
-                        <div id="profile-val" class="profile-text">--</div>
-                        <div class="action-status">
-                            <span id="status-arrow" class="blink-active">▼</span>
-                            <span id="action-val">--</span>
-                        </div>
-                    </div>
+            <div class="progress-widget">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; color: #888;">
+                    <span>START</span>
+                    <span id="progress-percent">0%</span>
+                    <span>READY</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="progress-fill" class="progress-fill-anim"></div>
                 </div>
             </div>
 
-            <hr class="separator-line">
-
-            <div class="progress-section">
-                <div class="section-header">PROGRESS</div>
-                <hr class="dashed-divider">
-                
-                <div class="progress-widget">
-                    <div class="progress-labels">
-                        <span>START</span>
-                        <span id="progress-percent">0%</span>
-                        <span>READY</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div id="progress-fill" class="progress-fill-anim"></div>
-                    </div>
-                </div>
-
-                <div class="phase-info">
-                    <div>Day: <span id="day-val">0.0</span></div>
-                    <div>Phase: <span id="status-text">--</span></div>
-                </div>
+            <div class="phase-info">
+                <div>Day: <span id="day-val" style="color: var(--oled-color);">0.0</span></div>
+                <div>Phase: <span id="status-text" style="font-weight: 800;">--</span></div>
             </div>
+        </div>
 
-            <div class="chart-section">
-                <div class="chart-header">TEMP HISTORY</div>
-                <div class="chart-container">
-                    <canvas id="beer-chart"></canvas>
-                </div>
+        <div class="chart-section">
+            <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 4px; letter-spacing: 1px;">TEMP HISTORY</div>
+            <div class="chart-container">
+                <canvas id="beer-chart"></canvas>
             </div>
-        </div> 
-        <button id="btn-logout" class="logout-minimal">LOGOUT</button>
-    </div>
+        </div>
+    </div> 
+    
+    <button id="btn-logout" class="logout-btn">LOGOUT</button>
+</div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
