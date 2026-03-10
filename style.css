@@ -173,9 +173,25 @@ body {
      margin-bottom: 20px;
 }
 
-/* Om du vill ha specifikt avstånd bara efter Day */
-.day-text {
-    margin-bottom: 10px; 
+/* Detta skapar luft mellan baren och Day-texten */
+.progress-widget {
+    margin-bottom: 25px; /* Justera detta för avståndet till Day */
+}
+
+/* Detta skapar luft mellan Day-raden och Phase-raden */
+.phase-info div {
+    margin-bottom: 12px; /* Justera detta för mer/mindre luft mellan raderna */
+}
+
+/* Ta bort marginalen på sista raden så den inte förstör balansen nedåt */
+.phase-info div:last-child {
+    margin-bottom: 0;
+}
+
+/* Om du vill att texterna ska se lite krispigare ut (som på OLED) */
+.phase-info {
+    font-size: 1.1rem;
+    line-height: 1.4;
 }
 
 .chart-section { 
