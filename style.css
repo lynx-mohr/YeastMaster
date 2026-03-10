@@ -164,33 +164,45 @@ body {
 @keyframes blinker { 50% { opacity: 0; } }
 .blink-active { animation: blinker 1s step-start infinite; }
 
-/* --- MOBILANPASSNING (LÅST & ISOLERAD) --- */
+/* --- MOBILANPASSNING (ENBART DENNA DEL BEHÖVER ÄNDRAS) --- */
 @media (max-width: 600px) {
+    .left-col { 
+        width: 40% !important; /* Ger lite mer andrum åt flaskan */
+    }
+
     .carboy-wrapper {
-        transform: scale(1.4) !important; 
+        transform: scale(1.4) !important;
         transform-origin: center left !important;
-        margin-top: 15px !important;
+        margin-top: 20px !important;
         margin-left: 10px !important;
     }
 
-    .beer-temp {
-        font-size: 1.3rem !important;
-        top: 60% !important; /* Tvingar ner den ytterligare i magen på mobil */
+    /* Här fixar vi Air-texten så den slutar krocka med IRISH ALE */
+    .air-floating { 
+        top: 32px !important;    /* Drar ner den från halsen till axeln */
+        right: 0px !important;   /* Drar in den så den inte nuddar högerkolumnen */
+        font-size: 0.7rem !important;
+        opacity: 0.5;
     }
 
-    .main-display {
-        margin-bottom: -65px !important; /* Matchar PC för konsekvent djupeffekt */
+    .main-display { 
+        margin-bottom: -65px !important; 
     }
 
-    .right-col {
+    .right-col { 
+        width: 55% !important;
         padding-bottom: 75px !important; 
-        width: 60% !important;
     }
 
-    .air-floating {
-        top: 20px;
-        right: -5px;
-        font-size: 0.75rem;
+    .beer-temp { 
+        font-size: 1.3rem !important; 
+        top: 60% !important; 
+    }
+
+    /* Gör IRISH ALE-boxen pyttelite mindre på mobil så den inte "äter" Air-texten */
+    .highlight-box {
+        font-size: 1.1rem !important;
+        padding: 3px 8px !important;
     }
 }
 
@@ -213,3 +225,4 @@ body {
 .logout-btn:hover {
     opacity: 1;
 }
+
