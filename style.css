@@ -160,7 +160,7 @@ body {
     border-radius: 10px; 
     overflow: hidden; 
     background: rgba(255,255,255,0.05); 
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
 
@@ -171,6 +171,11 @@ body {
     transition: width 1s ease-in-out; 
     box-shadow: 0 0 10px rgba(243, 156, 18, 0.4);
      margin-bottom: 20px;
+}
+
+/* Om du vill ha specifikt avstånd bara efter Day */
+.day-text {
+    margin-bottom: 20px; 
 }
 
 .chart-section { 
