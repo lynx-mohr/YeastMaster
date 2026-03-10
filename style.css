@@ -199,15 +199,17 @@ body {
     }
 
 .air-floating {
-        /* Dina andra värden... */
         top: 85px !important;
-        right: -18px !important; 
         
-        /* FIXEN: Förbjud animationer vid laddning på mobil */
-        transition: none !important; 
-        animation: none !important;
+        /* FIXEN: Vi slutar styra från höger och låser vänsterkanten istället */
+        left: 110px !important;   /* Prova dig fram mellan 105px och 120px */
+        right: auto !important;    /* VIKTIGT: Detta "stänger av" den gamla högerstyrningen */
+        
+        width: 100px;             /* Ge den gott om plats att växa åt höger */
+        text-align: left;         /* Texten skriver nu från vänster till höger */
+        white-space: nowrap;
+        font-size: 0.75rem !important;
     }
-
     /* 4. SYNKRONISERA HÖGERKOLUMNEN (Matchar -65px ovan) */
     .right-col {
         width: 65% !important;
@@ -276,6 +278,7 @@ body {
     font-size: 0.9rem;
     font-weight: 600;
 }
+
 
 
 
