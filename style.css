@@ -195,9 +195,15 @@ body {
     margin-left: 5px;
 }
 
-/* Om du vill att texterna ska se lite krispigare ut (som på OLED) */
+/* Den inramade lådan (Data Card) */
 .phase-info {
-    margin-top: 20px; /* Avstånd upp till progress bar */
+    margin-top: 25px; /* Avstånd upp till progress bar */
+    margin-bottom: 10px; /* Avstånd ner till grafen */
+    background-color: rgba(255, 255, 255, 0.04); /* Svagt upplyst bakgrund */
+    border: 1px solid #333; /* Tunn, diskret ram */
+    border-radius: 8px; /* Mjuka hörn */
+    padding: 15px; /* Luft inuti rutan så texten inte slår i kanterna */
+    border-left: 3px solid #f39c12; /* En kaxig orange linje på vänsterkanten (valfritt!) */
 }
 
 
