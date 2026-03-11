@@ -77,6 +77,8 @@ async function updateDashboard() {
 
         if (data.length > 0) {
             const latest = data[data.length - 1];
+            console.log("Här är senaste datan från servern:");
+            console.log(latest);
 
             // 1. Temperaturer
             document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
