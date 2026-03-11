@@ -91,19 +91,22 @@ async function updateDashboard() {
             const action = (latest.action || "IDLE").toUpperCase();
             document.getElementById('action-val').innerText = action;
 
-       // 3. Pil-logik (Vänster om texten, färg och riktning)
+// 3. Pil-logik (Vänster om texten, färg och riktning)
 const arrow = document.getElementById('status-arrow');
 if (action === "COOLING") {
     arrow.innerText = "▼";
     arrow.style.color = "#0088ff"; 
-    arrow.style.opacity = "1"; // Visa pilen
+    arrow.style.visibility = "visible";  // Visa den
+    arrow.classList.add('blink-active'); // Starta blinket
 } else if (action === "HEATING") {
     arrow.innerText = "▲";
     arrow.style.color = "#ff4444"; 
-    arrow.style.opacity = "1"; // Visa pilen
+    arrow.style.visibility = "visible";  // Visa den
+    arrow.classList.add('blink-active'); // Starta blinket
 } else {
-    // Istället för display: none, använd opacity: 0
-    arrow.style.opacity = "0"; // Göm pilen men behåll platsen
+    // IDLE-LÄGE
+    arrow.style.visibility = "hidden";      // Göm den helt men behåll platsen
+    arrow.classList.remove('blink-active'); // Döda animationen så den inte blinkar vitt
 }
 
 // 4. Statusrad (Fas)
