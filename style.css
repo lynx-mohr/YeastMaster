@@ -149,7 +149,12 @@ left: 150px;        /* Justera detta för att flytta texten i sidled */
 
 .action-status { 
     font-size: 1.8rem; 
-    font-weight: 800; 
+    font-weight: 800;
+    /* --- NYA RADER --- */
+    height: 2.2rem;       /* Låser höjden på raden */
+    display: flex;        /* Gör det lättare att centrera pilen vertikalt */
+    align-items: center;  /* Centrerar text och pil på samma linje */
+    gap: 8px;            /* Snyggt avstånd mellan pil och text */
 }
 
 /* --- 6. PROGRESS & CHART --- */
