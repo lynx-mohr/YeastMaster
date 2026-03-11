@@ -268,7 +268,7 @@ function animate(timestamp) {
             
             // Ta bort bubblan när den når toppen
           // Bubblan tas nu bort precis när den når vätskeytan (32)
-if (b.y < 38) { 
+if (b.y < 39) { 
     b.element.remove(); 
     bubbles.splice(i, 1); 
 }
