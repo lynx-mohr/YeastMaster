@@ -227,39 +227,41 @@ body {
 
 /* --- 7. MOBILANPASSNING (De sista fixarna!) --- */
 @media (max-width: 600px) {
-/* 1. BEHÅLL DIN BRA PLACERING (Drar upp flaskan snyggt) */
+    /* 1. Ge skärmen luft i toppen så inte korken slår i taket */
+    .oled-screen {
+        padding-top: 45px !important; 
+    }
+
+    /* 2. Flytta ner flaskan (vi ändrar -45px till +15px) */
     .carboy-wrapper {
         transform: scale(1.3) !important;
         transform-origin: center left !important;
-        margin-top: -45px !important;    
-        margin-left: -20px !important; 
+        margin-top: 15px !important;    /* Drar ner flaskan från kanten */
+        margin-left: -15px !important; 
     }
 
-    /* 2. SÄNK LINJEN (Vi går från -75px till -65px för att flytta ner den) */
+    /* 3. Justera linjen (stannar på -65px för snyggt djup) */
     .main-display {
-        /* En lägre negativ siffra flyttar ner linjen och Progress-sektionen */
         margin-bottom: -65px !important; 
     }
 
-.air-floating {
-        top: 85px !important;
-        
-        /* FIXEN: Vi slutar styra från höger och låser vänsterkanten istället */
-        left: 100px !important;   /* Prova dig fram mellan 105px och 120px */
-        right: auto !important;    /* VIKTIGT: Detta "stänger av" den gamla högerstyrningen */
-        transform: none !important; /* Förhindrar att den försöker centrera sig */
-        
-        width: 100px;             /* Ge den gott om plats att växa åt höger */
-        text-align: left;         /* Texten skriver nu från vänster till höger */
+    /* 4. Ankra Air-tempen på axeln igen */
+    .air-floating {
+        top: 35px !important;       /* Flyttad upp för att matcha axeln */
+        left: 95px !important;   
+        right: auto !important;    
+        transform: none !important;
+        width: auto;
+        text-align: left;
         white-space: nowrap;
-        font-size: 0.70rem !important;
+        font-size: 0.75rem !important;
+        opacity: 0.8 !important;
     }
 
-
-    /* 4. SYNKRONISERA HÖGERKOLUMNEN (Matchar -65px ovan) */
+    /* 5. Synka högerkolumnen (padding-bottom matchar margin-bottom) */
     .right-col {
         width: 65% !important;
-        padding-bottom: 65px !important; 
+        padding-bottom: 75px !important; /* 10px luft ovanför linjen */
     }
 
     .action-status { 
@@ -267,13 +269,15 @@ body {
         font-weight: 800;
     }
 
-/* 5. Säkra temperaturen i magen */
     .beer-temp { 
         font-size: 1.25rem !important; 
         top: 58% !important; 
     }
     
-    .highlight-box { font-size: 1rem !important; padding: 3px 10px !important; }
+    .highlight-box { 
+        font-size: 1rem !important; 
+        padding: 3px 10px !important; 
+    }
 }
 
 /* --- 8. AUTH BOXES (Fixar så de faktiskt syns) --- */
