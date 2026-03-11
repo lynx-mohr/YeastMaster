@@ -159,6 +159,12 @@ function updateChart(data) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     
+    // --- HÄR ÄR RADERNA SOM SAKNADES ---
+    // Hämtar färgen från CSS, om den inte hittas används orange som reserv!
+    let themeAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
+    if (!themeAccent) themeAccent = '#f39c12'; 
+    // -----------------------------------
+
     // TYDLIGARE GRÅ GRADIENT (Ökad opacitet till 0.3)
     const gradient = ctx.createLinearGradient(0, 0, 0, 120);
     gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)'); 
@@ -170,6 +176,7 @@ function updateChart(data) {
     if (beerChart) {
         beerChart.data.labels = labels;
         beerChart.data.datasets[0].data = temps;
+        beerChart.data.datasets[0].borderColor = themeAccent; // <--- Ser till att färgen uppdateras!
         beerChart.update('none');
     } else {
         beerChart = new Chart(ctx, {
@@ -179,7 +186,7 @@ function updateChart(data) {
                 datasets: [{
                     label: 'Beer Temp',
                     data: temps,
-                    borderColor: themeAccent,
+                    borderColor: themeAccent, // Nu vet koden vad detta är!
                     borderWidth: 2,
                     fill: true, 
                     backgroundColor: gradient, // Tydligare grå skugga
