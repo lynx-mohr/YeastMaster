@@ -30,7 +30,8 @@ app.use(express.static('.'));
 
 // --- 1. MOTTAGAREN (Från ESP32) ---
 app.post('/api/update', async (req, res) => {
-    const { device_id, temp, air_temp, day, status, action, token, strain, profile } = req.body;
+    // 1. LÄGG TILL target_temp HÄR:
+    const { device_id, temp, air_temp, day, status, action, token, strain, profile, target_temp } = req.body;
 
     if (token !== "YeastMaster-Super-Secret-2024") {
         return res.status(401).send({ error: "Obehörig!" });
@@ -48,7 +49,9 @@ app.post('/api/update', async (req, res) => {
         status, 
         action: action || "IDLE", 
         strain,
-        profile
+        profile,
+        // 2. LÄGG TILL DEN I OBJEKTET SOM SPARAS HÄR:
+        target_temp 
     };
 
     try {
