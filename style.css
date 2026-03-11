@@ -247,8 +247,8 @@ body {
 
     /* 4. Ankra Air-tempen på axeln igen */
     .air-floating {
-        top: 100px !important;       /* Flyttad upp för att matcha axeln */
-        left: 125px !important;   
+        top: 125px !important;       /* Flyttad upp för att matcha axeln */
+        left: 120px !important;   
         right: auto !important;    
         transform: none !important;
         width: auto;
