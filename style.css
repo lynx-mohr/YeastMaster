@@ -8,6 +8,7 @@
 :root { 
     --oled-color: #e0e0e0; 
     --oled-bg: #000000; 
+    --accent-color: #f39c12; 
 }
 
 body { 
@@ -167,9 +168,9 @@ body {
 
 .progress-fill-anim { 
     height: 100%; 
-    background-color: #f39c12; 
+    background-color: var(--accent-color); 
     transition: width 1s ease-in-out; 
-    box-shadow: 0 0 10px rgba(243, 156, 18, 0.4);
+    box-shadow: 0 0 10px var(--accent-color);
      margin-bottom: 20px;
 }
 
@@ -203,7 +204,7 @@ body {
     border: 1px solid #333; /* Tunn, diskret ram */
     border-radius: 8px; /* Mjuka hörn */
     padding: 15px; /* Luft inuti rutan så texten inte slår i kanterna */
-    border-left: 3px solid #f39c12; /* En kaxig orange linje på vänsterkanten (valfritt!) */
+    border-left: 3px solid var(--accent-color);
 }
 
 

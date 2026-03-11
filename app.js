@@ -179,7 +179,7 @@ function updateChart(data) {
                 datasets: [{
                     label: 'Beer Temp',
                     data: temps,
-                    borderColor: '#f39c12', // Orange kaxig linje
+                    borderColor: themeAccent,
                     borderWidth: 2,
                     fill: true, 
                     backgroundColor: gradient, // Tydligare grå skugga
