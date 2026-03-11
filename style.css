@@ -118,7 +118,7 @@ body {
 
 .air-floating {
     position: absolute;
-    top: 180px; 
+    top: 165px; 
 left: 150px;        /* Justera detta för att flytta texten i sidled */
     right: auto !important;
     font-size: 0.85rem;
