@@ -8,7 +8,7 @@
 :root { 
     --oled-color: #e0e0e0; 
     --oled-bg: #000000; 
-    --accent-color: #f39c12;        /*Orangea #f39c12; cyberpunkblå #00f3ff;*/
+    --accent-color: #ff003c;        /*Orangea #f39c12; cyberpunkblå #00f3ff; Crimson Red: #ff003c*/
 }
 
 body { 
