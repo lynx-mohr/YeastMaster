@@ -229,7 +229,7 @@ body {
 @media (max-width: 600px) {
     /* 1. Ge skärmen luft i toppen så inte korken slår i taket */
     .oled-screen {
-        padding-top: 45px !important; 
+        padding-top: 25px !important; 
     }
 
     /* 2. Flytta ner flaskan (vi ändrar -45px till +15px) */
