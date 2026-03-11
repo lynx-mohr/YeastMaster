@@ -106,6 +106,22 @@ async function updateDashboard() {
 // 4. Statusrad (Fas)
             document.getElementById('status-text').innerText = latest.status.toUpperCase();
             
+            // --- NY LOGIK: Räkna ut hur länge vi varit i denna fas ---
+            let phaseStartTime = latest.time; 
+            for (let i = data.length - 1; i >= 0; i--) {
+                if (data[i].status !== latest.status) {
+                    // Fasen ändrades här! Starttiden är nästa mätpunkt.
+                    phaseStartTime = data[i + 1].time;
+                    break;
+                }
+                if (i === 0) {
+                    phaseStartTime = data[0].time;
+                }
+            }
+            const msInADay = 1000 * 60 * 60 * 24;
+            // Räkna ut dagarna, om data saknas sätter vi den till 0
+            const phaseDay = (latest.time && phaseStartTime) ? (new Date(latest.time) - new Date(phaseStartTime)) / msInADay : 0;
+
             // 5. Dag och Progress-mätare (Logiken för den orangea mätaren)
             const currentDay = latest.day || 0;
             const targetDays = 14; // Här sätter vi målet för mätaren (t.ex. 14 dagar)
@@ -115,6 +131,7 @@ async function updateDashboard() {
 
             // Uppdatera värdena i HTML
             document.getElementById('day-val').innerText = currentDay.toFixed(1);
+            document.getElementById('phase-day-val').innerText = phaseDay.toFixed(1);
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
 
