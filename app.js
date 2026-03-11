@@ -267,10 +267,11 @@ function animate(timestamp) {
             b.element.setAttribute("cy", b.y);
             
             // Ta bort bubblan när den når toppen
-            if (b.y < 15) { 
-                b.element.remove(); 
-                bubbles.splice(i, 1); 
-            }
+          // Bubblan tas nu bort precis när den når vätskeytan (32)
+if (b.y < 32) { 
+    b.element.remove(); 
+    bubbles.splice(i, 1); 
+}
         }
 
         // 4. Fortsätt animera (Motorn i alltihop!)
