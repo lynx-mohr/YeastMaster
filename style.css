@@ -118,8 +118,8 @@ body {
 
 .air-floating {
     position: absolute;
-    top: 150px; 
-    left: 120px !important;   
+    top: 160px; 
+    left: 140px !important;   
         right: auto !important; 
     font-size: 0.85rem;
     font-weight: 600;
