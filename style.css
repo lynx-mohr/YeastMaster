@@ -229,7 +229,7 @@ body {
 @media (max-width: 600px) {
     /* 1. Ge skärmen luft i toppen så inte korken slår i taket */
     .oled-screen {
-        padding-top: 25px !important; 
+        padding-top: 15px !important; 
     }
 
     /* 2. Flytta ner flaskan (vi ändrar -45px till +15px) */
@@ -247,7 +247,7 @@ body {
 
     /* 4. Ankra Air-tempen på axeln igen */
     .air-floating {
-        top: 35px !important;       /* Flyttad upp för att matcha axeln */
+        top: 50px !important;       /* Flyttad upp för att matcha axeln */
         left: 95px !important;   
         right: auto !important;    
         transform: none !important;
