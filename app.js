@@ -135,6 +135,14 @@ async function updateDashboard() {
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
 
+            // --- NY KOD FÖR MÅLTEMPERATUR ---
+            // OBS: Kolla vad din variabel heter i ditt API. Ofta heter den target_temp, set_temp eller setpoint.
+            const targetTemp = latest.target_temp || 0; 
+            const targetTempElement = document.getElementById('target-temp-val');
+            if (targetTempElement) {
+                targetTempElement.innerText = targetTemp.toFixed(1);
+            }
+            
             updateChart(data);
         }
     } catch (error) {
