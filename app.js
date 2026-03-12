@@ -206,10 +206,16 @@ function updateChart(data) {
                         ticks: { color: '#666', maxTicksLimit: 5, font: { family: 'Inter', size: 10 } }, 
                         grid: { display: false } 
                     },
-                    y: { 
-                        ticks: { color: '#666', font: { family: 'Inter', size: 10 }, callback: v => v + '°' }, 
-                        grid: { color: 'rgba(255, 255, 255, 0.05)' } 
-                    }
+                  y: { 
+    ticks: { 
+        color: '#666', 
+        font: { family: 'Inter', size: 10 }, 
+        // Ändra denna rad från: callback: v => v + '°'
+        // Till detta:
+        callback: v => v.toFixed(1) + '°' 
+    }, 
+    grid: { color: 'rgba(255, 255, 255, 0.05)' } 
+}
                 },
                 plugins: { 
                     legend: { display: false },
