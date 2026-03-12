@@ -2,12 +2,12 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>YeastMaster Live 2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
-   <link rel="apple-touch-icon" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
 </head>
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <div id="claim-container">
+    <div id="claim-container" style="display: none;">
         <div class="auth-box">
             <h2>Koppla enhet</h2>
             <p>Ange ID från OLED-menyn</p>
@@ -31,85 +31,145 @@
         </div>
     </div>
 
-    <div id="dashboard-container">
-        <div class="oled-screen"> 
-            
-            <div class="main-display">
-                <div class="left-col"> 
-                    <div class="carboy-wrapper">
-                        <div class="air-floating">Air: <span id="air-temp-val">--</span>°C</div>
-                     <svg viewBox="0 0 100 92" class="carboy-svg">
-    <defs>
-        <linearGradient id="liquid-fill" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="32%" stop-color="transparent" /> <stop offset="32%" stop-color="#4a4a4a" />     </linearGradient>
-    </defs>
-
-    <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
-    <path class="glass-line" 
-          d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" 
-          style="fill: url(#liquid-fill) !important;" 
-          stroke="var(--oled-color)" 
-          stroke-width="2.5" />
-    <g id="bubble-stream"></g>
-</svg>
-                        <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
-                    </div>
-                </div> 
-
-                <div class="right-col">
-                    <div class="highlight-box" id="strain-val">--</div>
-                    <div id="profile-val" style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; opacity: 0.7;">--</div>
-                    <div class="action-status">
-                        <span id="status-arrow" class="blink-active">▼</span>
-                        <span id="action-val">--</span>
-                    </div>
-                </div>
-            </div>
-
-            <hr class="separator-line">
-
-            <div class="progress-section">
-                <div style="font-size: 1.2rem; font-weight: 800; letter-spacing: 1px;">PROGRESS</div>
-                <hr style="border-top: 1px dashed #555; margin: 4px 0 10px 0; opacity: 0.6;">
-                
-                <div class="progress-widget">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; color: #888;">
-                        <span>START</span>
-                        <span id="progress-percent">0%</span>
-                        <span>READY</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div id="progress-fill" class="progress-fill-anim"></div>
-                    </div>
-                </div>
-
-              <div class="phase-info">
-    <div class="phase-row">Phase: <span id="status-text" style="font-weight: 800; color: #fff;">--</span></div>
-    
-    <div class="day-row">Days since start: <span id="day-val" style="color: var(--oled-color);">0.0</span></div>
-    
-    <div class="phase-day-row">Days in phase: <span id="phase-day-val" style="color: var(--accent-color);">0.0</span></div>
-
-    <div class="target-temp-row">Goal temp in phase: <span id="target-temp-val" style="color: #0088ff;">0.0</span>°C</div>
-</div>
-            </div>
-
-            <div class="chart-section">
-                <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 4px; letter-spacing: 1px;">TEMP HISTORY</div>
-                <div class="chart-container">
-                    <canvas id="beer-chart"></canvas>
-                </div>
-            </div>
-        </div> 
+    <div id="dashboard-container" style="display: none;">
         
-        <button id="btn-logout" class="logout-btn">LOGOUT</button>
+        <section id="view-dashboard" class="app-view">
+            <div class="oled-screen"> 
+                <div class="main-display">
+                    <div class="left-col"> 
+                        <div class="carboy-wrapper">
+                            <div class="air-floating">Air: <span id="air-temp-val">--</span>°C</div>
+                            <svg viewBox="0 0 100 92" class="carboy-svg">
+                                <defs>
+                                    <linearGradient id="liquid-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="32%" stop-color="transparent" /> 
+                                        <stop offset="32%" stop-color="#4a4a4a" />
+                                    </linearGradient>
+                                </defs>
+                                <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
+                                <path class="glass-line" d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" style="fill: url(#liquid-fill) !important;" stroke="var(--oled-color)" stroke-width="2.5" />
+                                <g id="bubble-stream"></g>
+                            </svg>
+                            <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
+                        </div>
+                    </div> 
+
+                    <div class="right-col">
+                        <div class="highlight-box" id="strain-val">--</div>
+                        <div id="profile-val" style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; opacity: 0.7;">--</div>
+                        <div class="action-status">
+                            <span id="status-arrow" class="blink-active">▼</span>
+                            <span id="action-val">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="separator-line">
+
+                <div class="progress-section">
+                    <div style="font-size: 1.2rem; font-weight: 800; letter-spacing: 1px;">PROGRESS</div>
+                    <hr style="border-top: 1px dashed #555; margin: 4px 0 10px 0; opacity: 0.6;">
+                    <div class="progress-widget">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; color: #888;">
+                            <span>START</span>
+                            <span id="progress-percent">0%</span>
+                            <span>READY</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div id="progress-fill" class="progress-fill-anim"></div>
+                        </div>
+                    </div>
+
+                    <div class="phase-info">
+                        <div class="phase-row">Phase: <span id="status-text" style="font-weight: 800; color: #fff;">--</span></div>
+                        <div class="day-row">Days since start: <span id="day-val" style="color: var(--oled-color);">0.0</span></div>
+                        <div class="phase-day-row">Days in phase: <span id="phase-day-val" style="color: var(--accent-color);">0.0</span></div>
+                        <div class="target-temp-row">Goal temp in phase: <span id="target-temp-val" style="color: #0088ff;">0.0</span>°C</div>
+                    </div>
+                </div>
+
+                <div class="chart-section">
+                    <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 4px; letter-spacing: 1px;">TEMP HISTORY</div>
+                    <div class="chart-container">
+                        <canvas id="beer-chart"></canvas>
+                    </div>
+                </div>
+            </div> 
+            <button id="btn-logout" class="logout-btn">LOGOUT</button>
+        </section>
+
+        <section id="view-library" class="app-view" style="display: none;">
+            <div class="library-header">
+                <h2>Yeast Library</h2>
+                <div class="sync-status">Selected: <span id="fav-count">0</span>/10</div>
+                <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
+            </div>
+            <div class="yeast-grid" id="yeast-grid">
+                <div class="yeast-card" data-id="us-05">
+                    <div class="favorite-star">★</div>
+                    <div class="yeast-info">
+                        <h3>SafAle US-05</h3>
+                        <p class="yeast-origin">USA</p>
+                        <div class="yeast-tags">
+                            <span>Clean</span>
+                            <span>Crisp</span>
+                        </div>
+                    </div>
+                    <div class="quick-view-hint">Hold for details</div>
+                </div>
+            </div>
+            <button id="sync-btn" class="sync-button">SYNC TO DEVICE</button>
+        </section>
+
+        <section id="view-lab" class="app-view" style="display: none;">
+            <div class="library-header">
+                <h2>The Arcane Lab</h2>
+                <p style="opacity: 0.6; font-size: 0.9rem;">Bygg din 5-stegsprofil här.</p>
+            </div>
+            <div style="padding: 40px; text-align: center; color: #444;">
+                <p>Profilbyggaren under konstruktion...</p>
+            </div>
+        </section>
+
+        <section id="view-settings" class="app-view" style="display: none;">
+            <div class="library-header">
+                <h2>Settings</h2>
+            </div>
+            <div style="padding: 20px;">
+                </div>
+        </section>
+
+        <nav class="main-nav">
+            <div class="nav-item active" onclick="switchView('dashboard', this)">🏠</div>
+            <div class="nav-item" onclick="switchView('library', this)">🧪</div>
+            <div class="nav-item" onclick="switchView('lab', this)">⚗️</div>
+            <div class="nav-item" onclick="switchView('settings', this)">⚙️</div>
+        </nav>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="app.js"></script>
 
+    <script>
+        function switchView(viewId, el) {
+            // Dölj alla vyer
+            document.querySelectorAll('.app-view').forEach(view => {
+                view.style.display = 'none';
+            });
+            // Visa vald vy
+            document.getElementById('view-' + viewId).style.display = 'block';
+            
+            // Uppdatera nav-ikoner (ta bort active från alla, lägg på klickad)
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('active');
+            });
+            el.classList.add('active');
+
+            // Scrolla till toppen så man inte är kvar nere i biblioteket
+            window.scrollTo(0,0);
+        }
+    </script>
+
 </body>
 </html>
-
-
