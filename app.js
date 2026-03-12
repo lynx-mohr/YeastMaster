@@ -1,3 +1,25 @@
+const yeastStrains = [
+    { id: "us-05", name: "SafAle US-05", origin: "USA", temp: "12-25°C", tags: ["Clean", "Crisp"], desc: "Världens mest populära IPA-jäst. Neutral och pålitlig.", styles: "IPA, APA, Stout" },
+    { id: "s-04", name: "SafAle S-04", origin: "UK", temp: "15-20°C", tags: ["Fruity", "Fast"], desc: "Klassisk brittisk ale-jäst. Snabb jäsning och bra flockning.", styles: "English Pale Ale, Porter" },
+    { id: "w-34-70", name: "Saflager W-34/70", origin: "Germany", temp: "9-15°C", tags: ["Clean", "Lager"], desc: "Den berömda Weihenstephan-stammen för krispiga lageröl.", styles: "Pilsner, Helles, Märzen" },
+    { id: "be-256", name: "SafAle BE-256", origin: "Belgium", temp: "15-25°C", tags: ["Spicy", "High ABV"], desc: "För starka belgiska öl. Ger estrar av torkad frukt.", styles: "Abbey, Dubbel, Tripel" },
+    { id: "wb-06", name: "SafAle WB-06", origin: "Germany", temp: "18-24°C", tags: ["Banana", "Clove"], desc: "Specialjäst för veteöl. Framhäver fenoliska toner.", styles: "Hefeweizen, Witbier" },
+    { id: "verdant", name: "Lallemand Verdant", origin: "UK", temp: "18-23°C", tags: ["Apricot", "Hazy"], desc: "Perfekt för NEIPA. Ger toner av aprikos och fyllig munkänsla.", styles: "NEIPA, Hazy IPA" },
+    { id: "voss", name: "Lallemand Voss Kveik", origin: "Norway", temp: "25-40°C", tags: ["High Temp", "Orange"], desc: "Traditionell kveik. Kan jäsa extremt varmt utan bismaker.", styles: "Farmhouse, IPA, Pale Ale" },
+    { id: "nottingham", name: "Lallemand Nottingham", origin: "UK", temp: "10-22°C", tags: ["Versatile", "Dry"], desc: "Hög utjäsning och mycket neutral profil. En riktig arbetshäst.", styles: "All Ales, Cider" },
+    { id: "wlp001", name: "WLP001 California Ale", origin: "USA", temp: "20-23°C", tags: ["Classic", "IPA"], desc: "White Labs flaggskepp. Mycket ren profil som låter humlen tala.", styles: "West Coast IPA" },
+    { id: "wlp300", name: "WLP300 Hefeweizen", origin: "Germany", temp: "18-21°C", tags: ["Classic", "Wheat"], desc: "Den ultimata veteölsjästen för banankänsla.", styles: "Weissbier" },
+    { id: "belle-saison", name: "Lallemand Belle Saison", origin: "Belgium", temp: "15-35°C", tags: ["Dry", "Spicy"], desc: "Skapar mycket torra och peppriga Saison-öl.", styles: "Saison, Farmhouse" },
+    { id: "t-58", name: "SafAle T-58", origin: "Belgium", temp: "15-24°C", tags: ["Peppery", "Ester"], desc: "Känd för sina peppriga och kryddiga estrar.", styles: "Belgian Ale" },
+    { id: "s-23", name: "Saflager S-23", origin: "Germany", temp: "9-15°C", tags: ["Fruity", "Lager"], desc: "En lagerjäst som ger lite mer fruktiga toner än 34/70.", styles: "Lager, Bock" },
+    { id: "wlp002", name: "WLP002 English Ale", origin: "UK", temp: "18-20°C", tags: ["Sweet", "Malty"], desc: "Lämnar lite restsötma och flockar som sten.", styles: "Bitter, Stout" },
+    { id: "wlp500", name: "WLP500 Trappist", origin: "Belgium", temp: "18-22°C", tags: ["Fruity", "Abbey"], desc: "Från ett av de sex belgiska trappistbryggerierna.", styles: "Tripel, Quad" },
+    { id: "diamond", name: "Lallemand Diamond", origin: "Germany", temp: "10-15°C", tags: ["Pilsner", "Clean"], desc: "Klassisk tysk lagerjäst för eleganta profil.", styles: "German Pilsner" },
+    { id: "wlp066", name: "WLP066 London Fog", origin: "UK", temp: "18-22°C", tags: ["Juicy", "Creamy"], desc: "Standardjästen för juice-liknande NEIPA.", styles: "NEIPA" },
+    { id: "s-33", name: "SafAle S-33", origin: "UK", temp: "15-22°C", tags: ["Robust", "All-round"], desc: "Ger en robust och stabil jäsning.", styles: "Trappist, Stout" },
+    { id: "wlp800", name: "WLP800 Pilsner Lager", origin: "Czech", temp: "10-13°C", tags: ["Crisp", "Floral"], desc: "Traditionell tjeckisk jäst för äkta pilsner.", styles: "Bohemian Pilsner" },
+    { id: "novalager", name: "Lallemand NovaLager", origin: "Modern", temp: "10-20°C", tags: ["Hybrid", "Fast"], desc: "En modern hybrid-lagerjäst som jäser snabbare.", styles: "Modern Lager" }
+];
 
 document.addEventListener('DOMContentLoaded', () => {
     // Om vi inte vet statusen än, visa login-vyn som default
@@ -351,6 +373,70 @@ if(document.getElementById('btn-logout')) {
         auth.signOut();
     });
 }
+
+let selectedStrains = []; // Här sparar vi ID:n på de 10 utvalda
+
+function renderYeastLibrary(filter = "") {
+    const grid = document.getElementById('yeast-grid');
+    grid.innerHTML = ""; // Rensa gridet
+
+    const filteredStrains = yeastStrains.filter(s => 
+        s.name.toLowerCase().includes(filter.toLowerCase()) || 
+        s.styles.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    filteredStrains.forEach(yeast => {
+        const isSelected = selectedStrains.includes(yeast.id);
+        const card = document.createElement('div');
+        card.className = `yeast-card ${isSelected ? 'selected' : ''}`;
+        card.innerHTML = `
+            <div class="favorite-star">${isSelected ? '★' : '☆'}</div>
+            <div class="yeast-info">
+                <h3>${yeast.name}</h3>
+                <p class="yeast-origin">${yeast.origin} | ${yeast.temp}</p>
+                <div class="yeast-tags">
+                    ${yeast.tags.map(t => `<span>${t}</span>`).join('')}
+                </div>
+            </div>
+            <div class="quick-view-hint">Hold for details</div>
+        `;
+
+        // Hantera klick (Välj som favorit)
+        card.onclick = () => toggleFavorite(yeast.id);
+
+        // Hantera Long-press (Visa faktasida)
+        let timer;
+        card.onmousedown = card.ontouchstart = () => {
+            timer = setTimeout(() => alert(`INFO OM ${yeast.name}:\n\n${yeast.desc}\n\nPassar till: ${yeast.styles}`), 800);
+        };
+        card.onmouseup = card.onmouseleave = card.ontouchend = () => clearTimeout(timer);
+
+        grid.appendChild(card);
+    });
+}
+
+function toggleFavorite(id) {
+    const index = selectedStrains.indexOf(id);
+    if (index > -1) {
+        selectedStrains.splice(index, 1); // Ta bort om den redan fanns
+    } else {
+        if (selectedStrains.length < 10) {
+            selectedStrains.push(id); // Lägg till om vi inte nått 10
+        } else {
+            alert("Du kan bara synka 10 stammar åt gången!");
+        }
+    }
+    document.getElementById('fav-count').innerText = selectedStrains.length;
+    renderYeastLibrary(document.getElementById('yeast-search').value);
+}
+
+// Koppla sökfältet
+document.getElementById('yeast-search').addEventListener('input', (e) => {
+    renderYeastLibrary(e.target.value);
+});
+
+// Initiera biblioteket när sidan laddas
+renderYeastLibrary();
 
 
 
