@@ -1,43 +1,42 @@
-/* --- 1. VARIABLER & GRUNDINSTÄLLNINGAR --- */
+/* --- 1. VARIABLER & RESET --- */
 :root {
     --oled-color: #e0e0e0;
     --oled-bg: #000000;
-    --accent-color: #00e5ff; /* Din krispiga Isblå */
-    --card-bg: #0a0a0a;
-    --border-color: #222;
+    --accent-color: #00e5ff;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    background-color: #000;
+    background-color: #111;
     color: var(--oled-color);
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
-    overflow-x: hidden;
 }
 
-/* --- 2. AUTH (LOGIN & CLAIM) --- */
+/* --- 2. CONTAINERS & AUTH --- */
+#dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
 #login-container, #claim-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
+    width: 100%;
+    padding-top: 50px;
 }
 
 .auth-box {
-    background-color: var(--oled-bg);
-    border: 3px solid var(--oled-color);
+    background-color: #000;
+    border: 3px solid #e0e0e0;
     padding: 30px;
     border-radius: 8px;
     text-align: center;
-    width: 100%;
+    width: 90%;
     max-width: 350px;
 }
 
@@ -46,67 +45,49 @@ body {
     color: var(--oled-bg);
     border: none;
     padding: 15px;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 800;
     width: 100%;
     margin-top: 20px;
     cursor: pointer;
-    border-radius: 4px;
 }
 
-/* --- 3. LAYOUT-MOTOR (Hjärtat i appen) --- */
-#dashboard-container {
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column; /* Standard för mobil */
-}
-
-/* --- 4. NAVIGATION (Sidomeny PC / Bottenmeny Mobil) --- */
-.main-nav {
-    background: rgba(0, 0, 0, 0.95);
-    display: flex;
-    z-index: 1000;
-    backdrop-filter: blur(10px);
-}
-
-.nav-item {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
-}
-
-.nav-indicator {
-    display: block;
-    background: #222;
-    border-radius: 2px;
-    transition: all 0.3s ease;
-}
-
-.nav-item.active .nav-indicator {
-    background: var(--accent-color);
-    box-shadow: 0 0 15px var(--accent-color);
-}
-
-/* --- 5. DASHBOARD (Damejeang & Mätare) --- */
+/* --- 3. OLED SCREEN & DASHBOARD (Dina exakta mått) --- */
 .oled-screen {
     width: 100%;
     max-width: 450px;
-    margin: 0 auto;
     background-color: var(--oled-bg);
     border: 3px solid #333;
     border-radius: 8px;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3);
 }
 
 .main-display {
     display: flex;
     justify-content: space-between;
     position: relative;
-    margin-bottom: -75px;
+    margin-bottom: -75px; /* Bevarad för att få ihop designen */
     z-index: 2;
+}
+
+.left-col {
+    width: 45%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-top: -55px; /* Din exakta offset */
+}
+
+.right-col {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    padding-bottom: 75px !important;
 }
 
 .carboy-wrapper {
@@ -121,115 +102,56 @@ body {
     transform: translate(-50%, -50%);
     font-size: 1.65rem;
     font-weight: 800;
+    width: 100%;
+    text-align: center;
     color: var(--oled-bg);
     -webkit-text-stroke: 1.3px var(--oled-color);
 }
 
 .air-floating {
     position: absolute;
-    top: 155px; left: 150px;
+    top: 155px;
+    left: 150px;
     font-size: 0.85rem;
+    font-weight: 600;
     opacity: 0.6;
     white-space: nowrap;
+    z-index: 10;
 }
 
-.highlight-box {
-    background-color: var(--oled-color);
-    color: var(--oled-bg);
-    font-size: 1.4rem;
-    font-weight: 800;
-    padding: 4px 12px;
-    margin-bottom: 12px;
+/* --- 4. NAVIGATION (Diskreta streck) --- */
+.main-nav {
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    display: flex;
+    z-index: 1000;
 }
 
-/* --- 6. PROGRESS & PHASE CARD --- */
-.phase-info {
-    margin: 25px 0 10px 0;
-    background-color: rgba(255, 255, 255, 0.04);
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 15px;
-    border-left: 3px solid var(--accent-color);
-}
-
-.phase-info div { margin-bottom: 12px; font-size: 0.95rem; }
-
-/* --- 7. YEAST LIBRARY (Låga & Breda kort) --- */
-.library-header {
-    position: sticky;
-    top: 0;
-    background: #000;
-    z-index: 100;
-    padding: 15px;
-    border-bottom: 1px solid #222;
-}
-
-#yeast-search {
-    width: 100%;
-    padding: 12px;
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 8px;
-    color: white;
-    margin-top: 10px;
-}
-
-.yeast-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 8px;
-    padding: 15px;
-}
-
-.yeast-card {
-    height: 50px;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 0 15px;
+.nav-item {
+    cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 }
 
-.yeast-card.selected { border-color: var(--accent-color); }
-
-/* Detaljvyn (Faktasidan) */
-#yeast-detail-view {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: #000;
-    z-index: 3000;
-    display: none;
-    padding: 30px;
+.nav-indicator {
+    display: block;
+    background: #333;
+    border-radius: 2px;
+    transition: 0.3s ease;
 }
 
-/* --- 8. THE ARCANE LAB --- */
-.lab-graph-container {
-    background: #050505;
-    border: 1px solid #222;
-    margin: 15px;
-    border-radius: 12px;
-    height: 180px;
-    padding: 10px;
+.nav-item.active .nav-indicator {
+    background: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-color);
 }
 
-.step-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    display: flex;
-    padding: 10px 15px;
-    margin-bottom: 8px;
-}
-
-/* --- 9. RESPONSIVE DESIGN (PC-magin!) --- */
-
-/* PC (Skärmar bredare än 600px) */
+/* --- 5. RESPONSIVE (PC Vänster / Mobil Botten) --- */
 @media (min-width: 601px) {
     #dashboard-container {
         display: grid;
-        grid-template-columns: 80px 1fr; /* Skapar vänsterspalten för menyn */
+        grid-template-columns: 80px 1fr; /* Skapar plats för menyn till vänster */
+        align-items: start;
     }
 
     .main-nav {
@@ -243,61 +165,60 @@ body {
         border-right: 1px solid #222;
     }
 
-    .nav-indicator {
-        width: 6px; /* Smala rektanglar */
-        height: 40px; /* Höga rektanglar */
-    }
+    .nav-indicator { width: 4px; height: 40px; }
 
     .app-view {
         grid-column: 2;
-        padding: 40px;
         width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 40px;
     }
 }
 
-/* MOBIL (Skärmar upp till 600px) */
 @media (max-width: 600px) {
     .main-nav {
         position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 65px;
+        bottom: 0; left: 0; right: 0;
+        height: 70px;
+        border-top: 1px solid #222;
         flex-direction: row;
         justify-content: space-around;
-        border-top: 1px solid #222;
     }
 
-    .nav-indicator {
-        width: 40px; /* Breda rektanglar */
-        height: 6px; /* Låga rektanglar */
-    }
+    .nav-indicator { width: 40px; height: 4px; }
 
-    .app-view {
-        padding: 15px;
-        padding-bottom: 100px; /* Luft för bottenmenyn */
-    }
+    .app-view { padding-bottom: 100px; }
 
-    /* Flytta ner flaskan på mobil så den inte slår i toppen */
+    /* Din mobil-justering för damejeangen */
     .carboy-wrapper {
-        transform: scale(1.2);
-        margin-top: 20px;
+        transform: scale(1.3) !important;
+        transform-origin: center left !important;
+        margin-top: 15px !important;
+        margin-left: -15px !important;
     }
 }
 
-/* Tooltip & Animeringar */
-#yeast-tooltip {
-    position: fixed;
-    display: none;
-    background: #1a1a1a;
-    border: 1px solid var(--accent-color);
-    padding: 8px;
-    border-radius: 6px;
-    z-index: 2000;
-    font-size: 0.8rem;
-}
+/* --- 6. KOMPONENTER (Progress, Library, Lab) --- */
+.separator-line { border-top: 3px solid var(--oled-color); margin: 0; }
+.highlight-box { background-color: var(--oled-color); color: var(--oled-bg); font-size: 1.4rem; font-weight: 800; padding: 4px 12px; margin-bottom: 12px; display: inline-block; }
+.action-status { font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+
+.progress-bar-bg { width: 100%; height: 7px; border: 1px solid #444; border-radius: 10px; overflow: hidden; background: rgba(255,255,255,0.05); margin-bottom: 20px; }
+.progress-fill-anim { height: 100%; background-color: var(--accent-color); transition: width 1s ease-in-out; box-shadow: 0 0 10px var(--accent-color); }
+
+.phase-info { margin-top: 25px; background-color: rgba(255, 255, 255, 0.04); border: 1px solid #333; border-radius: 8px; padding: 15px; border-left: 3px solid var(--accent-color); }
+.phase-info div { margin-bottom: 12px; font-size: 0.95rem; }
+
+/* Library Grid */
+.yeast-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 8px; padding: 15px; width: 100%; }
+.yeast-card { height: 50px; background: #0a0a0a; border: 1px solid #222; border-radius: 6px; padding: 0 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+
+/* Lab Graph */
+.lab-graph-container { background: #050505; border: 1px solid #222; margin: 15px; border-radius: 12px; height: 180px; padding: 10px; width: 100%; max-width: 450px; }
+
+.logout-btn { display: block; margin: 30px auto; opacity: 0.4; background: none; border: 1px solid #666; color: #fff; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
 
 @keyframes blinker { 50% { opacity: 0; } }
 .blink-active { animation: blinker 1s step-start infinite; }
