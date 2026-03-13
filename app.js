@@ -385,11 +385,12 @@ let selectedStrains = []; // Här sparar vi ID:n på de 10 utvalda
 function renderYeastLibrary(filter = "") {
     const grid = document.getElementById('yeast-grid');
     const tooltip = document.getElementById('yeast-tooltip');
+    if (!grid) return; // Felsäkring
+    
     grid.innerHTML = "";
+    const searchTerm = filter.toLowerCase();
 
-    const filtered = yeastStrains.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()));
-
-// Här är fixen: Vi kollar namn, tags OCH styles!
+    // Här är den lagade fixen: Vi kollar namn, tags OCH styles!
     const filtered = yeastStrains.filter(s => {
         const nameMatch = s.name.toLowerCase().includes(searchTerm);
         const tagMatch = s.tags.some(tag => tag.toLowerCase().includes(searchTerm));
@@ -412,12 +413,14 @@ function renderYeastLibrary(filter = "") {
 
         // 1. HOVER-logik (PC)
         card.onmousemove = (e) => {
-            tooltip.style.display = "block";
-            tooltip.style.left = (e.clientX + 15) + "px";
-            tooltip.style.top = (e.clientY + 15) + "px";
-            tooltip.innerHTML = `<strong>${yeast.name}</strong><br>${yeast.temp}<br>${yeast.tags.join(', ')}`;
+            if (tooltip) {
+                tooltip.style.display = "block";
+                tooltip.style.left = (e.clientX + 15) + "px";
+                tooltip.style.top = (e.clientY + 15) + "px";
+                tooltip.innerHTML = `<strong>${yeast.name}</strong><br>${yeast.temp}<br>${yeast.tags.join(', ')}`;
+            }
         };
-        card.onmouseleave = () => tooltip.style.display = "none";
+        card.onmouseleave = () => { if(tooltip) tooltip.style.display = "none"; };
 
         // 2. KLICK-logik (Fullvy)
         card.onclick = () => openYeastDetail(yeast);
