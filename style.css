@@ -127,6 +127,7 @@ body {
     #dashboard-container {
         width: 100%;
         overflow-x: hidden;
+        display: block; 
     }
 .oled-screen {
         width: 95% !important;
@@ -167,6 +168,8 @@ body {
     /* FIX FÖR MOBIL-KANTER */
     margin-left: auto;
     margin-right: auto;
+
+    overflow: hidden;
 }
 
 .main-display {
