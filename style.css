@@ -1,28 +1,33 @@
 /* --- 1. GRUNDLÄGGANDE RESET & BODY --- */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
 
-:root {
-    --oled-color: #e0e0e0;
-    --oled-bg: #000000;
+:root { 
+    --oled-color: #e0e0e0; 
+    --oled-bg: #000000; 
     --accent-color: #00e5ff;
 }
 
-body {
-    background-color: #111;
-    color: var(--oled-color);
-    font-family: 'Inter', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
+body { 
+    background-color: #111; 
+    color: var(--oled-color); 
+    font-family: 'Inter', sans-serif; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    min-height: 100vh; 
+    padding: 15px;
 }
 
-/* --- 2. CONTAINERS & AUTH --- */
-#dashboard-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+/* --- 2. CONTAINERS (Felsäkra inställningar) --- */
+#dashboard-container { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    width: 100%; 
 }
 
 #login-container, #claim-container {
@@ -43,24 +48,13 @@ body {
     max-width: 350px;
 }
 
-.btn-primary {
-    background-color: var(--oled-color);
-    color: var(--oled-bg);
-    border: none;
-    padding: 15px;
-    font-size: 1.2rem;
-    font-weight: 800;
-    width: 100%;
-    margin-top: 20px;
-    cursor: pointer;
-}
-
-/* --- 3. NAVIGATION (DISRETA STRECK) --- */
+/* --- 3. NAVIGATION (DISRETA STRECK - PC & MOBIL) --- */
 .main-nav {
-    background: rgba(0, 0, 0, 0.95);
+    position: fixed;
+    background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(10px);
     display: flex;
-    z-index: 2000; /* Ligger alltid överst */
+    z-index: 2000;
 }
 
 .nav-item {
@@ -68,14 +62,16 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: 0.3s;
+    /* Här ger vi knappen en yta så den syns och går att klicka på */
+    width: 60px;
+    height: 60px;
 }
 
 .nav-indicator {
     display: block;
-    background: #333; /* Grått streck för inaktiva val */
+    background: #333; /* Det mörka strecket */
     border-radius: 2px;
-    transition: all 0.3s ease;
+    transition: 0.3s ease;
 }
 
 .nav-item.active .nav-indicator {
@@ -86,58 +82,52 @@ body {
 /* PC-VY: Sidomeny till vänster */
 @media (min-width: 601px) {
     .main-nav {
-        position: fixed;
-        left: 0; top: 0; bottom: 0;
-        width: 70px;
+        left: 0; 
+        top: 0; 
+        bottom: 0;
+        width: 80px;
         flex-direction: column;
         justify-content: center;
         gap: 40px;
         border-right: 1px solid #222;
     }
-
     .nav-indicator {
-        width: 4px; /* Smalt streck */
-        height: 40px; /* Högt streck */
+        width: 5px;   /* Smalt streck */
+        height: 45px; /* Högt streck */
     }
-
-    /* Flyttar hela innehållet lite åt höger för att ge plats åt menyn */
-    #dashboard-container {
-        padding-left: 70px;
-    }
+    /* VIKTIGT: Vi puttar body 80px åt höger så menyn inte ligger över kanten */
+    body { padding-left: 80px; }
 }
 
 /* MOBIL-VY: Bottenmeny */
 @media (max-width: 600px) {
     .main-nav {
-        position: fixed;
-        bottom: 0; left: 0; right: 0;
+        bottom: 0; 
+        left: 0; 
+        right: 0;
         height: 70px;
         flex-direction: row;
         justify-content: space-around;
         border-top: 1px solid #222;
     }
-
     .nav-indicator {
-        width: 40px; /* Brett streck */
-        height: 4px; /* Lågt streck */
+        width: 45px; /* Brett streck */
+        height: 5px; /* Lågt streck */
     }
-
-    /* Plats för bottenmenyn */
-    .app-view {
-        padding-bottom: 100px;
-    }
+    body { padding-bottom: 80px; }
 }
 
-/* --- 4. DASHBOARD (Dina exakta mått återställda) --- */
-.oled-screen {
-    width: 100%;
-    max-width: 450px;
-    background-color: var(--oled-bg);
-    border: 3px solid #333;
-    border-radius: 8px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
+/* --- 4. HUVUDVY PC (DIN MILLIMETERPRECISION ÅTERSTÄLLD) --- */
+.oled-screen { 
+    width: 100%; 
+    max-width: 450px; 
+    background-color: var(--oled-bg); 
+    border: 3px solid #333; 
+    border-radius: 8px; 
+    padding: 20px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0; 
     text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3);
 }
 
@@ -145,38 +135,44 @@ body {
     display: flex;
     justify-content: space-between;
     position: relative;
-    margin-bottom: -75px;
+    margin-bottom: -75px; 
     z-index: 2;
 }
 
-.left-col {
-    width: 45%;
-    display: flex;
-    justify-content: center;
-    position: relative;
-    margin-top: -55px; /* Din exakta offset */
+.left-col { 
+    width: 45%; 
+    display: flex; 
+    justify-content: center; 
+    position: relative; 
+    margin-top: -55px; /* DIN VIKTIGA OFFSET */
 }
 
-.right-col {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+.right-col { 
+    width: 50%; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-end; 
     text-align: right;
-    padding-bottom: 75px !important;
+    padding-bottom: 75px !important; 
 }
 
-.carboy-wrapper {
-    position: relative;
-    width: 230px;
-    height: 230px;
+/* --- 5. DAMEJEANG & TEMPERATUR --- */
+.carboy-wrapper { 
+    position: relative; 
+    width: 230px; 
+    height: 230px; 
 }
 
-.carboy-svg { display: block; width: 100%; height: 100%; }
+.carboy-svg { 
+    display: block; 
+    width: 100%; 
+    height: 100%; 
+}
 
 .beer-temp {
     position: absolute;
-    top: 58%; left: 50%;
+    top: 58%; 
+    left: 50%;
     transform: translate(-50%, -50%);
     font-size: 1.65rem;
     font-weight: 800;
@@ -188,8 +184,9 @@ body {
 
 .air-floating {
     position: absolute;
-    top: 155px;
-    left: 150px;
+    top: 155px; 
+    left: 150px; /* DIN EXAKTA POSITION */
+    right: auto !important;
     font-size: 0.85rem;
     font-weight: 600;
     opacity: 0.6;
@@ -197,33 +194,90 @@ body {
     z-index: 10;
 }
 
-/* --- 5. KOMPONENTER (Allt från 527-filen) --- */
-.separator-line { border-top: 3px solid var(--oled-color); margin: 0; position: relative; z-index: 1; }
-.highlight-box { background-color: var(--oled-color); color: var(--oled-bg); font-size: 1.4rem; font-weight: 800; padding: 4px 12px; margin-bottom: 12px; display: inline-block; }
-.action-status { font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; gap: 8px; min-height: 2.2rem; }
+/* --- 6. KOMPONENTER --- */
+.separator-line { 
+    border: none; 
+    border-top: 3px solid var(--oled-color); 
+    position: relative; 
+    z-index: 1; 
+    margin: 0; 
+}
 
-.progress-section { text-align: left; padding: 35px 5px 0 5px; }
-.progress-bar-bg { width: 100%; height: 7px; border: 1px solid #444; border-radius: 10px; overflow: hidden; background: rgba(255,255,255,0.05); margin-bottom: 20px; }
-.progress-fill-anim { height: 100%; background-color: var(--accent-color); transition: width 1s ease-in-out; box-shadow: 0 0 10px var(--accent-color); }
+.highlight-box { 
+    background-color: var(--oled-color); 
+    color: var(--oled-bg); 
+    font-size: 1.4rem; 
+    font-weight: 800; 
+    padding: 4px 12px; 
+    margin-bottom: 12px; 
+    display: inline-block;
+}
+
+.action-status { 
+    font-size: 1.8rem; 
+    font-weight: 800;
+    min-height: 2.2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- 7. PROGRESS & CHART (ALLA DINA RADER) --- */
+.progress-section { 
+    text-align: left; 
+    padding: 35px 5px 0 5px; 
+}
+
+.progress-bar-bg { 
+    width: 100%; 
+    height: 7px; 
+    border: 1px solid #444; 
+    border-radius: 10px; 
+    overflow: hidden; 
+    background: rgba(255,255,255,0.05); 
+    margin-bottom: 20px;
+}
+
+.progress-fill-anim { 
+    height: 100%; 
+    background-color: var(--accent-color); 
+    transition: width 1s ease-in-out; 
+    box-shadow: 0 0 10px var(--accent-color);
+    margin-bottom: 20px;
+}
+
+.progress-widget {
+    margin-bottom: 25px;
+}
 
 .phase-info {
-    margin-top: 25px; margin-bottom: 10px;
+    margin-top: 25px;
+    margin-bottom: 10px;
     background-color: rgba(255, 255, 255, 0.04);
-    border: 1px solid #333; border-radius: 8px; padding: 15px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 15px;
     border-left: 3px solid var(--accent-color);
 }
-.phase-info div { margin-bottom: 12px; font-size: 0.95rem; }
 
-.chart-section { margin-top: 15px; padding-top: 10px; border-top: 1px solid #333; }
-.chart-container { height: 110px; position: relative; }
+.phase-info div {
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+}
 
-.logout-btn { display: block; margin: 30px auto; opacity: 0.4; background: none; border: 1px solid #666; color: #fff; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: 600; }
+.chart-section { 
+    margin-top: 15px; 
+    padding-top: 10px; 
+    border-top: 1px solid #333; 
+}
 
-/* --- 6. BIBLIOTEK & LAB --- */
-.yeast-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 8px; padding: 15px; width: 100%; }
-.yeast-card { height: 50px; background: #0a0a0a; border: 1px solid #222; border-radius: 6px; padding: 0 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.chart-container { 
+    height: 110px; 
+    position: relative; 
+}
 
-/* Mobil-fixar för damejeangen */
+/* --- 8. MOBIL-FIXAR (ÅTERSTÄLLDA) --- */
 @media (max-width: 600px) {
     .oled-screen { padding-top: 10px !important; }
     .carboy-wrapper {
@@ -232,8 +286,51 @@ body {
         margin-top: 15px !important;
         margin-left: -15px !important;
     }
-    .air-floating { top: 140px !important; left: 120px !important; font-size: 0.65rem !important; }
+    .main-display { margin-bottom: -65px !important; }
+    .air-floating {
+        top: 140px !important;
+        left: 120px !important;
+        font-size: 0.65rem !important;
+    }
+    .right-col { width: 65% !important; padding-bottom: 75px !important; }
+    .beer-temp { font-size: 1.25rem !important; top: 58% !important; }
 }
 
-@keyframes blinker { 50% { opacity: 0; } }
-.blink-active { animation: blinker 1s step-start infinite; }
+/* --- 9. BIBLIOTEK & LAB (HÄR FYLLER VI PÅ) --- */
+.yeast-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 8px; 
+    padding: 15px; 
+}
+
+.yeast-card {
+    height: 50px;
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 6px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.lab-graph-container {
+    background: #050505;
+    border: 1px solid #222;
+    margin: 15px;
+    border-radius: 12px;
+    height: 180px;
+    padding: 10px;
+}
+
+.logout-btn { 
+    display: block; 
+    margin: 30px auto; 
+    opacity: 0.4; 
+    background: none; 
+    border: 1px solid #666; 
+    color: #fff; 
+    padding: 8px 20px; 
+    border-radius: 4px;
