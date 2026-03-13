@@ -429,6 +429,7 @@ function openYeastDetail(yeast) {
             ${selectedStrains.includes(yeast.id) ? 'TA BORT FRÅN MINA 10' : 'VÄLJ DENNA JÄST'}
         </button>
     `;
+    history.pushState({ view: 'yeast-detail' }, "");
     detail.style.display = "block";
 }
 
@@ -459,7 +460,14 @@ document.getElementById('yeast-search').addEventListener('input', (e) => {
 // Initiera biblioteket när sidan laddas
 renderYeastLibrary();
 
-
+window.onpopstate = function(event) {
+    // Om användaren trycker bakåt och detaljvyn är öppen -> stäng den
+    const detail = document.getElementById('yeast-detail-view');
+    if (detail.style.display === "block") {
+        // Vi döljer vyn utan att trigga history.back() igen
+        detail.style.display = "none";
+    }
+};
 
 
 
