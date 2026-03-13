@@ -53,9 +53,13 @@ function showView(viewName) {
     
     Object.keys(views).forEach(key => {
         if (views[key]) {
-            // Om vyn ska visas, sätt den till 'flex' (eftersom din CSS kräver det)
-            // Annars sätt den till 'none' för att dölja den helt.
-            views[key].style.display = (key === viewName) ? 'block' : 'none';
+            if (key === viewName) {
+                // Dashboarden mår bäst av 'block' för att grafen ska vara stabil
+                // Login och Claim behöver 'flex' för att centrera boxen
+                views[key].style.display = (key === 'dashboard') ? 'block' : 'flex';
+            } else {
+                views[key].style.display = 'none';
+            }
         }
     });
 }
@@ -471,7 +475,33 @@ window.onpopstate = function(event) {
     }
 };
 
+function toggleTheme() {
+    document.body.classList.toggle('light-mode');
+    // Spara valet i webbläsaren så det komms ihåg nästa gång
+    const isLight = document.body.classList.contains('light-mode');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
 
+function setAccent(color) {
+    document.documentElement.style.setProperty('--accent-color', color);
+    localStorage.setItem('accentColor', color);
+    
+    // VIKTIGT: Uppdatera grafen direkt så linjen byter färg
+    if (beerChart) {
+        beerChart.data.datasets[0].borderColor = color;
+        beerChart.update();
+    }
+}
+
+// Ladda sparade inställningar när sidan startar
+window.addEventListener('DOMContentLoaded', () => {
+    const savedAccent = localStorage.getItem('accentColor');
+    if (savedAccent) setAccent(savedAccent);
+    
+    if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-mode');
+    }
+});
 
 
 
