@@ -182,6 +182,12 @@ body.light-mode .btn-primary {
         margin-left: -5px !important;
     }
     .main-display { margin-bottom: -75px !important; }
+
+.action-status { 
+        font-size: 1.1rem !important; 
+        gap: 4px !important;
+    }
+
     .air-floating {
         top: 140px !important;
         left: 120px !important;
@@ -468,4 +474,12 @@ button#back-btn, .back-btn {
 canvas#beer-chart {
     max-width: 100% !important;
     display: block;
+}
+
+@keyframes blinker { 
+    50% { opacity: 0; } 
+}
+
+.blink-active { 
+    animation: blinker 1s step-start infinite !important; 
 }
