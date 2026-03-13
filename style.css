@@ -184,13 +184,14 @@ body.light-mode .btn-primary {
     }
     .main-display { margin-bottom: -75px !important; }
 
-.action-status {
-        margin-top: -5px !important; /* Negativ marginal drar dem närmare varandra */
-        min-height: auto !important; /* Tar bort eventuellt dött utrymme i höjdled */
-    }
+.action-status { 
+        font-size: 1.1rem !important; 
+        gap: 4px !important;
+      transform: translate(-10px) !important;
+        }
 
     .air-floating {
-        top: 140px !important;
+        top: 130px !important;
         left: 110px !important;
         font-size: 0.65rem !important;
     }
