@@ -128,19 +128,16 @@ body {
         width: 100%;
         overflow-x: hidden;
     }
-  .oled-screen {
-        width: 95% !important; 
-        padding: 15px !important;
-        /* Denna rad är som en tvångströja för allt innehåll - inget slipper ut! */
-        overflow: hidden !important; 
+.oled-screen {
+        width: 95% !important;
+        overflow: hidden !important; /* Säkerhetsbälte: inget får sticka ut */
     }
 .carboy-wrapper {
-        /* Vi sänker från 1.3 till 1.1 så den inte "spränger" ramen */
-        transform: scale(1.1) !important; 
+
+        /* Sänk från 1.3 till 1.15 - den ser fortfarande stor ut men får plats */
+        transform: scale(1.15) !important; 
         transform-origin: center left !important;
-        margin-top: 10px !important;
-        /* Vi minskar minus-marginalen så den inte nuddar vänsterkanten för hårt */
-        margin-left: -5px !important; 
+        margin-left: -5px !important;
     }
     .main-display { margin-bottom: -65px !important; }
     .air-floating {
@@ -403,6 +400,8 @@ button#back-btn, .back-btn {
 .chart-container { 
     height: 110px; 
     position: relative; 
+    /* Dessa tre rader stoppar expansionen: */
     width: 100% !important;
-    overflow: hidden; 
+    max-width: 100% !important;
+    overflow: hidden !important; 
 }
