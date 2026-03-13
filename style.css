@@ -1,342 +1,36 @@
-/* --- 1. GRUNDLÄGGANDE RESET & BODY --- */
-* { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
+/* --- 1. VARIABLER & GRUNDINSTÄLLNINGAR --- */
+:root {
+    --oled-color: #e0e0e0;
+    --oled-bg: #000000;
+    --accent-color: #00e5ff; /* Din krispiga Isblå */
+    --card-bg: #0a0a0a;
+    --border-color: #222;
 }
 
-:root { 
-
-    
-    --oled-color: #e0e0e0; 
-    --oled-bg: #000000; 
-    --accent-color: #00e5ff;        /*Orangea #f39c12; cyberpunkblå #00f3ff; Crimson Red: #ff003c; Deep Purple: #b026ff; Isblå: #00e5ff;*/
-
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-body { 
-    background-color: #111; 
-    color: var(--oled-color); 
-    font-family: 'Inter', sans-serif; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    min-height: 100vh; 
-    padding: 15px; /* Lite mindre padding på mobil */
+body {
+    background-color: #000;
+    color: var(--oled-color);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* --- 2. CONTAINERS (Felsäkra inställningar) --- */
-#dashboard-container { 
-    display: flex; /* Visas som standard för att undvika svart skärm */
-    flex-direction: column; 
-    align-items: center; 
-    width: 100%; 
-}
-
+/* --- 2. AUTH (LOGIN & CLAIM) --- */
 #login-container, #claim-container {
-    display: none; /* JavaScript tänder dessa vid behov */
+    display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    padding-top: 50px;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
 }
 
-.auth-box {
-    background-color: #000;
-    border: 3px solid #e0e0e0;
-    padding: 30px;
-    border-radius: 8px;
-    text-align: center;
-    width: 90%;
-    max-width: 350px;
-}
-
-.oled-screen { 
-    width: 100%; 
-    max-width: 450px; 
-    background-color: var(--oled-bg); 
-    border: 3px solid #333; 
-    border-radius: 8px; 
-    padding: 20px; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 0; 
-    text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3);
-}
-
-/* --- 3. HUVUDVY PC (Dina favorit-mått) --- */
-.main-display {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    margin-bottom: -75px; 
-    z-index: 2;
-}
-
-.left-col { 
-    width: 45%; 
-    display: flex; 
-    justify-content: center; 
-    position: relative; 
-    margin-top: -55px;
-}
-
-.right-col { 
-    width: 50%; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: flex-end; 
-    text-align: right;
-    padding-bottom: 75px !important; 
-}
-
-/* --- 4. DAMEJEANG & TEMPERATUR (PC) --- */
-.carboy-wrapper { 
-    position: relative; 
-    width: 230px; 
-    height: 230px; 
-}
-
-.carboy-svg { 
-    display: block; 
-    width: 100%; 
-    height: 100%; 
-}
-
-.beer-temp {
-    position: absolute;
-    top: 58%; 
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.65rem;
-    font-weight: 800;
-    width: 100%;
-    text-align: center;
-    color: var(--oled-bg);
-    -webkit-text-stroke: 1.3px var(--oled-color);
-}
-
-.air-floating {
-    position: absolute;
-    top: 155px; 
-left: 150px;        /* Justera detta för att flytta texten i sidled */
-    right: auto !important;
-    font-size: 0.85rem;
-    font-weight: 600;
-    opacity: 0.6;
-    white-space: nowrap;
-    z-index: 10;
-}
-
-/* --- 5. KOMPONENTER --- */
-.separator-line { 
-    border: none; 
-    border-top: 3px solid var(--oled-color); 
-    position: relative; 
-    z-index: 1; 
-    margin: 0; 
-}
-
-.highlight-box { 
-    background-color: var(--oled-color); 
-    color: var(--oled-bg); 
-    font-size: 1.4rem; 
-    font-weight: 800; 
-    padding: 4px 12px; 
-    margin-bottom: 12px; 
-    display: inline-block;
-}
-
-.action-status { 
-    font-size: 1.8rem; 
-    font-weight: 800;
-    min-height: 2.2rem; /* Detta "mutar" in platsen så inget hoppar */
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* --- 6. PROGRESS & CHART --- */
-.progress-section { 
-    text-align: left; 
-    padding: 35px 5px 0 5px; 
-}
-
-.progress-bar-bg { 
-    width: 100%; 
-    height: 7px; 
-    border: 1px solid #444; 
-    border-radius: 10px; 
-    overflow: hidden; 
-    background: rgba(255,255,255,0.05); 
-    margin-bottom: 20px;
-}
-
-
-
-.progress-fill-anim { 
-    height: 100%; 
-    background-color: var(--accent-color); 
-    transition: width 1s ease-in-out; 
-    box-shadow: 0 0 10px var(--accent-color);
-     margin-bottom: 20px;
-}
-
-/* Detta skapar luft mellan baren och Day-texten */
-.progress-widget {
-    margin-bottom: 25px; /* Justera detta för avståndet till Day */
-}
-
-
-.phase-info div {
-    margin-bottom: 12px; /* Skapar exakt det avstånd du ville ha mellan raderna */
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
-}
-
-/* Ta bort marginalen på sista raden så den inte förstör balansen nedåt */
-.phase-info div:last-child {
-    margin-bottom: 0;
-}
-
-/* Gör labels lite diskretare om du vill att värdena ska poppa */
-.phase-info span {
-    margin-left: 5px;
-}
-
-/* Den inramade lådan (Data Card) */
-.phase-info {
-    margin-top: 25px; /* Avstånd upp till progress bar */
-    margin-bottom: 10px; /* Avstånd ner till grafen */
-    background-color: rgba(255, 255, 255, 0.04); /* Svagt upplyst bakgrund */
-    border: 1px solid #333; /* Tunn, diskret ram */
-    border-radius: 8px; /* Mjuka hörn */
-    padding: 15px; /* Luft inuti rutan så texten inte slår i kanterna */
-    border-left: 3px solid var(--accent-color);
-}
-
-
-.chart-section { 
-    margin-top: 15px; 
-    padding-top: 10px; 
-    border-top: 1px solid #333; 
-}
-
-.chart-container { 
-    height: 110px; 
-    position: relative; 
-}
-
-@keyframes blinker { 50% { opacity: 0; } }
-.blink-active { animation: blinker 1s step-start infinite; }
-
-.main-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 70px;
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid #222;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 1000;
-}
-
-.nav-item {
-    font-size: 1.5rem;
-    opacity: 0.4;
-    cursor: pointer;
-    padding: 10px 20px;
-    transition: 0.3s;
-}
-
-.nav-item.active {
-    opacity: 1;
-    transform: scale(1.2);
-    text-shadow: 0 0 15px var(--oled-color);
-}
-
-/* Justera dashboard så att naven inte täcker grafen */
-.app-view {
-    padding-bottom: 100px; 
-}
-
-/* För stora skärmar (PC/Padda) */
-@media (min-width: 601px) {
-    .library-container {
-        max-width: 900px; /* Centrera biblioteket så det inte blir milsvidst brett */
-        margin: 0 auto;
-    }
-    
-    .main-nav {
-        top: 0; /* Flytta upp menyn på PC? Eller ha kvar den nere för app-känsla. */
-        bottom: auto;
-        border-top: none;
-        border-bottom: 1px solid #222;
-        justify-content: center;
-        gap: 50px;
-    }
-}
-
-/* --- 7. MOBILANPASSNING (De sista fixarna!) --- */
-@media (max-width: 600px) {
-    /* 1. Ge skärmen luft i toppen så inte korken slår i taket */
-    .oled-screen {
-        padding-top: 10px !important; 
-    }
-
-    /* 2. Flytta ner flaskan (vi ändrar -45px till +15px) */
-    .carboy-wrapper {
-        transform: scale(1.3) !important;
-        transform-origin: center left !important;
-        margin-top: 15px !important;    /* Drar ner flaskan från kanten */
-        margin-left: -15px !important; 
-    }
-
-    /* 3. Justera linjen (stannar på -65px för snyggt djup) */
-    .main-display {
-        margin-bottom: -65px !important; 
-    }
-
-    /* 4. Ankra Air-tempen på axeln igen */
-    .air-floating {
-        top: 140px !important;       /* Flyttad upp för att matcha axeln */
-        left: 120px !important;   
-        right: auto !important;    
-        transform: none !important;
-        width: auto;
-        text-align: left;
-        white-space: nowrap;
-        font-size: 0.65rem !important;
-        opacity: 0.8 !important;
-    }
-
-    /* 5. Synka högerkolumnen (padding-bottom matchar margin-bottom) */
-    .right-col {
-        width: 65% !important;
-        padding-bottom: 75px !important; /* 10px luft ovanför linjen */
-    }
-
-    .action-status { 
-        font-size: 1.1rem !important; 
-        font-weight: 800;
-    }
-
-    .beer-temp { 
-        font-size: 1.25rem !important; 
-        top: 58% !important; 
-    }
-    
-    .highlight-box { 
-        font-size: 1rem !important; 
-        padding: 3px 10px !important; 
-    }
-}
-
-/* --- 8. AUTH BOXES (Fixar så de faktiskt syns) --- */
 .auth-box {
     background-color: var(--oled-bg);
     border: 3px solid var(--oled-color);
@@ -344,7 +38,7 @@ left: 150px;        /* Justera detta för att flytta texten i sidled */
     border-radius: 8px;
     text-align: center;
     width: 100%;
-    max-width: 400px;
+    max-width: 350px;
 }
 
 .btn-primary {
@@ -352,45 +46,115 @@ left: 150px;        /* Justera detta för att flytta texten i sidled */
     color: var(--oled-bg);
     border: none;
     padding: 15px;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 800;
     width: 100%;
     margin-top: 20px;
     cursor: pointer;
+    border-radius: 4px;
 }
 
-#input-mac {
-    background: transparent;
-    border: 2px solid #444;
-    color: var(--oled-color);
+/* --- 3. LAYOUT-MOTOR (Hjärtat i appen) --- */
+#dashboard-container {
     width: 100%;
-    padding: 10px;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 1.1rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* Standard för mobil */
 }
 
-/* --- 9. LOGOUT KNAPP --- */
-.logout-btn { 
-    display: block; 
-    margin: 30px auto; 
-    opacity: 0.4; 
-    background: none; 
-    border: 1px solid #666; 
-    color: #fff; 
-    padding: 8px 20px; 
-    border-radius: 4px; 
-    cursor: pointer; 
-    font-size: 0.9rem;
-    font-weight: 600;
+/* --- 4. NAVIGATION (Sidomeny PC / Bottenmeny Mobil) --- */
+.main-nav {
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
 }
 
-/* --- 10. YEAST LIBRARY SPECIFIK CSS --- */
-/* Bibliotekets huvudlayout */
-#view-library {
-    padding-top: 0; /* För att sökfältet ska ligga mot kanten */
+.nav-item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
 }
 
+.nav-indicator {
+    display: block;
+    background: #222;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.nav-item.active .nav-indicator {
+    background: var(--accent-color);
+    box-shadow: 0 0 15px var(--accent-color);
+}
+
+/* --- 5. DASHBOARD (Damejeang & Mätare) --- */
+.oled-screen {
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    background-color: var(--oled-bg);
+    border: 3px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.main-display {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: -75px;
+    z-index: 2;
+}
+
+.carboy-wrapper {
+    position: relative;
+    width: 230px;
+    height: 230px;
+}
+
+.beer-temp {
+    position: absolute;
+    top: 58%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: var(--oled-bg);
+    -webkit-text-stroke: 1.3px var(--oled-color);
+}
+
+.air-floating {
+    position: absolute;
+    top: 155px; left: 150px;
+    font-size: 0.85rem;
+    opacity: 0.6;
+    white-space: nowrap;
+}
+
+.highlight-box {
+    background-color: var(--oled-color);
+    color: var(--oled-bg);
+    font-size: 1.4rem;
+    font-weight: 800;
+    padding: 4px 12px;
+    margin-bottom: 12px;
+}
+
+/* --- 6. PROGRESS & PHASE CARD --- */
+.phase-info {
+    margin: 25px 0 10px 0;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 15px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.phase-info div { margin-bottom: 12px; font-size: 0.95rem; }
+
+/* --- 7. YEAST LIBRARY (Låga & Breda kort) --- */
 .library-header {
     position: sticky;
     top: 0;
@@ -400,52 +164,37 @@ left: 150px;        /* Justera detta för att flytta texten i sidled */
     border-bottom: 1px solid #222;
 }
 
-/* Gridet: Nu med bredare kolumner för "wide" look */
+#yeast-search {
+    width: 100%;
+    padding: 12px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: white;
+    margin-top: 10px;
+}
+
 .yeast-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 8px;
     padding: 15px;
 }
 
-/* Korten: Låga och breda */
 .yeast-card {
-    height: 50px; /* Fixerad låg höjd */
-    background: #0a0a0a;
-    border: 1px solid #222;
+    height: 50px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 0 15px;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Namn till vänster, stjärna till höger */
-    cursor: pointer;
-    transition: 0.2s;
+    justify-content: space-between;
 }
 
-.yeast-card h3 {
-    font-size: 0.95rem;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* Klipper namn om de är för långa */
-}
+.yeast-card.selected { border-color: var(--accent-color); }
 
-/* Tooltip (Hover-fönstret för PC) */
-#yeast-tooltip {
-    position: fixed;
-    display: none;
-    background: #1a1a1a;
-    border: 1px solid var(--accent-color);
-    padding: 10px;
-    border-radius: 8px;
-    z-index: 2000;
-    pointer-events: none; /* Musen ska inte fastna på tooltipen */
-    font-size: 0.8rem;
-    max-width: 200px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-}
-
-/* Fullvy-fönstret (När man klickar) */
+/* Detaljvyn (Faktasidan) */
 #yeast-detail-view {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -453,16 +202,9 @@ left: 150px;        /* Justera detta för att flytta texten i sidled */
     z-index: 3000;
     display: none;
     padding: 30px;
-    overflow-y: auto;
 }
 
-@media (max-width: 600px) {
-    .yeast-grid {
-        grid-template-columns: 1fr; /* Ett kort per rad på mobilen */
-    }
-    .library-header h2 { font-size: 1.2rem; }
-}
-
+/* --- 8. THE ARCANE LAB --- */
 .lab-graph-container {
     background: #050505;
     border: 1px solid #222;
@@ -472,59 +214,90 @@ left: 150px;        /* Justera detta för att flytta texten i sidled */
     padding: 10px;
 }
 
-.steps-container {
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
 .step-card {
-    background: #0a0a0a;
-    border: 1px solid #222;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     display: flex;
-    align-items: center;
     padding: 10px 15px;
-    gap: 15px;
+    margin-bottom: 8px;
 }
 
-.step-number {
-    font-weight: 800;
-    color: var(--accent-color);
-    width: 25px;
+/* --- 9. RESPONSIVE DESIGN (PC-magin!) --- */
+
+/* PC (Skärmar bredare än 600px) */
+@media (min-width: 601px) {
+    #dashboard-container {
+        display: grid;
+        grid-template-columns: 80px 1fr; /* Skapar vänsterspalten för menyn */
+    }
+
+    .main-nav {
+        grid-column: 1;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        flex-direction: column;
+        justify-content: center;
+        gap: 40px;
+        border-right: 1px solid #222;
+    }
+
+    .nav-indicator {
+        width: 6px; /* Smala rektanglar */
+        height: 40px; /* Höga rektanglar */
+    }
+
+    .app-view {
+        grid-column: 2;
+        padding: 40px;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 }
 
-.step-input-group {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    flex: 1;
+/* MOBIL (Skärmar upp till 600px) */
+@media (max-width: 600px) {
+    .main-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 65px;
+        flex-direction: row;
+        justify-content: space-around;
+        border-top: 1px solid #222;
+    }
+
+    .nav-indicator {
+        width: 40px; /* Breda rektanglar */
+        height: 6px; /* Låga rektanglar */
+    }
+
+    .app-view {
+        padding: 15px;
+        padding-bottom: 100px; /* Luft för bottenmenyn */
+    }
+
+    /* Flytta ner flaskan på mobil så den inte slår i toppen */
+    .carboy-wrapper {
+        transform: scale(1.2);
+        margin-top: 20px;
+    }
 }
 
-.step-input-group input {
-    width: 50px;
-    background: #111;
-    border: 1px solid #333;
-    color: white;
-    padding: 5px;
-    text-align: center;
-    border-radius: 4px;
+/* Tooltip & Animeringar */
+#yeast-tooltip {
+    position: fixed;
+    display: none;
+    background: #1a1a1a;
+    border: 1px solid var(--accent-color);
+    padding: 8px;
+    border-radius: 6px;
+    z-index: 2000;
+    font-size: 0.8rem;
 }
 
-.step-input-group label {
-    font-size: 0.7rem;
-    color: #666;
-    text-transform: uppercase;
-}
-
-.add-event-btn {
-    background: none;
-    border: 1px dashed #444;
-    color: #888;
-    width: calc(100% - 30px);
-    margin: 0 15px;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-}
+@keyframes blinker { 50% { opacity: 0; } }
+.blink-active { animation: blinker 1s step-start infinite; }
