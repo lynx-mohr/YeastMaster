@@ -355,6 +355,8 @@ body.light-mode .btn-primary {
     margin-bottom: 25px;
 }
 
+#profile-val {margin-bottom: 2px !important;
+}
 .phase-info {
     margin-top: 25px;
     margin-bottom: 10px;
