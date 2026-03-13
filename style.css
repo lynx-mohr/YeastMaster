@@ -462,3 +462,69 @@ left: 150px;        /* Justera detta för att flytta texten i sidled */
     }
     .library-header h2 { font-size: 1.2rem; }
 }
+
+.lab-graph-container {
+    background: #050505;
+    border: 1px solid #222;
+    margin: 15px;
+    border-radius: 12px;
+    height: 180px;
+    padding: 10px;
+}
+
+.steps-container {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.step-card {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    gap: 15px;
+}
+
+.step-number {
+    font-weight: 800;
+    color: var(--accent-color);
+    width: 25px;
+}
+
+.step-input-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+}
+
+.step-input-group input {
+    width: 50px;
+    background: #111;
+    border: 1px solid #333;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.step-input-group label {
+    font-size: 0.7rem;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.add-event-btn {
+    background: none;
+    border: 1px dashed #444;
+    color: #888;
+    width: calc(100% - 30px);
+    margin: 0 15px;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
