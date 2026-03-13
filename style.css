@@ -187,6 +187,7 @@ body.light-mode .btn-primary {
 .action-status { 
         font-size: 1.1rem !important; 
         gap: 4px !important;
+        margin-bottom: 8px !important;
     }
 
     .air-floating {
