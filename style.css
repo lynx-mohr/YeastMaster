@@ -129,22 +129,23 @@ body.light-mode .btn-primary {
 
 /* PC-VY: Sidomeny till vänster */
 @media (min-width: 601px) {
-    .main-nav {
+   .main-nav {
         left: 0; 
         top: 0; 
         bottom: 0;
-        width: 80px;
+        /* SKRUV 1: Vi ökar bredden på balken */
+        width: 110px; 
         flex-direction: column;
         justify-content: center;
         gap: 40px;
         border-right: 1px solid #222;
     }
-    .nav-indicator {
-        width: 5px;   /* Smalt streck */
-        height: 45px; /* Högt streck */
+   .nav-indicator {
+        width: 5px;   /* Behåll strecket smalt och elegant */
+        height: 45px; 
     }
     /* VIKTIGT: Vi puttar body 80px åt höger så menyn inte ligger över kanten */
-    body { padding-left: 80px; }
+    body { padding-left: 110px; }
 }
 
 /* --- EN ENDA MOBIL-VAKT FÖR HELA FILEN --- */
