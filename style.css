@@ -2,8 +2,14 @@
 * { 
     box-sizing: border-box; 
     margin: 0; 
-    padding: 0; 
+    padding: 0;     
 }
+    
+    html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
 
 :root { 
     --oled-color: #e0e0e0; 
@@ -55,6 +61,7 @@ body {
     backdrop-filter: blur(10px);
     display: flex;
     z-index: 2000;
+    pointer-events: none;
 }
 
 .nav-item {
@@ -65,6 +72,7 @@ body {
     /* Här ger vi knappen en yta så den syns och går att klicka på */
     width: 60px;
     height: 60px;
+    pointer-events: auto;
 }
 
 .nav-indicator {
@@ -99,30 +107,47 @@ body {
     body { padding-left: 80px; }
 }
 
-/* MOBIL-VY: Bottenmeny */
+/* --- EN ENDA MOBIL-VAKT FÖR HELA FILEN --- */
 @media (max-width: 600px) {
     .main-nav {
-        bottom: 0; 
-        left: 0; 
-        right: 0;
+        bottom: 0; left: 0; right: 0;
         height: 70px;
         flex-direction: row;
         justify-content: space-around;
         border-top: 1px solid #222;
     }
     .nav-indicator {
-        width: 45px; /* Brett streck */
-        height: 5px; /* Lågt streck */
+        width: 45px; height: 5px;
     }
- body { 
-        padding: 10px; /* Mindre padding på sidorna så skärmen får plats */
-        overflow-x: hidden; /* Förhindrar sidscroll */
+    body { 
+        padding: 10px; 
+        padding-bottom: 80px; 
+        overflow-x: hidden; 
     }
-
     #dashboard-container {
         width: 100%;
         overflow-x: hidden;
     }
+    .oled-screen {
+        width: 95%; 
+        padding: 15px;
+    }
+    .carboy-wrapper {
+        transform: scale(1.3) !important;
+        transform-origin: center left !important;
+        margin-top: 15px !important;
+        margin-left: -15px !important;
+    }
+    .main-display { margin-bottom: -65px !important; }
+    .air-floating {
+        top: 140px !important;
+        left: 120px !important;
+        font-size: 0.65rem !important;
+    }
+    .right-col { width: 65% !important; padding-bottom: 75px !important; }
+    .beer-temp { font-size: 1.25rem !important; top: 58% !important; }
+
+} 
 
 /* --- 4. HUVUDVY PC (DIN MILLIMETERPRECISION ÅTERSTÄLLD) --- */
 .oled-screen { 
@@ -284,31 +309,18 @@ body {
     border-top: 1px solid #333; 
 }
 
-.chart-container { 
-    height: 110px; 
-    position: relative; 
+
+
+
+.yeast-card {
+    /* ... behåll din gamla kod här ... */
+    pointer-events: auto !important;
 }
 
-/* --- 8. MOBIL-FIXAR (ÅTERSTÄLLDA) --- */
-@media (max-width: 600px) {
-   .oled-screen {
-        width: 95%; /* Gör den lite smalare än skärmen så kanterna syns */
-        padding: 15px; /* Lite mindre padding invändigt på små skärmar */
-    }
-    .carboy-wrapper {
-        transform: scale(1.3) !important;
-        transform-origin: center left !important;
-        margin-top: 15px !important;
-        margin-left: -15px !important;
-    }
-    .main-display { margin-bottom: -65px !important; }
-    .air-floating {
-        top: 140px !important;
-        left: 120px !important;
-        font-size: 0.65rem !important;
-    }
-    .right-col { width: 65% !important; padding-bottom: 75px !important; }
-    .beer-temp { font-size: 1.25rem !important; top: 58% !important; }
+/* Lägg till detta för att få tillbaka hover-effekten på PC */
+.yeast-card:hover {
+    border-color: var(--accent-color) !important;
+    background: #111 !important;
 }
 
 /* --- 9. BIBLIOTEK & LAB (HÄR FYLLER VI PÅ) --- */
@@ -340,21 +352,47 @@ body {
     padding: 10px;
 }
 
-.logout-btn { 
+/* --- 9. STABILISERING & KNAPP-STYLING --- */
+
+.logout-btn, #btn-logout { 
     display: block; 
     margin: 30px auto; 
-    opacity: 0.4; 
-    background: none; 
-    border: 1px solid #666; 
+    opacity: 0.6; 
+    background: #111; 
+    border: 1px solid #444; 
     color: #fff; 
     padding: 8px 20px; 
     border-radius: 4px;
-
-    #view-library, #yeast-grid {
-    position: relative;
-    z-index: 5; /* Detta lyfter fram biblioteket över eventuella osynliga lager */
+    cursor: pointer;
+    font-weight: 600;
 }
 
-.yeast-card {
-    pointer-events: auto !important; /* Tvingar korten att känna av musen */
+.logout-btn:hover { opacity: 1; border-color: var(--accent-color); }
+
+/* Gör den nya "Back"-knappen snygg */
+button#back-btn, .back-btn {
+    background: #222;
+    border: 1px solid #444;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Säkra att damejeangen och stats ligger sida vid sida på PC */
+@media (min-width: 601px) {
+    .main-display {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+    }
+}
+
+/* Fixa grafen så den inte knuffar ut väggarna */
+.chart-container { 
+    height: 110px; 
+    position: relative; 
+    width: 100% !important;
+    overflow: hidden; 
 }
