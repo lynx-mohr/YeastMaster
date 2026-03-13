@@ -55,7 +55,7 @@ function showView(viewName) {
         if (views[key]) {
             // Om vyn ska visas, sätt den till 'flex' (eftersom din CSS kräver det)
             // Annars sätt den till 'none' för att dölja den helt.
-            views[key].style.display = (key === viewName) ? 'flex' : 'none';
+            views[key].style.display = (key === viewName) ? 'block' : 'none';
         }
     });
 }
@@ -223,6 +223,8 @@ function updateChart(data) {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                resizeDelay: 10, // Ger webbläsaren tid att sätta layouten innan grafen ritas
+    layout: { padding: 0 },
                 scales: {
                     x: { 
                         ticks: { color: '#666', maxTicksLimit: 5, font: { family: 'Inter', size: 10 } }, 
