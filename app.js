@@ -389,6 +389,15 @@ function renderYeastLibrary(filter = "") {
 
     const filtered = yeastStrains.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()));
 
+// Här är fixen: Vi kollar namn, tags OCH styles!
+    const filtered = yeastStrains.filter(s => {
+        const nameMatch = s.name.toLowerCase().includes(searchTerm);
+        const tagMatch = s.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+        const styleMatch = s.styles && s.styles.toLowerCase().includes(searchTerm);
+        
+        return nameMatch || tagMatch || styleMatch;
+    });
+
     filtered.forEach(yeast => {
         const isSelected = selectedStrains.includes(yeast.id);
         const card = document.createElement('div');
