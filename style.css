@@ -249,15 +249,12 @@ body {
     margin: 0; 
 }
 
-.highlight-box { 
-    background-color: var(--oled-color); 
-    color: var(--oled-bg); 
-    font-size: 1.4rem; 
-    font-weight: 800; 
-    padding: 4px 12px; 
-    margin-bottom: 12px; 
-    display: inline-block;
-}
+.highlight-box {
+        font-size: 0.9rem !important; /* Gör texten lite mindre så den får plats */
+        white-space: nowrap !important; /* Förbjuder radbrytning */
+        padding: 4px 8px !important;
+        display: inline-block;
+    }
 
 .action-status { 
     font-size: 1.8rem; 
