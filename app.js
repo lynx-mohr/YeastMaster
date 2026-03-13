@@ -378,41 +378,62 @@ let selectedStrains = []; // Här sparar vi ID:n på de 10 utvalda
 
 function renderYeastLibrary(filter = "") {
     const grid = document.getElementById('yeast-grid');
-    grid.innerHTML = ""; // Rensa gridet
+    const tooltip = document.getElementById('yeast-tooltip');
+    grid.innerHTML = "";
 
-    const filteredStrains = yeastStrains.filter(s => 
-        s.name.toLowerCase().includes(filter.toLowerCase()) || 
-        s.styles.toLowerCase().includes(filter.toLowerCase())
-    );
+    const filtered = yeastStrains.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()));
 
-    filteredStrains.forEach(yeast => {
+    filtered.forEach(yeast => {
         const isSelected = selectedStrains.includes(yeast.id);
         const card = document.createElement('div');
         card.className = `yeast-card ${isSelected ? 'selected' : ''}`;
+        
         card.innerHTML = `
-            <div class="favorite-star">${isSelected ? '★' : '☆'}</div>
-            <div class="yeast-info">
-                <h3>${yeast.name}</h3>
-                <p class="yeast-origin">${yeast.origin} | ${yeast.temp}</p>
-                <div class="yeast-tags">
-                    ${yeast.tags.map(t => `<span>${t}</span>`).join('')}
-                </div>
+            <h3>${yeast.name}</h3>
+            <div class="favorite-star" onclick="event.stopPropagation(); toggleFavorite('${yeast.id}')">
+                ${isSelected ? '★' : '☆'}
             </div>
-            <div class="quick-view-hint">Hold for details</div>
         `;
 
-        // Hantera klick (Välj som favorit)
-        card.onclick = () => toggleFavorite(yeast.id);
-
-        // Hantera Long-press (Visa faktasida)
-        let timer;
-        card.onmousedown = card.ontouchstart = () => {
-            timer = setTimeout(() => alert(`INFO OM ${yeast.name}:\n\n${yeast.desc}\n\nPassar till: ${yeast.styles}`), 800);
+        // 1. HOVER-logik (PC)
+        card.onmousemove = (e) => {
+            tooltip.style.display = "block";
+            tooltip.style.left = (e.clientX + 15) + "px";
+            tooltip.style.top = (e.clientY + 15) + "px";
+            tooltip.innerHTML = `<strong>${yeast.name}</strong><br>${yeast.temp}<br>${yeast.tags.join(', ')}`;
         };
-        card.onmouseup = card.onmouseleave = card.ontouchend = () => clearTimeout(timer);
+        card.onmouseleave = () => tooltip.style.display = "none";
+
+        // 2. KLICK-logik (Fullvy)
+        card.onclick = () => openYeastDetail(yeast);
 
         grid.appendChild(card);
     });
+}
+
+function openYeastDetail(yeast) {
+    const detail = document.getElementById('yeast-detail-view');
+    const content = document.getElementById('yeast-detail-content');
+    
+    content.innerHTML = `
+        <h1 style="color:var(--accent-color)">${yeast.name}</h1>
+        <p style="opacity:0.6; font-size:1.1rem;">${yeast.origin} | ${yeast.temp}</p>
+        <hr style="border:0; border-top:1px solid #222; margin:20px 0;">
+        <div style="background:#111; padding:20px; border-radius:10px;">
+            <h3>Beskrivning</h3>
+            <p>${yeast.desc}</p>
+            <h3 style="margin-top:20px;">Passar till</h3>
+            <p>${yeast.styles}</p>
+        </div>
+        <button class="btn-primary" style="margin-top:30px;" onclick="toggleFavorite('${yeast.id}'); closeYeastDetail();">
+            ${selectedStrains.includes(yeast.id) ? 'TA BORT FRÅN MINA 10' : 'VÄLJ DENNA JÄST'}
+        </button>
+    `;
+    detail.style.display = "block";
+}
+
+function closeYeastDetail() {
+    document.getElementById('yeast-detail-view').style.display = "none";
 }
 
 function toggleFavorite(id) {

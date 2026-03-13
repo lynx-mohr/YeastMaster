@@ -386,84 +386,79 @@ left: 150px;        /* Justera detta för att flytta texten i sidled */
 }
 
 /* --- 10. YEAST LIBRARY SPECIFIK CSS --- */
+/* Bibliotekets huvudlayout */
+#view-library {
+    padding-top: 0; /* För att sökfältet ska ligga mot kanten */
+}
+
 .library-header {
-    padding: 20px 10px;
-    text-align: left;
+    position: sticky;
+    top: 0;
+    background: #000;
+    z-index: 100;
+    padding: 15px;
+    border-bottom: 1px solid #222;
 }
 
-.library-header h2 {
-    color: var(--oled-color);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-
-#yeast-search {
-    width: 100%;
-    padding: 12px;
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 8px;
-    color: white;
-    margin-top: 15px;
-    font-size: 1rem;
-}
-
+/* Gridet: Nu med bredare kolumner för "wide" look */
 .yeast-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 15px;
-    padding: 10px;
-    width: 100%;
-    max-width: 900px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 8px;
+    padding: 15px;
 }
 
+/* Korten: Låga och breda */
 .yeast-card {
+    height: 50px; /* Fixerad låg höjd */
     background: #0a0a0a;
     border: 1px solid #222;
-    border-radius: 12px;
-    padding: 15px;
-    position: relative;
+    border-radius: 6px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Namn till vänster, stjärna till höger */
+    cursor: pointer;
     transition: 0.2s;
 }
 
-.yeast-card.selected {
-    border-color: var(--accent-color);
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+.yeast-card h3 {
+    font-size: 0.95rem;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Klipper namn om de är för långa */
 }
 
-.favorite-star {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: #333;
-}
-
-.selected .favorite-star {
-    color: var(--accent-color);
-}
-
-.sync-button {
+/* Tooltip (Hover-fönstret för PC) */
+#yeast-tooltip {
     position: fixed;
-    bottom: 90px; /* Hamnar precis ovanför navigeringen */
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--accent-color);
-    color: #000;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 25px;
-    font-weight: 800;
-    z-index: 999;
-    box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+    display: none;
+    background: #1a1a1a;
+    border: 1px solid var(--accent-color);
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 2000;
+    pointer-events: none; /* Musen ska inte fastna på tooltipen */
+    font-size: 0.8rem;
+    max-width: 200px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 
+/* Fullvy-fönstret (När man klickar) */
+#yeast-detail-view {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #000;
+    z-index: 3000;
+    display: none;
+    padding: 30px;
+    overflow-y: auto;
+}
 
-
-
-
-
-
-
-
-
-
+@media (max-width: 600px) {
+    .yeast-grid {
+        grid-template-columns: 1fr; /* Ett kort per rad på mobilen */
+    }
+    .library-header h2 { font-size: 1.2rem; }
+}
