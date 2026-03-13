@@ -2,19 +2,15 @@
 * { 
     box-sizing: border-box; 
     margin: 0; 
-    padding: 0;     
+    padding: 0; 
 }
-    
-    html, body {
+
+html, body {
+    /* Detta tvingar webbläsaren att aldrig låta sidan bli bredare än skärmen */
+    width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
-}
-
-
-:root { 
-    --oled-color: #e0e0e0; 
-    --oled-bg: #000000; 
-    --accent-color: #00e5ff;
+    position: relative;
 }
 
 body { 
@@ -26,6 +22,14 @@ body {
     align-items: center; 
     min-height: 100vh; 
     padding: 15px;
+    /* Denna rad ser till att sidomenyn inte trycker ut bodyn */
+    overflow-x: hidden; 
+}
+
+:root { 
+    --oled-color: #e0e0e0; 
+    --oled-bg: #000000; 
+    --accent-color: #00e5ff;
 }
 
 /* --- 2. CONTAINERS (Felsäkra inställningar) --- */
@@ -399,12 +403,17 @@ button#back-btn, .back-btn {
     }
 }
 
-/* Fixa grafen så den inte knuffar ut väggarna */
 .chart-container { 
     height: 110px; 
     position: relative; 
-    /* Dessa tre rader stoppar expansionen: */
-    width: 100% !important;
+    /* Vi låser bredden stenhårt till föräldern (.oled-screen) */
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* Denna rad tvingar själva grafen att hålla sig inuti containern */
+canvas#beer-chart {
     max-width: 100% !important;
-    overflow: hidden !important; 
+    display: block;
 }
