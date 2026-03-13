@@ -146,7 +146,7 @@ body {
         transform-origin: center left !important;
         margin-left: -5px !important;
     }
-    .main-display { margin-bottom: -65px !important; }
+    .main-display { margin-bottom: -75px !important; }
     .air-floating {
         top: 140px !important;
         left: 120px !important;
@@ -157,7 +157,7 @@ body {
         font-size: 1.1rem !important; /* Lite mindre på mobilen */
         padding: 3px 8px !important;
     }
-    
+
     .right-col { 
     width: 50%; 
     display: flex; 
