@@ -44,6 +44,29 @@ body.light-mode .oled-screen {
     --accent-color: #00e5ff;
 }
 
+/* --- LIGHT MODE INVERSION --- */
+body.light-mode {
+    --oled-bg: #ffffff;    /* Bakgrunden blir vit */
+    --oled-color: #111111; /* Texten blir mörkgrå/svart */
+    background-color: #f0f0f0; /* Området utanför skärmen blir ljust grått */
+}
+
+body.light-mode .oled-screen {
+    background-color: #ffffff;
+    border-color: #ddd; /* Ljusare ram för ljust läge */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* En mjuk skugga istället för glöd */
+}
+
+/* Fix för separator-strecket så det syns bra */
+body.light-mode .separator-line {
+    border-top: 2px solid #eee;
+}
+
+/* Fix för knappar så de inte blir osynliga */
+body.light-mode .btn-primary {
+    border: 1px solid #ccc;
+}
+
 /* --- 2. CONTAINERS (Felsäkra inställningar) --- */
 #dashboard-container { 
     display: flex; 

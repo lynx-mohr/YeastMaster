@@ -137,21 +137,21 @@
         <p style="opacity: 0.6; font-size: 0.9rem;">Anpassa din YeastMaster</p>
     </div>
 
-    <div style="padding: 20px; display: flex; flex-direction: column; gap: 25px;">
+    <div style="padding: 20px; display: flex; flex-direction: column; gap: 35px;">
         
         <div>
-            <h3 style="margin-bottom: 10px; font-size: 1rem;">THEME MODE</h3>
-            <button class="btn-primary" onclick="toggleTheme()" style="background: #222; border: 1px solid #444; color: #fff;">
-                Switch to Light/Dark
+            <h3 style="margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 1px; opacity: 0.8;">VISUAL MODE</h3>
+            <button onclick="toggleTheme()" class="logout-btn" style="width: 100%; opacity: 1; border-color: var(--accent-color); margin: 0; background: var(--oled-bg); color: var(--oled-color);">
+                SWITCH LIGHT / DARK
             </button>
         </div>
 
         <div>
-            <h3 style="margin-bottom: 10px; font-size: 1rem;">ACCENT COLOR</h3>
-            <div style="display: flex; gap: 15px;">
-                <div onclick="setAccent('#00e5ff')" style="width: 40px; height: 40px; background: #00e5ff; border-radius: 50%; cursor: pointer; border: 2px solid #fff;"></div>
-                <div onclick="setAccent('#f39c12')" style="width: 40px; height: 40px; background: #f39c12; border-radius: 50%; cursor: pointer;"></div>
-                <div onclick="setAccent('#ff003c')" style="width: 40px; height: 40px; background: #ff003c; border-radius: 50%; cursor: pointer;"></div>
+            <h3 style="margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 1px; opacity: 0.8;">ACCENT COLOR</h3>
+            <div style="display: flex; gap: 20px; justify-content: flex-start;">
+                <div onclick="setAccent('#00e5ff')" style="width: 45px; height: 45px; background: #00e5ff; border-radius: 50%; cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 10px rgba(0,229,255,0.2);"></div>
+                <div onclick="setAccent('#f39c12')" style="width: 45px; height: 45px; background: #f39c12; border-radius: 50%; cursor: pointer;"></div>
+                <div onclick="setAccent('#ff003c')" style="width: 45px; height: 45px; background: #ff003c; border-radius: 50%; cursor: pointer;"></div>
             </div>
         </div>
 
