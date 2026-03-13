@@ -129,6 +129,7 @@ body {
         padding-bottom: 80px; 
         overflow-x: hidden; 
     }
+
     #dashboard-container {
         width: 100%;
         overflow-x: hidden;
@@ -151,7 +152,20 @@ body {
         left: 120px !important;
         font-size: 0.65rem !important;
     }
-    .right-col { width: 65% !important; padding-bottom: 75px !important; }
+
+    .highlight-box {
+        font-size: 1.1rem !important; /* Lite mindre på mobilen */
+        padding: 3px 8px !important;
+    }
+    
+    .right-col { 
+    width: 50%; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-end; /* Texten trycks till högerkanten */
+    text-align: right;
+    padding-bottom: 75px !important; 
+}
     .beer-temp { font-size: 1.25rem !important; top: 58% !important; }
 
 } 
@@ -249,12 +263,17 @@ body {
     margin: 0; 
 }
 
-.highlight-box {
-        font-size: 0.9rem !important; /* Gör texten lite mindre så den får plats */
-        white-space: nowrap !important; /* Förbjuder radbrytning */
-        padding: 4px 8px !important;
-        display: inline-block;
-    }
+/* --- 6. KOMPONENTER (Gäller både PC & MOBIL) --- */
+.highlight-box { 
+    background-color: var(--oled-color); /* Den vita bakgrunden */
+    color: var(--oled-bg);              /* Den svarta texten */
+    font-size: 1.4rem; 
+    font-weight: 800; 
+    padding: 4px 12px; 
+    margin-bottom: 12px; 
+    display: inline-block;
+    white-space: nowrap; /* Detta hindrar namnet från att delas upp på två rader */
+}
 
 .action-status { 
     font-size: 1.8rem; 
