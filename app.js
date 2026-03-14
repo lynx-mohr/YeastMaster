@@ -515,7 +515,15 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
+function setActive(clickedElement) {
+    // Ta bort 'active' klassen från alla nav-items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    // Lägg till 'active' på den vi just klickade på
+    clickedElement.classList.add('active');
+}
 
 
 

@@ -156,14 +156,26 @@ body.light-mode .btn-primary {
     body { 
         padding-left: 100px; /* Detta avstånd styr hur långt dashboarden flyttas från kanten */
     }
-   .nav-indicator {
-        /* Bredare och kortare för att kännas som knappar */
-        width: 14px;      /* ÄNDRAD: Från 5px till 14px (gör dem bredare) */
-        height: 30px;     /* ÄNDRAD: Från 45px till 30px (gör dem mer kompakta) */
-        border-radius: 4px; /* Lite rundade hörn för en modern look */
-        background: #333;
-        transition: 0.3s ease;
-    }
+ /* --- IKON-STYLING --- */
+.nav-icon {
+    width: 28px;        /* Lagom storlek för klickvänlighet */
+    height: 28px;
+    fill: #555;         /* Grå när den är inaktiv */
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 0px transparent);
+}
+
+/* När en ikon är aktiv (vald) */
+.nav-item.active .nav-icon {
+    fill: var(--accent-color); /* Blir blå/orange/röd beroende på inställning */
+    filter: drop-shadow(0 0 8px var(--accent-color)); /* Glöd-effekt! */
+    transform: scale(1.1); /* Blir lite större för feedback */
+}
+
+/* Hover-effekt för att visa att den går att klicka på */
+.nav-item:hover .nav-icon {
+    fill: #aaa;
+}
     /* VIKTIGT: Vi puttar body 80px åt höger så menyn inte ligger över kanten */
     body { padding-left: 110px; }
 }
