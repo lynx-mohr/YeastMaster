@@ -137,12 +137,16 @@ body.light-mode .btn-primary {
         width: 110px; 
         flex-direction: column;
         justify-content: center;
-        gap: 40px;
+        gap: 20px;
         border-right: 1px solid #222;
     }
    .nav-indicator {
-        width: 5px;   /* Behåll strecket smalt och elegant */
-        height: 45px; 
+        /* Bredare och kortare för att kännas som knappar */
+        width: 14px;      /* ÄNDRAD: Från 5px till 14px (gör dem bredare) */
+        height: 30px;     /* ÄNDRAD: Från 45px till 30px (gör dem mer kompakta) */
+        border-radius: 4px; /* Lite rundade hörn för en modern look */
+        background: #333;
+        transition: 0.3s ease;
     }
     /* VIKTIGT: Vi puttar body 80px åt höger så menyn inte ligger över kanten */
     body { padding-left: 110px; }
