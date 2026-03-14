@@ -52,7 +52,30 @@
                             </svg>
                             <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
                         </div>
-                    </div> 
+                    </div>
+                    
+                    <div id="view-library" style="display:none; padding: 20px; padding-left: 110px;">
+    <h1 style="color:var(--accent-color); margin-bottom: 20px;">Yeast Library</h1>
+    <input type="text" id="yeast-search" placeholder="Sök jäst, stil eller egenskap..." 
+           style="width:100%; padding:12px; background:#111; border:1px solid #333; color:white; border-radius:8px; margin-bottom:20px;">
+    <div id="yeast-grid" class="yeast-grid"></div>
+</div>
+
+<div id="view-lab" style="display:none; padding: 20px; padding-left: 110px;">
+    <h1 style="color:var(--accent-color); margin-bottom: 20px;">The Arcane Lab</h1>
+    <div class="lab-graph-container">
+        <p style="opacity:0.5;">Här förbereds din avancerade jäsprofil...</p>
+    </div>
+</div>
+
+<div id="view-settings" style="display:none; padding: 20px; padding-left: 110px;">
+    <h1 style="color:var(--accent-color); margin-bottom: 20px;">Settings</h1>
+    <div class="phase-info">
+        <h3>Tema & Färg</h3>
+        <button class="btn-primary" onclick="toggleTheme()" style="margin-top:10px;">Växla Ljust/Mörkt</button>
+    </div>
+    <button id="btn-logout" class="logout-btn">Logga ut</button>
+</div>
 
                     <div class="right-col">
                         <div class="highlight-box" id="strain-val">--</div>

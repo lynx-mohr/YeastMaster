@@ -48,20 +48,32 @@ function showView(viewName) {
     const views = {
         login: document.getElementById('login-container'),
         claim: document.getElementById('claim-container'),
-        dashboard: document.getElementById('dashboard-container')
+        dashboard: document.getElementById('dashboard-container'),
+        library: document.getElementById('view-library'), // Ny!
+        lab: document.getElementById('view-lab'),         // Ny!
+        settings: document.getElementById('view-settings') // Ny!
     };
     
     Object.keys(views).forEach(key => {
         if (views[key]) {
             if (key === viewName) {
-                // Dashboarden mår bäst av 'block' för att grafen ska vara stabil
-                // Login och Claim behöver 'flex' för att centrera boxen
-                views[key].style.display = (key === 'dashboard') ? 'block' : 'flex';
+                // Dashboard, Library, Lab och Settings kör 'block'
+                // Login och Claim kör 'flex' för centrering
+                const isFlexView = (key === 'login' || key === 'claim');
+                views[key].style.display = isFlexView ? 'flex' : 'block';
             } else {
                 views[key].style.display = 'none';
             }
         }
     });
+}
+
+// Och se till att denna finns för att tända ikonerna!
+function setActive(clickedElement) {
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    clickedElement.classList.add('active');
 }
 
 // --- 2. INLOGGNINGS-VAKT ---
