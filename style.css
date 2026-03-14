@@ -289,7 +289,7 @@ body.light-mode .btn-primary {
 
 .air-floating {
     position: absolute;
-    top: 155px; 
+    top: 150px; 
     left: 150px; /* DIN EXAKTA POSITION */
     right: auto !important;
     font-size: 0.85rem;
