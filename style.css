@@ -134,7 +134,7 @@ body.light-mode .btn-primary {
         left: 20px;          /* Lite luft från vänsterkanten */
         top: 50%;            /* Placera toppen i mitten av skärmen */
         transform: translateY(-50%); /* Justera så den centreras exakt vertikalt */
-        width: 60px;         /* Gör själva fältet smalare */
+        width: 50px;         /* Gör själva fältet smalare */
         height: fit-content; /* Låt fältet bara vara så långt som knapparna kräver */
         bottom: auto;        /* Släpp låsningen i botten */
 
