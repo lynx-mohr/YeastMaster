@@ -13,7 +13,7 @@
 </head>
 <body>
 
-    <div id="login-container" class="app-view">
+    <div id="login-container">
         <div class="auth-box">
             <h1>YeastMaster</h1>
             <p>Vittnesskyddat moln</p>
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <div id="claim-container" class="app-view" style="display: none;">
+    <div id="claim-container" style="display: none;">
         <div class="auth-box">
             <h2>Koppla enhet</h2>
             <p>Ange ID från OLED-menyn</p>
@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    <section id="view-dashboard" class="app-view" style="display: none;">
+    <section id="view-dashboard" style="display: none;">
         <div class="oled-screen"> 
             <div class="main-display">
                 <div class="left-col"> 
@@ -96,7 +96,7 @@
         <button id="btn-logout-dash" class="logout-btn">LOGOUT</button>
     </section>
 
-    <section id="view-library" class="app-view" style="display: none;">
+    <section id="view-library" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
         <div class="library-header">
             <h2>Yeast Library</h2>
             <div class="sync-status">Selected: <span id="fav-count">0</span>/10</div>
@@ -107,17 +107,17 @@
         <button id="sync-btn" class="sync-button">SYNC TO DEVICE</button>
     </section>
 
-    <section id="view-lab" class="app-view" style="display: none;">
+    <section id="view-lab" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
         <div class="library-header">
             <h2>The Arcane Lab</h2>
             <p style="opacity: 0.6; font-size: 0.9rem;">Bygg din 5-stegsprofil här.</p>
         </div>
         <div style="padding: 40px; text-align: center; color: #444;">
-            <p>Profilbyggaren under konstruktion...</p>
-            </div>
+            <p>Profilbyggaren redo för graf...</p>
+        </div>
     </section>
 
-    <section id="view-settings" class="app-view" style="display: none;">
+    <section id="view-settings" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
         <div class="library-header">
             <h2>Settings</h2>
             <p style="opacity: 0.6; font-size: 0.9rem;">Anpassa din YeastMaster</p>
@@ -137,7 +137,6 @@
                     <div onclick="setAccent('#ff003c')" style="width: 45px; height: 45px; background: #ff003c; border-radius: 50%; cursor: pointer;"></div>
                 </div>
             </div>
-            <button id="btn-logout-settings" class="logout-btn">LOG OUT FROM CLOUD</button>
         </div>
     </section>
 
@@ -162,4 +161,63 @@
         </div>
         <div class="nav-item" onclick="showView('settings', this)">
             <svg class="nav-icon" viewBox="0 0 24 24">
-                <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.35 19.43,11.03L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.97 19.05,5.05L16.56,6.05C16.04,5.66 15.47,5.34 14.86,5.08L14.49,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.51,2.42L9.14,5.08C8.53,5.34 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.97 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11.03C4.53,11.35 4.5,11.67 4.5,12C4.5,11.67 4.53,11.35 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.95C7.96,18.34 8.53,18.66 9.14,18.92L9.51,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 1
+                <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.35 19.43,11.03L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.97 19.05,5.05L16.56,6.05C16.04,5.66 15.47,5.34 14.86,5.08L14.49,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.51,2.42L9.14,5.08C8.53,5.34 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.97 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11.03C4.53,11.35 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.95C7.96,18.34 8.53,18.66 9.14,18.92L9.51,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.49,21.58L14.86,18.92C15.47,18.66 16.04,18.34 16.56,17.95L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+            </svg>
+        </div>
+    </nav>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+        // Detta skript körs istället och förstår dina exakta ID:n!
+        window.showView = function(viewName, clickedElement) {
+            
+            // 1. Dölj precis allting först
+            const allViews = [
+                'login-container', 
+                'claim-container', 
+                'view-dashboard', 
+                'view-library', 
+                'view-lab', 
+                'view-settings'
+            ];
+            
+            allViews.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.style.display = 'none';
+            });
+
+            // 2. Vilket ID ska vi faktiskt visa?
+            let targetId = '';
+            if (viewName === 'login') targetId = 'login-container';
+            else if (viewName === 'claim') targetId = 'claim-container';
+            else targetId = 'view-' + viewName; // dashboard, library, lab, settings
+
+            // 3. Visa rätt element
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) {
+                // Inloggning/claim använder 'flex' för centrering, resten kör 'block'
+                if (viewName === 'login' || viewName === 'claim') {
+                    targetEl.style.display = 'flex';
+                } else {
+                    targetEl.style.display = 'block';
+                }
+            }
+
+            // 4. Uppdatera ikoner om klicket kom från menyn
+            if (clickedElement) {
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                clickedElement.classList.add('active');
+            }
+            
+            // 5. Scrolla högst upp
+            window.scrollTo(0,0);
+        };
+    </script>
+
+</body>
+</html>
