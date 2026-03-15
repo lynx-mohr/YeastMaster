@@ -13,7 +13,7 @@
 </head>
 <body>
 
-    <div id="login-container">
+    <div id="login-container" class="app-view">
         <div class="auth-box">
             <h1>YeastMaster</h1>
             <p>Vittnesskyddat moln</p>
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <div id="claim-container" style="display: none;">
+    <div id="claim-container" class="app-view" style="display: none;">
         <div class="auth-box">
             <h2>Koppla enhet</h2>
             <p>Ange ID från OLED-menyn</p>
@@ -31,216 +31,135 @@
         </div>
     </div>
 
-    <div id="dashboard-container" style="display: none;">
-        
-        <section id="view-dashboard" class="app-view">
-            <div class="oled-screen"> 
-                <div class="main-display">
-                    <div class="left-col"> 
-                        <div class="carboy-wrapper">
-                            <div class="air-floating">Air: <span id="air-temp-val">--</span>°C</div>
-                            <svg viewBox="0 0 100 92" class="carboy-svg">
-                                <defs>
-                                    <linearGradient id="liquid-fill" x1="0%" y1="0%" x2="0%" y2="100%">
-                                        <stop offset="32%" stop-color="transparent" /> 
-                                        <stop offset="32%" stop-color="#4a4a4a" />
-                                    </linearGradient>
-                                </defs>
-                                <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
-                                <path class="glass-line" d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" style="fill: url(#liquid-fill) !important;" stroke="var(--oled-color)" stroke-width="2.5" />
-                                <g id="bubble-stream"></g>
-                            </svg>
-                            <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
-                        </div>
+    <section id="view-dashboard" class="app-view" style="display: none;">
+        <div class="oled-screen"> 
+            <div class="main-display">
+                <div class="left-col"> 
+                    <div class="carboy-wrapper">
+                        <div class="air-floating">Air: <span id="air-temp-val">--</span>°C</div>
+                        <svg viewBox="0 0 100 92" class="carboy-svg">
+                            <defs>
+                                <linearGradient id="liquid-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="32%" stop-color="transparent" /> 
+                                    <stop offset="32%" stop-color="#4a4a4a" />
+                                </linearGradient>
+                            </defs>
+                            <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
+                            <path class="glass-line" d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" style="fill: url(#liquid-fill) !important;" stroke="var(--oled-color)" stroke-width="2.5" />
+                            <g id="bubble-stream"></g>
+                        </svg>
+                        <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
                     </div>
-                    
-                    <div id="view-library" style="display:none; padding: 20px; padding-left: 110px;">
-    <h1 style="color:var(--accent-color); margin-bottom: 20px;">Yeast Library</h1>
-    <input type="text" id="yeast-search" placeholder="Sök jäst, stil eller egenskap..." 
-           style="width:100%; padding:12px; background:#111; border:1px solid #333; color:white; border-radius:8px; margin-bottom:20px;">
-    <div id="yeast-grid" class="yeast-grid"></div>
-</div>
+                </div>
+                
+                <div class="right-col">
+                    <div class="highlight-box" id="strain-val">--</div>
+                    <div id="profile-val" style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; opacity: 0.7;">--</div>
+                    <div class="action-status">
+                        <span id="status-arrow" class="blink-active">▼</span>
+                        <span id="action-val">--</span>
+                    </div>
+                </div>
+            </div>
 
-<div id="view-lab" style="display:none; padding: 20px; padding-left: 110px;">
-    <h1 style="color:var(--accent-color); margin-bottom: 20px;">The Arcane Lab</h1>
-    <div class="lab-graph-container">
-        <p style="opacity:0.5;">Här förbereds din avancerade jäsprofil...</p>
-    </div>
-</div>
+            <hr class="separator-line">
 
-<div id="view-settings" style="display:none; padding: 20px; padding-left: 110px;">
-    <h1 style="color:var(--accent-color); margin-bottom: 20px;">Settings</h1>
-    <div class="phase-info">
-        <h3>Tema & Färg</h3>
-        <button class="btn-primary" onclick="toggleTheme()" style="margin-top:10px;">Växla Ljust/Mörkt</button>
-    </div>
-    <button id="btn-logout" class="logout-btn">Logga ut</button>
-</div>
-
-                    <div class="right-col">
-                        <div class="highlight-box" id="strain-val">--</div>
-                        <div id="profile-val" style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; opacity: 0.7;">--</div>
-                        <div class="action-status">
-                            <span id="status-arrow" class="blink-active">▼</span>
-                            <span id="action-val">--</span>
-                        </div>
+            <div class="progress-section">
+                <div style="font-size: 1.2rem; font-weight: 800; letter-spacing: 1px;">PROGRESS</div>
+                <hr style="border-top: 1px dashed #555; margin: 4px 0 10px 0; opacity: 0.6;">
+                <div class="progress-widget">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; color: #888;">
+                        <span>START</span>
+                        <span id="progress-percent">0%</span>
+                        <span>READY</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="progress-fill" class="progress-fill-anim"></div>
                     </div>
                 </div>
 
-                <hr class="separator-line">
-
-                <div class="progress-section">
-                    <div style="font-size: 1.2rem; font-weight: 800; letter-spacing: 1px;">PROGRESS</div>
-                    <hr style="border-top: 1px dashed #555; margin: 4px 0 10px 0; opacity: 0.6;">
-                    <div class="progress-widget">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; color: #888;">
-                            <span>START</span>
-                            <span id="progress-percent">0%</span>
-                            <span>READY</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div id="progress-fill" class="progress-fill-anim"></div>
-                        </div>
-                    </div>
-
-                    <div class="phase-info">
-                        <div class="phase-row">Phase: <span id="status-text" style="font-weight: 800; color: #fff;">--</span></div>
-                        <div class="day-row">Days since start: <span id="day-val" style="color: var(--oled-color);">0.0</span></div>
-                        <div class="phase-day-row">Days in phase: <span id="phase-day-val" style="color: var(--accent-color);">0.0</span></div>
-                        <div class="target-temp-row">Goal temp in phase: <span id="target-temp-val" style="color: #0088ff;">0.0</span>°C</div>
-                    </div>
-                </div>
-
-                <div class="chart-section">
-                    <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 4px; letter-spacing: 1px;">TEMP HISTORY</div>
-                    <div class="chart-container">
-                        <canvas id="beer-chart"></canvas>
-                    </div>
-                </div>
-            </div> 
-            <button id="btn-logout" class="logout-btn">LOGOUT</button>
-        </section>
-
-        <section id="view-library" class="app-view" style="display: none;">
-            <div class="library-header">
-                <h2>Yeast Library</h2>
-                <div class="sync-status">Selected: <span id="fav-count">0</span>/10</div>
-                <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
-            </div>
-            <div class="yeast-grid" id="yeast-grid">
-                <div class="yeast-card" data-id="us-05">
-                    <div class="favorite-star">★</div>
-                    <div class="yeast-info">
-                        <h3>SafAle US-05</h3>
-                        <p class="yeast-origin">USA</p>
-                        <div class="yeast-tags">
-                            <span>Clean</span>
-                            <span>Crisp</span>
-                        </div>
-                    </div>
-                    <div class="quick-view-hint">Hold for details</div>
+                <div class="phase-info">
+                    <div class="phase-row">Phase: <span id="status-text" style="font-weight: 800; color: #fff;">--</span></div>
+                    <div class="day-row">Days since start: <span id="day-val" style="color: var(--oled-color);">0.0</span></div>
+                    <div class="phase-day-row">Days in phase: <span id="phase-day-val" style="color: var(--accent-color);">0.0</span></div>
+                    <div class="target-temp-row">Goal temp in phase: <span id="target-temp-val" style="color: #0088ff;">0.0</span>°C</div>
                 </div>
             </div>
-            <button id="sync-btn" class="sync-button">SYNC TO DEVICE</button>
-        </section>
 
-        <section id="view-lab" class="app-view" style="display: none;">
-            <div class="library-header">
-                <h2>The Arcane Lab</h2>
-                <p style="opacity: 0.6; font-size: 0.9rem;">Bygg din 5-stegsprofil här.</p>
+            <div class="chart-section">
+                <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 4px; letter-spacing: 1px;">TEMP HISTORY</div>
+                <div class="chart-container">
+                    <canvas id="beer-chart"></canvas>
+                </div>
             </div>
-            <div style="padding: 40px; text-align: center; color: #444;">
-                <p>Profilbyggaren under konstruktion...</p>
-            </div>
-        </section>
+        </div> 
+        <button id="btn-logout-dash" class="logout-btn">LOGOUT</button>
+    </section>
 
-<section id="view-settings" class="app-view" style="display: none;">
-    <div class="library-header">
-        <h2>Settings</h2>
-        <p style="opacity: 0.6; font-size: 0.9rem;">Anpassa din YeastMaster</p>
-    </div>
-
-    <div style="padding: 20px; display: flex; flex-direction: column; gap: 35px;">
-        
-        <div>
-            <h3 style="margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 1px; opacity: 0.8;">VISUAL MODE</h3>
-            <button onclick="toggleTheme()" class="logout-btn" style="width: 100%; opacity: 1; border-color: var(--accent-color); margin: 0; background: var(--oled-bg); color: var(--oled-color);">
-                SWITCH LIGHT / DARK
-            </button>
+    <section id="view-library" class="app-view" style="display: none;">
+        <div class="library-header">
+            <h2>Yeast Library</h2>
+            <div class="sync-status">Selected: <span id="fav-count">0</span>/10</div>
+            <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
         </div>
-
-        <div>
-            <h3 style="margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 1px; opacity: 0.8;">ACCENT COLOR</h3>
-            <div style="display: flex; gap: 20px; justify-content: flex-start;">
-                <div onclick="setAccent('#00e5ff')" style="width: 45px; height: 45px; background: #00e5ff; border-radius: 50%; cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 10px rgba(0,229,255,0.2);"></div>
-                <div onclick="setAccent('#f39c12')" style="width: 45px; height: 45px; background: #f39c12; border-radius: 50%; cursor: pointer;"></div>
-                <div onclick="setAccent('#ff003c')" style="width: 45px; height: 45px; background: #ff003c; border-radius: 50%; cursor: pointer;"></div>
+        <div class="yeast-grid" id="yeast-grid">
             </div>
+        <button id="sync-btn" class="sync-button">SYNC TO DEVICE</button>
+    </section>
+
+    <section id="view-lab" class="app-view" style="display: none;">
+        <div class="library-header">
+            <h2>The Arcane Lab</h2>
+            <p style="opacity: 0.6; font-size: 0.9rem;">Bygg din 5-stegsprofil här.</p>
         </div>
+        <div style="padding: 40px; text-align: center; color: #444;">
+            <p>Profilbyggaren under konstruktion...</p>
+            </div>
+    </section>
 
-    </div>
-</section>
+    <section id="view-settings" class="app-view" style="display: none;">
+        <div class="library-header">
+            <h2>Settings</h2>
+            <p style="opacity: 0.6; font-size: 0.9rem;">Anpassa din YeastMaster</p>
+        </div>
+        <div style="padding: 20px; display: flex; flex-direction: column; gap: 35px;">
+            <div>
+                <h3 style="margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 1px; opacity: 0.8;">VISUAL MODE</h3>
+                <button onclick="toggleTheme()" class="logout-btn" style="width: 100%; opacity: 1; border-color: var(--accent-color); margin: 0; background: var(--oled-bg); color: var(--oled-color);">
+                    SWITCH LIGHT / DARK
+                </button>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 1px; opacity: 0.8;">ACCENT COLOR</h3>
+                <div style="display: flex; gap: 20px; justify-content: flex-start;">
+                    <div onclick="setAccent('#00e5ff')" style="width: 45px; height: 45px; background: #00e5ff; border-radius: 50%; cursor: pointer; border: 2px solid #fff;"></div>
+                    <div onclick="setAccent('#f39c12')" style="width: 45px; height: 45px; background: #f39c12; border-radius: 50%; cursor: pointer;"></div>
+                    <div onclick="setAccent('#ff003c')" style="width: 45px; height: 45px; background: #ff003c; border-radius: 50%; cursor: pointer;"></div>
+                </div>
+            </div>
+            <button id="btn-logout-settings" class="logout-btn">LOG OUT FROM CLOUD</button>
+        </div>
+    </section>
 
-<nav class="main-nav">
-    <div class="nav-item active" onclick="showView('dashboard'); setActive(this)">
-        <svg class="nav-icon" viewBox="0 0 24 24">
-            <path d="M13,2H11V5.1C7.6,5.6 5,8.5 5,12C5,15.9 8.1,19 12,19C15.9,19 19,15.9 19,12C19,8.5 16.4,5.6 13,5.1V2Z" />
-            <circle cx="10" cy="12" r="1.2" opacity="0.5" fill="white" />
-        </svg>
-    </div>
-
-    <div class="nav-item" onclick="showView('library'); setActive(this)">
-        <svg class="nav-icon" viewBox="0 0 24 24">
-            <path d="M18,2H7A2,2 0 0,0 5,4V20A2,2 0 0,0 7,22H18A2,2 0 0,0 20,20V4A2,2 0 0,0 18,2M18,20H7V4H8V20H9V4H18V20Z" />
-            <circle cx="13.5" cy="12" r="3" />
-            <circle cx="13.5" cy="12" r="1" opacity="0.6" />
-        </svg>
-    </div>
-
-    <div class="nav-item" onclick="showView('lab'); setActive(this)">
-        <svg class="nav-icon" viewBox="0 0 24 24">
-            <path d="M16,2H8V4H9V18A3,3 0 0,0 12,21A3,3 0 0,0 15,18V4H16V2M13,17H11V15H13V17M13,13H11V11H13V13M13,9H11V7H13V9Z" />
-        </svg>
-    </div>
-
-    <div class="nav-item" onclick="showView('settings'); setActive(this)">
-        <svg class="nav-icon" viewBox="0 0 24 24">
-            <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.35 19.43,11.03L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.97 19.05,5.05L16.56,6.05C16.04,5.66 15.47,5.34 14.86,5.08L14.49,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.51,2.42L9.14,5.08C8.53,5.34 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.97 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11.03C4.53,11.35 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.95C7.96,18.34 8.53,18.66 9.14,18.92L9.51,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.49,21.58L14.86,18.92C15.47,18.66 16.04,18.34 16.56,17.95L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
-        </svg>
-    </div>
-</nav>
-
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="app.js"></script>
-
-    <script>
-        function switchView(viewId, el) {
-            // Dölj alla vyer
-            document.querySelectorAll('.app-view').forEach(view => {
-                view.style.display = 'none';
-            });
-            // Visa vald vy
-            document.getElementById('view-' + viewId).style.display = 'block';
-            
-            // Uppdatera nav-ikoner (ta bort active från alla, lägg på klickad)
-            document.querySelectorAll('.nav-item').forEach(nav => {
-                nav.classList.remove('active');
-            });
-            el.classList.add('active');
-
-            // Scrolla till toppen så man inte är kvar nere i biblioteket
-            window.scrollTo(0,0);
-        }
-    </script>
-
-<div id="yeast-tooltip"></div>
-
-<div id="yeast-detail-view">
-   <button onclick="history.back()" style="background:none; border:1px solid #444; color:white; padding:5px 15px; border-radius:4px;">← Back</button>
-    <div id="yeast-detail-content" style="margin-top:30px;"></div>
-</div>
-
-
-</body>
-</html>
+    <nav class="main-nav">
+        <div class="nav-item active" onclick="showView('dashboard', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M13,2H11V5.1C7.6,5.6 5,8.5 5,12C5,15.9 8.1,19 12,19C15.9,19 19,15.9 19,12C19,8.5 16.4,5.6 13,5.1V2Z" />
+                <circle cx="10" cy="12" r="1.2" opacity="0.5" fill="white" />
+            </svg>
+        </div>
+        <div class="nav-item" onclick="showView('library', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M18,2H7A2,2 0 0,0 5,4V20A2,2 0 0,0 7,22H18A2,2 0 0,0 20,20V4A2,2 0 0,0 18,2M18,20H7V4H8V20H9V4H18V20Z" />
+                <circle cx="13.5" cy="12" r="3" />
+                <circle cx="13.5" cy="12" r="1" opacity="0.6" />
+            </svg>
+        </div>
+        <div class="nav-item" onclick="showView('lab', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M16,2H8V4H9V18A3,3 0 0,0 12,21A3,3 0 0,0 15,18V4H16V2M13,17H11V15H13V17M13,13H11V11H13V13M13,9H11V7H13V9Z" />
+            </svg>
+        </div>
+        <div class="nav-item" onclick="showView('settings', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.35 19.43,11.03L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.97 19.05,5.05L16.56,6.05C16.04,5.66 15.47,5.34 14.86,5.08L14.49,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.51,2.42L9.14,5.08C8.53,5.34 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.97 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11.03C4.53,11.35 4.5,11.67 4.5,12C4.5,11.67 4.53,11.35 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.95C7.96,18.34 8.53,18.66 9.14,18.92L9.51,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 1
