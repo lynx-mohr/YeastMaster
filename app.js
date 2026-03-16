@@ -208,24 +208,23 @@ function updateChart(data) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     
-    // --- HÄR ÄR RADERNA SOM SAKNADES ---
     // Hämtar färgen från CSS, om den inte hittas används orange som reserv!
     let themeAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
     if (!themeAccent) themeAccent = '#f39c12'; 
-    // -----------------------------------
 
-    // TYDLIGARE GRÅ GRADIENT (Ökad opacitet till 0.3)
+    // TYDLIGARE GRÅ GRADIENT
     const gradient = ctx.createLinearGradient(0, 0, 0, 120);
     gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)'); 
     gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');   
 
+    // Säkerställ att vi bara försöker plotta riktiga siffror, annars kraschar hela Chart.js
     const labels = data.map(d => new Date(d.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    const temps = data.map(d => d.temp);
+    const temps = data.map(d => Number(d.temp) || 0); // <-- NYTT: Säkerhetsnät! Om d.temp är skumt, sätt 0.
 
     if (beerChart) {
         beerChart.data.labels = labels;
         beerChart.data.datasets[0].data = temps;
-        beerChart.data.datasets[0].borderColor = themeAccent; // <--- Ser till att färgen uppdateras!
+        beerChart.data.datasets[0].borderColor = themeAccent; 
         beerChart.update('none');
     } else {
         beerChart = new Chart(ctx, {
@@ -235,10 +234,10 @@ function updateChart(data) {
                 datasets: [{
                     label: 'Beer Temp',
                     data: temps,
-                    borderColor: themeAccent, // Nu vet koden vad detta är!
+                    borderColor: themeAccent, 
                     borderWidth: 2,
                     fill: true, 
-                    backgroundColor: gradient, // Tydligare grå skugga
+                    backgroundColor: gradient, 
                     tension: 0.3,
                     pointRadius: 0 
                 }]
@@ -246,23 +245,24 @@ function updateChart(data) {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                resizeDelay: 10, // Ger webbläsaren tid att sätta layouten innan grafen ritas
-    layout: { padding: 0 },
+                resizeDelay: 10, 
+                layout: { padding: 0 },
                 scales: {
                     x: { 
                         ticks: { color: '#666', maxTicksLimit: 5, font: { family: 'Inter', size: 10 } }, 
                         grid: { display: false } 
                     },
-                  y: { 
-    ticks: { 
-        color: '#666', 
-        font: { family: 'Inter', size: 10 }, 
-        // Ändra denna rad från: callback: v => v + '°'
-        // Till detta:
-        callback: v => v.toFixed(1) + '°' 
-    }, 
-    grid: { color: 'rgba(255, 255, 255, 0.05)' } 
-}
+                    y: { 
+                        ticks: { 
+                            color: '#666', 
+                            font: { family: 'Inter', size: 10 }, 
+                            // <-- NYTT: Här är skyddet som förhindrar att funktionen kraschar
+                            callback: function(value) {
+                                return Number(value).toFixed(1) + '°';
+                            }
+                        }, 
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' } 
+                    }
                 },
                 plugins: { 
                     legend: { display: false },
