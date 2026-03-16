@@ -150,21 +150,28 @@ if (action === "COOLING") {
 // 4. Statusrad (Fas)
             document.getElementById('status-text').innerText = latest.status.toUpperCase();
             
-            // --- NY LOGIK: Räkna ut hur länge vi varit i denna fas ---
-            let phaseStartTime = latest.time; 
-            for (let i = data.length - 1; i >= 0; i--) {
-                if (data[i].status !== latest.status) {
-                    // Fasen ändrades här! Starttiden är nästa mätpunkt.
-                    phaseStartTime = data[i + 1].time;
-                    break;
+            // --- DAGAR I FAS ---
+            // Vi försöker först hämta det riktiga värdet från servern (t.ex. latest.phase_day).
+            // Finns inte det, kör vi din uträkning som en nöd-backup (som maxar ut på historikens längd).
+            let phaseDay = 0;
+            
+            if (latest.phase_day !== undefined) {
+                phaseDay = latest.phase_day; // Det perfekta sättet!
+            } else {
+                // Nöd-uträkning om servern inte skickar phase_day
+                let phaseStartTime = latest.time; 
+                for (let i = data.length - 1; i >= 0; i--) {
+                    if (data[i].status !== latest.status) {
+                        phaseStartTime = data[i + 1].time;
+                        break;
+                    }
+                    if (i === 0) {
+                        phaseStartTime = data[0].time;
+                    }
                 }
-                if (i === 0) {
-                    phaseStartTime = data[0].time;
-                }
+                const msInADay = 1000 * 60 * 60 * 24;
+                phaseDay = (latest.time && phaseStartTime) ? (new Date(latest.time) - new Date(phaseStartTime)) / msInADay : 0;
             }
-            const msInADay = 1000 * 60 * 60 * 24;
-            // Räkna ut dagarna, om data saknas sätter vi den till 0
-            const phaseDay = (latest.time && phaseStartTime) ? (new Date(latest.time) - new Date(phaseStartTime)) / msInADay : 0;
 
             // 5. Dag och Progress-mätare (Logiken för den orangea mätaren)
             const currentDay = latest.day || 0;
