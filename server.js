@@ -30,7 +30,9 @@ app.use(express.static('.'));
 
 // --- 1. MOTTAGAREN (Från ESP32) ---
 app.post('/api/update', async (req, res) => {
-    // 1. LÄGG TILL target_temp HÄR:
+
+    console.log("Inkommande data från ESP32:", req.body);
+  
    const { device_id, temp, air_temp, day, phase_day, status, action, token, strain, profile, target_temp } = req.body;
 
     if (token !== "YeastMaster-Super-Secret-2024") {
