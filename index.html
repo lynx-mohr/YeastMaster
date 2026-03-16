@@ -187,15 +187,29 @@
         </div>
     </section>
 
-    <section id="view-soul" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
-        <div class="library-header">
-            <h2>Soul of Beer</h2>
-            <p style="opacity: 0.6; font-size: 0.9rem;">Din samling av bryggningar och recept.</p>
+  <section id="view-soul" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
+    <div class="library-header">
+        <h2>Soul of Beer</h2>
+        <p style="opacity: 0.6; font-size: 0.9rem;">Utforska bryggerijästens magiska värld.</p>
+    </div>
+    
+    <div style="padding: 20px; color: #fff; line-height: 1.6;">
+        <p>Här börjar resan för varje fantastisk öl. Jästen är inte bara en ingrediens, det är hantverkets själ.</p>
+        
+        <div style="background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; margin: 20px 0;">
+            <h3 style="color: var(--accent-color); margin-top: 0;">Vad är YeastMaster?</h3>
+            <p style="font-size: 0.9rem; opacity: 0.8;">
+                YeastMaster är vårt egenutvecklade system för att ge bryggare total kontroll över jäsningsprocessen. 
+                Genom realtidsövervakning och precisionsstyrning av temperatur ser vi till att jästen alltid presterar sitt bästa.
+            </p>
         </div>
-        <div style="padding: 40px; text-align: center; color: #444;">
-            <p>Här kommer dina bryggloggar att finnas...</p>
+
+        <div id="soul-login-prompt" style="text-align: center; margin-top: 30px;">
+            <p style="margin-bottom: 15px; font-size: 0.85rem; opacity: 0.6;">Har du en YeastMaster eller vill du skapa ett konto?</p>
+            <button class="btn-primary" onclick="showView('login')">GÅ TILL INLOGGNING</button>
         </div>
-    </section>
+    </div>
+</section>
 
     <section id="view-librarian" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
         <div class="library-header">

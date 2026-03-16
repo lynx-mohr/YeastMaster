@@ -79,24 +79,26 @@ function setActive(clickedElement) {
 // --- 2. INLOGGNINGS-VAKT ---
 auth.onAuthStateChanged(async (user) => {
     if (user) {
+        // INLOGGAD
         try {
             const res = await fetch(`${API_BASE}/my-devices?uid=${user.uid}`);
             const devices = await res.json();
 
             if (devices.length > 0) {
                 activeDeviceId = devices[0].device_id;
-                showView('dashboard');
-                // Starta allt det snygga nu när vi är inne!
+                showView('dashboard'); // Direkt till jäsningen!
                 updateDashboard();
                 setInterval(updateDashboard, 20000);
             } else {
-                showView('claim');
+                showView('claim'); // Ny användare utan maskin
             }
         } catch (err) {
-            console.error("Kunde inte kolla enheter:", err);
+            console.error("Fel vid enhetskoll:", err);
+            showView('dashboard'); 
         }
     } else {
-        showView('login');
+        // INTE INLOGGAD - Visa landningssidan (Soul of Beer)
+        showView('soul'); 
     }
 });
 
