@@ -620,3 +620,57 @@ canvas#beer-chart {
     font-size: 0.8rem;
     text-align: center;
 }
+
+/* --- LIGHT MODE JUSTERINGAR FÖR NYA MODULER --- */
+
+.light-mode .yeast-card {
+    background: #fff;
+    border-color: #eee;
+    color: #222;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.light-mode .yeast-card h3 {
+    color: #333;
+}
+
+.light-mode .calc-container {
+    background: #fdfdfd;
+    border-color: #ddd;
+}
+
+.light-mode .input-group label {
+    color: #666;
+}
+
+.light-mode .input-group input, 
+.light-mode .input-group select {
+    background: #fff;
+    border-color: #ccc;
+    color: #222;
+}
+
+.light-mode .res-card {
+    background: #f5f5f5;
+    border-left-color: #ccc;
+}
+
+.light-mode .res-val {
+    color: #111;
+}
+
+.light-mode .res-unit, .light-mode .res-label {
+    color: #666;
+}
+
+/* Arcane Lab inputs i ljust läge */
+.light-mode .lab-step {
+    background: #fff;
+    border-color: #ddd;
+}
+
+.light-mode .step-inputs input {
+    background: #f9f9f9;
+    border-color: #ccc;
+    color: #222;
+}
