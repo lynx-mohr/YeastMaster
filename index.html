@@ -211,15 +211,64 @@
     </div>
 </section>
 
-    <section id="view-librarian" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
-        <div class="library-header">
-            <h2>Yeast Librarian</h2>
-            <p style="opacity: 0.6; font-size: 0.9rem;">Hantera och utvärdera dina jäststammar.</p>
+ <section id="view-librarian" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
+    <div class="library-header">
+        <h2>Yeast Librarian</h2>
+        <div class="lab-tabs">
+            <button class="lab-tab active" onclick="switchLabTab('calc')">PITCH CALC</button>
+            <button class="lab-tab" onclick="switchLabTab('academy')">ACADEMY</button>
         </div>
-        <div style="padding: 40px; text-align: center; color: #444;">
-            <p>AI-assistenten för jäst utvärdering under uppbyggnad...</p>
+    </div>
+
+    <div id="lab-content-calc">
+        <div class="calc-container">
+            <div class="calc-inputs">
+                <div class="input-group">
+                    <label>Batch Volume (L)</label>
+                    <input type="number" id="pitch-vol" value="20" oninput="calculatePitch()">
+                </div>
+                <div class="input-group">
+                    <label>Gravity (OG)</label>
+                    <input type="number" id="pitch-og" value="1.050" step="0.001" oninput="calculatePitch()">
+                </div>
+                <div class="input-group">
+                    <label>Pitch Rate (M/ml/°P)</label>
+                    <select id="pitch-rate" onchange="calculatePitch()">
+                        <option value="0.75">0.75 (Standard Ale)</option>
+                        <option value="1.0">1.0 (High Gravity Ale)</option>
+                        <option value="1.5">1.5 (Standard Lager)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Harvest Date</label>
+                    <input type="date" id="pitch-date" onchange="calculatePitch()">
+                </div>
+            </div>
+
+            <div class="calc-results">
+                <div class="res-card">
+                    <span class="res-label">CELLS NEEDED</span>
+                    <span class="res-val" id="res-needed">--</span>
+                    <span class="res-unit">Billion cells</span>
+                </div>
+                <div class="res-card accent">
+                    <span class="res-label">EST. VIABILITY</span>
+                    <span class="res-val" id="res-viability">--</span>
+                    <span class="res-unit" id="res-days-old">New</span>
+                </div>
+            </div>
+
+            <div id="pitch-warning" class="warning-box" style="display:none;">
+                ⚠️ Warning: Underpitching detected. Consider a starter!
+            </div>
         </div>
-    </section>
+    </div>
+
+    <div id="lab-content-academy" style="display:none; padding: 20px;">
+        <h3 style="color:var(--accent-color)">Yeast Management Academy</h3>
+        <p style="opacity:0.7">Här kommer dina guider om agar, utstrykning och bibliotekshantering att bo...</p>
+    </div>
+</section>
 
 <nav class="main-nav">
         <div class="nav-item" onclick="showView('soul', this)">

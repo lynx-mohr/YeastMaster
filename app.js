@@ -659,6 +659,54 @@ window.addEventListener('DOMContentLoaded', () => {
     setTimeout(updateLabChart, 500); // Liten delay så canvasen hinner få sin storlek
 });
 
+function calculatePitch() {
+    const vol = parseFloat(document.getElementById('pitch-vol').value) || 0;
+    const og = parseFloat(document.getElementById('pitch-og').value) || 1.000;
+    const rate = parseFloat(document.getElementById('pitch-rate').value) || 0.75;
+    const harvestDate = document.getElementById('pitch-date').value;
+
+    // 1. Konvertera OG till Plato (Approximation)
+    const plato = (og - 1) * 250;
+
+    // 2. Räkna ut cellbehov (i miljarder)
+    // Formel: (ml vätska * plato * rate) / 1000
+    const cellsNeeded = Math.round((vol * 1000 * plato * rate) / 1000);
+    document.getElementById('res-needed').innerText = cellsNeeded;
+
+    // 3. Räkna ut Viability
+    if (harvestDate) {
+        const start = new Date(harvestDate);
+        const now = new Date();
+        const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+        
+        // Enkel modell: tappar 0.7% livskraft per dag i kylen
+        let viability = Math.max(0, 100 - (diffDays * 0.7));
+        document.getElementById('res-viability').innerText = Math.round(viability) + "%";
+        document.getElementById('res-days-old').innerText = diffDays + " days old";
+        
+        // Varna om viability är låg
+        document.getElementById('pitch-warning').style.display = (viability < 50) ? 'block' : 'none';
+    } else {
+        document.getElementById('res-viability').innerText = "100%";
+        document.getElementById('res-days-old').innerText = "Fresh/New";
+    }
+}
+
+function switchLabTab(tab) {
+    document.getElementById('lab-content-calc').style.display = tab === 'calc' ? 'block' : 'none';
+    document.getElementById('lab-content-academy').style.display = tab === 'academy' ? 'block' : 'none';
+    
+    document.querySelectorAll('.lab-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText.toLowerCase().includes(tab));
+    });
+}
+
+// Sätt dagens datum som default i kalkylatorn
+window.addEventListener('DOMContentLoaded', () => {
+    const dateInput = document.getElementById('pitch-date');
+    if(dateInput) dateInput.valueAsDate = new Date();
+    calculatePitch();
+});
 
 
 

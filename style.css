@@ -539,3 +539,84 @@ canvas#beer-chart {
     font-family: monospace;
     line-height: 1.5;
 }
+
+/* Librarian Tabs */
+.lab-tabs {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+.lab-tab {
+    background: transparent;
+    border: 1px solid #333;
+    color: #666;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+.lab-tab.active {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+/* Calc Styling */
+.calc-container {
+    background: #111;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #222;
+}
+.calc-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+.input-group label {
+    display: block;
+    font-size: 0.7rem;
+    color: #888;
+    margin-bottom: 5px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.input-group input, .input-group select {
+    width: 100%;
+    background: #000;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: 'Inter';
+}
+
+.calc-results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.res-card {
+    background: #1a1a1a;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    border-left: 4px solid #444;
+}
+.res-card.accent { border-left-color: var(--accent-color); }
+.res-label { display: block; font-size: 0.6rem; color: #888; font-weight: 800; margin-bottom: 5px;}
+.res-val { display: block; font-size: 1.5rem; font-weight: 800; color: #fff; }
+.res-unit { font-size: 0.7rem; opacity: 0.5; }
+
+.warning-box {
+    margin-top: 20px;
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid #ff4444;
+    color: #ff4444;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    text-align: center;
+}
