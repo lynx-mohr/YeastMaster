@@ -176,7 +176,77 @@ body.light-mode .btn-primary {
 .nav-item:hover .nav-icon {
     fill: #aaa;
 }
+    /* VIKTIGT: Vi puttar body 80px åt höger så menyn inte ligger över kanten */
+    body { padding-left: 110px; }
+}
 
+/* --- EN ENDA MOBIL-VAKT FÖR HELA FILEN --- */
+@media (max-width: 600px) {
+    .main-nav {
+        bottom: 0; left: 0; right: 0;
+        height: 70px;
+        flex-direction: row;
+         gap: 10px;
+        justify-content: space-around;
+        border-top: 1px solid #222;
+    }
+    .nav-indicator {
+        width: 45px; height: 5px;
+    }
+    body { 
+        padding: 10px; 
+        padding-bottom: 80px; 
+        overflow-x: hidden; 
+    }
+
+    #dashboard-container {
+        width: 100%;
+        overflow-x: hidden;
+        display: block; 
+    }
+.oled-screen {
+        width: 95% !important;
+        overflow: hidden !important; /* Säkerhetsbälte: inget får sticka ut */
+    }
+.carboy-wrapper {
+
+        /* Sänk från 1.3 till 1.15 - den ser fortfarande stor ut men får plats */
+        transform: scale(1.15) !important; 
+        transform-origin: center left !important;
+        margin-left: -5px !important;
+    }
+    .main-display { margin-bottom: -75px !important; }
+
+.action-status { 
+        font-size: 1.1rem !important; 
+        gap: 4px !important;
+        margin-top:-5px !important;
+      transform: translate(-10px) !important;
+        }
+
+    .air-floating {
+        top: 135px !important;
+        left: 110px !important;
+        font-size: 0.65rem !important;
+    }
+
+    .highlight-box {
+        font-size: 1.1rem !important; /* Lite mindre på mobilen */
+        padding: 3px 8px !important;
+        margin-bottom: 5px !important;
+    }
+
+    .right-col { 
+    width: 50%; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-end; /* Texten trycks till högerkanten */
+    text-align: right;
+    padding-bottom: 75px !important; 
+}
+    .beer-temp { font-size: 1.25rem !important; top: 58% !important; }
+
+} 
 
 /* --- 4. HUVUDVY PC (DIN MILLIMETERPRECISION ÅTERSTÄLLD) --- */
 .oled-screen { 
@@ -452,72 +522,3 @@ canvas#beer-chart {
 .blink-active { 
     animation: blinker 1s step-start infinite !important; 
 }
-
-/* --- EN ENDA MOBIL-VAKT FÖR HELA FILEN --- */
-@media (max-width: 600px) {
-    .main-nav {
-        bottom: 0; left: 0; right: 0;
-        height: 70px;
-        flex-direction: row;
-         gap: 10px;
-        justify-content: space-around;
-        border-top: 1px solid #222;
-    }
-    .nav-indicator {
-        width: 45px; height: 5px;
-    }
-    body { 
-        padding: 10px; 
-        padding-bottom: 80px; 
-        overflow-x: hidden; 
-    }
-
-    #dashboard-container {
-        width: 100%;
-        overflow-x: hidden;
-        display: block; 
-    }
-.oled-screen {
-        width: 95% !important;
-        overflow: hidden !important; /* Säkerhetsbälte: inget får sticka ut */
-    }
-.carboy-wrapper {
-
-        /* Sänk från 1.3 till 1.15 - den ser fortfarande stor ut men får plats */
-        transform: scale(1.15) !important; 
-        transform-origin: center left !important;
-        margin-left: -5px !important;
-    }
-    .main-display { margin-bottom: -75px !important; }
-
-.action-status { 
-        font-size: 1.1rem !important; 
-        gap: 4px !important;
-        margin-top:-5px !important;
-      transform: translate(-10px) !important;
-        }
-
-    .air-floating {
-        top: 135px !important;
-        left: 110px !important;
-        font-size: 0.65rem !important;
-    }
-
-    .highlight-box {
-        font-size: 1.1rem !important; /* Lite mindre på mobilen */
-        padding: 3px 8px !important;
-        margin-bottom: 5px !important;
-    }
-
-    .right-col { 
-    width: 50%; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: flex-end; /* Texten trycks till högerkanten */
-    text-align: right;
-    padding-bottom: 75px !important; 
-}
-    .beer-temp { font-size: 1.25rem !important; top: 58% !important; }
-
-} 
-
