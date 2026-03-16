@@ -451,3 +451,11 @@ canvas#beer-chart {
     
     .beer-temp { font-size: 1.25rem !important; top: 58% !important; }
 }
+
+@keyframes blinker { 
+    50% { opacity: 0; } 
+}
+
+.blink-active { 
+    animation: blinker 1s step-start infinite !important; 
+}
