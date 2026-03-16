@@ -459,3 +459,83 @@ canvas#beer-chart {
 .blink-active { 
     animation: blinker 1s step-start infinite !important; 
 }
+
+/* --- THE ARCANE LAB --- */
+.lab-controls {
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.lab-step {
+    background: #1a1a1a;
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.step-title {
+    font-weight: 800;
+    color: var(--accent-color);
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    min-width: 130px;
+}
+
+.step-inputs {
+    display: flex;
+    gap: 15px;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.step-inputs label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.75rem;
+    color: #888;
+    font-weight: 600;
+}
+
+.step-inputs input {
+    background: #000;
+    border: 1px solid #444;
+    color: #fff;
+    padding: 8px;
+    border-radius: 5px;
+    width: 75px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 5px;
+    transition: all 0.3s ease;
+}
+
+.step-inputs input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+    outline: none;
+}
+
+.step-inputs input:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+#lab-json-out {
+    background: #0a0a0a;
+    padding: 20px;
+    border-radius: 10px;
+    color: #a6e22e; /* Ljusgrön kod-färg */
+    overflow-x: auto;
+    font-size: 0.85rem;
+    border: 1px solid #333;
+    font-family: monospace;
+    line-height: 1.5;
+}

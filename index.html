@@ -107,13 +107,60 @@
         <button id="sync-btn" class="sync-button">SYNC TO DEVICE</button>
     </section>
 
-    <section id="view-lab" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
+<section id="view-lab" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
         <div class="library-header">
             <h2>The Arcane Lab</h2>
-            <p style="opacity: 0.6; font-size: 0.9rem;">Bygg din 5-stegsprofil här.</p>
+            <p style="opacity: 0.6; font-size: 0.9rem;">Bygg och exportera din 5-stegsprofil.</p>
         </div>
-        <div style="padding: 40px; text-align: center; color: #444;">
-            <p>Profilbyggaren redo för graf...</p>
+
+        <div class="chart-section" style="margin: 20px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333;">
+            <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 10px; letter-spacing: 1px;">PROFILE PREVIEW</div>
+            <div class="chart-container" style="height: 250px;">
+                <canvas id="lab-chart"></canvas>
+            </div>
+        </div>
+
+        <div class="lab-controls">
+            <div class="lab-step">
+                <div class="step-title">1. Pitch / Start</div>
+                <div class="step-inputs">
+                    <label>Days: <input type="number" id="lab-d1" value="0.0" step="0.1" disabled></label>
+                    <label>Temp (°C): <input type="number" id="lab-t1" value="18.0" step="0.5" oninput="updateLabChart()"></label>
+                </div>
+            </div>
+            <div class="lab-step">
+                <div class="step-title">2. Primary Ferm.</div>
+                <div class="step-inputs">
+                    <label>Days: <input type="number" id="lab-d2" value="5.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Temp (°C): <input type="number" id="lab-t2" value="18.0" step="0.5" oninput="updateLabChart()"></label>
+                </div>
+            </div>
+            <div class="lab-step">
+                <div class="step-title">3. Diacetyl Rest</div>
+                <div class="step-inputs">
+                    <label>Days: <input type="number" id="lab-d3" value="7.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Temp (°C): <input type="number" id="lab-t3" value="20.0" step="0.5" oninput="updateLabChart()"></label>
+                </div>
+            </div>
+            <div class="lab-step">
+                <div class="step-title">4. Cold Crash</div>
+                <div class="step-inputs">
+                    <label>Days: <input type="number" id="lab-d4" value="9.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Temp (°C): <input type="number" id="lab-t4" value="4.0" step="0.5" oninput="updateLabChart()"></label>
+                </div>
+            </div>
+            <div class="lab-step">
+                <div class="step-title">5. Conditioning</div>
+                <div class="step-inputs">
+                    <label>Days: <input type="number" id="lab-d5" value="14.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Temp (°C): <input type="number" id="lab-t5" value="4.0" step="0.5" oninput="updateLabChart()"></label>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin: 20px;">
+            <button class="btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="generateJSON()">GENERATE PROFILE JSON</button>
+            <pre id="lab-json-out">// Din färdiga JSON-kod kommer dyka upp här...</pre>
         </div>
     </section>
 

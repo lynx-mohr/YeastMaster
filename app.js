@@ -544,6 +544,108 @@ function setActive(clickedElement) {
     clickedElement.classList.add('active');
 }
 
+// ==========================================
+// THE ARCANE LAB (Profilbyggaren)
+// ==========================================
+
+let labChart;
+
+function updateLabChart() {
+    const canvas = document.getElementById('lab-chart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    // Hämta värden från alla inputs
+    const dataPoints = [
+        { x: parseFloat(document.getElementById('lab-d1').value) || 0, y: parseFloat(document.getElementById('lab-t1').value) || 0 },
+        { x: parseFloat(document.getElementById('lab-d2').value) || 0, y: parseFloat(document.getElementById('lab-t2').value) || 0 },
+        { x: parseFloat(document.getElementById('lab-d3').value) || 0, y: parseFloat(document.getElementById('lab-t3').value) || 0 },
+        { x: parseFloat(document.getElementById('lab-d4').value) || 0, y: parseFloat(document.getElementById('lab-t4').value) || 0 },
+        { x: parseFloat(document.getElementById('lab-d5').value) || 0, y: parseFloat(document.getElementById('lab-t5').value) || 0 }
+    ];
+
+    // Temafärg
+    let themeAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#00e5ff';
+    
+    // Gradient
+    const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)'); 
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+    if (labChart) {
+        labChart.data.datasets[0].data = dataPoints;
+        labChart.data.datasets[0].borderColor = themeAccent;
+        labChart.update();
+    } else {
+        labChart = new Chart(ctx, {
+            type: 'scatter', // Scatter med showLine är bäst för fristående X/Y-koordinater
+            data: {
+                datasets: [{
+                    label: 'Profile Target Temp',
+                    data: dataPoints,
+                    borderColor: themeAccent,
+                    backgroundColor: gradient,
+                    borderWidth: 3,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: themeAccent,
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                    fill: true,
+                    showLine: true,
+                    tension: 0.1 // Lätt kurvning, men mest raka streck
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'linear',
+                        title: { display: true, text: 'Days', color: '#888', font: {family: 'Inter', weight: 600} },
+                        ticks: { color: '#666' },
+                        grid: { color: 'rgba(255,255,255,0.05)' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Temp (°C)', color: '#888', font: {family: 'Inter', weight: 600} },
+                        ticks: { color: '#666', callback: v => Number(v).toFixed(1) + '°' },
+                        grid: { color: 'rgba(255,255,255,0.05)' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `Day ${context.parsed.x}: ${context.parsed.y}°C`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+// Generera JSON-koden
+function generateJSON() {
+    const steps = [
+        [parseFloat(document.getElementById('lab-d1').value), parseFloat(document.getElementById('lab-t1').value), "PRIMARY"],
+        [parseFloat(document.getElementById('lab-d2').value), parseFloat(document.getElementById('lab-t2').value), "PRIMARY"],
+        [parseFloat(document.getElementById('lab-d3').value), parseFloat(document.getElementById('lab-t3').value), "DIACETYL REST"],
+        [parseFloat(document.getElementById('lab-d4').value), parseFloat(document.getElementById('lab-t4').value), "COLD CRASH"],
+        [parseFloat(document.getElementById('lab-d5').value), parseFloat(document.getElementById('lab-t5').value), "CONDITIONING"]
+    ];
+
+    // Bygg JSON-strängen snyggt
+    const jsonString = `"steps": [\n  [${steps[0].join(', ')}],\n  [${steps[1].join(', ')}],\n  [${steps[2].join(', ')}],\n  [${steps[3].join(', ')}],\n  [${steps[4].join(', ')}]\n]`;
+    
+    document.getElementById('lab-json-out').innerText = jsonString;
+}
+
+// Ladda grafen direkt när sidan startar
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(updateLabChart, 500); // Liten delay så canvasen hinner få sin storlek
+});
 
 
 
