@@ -52,16 +52,15 @@
                     </div>
                 </div>
                 
-           <div class="right-col">
-    <div class="highlight-box" id="strain-val">--</div>
-    
-    <div id="profile-val" style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; opacity: 0.7;">--</div>
-    
-    <div class="action-status">
-        <span id="status-arrow" class="blink-active">▼</span>
-        <span id="action-val">--</span>
-    </div>
-</div>
+                <div class="right-col">
+                    <div class="highlight-box" id="strain-val">--</div>
+                    <div id="profile-val" style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; opacity: 0.7;">--</div>
+                    <div class="action-status">
+                        <span id="status-arrow" class="blink-active">▼</span>
+                        <span id="action-val">--</span>
+                    </div>
+                </div>
+            </div>
 
             <hr class="separator-line">
 
@@ -178,10 +177,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="app.js"></script>
 
-<script>
+    <script>
         // Detta skript körs istället och förstår dina exakta ID:n!
-        // Nytt: Vi har lagt till "addToHistory" för att hantera webbläsarens back-knapp
-        window.showView = function(viewName, clickedElement, addToHistory = true) {
+        window.showView = function(viewName, clickedElement) {
             
             // 1. Dölj precis allting först
             const allViews = [
@@ -207,6 +205,7 @@
             // 3. Visa rätt element
             const targetEl = document.getElementById(targetId);
             if (targetEl) {
+                // Inloggning/claim använder 'flex' för centrering, resten kör 'block'
                 if (viewName === 'login' || viewName === 'claim') {
                     targetEl.style.display = 'flex';
                 } else {
@@ -214,45 +213,17 @@
                 }
             }
 
-            // 4. Hantera webbläsarens historik (Magin för Back-knappen!)
-            // Vi loggar inte login/claim för vi vill inte att folk ska kunna "backa" in i inloggningen
-            if (addToHistory && viewName !== 'login' && viewName !== 'claim') {
-                history.pushState({ view: viewName }, '', '#' + viewName);
+            // 4. Uppdatera ikoner om klicket kom från menyn
+            if (clickedElement) {
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                clickedElement.classList.add('active');
             }
-
-            // 5. Uppdatera ikoner i menyn
-            document.querySelectorAll('.nav-item').forEach(nav => {
-                nav.classList.remove('active');
-                // Om vi klickade på en ikon, tänd den. 
-                // Om vi tryckte "Bakåt" letar koden själv upp rätt knapp att tända!
-                if (clickedElement && nav === clickedElement) {
-                    nav.classList.add('active');
-                } else if (!clickedElement && nav.getAttribute('onclick').includes("'" + viewName + "'")) {
-                    nav.classList.add('active');
-                }
-            });
             
-            // 6. Scrolla högst upp
+            // 5. Scrolla högst upp
             window.scrollTo(0,0);
         };
-
-        // LYSSNARE FÖR BACK-KNAPPEN
-        // Detta körs när användaren klickar på "Bakåt" eller "Framåt" i webbläsaren/mobilen
-        window.addEventListener('popstate', function(event) {
-            if (event.state && event.state.view) {
-                // Anropa showView, men säg 'false' så den inte skapar en oändlig loop i historiken
-                showView(event.state.view, null, false);
-            }
-        });
-
-        // Sätt initial state när sidan laddas så första klicket bakåt inte stänger appen
-        window.addEventListener('DOMContentLoaded', () => {
-            // Kolla om vi har laddat om sidan och redan är i t.ex. #library
-            let initialView = window.location.hash ? window.location.hash.substring(1) : 'dashboard';
-            if(initialView !== 'login' && initialView !== 'claim') {
-                history.replaceState({ view: initialView }, '', '#' + initialView);
-            }
-        });
     </script>
 
 </body>
