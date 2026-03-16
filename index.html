@@ -223,7 +223,7 @@
                 'view-dashboard', 
                 'view-library', 
                 'view-lab', 
-                'view-settings'
+                'view-settings',
                 'view-soul',       
                 'view-librarian'   
             ];
@@ -255,14 +255,16 @@
                 history.pushState({ view: viewName }, '', '#' + viewName);
             }
 
-            // 5. Uppdatera ikoner i menyn
+          // 5. Uppdatera ikoner och text i menyn (Idiotsäker version)
             document.querySelectorAll('.nav-item').forEach(nav => {
+                // Släck alla knappar först
                 nav.classList.remove('active');
-                // Om vi klickade på en ikon, tänd den. 
-                // Om vi tryckte "Bakåt" letar koden själv upp rätt knapp att tända!
-                if (clickedElement && nav === clickedElement) {
-                    nav.classList.add('active');
-                } else if (!clickedElement && nav.getAttribute('onclick').includes("'" + viewName + "'")) {
+                
+                // Hämta koden som står i knappens "onclick" (t.ex. "showView('soul', this)")
+                const onclickCode = nav.getAttribute('onclick') || '';
+                
+                // Om knappens kod innehåller namnet på vyn vi just öppnade... Tänd den!
+                if (onclickCode.includes("'" + viewName + "'")) {
                     nav.classList.add('active');
                 }
             });
