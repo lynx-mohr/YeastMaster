@@ -6,7 +6,6 @@
 }
 
 html, body {
-    /* Detta tvingar webbläsaren att aldrig låta sidan bli bredare än skärmen */
     width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
@@ -21,67 +20,38 @@ body {
     flex-direction: column; 
     align-items: center; 
     min-height: 100vh; 
-    padding: 15px;
-    /* Denna rad ser till att sidomenyn inte trycker ut bodyn */
     overflow-x: hidden; 
 }
 
-/* Light Mode-överskridning */
-body.light-mode {
-    --oled-bg: #f5f5f5;
-    --oled-color: #111111;
-    background-color: #e0e0e0;
-}
-
-body.light-mode .oled-screen {
-    border-color: #ccc;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
+/* Light Mode & Teman */
 :root { 
     --oled-color: #e0e0e0; 
     --oled-bg: #000000; 
     --accent-color: #00e5ff;
 }
 
-/* --- LIGHT MODE INVERSION --- */
 body.light-mode {
-    --oled-bg: #ffffff;    /* Bakgrunden blir vit */
-    --oled-color: #111111; /* Texten blir mörkgrå/svart */
-    background-color: #f0f0f0; /* Området utanför skärmen blir ljust grått */
+    --oled-bg: #ffffff;    
+    --oled-color: #111111; 
+    background-color: #f0f0f0; 
 }
 
 body.light-mode .oled-screen {
-    background-color: #ffffff;
-    border-color: #ddd; /* Ljusare ram för ljust läge */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* En mjuk skugga istället för glöd */
+    border-color: #ddd; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
 }
 
-/* Fix för separator-strecket så det syns bra */
-body.light-mode .separator-line {
-    border-top: 2px solid #eee;
-}
+body.light-mode .separator-line { border-top: 2px solid #eee; }
+body.light-mode .btn-primary { border: 1px solid #ccc; }
 
-/* Fix för knappar så de inte blir osynliga */
-body.light-mode .btn-primary {
-    border: 1px solid #ccc;
-}
-
-/* --- 2. CONTAINERS (Felsäkra inställningar) --- */
-#dashboard-container { 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    width: 100%; 
-}
-
+/* --- 2. CONTAINERS & AUTH --- */
 #login-container, #claim-container {
     display: none;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Lägg till denna för vertikal centrering */
+    justify-content: center; 
     width: 100%;
-    min-height: 80vh; /* Ger containern höjd så den kan centrera på mitten av skärmen */
+    min-height: 80vh; 
 }
 
 .auth-box {
@@ -94,162 +64,17 @@ body.light-mode .btn-primary {
     max-width: 350px;
 }
 
-/* --- 3. NAVIGATION (DISRETA STRECK - PC & MOBIL) --- */
-.main-nav {
-    position: fixed;
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(10px);
+/* --- 3. VYER & OLED SCREEN (HÄR ÄR FIXEN) --- */
+section[id^="view-"] {
+    width: 100%;
     display: flex;
-    z-index: 2000;
-    pointer-events: none;
-}
-
-.nav-item {
-    cursor: pointer;
-    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    /* Här ger vi knappen en yta så den syns och går att klicka på */
-    width: 60px;
-    height: 60px;
-    pointer-events: auto;
 }
 
-.nav-indicator {
-    display: block;
-    background: #333; /* Det mörka strecket */
-    border-radius: 2px;
-    transition: 0.3s ease;
-}
-
-.nav-item.active .nav-indicator {
-    background: var(--accent-color);
-    box-shadow: 0 0 15px var(--accent-color);
-}
-
-/* PC-VY: Sidomeny till vänster */
-@media (min-width: 601px) {
-   .main-nav {
-        /* 1. POSITION & STORLEK */
-        left: 20px;          /* Lite luft från vänsterkanten */
-        top: 50%;            /* Placera toppen i mitten av skärmen */
-        transform: translateY(-50%); /* Justera så den centreras exakt vertikalt */
-        width: 50px;         /* Gör själva fältet smalare */
-        height: fit-content; /* Låt fältet bara vara så långt som knapparna kräver */
-        bottom: auto;        /* Släpp låsningen i botten */
-
-        /* 2. UTSEENDE */
-        padding: 20px 0;     /* Ger lite luft inuti fältet över/under knapparna */
-        background: rgba(0, 0, 0, 0.85); 
-        border: 1px solid #222;
-        border-radius: 40px; /* Runda hörn för en modern "piller"-look */
-        
-        /* Behåll dessa */
-        flex-direction: column;
-        justify-content: center;
-        gap: 20px; 
-        z-index: 2000;
-        pointer-events: none;
-    }
-
-    /* 3. JUSTERA RESTEN AV SIDAN */
-    body { 
-        padding-left: 100px; /* Detta avstånd styr hur långt dashboarden flyttas från kanten */
-    }
- /* --- IKON-STYLING --- */
-.nav-icon {
-    width: 28px;        /* Lagom storlek för klickvänlighet */
-    height: 28px;
-    fill: #555;         /* Grå när den är inaktiv */
-    transition: all 0.3s ease;
-    filter: drop-shadow(0 0 0px transparent);
-}
-
-/* När en ikon är aktiv (vald) */
-.nav-item.active .nav-icon {
-    fill: var(--accent-color); /* Blir blå/orange/röd beroende på inställning */
-    filter: drop-shadow(0 0 8px var(--accent-color)); /* Glöd-effekt! */
-    transform: scale(1.1); /* Blir lite större för feedback */
-}
-
-/* Hover-effekt för att visa att den går att klicka på */
-.nav-item:hover .nav-icon {
-    fill: #aaa;
-}
-    /* VIKTIGT: Vi puttar body 80px åt höger så menyn inte ligger över kanten */
-    body { padding-left: 110px; }
-}
-
-/* --- EN ENDA MOBIL-VAKT FÖR HELA FILEN --- */
-@media (max-width: 600px) {
-    .main-nav {
-        bottom: 0; left: 0; right: 0;
-        height: 70px;
-        flex-direction: row;
-         gap: 10px;
-        justify-content: space-around;
-        border-top: 1px solid #222;
-    }
-    .nav-indicator {
-        width: 45px; height: 5px;
-    }
-   body { 
-        padding-left: 10px !important; 
-        padding-right: 10px !important;
-    }
-
-    #dashboard-container {
-        width: 100%;
-        overflow-x: hidden;
-        display: block; 
-    }
-.oled-screen {
-        width: 100% !important; /* Låt den ta platsen den får på mobilen */
-    }
-.carboy-wrapper {
-
-        /* Sänk från 1.3 till 1.15 - den ser fortfarande stor ut men får plats */
-        transform: scale(1.15) !important; 
-        transform-origin: center left !important;
-        margin-left: -5px !important;
-    }
-    .main-display { margin-bottom: -75px !important; }
-
-.action-status { 
-        font-size: 1.1rem !important; 
-        gap: 4px !important;
-        margin-top:-5px !important;
-      transform: translate(-10px) !important;
-        }
-
-    .air-floating {
-        top: 135px !important;
-        left: 110px !important;
-        font-size: 0.65rem !important;
-    }
-
-    .highlight-box {
-        font-size: 1.1rem !important; /* Lite mindre på mobilen */
-        padding: 3px 8px !important;
-        margin-bottom: 5px !important;
-    }
-
-    .right-col { 
-    width: 50%; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: flex-end; /* Texten trycks till högerkanten */
-    text-align: right;
-    padding-bottom: 75px !important; 
-}
-    .beer-temp { font-size: 1.25rem !important; top: 58% !important; }
-
-} 
-
-/* --- 4. HUVUDVY PC (DIN MILLIMETERPRECISION ÅTERSTÄLLD) --- */
 .oled-screen { 
     width: 100%; 
-    max-width: 450px; /* Detta hindrar den från att bli för bred på PC */
+    max-width: 450px; /* PC Standardbredd */
     background-color: var(--oled-bg); 
     border: 3px solid #333; 
     border-radius: 8px; 
@@ -259,6 +84,7 @@ body.light-mode .btn-primary {
     margin-left: auto;
     margin-right: auto;
     overflow: hidden;
+    text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3);
 }
 
 .main-display {
@@ -274,7 +100,7 @@ body.light-mode .btn-primary {
     display: flex; 
     justify-content: center; 
     position: relative; 
-    margin-top: -55px; /* DIN VIKTIGA OFFSET */
+    margin-top: -55px; 
 }
 
 .right-col { 
@@ -286,7 +112,7 @@ body.light-mode .btn-primary {
     padding-bottom: 75px !important; 
 }
 
-/* --- 5. DAMEJEANG & TEMPERATUR --- */
+/* --- 4. DAMEJEANG & TEMPERATUR --- */
 .carboy-wrapper { 
     position: relative; 
     width: 230px; 
@@ -315,8 +141,7 @@ body.light-mode .btn-primary {
 .air-floating {
     position: absolute;
     top: 145px; 
-    left: 150px; /* DIN EXAKTA POSITION */
-    right: auto !important;
+    left: 150px; 
     font-size: 0.85rem;
     font-weight: 600;
     opacity: 0.6;
@@ -324,7 +149,7 @@ body.light-mode .btn-primary {
     z-index: 10;
 }
 
-/* --- 6. KOMPONENTER --- */
+/* --- 5. KOMPONENTER --- */
 .separator-line { 
     border: none; 
     border-top: 3px solid var(--oled-color); 
@@ -333,16 +158,15 @@ body.light-mode .btn-primary {
     margin: 0; 
 }
 
-/* --- 6. KOMPONENTER (Gäller både PC & MOBIL) --- */
 .highlight-box { 
-    background-color: var(--oled-color); /* Den vita bakgrunden */
-    color: var(--oled-bg);              /* Den svarta texten */
+    background-color: var(--oled-color); 
+    color: var(--oled-bg);              
     font-size: 1.4rem; 
     font-weight: 800; 
     padding: 4px 12px; 
     margin-bottom: 12px; 
     display: inline-block;
-    white-space: nowrap; /* Detta hindrar namnet från att delas upp på två rader */
+    white-space: nowrap; 
 }
 
 .action-status { 
@@ -354,7 +178,7 @@ body.light-mode .btn-primary {
     gap: 8px;
 }
 
-/* --- 7. PROGRESS & CHART (ALLA DINA RADER) --- */
+/* --- 6. PROGRESS & CHART --- */
 .progress-section { 
     text-align: left; 
     padding: 35px 5px 0 5px; 
@@ -378,12 +202,9 @@ body.light-mode .btn-primary {
     margin-bottom: 20px;
 }
 
-.progress-widget {
-    margin-bottom: 25px;
-}
+.progress-widget { margin-bottom: 25px; }
+#profile-val { margin-bottom: 2px !important; }
 
-#profile-val {margin-bottom: 2px !important;
-}
 .phase-info {
     margin-top: 25px;
     margin-bottom: 10px;
@@ -406,26 +227,28 @@ body.light-mode .btn-primary {
     border-top: 1px solid #333; 
 }
 
-
-
-
-.yeast-card {
-    /* ... behåll din gamla kod här ... */
-    pointer-events: auto !important;
+.chart-container { 
+    height: 110px; 
+    position: relative; 
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
 }
 
-/* Lägg till detta för att få tillbaka hover-effekten på PC */
-.yeast-card:hover {
-    border-color: var(--accent-color) !important;
-    background: #111 !important;
+canvas#beer-chart {
+    max-width: 100% !important;
+    display: block;
 }
 
-/* --- 9. BIBLIOTEK & LAB (HÄR FYLLER VI PÅ) --- */
+/* --- 7. BIBLIOTEK & KNAPPAR --- */
+.library-header { width: 100%; text-align: left; margin-bottom: 20px; }
+
 .yeast-grid { 
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
     gap: 8px; 
     padding: 15px; 
+    width: 100%;
 }
 
 .yeast-card {
@@ -438,23 +261,12 @@ body.light-mode .btn-primary {
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+    pointer-events: auto !important;
 }
 
-.lab-graph-container {
-    background: #050505;
-    border: 1px solid #222;
-    margin: 15px;
-    border-radius: 12px;
-    height: 180px;
-    padding: 10px;
-}
-
-/* --- 9. STABILISERING & KNAPP-STYLING --- */
-
-/* Denna rad gör att biblioteket hamnar "överst" så du kan klicka */
-#view-library, #yeast-grid {
-    position: relative;
-    z-index: 10;
+.yeast-card:hover {
+    border-color: var(--accent-color) !important;
+    background: #111 !important;
 }
 
 .logout-btn, #btn-logout { 
@@ -472,19 +284,67 @@ body.light-mode .btn-primary {
 
 .logout-btn:hover { opacity: 1; border-color: var(--accent-color); }
 
-/* Gör den nya "Back"-knappen snygg */
-button#back-btn, .back-btn {
-    background: #222;
-    border: 1px solid #444;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
+/* --- 8. NAVIGATION --- */
+.main-nav {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    display: flex;
+    z-index: 2000;
+    pointer-events: none;
 }
 
-/* Säkra att damejeangen och stats ligger sida vid sida på PC */
+.nav-item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    pointer-events: auto;
+}
+
+.nav-icon {
+    width: 28px;        
+    height: 28px;
+    fill: #555;         
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 0px transparent);
+}
+
+.nav-item.active .nav-icon {
+    fill: var(--accent-color); 
+    filter: drop-shadow(0 0 8px var(--accent-color)); 
+    transform: scale(1.1); 
+}
+
+.nav-item:hover .nav-icon { fill: #aaa; }
+
+/* --- 9. ANIMATIONER --- */
+@keyframes blinker { 50% { opacity: 0; } }
+.blink-active { animation: blinker 1s step-start infinite !important; }
+
+/* ========================================= */
+/* --- 10. PC-VAKTPOST (BRED SKÄRM) --- */
+/* ========================================= */
 @media (min-width: 601px) {
+    body { padding-left: 110px !important; padding-top: 20px; }
+    
+    .main-nav {
+        left: 20px;          
+        top: 50%;            
+        transform: translateY(-50%); 
+        width: 50px;         
+        height: fit-content; 
+        bottom: auto;        
+        padding: 20px 0;     
+        border: 1px solid #222;
+        border-radius: 40px; 
+        flex-direction: column;
+        justify-content: center;
+        gap: 20px; 
+    }
+
     .main-display {
         display: flex !important;
         flex-direction: row !important;
@@ -492,25 +352,72 @@ button#back-btn, .back-btn {
     }
 }
 
-.chart-container { 
-    height: 110px; 
-    position: relative; 
-    /* Vi låser bredden stenhårt till föräldern (.oled-screen) */
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-}
+/* ========================================= */
+/* --- 11. MOBIL-VAKTPOST (SMAL SKÄRM) --- */
+/* ========================================= */
+@media (max-width: 600px) {
+    body { 
+        padding-left: 10px !important; 
+        padding-right: 10px !important;
+        padding-top: 10px !important;
+        padding-bottom: 80px !important; 
+    }
 
-/* Denna rad tvingar själva grafen att hålla sig inuti containern */
-canvas#beer-chart {
-    max-width: 100% !important;
-    display: block;
-}
+    .main-nav {
+        bottom: 0; left: 0; right: 0; top: auto;
+        height: 70px;
+        width: 100%;
+        border-radius: 0;
+        flex-direction: row;
+        gap: 10px;
+        justify-content: space-around;
+        border-top: 1px solid #222;
+        border-right: none;
+        transform: none;
+        padding: 0;
+    }
+    
+    .oled-screen {
+        width: 100% !important;
+        max-width: 380px !important; 
+        padding: 12px !important;
+    }
 
-@keyframes blinker { 
-    50% { opacity: 0; } 
-}
+    .carboy-wrapper {
+        transform: scale(1.15) !important; 
+        transform-origin: center left !important;
+        margin-left: -5px !important;
+    }
+    
+    .main-display { margin-bottom: -75px !important; }
 
-.blink-active { 
-    animation: blinker 1s step-start infinite !important; 
+    .action-status { 
+        font-size: 1.1rem !important; 
+        gap: 4px !important;
+        margin-top:-5px !important;
+        transform: translate(-10px) !important;
+    }
+
+    .air-floating {
+        top: 135px !important;
+        left: 110px !important;
+        font-size: 0.65rem !important;
+    }
+
+    .highlight-box {
+        font-size: 1.1rem !important; 
+        padding: 3px 8px !important;
+        margin-bottom: 5px !important;
+    }
+
+    .right-col { 
+        width: 50%; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: flex-end; 
+        text-align: right;
+        padding-bottom: 60px !important; 
+    }
+    
+    .beer-temp { font-size: 1.25rem !important; top: 58% !important; }
 }
