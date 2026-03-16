@@ -78,27 +78,29 @@ function setActive(clickedElement) {
 
 // --- 2. INLOGGNINGS-VAKT ---
 auth.onAuthStateChanged(async (user) => {
+    const soulLoginPrompt = document.getElementById('soul-login-prompt');
+    
     if (user) {
-        // INLOGGAD
+        // Om användaren är inloggad, dölj login-knappen på Soul of Beer-sidan
+        if (soulLoginPrompt) soulLoginPrompt.style.display = 'none';
+
         try {
             const res = await fetch(`${API_BASE}/my-devices?uid=${user.uid}`);
             const devices = await res.json();
-
             if (devices.length > 0) {
                 activeDeviceId = devices[0].device_id;
-                showView('dashboard'); // Direkt till jäsningen!
+                showView('dashboard');
                 updateDashboard();
-                setInterval(updateDashboard, 20000);
             } else {
-                showView('claim'); // Ny användare utan maskin
+                showView('claim');
             }
         } catch (err) {
-            console.error("Fel vid enhetskoll:", err);
-            showView('dashboard'); 
+            console.error(err);
         }
     } else {
-        // INTE INLOGGAD - Visa landningssidan (Soul of Beer)
-        showView('soul'); 
+        // Om användaren är utloggad, visa login-knappen på Soul of Beer-sidan
+        if (soulLoginPrompt) soulLoginPrompt.style.display = 'block';
+        showView('soul');
     }
 });
 
@@ -397,7 +399,15 @@ if(document.getElementById('btn-claim')) {
 
 if(document.getElementById('btn-logout')) {
     document.getElementById('btn-logout').addEventListener('click', () => {
-        auth.signOut();
+        auth.signOut().then(() => {
+            // Nollställ lokala variabler
+            activeDeviceId = null;
+            // Tvinga fram Soul of Beer-vyn
+            showView('soul');
+            console.log("Utloggad och skickad till Soul of Beer");
+        }).catch((error) => {
+            console.error("Logout-fel:", error);
+        });
     });
 }
 
