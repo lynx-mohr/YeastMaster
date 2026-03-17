@@ -407,6 +407,27 @@ canvas#beer-chart {
         padding: 0;
     }
     
+    /* Tvinga fram 2 kolumner för jästbiblioteket på mobil */
+    .yeast-grid {
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 6px !important;
+        padding: 10px !important;
+    }
+
+    /* Gör korten lite mer kompakta inuti */
+    .yeast-card {
+        padding: 0 8px !important;
+    }
+
+    /* Minska texten och lägg till "..." om namnet är för långt */
+    .yeast-card h3 {
+        font-size: 0.75rem !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-right: 5px; /* Skapa lite avstånd till stjärnan */
+    }
+    
     .oled-screen {
         width: 100% !important;
         max-width: 380px !important; 
