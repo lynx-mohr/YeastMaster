@@ -264,9 +264,12 @@ canvas#beer-chart {
     pointer-events: auto !important;
 }
 
-.yeast-card:hover {
+/* Tillämpas när jäststammen är stjärnmarkerad */
+.yeast-card.selected {
     border-color: var(--accent-color) !important;
     background: #111 !important;
+    /* Valfritt: Lägg till ett mjukt sken runt kortet för extra tydlighet */
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.15); 
 }
 
 .logout-btn, #btn-logout { 
@@ -427,7 +430,7 @@ canvas#beer-chart {
         text-overflow: ellipsis;
         margin-right: 5px; /* Skapa lite avstånd till stjärnan */
     }
-    
+
     .oled-screen {
         width: 100% !important;
         max-width: 380px !important; 
@@ -644,11 +647,11 @@ canvas#beer-chart {
 
 /* --- LIGHT MODE JUSTERINGAR FÖR NYA MODULER --- */
 
-.light-mode .yeast-card {
-    background: #fff;
-    border-color: #eee;
-    color: #222;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+/* Samma sak för Light Mode så det syns bra där också */
+.light-mode .yeast-card.selected {
+    border-color: var(--accent-color) !important;
+    background: #f9f9f9 !important;
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
 }
 
 .light-mode .yeast-card h3 {
