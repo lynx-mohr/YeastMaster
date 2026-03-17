@@ -1,6 +1,13 @@
 {
+  "orientation": "portrait",
+  "name": "YeastMaster Live",
   "short_name": "YeastMaster",
-  "name": "YeastMaster Live 2.0",
+  "description": "Vittnesskyddat moln för din bryggning",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icon.png",
@@ -11,11 +18,9 @@
     {
       "src": "icon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ],
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000"
+  ]
 }
+
