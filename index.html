@@ -31,100 +31,7 @@
         </div>
     </div>
 
-<section id="view-soul" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
-        <div class="library-header">
-            <h2>The Soul of Beer</h2>
-            <p style="opacity: 0.6; font-size: 0.9rem;">Utforska bryggerijästens magiska värld.</p>
-            <svg viewBox="0 0 100 130" width="120" height="150" xmlns="http://www.w3.org/2000/svg" style="margin-top: 20px;">
-                <path class="liquid-fill" d="M 20 85 C 20 105, 30 120, 50 120 C 70 120, 80 105, 80 85 C 80 75, 75 65, 68 58 L 32 58 C 25 65, 20 75, 20 85 Z" />
-                <path class="glass-line" d="M 40 35 L 40 45 C 25 55, 15 70, 15 90 C 15 115, 30 125, 50 125 C 70 125, 85 115, 85 90 C 85 70, 75 55, 60 45 L 60 35 Z" stroke="var(--oled-color)" fill="none" stroke-width="2" />
-                <line class="glass-line" x1="35" y1="35" x2="65" y2="35" stroke="var(--oled-color)" stroke-width="2" />
-                <polygon points="42,25 58,25 55,35 45,35" fill="#333" />
-                <path class="airlock" d="M 50 25 L 50 15 C 50 5, 60 5, 60 15 C 60 25, 70 25, 70 15 L 70 5" fill="none" stroke="#888" stroke-width="2" />
-                <circle class="bubble" cx="45" cy="100" r="2" fill="var(--accent-color)" />
-                <circle class="bubble" cx="55" cy="85" r="3" fill="var(--accent-color)" />
-                <circle class="bubble" cx="35" cy="75" r="1.5" fill="var(--accent-color)" />
-            </svg>
-        </div>
-        <div style="padding: 20px; color: #fff; line-height: 1.6;">
-            <p>Här börjar resan för varje fantastisk öl. Jästen är hantverkets själ.</p>
-            <div style="background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; margin: 20px 0;">
-                <h3 style="color: var(--accent-color); margin-top: 0;">Vad är YeastMaster?</h3>
-                <p style="font-size: 0.9rem; opacity: 0.8;">Vårt system för total kontroll över jäsningsprocessen genom realtidsövervakning.</p>
-            </div>
-            <div id="soul-login-prompt" style="text-align: center; margin-top: 30px;">
-                <button class="btn-primary" onclick="showView('login')">GÅ TILL INLOGGNING</button>
-            </div>
-        </div>
-    </section>
-
-    <section id="view-arcane-lab" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
-        <div class="library-header">
-            <h2>Arcane Lab</h2>
-            <div class="lab-tabs">
-                <button class="lab-tab active" onclick="switchLabTab('calc')">PITCH CALC</button>
-                <button class="lab-tab" onclick="switchLabTab('academy')">ACADEMY</button>
-            </div>
-        </div>
-        <div id="lab-content-calc">
-            <div class="calc-container">
-                <div class="calc-inputs">
-                    <div class="input-group"><label>Batch Volume (L)</label><input type="number" id="pitch-vol" value="20" oninput="calculatePitch()"></div>
-                    <div class="input-group"><label>Gravity (OG)</label><input type="number" id="pitch-og" value="1.050" step="0.001" oninput="calculatePitch()"></div>
-                    <div class="input-group">
-                        <label>Pitch Rate</label>
-                        <select id="pitch-rate" onchange="calculatePitch()">
-                            <option value="0.75">0.75 (Standard Ale)</option>
-                            <option value="1.5">1.5 (Standard Lager)</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="calc-results">
-                    <div class="res-card"><span class="res-label">CELLS NEEDED</span><span class="res-val" id="res-needed">--</span></div>
-                    <div class="res-card accent"><span class="res-label">EST. VIABILITY</span><span class="res-val" id="res-viability">--</span></div>
-                </div>
-            </div>
-        </div>
-        <div id="lab-content-academy" style="display:none; padding: 20px;">
-            <h3 style="color:var(--accent-color)">Academy</h3>
-            <p style="opacity:0.7">Guider om mikrobiologi kommer snart...</p>
-        </div>
-    </section>
-
-    <section id="view-profiler" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
-        <div class="library-header">
-            <h2>Profiler</h2>
-            <p style="opacity: 0.6; font-size: 0.9rem;">A Profiler creates profiles.</p>
-        </div>
-        <div class="chart-section" style="margin: 20px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333;">
-            <div class="chart-container" style="height: 250px;"><canvas id="lab-chart"></canvas></div>
-        </div>
-        <div class="lab-controls">
-            <div class="lab-step">
-                <div class="step-title">Ferm. Profile Steps</div>
-                <div class="step-inputs">
-                    <label>T1: <input type="number" id="lab-t1" value="18.0" oninput="updateLabChart()"></label>
-                    <label>T2: <input type="number" id="lab-t2" value="18.0" oninput="updateLabChart()"></label>
-                    </div>
-            </div>
-        </div>
-        <div style="margin: 20px;">
-            <button class="btn-primary" style="width: 100%;" onclick="generateJSON()">GENERATE PROFILE JSON</button>
-            <pre id="lab-json-out" style="font-size: 0.7rem; margin-top: 10px;"></pre>
-        </div>
-    </section>
-
-    <section id="view-library" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
-        <div class="library-header">
-            <h2>Yeast Library</h2>
-            <div class="sync-status">Selected: <span id="fav-count">0</span>/10</div>
-            <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA')...">
-        </div>
-        <div class="yeast-grid" id="yeast-grid"></div>
-        <button id="sync-btn" class="sync-button">SYNC TO DEVICE</button>
-    </section>
-
-    <section id="view-live" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
+    <section id="view-dashboard" style="display: none;">
         <div class="oled-screen"> 
             <div class="main-display">
                 <div class="left-col"> 
@@ -132,31 +39,129 @@
                         <div class="air-floating">Air: <span id="air-temp-val">--</span>°C</div>
                         <svg viewBox="0 0 100 92" class="carboy-svg">
                             <defs>
-                                <linearGradient id="liquid-fill-live" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <linearGradient id="liquid-fill" x1="0%" y1="0%" x2="0%" y2="100%">
                                     <stop offset="32%" stop-color="transparent" /> 
                                     <stop offset="32%" stop-color="#4a4a4a" />
                                 </linearGradient>
                             </defs>
-                            <path class="glass-line" d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" style="fill: url(#liquid-fill-live) !important;" stroke="var(--oled-color)" stroke-width="2.5" />
+                            <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
+                            <path class="glass-line" d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" style="fill: url(#liquid-fill) !important;" stroke="var(--oled-color)" stroke-width="2.5" />
+                            <g id="bubble-stream"></g>
                         </svg>
                         <div class="beer-temp"><span id="temp-beer-val">--</span>°C</div>
                     </div>
                 </div>
+                
                 <div class="right-col">
                     <div class="highlight-box" id="strain-val">--</div>
-                    <div id="profile-val" style="opacity: 0.7;">--</div>
-                    <div class="action-status"><span id="action-val">--</span></div>
+                    <div id="profile-val" style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; opacity: 0.7;">--</div>
+                    <div class="action-status">
+                        <span id="status-arrow" class="blink-active">▼</span>
+                        <span id="action-val">--</span>
+                    </div>
                 </div>
             </div>
+
+            <hr class="separator-line">
+
             <div class="progress-section">
-                <div class="progress-bar-bg"><div id="progress-fill" class="progress-fill-anim"></div></div>
+                <div style="font-size: 1.2rem; font-weight: 800; letter-spacing: 1px;">PROGRESS</div>
+                <hr style="border-top: 1px dashed #555; margin: 4px 0 10px 0; opacity: 0.6;">
+                <div class="progress-widget">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; color: #888;">
+                        <span>START</span>
+                        <span id="progress-percent">0%</span>
+                        <span>READY</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="progress-fill" class="progress-fill-anim"></div>
+                    </div>
+                </div>
+
                 <div class="phase-info">
-                    <div class="phase-row">Phase: <span id="status-text">--</span></div>
+                    <div class="phase-row">Phase: <span id="status-text" style="font-weight: 800; color: #fff;">--</span></div>
+                    <div class="day-row">Days since start: <span id="day-val" style="color: var(--oled-color);">0.0</span></div>
+                    <div class="phase-day-row">Days in phase: <span id="phase-day-val" style="color: var(--accent-color);">0.0</span></div>
+                    <div class="target-temp-row">Goal temp in phase: <span id="target-temp-val" style="color: #0088ff;">0.0</span>°C</div>
                 </div>
             </div>
-            <div class="chart-section"><canvas id="beer-chart"></canvas></div>
+
+            <div class="chart-section">
+                <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 4px; letter-spacing: 1px;">TEMP HISTORY</div>
+                <div class="chart-container">
+                    <canvas id="beer-chart"></canvas>
+                </div>
+            </div>
         </div> 
-        <button id="btn-logout" class="btn-secondary">LOGGA UT</button>
+   <button id="btn-logout" class="btn-secondary">LOGGA UT</button>
+    </section>
+
+    <section id="view-library" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
+        <div class="library-header">
+            <h2>Yeast Library</h2>
+            <div class="sync-status">Selected: <span id="fav-count">0</span>/10</div>
+            <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
+        </div>
+        <div class="yeast-grid" id="yeast-grid">
+            </div>
+        <button id="sync-btn" class="sync-button">SYNC TO DEVICE</button>
+    </section>
+
+<section id="view-lab" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
+        <div class="library-header">
+            <h2>The Arcane Lab</h2>
+            <p style="opacity: 0.6; font-size: 0.9rem;">Bygg och exportera din 5-stegsprofil.</p>
+        </div>
+
+        <div class="chart-section" style="margin: 20px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333;">
+            <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 10px; letter-spacing: 1px;">PROFILE PREVIEW</div>
+            <div class="chart-container" style="height: 250px;">
+                <canvas id="lab-chart"></canvas>
+            </div>
+        </div>
+
+        <div class="lab-controls">
+            <div class="lab-step">
+                <div class="step-title">1. Pitch / Start</div>
+                <div class="step-inputs">
+                    <label>Days: <input type="number" id="lab-d1" value="0.0" step="0.1" disabled></label>
+                    <label>Temp (°C): <input type="number" id="lab-t1" value="18.0" step="0.5" oninput="updateLabChart()"></label>
+                </div>
+            </div>
+            <div class="lab-step">
+                <div class="step-title">2. Primary Ferm.</div>
+                <div class="step-inputs">
+                    <label>Days: <input type="number" id="lab-d2" value="5.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Temp (°C): <input type="number" id="lab-t2" value="18.0" step="0.5" oninput="updateLabChart()"></label>
+                </div>
+            </div>
+            <div class="lab-step">
+                <div class="step-title">3. Diacetyl Rest</div>
+                <div class="step-inputs">
+                    <label>Days: <input type="number" id="lab-d3" value="7.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Temp (°C): <input type="number" id="lab-t3" value="20.0" step="0.5" oninput="updateLabChart()"></label>
+                </div>
+            </div>
+            <div class="lab-step">
+                <div class="step-title">4. Cold Crash</div>
+                <div class="step-inputs">
+                    <label>Days: <input type="number" id="lab-d4" value="9.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Temp (°C): <input type="number" id="lab-t4" value="4.0" step="0.5" oninput="updateLabChart()"></label>
+                </div>
+            </div>
+            <div class="lab-step">
+                <div class="step-title">5. Conditioning</div>
+                <div class="step-inputs">
+                    <label>Days: <input type="number" id="lab-d5" value="14.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Temp (°C): <input type="number" id="lab-t5" value="4.0" step="0.5" oninput="updateLabChart()"></label>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin: 20px;">
+            <button class="btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="generateJSON()">GENERATE PROFILE JSON</button>
+            <pre id="lab-json-out">// Din färdiga JSON-kod kommer dyka upp här...</pre>
+        </div>
     </section>
 
     <section id="view-settings" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
@@ -164,37 +169,173 @@
             <h2>Settings</h2>
             <p style="opacity: 0.6; font-size: 0.9rem;">Anpassa din YeastMaster</p>
         </div>
-        <div style="padding: 20px;">
-            <button onclick="toggleTheme()" class="btn-primary" style="width: 100%;">SWITCH LIGHT / DARK</button>
+        <div style="padding: 20px; display: flex; flex-direction: column; gap: 35px;">
+            <div>
+                <h3 style="margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 1px; opacity: 0.8;">VISUAL MODE</h3>
+                <button onclick="toggleTheme()" class="logout-btn" style="width: 100%; opacity: 1; border-color: var(--accent-color); margin: 0; background: var(--oled-bg); color: var(--oled-color);">
+                    SWITCH LIGHT / DARK
+                </button>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 1px; opacity: 0.8;">ACCENT COLOR</h3>
+                <div style="display: flex; gap: 20px; justify-content: flex-start;">
+                    <div onclick="setAccent('#00e5ff')" style="width: 45px; height: 45px; background: #00e5ff; border-radius: 50%; cursor: pointer; border: 2px solid #fff;"></div>
+                    <div onclick="setAccent('#f39c12')" style="width: 45px; height: 45px; background: #f39c12; border-radius: 50%; cursor: pointer;"></div>
+                    <div onclick="setAccent('#ff003c')" style="width: 45px; height: 45px; background: #ff003c; border-radius: 50%; cursor: pointer;"></div>
+                </div>
+            </div>
         </div>
     </section>
 
+  <section id="view-soul" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
+    <div class="library-header">
+        <h2>Soul of Beer</h2>
+        <p style="opacity: 0.6; font-size: 0.9rem;">Utforska bryggerijästens magiska värld.</p>
+
+        <svg viewBox="0 0 100 130" width="120" height="150" xmlns="http://www.w3.org/2000/svg">
+
+  <path class="liquid-fill" d="M 20 85 C 20 105, 30 120, 50 120 C 70 120, 80 105, 80 85 C 80 75, 75 65, 68 58 L 32 58 C 25 65, 20 75, 20 85 Z" />
+
+  <path class="glass-line" d="M 40 35 L 40 45 C 25 55, 15 70, 15 90 C 15 115, 30 125, 50 125 C 70 125, 85 115, 85 90 C 85 70, 75 55, 60 45 L 60 35 Z" />
+  
+  <line class="glass-line" x1="35" y1="35" x2="65" y2="35" />
+
+  <polygon points="42,25 58,25 55,35 45,35" fill="#333" />
+
+  <path class="airlock" d="M 50 25 L 50 15 C 50 5, 60 5, 60 15 C 60 25, 70 25, 70 15 L 70 5" />
+  <circle cx="70" cy="5" r="3" fill="none" stroke="#888" stroke-width="2"/>
+
+  <circle class="bubble" cx="45" cy="100" r="2" />
+  <circle class="bubble" cx="55" cy="85" r="3" />
+  <circle class="bubble" cx="35" cy="75" r="1.5" />
+  <circle class="bubble" cx="65" cy="95" r="2" />
+</svg>
+
+    </div>
+    
+    <div style="padding: 20px; color: #fff; line-height: 1.6;">
+        <p>Här börjar resan för varje fantastisk öl. Jästen är inte bara en ingrediens, det är hantverkets själ.</p>
+        
+        <div style="background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; margin: 20px 0;">
+            <h3 style="color: var(--accent-color); margin-top: 0;">Vad är YeastMaster?</h3>
+            <p style="font-size: 0.9rem; opacity: 0.8;">
+                YeastMaster är vårt egenutvecklade system för att ge bryggare total kontroll över jäsningsprocessen. 
+                Genom realtidsövervakning och precisionsstyrning av temperatur ser vi till att jästen alltid presterar sitt bästa.
+            </p>
+        </div>
+
+        <div id="soul-login-prompt" style="text-align: center; margin-top: 30px;">
+            <p style="margin-bottom: 15px; font-size: 0.85rem; opacity: 0.6;">Har du en YeastMaster eller vill du skapa ett konto?</p>
+            <button class="btn-primary" onclick="showView('login')">GÅ TILL INLOGGNING</button>
+        </div>
+    </div>
+</section>
+
+ <section id="view-librarian" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
+    <div class="library-header">
+        <h2>Yeast Librarian</h2>
+        <div class="lab-tabs">
+            <button class="lab-tab active" onclick="switchLabTab('calc')">PITCH CALC</button>
+            <button class="lab-tab" onclick="switchLabTab('academy')">ACADEMY</button>
+        </div>
+    </div>
+
+    <div id="lab-content-calc">
+        <div class="calc-container">
+            <div class="calc-inputs">
+                <div class="input-group">
+                    <label>Batch Volume (L)</label>
+                    <input type="number" id="pitch-vol" value="20" oninput="calculatePitch()">
+                </div>
+                <div class="input-group">
+                    <label>Gravity (OG)</label>
+                    <input type="number" id="pitch-og" value="1.050" step="0.001" oninput="calculatePitch()">
+                </div>
+                <div class="input-group">
+                    <label>Pitch Rate (M/ml/°P)</label>
+                    <select id="pitch-rate" onchange="calculatePitch()">
+                        <option value="0.75">0.75 (Standard Ale)</option>
+                        <option value="1.0">1.0 (High Gravity Ale)</option>
+                        <option value="1.5">1.5 (Standard Lager)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Harvest Date</label>
+                    <input type="date" id="pitch-date" onchange="calculatePitch()">
+                </div>
+            </div>
+
+            <div class="calc-results">
+                <div class="res-card">
+                    <span class="res-label">CELLS NEEDED</span>
+                    <span class="res-val" id="res-needed">--</span>
+                    <span class="res-unit">Billion cells</span>
+                </div>
+                <div class="res-card accent">
+                    <span class="res-label">EST. VIABILITY</span>
+                    <span class="res-val" id="res-viability">--</span>
+                    <span class="res-unit" id="res-days-old">New</span>
+                </div>
+            </div>
+
+            <div id="pitch-warning" class="warning-box" style="display:none;">
+                ⚠️ Warning: Underpitching detected. Consider a starter!
+            </div>
+        </div>
+    </div>
+
+    <div id="lab-content-academy" style="display:none; padding: 20px;">
+        <h3 style="color:var(--accent-color)">Yeast Management Academy</h3>
+        <p style="opacity:0.7">Här kommer dina guider om agar, utstrykning och bibliotekshantering att bo...</p>
+    </div>
+</section>
+
 <nav class="main-nav">
-    <div class="nav-item" onclick="showView('soul', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M4,2H19V3H20A2,2 0 0,1 22,5V13A2,2 0 0,1 20,15H19V20A2,2 0 0,1 17,22H7A2,2 0 0,1 5,20V14H4V11H5V6H4V2M9,6V18H11V6H9M13,6V18H15V6H13M19,5V13H20V5H19Z" /></svg>
-        <span class="nav-text">Soul</span>
-    </div>
-    <div class="nav-item" onclick="showView('arcane-lab', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M16,2H8V4H9V18A3,3 0 0,0 12,21A3,3 0 0,0 15,18V4H16V2M13,17H11V15H13V17M13,13H11V11H13V13M13,9H11V7H13V9Z" /></svg>
-        <span class="nav-text">Arcane Lab</span>
-    </div>
-    <div class="nav-item" onclick="showView('profiler', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3.5,18.5L9.5,12.5L13.5,16.5L22,6.91L20.59,5.5L13.5,13.5L9.5,9.5L2,17L3.5,18.5Z" /></svg>
-        <span class="nav-text">Profiler</span>
-    </div>
-    <div class="nav-item" onclick="showView('library', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M18,2H7A2,2 0 0,0 5,4V20A2,2 0 0,0 7,22H18A2,2 0 0,0 20,20V4A2,2 0 0,0 18,2M18,20H7V4H8V20H9V4H18V20Z" /><circle cx="13.5" cy="12" r="3" /></svg>
-        <span class="nav-text">Library</span>
-    </div>
-    <div class="nav-item active" onclick="showView('live', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M13,2H11V5.1C7.6,5.6 5,8.5 5,12C5,15.9 8.1,19 12,19C15.9,19 19,15.9 19,12C19,8.5 16.4,5.6 13,5.1V2Z" /></svg>
-        <span class="nav-text">Live</span>
-    </div>
-    <div class="nav-item" onclick="showView('settings', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.35 19.43,11.03L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.97 19.05,5.05L16.56,6.05C16.04,5.66 15.47,5.34 14.86,5.08L14.49,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.51,2.42L9.14,5.08C8.53,5.34 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.97 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11.03C4.53,11.35 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.95C7.96,18.34 8.53,18.66 9.14,18.92L9.51,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.49,21.58L14.86,18.92C15.47,18.66 16.04,18.34 16.56,17.95L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" /></svg>
-        <span class="nav-text">Inställn.</span>
-    </div>
-</nav>
+        <div class="nav-item" onclick="showView('soul', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M4,2H19V3H20A2,2 0 0,1 22,5V13A2,2 0 0,1 20,15H19V20A2,2 0 0,1 17,22H7A2,2 0 0,1 5,20V14H4V11H5V6H4V2M9,6V18H11V6H9M13,6V18H15V6H13M19,5V13H20V5H19Z" />
+            </svg>
+            <span class="nav-text">Soul of Beer</span>
+        </div>
+
+        <div class="nav-item" onclick="showView('librarian', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+            </svg>
+            <span class="nav-text">Yeast Librarian</span>
+        </div>
+
+        <div class="nav-item" onclick="showView('lab', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M16,2H8V4H9V18A3,3 0 0,0 12,21A3,3 0 0,0 15,18V4H16V2M13,17H11V15H13V17M13,13H11V11H13V13M13,9H11V7H13V9Z" />
+            </svg>
+            <span class="nav-text">Arcane Lab</span>
+        </div>
+
+        <div class="nav-item" onclick="showView('library', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M18,2H7A2,2 0 0,0 5,4V20A2,2 0 0,0 7,22H18A2,2 0 0,0 20,20V4A2,2 0 0,0 18,2M18,20H7V4H8V20H9V4H18V20Z" />
+                <circle cx="13.5" cy="12" r="3" />
+                <circle cx="13.5" cy="12" r="1" opacity="0.6" />
+            </svg>
+            <span class="nav-text">Yeast Library</span>
+        </div>
+
+        <div class="nav-item active" onclick="showView('dashboard', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M13,2H11V5.1C7.6,5.6 5,8.5 5,12C5,15.9 8.1,19 12,19C15.9,19 19,15.9 19,12C19,8.5 16.4,5.6 13,5.1V2Z" />
+                <circle cx="10" cy="12" r="1.2" opacity="0.5" fill="white" />
+            </svg>
+            <span class="nav-text">Dashboard</span>
+        </div>
+
+        <div class="nav-item" onclick="showView('settings', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.35 19.43,11.03L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.97 19.05,5.05L16.56,6.05C16.04,5.66 15.47,5.34 14.86,5.08L14.49,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.51,2.42L9.14,5.08C8.53,5.34 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.97 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11.03C4.53,11.35 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.95C7.96,18.34 8.53,18.66 9.14,18.92L9.51,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.49,21.58L14.86,18.92C15.47,18.66 16.04,18.34 16.56,17.95L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+            </svg>
+            <span class="nav-text">Settings</span>
+        </div>
+    </nav>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -206,16 +347,16 @@
         window.showView = function(viewName, clickedElement, addToHistory = true) {
             
             // 1. Dölj precis allting först
-        const allViews = [
-    'login-container', 
-    'claim-container', 
-    'view-dashboard', 
-    'view-library', 
-    'view-profiles',    // Matchar Profiler
-    'view-settings',
-    'view-soul',       
-    'view-arcane-lab'   // Matchar Arcane Lab
-];
+            const allViews = [
+                'login-container', 
+                'claim-container', 
+                'view-dashboard', 
+                'view-library', 
+                'view-lab', 
+                'view-settings',
+                'view-soul',       
+                'view-librarian'   
+            ];
             
             allViews.forEach(id => {
                 const el = document.getElementById(id);
