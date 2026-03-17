@@ -759,172 +759,170 @@ if ('serviceWorker' in navigator) {
 const yeastDescriptions = {
     "Wyeast 1968": `
         <p><strong>Wyeast 1968 (London ESB Ale)</strong></p>
-        <h3>1. Temperaturspannet (18-22°C)</h3>
-        <p>Wyeast 1968 trivs bäst mellan 18 och 22 grader.<br>
-        <strong>Vårt val:</strong> Att starta på 19°C är perfekt för att få en balanserad mängd estrar (fruktighet) utan att det blir för spritigt.</p>
+        <h3>1. Temperature Range (18-22°C)</h3>
+        <p>Wyeast 1968 thrives between 18 and 22 degrees Celsius.<br>
+        <strong>Our Pick:</strong> Starting at 19°C is perfect for a balanced ester profile (fruitiness) without becoming too alcoholic or solvent-like.</p>
         
-        <h3>2. Extrem flockulering (Viktigt!)</h3>
-        <p>Den är "Very High" i flockulering. Det betyder att jästen faller till botten som en gråsten så fort den känner sig färdig.<br>
-        <strong>Risken:</strong> Om temperaturen sjunker för tidigt, eller om jästen somnar för snabbt, kan den lämna kvar ämnen som Diacetyl (smakar smörkola).</p>
+        <h3>2. Extreme Flocculation (Crucial!)</h3>
+        <p>It has "Very High" flocculation. This means the yeast drops to the bottom like a rock as soon as it feels done.<br>
+        <strong>The Risk:</strong> If the temperature drops too early, or if the yeast goes to sleep too fast, it can leave behind compounds like Diacetyl (which tastes like butterscotch).</p>
         
-        <h3>3. Behovet av Diacetylrast</h3>
-        <p>Eftersom den flockulerar så snabbt, behöver vi tvinga den att hålla sig vaken i slutet av jäsningen för att "städa upp" efter sig.</p>
+        <h3>3. The Need for a Diacetyl Rest</h3>
+        <p>Because it drops out so quickly, we need to force it to stay awake at the end of fermentation to "clean up" after itself.</p>
         <ul>
-            <li><strong>Active Ferm (0-3 dagar):</strong> Här skapas de viktigaste smakerna. Genom att hålla den på 19°C får vi den klassiska brittiska maltigheten.</li>
-            <li><strong>Diacetyl Rest (4-7 dagar):</strong> Här höjer vi temperaturen ganska rejält (till jästens maxgräns på 22°C). Eftersom 1968 vill "gå och lägga sig" tidigt, hjälper värmen den att stanna i lösning och äta upp restprodukter. Detta är hemligheten bakom en bra brittisk ale!</li>
-            <li><strong>Cold Crash:</strong> Eftersom jästen flockulerar så bra kommer ölet bli extremt klart mycket snabbare än med andra jästsorter.</li>
+            <li><strong>Active Ferm (0-3 days):</strong> This is where the core flavors are created. By keeping it at 19°C, we get that classic British maltiness.</li>
+            <li><strong>Diacetyl Rest (4-7 days):</strong> Here we raise the temperature quite a bit (to its max limit of 22°C). Since 1968 wants to "go to bed" early, the heat helps it stay in suspension and consume byproducts. This is the secret behind a great British ale!</li>
+            <li><strong>Cold Crash:</strong> Because of the high flocculation, the beer will become brilliantly clear much faster than with other strains.</li>
         </ul>
     `,
     "WLP920": `
-        <p><strong>WLP920 Old Bavarian Lager</strong> är en klassiker från södra Tyskland som är känd för att ge en maltig profil med en lätt touch av estrar, vilket gör den perfekt för Oktoberfest-öl, Bocks och mörka lagers.</p>
-        <p>Baserat på databladet från White Labs och vedertagen lagertradition, här är de kritiska punkterna vi bör programmera in:</p>
+        <p><strong>WLP920 Old Bavarian Lager</strong> is a classic from southern Germany, known for a malty profile with a light touch of esters, making it perfect for Oktoberfest beers, Bocks, and dark lagers.</p>
+        <p>Based on the White Labs spec sheet and traditional lager practices, here are the critical points we need to program:</p>
         
-        <h3>1. Temperaturspannet (10–13 °C)</h3>
-        <p>White Labs anger 10–13 °C som det optimala spannet.<br>
-        <strong>Strategi:</strong> För att få den där rena, tyska karaktären vill vi starta i den nedre delen av spannet (ca 10.5 °C) för att hålla biprodukterna i schack.</p>
+        <h3>1. Temperature Range (10–13 °C)</h3>
+        <p>White Labs states 10–13 °C as the optimal range.<br>
+        <strong>Strategy:</strong> To get that clean, German character, we want to start at the lower end of the range (around 10.5 °C) to keep byproducts in check.</p>
         
-        <h3>2. Diacetylrast (Ett måste för Lager!)</h3>
-        <p>Eftersom WLP920 är en lagerjäst som jobbar kallt, bildas det mer diacetyl (smörkola) än i en ale. Vi behöver därför tvinga upp temperaturen rejält mot slutet av jäsningen när jästen fortfarande är aktiv men börjar bli klar.</p>
+        <h3>2. Diacetyl Rest (A must for Lagers!)</h3>
+        <p>Since WLP920 is a bottom-fermenting lager yeast working cold, it produces more diacetyl (butterscotch) than an ale. Therefore, we need to significantly raise the temperature towards the end of fermentation while the yeast is still active but finishing up.</p>
         
-        <h3>3. "Lagering" (Lagringsfasen)</h3>
-        <p>Lageröl behöver tid på sig att klarna och mogna. Vi lägger därför in en längre profil än för din ESB.</p>
+        <h3>3. "Lagering" (The Conditioning Phase)</h3>
+        <p>Lagers need time to clear and mature. That's why we use a longer profile than for an ESB.</p>
         
-        <h3>Varför ser den ut så här?</h3>
+        <h3>Why does the profile look like this?</h3>
         <ul>
-            <li><strong>Primary Ferm (Dag 10):</strong> Vi ger den 10 hela dagar i kylan. Lagerjäst jobbar långsammare än alejäst.</li>
-            <li><strong>Diacetyl Rest (Dag 14):</strong> Vi kliver upp till 16 grader. Det är över jästens "optimala" jäsningstemp, men det är precis vad som behövs för att jästen ska äta upp restprodukterna innan den somnar.</li>
-            <li><strong>Lagering (Dag 28):</strong> Vi sträcker ut tiden till 28 dagar. En lager mår bra av att stå kallt länge för att bli riktigt krispig och blank.</li>
+            <li><strong>Primary Ferm (Day 10):</strong> We give it 10 full days in the cold. Lager yeast works slower than ale yeast.</li>
+            <li><strong>Diacetyl Rest (Day 14):</strong> We step up to 16 degrees. That's above the "optimal" fermentation temp, but it's exactly what's needed for the yeast to clean up before going dormant.</li>
+            <li><strong>Lagering (Day 28):</strong> We stretch the time to 28 days. A lager benefits from a long cold conditioning to become truly crisp and clear.</li>
         </ul>
-        <p><strong>Ett tips för just denna jäst:</strong><br>
-        White Labs nämner att den har "Medium" flockulering. Det betyder att den inte faller till botten lika aggressivt som London-jästen gjorde. Därför är steg 3 (Lagering) extra viktigt här – ge den tiden i kylan, så kommer du bli belönad med ett fantastiskt blankt och proffsigt öl!</p>
+        <p><strong>A tip for this specific yeast:</strong><br>
+        White Labs mentions it has "Medium" flocculation. It won't drop as aggressively as the London yeast. Therefore, Step 3 (Lagering) is extra important here – give it time in the cold, and you'll be rewarded with a brilliantly clear, professional beer!</p>
     `,
     "Imperial B45": `
-         <p><strong>Imperial Yeast B45 Gnome</strong> är en fantastisk jäst! Det är en klassisk belgisk stam (många tror att den kommer från det kända bryggeriet Achouffe) som är känd för att producera härliga päronestrar och en lätt kryddighet (fenoler).</p>
-        <p>Det viktigaste med den här jästen är att den älskar värme. Imperial Yeast rekommenderar ett spann på 20–25.5 °C. Om man kör den för kallt kan den bli lite "lat" och inte jäsa ut ordentligt, men om man startar för varmt kan den ge för mycket tuggummi-smak.</p>
+         <p><strong>Imperial Yeast B45 Gnome</strong> is an amazing strain! It's a classic Belgian yeast (rumored to be from the famous Achouffe brewery) renowned for producing beautiful pear esters and a light spiciness (phenols).</p>
+        <p>The most important thing about this yeast is that it loves heat. Imperial Yeast recommends a range of 20–25.5 °C. Run it too cold and it gets "lazy" and under-attenuates; start it too hot and it might throw off too much bubblegum flavor.</p>
         
-        <h3>Här är två profiler skräddarsydda för "Tomten":</h3>
+        <h3>Here are two profiles tailored for "The Gnome":</h3>
         <ol>
-            <li><strong>"Classic Gnome" (Den balanserade):</strong> Vi startar i den nedre delen av spannet för att få en ren jäsning, och sen låter vi temperaturen stiga naturligt för att låta jästen "städa upp" och ge den där klassiska belgiska karaktären.</li>
-            <li><strong>"Spicy Gnome" (Varm & Karaktärsfull):</strong> Här trycker vi på lite mer värme tidigt för att verkligen locka fram de kryddiga fenolerna och fruktiga estrar som man förväntar sig av en stark belgisk ale.</li>
+            <li><strong>"Classic Gnome" (Balanced):</strong> We start at the lower end of the range for a clean primary, then let the temperature free-rise to help the yeast "clean up" and deliver that classic Belgian character.</li>
+            <li><strong>"Spicy Gnome" (Warm & Expressive):</strong> Here we push the heat early on to really coax out the spicy phenols and fruity esters expected in a strong Belgian ale.</li>
         </ol>
         
-        <h3>Varför är dessa profiler bra för Gnome?</h3>
+        <h3>Why are these profiles great for Gnome?</h3>
         <ul>
-            <li><strong>Belgian Ramp:</strong> Belgisk jäst mår bäst av att "stiga" i temperatur. Det efterliknar hur man bryggde förr i tiden när man inte hade kylning – jäsningen skapar egen värme och får ölet att stiga, vilket ger den där komplexa smaken.</li>
-            <li><strong>Utjäsning:</strong> Gnome (och belgiska stammar generellt) är kända för att vilja jäsa ut ölet väldigt torrt. Genom att gå upp mot 24-25 grader mot slutet hjälper vi jästen att orka hela vägen, särskilt om du brygger en starkare öl som en Dubbel eller Trippel.</li>
+            <li><strong>Belgian Ramp:</strong> Belgian yeast thrives on a temperature "ramp". It mimics historical brewing before refrigeration – fermentation generates its own heat, naturally raising the temp and creating complex flavors.</li>
+            <li><strong>Attenuation:</strong> Gnome (and Belgian strains in general) want to finish very dry. By pushing towards 24-25 degrees at the end, we ensure the yeast has the energy to finish the job, especially for high gravity beers like a Dubbel or Tripel.</li>
         </ul>
     `,
     "Wyeast 1084": `
-         <p><strong>Wyeast 1084 Irish Ale</strong> är en riktig arbetshäst! Det är den klassiska jästen från Guinness-bryggeriet i Dublin. Den är känd för att vara väldigt mångsidig – den ger en rik, maltig profil med en svag touch av frukt (estrar) och ibland en gnutta diacetyl (smörkola) som passar perfekt i mörka öl.</p>
-        <p>Enligt Wyeast ligger spannet på 17–22 °C.</p>
+         <p><strong>Wyeast 1084 Irish Ale</strong> is a true workhorse! This is the classic strain from the Guinness brewery in Dublin. It's incredibly versatile – providing a rich, malty profile with a subtle hint of fruit (esters) and occasionally a touch of diacetyl that works perfectly in dark beers.</p>
+        <p>According to Wyeast, the range is 17–22 °C.</p>
         
-        <h3>Två profiler för din 1084:</h3>
+        <h3>Two profiles for your 1084:</h3>
         <ol>
-            <li><strong>"Irish Dry Stout" (Ren & krispig):</strong> Här håller vi temperaturen låg för att få en så ren och maltig profil som möjligt, vilket låter den rostade malten skina igenom. Vi avslutar med en liten höjning för att se till att den jäser ut ordentligt och inte lämnar efter sig för mycket smörkola.</li>
-            <li><strong>"Irish Red Ale" (Maltig & Fyllig):</strong> Här tillåter vi lite mer fruktighet genom att starta varmare. Det passar utmärkt för irländska Red Ales eller kraftigare Porters där man vill ha en lite fylligare munkänsla.</li>
+            <li><strong>"Irish Dry Stout" (Clean & Crisp):</strong> We keep the temperature low for a clean, malty profile, letting the roasted malts shine. We finish with a slight bump to ensure complete attenuation without excessive butterscotch notes.</li>
+            <li><strong>"Irish Red Ale" (Malty & Full):</strong> Here we allow a bit more fruitiness by starting warmer. Excellent for Irish Red Ales or robust Porters where a fuller mouthfeel is desired.</li>
         </ol>
         
-        <h3>Varför är dessa profiler bra för 1084?</h3>
+        <h3>Why are these profiles good for 1084?</h3>
         <ul>
-            <li><strong>Diacetyl-kontroll:</strong> Den här jästen kan ibland producera en del diacetyl. Genom att vi i båda profilerna går upp till 20 °C eller mer mot slutet, hjälper vi jästen att "äta upp" sina egna biprodukter.</li>
-            <li><strong>Flockulering:</strong> 1084 flockulerar (flockar ihop sig och sjunker) bra, men inte lika snabbt som London-jästen. Därför är våra 14 dagar med en rejäl Cold Crash mot slutet guld värda för att få ett blankt och fint öl.</li>
+            <li><strong>Diacetyl Control:</strong> This yeast can occasionally throw some diacetyl. By ramping up to 20 °C or more towards the end in both profiles, we help the yeast reabsorb its own byproducts.</li>
+            <li><strong>Flocculation:</strong> 1084 flocculates well, but not as fast as the London strain. Therefore, a solid 14-day schedule with a proper Cold Crash is golden for a bright beer.</li>
         </ul>
     `,
     "Wyeast 3944": `
-        <p><strong>Wyeast 3944 Belgian Witbier</strong> är kungen av veteöl! Det här är den klassiska "Hoegaarden-jästen" och den är känd för att vara väldigt karaktärsfull. Den producerar en komplex blandning av kryddiga fenoler (peppar/nejlika) och fruktiga estrar (banan/citrus), med en svagt syrlig och uppfriskande avslutning.</p>
-        <p>Enligt Wyeast ligger spannet på 16–24 °C, men den här jästen har några specifika beteenden vi måste ta hänsyn till:</p>
+        <p><strong>Wyeast 3944 Belgian Witbier</strong> is the king of wheat beers! This is the classic "Hoegaarden" strain, known for immense character. It produces a complex blend of spicy phenols (pepper/clove) and fruity esters (banana/citrus), finishing with a slight, refreshing tartness.</p>
+        <p>Wyeast states a range of 16–24 °C, but this yeast has some specific quirks we must account for:</p>
         <ul>
-            <li><strong>Dålig flockulering:</strong> Den här jästen vill inte ramla till botten, och det är bra! En Witbier ska vara grumlig. Vi vill därför inte göra en för aggressiv "Cold crash".</li>
-            <li><strong>Krausen-monster:</strong> Den skapar ett enormt skumtäcke (krausen) i början.</li>
-            <li><strong>Temperaturkänslig:</strong> Om den hålls för kall kan den stanna av i förtid. Vi vill ha en stadig ökning för att den ska jäsa ut helt.</li>
+            <li><strong>Low Flocculation:</strong> This yeast refuses to drop, and that's a good thing! A Witbier should be hazy. We avoid an aggressive cold crash.</li>
+            <li><strong>Krausen Monster:</strong> It creates a massive krausen (foam head) early on.</li>
+            <li><strong>Temperature Sensitive:</strong> If kept too cold, it can stall prematurely. We need a steady rise to ensure full attenuation.</li>
         </ul>
         
-        <h3>Två profiler för din 3944:</h3>
+        <h3>Two profiles for your 3944:</h3>
         <ol>
-            <li><strong>"Classic Belgian Wit" (Balanserad):</strong> Här siktar vi på den klassiska balansen där varken kryddigheten eller frukten tar överhanden. Vi börjar svalt och låter den stiga långsamt.</li>
-            <li><strong>"Summer Wit" (Fruktig & Expressiv):</strong> Om du vill ha en riktigt somrig öl med mer tryck i banan- och citrus-tonerna så kör vi denna profil som startar varmare.</li>
+            <li><strong>"Classic Belgian Wit" (Balanced):</strong> Aiming for the classic balance where neither spice nor fruit dominates. We start cool and let it rise slowly.</li>
+            <li><strong>"Summer Wit" (Fruity & Expressive):</strong> For a truly summery beer with punchy banana and citrus notes, we use this warmer starting profile.</li>
         </ol>
         
-        <h3>Varför är dessa profiler speciella?</h3>
+        <h3>What makes these profiles special?</h3>
         <ul>
-            <li><strong>Ingen "Hard" Cold Crash:</strong> I båda profilerna satte jag slut-temperaturen till 6.0 °C istället för 2.0–3.0 °C. Varför? Jo, i en Witbier vill vi att jästen och veteproteinerna ska stanna kvar i suspension för att ge den där mjölkiga, vita looken. Kyler vi för hårt blir ölet för klart, och då tappar man stilen!</li>
-            <li><strong>Fenol-kontroll:</strong> Genom att starta på 18°C i Classic-profilen undviker vi att det smakar "för mycket" tuggummi, och får istället fram de eleganta kryddtonerna.</li>
+            <li><strong>No "Hard" Cold Crash:</strong> In both profiles, the final temp is set to 6.0 °C instead of 2.0–3.0 °C. Why? In a Witbier, we want the yeast and wheat proteins to stay in suspension for that milky, white appearance. Chill too hard, the beer clears up, and you lose the style!</li>
+            <li><strong>Phenol Control:</strong> Starting at 18°C in the Classic profile prevents it from tasting like bubblegum, bringing forward elegant spicy notes instead.</li>
         </ul>
     `,
     "WLP833": `
-        <p><strong>WLP833 German Bock Lager</strong> är en riktig tungviktare! Det här är jästen från det berömda bryggeriet i Ayinger (Sydbavaria). Om WLP920 är bra för "rena" lagers, så är WLP833 kungen av maltighet. Den är känd för att lämna kvar en fantastisk maltig sötma och kropp, vilket gör den till det självklara valet för Bock, Doppelbock och festliga Märzen.</p>
-        <p>Enligt White Labs ligger spannet på 9–13 °C. Precis som med alla lagerjäster är kontrollen under de första dagarna helt avgörande för att slippa svavel och bismaker.</p>
+        <p><strong>WLP833 German Bock Lager</strong> is a heavyweight! This is the strain from the renowned Ayinger brewery in Southern Bavaria. If WLP920 is for "clean" lagers, WLP833 is the king of maltiness. It leaves a fantastic malty sweetness and body, making it the obvious choice for Bocks, Doppelbocks, and festive Märzens.</p>
+        <p>White Labs recommends 9–13 °C. As with all lager yeasts, control during the first few days is critical to avoid sulfur and off-flavors.</p>
         
-        <h3>Två profiler skräddarsydda för din sydtyska malt-maskin:</h3>
+        <h3>Two profiles tailored for your Bavarian malt machine:</h3>
         <ol>
-            <li><strong>"Traditional Bock" (Ren Maltfokus):</strong> Här låter vi jästen jobba kallt och långsamt för att maximera den där rena bayeriska maltprofilen. Eftersom Bock-öl ofta har hög stamvörtstyrka (mer socker), ger vi den extra tid att jäsa ut och en rejäl lagringstid.</li>
-            <li><strong>"Fast Bock" (Modern Lager-metod):</strong> Om du inte vill vänta i fem veckor så kör vi en profil med lite högre starttemperatur och en tidigare diacetylrast. Fungerar utmärkt för t.ex. en Helles eller en lättare bock.</li>
+            <li><strong>"Traditional Bock" (Pure Malt Focus):</strong> We let the yeast work cold and slow to maximize that clean Bavarian malt profile. Since Bocks often have high starting gravities, we give it extra time to attenuate and a substantial lagering period.</li>
+            <li><strong>"Fast Bock" (Modern Lager Method):</strong> If you don't want to wait five weeks, we use a profile with a slightly higher starting temp and an earlier diacetyl rest. Works great for a Helles or a lighter bock.</li>
         </ol>
         
-        <h3>Varför är dessa profiler bra för Bock-jästen?</h3>
+        <h3>Why are these profiles great for the Bock yeast?</h3>
         <ul>
-            <li><strong>Malt-bevarande:</strong> Genom att hålla Primary på 10°C i den traditionella profilen undviker vi att jästen producerar biprodukter som krockar med den rika maltsmaken.</li>
-            <li><strong>Tid för "Cleanup":</strong> Bock-jäst kan vara lite envis med att städa efter sig om den har jäst en stark öl. Därför går vi upp till 16-17°C under diacetylrasten för att verkligen väcka jästen så den hinner städa klart innan kylan kommer.</li>
-            <li><strong>Lager-filtreringen:</strong> Eftersom vi markerat den som true (Lager), kommer du nu bara se dessa bock-profiler när du valt WLP833. Inget Ale-trams här inte!</li>
+            <li><strong>Preserving Malt:</strong> Keeping Primary at 10°C in the traditional profile prevents byproducts that clash with the rich malt flavor.</li>
+            <li><strong>Time for Cleanup:</strong> Bock yeast can be stubborn about cleaning up after a high-gravity fermentation. We push up to 16-17°C during the diacetyl rest to truly wake the yeast up before the cold sets in.</li>
         </ul>
     `,
     "WLP007": `
-         <p><strong>WLP007 Dry English Ale</strong> är precis som du säger – en riktig målsökande missil! Den är känd som "Workhorse"-jästen för många amerikanska craft-bryggerier (ofta kallad "Whitbread Dry").</p>
-        <p>Det som gör WLP007 unik är kombinationen av två saker:</p>
+         <p><strong>WLP007 Dry English Ale</strong> is exactly what you'd expect – a heat-seeking missile! Known as the "Workhorse" yeast for many American craft breweries (often called "Whitbread Dry").</p>
+        <p>What makes WLP007 unique is the combination of two things:</p>
         <ol>
-            <li>Den är snabb och jäser ut väldigt torrt (hög utjäsning).</li>
-            <li>Den faller som en gråsten till botten (extremt hög flockulering).</li>
+            <li>It's fast and attenuates very dry.</li>
+            <li>It drops like a rock (extremely high flocculation).</li>
         </ol>
-        <p>Enligt White Labs ligger spannet på 18–21 °C. Eftersom den är så aggressiv kan den ibland skapa en del värme själv, så vi vill ha en kontrollerad start.</p>
+        <p>White Labs recommends 18–21 °C. Because it's so aggressive, it generates a lot of exothermic heat, requiring a controlled start.</p>
         
-        <h3>Två profiler för din brittiska torped:</h3>
+        <h3>Two profiles for your British torpedo:</h3>
         <ol>
-            <li><strong>"Dry West Coast" (Ren & Torr):</strong> Denna profil är perfekt för IPA eller Pale Ale där du vill att humlen ska stå i centrum utan att jästen stör. Vi startar svalt för att hålla estrar i schack och låter den sedan städa upp snabbt.</li>
-            <li><strong>"Monster Stout" (Aggressiv & Snabb):</strong> WLP007 är fantastisk för tunga Stouts eftersom den orkar jäsa ut även vid hög alkoholhalt. Här trycker vi på lite mer temperatur för att få ölet färdigt snabbt.</li>
+            <li><strong>"Dry West Coast" (Clean & Dry):</strong> Perfect for an IPA or Pale Ale where the hops should shine without yeast interference. We start cool to keep esters down, then let it clean up quickly.</li>
+            <li><strong>"Monster Stout" (Aggressive & Fast):</strong> WLP007 is fantastic for heavy Stouts as it handles high ABV well. We push the temperature a bit more here to finish the beer quickly.</li>
         </ol>
         
-        <h3>Varför är WLP007 så tacksam för din kontrollbox?</h3>
+        <h3>Why does WLP007 love your control box?</h3>
         <ul>
-            <li><strong>Temperaturkontroll:</strong> Eftersom 007 jäser så våldsamt skapar den mycket egen värme. Din termostat kommer förmodligen få jobba hårt med kylen de första 48 timmarna för att hålla den på 18.5°C. Utan kontrollen sticker den lätt iväg till 24°C och då börjar det smaka lösningsmedel.</li>
-            <li><strong>Flockuleringen:</strong> Du kommer märka att ölet blir kristallklart mycket snabbare än med de andra jästsorterna. Redan efter 2-3 dagar i "Cold Crash" kommer jästkakan vara stenhård på botten.</li>
+            <li><strong>Temp Control:</strong> Because 007 ferments so violently, it creates intense heat. Your thermostat will work hard the first 48 hours to hold it at 18.5°C. Without control, it easily spikes to 24°C, bringing out solvent-like flavors.</li>
+            <li><strong>Flocculation:</strong> The beer will become crystal clear much faster than with other strains. Just 2-3 days into the Cold Crash, the yeast cake will be rock solid.</li>
         </ul>
     `,
-"Wyeast 1318": `
-        <p><strong>Wyeast 1318 London Ale III</strong> är ju själva fundamentet i hela NEIPA-revolutionen. Det är jästen som gav världen "Juice".</p>
-        <p>Det som gör 1318 så speciell är att den inte flockulerar (sjunker) särskilt bra, vilket hjälper till att hålla ölet disigt, och den producerar fantastiska estrar av stenfrukt (persika/aprikos) som gifter sig perfekt med moderna humlesorter som Citra och Mosaic.</p>
-        <p>Enligt Wyeast ligger spannet på 18–22 °C.</p>
+    "Wyeast 1318": `
+        <p><strong>Wyeast 1318 London Ale III</strong> is the very foundation of the NEIPA revolution. This is the yeast that gave the world "Juice".</p>
+        <p>What makes 1318 special is its low flocculation, which helps keep the beer hazy, and its production of fantastic stone fruit esters (peach/apricot) that pair perfectly with modern hops like Citra and Mosaic.</p>
+        <p>Wyeast recommends a range of 18–22 °C.</p>
         
-        <h3>Här är två profiler:</h3>
+        <h3>Here are two profiles:</h3>
         <ol>
-            <li><strong>"Juicy NEIPA" (Biotransformation):</strong> Här siktar vi på att maximera samspelet mellan jäst och humle. Vi startar stabilt och höjer sedan temperaturen för att hjälpa jästen att "städa upp" och torka ut den sista sötman.</li>
-            <li><strong>"Classic Hazy" (Fyllig & Mjuk):</strong> Vi håller temperaturen något jämnare hela vägen för att bevara en kraftigare munkänsla.</li>
+            <li><strong>"Juicy NEIPA" (Biotransformation):</strong> Aimed at maximizing the yeast/hop interaction. We start steady and ramp the temperature to help the yeast clean up and dry out the final sweetness.</li>
+            <li><strong>"Classic Hazy" (Full & Soft):</strong> We keep the temperature slightly more even throughout to preserve a heavier mouthfeel.</li>
         </ol>
     `,
     "Wyeast 2565": `
-        <p><strong>Wyeast 2565 Kölsch</strong> är en av de mest intressanta jäststammarna som finns. Det är en "hybrid" – tekniskt sett en ale-jäst, men den föredrar att jobba i temperaturer som nästan nuddar lager-nivåer. Den är känd för att ge en extremt krispig, ren och nästan vinös profil med en lätt ton av äpple eller päron.</p>
-        <p>Eftersom den har låg flockulering (den vill inte sjunka), kräver den en rejäl kallagring för att bli så där spegelblank som en äkta Kölsch ska vara.</p>
+        <p><strong>Wyeast 2565 Kölsch</strong> is one of the most interesting strains available. It's a "hybrid" – technically an ale yeast, but it prefers working at near-lager temperatures. It's known for an extremely crisp, clean, and almost vinous profile with a light hint of apple or pear.</p>
+        <p>Due to its low flocculation (it stays in suspension), it requires a proper cold conditioning (lagering) period to become as brilliantly clear as a true Kölsch should be.</p>
         
-        <h3>Två profiler för din tyska hybrid:</h3>
+        <h3>Two profiles for your German hybrid:</h3>
         <ol>
-            <li><strong>"Authentic Kölsch" (Krispig & Lager-lik):</strong> Detta är profilen för dig som vill tävla mot bryggerierna i Köln. Vi börjar i den absolut nedre delen av spannet för att få maximal krispighet och minimalt med estrar.</li>
-            <li><strong>"Hybrid Ale/Alt" (Fruktig & Vinös):</strong> Om du vill ha lite mer av den där "vinösa" karaktären eller brygger en Düsseldorf Altbier, så kör vi denna som ligger lite högre i temperatur.</li>
+            <li><strong>"Authentic Kölsch" (Crisp & Lager-like):</strong> The profile for challenging the breweries of Cologne. We start at the absolute bottom of the range for maximum crispness and minimal esters.</li>
+            <li><strong>"Hybrid Ale/Alt" (Fruity & Vinous):</strong> For a more "vinous" character or when brewing a Düsseldorf Altbier, we run this slightly warmer profile.</li>
         </ol>
 
-        <h3>Varför är "Lagering" viktigt här?</h3>
-        <p>Wyeast 2565 är ökänd för att vara "dammig". Den hänger kvar i ölet och gör det grumligt länge. Genom att vi i den autentiska profilen lägger in 14 dagars lagring vid 2°C, tvingar vi till slut ner den till botten. Resultatet blir det där briljanta, guldgula ölet som ser ut som en lager men smakar som en ale.</p>
+        <h3>Why is "Lagering" important here?</h3>
+        <p>Wyeast 2565 is notoriously "dusty." It hangs around in the beer, keeping it cloudy for a long time. By incorporating a 14-day lagering at 2°C in the authentic profile, we finally force it to the bottom. The result is that brilliant, golden beer that looks like a lager but tastes like an ale.</p>
     `,
     "WLP095": `
-        <p><strong>WLP095 Burlington Ale</strong>! Det här är jästen som satte Vermont-stilen på kartan (många känner igen den som "Conan-strängen"). Den är berömd för sin unika förmåga att producera intensiva toner av mogna persikor och aprikoser, vilket gör den till den ultimata partnern för humlesorter som Citra, Galaxy och Mosaic.</p>
-        <p>Till skillnad från London III (1318) tenderar Burlington att jäsa ut aningen mer, vilket ger ett lite torrare men fortfarande extremt "juicy" öl. White Labs rekommenderar 19–21 °C.</p>
+        <p><strong>WLP095 Burlington Ale</strong>! This is the yeast that put the Vermont style on the map (widely known as the "Conan" strain). It's famous for its unique ability to produce intense notes of ripe peach and apricot, making it the ultimate partner for hops like Citra, Galaxy, and Mosaic.</p>
+        <p>Unlike London III (1318), Burlington tends to attenuate slightly more, yielding a drier but still exceptionally "juicy" beer. White Labs recommends 19–21 °C.</p>
         
-        <h3>Två profiler för din Vermont-juice:</h3>
+        <h3>Two profiles for your Vermont juice:</h3>
         <ol>
-            <li><strong>"Burlington Hazy" (Maxad Persika):</strong> Den här profilen fokuserar på att locka fram de där berömda stenfrukts-estrarna. Vi startar mitt i spannet och låter den stiga för att få en fullständig utjäsning.</li>
-            <li><strong>"Conan Style IPA" (Krispig Juice):</strong> Här håller vi temperaturen lite stramare i början för att få en renare profil där humlen får ta mer plats, men där den typiska Burlington-karaktären ligger som en snygg bakgrund.</li>
+            <li><strong>"Burlington Hazy" (Max Peach):</strong> Focused on coaxing out those famous stone fruit esters. We start in the middle of the range and let it free-rise for complete attenuation.</li>
+            <li><strong>"Conan Style IPA" (Crisp Juice):</strong> We keep the temperature tighter early on for a cleaner profile where hops take center stage, while that typical Burlington character provides a beautiful backdrop.</li>
         </ol>
     `
-}; // <-- DENNA STÄNGER HELA OBJEKTET, EXTREMT VIKTIG!
-
+};
 
 // --- POPUP-FUNKTIONER (MODAL) ---
 function openYeastModal(yeast) {
