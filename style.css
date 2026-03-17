@@ -412,23 +412,32 @@ canvas#beer-chart {
     
     /* Tvinga fram 2 kolumner för jästbiblioteket på mobil */
     .yeast-grid {
-        grid-template-columns: repeat(2, 1fr) !important; 
-        gap: 6px !important;
-        padding: 10px !important;
+        /* minmax(0, 1fr) är magin som förhindrar att kolumnen spränger skärmen */
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important; 
+        gap: 8px !important;
+        padding: 10px 0 !important; /* Tar bort sido-luft så det linjerar perfekt med rubriken */
     }
 
     /* Gör korten lite mer kompakta inuti */
     .yeast-card {
         padding: 0 8px !important;
+        min-width: 0; /* Tvingar kortet att krympa om skärmen är liten */
     }
 
-    /* Minska texten och lägg till "..." om namnet är för långt */
+    /* Minska texten och tvinga tre punkter "..." om namnet är för långt */
     .yeast-card h3 {
         font-size: 0.75rem !important;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        margin-right: 5px; /* Skapa lite avstånd till stjärnan */
+        margin-right: 5px; 
+        min-width: 0; /* Superviktigt: låter texten klippas istället för att trycka ut rutan */
+        flex: 1; /* Tvingar texten att ta all tillgänglig plats fram till stjärnan */
+    }
+
+    /* Se till att stjärnan aldrig trycks ihop och blir oval */
+    .favorite-star {
+        flex-shrink: 0;
     }
 
     .oled-screen {
