@@ -278,6 +278,34 @@ canvas#beer-chart {
     box-shadow: 0 0 8px rgba(0, 229, 255, 0.15); 
 }
 
+/* --- SÖKRUTAN I BIBLIOTEKET --- */
+#yeast-search {
+    width: 100%;
+    padding: 14px 20px;
+    margin-top: 15px;
+    font-size: 1.1rem;
+    background-color: #0a0a0a;
+    color: #fff;
+    border: 2px solid #333;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+}
+
+/* När man klickar i rutan för att skriva */
+#yeast-search:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
+    outline: none;
+}
+
+/* Light mode-stöd för sökrutan */
+.light-mode #yeast-search {
+    background-color: #fff;
+    color: #111;
+    border-color: #ccc;
+}
+
 .logout-btn, #btn-logout { 
     display: block; 
     margin: 30px auto; 
