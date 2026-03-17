@@ -708,6 +708,15 @@ window.addEventListener('DOMContentLoaded', () => {
     calculatePitch();
 });
 
+// Registrera Service Worker för att möjliggöra PWA-installation
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('Service Worker registrerad!', reg))
+      .catch(err => console.log('Service Worker fel:', err));
+  });
+}
+
 
 
 
