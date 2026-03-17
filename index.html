@@ -230,15 +230,15 @@
 </section>
 
 <section id="view-librarian" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
-<div class="library-header">
+    <div class="library-header">
         <h2>Arcane Lab</h2> 
         <div class="lab-tabs">
-            <button class="lab-tab" onclick="switchLabTab('academy')">THE YEAST LIBRARIAN</button>
-            <button class="lab-tab active" onclick="switchLabTab('calc')">PITCH CALCULATOR</button>
+            <button class="lab-tab active" onclick="switchLabTab('academy', this)">THE YEAST LIBRARIAN</button>
+            <button class="lab-tab" onclick="switchLabTab('calc', this)">PITCH CALCULATOR</button>
         </div>
     </div>
 
-    <div id="lab-content-calc">
+    <div id="lab-content-calc" style="display:none;">
         <div class="calc-container">
             <div class="calc-inputs">
                 <div class="input-group">
@@ -282,7 +282,7 @@
         </div>
     </div>
 
-    <div id="lab-content-academy" style="display:none; padding: 20px;">
+    <div id="lab-content-academy" style="display:block; padding: 20px;">
         <h3 style="color:var(--accent-color)">Yeast Management Academy</h3>
         <p style="opacity:0.7">Här kommer dina guider om agar, utstrykning och bibliotekshantering att bo...</p>
     </div>
@@ -417,6 +417,32 @@
                 history.replaceState({ view: initialView }, '', '#' + initialView);
             }
         });
+
+        // Funktion för att byta flikar i Arcane Lab
+window.switchLabTab = function(tabName, clickedElement) {
+    // 1. Dölj båda innehållen
+    document.getElementById('lab-content-calc').style.display = 'none';
+    document.getElementById('lab-content-academy').style.display = 'none';
+    
+    // 2. Ta bort 'active' (lys-effekten) från ALLA flik-knappar
+    const allTabs = document.querySelectorAll('.lab-tab');
+    allTabs.forEach(tab => {
+        tab.classList.remove('active');
+    });
+
+    // 3. Visa det valda innehållet
+    if (tabName === 'calc') {
+        document.getElementById('lab-content-calc').style.display = 'block';
+    } else if (tabName === 'academy') {
+        document.getElementById('lab-content-academy').style.display = 'block';
+    }
+
+    // 4. Tänd knappen som du precis klickade på
+    if (clickedElement) {
+        clickedElement.classList.add('active');
+    }
+};
+
     </script>
 
 </body>
