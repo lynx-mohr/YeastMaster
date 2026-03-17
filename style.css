@@ -262,13 +262,19 @@ canvas#beer-chart {
     justify-content: space-between;
     cursor: pointer;
     pointer-events: auto !important;
+    transition: all 0.2s ease; /* Ger en mjuk och snygg övergång när man hovrar */
 }
 
-/* Tillämpas när jäststammen är stjärnmarkerad */
+/* 1. HOVER-EFFEKTEN FÖR PC (Denna hade försvunnit!) */
+.yeast-card:hover {
+    border-color: var(--accent-color) !important;
+    background: #111 !important;
+}
+
+/* 2. VALD/MARKERAD JÄST (Stjärnan är klickad) */
 .yeast-card.selected {
     border-color: var(--accent-color) !important;
     background: #111 !important;
-    /* Valfritt: Lägg till ett mjukt sken runt kortet för extra tydlighet */
     box-shadow: 0 0 8px rgba(0, 229, 255, 0.15); 
 }
 
