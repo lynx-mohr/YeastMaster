@@ -830,3 +830,34 @@ canvas#beer-chart {
 .modal-body li {
     margin-bottom: 5px;
 }
+
+/* --- THE YEAST LIBRARIAN ILLUSTRATION --- */
+
+/* Gemensamma regler för responsivitet och centrering */
+.librarian-illustration {
+    display: block;
+    max-width: 100%; /* Ser till att bilden aldrig blir bredare än skärmen */
+    width: 450px;    /* A good maximum width for desktop view */
+    height: auto;
+    margin: 0 auto 25px auto; /* Centrerad med luft i botten */
+    border-radius: 12px;
+}
+
+/* --- LOGIK FÖR TEMAVÄXLING (HÄR ÄR MAGIN) --- */
+
+/* 1. Standard (Dark Mode - default) */
+/* Vi döljer den ljusa bilden som standard */
+.lib-light { display: none !important; }
+/* Vi ser till att den mörka bilden är synlig */
+.lib-dark { display: block !important; }
+
+/* 2. Light Mode (När 'body' har klassen .light-mode) */
+body.light-mode .lib-dark { display: none !important; }
+body.light-mode .lib-light { display: block !important; }
+
+/* En liten justering för light mode så bildens bakgrund
+   smälter bättre in med den ljusgrå bakgrunden */
+.light-mode .lib-light {
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
