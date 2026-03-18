@@ -907,18 +907,41 @@ function populateBaseYeastDropdown() {
     const dropdown = document.getElementById('custom-base-yeast');
     if (!dropdown) return;
 
-    // Plocka ut alla unika jäst-namn från maskin-databasen
-    const uniqueStrains = [...new Set(yeastDatabase.yeasts.map(y => y.s))];
+    // Plocka fram alla vanliga jäster (inte dina egengjorda)
+    const baseStrains = yeastStrains.filter(y => !y.isCustom).map(y => y.name);
     
-    uniqueStrains.sort().forEach(strain => {
+    // Fyll rullistan
+    baseStrains.sort().forEach(strain => {
         const option = document.createElement('option');
         option.value = strain;
         option.textContent = strain;
         dropdown.appendChild(option);
     });
+
+    // --- NY LOGIK: Lyssna på när du väljer en jäst ---
+    dropdown.addEventListener('change', function() {
+        const placeholder = document.getElementById('chart-placeholder');
+        const chartArea = document.getElementById('chart-scroll-area');
+        
+        if (this.value !== "") {
+            // En jäst är vald -> Göm texten och tona in grafen!
+            if (placeholder) placeholder.style.display = 'none';
+            if (chartArea) {
+                chartArea.style.opacity = '1';
+                chartArea.style.pointerEvents = 'auto'; // Slå på drag-funktionen
+            }
+        } else {
+            // Inget är valt (eller man ångrade sig) -> Visa texten igen
+            if (placeholder) placeholder.style.display = 'flex';
+            if (chartArea) {
+                chartArea.style.opacity = '0';
+                chartArea.style.pointerEvents = 'none'; // Stäng av drag-funktionen
+            }
+        }
+    });
 }
 
-// --- 2. SPARA TILL BIBLIOTEK ---
+// --- 2. SPARA TILL BIBLIOTEK (Städad version utan JSON-export) ---
 function saveProfileToLibrary() {
     let rawName = document.getElementById('custom-profile-name').value.trim().toUpperCase();
     const profileName = rawName !== "" ? rawName : "CUSTOM_1";
@@ -926,7 +949,7 @@ function saveProfileToLibrary() {
     let baseYeast = document.getElementById('custom-base-yeast').value;
     if(baseYeast === "") baseYeast = "Unknown Base";
 
-    // Skapa maskin-objektet för grafen och bryggverket
+    // Skapa maskin-objektet
     const profileData = {
         s: profileName,             
         p: `Custom (${baseYeast})`, 
@@ -939,7 +962,7 @@ function saveProfileToLibrary() {
         ]
     };
 
-    // Spara ner det i enhetens minne
+    // Spara ner det i enhetens minne (localStorage)
     let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
     savedProfiles.push(profileData);
     localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
@@ -948,12 +971,13 @@ function saveProfileToLibrary() {
     const btn = document.getElementById('btn-save-profile');
     const originalText = btn.innerText;
     btn.innerText = "SAVED TO LIBRARY! ✓";
-    btn.style.backgroundColor = "#b142ff"; 
+    btn.style.backgroundColor = "#b142ff"; // Lila succéfärg
     btn.style.borderColor = "#b142ff";
     btn.style.color = "#fff";
 
+    // Ladda om sidan efter 1.2 sekunder så att allt synkas in i biblioteket
     setTimeout(() => {
-        location.reload(); // Laddar om sidan för att baka in den nya jästen överallt
+        location.reload(); 
     }, 1200);
 }
 

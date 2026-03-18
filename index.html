@@ -116,12 +116,17 @@
   <div class="chart-section" style="margin: 20px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333;">
         <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 10px; letter-spacing: 1px;">PROFILE BUILDER</div>
         
-        <div class="chart-container" style="height: 300px; width: 100%; overflow-x: auto; overflow-y: hidden;">
-            <div style="min-width: 600px; height: 100%; position: relative;">
+     <div class="chart-container" style="height: 300px; width: 100%; overflow-x: auto; overflow-y: hidden; position: relative;">
+            
+            <div id="chart-placeholder" style="position: sticky; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; color: #555; font-size: 1.1rem; font-weight: 600; padding: 20px;">
+                Pick a base yeast and name your profile below 👇
+            </div>
+            
+            <div id="chart-scroll-area" style="min-width: 600px; height: 100%; position: absolute; top: 0; left: 0; right: 0; opacity: 0; pointer-events: none; transition: opacity 0.5s ease;">
                 <canvas id="lab-chart"></canvas>
             </div>
+            
         </div>
-    </div>
 
 <div style="margin: 0 20px 20px 20px; display: flex; gap: 15px;">
         <div style="flex: 1;">
@@ -177,10 +182,10 @@
         </div>
     </div>
 
-    <div style="margin: 20px;">
-        <button class="btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="generateJSON()">GENERATE PROFILE JSON</button>
-        <pre id="lab-json-out">// Din färdiga JSON-kod kommer dyka upp här...</pre>
+   <div style="margin: 20px;">
+        <button id="btn-save-profile" class="btn-primary" style="width: 100%; margin-bottom: 20px;" onclick="saveProfileToLibrary()">SAVE TO YEAST LIBRARY</button>
     </div>
+    
 </section>
 
     <section id="view-settings" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
