@@ -605,13 +605,12 @@ function updateLabChart() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    // Hämta värden från alla inputs
+  // Hämta värden från alla inputs (Nu 4 steg)
     const dataPoints = [
         { x: parseFloat(document.getElementById('lab-d1').value) || 0, y: parseFloat(document.getElementById('lab-t1').value) || 0 },
         { x: parseFloat(document.getElementById('lab-d2').value) || 0, y: parseFloat(document.getElementById('lab-t2').value) || 0 },
         { x: parseFloat(document.getElementById('lab-d3').value) || 0, y: parseFloat(document.getElementById('lab-t3').value) || 0 },
-        { x: parseFloat(document.getElementById('lab-d4').value) || 0, y: parseFloat(document.getElementById('lab-t4').value) || 0 },
-        { x: parseFloat(document.getElementById('lab-d5').value) || 0, y: parseFloat(document.getElementById('lab-t5').value) || 0 }
+        { x: parseFloat(document.getElementById('lab-d4').value) || 0, y: parseFloat(document.getElementById('lab-t4').value) || 0 }
     ];
 
     // Temafärg
@@ -677,19 +676,54 @@ function updateLabChart() {
 }
 
 // Generera JSON-koden
+// Generera JSON-koden
 function generateJSON() {
-    const steps = [
-        [parseFloat(document.getElementById('lab-d1').value), parseFloat(document.getElementById('lab-t1').value), "PRIMARY"],
-        [parseFloat(document.getElementById('lab-d2').value), parseFloat(document.getElementById('lab-t2').value), "PRIMARY"],
-        [parseFloat(document.getElementById('lab-d3').value), parseFloat(document.getElementById('lab-t3').value), "DIACETYL REST"],
-        [parseFloat(document.getElementById('lab-d4').value), parseFloat(document.getElementById('lab-t4').value), "COLD CRASH"],
-        [parseFloat(document.getElementById('lab-d5').value), parseFloat(document.getElementById('lab-t5').value), "CONDITIONING"]
-    ];
+    // 1. Samla in all data från de 4 stegen
+    const profileData = {
+        name: "Custom Yeast Profile",
+        created: new Date().toISOString().split('T')[0],
+        steps: [
+            {
+                phase: "Pitch / Primary",
+                days: parseFloat(document.getElementById('lab-d1').value) || 0,
+                temp: parseFloat(document.getElementById('lab-t1').value) || 0
+            },
+            {
+                phase: "Cleanup / D-Rest",
+                days: parseFloat(document.getElementById('lab-d2').value) || 0,
+                temp: parseFloat(document.getElementById('lab-t2').value) || 0
+            },
+            {
+                phase: "Cold Crash",
+                days: parseFloat(document.getElementById('lab-d3').value) || 0,
+                temp: parseFloat(document.getElementById('lab-t3').value) || 0
+            },
+            {
+                phase: "Conditioning",
+                days: parseFloat(document.getElementById('lab-d4').value) || 0,
+                temp: parseFloat(document.getElementById('lab-t4').value) || 0
+            }
+        ]
+    };
 
-    // Bygg JSON-strängen snyggt
-    const jsonString = `"steps": [\n  [${steps[0].join(', ')}],\n  [${steps[1].join(', ')}],\n  [${steps[2].join(', ')}],\n  [${steps[3].join(', ')}],\n  [${steps[4].join(', ')}]\n]`;
+    // 2. Förvandla till snygg kod
+    const jsonString = JSON.stringify(profileData, null, 4);
     
+    // 3. Skriv ut i rutan
     document.getElementById('lab-json-out').innerText = jsonString;
+
+    // 4. Liten snygg animation på knappen
+    const btn = document.querySelector('button[onclick="generateJSON()"]');
+    const originalText = btn.innerText;
+    btn.innerText = "JSON GENERATED! ✓";
+    btn.style.backgroundColor = "#4CAF50"; 
+    btn.style.borderColor = "#4CAF50";
+
+    setTimeout(() => {
+        btn.innerText = originalText;
+        btn.style.backgroundColor = ""; 
+        btn.style.borderColor = "";
+    }, 2000);
 }
 
 // Ladda grafen direkt när sidan startar

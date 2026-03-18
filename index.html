@@ -119,40 +119,33 @@
             </div>
         </div>
 
-        <div class="lab-controls">
+   <div class="lab-controls">
             <div class="lab-step">
-                <div class="step-title">1. Pitch / Start</div>
+                <div class="step-title">1. Pitch / Primary</div>
                 <div class="step-inputs">
                     <label>Days: <input type="number" id="lab-d1" value="0.0" step="0.1" disabled></label>
-                    <label>Temp (°C): <input type="number" id="lab-t1" value="18.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Temp (°C): <input type="number" id="lab-t1" value="19.0" step="0.5" oninput="updateLabChart()"></label>
                 </div>
             </div>
             <div class="lab-step">
-                <div class="step-title">2. Primary Ferm.</div>
+                <div class="step-title">2. Cleanup / D-Rest</div>
                 <div class="step-inputs">
                     <label>Days: <input type="number" id="lab-d2" value="5.0" step="0.5" oninput="updateLabChart()"></label>
-                    <label>Temp (°C): <input type="number" id="lab-t2" value="18.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Temp (°C): <input type="number" id="lab-t2" value="22.0" step="0.5" oninput="updateLabChart()"></label>
                 </div>
             </div>
             <div class="lab-step">
-                <div class="step-title">3. Diacetyl Rest</div>
+                <div class="step-title">3. Cold Crash</div>
                 <div class="step-inputs">
-                    <label>Days: <input type="number" id="lab-d3" value="7.0" step="0.5" oninput="updateLabChart()"></label>
-                    <label>Temp (°C): <input type="number" id="lab-t3" value="20.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Days: <input type="number" id="lab-d3" value="8.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Temp (°C): <input type="number" id="lab-t3" value="3.0" step="0.5" oninput="updateLabChart()"></label>
                 </div>
             </div>
             <div class="lab-step">
-                <div class="step-title">4. Cold Crash</div>
+                <div class="step-title">4. Conditioning</div>
                 <div class="step-inputs">
-                    <label>Days: <input type="number" id="lab-d4" value="9.0" step="0.5" oninput="updateLabChart()"></label>
-                    <label>Temp (°C): <input type="number" id="lab-t4" value="4.0" step="0.5" oninput="updateLabChart()"></label>
-                </div>
-            </div>
-            <div class="lab-step">
-                <div class="step-title">5. Conditioning</div>
-                <div class="step-inputs">
-                    <label>Days: <input type="number" id="lab-d5" value="14.0" step="0.5" oninput="updateLabChart()"></label>
-                    <label>Temp (°C): <input type="number" id="lab-t5" value="4.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Days: <input type="number" id="lab-d4" value="14.0" step="0.5" oninput="updateLabChart()"></label>
+                    <label>Temp (°C): <input type="number" id="lab-t4" value="3.0" step="0.5" oninput="updateLabChart()"></label>
                 </div>
             </div>
         </div>
