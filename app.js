@@ -442,9 +442,11 @@ function renderYeastLibrary(filter = "") {
     });
 
     filtered.forEach(yeast => {
-        const isSelected = selectedStrains.includes(yeast.id);
+ const isSelected = selectedStrains.includes(yeast.id);
+        const isCustom = yeast.isCustom ? 'custom-profile' : ''; // Kollar om det är din egen
+        
         const card = document.createElement('div');
-        card.className = `yeast-card ${isSelected ? 'selected' : ''}`;
+        card.className = `yeast-card ${isCustom} ${isSelected ? 'selected' : ''}`;
         
         card.innerHTML = `
             <h3>${yeast.name}</h3>
@@ -899,92 +901,104 @@ function initLabChart() {
     updateSummaryText(); 
 }
 
-// --- SPARA TILL BIBLIOTEK & JSON-GENERATOR ---
+
+// --- 1. FYLL RULLISTAN MED BASJÄSTER ---
+function populateBaseYeastDropdown() {
+    const dropdown = document.getElementById('custom-base-yeast');
+    if (!dropdown) return;
+
+    // Plocka ut alla unika jäst-namn från maskin-databasen
+    const uniqueStrains = [...new Set(yeastDatabase.yeasts.map(y => y.s))];
+    
+    uniqueStrains.sort().forEach(strain => {
+        const option = document.createElement('option');
+        option.value = strain;
+        option.textContent = strain;
+        dropdown.appendChild(option);
+    });
+}
+
+// --- 2. SPARA TILL BIBLIOTEK ---
 function saveProfileToLibrary() {
-    // Hämta inmatade värden (om tomt, ge dem standardnamn)
     let rawName = document.getElementById('custom-profile-name').value.trim().toUpperCase();
     const profileName = rawName !== "" ? rawName : "CUSTOM_1";
     
-    let rawBase = document.getElementById('custom-base-yeast').value.trim();
-    const baseYeast = rawBase !== "" ? rawBase : "Unknown Base";
+    let baseYeast = document.getElementById('custom-base-yeast').value;
+    if(baseYeast === "") baseYeast = "Unknown Base";
 
-    // 1. Skapa dataobjektet
+    // Skapa maskin-objektet för grafen och bryggverket
     const profileData = {
-        name: profileName,
-        base: baseYeast,
-        created: new Date().toISOString().split('T')[0],
-        dryHopSchedule: dryHopData.enabled ? { phase: "Add Dry Hops", day: dryHopData.day } : null,
+        s: profileName,             
+        p: `Custom (${baseYeast})`, 
+        dryHopDay: dryHopData.enabled ? dryHopData.day : null, 
         steps: [
-            { phase: "Pitch / Primary", days: profilePoints[0].x, temp: profilePoints[0].y },
-            { phase: "Cleanup / D-Rest", days: profilePoints[1].x, temp: profilePoints[1].y },
-            { phase: "Cold Crash", days: profilePoints[2].x, temp: profilePoints[2].y },
-            { phase: "Conditioning", days: profilePoints[3].x, temp: profilePoints[3].y }
+            [profilePoints[0].x, profilePoints[0].y],
+            [profilePoints[1].x, profilePoints[1].y],
+            [profilePoints[2].x, profilePoints[2].y],
+            [profilePoints[3].x, profilePoints[3].y]
         ]
     };
 
-    // 2. Skriv ut JSON (ifall man behöver kopiera den manuellt till bryggverket)
-    const jsonString = JSON.stringify(profileData, null, 4);
-    const jsonOut = document.getElementById('lab-json-out');
-    jsonOut.style.display = 'block';
-    jsonOut.innerText = jsonString;
-
-    // 3. Spara till webbläsarens lokala minne
+    // Spara ner det i enhetens minne
     let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
     savedProfiles.push(profileData);
     localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
 
-    // 4. Lägg till den som ett kort i biblioteket direkt!
-    renderCustomProfileInLibrary(profileData);
-
-    // 5. Knapp-animation
+    // Magisk Knapp-animation
     const btn = document.getElementById('btn-save-profile');
     const originalText = btn.innerText;
     btn.innerText = "SAVED TO LIBRARY! ✓";
-    btn.style.backgroundColor = "#b142ff"; // Lila succé-färg
+    btn.style.backgroundColor = "#b142ff"; 
     btn.style.borderColor = "#b142ff";
     btn.style.color = "#fff";
 
     setTimeout(() => {
-        btn.innerText = originalText;
-        btn.style.backgroundColor = ""; 
-        btn.style.borderColor = "";
-        btn.style.color = "";
-    }, 2000);
+        location.reload(); // Laddar om sidan för att baka in den nya jästen överallt
+    }, 1200);
 }
 
-// Renderar det lila kortet i Library-vyn
-function renderCustomProfileInLibrary(profileData) {
-    const grid = document.querySelector('.yeast-grid');
-    if (!grid) return;
-
-    // Vi skapar kortets HTML. Vi skickar med namnet till toggle-funktionen (precis som vanliga jäster)
-    const cardHTML = `
-        <div class="yeast-card custom-profile" onclick="toggleYeastSelection(this, '${profileData.name}')">
-            <div style="display: flex; flex-direction: column; justify-content: center; overflow: hidden;">
-                <h3 style="margin: 0; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    <span style="font-size: 0.8rem; margin-right: 4px;">🧪</span> ${profileData.name}
-                </h3>
-                <span style="font-size: 0.65rem; color: #aaa; margin-top: 2px;">Base: ${profileData.base}</span>
-            </div>
-            <div class="favorite-star" style="opacity: 0.5;">☆</div>
-        </div>
-    `;
-    
-    // Lägg in den ALLRA FÖRST i listan!
-    grid.insertAdjacentHTML('afterbegin', cardHTML);
-}
-
-// Laddar sparade profiler när appen startas
+// --- 3. LADDA IN DINA EGNA JÄSTER I BÅDA DATABASERNA ---
 function loadCustomProfiles() {
     let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
-    // Rita dem i omvänd ordning så de senaste alltid hamnar högst upp
-    savedProfiles.reverse().forEach(profile => renderCustomProfileInLibrary(profile));
+    
+    savedProfiles.reverse().forEach(profile => {
+        // A) Smuggla in i Maskin-databasen (yeastDatabase)
+        if (!yeastDatabase.yeasts.some(y => y.s === profile.s && y.p === profile.p)) {
+            yeastDatabase.yeasts.unshift(profile);
+        }
+
+        // B) Smuggla in i UI-databasen (yeastStrains) så den ritas som ett kort!
+        const customId = "custom-" + profile.s.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (!yeastStrains.some(y => y.id === customId)) {
+            yeastStrains.unshift({
+                id: customId,
+                name: profile.s,
+                origin: "Custom",
+                temp: "User Defined",
+                tags: ["Custom", profile.p],
+                desc: "Din egenhändigt skapade jästprofil. Denna är baserad på: " + profile.p,
+                styles: "Any",
+                isCustom: true // Flagga så vi vet att den är egengjord
+            });
+        }
+    });
 }
 
+// --- STARTMOTORN ---
 window.addEventListener('DOMContentLoaded', () => {
+    // 1. Först laddar vi in dina egna jäster så systemet vet om dem
+    loadCustomProfiles(); 
+    
+    // 2. Sen fyller vi rullistan
+    populateBaseYeastDropdown();
+    
+    // 3. Sen startar vi grafen i Profiler
     setTimeout(initLabChart, 500); 
-    loadCustomProfiles();
 });
+
+
+
+
 
 // ==========================================
 // PITCH CALCULATOR

@@ -130,19 +130,24 @@
         </div>
         <div style="flex: 1;">
             <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">BASE YEAST</label>
-            <input type="text" id="custom-base-yeast" placeholder="e.g. WLP007" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; outline: none;">
+            <select id="custom-base-yeast" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; outline: none;">
+                <option value="">Select Base...</option>
+                </select>
         </div>
     </div>
 
-    <div id="profile-summary" style="..."> 
-         </div>
-
-    <div class="lab-actions" style="...">
+    <div id="profile-summary" style="margin: 0 20px 20px 20px; background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 20px;">
         </div>
 
+    <div class="lab-actions" style="margin: 20px; text-align: center; border-top: 1px solid #333; padding-top: 20px;">
+        <button id="btn-add-hops" class="btn-secondary" style="width: auto; padding: 10px 20px; font-size: 0.9rem;" onclick="toggleDryHopLine()">+ ADD DRY HOPS</button>
+        <div id="hop-schedule-text" style="margin-top: 10px; font-size: 0.85rem; color: #888; display: none;">
+            Hops scheduled on Day <span id="hop-day-val" style="color: var(--accent-color); font-weight: 800;">5.0</span>
+        </div>
+    </div>
+
     <div style="margin: 20px;">
-        <button id="btn-save-profile" class="btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="saveProfileToLibrary()">SAVE TO YEAST LIBRARY</button>
-        <pre id="lab-json-out" style="display: none;">// JSON-kod visas här om den behövs i framtiden...</pre>
+        <button id="btn-save-profile" class="btn-primary" style="width: 100%; margin-bottom: 20px;" onclick="saveProfileToLibrary()">SAVE TO YEAST LIBRARY</button>
     </div>
 </section>
 
