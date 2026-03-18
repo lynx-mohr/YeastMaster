@@ -5,6 +5,12 @@
     padding: 0; 
 }
 
+/* NYTT: Tvinga fram scroll-spåret på HTML-nivå för att låsa mittenläget på PC */
+html {
+    overflow-y: scroll;
+    width: 100%;
+}
+
 html, body {
     width: 100%;
     max-width: 100vw;
@@ -15,13 +21,13 @@ html, body {
 body { 
     background-color: #111; 
     color: var(--oled-color); 
-  font-family: 'Lexend', sans-serif;
+    font-family: 'Lexend', sans-serif;
     display: flex; 
     flex-direction: column; 
     align-items: center; 
     min-height: 100vh; 
-    overflow-x: hidden; 
-    overflow-y: scroll;
+    /* Vi behåller denna som backup */
+    overflow-y: scroll; 
 }
 
 /* Light Mode & Teman */
@@ -66,22 +72,27 @@ body.light-mode .btn-primary { border: 1px solid #ccc; }
 }
 
 /* --- 3. VYER & OLED SCREEN (HÄR ÄR FIXEN) --- */
-section[id^="view-"] {
+/* --- 3. VYER & SEKTIONER (FIXEN FÖR PC-HOPP) --- */
+section {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    max-width: 800px;
+    margin: 0 auto !important; /* Tvingar sektionen till mitten av skärmen */
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    display: block; /* Ändrat från flex för att rubriker ska ligga fast till vänster */
+    box-sizing: border-box;
 }
 
 .oled-screen { 
     width: 100%; 
-    max-width: 450px; /* PC Standardbredd */
+    max-width: 450px; 
     background-color: var(--oled-bg); 
     border: 3px solid #333; 
     border-radius: 8px; 
     padding: 20px; 
     display: flex; 
     flex-direction: column; 
+    /* Centrerar själva OLED-skärmen inuti den 800px breda sektionen */
     margin-left: auto;
     margin-right: auto;
     overflow: hidden;
@@ -246,7 +257,7 @@ canvas#beer-chart {
     width: 100%; 
     text-align: left; 
     margin-bottom: 20px; 
-    padding: 0 20px; /* <--- LÄGG TILL DENNA: Ger 20px luft på sidorna */
+    padding: 0;
     box-sizing: border-box; /* Ser till att paddingen inte gör headern bredare än 100% */
 }
 
