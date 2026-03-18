@@ -387,12 +387,19 @@ canvas#beer-chart {
     text-shadow: 0 0 8px rgba(0, 229, 255, 0.5); /* Lätt glöd på texten */
 }
 
-.nav-item:hover .nav-icon, 
-.nav-item:hover .nav-text { 
+/* Ändrad hover-regel: Blir bara grå om den INTE redan är aktiv */
+.nav-item:not(.active):hover .nav-icon, 
+.nav-item:not(.active):hover .nav-text { 
     color: #aaa; 
     fill: #aaa; 
 }
 
+/* För säkerhets skull: Tvinga den aktiva ikonen att alltid vara i accentfärg */
+.nav-item.active .nav-icon {
+    fill: var(--accent-color) !important;
+    filter: drop-shadow(0 0 8px var(--accent-color)); 
+    transform: scale(1.1); 
+}
 
 /* ========================================= */
 /* --- 10. PC-VAKTPOST (BRED SKÄRM) --- */
