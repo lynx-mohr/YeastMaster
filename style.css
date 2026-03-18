@@ -886,3 +886,29 @@ body.light-mode .lib-light { display: block !important; }
 #lab-chart {
     cursor: default; 
 }
+
+/* --- CUSTOM YEAST PROFILES (I Biblioteket) --- */
+.yeast-card.custom-profile {
+    border-color: #b142ff; /* Lila färg för att skilja dem från vanliga */
+    background: rgba(177, 66, 255, 0.05);
+}
+
+.yeast-card.custom-profile h3 {
+    color: #b142ff !important;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+/* När man drar musen över, eller stjärnmarkerar den */
+.yeast-card.custom-profile:hover,
+.yeast-card.custom-profile.selected {
+    background: rgba(177, 66, 255, 0.15) !important;
+    border-color: #b142ff !important;
+    box-shadow: 0 0 10px rgba(177, 66, 255, 0.3);
+}
+
+/* Light mode support */
+.light-mode .yeast-card.custom-profile {
+    background: #faf0ff;
+    border-color: #d28cff;
+}

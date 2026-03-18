@@ -899,17 +899,21 @@ function initLabChart() {
     updateSummaryText(); 
 }
 
-// --- JSON-GENERATOR ---
-function generateJSON() {
-    const profileData = {
-        name: "Interactive 4-Step Profile",
-        created: new Date().toISOString().split('T')[0],
-        
-        dryHopSchedule: dryHopData.enabled ? {
-            phase: "Add Dry Hops",
-            day: dryHopData.day
-        } : null,
+// --- SPARA TILL BIBLIOTEK & JSON-GENERATOR ---
+function saveProfileToLibrary() {
+    // Hämta inmatade värden (om tomt, ge dem standardnamn)
+    let rawName = document.getElementById('custom-profile-name').value.trim().toUpperCase();
+    const profileName = rawName !== "" ? rawName : "CUSTOM_1";
+    
+    let rawBase = document.getElementById('custom-base-yeast').value.trim();
+    const baseYeast = rawBase !== "" ? rawBase : "Unknown Base";
 
+    // 1. Skapa dataobjektet
+    const profileData = {
+        name: profileName,
+        base: baseYeast,
+        created: new Date().toISOString().split('T')[0],
+        dryHopSchedule: dryHopData.enabled ? { phase: "Add Dry Hops", day: dryHopData.day } : null,
         steps: [
             { phase: "Pitch / Primary", days: profilePoints[0].x, temp: profilePoints[0].y },
             { phase: "Cleanup / D-Rest", days: profilePoints[1].x, temp: profilePoints[1].y },
@@ -918,24 +922,68 @@ function generateJSON() {
         ]
     };
 
+    // 2. Skriv ut JSON (ifall man behöver kopiera den manuellt till bryggverket)
     const jsonString = JSON.stringify(profileData, null, 4);
-    document.getElementById('lab-json-out').innerText = jsonString;
+    const jsonOut = document.getElementById('lab-json-out');
+    jsonOut.style.display = 'block';
+    jsonOut.innerText = jsonString;
 
-    const btn = document.querySelector('button[onclick="generateJSON()"]');
+    // 3. Spara till webbläsarens lokala minne
+    let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
+    savedProfiles.push(profileData);
+    localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
+
+    // 4. Lägg till den som ett kort i biblioteket direkt!
+    renderCustomProfileInLibrary(profileData);
+
+    // 5. Knapp-animation
+    const btn = document.getElementById('btn-save-profile');
     const originalText = btn.innerText;
-    btn.innerText = "JSON GENERATED! ✓";
-    btn.style.backgroundColor = "#4CAF50"; 
-    btn.style.borderColor = "#4CAF50";
+    btn.innerText = "SAVED TO LIBRARY! ✓";
+    btn.style.backgroundColor = "#b142ff"; // Lila succé-färg
+    btn.style.borderColor = "#b142ff";
+    btn.style.color = "#fff";
 
     setTimeout(() => {
         btn.innerText = originalText;
         btn.style.backgroundColor = ""; 
         btn.style.borderColor = "";
+        btn.style.color = "";
     }, 2000);
+}
+
+// Renderar det lila kortet i Library-vyn
+function renderCustomProfileInLibrary(profileData) {
+    const grid = document.querySelector('.yeast-grid');
+    if (!grid) return;
+
+    // Vi skapar kortets HTML. Vi skickar med namnet till toggle-funktionen (precis som vanliga jäster)
+    const cardHTML = `
+        <div class="yeast-card custom-profile" onclick="toggleYeastSelection(this, '${profileData.name}')">
+            <div style="display: flex; flex-direction: column; justify-content: center; overflow: hidden;">
+                <h3 style="margin: 0; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <span style="font-size: 0.8rem; margin-right: 4px;">🧪</span> ${profileData.name}
+                </h3>
+                <span style="font-size: 0.65rem; color: #aaa; margin-top: 2px;">Base: ${profileData.base}</span>
+            </div>
+            <div class="favorite-star" style="opacity: 0.5;">☆</div>
+        </div>
+    `;
+    
+    // Lägg in den ALLRA FÖRST i listan!
+    grid.insertAdjacentHTML('afterbegin', cardHTML);
+}
+
+// Laddar sparade profiler när appen startas
+function loadCustomProfiles() {
+    let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
+    // Rita dem i omvänd ordning så de senaste alltid hamnar högst upp
+    savedProfiles.reverse().forEach(profile => renderCustomProfileInLibrary(profile));
 }
 
 window.addEventListener('DOMContentLoaded', () => {
     setTimeout(initLabChart, 500); 
+    loadCustomProfiles();
 });
 
 // ==========================================
