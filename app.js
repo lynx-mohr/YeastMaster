@@ -1008,15 +1008,17 @@ function loadCustomProfiles() {
     });
 }
 
-// --- STARTMOTORN ---
+// --- STARTMOTORN FÖR ARCANE LAB ---
 window.addEventListener('DOMContentLoaded', () => {
-    // 1. Först laddar vi in dina egna jäster så systemet vet om dem
+    // 1. Ladda in dina egna skapelser i databasen först
     loadCustomProfiles(); 
     
-    // 2. Sen fyller vi rullistan
-    populateBaseYeastDropdown();
+    // 2. FYLL RULLISTAN (Det var den här som saknades!)
+    if (typeof populateBaseYeastDropdown === "function") {
+        populateBaseYeastDropdown();
+    }
     
-    // 3. Sen startar vi grafen i Profiler
+    // 3. Starta grafen (med en halv sekunds fördröjning så rutan hinner ritas)
     setTimeout(initLabChart, 500); 
 });
 
