@@ -264,13 +264,13 @@ function updateChart(data) {
                 layout: { padding: 0 },
                 scales: {
                     x: { 
-                        ticks: { color: '#666', maxTicksLimit: 5, font: { family: 'Inter', size: 10 } }, 
+                        ticks: { color: '#666', maxTicksLimit: 5, font: { family: 'Lexend', size: 10 } },
                         grid: { display: false } 
                     },
                     y: { 
                         ticks: { 
                             color: '#666', 
-                            font: { family: 'Inter', size: 10 }, 
+                           font: { family: 'Lexend', size: 10 },
                             // <-- NYTT: Här är skyddet som förhindrar att funktionen kraschar
                             callback: function(value) {
                                 return Number(value).toFixed(1) + '°';
@@ -651,12 +651,12 @@ function updateLabChart() {
                 scales: {
                     x: {
                         type: 'linear',
-                        title: { display: true, text: 'Days', color: '#888', font: {family: 'Inter', weight: 600} },
+                       title: { display: true, text: 'Days', color: '#888', font: {family: 'Lexend', weight: 600} },
                         ticks: { color: '#666' },
                         grid: { color: 'rgba(255,255,255,0.05)' }
                     },
                     y: {
-                        title: { display: true, text: 'Temp (°C)', color: '#888', font: {family: 'Inter', weight: 600} },
+                       title: { display: true, text: 'Temp (°C)', color: '#888', font: {family: 'Lexend', weight: 600} },
                         ticks: { color: '#666', callback: v => Number(v).toFixed(1) + '°' },
                         grid: { color: 'rgba(255,255,255,0.05)' }
                     }

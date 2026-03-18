@@ -15,7 +15,7 @@ html, body {
 body { 
     background-color: #111; 
     color: var(--oled-color); 
-    font-family: 'Inter', sans-serif; 
+  font-family: 'Lexend', sans-serif;
     display: flex; 
     flex-direction: column; 
     align-items: center; 
@@ -577,7 +577,7 @@ canvas#beer-chart {
     padding: 8px;
     border-radius: 5px;
     width: 75px;
-    font-family: 'Inter', sans-serif;
+  font-family: 'Lexend', sans-serif;
     font-weight: 600;
     text-align: center;
     margin-top: 5px;
@@ -657,7 +657,7 @@ canvas#beer-chart {
     color: #fff;
     padding: 10px;
     border-radius: 8px;
-    font-family: 'Inter';
+   font-family: 'Lexend', sans-serif;
 }
 
 .calc-results {
