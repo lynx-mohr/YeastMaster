@@ -21,6 +21,7 @@ body {
     align-items: center; 
     min-height: 100vh; 
     overflow-x: hidden; 
+    overflow-y: scroll;
 }
 
 /* Light Mode & Teman */
@@ -241,7 +242,13 @@ canvas#beer-chart {
 }
 
 /* --- 7. BIBLIOTEK & KNAPPAR --- */
-.library-header { width: 100%; text-align: left; margin-bottom: 20px; }
+.library-header { 
+    width: 100%; 
+    text-align: left; 
+    margin-bottom: 20px; 
+    padding: 0 20px; /* <--- LÄGG TILL DENNA: Ger 20px luft på sidorna */
+    box-sizing: border-box; /* Ser till att paddingen inte gör headern bredare än 100% */
+}
 
 .yeast-grid { 
     display: grid; 
@@ -911,4 +918,37 @@ body.light-mode .lib-light { display: block !important; }
 .light-mode .yeast-card.custom-profile {
     background: #faf0ff;
     border-color: #d28cff;
+}
+
+/* --- DELETE BUTTON FOR CUSTOM PROFILES --- */
+.delete-custom-btn {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 24px;
+    height: 24px;
+    background: #ff4444;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    z-index: 100; /* Se till att den ligger ovanpå allt annat på kortet */
+    transition: all 0.2s ease;
+    border: 2px solid #000; /* Gör den extra tydlig mot bakgrunden */
+}
+
+/* Gör krysset lite större och argare när man hovrar på PC */
+.delete-custom-btn:hover {
+    transform: scale(1.2);
+    background: #ff0000;
+}
+
+/* VIKTIGT: Se till att kortet fattar att krysset ska sitta fast i dess hörn */
+.yeast-card {
+    position: relative; /* Detta krävs för att 'absolute' positionering på krysset ska fungera */
 }

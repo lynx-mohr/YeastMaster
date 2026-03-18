@@ -448,7 +448,12 @@ function renderYeastLibrary(filter = "") {
         const card = document.createElement('div');
         card.className = `yeast-card ${isCustom} ${isSelected ? 'selected' : ''}`;
         
+      const deleteBtn = yeast.isCustom ? 
+            `<div class="delete-custom-btn" onclick="event.stopPropagation(); deleteCustomProfile('${yeast.name}')">×</div>` 
+            : '';
+
         card.innerHTML = `
+            ${deleteBtn}
             <h3>${yeast.name}</h3>
             <div class="favorite-star" onclick="event.stopPropagation(); toggleFavorite('${yeast.id}')">
                 ${isSelected ? '★' : '☆'}
@@ -1245,17 +1250,47 @@ function openYeastModal(yeast) {
     const modal = document.getElementById('yeast-info-modal');
     document.getElementById('modal-yeast-name').innerText = yeast.name;
     
-    // Leta i din stora text-ordlista. Om texten finns, visa den. Annars visa den korta.
-    // Tips: Jag matchar på "yeast.name" men vi kan matcha på ID också beroende på hur du döpte dem i arrayen.
-    let detailedText = yeastDescriptions[yeast.name] || yeastDescriptions[yeast.id];
-    
-    if (!detailedText) {
-        // Om ingen peppig text finns (ännu), visa den korta från arrayen
-        detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:15px;">Passar till:</h3><p>${yeast.styles}</p>`;
+    let detailedText = "";
+
+    // Kolla om detta är en egengjord profil (vi kollar efter flaggan 'isCustom')
+    if (yeast.isCustom) {
+        // Hitta den sparade profildatan i localStorage för att få tag i stegen
+        const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
+        // Vi matchar på namnet (eller så kan vi skicka med hela objektet i framtiden)
+        const profileData = savedProfiles.find(p => p.s === yeast.name);
+
+        if (profileData) {
+            const s = profileData.steps;
+            const baseYeast = profileData.p.replace('Custom (', '').replace(')', '');
+
+            detailedText = `
+                <div style="line-height: 1.6;">
+                    <p style="color: var(--accent-color); font-weight: 800; margin-bottom: 15px;">Created by you!</p>
+                    <p>This profile is used with <strong>${baseYeast}</strong> and these are the profile steps:</p>
+                    
+                    <ul style="list-style: none; padding: 0; margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
+                        <li><strong style="color: #fff;">Pitch / Primary:</strong> Start at ${s[0][1]}°C.</li>
+                        <li><strong style="color: #fff;">Cleanup / D-Rest:</strong> Rise to ${s[1][1]}°C on Day ${s[1][0]}.</li>
+                        <li><strong style="color: #fff;">Cold Crash:</strong> Drop to ${s[2][1]}°C on Day ${s[2][0]}.</li>
+                        <li><strong style="color: #fff;">Conditioning:</strong> Hold at ${s[3][1]}°C until Day ${s[3][0]}.</li>
+                    </ul>
+                    
+                    ${profileData.dryHopDay ? `<p style="margin-top: 15px; color: #00e5ff;"><strong>Dry Hop:</strong> Scheduled for Day ${profileData.dryHopDay}</p>` : ''}
+                </div>
+            `;
+        } else {
+            detailedText = `<p>Custom profile data not found.</p>`;
+        }
+    } else {
+        // Om det är en vanlig jäst från databasen, kör som vanligt
+        detailedText = yeastDescriptions[yeast.name] || yeastDescriptions[yeast.id];
+        if (!detailedText) {
+            detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:15px;">Passar till:</h3><p>${yeast.styles}</p>`;
+        }
     }
     
     document.getElementById('modal-yeast-desc').innerHTML = detailedText;
-    modal.style.display = 'flex'; // Visar din fina overlay
+    modal.style.display = 'flex';
 }
 
 window.closeYeastModal = function() {
@@ -1304,5 +1339,21 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// --- FUNKTION FÖR ATT RADERA EN PROFIL ---
+function deleteCustomProfile(profileName) {
+    if (!confirm(`Are you sure you want to delete "${profileName}"?`)) return;
+
+    // 1. Hämta befintliga profiler
+    let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
+    
+    // 2. Filtrera bort den vi vill radera
+    savedProfiles = savedProfiles.filter(p => p.s !== profileName);
+    
+    // 3. Spara tillbaka till localStorage
+    localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
+
+    // 4. Ladda om sidan för att uppdatera alla listor och grafer
+    location.reload();
+}
 
 
