@@ -113,10 +113,13 @@
         <p style="opacity: 0.6; font-size: 0.9rem;">Dra i punkterna för att bygga din jäsprofil.</p>
     </div>
 
-    <div class="chart-section" style="margin: 20px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333;">
+  <div class="chart-section" style="margin: 20px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333;">
         <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 10px; letter-spacing: 1px;">PROFILE BUILDER</div>
-        <div class="chart-container" style="height: 300px;">
-            <canvas id="lab-chart"></canvas>
+        
+        <div class="chart-container" style="height: 300px; width: 100%; overflow-x: auto; overflow-y: hidden;">
+            <div style="min-width: 600px; height: 100%; position: relative;">
+                <canvas id="lab-chart"></canvas>
+            </div>
         </div>
     </div>
 
