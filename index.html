@@ -108,53 +108,49 @@
     </section>
 
 <section id="view-lab" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
-        <div class="library-header">
-            <h2>Profiler</h2> <p style="opacity: 0.6; font-size: 0.9rem;">Bygg och exportera din 5-stegsprofil.</p>
-        </div>
+    <div class="library-header">
+        <h2>Profiler</h2> 
+        <p style="opacity: 0.6; font-size: 0.9rem;">Dra i punkterna för att bygga din jäsprofil.</p>
+    </div>
 
-        <div class="chart-section" style="margin: 20px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333;">
-            <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 10px; letter-spacing: 1px;">PROFILE PREVIEW</div>
-            <div class="chart-container" style="height: 250px;">
-                <canvas id="lab-chart"></canvas>
-            </div>
+    <div class="chart-section" style="margin: 20px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333;">
+        <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 10px; letter-spacing: 1px;">PROFILE BUILDER</div>
+        <div class="chart-container" style="height: 300px;">
+            <canvas id="lab-chart"></canvas>
         </div>
+    </div>
 
-   <div class="lab-controls">
-            <div class="lab-step">
-                <div class="step-title">1. Pitch / Primary</div>
-                <div class="step-inputs">
-                    <label>Days: <input type="number" id="lab-d1" value="0.0" step="0.1" disabled></label>
-                    <label>Temp (°C): <input type="number" id="lab-t1" value="19.0" step="0.5" oninput="updateLabChart()"></label>
-                </div>
+    <div id="profile-summary" style="margin: 0 20px 20px 20px; background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 20px;">
+        <div style="font-size: 0.85rem; font-weight: 800; color: var(--accent-color); margin-bottom: 15px; letter-spacing: 1px;">PROFILE SUMMARY</div>
+        
+        <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem; color: #ccc;">
+            <div id="sum-step1">
+                <strong>Pitch / Primary:</strong> Start at <span id="val-t1" style="color:#fff; font-weight:bold;">19°C</span>.
             </div>
-            <div class="lab-step">
-                <div class="step-title">2. Cleanup / D-Rest</div>
-                <div class="step-inputs">
-                    <label>Days: <input type="number" id="lab-d2" value="5.0" step="0.5" oninput="updateLabChart()"></label>
-                    <label>Temp (°C): <input type="number" id="lab-t2" value="22.0" step="0.5" oninput="updateLabChart()"></label>
-                </div>
+            <div id="sum-step2">
+                <strong>Cleanup / D-Rest:</strong> Rise to <span id="val-t2" style="color:#fff; font-weight:bold;">22°C</span> on Day <span id="val-d2" style="color:#fff; font-weight:bold;">5</span>.
             </div>
-            <div class="lab-step">
-                <div class="step-title">3. Cold Crash</div>
-                <div class="step-inputs">
-                    <label>Days: <input type="number" id="lab-d3" value="8.0" step="0.5" oninput="updateLabChart()"></label>
-                    <label>Temp (°C): <input type="number" id="lab-t3" value="3.0" step="0.5" oninput="updateLabChart()"></label>
-                </div>
+            <div id="sum-step3">
+                <strong>Cold Crash:</strong> Drop to <span id="val-t3" style="color:#fff; font-weight:bold;">3°C</span> on Day <span id="val-d3" style="color:#fff; font-weight:bold;">8</span>.
             </div>
-            <div class="lab-step">
-                <div class="step-title">4. Conditioning</div>
-                <div class="step-inputs">
-                    <label>Days: <input type="number" id="lab-d4" value="14.0" step="0.5" oninput="updateLabChart()"></label>
-                    <label>Temp (°C): <input type="number" id="lab-t4" value="3.0" step="0.5" oninput="updateLabChart()"></label>
-                </div>
+            <div id="sum-step4">
+                <strong>Conditioning:</strong> Hold at <span id="val-t4" style="color:#fff; font-weight:bold;">3°C</span> until Day <span id="val-d4" style="color:#fff; font-weight:bold;">14</span>.
             </div>
         </div>
+    </div>
 
-        <div style="margin: 20px;">
-            <button class="btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="generateJSON()">GENERATE PROFILE JSON</button>
-            <pre id="lab-json-out">// Din färdiga JSON-kod kommer dyka upp här...</pre>
+    <div class="lab-actions" style="margin: 20px; text-align: center; border-top: 1px solid #333; padding-top: 20px;">
+        <button id="btn-add-hops" class="btn-secondary" style="width: auto; padding: 10px 20px; font-size: 0.9rem;" onclick="toggleDryHopLine()">+ ADD DRY HOPS</button>
+        <div id="hop-schedule-text" style="margin-top: 10px; font-size: 0.85rem; color: #888; display: none;">
+            Hops scheduled on Day <span id="hop-day-val" style="color: var(--accent-color); font-weight: 800;">5.0</span>
         </div>
-    </section>
+    </div>
+
+    <div style="margin: 20px;">
+        <button class="btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="generateJSON()">GENERATE PROFILE JSON</button>
+        <pre id="lab-json-out">// Din färdiga JSON-kod kommer dyka upp här...</pre>
+    </div>
+</section>
 
     <section id="view-settings" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
         <div class="library-header">

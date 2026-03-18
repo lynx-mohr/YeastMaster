@@ -595,124 +595,310 @@ function setActive(clickedElement) {
 }
 
 // ==========================================
-// THE ARCANE LAB (Profilbyggaren)
+// THE ARCANE LAB (Interaktiv Profilbyggare)
 // ==========================================
 
 let labChart;
 
-function updateLabChart() {
+// Grundläggande data för de 4 stegen (Dag, Temp)
+let profilePoints = [
+    { x: 0, y: 19 },   // Steg 1: Pitch / Primary
+    { x: 5, y: 22 },   // Steg 2: Cleanup / D-Rest
+    { x: 8, y: 3 },    // Steg 3: Cold Crash
+    { x: 14, y: 3 }    // Steg 4: Conditioning
+];
+
+// Data-tillstånd för torrhumlingen
+let dryHopData = {
+    enabled: false,
+    day: 5.0,
+    isDragging: false,
+    color: '#00e5ff'
+};
+
+// --- CHART.JS PLUGIN: Torrhumlingslinjen ---
+const dryHopPlugin = {
+    id: 'dryHopLine',
+    afterDraw: (chart) => {
+        if (!dryHopData.enabled) return;
+
+        const {ctx, chartArea: {top, bottom, left, right}, scales: {x}} = chart;
+        const xPix = x.getPixelForValue(dryHopData.day);
+
+        // Om linjen ligger utanför grafen, rita den inte
+        if (xPix < left || xPix > right) return;
+
+        ctx.save();
+        
+        // Rita prickad linje
+        ctx.strokeStyle = dryHopData.color;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 6]);
+        ctx.beginPath();
+        ctx.moveTo(xPix, top);
+        ctx.lineTo(xPix, bottom);
+        ctx.stroke();
+        
+        // Rita etikett och handtag
+        ctx.setLineDash([]);
+        ctx.fillStyle = dryHopData.color;
+        ctx.font = 'bold 10px Lexend';
+        ctx.textAlign = 'center';
+        ctx.fillText('DRY HOP', xPix, top - 5);
+
+        ctx.beginPath();
+        ctx.arc(xPix, (top + bottom) / 2, 6, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.restore();
+    }
+};
+
+Chart.register(dryHopPlugin);
+
+// Tänd/släck torrhumlingslinjen
+function toggleDryHopLine() {
+    dryHopData.enabled = !dryHopData.enabled;
+    const btn = document.getElementById('btn-add-hops');
+    const textInfo = document.getElementById('hop-schedule-text');
+    
+    if (dryHopData.enabled) {
+        btn.innerText = "- REMOVE DRY HOPS";
+        btn.classList.add('active');
+        textInfo.style.display = 'block';
+        updateSummaryText();
+    } else {
+        btn.innerText = "+ ADD DRY HOPS";
+        btn.classList.remove('active');
+        textInfo.style.display = 'none';
+        if(labChart) labChart.canvas.style.cursor = 'default';
+    }
+    if (labChart) labChart.update('none');
+}
+
+// Uppdaterar den snygga textsammanfattningen
+function updateSummaryText() {
+    document.getElementById('val-t1').innerText = profilePoints[0].y.toFixed(1) + "°C";
+    
+    document.getElementById('val-t2').innerText = profilePoints[1].y.toFixed(1) + "°C";
+    document.getElementById('val-d2').innerText = profilePoints[1].x.toFixed(1);
+    
+    document.getElementById('val-t3').innerText = profilePoints[2].y.toFixed(1) + "°C";
+    document.getElementById('val-d3').innerText = profilePoints[2].x.toFixed(1);
+    
+    document.getElementById('val-t4').innerText = profilePoints[3].y.toFixed(1) + "°C";
+    document.getElementById('val-d4').innerText = profilePoints[3].x.toFixed(1);
+
+    if (dryHopData.enabled) {
+        document.getElementById('hop-day-val').innerText = dryHopData.day.toFixed(1);
+    }
+}
+
+// --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
+function initLabChart() {
     const canvas = document.getElementById('lab-chart');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-  // Hämta värden från alla inputs (Nu 4 steg)
-    const dataPoints = [
-        { x: parseFloat(document.getElementById('lab-d1').value) || 0, y: parseFloat(document.getElementById('lab-t1').value) || 0 },
-        { x: parseFloat(document.getElementById('lab-d2').value) || 0, y: parseFloat(document.getElementById('lab-t2').value) || 0 },
-        { x: parseFloat(document.getElementById('lab-d3').value) || 0, y: parseFloat(document.getElementById('lab-t3').value) || 0 },
-        { x: parseFloat(document.getElementById('lab-d4').value) || 0, y: parseFloat(document.getElementById('lab-t4').value) || 0 }
-    ];
-
-    // Temafärg
     let themeAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#00e5ff';
-    
-    // Gradient
-    const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+    dryHopData.color = themeAccent;
+
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)'); 
     gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
-    if (labChart) {
-        labChart.data.datasets[0].data = dataPoints;
-        labChart.data.datasets[0].borderColor = themeAccent;
-        labChart.update();
-    } else {
-        labChart = new Chart(ctx, {
-            type: 'scatter', // Scatter med showLine är bäst för fristående X/Y-koordinater
-            data: {
-                datasets: [{
-                    label: 'Profile Target Temp',
-                    data: dataPoints,
-                    borderColor: themeAccent,
-                    backgroundColor: gradient,
-                    borderWidth: 3,
-                    pointBackgroundColor: '#fff',
-                    pointBorderColor: themeAccent,
-                    pointRadius: 5,
-                    pointHoverRadius: 8,
-                    fill: true,
-                    showLine: true,
-                    tension: 0.1 // Lätt kurvning, men mest raka streck
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        type: 'linear',
-                       title: { display: true, text: 'Days', color: '#888', font: {family: 'Lexend', weight: 600} },
-                        ticks: { color: '#666' },
-                        grid: { color: 'rgba(255,255,255,0.05)' }
-                    },
-                    y: {
-                       title: { display: true, text: 'Temp (°C)', color: '#888', font: {family: 'Lexend', weight: 600} },
-                        ticks: { color: '#666', callback: v => Number(v).toFixed(1) + '°' },
-                        grid: { color: 'rgba(255,255,255,0.05)' }
-                    }
+    labChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Profile Target Temp',
+                data: profilePoints,
+                borderColor: themeAccent,
+                backgroundColor: gradient,
+                borderWidth: 3,
+                pointBackgroundColor: '#fff',
+                pointBorderColor: themeAccent,
+                pointRadius: 8,         // Större radie gör dem lättare att "träffa"
+                pointHoverRadius: 10,   // Ännu större vid hover
+                showLine: true,
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false, // Stäng av animationer för mjukare dra-effekt
+            scales: {
+                x: {
+                    type: 'linear',
+                    min: 0,
+                    suggestedMax: 21,
+                    title: { display: true, text: 'Days', color: '#888', font: {family: 'Lexend', weight: 600} },
+                    ticks: { color: '#666' },
+                    grid: { color: 'rgba(255,255,255,0.05)' }
                 },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `Day ${context.parsed.x}: ${context.parsed.y}°C`;
-                            }
-                        }
+                y: {
+                    min: -2,
+                    suggestedMax: 30,
+                    title: { display: true, text: 'Temp (°C)', color: '#888', font: {family: 'Lexend', weight: 600} },
+                    ticks: { color: '#666', callback: v => Number(v).toFixed(1) + '°' },
+                    grid: { color: 'rgba(255,255,255,0.05)' }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    enabled: true,
+                    callbacks: {
+                        label: (context) => `Day ${context.parsed.x.toFixed(1)}: ${context.parsed.y.toFixed(1)}°C`
                     }
                 }
             }
-        });
-    }
+        }
+    });
+
+    // --- MAGIN FÖR ATT DRA BÅDE PUNKTER OCH HUMLELINJE ---
+    let draggedPointIndex = null;
+    const hitRadius = 15; // Hitbox i pixlar
+
+    canvas.addEventListener('mousedown', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        // 1. Kolla om vi träffar humle-linjen först (högre prioritet)
+        if (dryHopData.enabled) {
+            const lineXPix = labChart.scales.x.getPixelForValue(dryHopData.day);
+            if (Math.abs(mouseX - lineXPix) < hitRadius) {
+                dryHopData.isDragging = true;
+                return;
+            }
+        }
+
+        // 2. Kolla om vi träffar en temperatur-punkt
+        for (let i = 0; i < profilePoints.length; i++) {
+            const ptX = labChart.scales.x.getPixelForValue(profilePoints[i].x);
+            const ptY = labChart.scales.y.getPixelForValue(profilePoints[i].y);
+
+            const distance = Math.sqrt(Math.pow(mouseX - ptX, 2) + Math.pow(mouseY - ptY, 2));
+            if (distance < hitRadius) {
+                draggedPointIndex = i;
+                labChart.options.plugins.tooltip.enabled = false; // Göm tooltip vid drag
+                return;
+            }
+        }
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        // --- Ändra muspekaren vid hover ---
+        let hoveringSomething = false;
+
+        if (dryHopData.enabled) {
+            const lineXPix = labChart.scales.x.getPixelForValue(dryHopData.day);
+            if (Math.abs(mouseX - lineXPix) < hitRadius || dryHopData.isDragging) {
+                canvas.style.cursor = 'ew-resize'; // Pil vänster/höger
+                hoveringSomething = true;
+            }
+        }
+
+        if (!hoveringSomething && draggedPointIndex === null) {
+            for (let i = 0; i < profilePoints.length; i++) {
+                const ptX = labChart.scales.x.getPixelForValue(profilePoints[i].x);
+                const ptY = labChart.scales.y.getPixelForValue(profilePoints[i].y);
+                if (Math.sqrt(Math.pow(mouseX - ptX, 2) + Math.pow(mouseY - ptY, 2)) < hitRadius) {
+                    canvas.style.cursor = 'grab';
+                    hoveringSomething = true;
+                    break;
+                }
+            }
+        }
+
+        if (!hoveringSomething) canvas.style.cursor = 'default';
+        if (draggedPointIndex !== null) canvas.style.cursor = 'grabbing';
+
+
+        // --- LOGIK: Om vi drar en Temperatur-punkt ---
+        if (draggedPointIndex !== null) {
+            let newX = labChart.scales.x.getValueForPixel(mouseX);
+            let newY = labChart.scales.y.getValueForPixel(mouseY);
+
+            // X-led (Tid) - Förhindra att man drar förbi andra punkter
+            if (draggedPointIndex === 0) {
+                newX = 0; // Steg 1 är alltid på dag 0
+            } else {
+                let minX = profilePoints[draggedPointIndex - 1].x + 0.5;
+                let maxX = (draggedPointIndex < profilePoints.length - 1) ? (profilePoints[draggedPointIndex + 1].x - 0.5) : 60;
+                newX = Math.max(minX, Math.min(newX, maxX));
+            }
+
+            // Y-led (Temperatur)
+            newY = Math.max(-2, Math.min(newY, 40));
+
+            // Uppdatera värden avrundat till halvor
+            profilePoints[draggedPointIndex].x = Math.round(newX * 2) / 2;
+            profilePoints[draggedPointIndex].y = Math.round(newY * 2) / 2;
+
+            labChart.update('none');
+            updateSummaryText();
+        }
+
+        // --- LOGIK: Om vi drar Humle-linjen ---
+        else if (dryHopData.isDragging) {
+            let newDay = labChart.scales.x.getValueForPixel(mouseX);
+            const maxDay = profilePoints[profilePoints.length - 1].x; // Lås till sista dagen
+            newDay = Math.max(0, Math.min(newDay, maxDay));
+            dryHopData.day = Math.round(newDay * 10) / 10;
+            
+            labChart.update('none');
+            updateSummaryText();
+        }
+    });
+
+    const stopDragging = () => {
+        if (draggedPointIndex !== null || dryHopData.isDragging) {
+            draggedPointIndex = null;
+            dryHopData.isDragging = false;
+            canvas.style.cursor = 'default';
+            labChart.options.plugins.tooltip.enabled = true; // Sätt tillbaka tooltip
+            labChart.update('none');
+        }
+    };
+
+    canvas.addEventListener('mouseup', stopDragging);
+    canvas.addEventListener('mouseleave', stopDragging);
+    
+    updateSummaryText(); // Kör en gång vid start
 }
 
-// Generera JSON-koden
-// Generera JSON-koden
+// --- JSON-GENERATOR ---
 function generateJSON() {
-    // 1. Samla in all data från de 4 stegen
     const profileData = {
-        name: "Custom Yeast Profile",
+        name: "Interactive 4-Step Profile",
         created: new Date().toISOString().split('T')[0],
+        
+        dryHopSchedule: dryHopData.enabled ? {
+            phase: "Add Dry Hops",
+            day: dryHopData.day
+        } : null,
+
         steps: [
-            {
-                phase: "Pitch / Primary",
-                days: parseFloat(document.getElementById('lab-d1').value) || 0,
-                temp: parseFloat(document.getElementById('lab-t1').value) || 0
-            },
-            {
-                phase: "Cleanup / D-Rest",
-                days: parseFloat(document.getElementById('lab-d2').value) || 0,
-                temp: parseFloat(document.getElementById('lab-t2').value) || 0
-            },
-            {
-                phase: "Cold Crash",
-                days: parseFloat(document.getElementById('lab-d3').value) || 0,
-                temp: parseFloat(document.getElementById('lab-t3').value) || 0
-            },
-            {
-                phase: "Conditioning",
-                days: parseFloat(document.getElementById('lab-d4').value) || 0,
-                temp: parseFloat(document.getElementById('lab-t4').value) || 0
-            }
+            { phase: "Pitch / Primary", days: profilePoints[0].x, temp: profilePoints[0].y },
+            { phase: "Cleanup / D-Rest", days: profilePoints[1].x, temp: profilePoints[1].y },
+            { phase: "Cold Crash", days: profilePoints[2].x, temp: profilePoints[2].y },
+            { phase: "Conditioning", days: profilePoints[3].x, temp: profilePoints[3].y }
         ]
     };
 
-    // 2. Förvandla till snygg kod
     const jsonString = JSON.stringify(profileData, null, 4);
-    
-    // 3. Skriv ut i rutan
     document.getElementById('lab-json-out').innerText = jsonString;
 
-    // 4. Liten snygg animation på knappen
     const btn = document.querySelector('button[onclick="generateJSON()"]');
     const originalText = btn.innerText;
     btn.innerText = "JSON GENERATED! ✓";
@@ -726,10 +912,12 @@ function generateJSON() {
     }, 2000);
 }
 
-// Ladda grafen direkt när sidan startar
+// Starta grafen vid laddning. Ersätter den gamla onDOMContentLoaded.
 window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(updateLabChart, 500); // Liten delay så canvasen hinner få sin storlek
+    // Vi kollar bara om vi befinner oss på Lab-vyn så grafen får rätt bredd direkt.
+    setTimeout(initLabChart, 500); 
 });
+
 
 function calculatePitch() {
     const vol = parseFloat(document.getElementById('pitch-vol').value) || 0;

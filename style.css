@@ -853,3 +853,36 @@ body.light-mode .lib-dark { display: none !important; }
 body.light-mode .lib-light { display: block !important; }
 
 /* --- VI TAR BORT REGLERNA NEDANFÖR SOM GAV BILDEN EN EGEN BAKGRUND --- */
+
+/* --- THE ARCANE LAB PROFILER STYLES --- */
+
+/* Sekundär knapp (för Add Dry Hops) */
+.btn-secondary {
+    background: transparent;
+    border: 1px solid #444;
+    color: #aaa;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    font-family: 'Lexend', sans-serif;
+}
+
+.btn-secondary:hover {
+    border-color: #888;
+    color: #fff;
+    background-color: rgba(255,255,255,0.05);
+}
+
+/* Aktiv stil för knappen när linjen är synlig */
+.btn-secondary.active {
+    background-color: rgba(0, 229, 255, 0.1);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+/* Tvinga fram en "drag-hand" när man hovrar över graf-canvasen */
+#lab-chart {
+    cursor: default; 
+}
