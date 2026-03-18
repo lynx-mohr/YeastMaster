@@ -1079,6 +1079,92 @@ if ('serviceWorker' in navigator) {
 
 // --- JÄST-DATABASEN MED BESKRIVNINGAR ---
 const yeastDescriptions = {
+    "US-05": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Safale US-05 (American Ale)</h3>
+        <p>Bryggvärldens okrönta konung när det kommer till rena, krispiga American Ales och västkust-IPAs. Det är en extremt pålitlig arbetshäst som sätter malt och humle i förarsätet.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. Temperaturspannet (15-22 °C)</h4>
+        <p>För att få den ikoniska, knivskarpa amerikanska profilen vill vi starta runt 18 °C. Går vi för varmt kan den kasta ur sig persiko-estrar, vilket vi vanligtvis vill undvika i en ren IPA.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">2. Medium Flockulering (Tålamod!)</h4>
+        <p>US-05 svävar gärna kvar i ölet ett bra tag. Detta är superbra för jäsningen (den jäser ut torrt och effektivt), men det betyder att ölet kan vara disigt länge om vi inte kyler det hårt på slutet.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">Bryggarens Profil:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Dag 0-4:</strong> Spika tempen på 18 °C. Extremt rent jobb utan att bränna bort humlearomer.</li>
+            <li><strong style="color: #fff;">Dag 4-7 (Diacetyl Rest):</strong> Rulla upp till 21 °C. Tvingar jästen att äta de sista, svåraste sockerarterna för en krispig avslutning.</li>
+            <li><strong style="color: #fff;">Dag 7+:</strong> Stenhård Cold Crash. Droppa snabbt mot nollan för att tvinga jästen till botten.</li>
+        </ul>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: Eftersom den jäser så torrt och rent, finns det ingenting att gömma sig bakom. Minimera syrekontakten vid torrhumling!</i></p>
+    `,
+
+    "S-04": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Safale S-04 (English Ale)</h3>
+        <p>Den brittiska sprintern! Älskad för sin förmåga att bygga fantastiska fruktiga estrar och sin brutala hastighet. Förstavalet för Bitters, Porters, Stouts och snabba Pale Ales.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. Temperaturspannet (15-20 °C)</h4>
+        <p>S-04 älskar att skapa estrar (marmelad, mörka bär). Men om den får gå för varmt i början förvandlas den till en okontrollerad fruktbomb. Starta stramt på 18 °C för elegans.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">2. Extrem Flockulering (Tegelstenen)</h4>
+        <p>När S-04 anser sig vara klar faller den till botten och bildar en jästkaka så fast att man nästan kan skära i den. Vi måste hinna värma upp den innan den går och lägger sig!</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">Bryggarens Profil:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Dag 0-3:</strong> Håll 18 °C. Den startar som ett godståg och skapar en kontrollerad fruktighet.</li>
+            <li><strong style="color: #fff;">Dag 3-6 (Cleanup):</strong> Höj till 21 °C när bubblandet avtar. Denna värmeknuff väcker jästen för att städa upp smörkola och gröna äpplen.</li>
+            <li><strong style="color: #fff;">Dag 6+:</strong> Cold Crash. Ölet blir kristallklart nästan omedelbart.</li>
+        </ul>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: Den lämnar kvar lite restsötma och kropp. Exakt därför är den magisk i mörka öl där du vill ha fyllighet.</i></p>
+    `,
+
+    "W-34/70": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Saflager W-34/70 (German Lager)</h3>
+        <p>Kungen av underjäst! Denna berömda stam från Weihenstephan-bryggeriet i Tyskland är förmodligen den mest använda lagerjästen i hela världen. Den ger den där ikoniska, krispiga och rena smakprofilen vi älskar i en Pilsner eller Helles.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. Kylan är din vän (9-15 °C)</h4>
+        <p>W-34/70 är en riktig kallbadare. Genom att jäsa den i botten av dess tolerans (runt 10-12 °C) trycker du ner produktionen av fruktiga estrar och svavel, vilket ger ölet dess rena karaktär.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">2. Smörkola-varning (Diacetyl)</h4>
+        <p>Eftersom den jobbar kallt och långsamt, är lagerjäst ökänd för att lämna kvar diacetyl (smakar smör/smörkola). En kraftig temperaturhöjning på slutet är inte ett tips – det är ett krav!</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">Bryggarens Profil:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Dag 0-7:</strong> Håll stenhårt på 11 °C. Låt jästen jobba ostört i mörkret och kylan.</li>
+            <li><strong style="color: #fff;">Dag 7-12 (D-Rest):</strong> Kasta upp tempen till 16 °C. Vi tvingar jästen att städa bort smörkolan innan den hinner gå i dvala.</li>
+            <li><strong style="color: #fff;">Dag 12-28 (Lagering):</strong> Droppa till 2 °C. Lagra kallt länge. Proteiner och jäst sjunker sakta, ölet blir blankt och smakerna mognar (krispigheten träder fram).</li>
+        </ul>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: Pitcha stort! Lageröl kräver nästan dubbelt så mycket jäst som en Ale för att starta hälsosamt i kylan. Använd Pitch Calculatorn!</i></p>
+    `,
+
+    "VERDANT": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Lallemand Verdant IPA (Juice Maskinen)</h3>
+        <p>Utvecklad tillsammans med Verdant Brewing Co., är detta den ultimata jästen för NEIPA och Hazy IPA. Den producerar massiva mängder aprikos- och vaniljestrar som backar upp modern humle perfekt.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. Biotransformationens Mästare</h4>
+        <p>Denna jäst är fenomenal på att ta torrhumle under pågående jäsning och kemiskt bygga om humleoljorna till ännu fruktigare smaker (biotransformation).</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">Bryggarens Profil:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Dag 0-3:</strong> Starta på 19 °C för att bygga en solid, fruktig bas utan fuselalkoholer. (Pitcha första torrhumlen här!)</li>
+            <li><strong style="color: #fff;">Dag 3-7:</strong> Låt temperaturen vandra upp till 22 °C för att stressa fram de sista saftiga estrarna och säkerställa en bra utjäsning.</li>
+        </ul>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: Den flockulerar ganska dåligt, vilket är EXAKT vad vi vill ha för att behålla the "Haze".</i></p>
+    `,
+
+    "KVEIK": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Lallemand Voss Kveik (Vikingen)</h3>
+        <p>Det norska kraftpaketet som bryter mot exakt alla regler vi lärt oss om bryggning. Den jäser brännhett, rasande snabbt, och lämnar rena, lätta apelsinnoter efter sig.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. Extrem värme (30-40 °C)</h4>
+        <p>Medan andra jäster hade dött eller skapat odrickbart raketbränsle vid 38 °C, så trivs Voss bäst där. Den behöver inga kylskåp, bara en värmematta och massor av jästnäring!</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">Bryggarens Profil:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Dag 0-3:</strong> Spika den på 38 °C. Jäsningen är ofta extremt våldsam och helt klar på bara 2-3 dagar.</li>
+            <li><strong style="color: #fff;">Dag 4+:</strong> Kyl direkt till serveringstemperatur. Den flockulerar stenhårt och snabbt. Du kan dricka ölet samma vecka!</li>
+        </ul>
+    `,
+    
     "Wyeast 1968": `
         <p><strong>Wyeast 1968 (London ESB Ale)</strong></p>
         <h3>1. Temperature Range (18-22°C)</h3>
