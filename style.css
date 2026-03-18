@@ -831,33 +831,25 @@ canvas#beer-chart {
     margin-bottom: 5px;
 }
 
-/* --- THE YEAST LIBRARIAN ILLUSTRATION --- */
+/* --- THE YEAST LIBRARIAN ILLUSTRATION (TRANSPARENT PNG) --- */
 
-/* Gemensamma regler för responsivitet och centrering */
 .librarian-illustration {
     display: block;
-    max-width: 100%; /* Ser till att bilden aldrig blir bredare än skärmen */
-    width: 450px;    /* A good maximum width for desktop view */
+    max-width: 100%;
+    width: 450px;
     height: auto;
-    margin: 0 auto 25px auto; /* Centrerad med luft i botten */
-    border-radius: 12px;
+    margin: 0 auto 25px auto;
+    /* Ingen border-radius eller bakgrund behövs nu, bilden smälter in av sig själv! */
 }
 
-/* --- LOGIK FÖR TEMAVÄXLING (HÄR ÄR MAGIN) --- */
+/* --- LOGIK FÖR TEMAVÄXLING (HÅLL DENNA KVAR) --- */
 
 /* 1. Standard (Dark Mode - default) */
-/* Vi döljer den ljusa bilden som standard */
 .lib-light { display: none !important; }
-/* Vi ser till att den mörka bilden är synlig */
 .lib-dark { display: block !important; }
 
 /* 2. Light Mode (När 'body' har klassen .light-mode) */
 body.light-mode .lib-dark { display: none !important; }
 body.light-mode .lib-light { display: block !important; }
 
-/* En liten justering för light mode så bildens bakgrund
-   smälter bättre in med den ljusgrå bakgrunden */
-.light-mode .lib-light {
-    background-color: #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
+/* --- VI TAR BORT REGLERNA NEDANFÖR SOM GAV BILDEN EN EGEN BAKGRUND --- */
