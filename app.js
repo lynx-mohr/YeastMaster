@@ -688,7 +688,7 @@ function updateSummaryText() {
     }
 }
 
-// --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN (MED MOBILE SUPPORT) ---
+// --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
 function initLabChart() {
     const canvas = document.getElementById('lab-chart');
     if (!canvas) return;
@@ -712,23 +712,32 @@ function initLabChart() {
                 borderWidth: 3,
                 pointBackgroundColor: '#fff',
                 pointBorderColor: themeAccent,
-                pointRadius: 8,         // Större för mobilen
-                pointHoverRadius: 12,   // Ännu större när man rör den
+                pointRadius: 8,         
+                pointHoverRadius: 12,   
                 showLine: true,
-                tension: 0.1
+                tension: 0.1,
+                clip: false // <--- NYTT: Förhindrar att prickarna klipps av i kanterna!
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            animation: false, // Mycket viktigt för drag-performance
+            animation: false, 
+            layout: {
+                padding: { top: 10, right: 15, left: 5, bottom: 5 } // Ger lite extra luft inuti rutan
+            },
             scales: {
                 x: {
                     type: 'linear',
-                    min: 0,
-                    suggestedMax: 21,
+                    min: -1, // <--- NYTT: Trycker in axeln så punkt 0 får plats
+                    max: Math.max(10, profilePoints[profilePoints.length - 1].x + 2), // <--- NYTT: Dynamisk startlängd
                     title: { display: true, text: 'Days', color: '#888', font: {family: 'Lexend', weight: 600} },
-                    ticks: { color: '#666' },
+                    ticks: { 
+                        color: '#666',
+                        callback: function(value) {
+                            return value < 0 ? '' : value; // Döljer "-1" så det ser snyggt ut
+                        }
+                    },
                     grid: { color: 'rgba(255,255,255,0.05)' }
                 },
                 y: {
@@ -754,12 +763,10 @@ function initLabChart() {
     // --- GEMENSAM LOGIK FÖR ATT HANTERA DRAG (MÖSS OCH FINGRAR) ---
     
     let draggedPointIndex = null;
-    const hitRadius = 20; // Lite större hitbox för fingrar
+    const hitRadius = 20;
 
-    // Hjälpfunktion för att hämta koordinater oavsett event-typ
     function getCanvasCoords(e) {
         const rect = canvas.getBoundingClientRect();
-        // Om det är ett touch-event, hämta första fingret. Annars ta musen.
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
         return {
@@ -768,14 +775,12 @@ function initLabChart() {
         };
     }
 
-    // FUNKTION: När vi trycker ner/rör skärmen
     function handleStart(e) {
         if (!labChart) return;
         const coords = getCanvasCoords(e);
         const mouseX = coords.x;
         const mouseY = coords.y;
 
-        // 1. Kolla torrhumlingslinjen
         if (dryHopData.enabled) {
             const lineXPix = labChart.scales.x.getPixelForValue(dryHopData.day);
             if (Math.abs(mouseX - lineXPix) < hitRadius) {
@@ -785,7 +790,6 @@ function initLabChart() {
             }
         }
 
-        // 2. Kolla temperatur-punkterna
         for (let i = 0; i < profilePoints.length; i++) {
             const ptX = labChart.scales.x.getPixelForValue(profilePoints[i].x);
             const ptY = labChart.scales.y.getPixelForValue(profilePoints[i].y);
@@ -800,14 +804,12 @@ function initLabChart() {
         }
     }
 
-    // FUNKTION: När vi flyttar musen/fingret
     function handleMove(e) {
         if (!labChart) return;
         const coords = getCanvasCoords(e);
         const mouseX = coords.x;
         const mouseY = coords.y;
 
-        // --- Hantera Cursor-ikonen (Endast för mus) ---
         if (!e.touches) {
             let hoveringSomething = false;
             if (dryHopData.enabled) {
@@ -832,7 +834,6 @@ function initLabChart() {
             if (draggedPointIndex !== null) canvas.style.cursor = 'grabbing';
         }
 
-        // --- LOGIK: Om vi faktiskt DRAR något ---
         if (draggedPointIndex !== null || dryHopData.isDragging) {
             if (e.cancelable) e.preventDefault(); 
         }
@@ -842,21 +843,22 @@ function initLabChart() {
             let newX = labChart.scales.x.getValueForPixel(mouseX);
             let newY = labChart.scales.y.getValueForPixel(mouseY);
 
-            // X-led (Tid)
             if (draggedPointIndex === 0) {
-                newX = 0; // Pitch-punkten är ALLTID på dag 0
+                newX = 0; 
             } else {
                 let minX = profilePoints[draggedPointIndex - 1].x + 0.5;
                 let maxX = (draggedPointIndex < profilePoints.length - 1) ? (profilePoints[draggedPointIndex + 1].x - 0.5) : 60;
                 newX = Math.max(minX, Math.min(newX, maxX));
             }
 
-            // Y-led (Temp)
             newY = Math.max(-2, Math.min(newY, 40));
 
-            // Avrunda
             profilePoints[draggedPointIndex].x = Math.round(newX * 2) / 2;
             profilePoints[draggedPointIndex].y = Math.round(newY * 2) / 2;
+
+            // --- NYTT: ADAPTERA X-AXELN DYNAMISKT ---
+            const currentMax = profilePoints[profilePoints.length - 1].x;
+            labChart.options.scales.x.max = Math.max(10, currentMax + 2); // Följer med sista punkten utåt
 
             labChart.update('none'); 
             updateSummaryText();
@@ -874,7 +876,6 @@ function initLabChart() {
         }
     }
 
-    // FUNKTION: När vi släpper musen/fingret
     function handleEnd() {
         if (draggedPointIndex !== null || dryHopData.isDragging) {
             draggedPointIndex = null;
@@ -885,7 +886,6 @@ function initLabChart() {
         }
     }
 
-    // --- LYSSNA PÅ HÄNDELSER (MÖSS OCH FINGRAR) ---
     canvas.addEventListener('mousedown', handleStart);
     canvas.addEventListener('mousemove', handleMove);
     canvas.addEventListener('mouseup', handleEnd);
