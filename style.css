@@ -963,3 +963,57 @@ body.light-mode .lib-light { display: block !important; }
 .yeast-card {
     position: relative; /* Detta krävs för att 'absolute' positionering på krysset ska fungera */
 }
+
+/* --- 15. TOTAL KNAPP-REMAKE (Sist i filen) --- */
+
+/* Vi lägger till 'body' och 'body.light-mode' för att skriva över allt gammalt skräp */
+body .btn-primary, 
+body .sync-button, 
+body #btn-save-profile,
+body.light-mode .btn-primary {
+    width: 100%;
+    background: #fff;
+    color: #000;
+    border: 2px solid #fff;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-family: 'Lexend', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+    margin-top: 10px;
+    outline: none;
+    display: block;
+}
+
+/* Specifik stil för Sync-knappen (Cyan-aktig glow) */
+body .sync-button {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+/* Hover-effekter för alla knappar */
+body .btn-primary:hover, 
+body .sync-button:hover, 
+body #btn-save-profile:hover,
+body.light-mode .btn-primary:hover {
+    background: #000;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    border-color: #fff;
+}
+
+/* Hover för just Sync-knappen */
+body .sync-button:hover {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
+}
