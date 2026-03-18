@@ -976,9 +976,11 @@ function loadCustomProfiles() {
     let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
     
     savedProfiles.reverse().forEach(profile => {
-        // A) Smuggla in i Maskin-databasen (yeastDatabase)
-        if (!yeastDatabase.yeasts.some(y => y.s === profile.s && y.p === profile.p)) {
-            yeastDatabase.yeasts.unshift(profile);
+        // A) Säkerhetskoll: Om maskin-databasen (yeastDatabase) finns, smuggla in den där!
+        if (typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
+            if (!yeastDatabase.yeasts.some(y => y.s === profile.s && y.p === profile.p)) {
+                yeastDatabase.yeasts.unshift(profile);
+            }
         }
 
         // B) Smuggla in i UI-databasen (yeastStrains) så den ritas som ett kort!
@@ -996,6 +998,12 @@ function loadCustomProfiles() {
             });
         }
     });
+
+    // C) SUPERVIKTIGT: Rita om biblioteket nu när dina egna jäster ligger i listan!
+    if (typeof renderYeastLibrary === 'function') {
+        const searchBox = document.getElementById('yeast-search');
+        renderYeastLibrary(searchBox ? searchBox.value : "");
+    }
 }
 
 
