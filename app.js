@@ -625,12 +625,10 @@ const dryHopPlugin = {
         const {ctx, chartArea: {top, bottom, left, right}, scales: {x}} = chart;
         const xPix = x.getPixelForValue(dryHopData.day);
 
-        // Om linjen ligger utanför grafen, rita den inte
         if (xPix < left || xPix > right) return;
 
         ctx.save();
         
-        // Rita prickad linje
         ctx.strokeStyle = dryHopData.color;
         ctx.lineWidth = 2;
         ctx.setLineDash([6, 6]);
@@ -639,7 +637,6 @@ const dryHopPlugin = {
         ctx.lineTo(xPix, bottom);
         ctx.stroke();
         
-        // Rita etikett och handtag
         ctx.setLineDash([]);
         ctx.fillStyle = dryHopData.color;
         ctx.font = 'bold 10px Lexend';
@@ -659,7 +656,6 @@ const dryHopPlugin = {
 
 Chart.register(dryHopPlugin);
 
-// Tänd/släck torrhumlingslinjen
 function toggleDryHopLine() {
     dryHopData.enabled = !dryHopData.enabled;
     const btn = document.getElementById('btn-add-hops');
@@ -679,25 +675,20 @@ function toggleDryHopLine() {
     if (labChart) labChart.update('none');
 }
 
-// Uppdaterar den snygga textsammanfattningen
 function updateSummaryText() {
     document.getElementById('val-t1').innerText = profilePoints[0].y.toFixed(1) + "°C";
-    
     document.getElementById('val-t2').innerText = profilePoints[1].y.toFixed(1) + "°C";
     document.getElementById('val-d2').innerText = profilePoints[1].x.toFixed(1);
-    
     document.getElementById('val-t3').innerText = profilePoints[2].y.toFixed(1) + "°C";
     document.getElementById('val-d3').innerText = profilePoints[2].x.toFixed(1);
-    
     document.getElementById('val-t4').innerText = profilePoints[3].y.toFixed(1) + "°C";
     document.getElementById('val-d4').innerText = profilePoints[3].x.toFixed(1);
-
     if (dryHopData.enabled) {
         document.getElementById('hop-day-val').innerText = dryHopData.day.toFixed(1);
     }
 }
 
-// --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
+// --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN (MED MOBILE SUPPORT) ---
 function initLabChart() {
     const canvas = document.getElementById('lab-chart');
     if (!canvas) return;
@@ -721,8 +712,8 @@ function initLabChart() {
                 borderWidth: 3,
                 pointBackgroundColor: '#fff',
                 pointBorderColor: themeAccent,
-                pointRadius: 8,         // Större radie gör dem lättare att "träffa"
-                pointHoverRadius: 10,   // Ännu större vid hover
+                pointRadius: 8,         // Större för mobilen
+                pointHoverRadius: 12,   // Ännu större när man rör den
                 showLine: true,
                 tension: 0.1
             }]
@@ -730,7 +721,7 @@ function initLabChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            animation: false, // Stäng av animationer för mjukare dra-effekt
+            animation: false, // Mycket viktigt för drag-performance
             scales: {
                 x: {
                     type: 'linear',
@@ -760,25 +751,41 @@ function initLabChart() {
         }
     });
 
-    // --- MAGIN FÖR ATT DRA BÅDE PUNKTER OCH HUMLELINJE ---
+    // --- GEMENSAM LOGIK FÖR ATT HANTERA DRAG (MÖSS OCH FINGRAR) ---
+    
     let draggedPointIndex = null;
-    const hitRadius = 15; // Hitbox i pixlar
+    const hitRadius = 20; // Lite större hitbox för fingrar
 
-    canvas.addEventListener('mousedown', (e) => {
+    // Hjälpfunktion för att hämta koordinater oavsett event-typ
+    function getCanvasCoords(e) {
         const rect = canvas.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
+        // Om det är ett touch-event, hämta första fingret. Annars ta musen.
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+            x: clientX - rect.left,
+            y: clientY - rect.top
+        };
+    }
 
-        // 1. Kolla om vi träffar humle-linjen först (högre prioritet)
+    // FUNKTION: När vi trycker ner/rör skärmen
+    function handleStart(e) {
+        if (!labChart) return;
+        const coords = getCanvasCoords(e);
+        const mouseX = coords.x;
+        const mouseY = coords.y;
+
+        // 1. Kolla torrhumlingslinjen
         if (dryHopData.enabled) {
             const lineXPix = labChart.scales.x.getPixelForValue(dryHopData.day);
             if (Math.abs(mouseX - lineXPix) < hitRadius) {
                 dryHopData.isDragging = true;
+                if (e.cancelable) e.preventDefault(); 
                 return;
             }
         }
 
-        // 2. Kolla om vi träffar en temperatur-punkt
+        // 2. Kolla temperatur-punkterna
         for (let i = 0; i < profilePoints.length; i++) {
             const ptX = labChart.scales.x.getPixelForValue(profilePoints[i].x);
             const ptY = labChart.scales.y.getPixelForValue(profilePoints[i].y);
@@ -786,95 +793,110 @@ function initLabChart() {
             const distance = Math.sqrt(Math.pow(mouseX - ptX, 2) + Math.pow(mouseY - ptY, 2));
             if (distance < hitRadius) {
                 draggedPointIndex = i;
-                labChart.options.plugins.tooltip.enabled = false; // Göm tooltip vid drag
+                labChart.options.plugins.tooltip.enabled = false;
+                if (e.cancelable) e.preventDefault(); 
                 return;
             }
         }
-    });
+    }
 
-    canvas.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
+    // FUNKTION: När vi flyttar musen/fingret
+    function handleMove(e) {
+        if (!labChart) return;
+        const coords = getCanvasCoords(e);
+        const mouseX = coords.x;
+        const mouseY = coords.y;
 
-        // --- Ändra muspekaren vid hover ---
-        let hoveringSomething = false;
-
-        if (dryHopData.enabled) {
-            const lineXPix = labChart.scales.x.getPixelForValue(dryHopData.day);
-            if (Math.abs(mouseX - lineXPix) < hitRadius || dryHopData.isDragging) {
-                canvas.style.cursor = 'ew-resize'; // Pil vänster/höger
-                hoveringSomething = true;
-            }
-        }
-
-        if (!hoveringSomething && draggedPointIndex === null) {
-            for (let i = 0; i < profilePoints.length; i++) {
-                const ptX = labChart.scales.x.getPixelForValue(profilePoints[i].x);
-                const ptY = labChart.scales.y.getPixelForValue(profilePoints[i].y);
-                if (Math.sqrt(Math.pow(mouseX - ptX, 2) + Math.pow(mouseY - ptY, 2)) < hitRadius) {
-                    canvas.style.cursor = 'grab';
+        // --- Hantera Cursor-ikonen (Endast för mus) ---
+        if (!e.touches) {
+            let hoveringSomething = false;
+            if (dryHopData.enabled) {
+                const lineXPix = labChart.scales.x.getPixelForValue(dryHopData.day);
+                if (Math.abs(mouseX - lineXPix) < hitRadius || dryHopData.isDragging) {
+                    canvas.style.cursor = 'ew-resize';
                     hoveringSomething = true;
-                    break;
                 }
             }
+            if (!hoveringSomething && draggedPointIndex === null) {
+                for (let i = 0; i < profilePoints.length; i++) {
+                    const ptX = labChart.scales.x.getPixelForValue(profilePoints[i].x);
+                    const ptY = labChart.scales.y.getPixelForValue(profilePoints[i].y);
+                    if (Math.sqrt(Math.pow(mouseX - ptX, 2) + Math.pow(mouseY - ptY, 2)) < hitRadius) {
+                        canvas.style.cursor = 'grab';
+                        hoveringSomething = true;
+                        break;
+                    }
+                }
+            }
+            if (!hoveringSomething) canvas.style.cursor = 'default';
+            if (draggedPointIndex !== null) canvas.style.cursor = 'grabbing';
         }
 
-        if (!hoveringSomething) canvas.style.cursor = 'default';
-        if (draggedPointIndex !== null) canvas.style.cursor = 'grabbing';
+        // --- LOGIK: Om vi faktiskt DRAR något ---
+        if (draggedPointIndex !== null || dryHopData.isDragging) {
+            if (e.cancelable) e.preventDefault(); 
+        }
 
-
-        // --- LOGIK: Om vi drar en Temperatur-punkt ---
+        // A. Dra temperatur-punkt
         if (draggedPointIndex !== null) {
             let newX = labChart.scales.x.getValueForPixel(mouseX);
             let newY = labChart.scales.y.getValueForPixel(mouseY);
 
-            // X-led (Tid) - Förhindra att man drar förbi andra punkter
+            // X-led (Tid)
             if (draggedPointIndex === 0) {
-                newX = 0; // Steg 1 är alltid på dag 0
+                newX = 0; // Pitch-punkten är ALLTID på dag 0
             } else {
                 let minX = profilePoints[draggedPointIndex - 1].x + 0.5;
                 let maxX = (draggedPointIndex < profilePoints.length - 1) ? (profilePoints[draggedPointIndex + 1].x - 0.5) : 60;
                 newX = Math.max(minX, Math.min(newX, maxX));
             }
 
-            // Y-led (Temperatur)
+            // Y-led (Temp)
             newY = Math.max(-2, Math.min(newY, 40));
 
-            // Uppdatera värden avrundat till halvor
+            // Avrunda
             profilePoints[draggedPointIndex].x = Math.round(newX * 2) / 2;
             profilePoints[draggedPointIndex].y = Math.round(newY * 2) / 2;
 
-            labChart.update('none');
+            labChart.update('none'); 
             updateSummaryText();
         }
 
-        // --- LOGIK: Om vi drar Humle-linjen ---
+        // B. Dra humle-linjen
         else if (dryHopData.isDragging) {
             let newDay = labChart.scales.x.getValueForPixel(mouseX);
-            const maxDay = profilePoints[profilePoints.length - 1].x; // Lås till sista dagen
+            const maxDay = profilePoints[profilePoints.length - 1].x;
             newDay = Math.max(0, Math.min(newDay, maxDay));
             dryHopData.day = Math.round(newDay * 10) / 10;
             
             labChart.update('none');
             updateSummaryText();
         }
-    });
+    }
 
-    const stopDragging = () => {
+    // FUNKTION: När vi släpper musen/fingret
+    function handleEnd() {
         if (draggedPointIndex !== null || dryHopData.isDragging) {
             draggedPointIndex = null;
             dryHopData.isDragging = false;
             canvas.style.cursor = 'default';
-            labChart.options.plugins.tooltip.enabled = true; // Sätt tillbaka tooltip
+            labChart.options.plugins.tooltip.enabled = true; 
             labChart.update('none');
         }
-    };
+    }
 
-    canvas.addEventListener('mouseup', stopDragging);
-    canvas.addEventListener('mouseleave', stopDragging);
+    // --- LYSSNA PÅ HÄNDELSER (MÖSS OCH FINGRAR) ---
+    canvas.addEventListener('mousedown', handleStart);
+    canvas.addEventListener('mousemove', handleMove);
+    canvas.addEventListener('mouseup', handleEnd);
+    canvas.addEventListener('mouseleave', handleEnd);
+
+    canvas.addEventListener('touchstart', handleStart, { passive: false });
+    canvas.addEventListener('touchmove', handleMove, { passive: false });
+    canvas.addEventListener('touchend', handleEnd);
+    canvas.addEventListener('touchcancel', handleEnd);
     
-    updateSummaryText(); // Kör en gång vid start
+    updateSummaryText(); 
 }
 
 // --- JSON-GENERATOR ---
@@ -912,12 +934,14 @@ function generateJSON() {
     }, 2000);
 }
 
-// Starta grafen vid laddning. Ersätter den gamla onDOMContentLoaded.
 window.addEventListener('DOMContentLoaded', () => {
-    // Vi kollar bara om vi befinner oss på Lab-vyn så grafen får rätt bredd direkt.
     setTimeout(initLabChart, 500); 
 });
 
+// ==========================================
+// PITCH CALCULATOR
+// ==========================================
+// ... (Din calculatePitch() funktion ligger kvar här nere precis som förut) ...
 
 function calculatePitch() {
     const vol = parseFloat(document.getElementById('pitch-vol').value) || 0;
