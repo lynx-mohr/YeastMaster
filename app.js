@@ -379,7 +379,8 @@ if (loginBtn) {
 // --- 7. KOPPLA ENHET (CLAIM) ---
 if(document.getElementById('btn-claim')) {
     document.getElementById('btn-claim').addEventListener('click', async () => {
-        const macInput = document.getElementById('input-mac').value.trim().toUpperCase();
+       const macInput = document.getElementById('input-mac').value.trim().toUpperCase();
+const nicknameInput = document.getElementById('input-nickname').value.trim() || "Min YeastMaster";
         const user = auth.currentUser;
 
         if (macInput.length < 12 || !user) {
@@ -392,9 +393,9 @@ if(document.getElementById('btn-claim')) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    uid: user.uid,
-                    device_id: macInput,
-                    name: "Min YeastMaster"
+    uid: user.uid,
+    device_id: macInput,
+    name: nicknameInput
                 })
             });
 
@@ -1337,6 +1338,9 @@ window.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('theme') === 'light') {
         document.body.classList.add('light-mode');
     }
+    auth.onAuthStateChanged(user => {
+        if (user) populateSyncDevices(); // Fyll listan när användaren loggat in
+    });
 });
 
 // --- FUNKTION FÖR ATT RADERA EN PROFIL ---
@@ -1357,3 +1361,79 @@ function deleteCustomProfile(profileName) {
 }
 
 
+async function populateSyncDevices() {
+    const dropdown = document.getElementById('sync-target-device');
+    if (!dropdown || !auth.currentUser) return;
+
+    try {
+        const res = await fetch(`${API_BASE}/my-devices?uid=${auth.currentUser.uid}`);
+        const devices = await res.json();
+        
+        dropdown.innerHTML = ""; // Rensa "Laddar..."
+        
+        if (devices.length === 0) {
+            dropdown.innerHTML = '<option value="">Inga enheter hittade</option>';
+            return;
+        }
+
+        devices.forEach(dev => {
+            const option = document.createElement('option');
+            option.value = dev.device_id;
+            // Här visar vi Nickname, men sparar MAC-adressen som värde!
+            option.textContent = `${dev.name || 'Namnlös'} (${dev.device_id})`;
+            dropdown.appendChild(option);
+        });
+    } catch (err) {
+        console.error("Kunde inte ladda enheter till synk:", err);
+    }
+}
+
+async function syncToSelectedDevice() {
+    const targetId = document.getElementById('sync-target-device').value;
+    const btn = document.getElementById('sync-btn');
+
+    if (!targetId) {
+        alert("Välj en enhet att synka till!");
+        return;
+    }
+
+    if (selectedStrains.length === 0) {
+        alert("Välj minst en jäststam att synka!");
+        return;
+    }
+
+    // Animation: Visa att något händer
+    const originalText = btn.innerText;
+    btn.innerText = "SYNCING... ⚡";
+    btn.disabled = true;
+
+    try {
+        // Här bygger vi paketet som ska skickas till ditt API
+        const payload = {
+            device_id: targetId,
+            strains: selectedStrains // Dina 10 valda ID:n
+        };
+
+        const res = await fetch(`${API_BASE}/sync-yeast`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+            btn.innerText = "SYNC SUCCESSFUL! ✓";
+            btn.style.backgroundColor = "#2ecc71"; // Grön för succé
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.backgroundColor = ""; 
+                btn.disabled = false;
+            }, 3000);
+        } else {
+            throw new Error("Synk misslyckades");
+        }
+    } catch (err) {
+        alert("Fel vid synk: " + err.message);
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+}

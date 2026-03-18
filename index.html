@@ -21,11 +21,15 @@
         </div>
     </div>
 
-    <div id="claim-container" style="display: none;">
+<div id="claim-container" style="display: none;">
         <div class="auth-box">
             <h2>Koppla enhet</h2>
             <p>Ange ID från OLED-menyn</p>
-            <input type="text" id="input-mac" placeholder="E4:B0:63:AE:1C:25">
+            <input type="text" id="input-mac" placeholder="E4:B0:63:AE:1C:25" style="margin-bottom: 10px;">
+            
+            <input type="text" id="input-nickname" placeholder="Nickname (t.ex. Kyl 1 / Stora koniska)" 
+                   style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+            
             <button id="btn-claim" class="btn-primary">Aktivera Bryggverk</button>
             <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.6;">Action-meny -> Device ID</p>
         </div>
@@ -96,16 +100,25 @@
    <button id="btn-logout" class="btn-secondary">LOGGA UT</button>
     </section>
 
-    <section id="view-library" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
-        <div class="library-header">
-            <h2>Yeast Library</h2>
-            <div class="sync-status">Selected: <span id="fav-count">0</span>/10</div>
-            <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
+   <section id="view-library" style="display: none;">
+    <div class="library-header">
+        <h2>Yeast Library</h2>
+        <div class="sync-status">Selected: <span id="fav-count">0</span>/10</div>
+        <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
+    </div>
+
+    <div class="yeast-grid" id="yeast-grid">
         </div>
-        <div class="yeast-grid" id="yeast-grid">
-            </div>
-        <button id="sync-btn" class="sync-button">SYNC TO DEVICE</button>
-    </section>
+
+    <div style="padding: 0 20px; margin-top: 20px;">
+        <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">TARGET DEVICE</label>
+        <select id="sync-target-device" style="width: 100%; background: #000; border: 2px solid #444; color: var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; font-weight: 800; outline: none; margin-bottom: 10px;">
+            <option value="">Laddar enheter...</option>
+        </select>
+        
+        <button id="sync-btn" class="sync-button" onclick="syncToSelectedDevice()">SYNC TO SELECTED DEVICE</button>
+    </div>
+</section>
 
 <section id="view-lab" style="display: none;">
     <div class="library-header">
