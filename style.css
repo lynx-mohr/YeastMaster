@@ -472,6 +472,21 @@ canvas#beer-chart {
     #view-lab .chart-container {
         height: 350px !important;
     }
+
+    #view-lab #profile-summary {
+        margin: 0 -10px 20px -10px !important; /* Samma negativa marginal som grafen */
+        padding: 15px !important; /* Behåll luft inuti rutan */
+    }
+
+    #view-lab .lab-actions {
+        margin: 20px -10px !important;
+        padding-top: 20px !important;
+    }
+    
+    /* Extra touch: Gör texten i sammanfattningen lite tydligare på mobil */
+    #profile-summary div {
+        font-size: 0.85rem !important;
+    }
     
     /* Tvinga fram 2 kolumner för jästbiblioteket på mobil */
     .yeast-grid {
