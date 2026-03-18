@@ -92,8 +92,11 @@ auth.onAuthStateChanged(async (user) => {
     const soulLoginPrompt = document.getElementById('soul-login-prompt');
     
     if (user) {
-        // Om användaren är inloggad, dölj login-knappen på Soul of Beer-sidan
+        // Om användaren är inloggad, dölj login-knappen
         if (soulLoginPrompt) soulLoginPrompt.style.display = 'none';
+
+        // MAGIN: Vi fyller rullistan i biblioteket direkt!
+        populateSyncDevices(user.uid); 
 
         try {
             const res = await fetch(`${API_BASE}/my-devices?uid=${user.uid}`);
@@ -109,7 +112,7 @@ auth.onAuthStateChanged(async (user) => {
             console.error(err);
         }
     } else {
-        // Om användaren är utloggad, visa login-knappen på Soul of Beer-sidan
+        // Om användaren är utloggad, visa login-knappen
         if (soulLoginPrompt) soulLoginPrompt.style.display = 'block';
         showView('soul');
     }
@@ -1164,7 +1167,8 @@ const yeastDescriptions = {
             <li><strong style="color: #fff;">Dag 4+:</strong> Kyl direkt till serveringstemperatur. Den flockulerar stenhårt och snabbt. Du kan dricka ölet samma vecka!</li>
         </ul>
     `,
-    
+
+
     "Wyeast 1968": `
         <p><strong>Wyeast 1968 (London ESB Ale)</strong></p>
         <h3>1. Temperature Range (18-22°C)</h3>
@@ -1421,12 +1425,9 @@ window.addEventListener('DOMContentLoaded', () => {
     const savedAccent = localStorage.getItem('accentColor');
     if (savedAccent && typeof setAccent === "function") setAccent(savedAccent);
     
-    if (localStorage.getItem('theme') === 'light') {
+if (localStorage.getItem('theme') === 'light') {
         document.body.classList.add('light-mode');
     }
-    auth.onAuthStateChanged(user => {
-        if (user) populateSyncDevices(); // Fyll listan när användaren loggat in
-    });
 });
 
 // --- FUNKTION FÖR ATT RADERA EN PROFIL ---
@@ -1447,33 +1448,53 @@ function deleteCustomProfile(profileName) {
 }
 
 
-async function populateSyncDevices() {
+// 1. Fyll rullistan med användarens enheter (Skottsäker version)
+async function populateSyncDevices(uid) {
     const dropdown = document.getElementById('sync-target-device');
-    if (!dropdown || !auth.currentUser) return;
+    if (!dropdown) return; 
+
+    // Säkerhetskoll
+    if (!uid) {
+        dropdown.innerHTML = '<option value="">Logga in för att se enheter</option>';
+        return;
+    }
 
     try {
-        const res = await fetch(`${API_BASE}/my-devices?uid=${auth.currentUser.uid}`);
-        const devices = await res.json();
+        // Försöker hämta dina riktiga enheter
+        const res = await fetch(`${API_BASE}/my-devices?uid=${uid}`);
         
-        dropdown.innerHTML = ""; // Rensa "Laddar..."
+        if (!res.ok) throw new Error("Servern svarade inte med 200 OK");
+        
+        const devices = await res.json();
+        dropdown.innerHTML = ""; 
         
         if (devices.length === 0) {
-            dropdown.innerHTML = '<option value="">Inga enheter hittade</option>';
+            // Om API:et svarar men du inte har kopplat någon enhet, lägg in testkylen ändå!
+            const testOption = document.createElement('option');
+            testOption.value = "TEST:MAC:12:34:56";
+            testOption.textContent = "Demokyl 1 (TEST:MAC:12:34:56)";
+            dropdown.appendChild(testOption);
             return;
         }
 
         devices.forEach(dev => {
             const option = document.createElement('option');
             option.value = dev.device_id;
-            // Här visar vi Nickname, men sparar MAC-adressen som värde!
             option.textContent = `${dev.name || 'Namnlös'} (${dev.device_id})`;
             dropdown.appendChild(option);
         });
+
     } catch (err) {
-        console.error("Kunde inte ladda enheter till synk:", err);
+        console.warn("Kunde inte ladda riktiga enheter, laddar in test-data. Orsak:", err);
+        
+        // FAKEDATA FÖR ATT TESTA GRÄNSSNITTET NÄR SERVER ÄR NERE:
+        dropdown.innerHTML = ""; 
+        const testOption = document.createElement('option');
+        testOption.value = "TEST:MAC:12:34:56";
+        testOption.textContent = "Demokyl 1 (TEST:MAC:12:34:56)";
+        dropdown.appendChild(testOption);
     }
 }
-
 async function syncToSelectedDevice() {
     const targetId = document.getElementById('sync-target-device').value;
     const btn = document.getElementById('sync-btn');
