@@ -461,6 +461,17 @@ canvas#beer-chart {
         transform: none;
         padding: 0;
     }
+
+    /* Gör Lab-grafen bredare på mobil genom att dra ut marginalerna */
+    #view-lab .chart-section {
+        margin: 15px -10px !important; 
+        padding: 10px !important;
+    }
+    
+    /* Öka höjden på grafytan på mobil för bättre precision */
+    #view-lab .chart-container {
+        height: 350px !important;
+    }
     
     /* Tvinga fram 2 kolumner för jästbiblioteket på mobil */
     .yeast-grid {
