@@ -113,22 +113,20 @@
         <p style="opacity: 0.6; font-size: 0.9rem;">Dra i punkterna för att bygga din jäsprofil.</p>
     </div>
 
-  <div class="chart-section" style="margin: 20px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333;">
+    <div class="chart-section" style="margin: 20px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333;">
         <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 10px; letter-spacing: 1px;">PROFILE BUILDER</div>
         
-     <div class="chart-container" style="height: 300px; width: 100%; overflow-x: auto; overflow-y: hidden; position: relative;">
-            
+        <div class="chart-container" style="height: 300px; width: 100%; overflow-x: auto; overflow-y: hidden; position: relative;">
             <div id="chart-placeholder" style="position: sticky; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; color: #555; font-size: 1.1rem; font-weight: 600; padding: 20px;">
                 Pick a base yeast and name your profile below 👇
             </div>
-            
             <div id="chart-scroll-area" style="min-width: 600px; height: 100%; position: absolute; top: 0; left: 0; right: 0; opacity: 0; pointer-events: none; transition: opacity 0.5s ease;">
                 <canvas id="lab-chart"></canvas>
             </div>
-            
         </div>
+    </div>
 
-<div style="margin: 0 20px 20px 20px; display: flex; gap: 15px;">
+    <div style="margin: 0 20px 20px 20px; display: flex; gap: 15px;">
         <div style="flex: 1;">
             <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">PROFILE NAME (MAX 8)</label>
             <input type="text" id="custom-profile-name" maxlength="8" placeholder="e.g. JUICEBMB" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; text-transform: uppercase; font-weight: 800; outline: none;">
@@ -140,21 +138,6 @@
                 </select>
         </div>
     </div>
-
-    <div id="profile-summary" style="margin: 0 20px 20px 20px; background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 20px;">
-        </div>
-
-    <div class="lab-actions" style="margin: 20px; text-align: center; border-top: 1px solid #333; padding-top: 20px;">
-        <button id="btn-add-hops" class="btn-secondary" style="width: auto; padding: 10px 20px; font-size: 0.9rem;" onclick="toggleDryHopLine()">+ ADD DRY HOPS</button>
-        <div id="hop-schedule-text" style="margin-top: 10px; font-size: 0.85rem; color: #888; display: none;">
-            Hops scheduled on Day <span id="hop-day-val" style="color: var(--accent-color); font-weight: 800;">5.0</span>
-        </div>
-    </div>
-
-    <div style="margin: 20px;">
-        <button id="btn-save-profile" class="btn-primary" style="width: 100%; margin-bottom: 20px;" onclick="saveProfileToLibrary()">SAVE TO YEAST LIBRARY</button>
-    </div>
-</section>
 
     <div id="profile-summary" style="margin: 0 20px 20px 20px; background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 20px;">
         <div style="font-size: 0.85rem; font-weight: 800; color: var(--accent-color); margin-bottom: 15px; letter-spacing: 1px;">PROFILE SUMMARY</div>
@@ -182,10 +165,9 @@
         </div>
     </div>
 
-   <div style="margin: 20px;">
+    <div style="margin: 20px;">
         <button id="btn-save-profile" class="btn-primary" style="width: 100%; margin-bottom: 20px;" onclick="saveProfileToLibrary()">SAVE TO YEAST LIBRARY</button>
     </div>
-    
 </section>
 
     <section id="view-settings" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
