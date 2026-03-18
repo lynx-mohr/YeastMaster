@@ -21,7 +21,7 @@
         </div>
     </div>
 
-<div id="claim-container" style="display: none;">
+    <div id="claim-container" style="display: none;">
         <div class="auth-box">
             <h2>Koppla enhet</h2>
             <p>Ange ID från OLED-menyn</p>
@@ -97,85 +97,83 @@
                 </div>
             </div>
         </div> 
-   <button id="btn-logout" class="btn-secondary">LOGGA UT</button>
+        <button id="btn-logout" class="btn-secondary">LOGGA UT</button>
     </section>
 
-   <section id="view-library" style="display: none;">
-    <div class="library-header">
-        <h2>Yeast Library</h2>
-        <div class="sync-status">Selected: <span id="fav-count">0</span>/10</div>
-        <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
-    </div>
-
-    <div class="yeast-grid" id="yeast-grid">
+    <section id="view-library" style="display: none;">
+        <div class="library-header">
+            <h2>Yeast Library</h2>
+            <div class="sync-status">Selected: <span id="fav-count">0</span>/10</div>
+            <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
         </div>
-
-    <div style="padding: 0 20px; margin-top: 20px;">
-        <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">TARGET DEVICE</label>
-        <select id="sync-target-device" style="width: 100%; background: #000; border: 2px solid #444; color: var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; font-weight: 800; outline: none; margin-bottom: 10px;">
-            <option value="">Laddar enheter...</option>
-        </select>
-        
-        <button id="sync-btn" class="sync-button" onclick="syncToSelectedDevice()">SYNC TO SELECTED DEVICE</button>
-    </div>
-</section>
-
-<section id="view-lab" style="display: none;">
-    <div class="library-header">
-        <h2>Profiler</h2> 
-        <p style="opacity: 0.6; font-size: 0.9rem;">Dra i punkterna för att bygga din jäsprofil.</p>
-    </div>
-
-    <div style="margin: 0 20px 20px 20px; display: flex; gap: 15px;">
-        <div style="flex: 1;">
-            <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">PROFILE NAME</label>
-            <input type="text" id="custom-profile-name" maxlength="8" placeholder="e.g. JUICEBMB" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; text-transform: uppercase; font-weight: 800; outline: none;">
+        <div class="yeast-grid" id="yeast-grid">
         </div>
-        <div style="flex: 1;">
-            <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">BASE YEAST</label>
-            <select id="custom-base-yeast" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; outline: none;">
-                <option value="">Select Base...</option>
+            
+        <div style="padding: 0 20px; margin-top: 20px;">
+            <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">TARGET DEVICE</label>
+            <select id="sync-target-device" style="width: 100%; background: #000; border: 2px solid #444; color: var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; font-weight: 800; outline: none; margin-bottom: 10px;">
+                <option value="">Laddar enheter...</option>
             </select>
+            <button id="sync-btn" class="sync-button" onclick="syncToSelectedDevice()">SYNC TO SELECTED DEVICE</button>
         </div>
-    </div>
+        </section>
 
-    <div class="chart-section" style="margin: 20px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333;">
-        <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 10px; letter-spacing: 1px;">PROFILE BUILDER</div>
-        
-        <div class="chart-container" style="height: 300px; width: 100%; overflow-x: auto; overflow-y: hidden; position: relative;">
-            <div id="chart-placeholder" style="position: sticky; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; color: #555; font-size: 1.1rem; font-weight: 600; padding: 20px;">
-                Pick a base yeast and name your profile above 👆
+    <section id="view-lab" style="display: none;">
+        <div class="library-header">
+            <h2>Profiler</h2> 
+            <p style="opacity: 0.6; font-size: 0.9rem;">Dra i punkterna för att bygga din jäsprofil.</p>
+        </div>
+
+        <div style="margin: 0 20px 20px 20px; display: flex; gap: 15px;">
+            <div style="flex: 1;">
+                <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">PROFILE NAME</label>
+                <input type="text" id="custom-profile-name" maxlength="8" placeholder="e.g. JUICEBMB" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; text-transform: uppercase; font-weight: 800; outline: none;">
             </div>
-            <div id="chart-scroll-area" style="min-width: 600px; height: 100%; position: absolute; top: 0; left: 0; right: 0; opacity: 0; pointer-events: none; transition: opacity 0.5s ease;">
-                <canvas id="lab-chart"></canvas>
+            <div style="flex: 1;">
+                <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">BASE YEAST</label>
+                <select id="custom-base-yeast" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; outline: none;">
+                    <option value="">Select Base...</option>
+                </select>
             </div>
         </div>
-    </div>
 
-    <div id="profile-summary" style="margin: 0 20px 20px 20px; background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 20px;">
-        <div style="font-size: 0.85rem; font-weight: 800; color: var(--accent-color); margin-bottom: 15px; letter-spacing: 1px;">PROFILE SUMMARY</div>
-        
-        <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem; color: #ccc;">
-            <div id="sum-step1"><strong>Pitch / Primary:</strong> Start at <span id="val-t1" style="color:#fff; font-weight:bold;">19°C</span>.</div>
-            <div id="sum-step2"><strong>Cleanup / D-Rest:</strong> Rise to <span id="val-t2" style="color:#fff; font-weight:bold;">22°C</span> on Day <span id="val-d2" style="color:#fff; font-weight:bold;">5</span>.</div>
-            <div id="sum-step3"><strong>Cold Crash:</strong> Drop to <span id="val-t3" style="color:#fff; font-weight:bold;">3°C</span> on Day <span id="val-d3" style="color:#fff; font-weight:bold;">8</span>.</div>
-            <div id="sum-step4"><strong>Conditioning:</strong> Hold at <span id="val-t4" style="color:#fff; font-weight:bold;">3°C</span> until Day <span id="val-d4" style="color:#fff; font-weight:bold;">14</span>.</div>
+        <div class="chart-section" style="margin: 20px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333;">
+            <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 10px; letter-spacing: 1px;">PROFILE BUILDER</div>
+            
+            <div class="chart-container" style="height: 300px; width: 100%; overflow-x: auto; overflow-y: hidden; position: relative;">
+                <div id="chart-placeholder" style="position: sticky; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; color: #555; font-size: 1.1rem; font-weight: 600; padding: 20px;">
+                    Pick a base yeast and name your profile above 👆
+                </div>
+                <div id="chart-scroll-area" style="min-width: 600px; height: 100%; position: absolute; top: 0; left: 0; right: 0; opacity: 0; pointer-events: none; transition: opacity 0.5s ease;">
+                    <canvas id="lab-chart"></canvas>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="lab-actions" style="margin: 20px; text-align: center; border-top: 1px solid #333; padding-top: 20px;">
-        <button id="btn-add-hops" class="btn-secondary" style="width: auto; padding: 10px 20px; font-size: 0.9rem;" onclick="toggleDryHopLine()">+ ADD DRY HOPS</button>
-        <div id="hop-schedule-text" style="margin-top: 10px; font-size: 0.85rem; color: #888; display: none;">
-            Hops scheduled on Day <span id="hop-day-val" style="color: var(--accent-color); font-weight: 800;">5.0</span>
+        <div id="profile-summary" style="margin: 0 20px 20px 20px; background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 20px;">
+            <div style="font-size: 0.85rem; font-weight: 800; color: var(--accent-color); margin-bottom: 15px; letter-spacing: 1px;">PROFILE SUMMARY</div>
+            
+            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem; color: #ccc;">
+                <div id="sum-step1"><strong>Pitch / Primary:</strong> Start at <span id="val-t1" style="color:#fff; font-weight:bold;">19°C</span>.</div>
+                <div id="sum-step2"><strong>Cleanup / D-Rest:</strong> Rise to <span id="val-t2" style="color:#fff; font-weight:bold;">22°C</span> on Day <span id="val-d2" style="color:#fff; font-weight:bold;">5</span>.</div>
+                <div id="sum-step3"><strong>Cold Crash:</strong> Drop to <span id="val-t3" style="color:#fff; font-weight:bold;">3°C</span> on Day <span id="val-d3" style="color:#fff; font-weight:bold;">8</span>.</div>
+                <div id="sum-step4"><strong>Conditioning:</strong> Hold at <span id="val-t4" style="color:#fff; font-weight:bold;">3°C</span> until Day <span id="val-d4" style="color:#fff; font-weight:bold;">14</span>.</div>
+            </div>
         </div>
-    </div>
 
-    <div style="margin: 20px;">
-        <button id="btn-save-profile" class="btn-primary" style="width: 100%; margin-bottom: 20px;" onclick="saveProfileToLibrary()">SAVE TO YEAST LIBRARY</button>
-    </div>
-</section>
+        <div class="lab-actions" style="margin: 20px; text-align: center; border-top: 1px solid #333; padding-top: 20px;">
+            <button id="btn-add-hops" class="btn-secondary" style="width: auto; padding: 10px 20px; font-size: 0.9rem;" onclick="toggleDryHopLine()">+ ADD DRY HOPS</button>
+            <div id="hop-schedule-text" style="margin-top: 10px; font-size: 0.85rem; color: #888; display: none;">
+                Hops scheduled on Day <span id="hop-day-val" style="color: var(--accent-color); font-weight: 800;">5.0</span>
+            </div>
+        </div>
 
-    <section id="view-settings" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
+        <div style="margin: 20px;">
+            <button id="btn-save-profile" class="btn-primary" style="width: 100%; margin-bottom: 20px;" onclick="saveProfileToLibrary()">SAVE TO YEAST LIBRARY</button>
+        </div>
+    </section>
+
+    <section id="view-settings" style="display: none;">
         <div class="library-header">
             <h2>Settings</h2>
             <p style="opacity: 0.6; font-size: 0.9rem;">Anpassa din YeastMaster</p>
@@ -198,132 +196,121 @@
         </div>
     </section>
 
-  <section id="view-soul" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
-    <div class="library-header">
-        <h2>The Soul of Beer</h2> <p style="opacity: 0.6; font-size: 0.9rem;">Utforska bryggerijästens magiska värld.</p>
+    <section id="view-soul" style="display: none;">
+        <div class="library-header">
+            <h2>The Soul of Beer</h2> <p style="opacity: 0.6; font-size: 0.9rem;">Utforska bryggerijästens magiska värld.</p>
 
-        <svg viewBox="0 0 100 130" width="120" height="150" xmlns="http://www.w3.org/2000/svg">
-
-  <path class="liquid-fill" d="M 20 85 C 20 105, 30 120, 50 120 C 70 120, 80 105, 80 85 C 80 75, 75 65, 68 58 L 32 58 C 25 65, 20 75, 20 85 Z" />
-
-  <path class="glass-line" d="M 40 35 L 40 45 C 25 55, 15 70, 15 90 C 15 115, 30 125, 50 125 C 70 125, 85 115, 85 90 C 85 70, 75 55, 60 45 L 60 35 Z" />
-  
-  <line class="glass-line" x1="35" y1="35" x2="65" y2="35" />
-
-  <polygon points="42,25 58,25 55,35 45,35" fill="#333" />
-
-  <path class="airlock" d="M 50 25 L 50 15 C 50 5, 60 5, 60 15 C 60 25, 70 25, 70 15 L 70 5" />
-  <circle cx="70" cy="5" r="3" fill="none" stroke="#888" stroke-width="2"/>
-
-  <circle class="bubble" cx="45" cy="100" r="2" />
-  <circle class="bubble" cx="55" cy="85" r="3" />
-  <circle class="bubble" cx="35" cy="75" r="1.5" />
-  <circle class="bubble" cx="65" cy="95" r="2" />
-</svg>
-
-    </div>
-    
-    <div style="padding: 20px; color: #fff; line-height: 1.6;">
-        <p>Här börjar resan för varje fantastisk öl. Jästen är inte bara en ingrediens, det är hantverkets själ.</p>
+            <svg viewBox="0 0 100 130" width="120" height="150" xmlns="http://www.w3.org/2000/svg">
+                <path class="liquid-fill" d="M 20 85 C 20 105, 30 120, 50 120 C 70 120, 80 105, 80 85 C 80 75, 75 65, 68 58 L 32 58 C 25 65, 20 75, 20 85 Z" />
+                <path class="glass-line" d="M 40 35 L 40 45 C 25 55, 15 70, 15 90 C 15 115, 30 125, 50 125 C 70 125, 85 115, 85 90 C 85 70, 75 55, 60 45 L 60 35 Z" />
+                <line class="glass-line" x1="35" y1="35" x2="65" y2="35" />
+                <polygon points="42,25 58,25 55,35 45,35" fill="#333" />
+                <path class="airlock" d="M 50 25 L 50 15 C 50 5, 60 5, 60 15 C 60 25, 70 25, 70 15 L 70 5" />
+                <circle cx="70" cy="5" r="3" fill="none" stroke="#888" stroke-width="2"/>
+                <circle class="bubble" cx="45" cy="100" r="2" />
+                <circle class="bubble" cx="55" cy="85" r="3" />
+                <circle class="bubble" cx="35" cy="75" r="1.5" />
+                <circle class="bubble" cx="65" cy="95" r="2" />
+            </svg>
+        </div>
         
-        <div style="background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; margin: 20px 0;">
-            <h3 style="color: var(--accent-color); margin-top: 0;">Vad är YeastMaster?</h3>
-            <p style="font-size: 0.9rem; opacity: 0.8;">
-                YeastMaster är vårt egenutvecklade system för att ge bryggare total kontroll över jäsningsprocessen. 
-                Genom realtidsövervakning och precisionsstyrning av temperatur ser vi till att jästen alltid presterar sitt bästa.
-            </p>
-        </div>
-
-        <div id="soul-login-prompt" style="text-align: center; margin-top: 30px;">
-            <p style="margin-bottom: 15px; font-size: 0.85rem; opacity: 0.6;">Har du en YeastMaster eller vill du skapa ett konto?</p>
-            <button class="btn-primary" onclick="showView('login')">GÅ TILL INLOGGNING</button>
-        </div>
-    </div>
-</section>
-
-<section id="view-librarian" style="display: none; width: 100%; max-width: 800px; margin: 0 auto; padding-top: 20px;">
-    <div class="library-header">
-        <h2>Arcane Lab</h2> 
-        <div class="lab-tabs">
-            <button class="lab-tab active" onclick="switchLabTab('academy', this)">THE YEAST LIBRARIAN</button>
-            <button class="lab-tab" onclick="switchLabTab('calc', this)">PITCH CALCULATOR</button>
-        </div>
-    </div>
-
-    <div id="lab-content-calc" style="display:none;">
-        <div class="calc-container">
-            <div class="calc-inputs">
-                <div class="input-group">
-                    <label>Batch Volume (L)</label>
-                    <input type="number" id="pitch-vol" value="20" oninput="calculatePitch()">
-                </div>
-                <div class="input-group">
-                    <label>Gravity (OG)</label>
-                    <input type="number" id="pitch-og" value="1.050" step="0.001" oninput="calculatePitch()">
-                </div>
-                <div class="input-group">
-                    <label>Pitch Rate (M/ml/°P)</label>
-                    <select id="pitch-rate" onchange="calculatePitch()">
-                        <option value="0.75">0.75 (Standard Ale)</option>
-                        <option value="1.0">1.0 (High Gravity Ale)</option>
-                        <option value="1.5">1.5 (Standard Lager)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Harvest Date</label>
-                    <input type="date" id="pitch-date" onchange="calculatePitch()">
-                </div>
+        <div style="padding: 20px; color: #fff; line-height: 1.6;">
+            <p>Här börjar resan för varje fantastisk öl. Jästen är inte bara en ingrediens, det är hantverkets själ.</p>
+            
+            <div style="background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; margin: 20px 0;">
+                <h3 style="color: var(--accent-color); margin-top: 0;">Vad är YeastMaster?</h3>
+                <p style="font-size: 0.9rem; opacity: 0.8;">
+                    YeastMaster är vårt egenutvecklade system för att ge bryggare total kontroll över jäsningsprocessen. 
+                    Genom realtidsövervakning och precisionsstyrning av temperatur ser vi till att jästen alltid presterar sitt bästa.
+                </p>
             </div>
 
-            <div class="calc-results">
-                <div class="res-card">
-                    <span class="res-label">CELLS NEEDED</span>
-                    <span class="res-val" id="res-needed">--</span>
-                    <span class="res-unit">Billion cells</span>
-                </div>
-                <div class="res-card accent">
-                    <span class="res-label">EST. VIABILITY</span>
-                    <span class="res-val" id="res-viability">--</span>
-                    <span class="res-unit" id="res-days-old">New</span>
-                </div>
-            </div>
-
-            <div id="pitch-warning" class="warning-box" style="display:none;">
-                ⚠️ Warning: Underpitching detected. Consider a starter!
+            <div id="soul-login-prompt" style="text-align: center; margin-top: 30px;">
+                <p style="margin-bottom: 15px; font-size: 0.85rem; opacity: 0.6;">Har du en YeastMaster eller vill du skapa ett konto?</p>
+                <button class="btn-primary" onclick="showView('login')">GÅ TILL INLOGGNING</button>
             </div>
         </div>
-    </div>
+    </section>
 
- <div id="lab-content-academy" style="display:block; padding: 20px;">
-        <img src="librarian-dark.png" class="librarian-illustration lib-dark" alt="The Yeast Librarian (Transparent Dark Mode)">
-        <img src="librarian-light.png" class="librarian-illustration lib-light" alt="The Yeast Librarian (Transparent Light Mode)">
-
-        <h3 style="color:var(--accent-color)">Yeast Management Academy</h3>
+    <section id="view-librarian" style="display: none;">
+        <div class="library-header">
+            <h2>Arcane Lab</h2> 
+            <div class="lab-tabs">
+                <button class="lab-tab active" onclick="switchLabTab('academy', this)">THE YEAST LIBRARIAN</button>
+                <button class="lab-tab" onclick="switchLabTab('calc', this)">PITCH CALCULATOR</button>
+            </div>
         </div>
-</section>
 
-<nav class="main-nav">
+        <div id="lab-content-calc" style="display:none;">
+            <div class="calc-container">
+                <div class="calc-inputs">
+                    <div class="input-group">
+                        <label>Batch Volume (L)</label>
+                        <input type="number" id="pitch-vol" value="20" oninput="calculatePitch()">
+                    </div>
+                    <div class="input-group">
+                        <label>Gravity (OG)</label>
+                        <input type="number" id="pitch-og" value="1.050" step="0.001" oninput="calculatePitch()">
+                    </div>
+                    <div class="input-group">
+                        <label>Pitch Rate (M/ml/°P)</label>
+                        <select id="pitch-rate" onchange="calculatePitch()">
+                            <option value="0.75">0.75 (Standard Ale)</option>
+                            <option value="1.0">1.0 (High Gravity Ale)</option>
+                            <option value="1.5">1.5 (Standard Lager)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Harvest Date</label>
+                        <input type="date" id="pitch-date" onchange="calculatePitch()">
+                    </div>
+                </div>
+
+                <div class="calc-results">
+                    <div class="res-card">
+                        <span class="res-label">CELLS NEEDED</span>
+                        <span class="res-val" id="res-needed">--</span>
+                        <span class="res-unit">Billion cells</span>
+                    </div>
+                    <div class="res-card accent">
+                        <span class="res-label">EST. VIABILITY</span>
+                        <span class="res-val" id="res-viability">--</span>
+                        <span class="res-unit" id="res-days-old">New</span>
+                    </div>
+                </div>
+
+                <div id="pitch-warning" class="warning-box" style="display:none;">
+                    ⚠️ Warning: Underpitching detected. Consider a starter!
+                </div>
+            </div>
+        </div>
+
+        <div id="lab-content-academy" style="display:block; padding: 20px;">
+            <img src="librarian-dark.png" class="librarian-illustration lib-dark" alt="The Yeast Librarian (Transparent Dark Mode)">
+            <img src="librarian-light.png" class="librarian-illustration lib-light" alt="The Yeast Librarian (Transparent Light Mode)">
+            <h3 style="color:var(--accent-color)">Yeast Management Academy</h3>
+        </div>
+    </section>
+
+    <nav class="main-nav">
         <div class="nav-item" onclick="showView('soul', this)">
             <svg class="nav-icon" viewBox="0 0 24 24">
                 <path d="M4,2H19V3H20A2,2 0 0,1 22,5V13A2,2 0 0,1 20,15H19V20A2,2 0 0,1 17,22H7A2,2 0 0,1 5,20V14H4V11H5V6H4V2M9,6V18H11V6H9M13,6V18H15V6H13M19,5V13H20V5H19Z" />
             </svg>
             <span class="nav-text">The Soul of Beer</span>
         </div>
-
         <div class="nav-item" onclick="showView('librarian', this)">
             <svg class="nav-icon" viewBox="0 0 24 24">
                 <path d="M16,2H8V4H9V18A3,3 0 0,0 12,21A3,3 0 0,0 15,18V4H16V2M13,17H11V15H13V17M13,13H11V11H13V13M13,9H11V7H13V9Z" />
             </svg>
             <span class="nav-text">Arcane Lab</span>
         </div>
-
         <div class="nav-item" onclick="showView('lab', this)">
             <svg class="nav-icon" viewBox="0 0 24 24">
                  <path d="M3.5,18.5L9.5,12.5L13.5,16.5L22,6.91L20.59,5.5L13.5,13.5L9.5,9.5L2,17L3.5,18.5Z" />
             </svg>
             <span class="nav-text">Profiler</span>
         </div>
-
         <div class="nav-item" onclick="showView('library', this)">
             <svg class="nav-icon" viewBox="0 0 24 24">
                 <path d="M18,2H7A2,2 0 0,0 5,4V20A2,2 0 0,0 7,22H18A2,2 0 0,0 20,20V4A2,2 0 0,0 18,2M18,20H7V4H8V20H9V4H18V20Z" />
@@ -332,14 +319,13 @@
             </svg>
             <span class="nav-text">Yeast Library</span>
         </div>
-
         <div class="nav-item active" onclick="showView('dashboard', this)">
             <svg class="nav-icon" viewBox="0 0 24 24">
                 <path d="M13,2H11V5.1C7.6,5.6 5,8.5 5,12C5,15.9 8.1,19 12,19C15.9,19 19,15.9 19,12C19,8.5 16.4,5.6 13,5.1V2Z" />
                 <circle cx="10" cy="12" r="1.2" opacity="0.5" fill="white" />
             </svg>
-            <span class="nav-text">Live</span> </div>
-
+            <span class="nav-text">Live</span> 
+        </div>
         <div class="nav-item" onclick="showView('settings', this)">
             <svg class="nav-icon" viewBox="0 0 24 24">
                 <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.35 19.43,11.03L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.97 19.05,5.05L16.56,6.05C16.04,5.66 15.47,5.34 14.86,5.08L14.49,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.51,2.42L9.14,5.08C8.53,5.34 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.97 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11.03C4.53,11.35 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.95C7.96,18.34 8.53,18.66 9.14,18.92L9.51,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.49,21.58L14.86,18.92C15.47,18.66 16.04,18.34 16.56,17.95L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
@@ -349,26 +335,22 @@
     </nav>
 
     <div id="yeast-info-modal" class="modal-overlay" style="display: none;">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modal-yeast-name">Yeast Name</h2>
-            <button class="close-btn" onclick="closeYeastModal()">×</button>
-        </div>
-        <div class="modal-body" id="modal-yeast-desc">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-yeast-name">Yeast Name</h2>
+                <button class="close-btn" onclick="closeYeastModal()">×</button>
             </div>
+            <div class="modal-body" id="modal-yeast-desc">
+            </div>
+        </div>
     </div>
-</div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="app.js"></script>
 
-<script>
-        // Detta skript körs istället och förstår dina exakta ID:n!
-        // Nytt: Vi har lagt till "addToHistory" för att hantera webbläsarens back-knapp
+    <script>
         window.showView = function(viewName, clickedElement, addToHistory = true) {
-            
-            // 1. Dölj precis allting först
             const allViews = [
                 'login-container', 
                 'claim-container', 
@@ -385,13 +367,11 @@
                 if(el) el.style.display = 'none';
             });
 
-            // 2. Vilket ID ska vi faktiskt visa?
             let targetId = '';
             if (viewName === 'login') targetId = 'login-container';
             else if (viewName === 'claim') targetId = 'claim-container';
-            else targetId = 'view-' + viewName; // dashboard, library, lab, settings
+            else targetId = 'view-' + viewName;
 
-            // 3. Visa rätt element
             const targetEl = document.getElementById(targetId);
             if (targetEl) {
                 if (viewName === 'login' || viewName === 'claim') {
@@ -401,74 +381,53 @@
                 }
             }
 
-            // 4. Hantera webbläsarens historik (Magin för Back-knappen!)
-            // Vi loggar inte login/claim för vi vill inte att folk ska kunna "backa" in i inloggningen
             if (addToHistory && viewName !== 'login' && viewName !== 'claim') {
                 history.pushState({ view: viewName }, '', '#' + viewName);
             }
 
-          // 5. Uppdatera ikoner och text i menyn (Idiotsäker version)
             document.querySelectorAll('.nav-item').forEach(nav => {
-                // Släck alla knappar först
                 nav.classList.remove('active');
-                
-                // Hämta koden som står i knappens "onclick" (t.ex. "showView('soul', this)")
                 const onclickCode = nav.getAttribute('onclick') || '';
-                
-                // Om knappens kod innehåller namnet på vyn vi just öppnade... Tänd den!
                 if (onclickCode.includes("'" + viewName + "'")) {
                     nav.classList.add('active');
                 }
             });
             
-            // 6. Scrolla högst upp
             window.scrollTo(0,0);
         };
 
-        // LYSSNARE FÖR BACK-KNAPPEN
-        // Detta körs när användaren klickar på "Bakåt" eller "Framåt" i webbläsaren/mobilen
         window.addEventListener('popstate', function(event) {
             if (event.state && event.state.view) {
-                // Anropa showView, men säg 'false' så den inte skapar en oändlig loop i historiken
                 showView(event.state.view, null, false);
             }
         });
 
-        // Sätt initial state när sidan laddas så första klicket bakåt inte stänger appen
         window.addEventListener('DOMContentLoaded', () => {
-            // Kolla om vi har laddat om sidan och redan är i t.ex. #library
             let initialView = window.location.hash ? window.location.hash.substring(1) : 'dashboard';
             if(initialView !== 'login' && initialView !== 'claim') {
                 history.replaceState({ view: initialView }, '', '#' + initialView);
             }
         });
 
-        // Funktion för att byta flikar i Arcane Lab
-window.switchLabTab = function(tabName, clickedElement) {
-    // 1. Dölj båda innehållen
-    document.getElementById('lab-content-calc').style.display = 'none';
-    document.getElementById('lab-content-academy').style.display = 'none';
-    
-    // 2. Ta bort 'active' (lys-effekten) från ALLA flik-knappar
-    const allTabs = document.querySelectorAll('.lab-tab');
-    allTabs.forEach(tab => {
-        tab.classList.remove('active');
-    });
+        window.switchLabTab = function(tabName, clickedElement) {
+            document.getElementById('lab-content-calc').style.display = 'none';
+            document.getElementById('lab-content-academy').style.display = 'none';
+            
+            const allTabs = document.querySelectorAll('.lab-tab');
+            allTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
 
-    // 3. Visa det valda innehållet
-    if (tabName === 'calc') {
-        document.getElementById('lab-content-calc').style.display = 'block';
-    } else if (tabName === 'academy') {
-        document.getElementById('lab-content-academy').style.display = 'block';
-    }
+            if (tabName === 'calc') {
+                document.getElementById('lab-content-calc').style.display = 'block';
+            } else if (tabName === 'academy') {
+                document.getElementById('lab-content-academy').style.display = 'block';
+            }
 
-    // 4. Tänd knappen som du precis klickade på
-    if (clickedElement) {
-        clickedElement.classList.add('active');
-    }
-};
-
+            if (clickedElement) {
+                clickedElement.classList.add('active');
+            }
+        };
     </script>
-
 </body>
 </html>
