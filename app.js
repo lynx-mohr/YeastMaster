@@ -576,16 +576,6 @@ function setAccent(color) {
     }
 }
 
-// Ladda sparade inställningar när sidan startar
-window.addEventListener('DOMContentLoaded', () => {
-    const savedAccent = localStorage.getItem('accentColor');
-    if (savedAccent) setAccent(savedAccent);
-    
-    if (localStorage.getItem('theme') === 'light') {
-        document.body.classList.add('light-mode');
-    }
-});
-
 function setActive(clickedElement) {
     // Ta bort 'active' klassen från alla nav-items
     document.querySelectorAll('.nav-item').forEach(item => {
@@ -1008,22 +998,6 @@ function loadCustomProfiles() {
     });
 }
 
-// --- STARTMOTORN FÖR ARCANE LAB ---
-window.addEventListener('DOMContentLoaded', () => {
-    // 1. Ladda in dina egna skapelser i databasen först
-    loadCustomProfiles(); 
-    
-    // 2. FYLL RULLISTAN (Det var den här som saknades!)
-    if (typeof populateBaseYeastDropdown === "function") {
-        populateBaseYeastDropdown();
-    }
-    
-    // 3. Starta grafen (med en halv sekunds fördröjning så rutan hinner ritas)
-    setTimeout(initLabChart, 500); 
-});
-
-
-
 
 
 // ==========================================
@@ -1284,6 +1258,41 @@ window.closeYeastModal = function() {
 document.getElementById('yeast-info-modal').addEventListener('click', function(event) {
     if (event.target === this) {
         closeYeastModal();
+    }
+});
+
+// ==========================================
+// MASTER STARTUP (Körs när sidan är helt redo)
+// ==========================================
+window.addEventListener('DOMContentLoaded', () => {
+    // 1. Ladda in dina egna sparade profiler
+    if (typeof loadCustomProfiles === "function") {
+        loadCustomProfiles();
+    }
+
+    // 2. Fyll rullistan i Arcane Lab
+    if (typeof populateBaseYeastDropdown === "function") {
+        populateBaseYeastDropdown();
+    }
+
+    // 3. Starta Lab-grafen
+    if (typeof initLabChart === "function") {
+        setTimeout(initLabChart, 500);
+    }
+    
+    // 4. Starta Pitch Calculatorn
+    const dateInput = document.getElementById('pitch-date');
+    if (dateInput) {
+        dateInput.valueAsDate = new Date();
+        if (typeof calculatePitch === "function") calculatePitch();
+    }
+
+    // 5. Tema och Färg (Ladda sparade val)
+    const savedAccent = localStorage.getItem('accentColor');
+    if (savedAccent && typeof setAccent === "function") setAccent(savedAccent);
+    
+    if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-mode');
     }
 });
 
