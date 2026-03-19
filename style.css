@@ -147,7 +147,7 @@ section {
     width: 100%;
     text-align: center;
     color: var(--oled-bg);
-    -webkit-text-stroke: 1.3px var(--oled-color);
+
 }
 
 .air-floating {
