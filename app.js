@@ -1558,3 +1558,70 @@ async function syncToSelectedDevice() {
         btn.disabled = false;
     }
 }
+
+// ==========================================
+// SWIPE NAVIGATION (Mobil)
+// ==========================================
+
+// Ordningen på flikarna, exakt så som de ligger i din meny
+const viewOrder = ['soul', 'librarian', 'lab', 'library', 'dashboard', 'settings'];
+
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
+function handleSwipe() {
+    const swipeThreshold = 50; // Hur många pixlar du måste svepa för att det ska "gälla"
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+
+    // 1. Kolla så det är ett horisontellt svep (och inte en scrollning neråt)
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > swipeThreshold) {
+        
+        // 2. Ta reda på vilken flik vi står på just nu
+        let currentView = '';
+        viewOrder.forEach(view => {
+            const el = document.getElementById('view-' + view);
+            if (el && (el.style.display === 'block' || el.style.display === 'flex')) {
+                currentView = view;
+            }
+        });
+
+        // Avbryt om vi är på inloggningen eller claim-sidan
+        let currentIndex = viewOrder.indexOf(currentView);
+        if (currentIndex === -1) return;
+
+        // 3. Byt flik baserat på riktning!
+        if (deltaX < 0) {
+            // Svep VÄNSTER (fingret dras åt vänster) = Gå till NÄSTA vy
+            if (currentIndex < viewOrder.length - 1) {
+                showView(viewOrder[currentIndex + 1]);
+            }
+        } else {
+            // Svep HÖGER (fingret dras åt höger) = Gå till FÖREGÅENDE vy
+            if (currentIndex > 0) {
+                showView(viewOrder[currentIndex - 1]);
+            }
+        }
+    }
+}
+
+document.addEventListener('touchstart', e => {
+    // SÄKERHETSSPÄRR: Ignorera svep om du rör grafen, sökrutan eller sliders
+    if (e.target.closest('.chart-container') || e.target.tagName.toLowerCase() === 'input') return;
+
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+
+document.addEventListener('touchend', e => {
+    if (e.target.closest('.chart-container') || e.target.tagName.toLowerCase() === 'input') return;
+
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipe();
+}, { passive: true });
+
+
+
