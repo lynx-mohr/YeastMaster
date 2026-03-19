@@ -754,10 +754,14 @@ canvas#beer-chart {
 
 /* Samma sak för Light Mode så det syns bra där också */
 
-/* --- ÖLFÄRG I LIGHT MODE --- */
-body.light-mode .beer-liquid {
-    fill: #e8992e !important; /* En snygg, gyllene bärnstensfärg */
-    transition: fill 0.4s ease; 
+/* --- ÖLFÄRG I LIGHT MODE (Via Gradient-stoppet) --- */
+body.light-mode #beer-color-stop {
+    stop-color: #e8992e !important; /* Gyllene bärnstensfärg */
+    transition: stop-color 0.4s ease;
+}
+
+#beer-color-stop {
+    transition: stop-color 0.4s ease; /* Mjuk övergång tillbaka till mörkgrått */
 }
 
 .beer-liquid {
