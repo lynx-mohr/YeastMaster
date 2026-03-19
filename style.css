@@ -146,8 +146,11 @@ section {
     font-weight: 800;
     width: 100%;
     text-align: center;
-    color: var(--oled-bg);
-
+    
+    /* MAGIN HÄR NERE: */
+    color: #4a4a4a; /* Fyller siffran med exakt samma färg som vätskan */
+    -webkit-text-stroke: 1.3px var(--oled-color); /* Ritar den snygga vita konturen */
+    z-index: 10; /* Garanterar att den ligger över bubblor och annat */
 }
 
 .air-floating {
