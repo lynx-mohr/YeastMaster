@@ -137,26 +137,25 @@ section {
     height: 100%; 
 }
 
-/* Den inre behållaren */
 .beer-temp {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2.8rem; /* Anpassa storleken om du vill */
-    font-weight: 800;
     
-    /* 1. KÅLSVART INSIDA */
+    /* 1. DET NYA TYPSNITTET FÖR MÄTAREN */
+    font-family: 'Roboto Mono', monospace;
+    font-size: 2.6rem; /* Kanske behöver minskas ett snäpp då Roboto Mono är ganska stort */
+    font-weight: 700;
+    letter-spacing: -2px; /* Drar ihop siffrorna lite så det ser ut som en snygg display */
+    
+    /* 2. KÅLSVART INSIDA OCH TUNN VIT KANT */
     color: #000 !important; 
-    
-    /* 2. TUNNARE VIT KONTURLINJE (Ändrad från 2px till 1px) */
     -webkit-text-stroke: 1px #fff !important; 
     text-stroke: 1px #fff !important;
-    
-    /* 3. TA BORT EVENTUELLT GLOW ELLER SKUGGNING */
     text-shadow: none !important; 
     
-    z-index: 10; /* Ser till att texten ligger över bubblorna och vätskan */
+    z-index: 10;
 }
 
 .air-floating {
