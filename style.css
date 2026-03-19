@@ -469,25 +469,19 @@ canvas#beer-chart {
         padding: 0;
     }
 
-    /* Gör Lab-grafen bredare på mobil genom att dra ut marginalerna */
-    #view-lab .chart-section {
-        margin: 15px -10px !important; 
-        padding: 10px !important;
-    }
+ 
     
     /* Öka höjden på grafytan på mobil för bättre precision */
     #view-lab .chart-container {
         height: 350px !important;
     }
 
-    #view-lab #profile-summary {
-        margin: 0 -10px 20px -10px !important; /* Samma negativa marginal som grafen */
-        padding: 15px !important; /* Behåll luft inuti rutan */
-    }
-
-    #view-lab .lab-actions {
-        margin: 20px -10px !important;
-        padding-top: 20px !important;
+    /* Bredda grafen, sammanfattningen, knapparna OCH input-fälten på mobil */
+    #view-lab .chart-section, 
+    #view-lab #profile-summary,
+    #view-lab .lab-actions,
+ #view-lab #profile-inputs {
+        padding: 0 10px !important; /* Ger fälten lite andrum från glaskanten */
     }
     
     /* Extra touch: Gör texten i sammanfattningen lite tydligare på mobil */
