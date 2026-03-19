@@ -578,7 +578,7 @@ canvas#beer-chart {
         padding-bottom: 60px !important; 
     }
     
-    .beer-temp { font-size: 1.25rem !important; top: 58% !important; }
+    .beer-temp { font-size: 1.0rem !important; top: 58% !important; }
 }
 
 @keyframes blinker { 
