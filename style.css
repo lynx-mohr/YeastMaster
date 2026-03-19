@@ -143,13 +143,14 @@ section {
     left: 50%;
     transform: translate(-50%, -50%);
     
-    /* 1. DET NYA TYPSNITTET FÖR MÄTAREN */
     font-family: 'Roboto Mono', monospace;
-    font-size: 2.6rem; /* Kanske behöver minskas ett snäpp då Roboto Mono är ganska stort */
-    font-weight: 700;
-    letter-spacing: -2px; /* Drar ihop siffrorna lite så det ser ut som en snygg display */
     
-    /* 2. KÅLSVART INSIDA OCH TUNN VIT KANT */
+    /* Betydligt mindre storlek för att få plats snyggt i vätskan */
+    font-size: 1.8rem; 
+    
+    /* Återställer avståndet så konturerna inte krockar med varandra */
+    letter-spacing: normal; 
+    
     color: #000 !important; 
     -webkit-text-stroke: 1px #fff !important; 
     text-stroke: 1px #fff !important;
