@@ -297,45 +297,86 @@ function updateChart(data) {
 function startBubbles() {
     const stream = document.getElementById('bubble-stream');
     if (!stream) {
-        setTimeout(startBubbles, 1000); // Vänta på att dashboarden ska visas
+        setTimeout(startBubbles, 1000); 
         return;
     }
 
     let bubbles = [];
     let lastSpawn = 0;
 
-function animate(timestamp) {
+    function animate(timestamp) {
         const statusElement = document.getElementById('status-text');
         const statusText = statusElement ? statusElement.innerText.toUpperCase() : '';
         
-        // 1. Bestäm spawn-hastighet baserat på status
+        // Hämta hur länge vi varit i den aktuella fasen (avläst från din mätare)
+        const phaseDayElement = document.getElementById('phase-day-val');
+        const phaseDays = phaseDayElement ? parseFloat(phaseDayElement.innerText) || 0 : 0;
+        
+        // 1. Bestäm spawn-hastighet och ANTAL bubblor baserat på status
         let spawnInterval = 250; 
+        let spawnCount = 1; // Standard: 1 bubbla åt gången
+
         if (statusText.includes('CRASH')) {
-            spawnInterval = 20000; // En bubbla var 20:e sekund
-        } else if (statusText === 'FINISHED') {
-            spawnInterval = 9999999; // Aldrig
+            // COLD CRASH: 2 bubblor var 15:e sekund
+            spawnInterval = 15000; 
+            spawnCount = 2; 
+        } 
+        else if (statusText.includes('CONDITIONING') || statusText === 'FINISHED') {
+            // CONDITIONING: Helt dött
+            spawnInterval = 9999999; 
+        } 
+        else if (statusText.includes('CLEAN')) {
+            // CLEANING UP: Mycket aktivt (som det var förut)
+            spawnInterval = 250; 
+        } 
+        else if (statusText.includes('PRIMARY') || statusText === '--' || statusText.includes('FERM')) {
+            // PRIMARY / DEFAULT: Stegrande aktivitet!
+            // 6 timmar = 0.25 dagar. 12 timmar = 0.5 dagar.
+            
+            if (phaseDays < 0.25) {
+                // Första 6 timmarna (Lag phase): Ingen aktivitet alls
+                spawnInterval = 9999999; 
+            } 
+            else if (phaseDays >= 0.25 && phaseDays < 0.5) {
+                // 6 till 12 timmar: Stegrande aktivitet
+                // Räkna ut hur långt vi har kommit i denna "uppstarts-fas" (ger ett värde mellan 0 och 1)
+                let progress = (phaseDays - 0.25) / 0.25; 
+                
+                // Går från en bubbla var 5:e sekund ner till en bubbla var 0.15 sekund
+                spawnInterval = 5000 - (progress * (5000 - 150)); 
+            } 
+            else {
+                // Efter 12 timmar (High Krausen): Fullt ös! Snäppet snabbare än Cleaning Up
+                spawnInterval = 150; 
+            }
         }
 
-        // 2. Skapa ny bubbla om det är dags
+        // 2. Skapa nya bubblor om det är dags
         if (timestamp - lastSpawn > spawnInterval) {
-            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            const size = Math.random() * 0.7 + 0.5; 
-            const startX = 50 + (Math.random() * 12 - 6); 
-            circle.setAttribute("r", size);
-            circle.setAttribute("fill", "rgba(255, 255, 255, 0.7)");
-            stream.appendChild(circle);
-            
-            bubbles.push({ 
-                element: circle, 
-                x: startX, 
-                y: 85, 
-                speed: Math.random() * 0.2 + 0.3, 
-                wobbleOffset: Math.random() * Math.PI * 2 
-            });
+            for (let i = 0; i < spawnCount; i++) {
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                const size = Math.random() * 0.7 + 0.5; 
+                const startX = 50 + (Math.random() * 12 - 6); 
+                
+                // Om vi släpper flera bubblor (som i Cold Crash), lägg dem på lite olika djup
+                const startY = 85 + (i * Math.random() * 4);
+
+                circle.setAttribute("r", size);
+                circle.setAttribute("fill", "rgba(255, 255, 255, 0.7)");
+                stream.appendChild(circle);
+                
+                bubbles.push({ 
+                    element: circle, 
+                    x: startX, 
+                    y: startY, 
+                    speed: Math.random() * 0.2 + 0.3, 
+                    wobbleOffset: Math.random() * Math.PI * 2 
+                });
+            }
             lastSpawn = timestamp;
         }
 
-        // 3. Flytta existerande bubblor (Denna del får inte tas bort!)
+        // 3. Flytta existerande bubblor
         for (let i = bubbles.length - 1; i >= 0; i--) {
             let b = bubbles[i];
             b.y -= b.speed;
@@ -343,15 +384,13 @@ function animate(timestamp) {
             b.element.setAttribute("cx", currentX);
             b.element.setAttribute("cy", b.y);
             
-            // Ta bort bubblan när den når toppen
-          // Bubblan tas nu bort precis när den når vätskeytan (32)
-if (b.y < 39) { 
-    b.element.remove(); 
-    bubbles.splice(i, 1); 
-}
+            // Ta bort bubblan precis under vätskeytan
+            if (b.y < 39) { 
+                b.element.remove(); 
+                bubbles.splice(i, 1); 
+            }
         }
 
-        // 4. Fortsätt animera (Motorn i alltihop!)
         requestAnimationFrame(animate);
     }
     requestAnimationFrame(animate);
