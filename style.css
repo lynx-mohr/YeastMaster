@@ -578,7 +578,7 @@ canvas#beer-chart {
         padding-bottom: 60px !important; 
     }
     
-    .beer-temp { font-size: 1.0rem !important; top: 56% !important; }
+    .beer-temp { font-size: 1.0rem !important; top: 57% !important; }
 }
 
 @keyframes blinker { 
@@ -753,6 +753,17 @@ canvas#beer-chart {
 /* --- LIGHT MODE JUSTERINGAR FÖR NYA MODULER --- */
 
 /* Samma sak för Light Mode så det syns bra där också */
+
+/* --- ÖLFÄRG I LIGHT MODE --- */
+body.light-mode .beer-liquid {
+    fill: #e8992e !important; /* En snygg, gyllene bärnstensfärg */
+    transition: fill 0.4s ease; 
+}
+
+.beer-liquid {
+    transition: fill 0.4s ease; /* Mjuk övergång tillbaka till grått */
+}
+
 .light-mode .yeast-card.selected {
     border-color: var(--accent-color) !important;
     background: #f9f9f9 !important;
