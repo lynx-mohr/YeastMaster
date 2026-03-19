@@ -139,7 +139,7 @@ section {
 
 .beer-temp {
     position: absolute;
-    top: 50%;
+    top: 70%;
     left: 50%;
     transform: translate(-50%, -50%);
     
@@ -578,7 +578,7 @@ canvas#beer-chart {
         padding-bottom: 60px !important; 
     }
     
-    .beer-temp { font-size: 1.0rem !important; top: 58% !important; }
+    .beer-temp { font-size: 1.0rem !important; top: 56% !important; }
 }
 
 @keyframes blinker { 
