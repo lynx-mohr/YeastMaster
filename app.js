@@ -318,7 +318,7 @@ function startBubbles() {
 
         if (statusText.includes('CRASH')) {
             // COLD CRASH: 2 bubblor var 15:e sekund
-            spawnInterval = 15000; 
+            spawnInterval = 10000; 
             spawnCount = 2; 
         } 
         else if (statusText.includes('CONDITIONING') || statusText === 'FINISHED') {
