@@ -898,7 +898,7 @@ canvas#beer-chart {
 .librarian-illustration {
     display: block;
     max-width: 100%;
-    width: 450px;
+    width: 200px;
     height: auto;
     margin: 0 auto 25px auto;
     /* Ingen border-radius eller bakgrund behövs nu, bilden smälter in av sig själv! */
