@@ -471,24 +471,32 @@ canvas#beer-chart {
 
  
     
-    /* Öka höjden på grafytan på mobil för bättre precision */
-    #view-lab .chart-container {
-        height: 350px !important;
+/* ========================================= */
+    /* MAXA BREDD OCH SYMMETRISKA AVSTÅND I LAB  */
+    /* ========================================= */
+    
+    /* 1. Input-fälten ovanför grafen */
+    #view-lab #profile-inputs {
+        margin: 15px 0 !important; /* 15px avstånd uppåt och nedåt, 0 på sidorna */
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* 2. Själva graf-rutan */
+    #view-lab .chart-section {
+        margin: 0 0 15px 0 !important; /* 0 uppåt (vi har redan 15px från fälten ovanför), 15px nedåt */
+        width: 100% !important;
+        padding: 15px 10px !important; /* Minskar luften inuti lådan så själva linjen får mer plats */
+        box-sizing: border-box !important;
     }
 
-    /* Bredda grafen, sammanfattningen, knapparna OCH input-fälten på mobil */
-    #view-lab .chart-section, 
+    /* 3. Sammanfattningen och knapparna under grafen */
     #view-lab #profile-summary,
-    #view-lab .lab-actions,
- #view-lab #profile-inputs {
-        padding: 0 10px !important; /* Ger fälten lite andrum från glaskanten */
+    #view-lab .lab-actions {
+        margin: 0 0 15px 0 !important; /* Exakt 15px avstånd nedåt */
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
-    
-    /* Extra touch: Gör texten i sammanfattningen lite tydligare på mobil */
-    #profile-summary div {
-        font-size: 0.85rem !important;
-    }
-    
     /* Tvinga fram 2 kolumner för jästbiblioteket på mobil */
     .yeast-grid {
         /* minmax(0, 1fr) är magin som förhindrar att kolumnen spränger skärmen */
