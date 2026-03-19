@@ -138,6 +138,8 @@ async function updateDashboard() {
 
             // 1. Temperaturer
             document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
+            // Uppdatera hela text-strängen så pseudo-elementet kan rita konturen!
+document.querySelector('.beer-temp').setAttribute('data-text', latest.temp.toFixed(1) + '°C');
             document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
 
             // 2. Höger kolumn (Hierarki enligt din OLED)
