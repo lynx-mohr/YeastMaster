@@ -1051,21 +1051,34 @@ body .sync-button:hover {
     box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
 }
 
-/* --- 16. SWIPE ANIMATIONER FÖR VY-BYTEN --- */
+/* --- 16. SWIPE ANIMATIONER (Uppgraderad med Scale) --- */
 @keyframes slideInFromRight {
-    0% { transform: translateX(60px); opacity: 0; }
-    100% { transform: translateX(0); opacity: 1; }
+    0% { 
+        transform: translateX(80px) scale(0.96); /* Startar lite längre bort och är 4% mindre */
+        opacity: 0; 
+    }
+    100% { 
+        transform: translateX(0) scale(1); /* Landar i originalstorlek */
+        opacity: 1; 
+    }
 }
 
 @keyframes slideInFromLeft {
-    0% { transform: translateX(-60px); opacity: 0; }
-    100% { transform: translateX(0); opacity: 1; }
+    0% { 
+        transform: translateX(-80px) scale(0.96); 
+        opacity: 0; 
+    }
+    100% { 
+        transform: translateX(0) scale(1); 
+        opacity: 1; 
+    }
 }
 
 .slide-in-right {
-    animation: slideInFromRight 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    /* Lite mjukare "studs" på slutet med denna cubic-bezier */
+    animation: slideInFromRight 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
 }
 
 .slide-in-left {
-    animation: slideInFromLeft 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    animation: slideInFromLeft 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
 }
