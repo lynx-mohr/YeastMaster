@@ -1050,3 +1050,22 @@ body .sync-button:hover {
     border-color: var(--accent-color);
     box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
 }
+
+/* --- 16. SWIPE ANIMATIONER FÖR VY-BYTEN --- */
+@keyframes slideInFromRight {
+    0% { transform: translateX(60px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInFromLeft {
+    0% { transform: translateX(-60px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+.slide-in-right {
+    animation: slideInFromRight 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+.slide-in-left {
+    animation: slideInFromLeft 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
