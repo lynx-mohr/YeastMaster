@@ -147,12 +147,21 @@ section {
     width: 100%;
     text-align: center;
     
-    /* MAGIN HÄR NERE: */
-    color: #4a4a4a; /* Fyller siffran med exakt samma färg som vätskan */
-    -webkit-text-stroke: 1.3px var(--oled-color); /* Ritar den snygga vita konturen */
-    z-index: 10; /* Garanterar att den ligger över bubblor och annat */
+    /* 1. Siffran i sig är samma färg som vätskan */
+    color: #4a4a4a; 
+    
+    /* 2. Ritar den snygga vita konturen (var--oled-color brukar vara vit) */
+    -webkit-text-stroke: 1px var(--oled-color); 
+    
+    /* 3. MAGIN: Bygger en tjock "osynlig" grå vägg BAKOM texten som blockerar alla streck! */
+    text-shadow: 
+        -2px -2px 0 #4a4a4a,  
+         2px -2px 0 #4a4a4a,
+        -2px  2px 0 #4a4a4a,
+         2px  2px 0 #4a4a4a;
+         
+    z-index: 10; 
 }
-
 .air-floating {
     position: absolute;
     top: 145px; 
