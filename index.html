@@ -124,24 +124,27 @@
         </div>
         </section>
 
-    <section id="view-lab" style="display: none;">
-        <div class="library-header">
-            <h2>The Profiler</h2> 
-            <p style="opacity: 0.6; font-size: 0.9rem;">Drag the points to build your fermentation profile.</p>
-        </div>
+<section id="view-lab" style="display: none;">
+    <div class="library-header">
+        <h2>The Profiler</h2> 
+        <p style="opacity: 0.6; font-size: 0.9rem;">
+    Pick a strain and drag the points to build your fermentation profile.<br>
+    When you're done, save and find your creation in the Yeast library. 
+    Don't forget the dry hops!
+</p>
+    </div>
 
-     <div id="profile-inputs" style="margin: 0 20px 20px 20px; display: flex; gap: 15px;">
-    <div style="flex: 1;">
-        <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">PROFILE NAME</label>
-        <input type="text" id="custom-profile-name" maxlength="8" placeholder="e.g. JUICEBMB" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; text-transform: uppercase; font-weight: 800; outline: none;">
+    <div id="profile-inputs" style="margin: 0 20px 20px 20px; display: flex; gap: 15px; align-items: flex-end;">
+        <div style="flex: 1;">
+            <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">PROFILE NAME</label>
+            <input type="text" id="custom-profile-name" maxlength="8" placeholder="e.g. JUICEBMB" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; text-transform: uppercase; font-weight: 800; outline: none;">
+        </div>
+        <div style="flex: 1;">
+            <select id="custom-base-yeast" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; font-weight: 800; text-transform: uppercase; outline: none;">
+                <option value="">Pick strain...</option>
+            </select>
+        </div>
     </div>
-    <div style="flex: 1;">
-       
-        <select id="custom-base-yeast" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; font-weight: 800; text-transform: uppercase; outline: none;">
-            <option value="">Pick strain...</option>
-        </select>
-    </div>
-</div>
 
        <div class="chart-section" style="margin: 20px; padding: 20px; border-radius: 15px;">
     <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 10px; letter-spacing: 1px;">PROFILE BUILDER</div>
