@@ -1388,3 +1388,27 @@ body.light-mode .day-row,
 body.light-mode .phase-row {
     color: #333 !important;
 }
+
+/* --- DEN NYA VÅG-ANIMERINGEN --- */
+
+@keyframes liquidSway {
+    0% { transform: rotate(-1deg); }
+    50% { transform: rotate(1.5deg); }
+    100% { transform: rotate(-1deg); }
+}
+
+.beer-liquid-group {
+    /* Vi sätter rotationspunkten till mitten av flaskan */
+    transform-origin: 50% 60%; 
+    animation: liquidSway 3s ease-in-out infinite;
+}
+
+.animated-liquid {
+    /* Gör ytan lite mjukare */
+    filter: drop-shadow(0 -1px 1px rgba(255,255,255,0.1));
+}
+
+/* För att JS fortfarande ska kunna hitta färgen */
+#beer-color-stop {
+    stop-color: var(--beer-color, #4a4a4a);
+}
