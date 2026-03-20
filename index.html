@@ -44,30 +44,25 @@
                         <div class="air-floating">Air: <span id="air-temp-val">--</span>°C</div>
 <svg viewBox="0 0 100 92" class="carboy-svg">
     <defs>
-        <linearGradient id="liquid-fill" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="32%" stop-color="transparent" /> 
-            <stop offset="32%" stop-color="#4a4a4a" id="beer-color-stop" />
-        </linearGradient>
+        <clipPath id="bottle-clip">
+            <path d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" />
+        </clipPath>
     </defs>
 
     <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
 
-    <path class="glass-line beer-liquid" 
-          d="M44,14 V30 A 30 30 0 1 0 56 30 V14 C52,14 48,14 44,14" 
-          style="fill: url(#liquid-fill) !important;" 
-          stroke="var(--oled-color)" 
-          stroke-width="2.5">
-          
-          <animate attributeName="d" 
-                   dur="3s" 
-                   repeatCount="indefinite" 
-                   values="
-                   M44,14 V30 A 30 30 0 1 0 56 30 V14 C52,13.5 48,15.5 44,14;
-                   M44,14 V30 A 30 30 0 1 0 56 30 V14 C52,15.5 48,13.5 44,14;
-                   M44,14 V30 A 30 30 0 1 0 56 30 V14 C52,13.5 48,15.5 44,14
-                   " />
-                   
-    </path>
+    <g clip-path="url(#bottle-clip)">
+        <path id="beer-color-stop" class="beer-liquid" fill="var(--beer-color, #4a4a4a)" d="M0,38 Q25,35 50,38 T100,38 V100 H0 Z">
+            <animate attributeName="d" dur="3s" repeatCount="indefinite"
+                     values="
+                     M0,38 Q25,35 50,38 T100,38 V100 H0 Z;
+                     M0,38 Q25,41 50,38 T100,38 V100 H0 Z;
+                     M0,38 Q25,35 50,38 T100,38 V100 H0 Z
+                     " />
+        </path>
+    </g>
+
+    <path class="glass-line" d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" fill="none" stroke="var(--oled-color)" stroke-width="2.5" />
 
     <g id="bubble-stream"></g>
 </svg>
