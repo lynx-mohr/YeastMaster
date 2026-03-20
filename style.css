@@ -1285,34 +1285,34 @@ body.light-mode #lab-json-out {
     border-color: #ccc !important;
 }
 
-/* --- GEMENSAM BAS-STYLING FÖR ATT JÄMNA UT STORLEK --- */
+/* --- KORRIGERAD CSS FÖR INPUTS I LIGHT MODE --- */
+
+/* 1. Gemensam bas för båda fälten (Vänster & Höger) */
 body.light-mode #custom-profile-name,
 body.light-mode #custom-base-yeast {
-    height: 48px; /* Tvingar fram en gemensam höjd */
-    line-height: 48px; /* Jämnar ut textplaceringen inuti */
-    
-    width: 100%;
-    margin: 0;
-    padding: 0 16px; /* Sido-padding för andrum */
-    border-radius: 8px;
-    font-family: 'Lexend', sans-serif;
-    font-size: 0.9rem;
-    
-    /* LIGHT MODE FÄRGER */
-    background: #ffffff !important;
+    /* Tvingar fram vit bakgrund och mörk text */
+    background-color: #ffffff !important;
     color: #111111 !important;
     border: 1px solid #ccc !important;
     
-    /* Tar bort webbläsarens egna effekter */
+    /* Jämnar ut storlekarna */
+    height: 48px !important;
+    padding: 0 12px !important; /* Lite mindre padding för att rymma texten */
+    border-radius: 8px;
+    font-family: 'Lexend', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 800; /* Båda blir kraftiga */
+    text-transform: uppercase; /* Båda får stora bokstäver */
+    
+    /* Rensar webbläsarens standard */
     -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none;
     outline: none;
     
     transition: all 0.2s ease;
 }
 
-/* Hover/Focus effekt för båda */
+/* 2. Hover/Focus-effekt för båda */
 body.light-mode #custom-profile-name:focus,
 body.light-mode #custom-base-yeast:focus,
 body.light-mode #custom-base-yeast:hover {
@@ -1320,30 +1320,29 @@ body.light-mode #custom-base-yeast:hover {
     box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
 }
 
-/* --- SPECIFIKT FÖR TEXTFÄLTET (VÄNSTRA) --- */
-body.light-mode #custom-profile-name {
-    text-transform: uppercase;
-    font-weight: 800; /* Kraftig stil för att matcha dropdown */
-}
-
-/* Färg på placeholder texten */
+/* 3. Specifikt för textfältet (Vänster) */
 body.light-mode #custom-profile-name::placeholder {
-    color: #999 !important;
+    color: #999 !important; /* Placeholder-texten blir grå */
     opacity: 1;
 }
 
-/* --- SPECIFIKT FÖR DROPDOWN (HÖGRA) --- */
+/* 4. Specifikt för dropdown (Höger) - Fixar pilen */
 body.light-mode #custom-base-yeast {
-    /* Lägger till en liten pil manuellt på höger sida */
+    /* Vi lägger till en mörk dropdown-pil manuellt i CSS */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23111111'%3E%3Cpath d='M7,10L12,15L17,10H7Z'/%3E%3C/svg%3E") !important;
     background-repeat: no-repeat !important;
-    background-position: right 12px center !important;
-    background-size: 24px !important;
-    padding-right: 40px !important; /* Ger plats åt pilen */
+    background-position: right 10px center !important;
+    background-size: 20px !important;
+    padding-right: 35px !important; /* Ger plats åt pilen */
 }
 
-/* Färg på "Pick strain..." (innan man valt) */
+/* Färg på texten inuti dropdown-alternativen */
+body.light-mode #custom-base-yeast option {
+    background-color: #ffffff !important;
+    color: #111111 !important;
+}
+
+/* Färg på "Pick strain..." (när inget är valt) */
 body.light-mode #custom-base-yeast option[value=""] {
     color: #999 !important;
 }
-
