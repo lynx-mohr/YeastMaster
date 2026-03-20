@@ -822,7 +822,6 @@ body.light-mode .yeast-card.selected .favorite-star {
 
 /* -- DAMEJEANGENS FÄRG (Styrs nu av JS-variabeln --beer-color) -- */
 /* -- 1. FÄRGEN PÅ VÄTSKAN -- */
-#beer-color-stop {
 
 #beer-color-stop {
     stop-color: var(--beer-color, #4a4a4a) !important;
