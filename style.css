@@ -778,6 +778,44 @@ canvas#beer-chart {
 
 /* -- DAMEJEANGENS FÄRG (Styrs nu av JS-variabeln --beer-color) -- */
 /* -- 1. FÄRGEN PÅ VÄTSKAN -- */
+
+/* --- LIGHT MODE JUSTERINGAR FÖR NYA MODULER --- */
+
+/* -- BÖRJAN: NYA REGLER FÖR YEAST-CARDS I LIGHT MODE -- */
+body.light-mode .yeast-card {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
+}
+
+body.light-mode .yeast-card h3 {
+    color: #222 !important; /* Mörkgrå text som syns bra mot vitt */
+}
+
+body.light-mode .favorite-star {
+    color: #aaa; /* Grå stjärna när den inte är markerad */
+}
+
+body.light-mode .yeast-card:hover {
+    background: #f9f9f9 !important;
+    border-color: var(--accent-color) !important;
+}
+
+body.light-mode .yeast-card.selected {
+    background: #ffffff !important;
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.25);
+}
+
+body.light-mode .yeast-card.selected .favorite-star {
+    color: var(--accent-color);
+}
+/* -- SLUT: NYA REGLER FÖR YEAST-CARDS I LIGHT MODE -- */
+
+/* -- DAMEJEANGENS FÄRG (Styrs nu av JS-variabeln --beer-color) -- */
+/* -- 1. FÄRGEN PÅ VÄTSKAN -- */
+#beer-color-stop {
+
 #beer-color-stop {
     stop-color: var(--beer-color, #4a4a4a) !important;
     transition: stop-color 0.4s ease;
