@@ -45,20 +45,19 @@
 <svg viewBox="0 0 100 92" class="carboy-svg">
     <defs>
         <linearGradient id="liquid-fill" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop id="beer-color-stop" offset="0%" stop-color="#4a4a4a" />
-            <stop offset="100%" stop-color="#333" />
+            <stop offset="32%" stop-color="transparent" /> 
+            <stop offset="32%" stop-color="#4a4a4a" id="beer-color-stop" />
         </linearGradient>
     </defs>
-    
-    <rect x="38" y="16" width="24" height="3" fill="var(--oled-color)" rx="1.5" />
-    
-    <path d="M44,19 V30 A 30 30 0 1 0 56 30 V19 Z" fill="none" stroke="var(--oled-color)" stroke-width="2.5" />
 
-    <g class="beer-liquid-group">
-        <path class="animated-liquid" d="M44,32 Q50,30 56,32 V30 A 30 30 0 1 0 44 30 Z" 
-              fill="url(#liquid-fill)" stroke="none" />
-    </g>
-    
+    <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
+
+    <path class="glass-line beer-liquid" 
+          d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" 
+          style="fill: url(#liquid-fill) !important;" 
+          stroke="var(--oled-color)" 
+          stroke-width="2.5" />
+
     <g id="bubble-stream"></g>
 </svg>
              <div class="beer-temp" data-text="--°C"><span id="temp-beer-val">--</span>°C</div>
