@@ -1350,3 +1350,14 @@ body.light-mode #custom-base-yeast option {
 body.light-mode #custom-base-yeast option[value=""] {
     color: #999 !important;
 }
+
+/* Denna regel ser till att statusen (t.ex. COLD CRASH) blir mörk i Light Mode */
+body.light-mode #status-text {
+    color: #111111 !important;
+}
+
+/* Du kan även passa på att snygga till raden för "Days since start" om den känns blek */
+body.light-mode .day-row, 
+body.light-mode .phase-row {
+    color: #333 !important;
+}
