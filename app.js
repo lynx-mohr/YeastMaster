@@ -1665,16 +1665,21 @@ document.addEventListener('touchend', e => {
 }, { passive: true });
 
 // ==========================================
-// BEER COLOR CYCLER (Easter Egg)
+// BEER COLOR CYCLER (Easter Egg med Kontrast-AI)
 // ==========================================
 const beerStyles = [
-    '#4a4a4a', // 0: Standard Mörkgrå (Neutral)
-    '#f4c95d', // 1: Ljus Pilsner
-    '#ffcc33', // 2: Solig Lager / Helles
-    '#f2b336', // 3: Veteöl / Pale Ale
-    '#e8992e', // 4: Bärnsten / ESB
-    '#8b4513', // 5: Brown Ale
-    '#2b1500'  // 6: Imperial Stout
+    // Neutral & Mörk: Ihålig text (insidan = vätskan) med ljus kontur
+    { name: 'Neutral', fill: '#4a4a4a', inner: '#4a4a4a', stroke: 'var(--oled-color)' }, 
+    
+    // Ljusa ölsorter: Solitt mörk text för grym kontrast!
+    { name: 'Pilsner', fill: '#f4c95d', inner: '#111111', stroke: '#111111' }, 
+    { name: 'Lager',   fill: '#ffcc33', inner: '#111111', stroke: '#111111' }, 
+    { name: 'Pale Ale',fill: '#f2b336', inner: '#111111', stroke: '#111111' }, 
+    { name: 'Amber',   fill: '#e8992e', inner: '#111111', stroke: '#111111' }, 
+    
+    // Mörka ölsorter: Tillbaka till ihålig text med kritvit kontur
+    { name: 'Brown',   fill: '#8b4513', inner: '#8b4513', stroke: '#ffffff' }, 
+    { name: 'Stout',   fill: '#2b1500', inner: '#2b1500', stroke: '#ffffff' }  
 ];
 
 let currentBeerStyleIndex = 0;
@@ -1683,40 +1688,39 @@ function initBeerCycler() {
     const carboyWrapper = document.querySelector('.carboy-wrapper');
     if (!carboyWrapper) return;
 
-    // 1. Kolla om du har en sparad färg från förra gången
-    const savedBeerStyle = localStorage.getItem('myBeerColor');
-    if (savedBeerStyle) {
-        document.documentElement.style.setProperty('--beer-color', savedBeerStyle);
-        // Hitta vilken plats i listan den färgen har (om den finns)
-        const index = beerStyles.indexOf(savedBeerStyle);
-        if (index !== -1) currentBeerStyleIndex = index;
+    // 1. Kolla om du har en sparad ölstil sedan tidigare
+    const savedIndex = localStorage.getItem('myBeerStyleIndex');
+    if (savedIndex !== null) {
+        currentBeerStyleIndex = parseInt(savedIndex, 10);
     }
+    
+    // 2. Applicera färgen direkt vid start
+    applyBeerStyle(currentBeerStyleIndex);
 
-    // 2. Visa att den går att klicka på (muspekare på PC)
+    // 3. Visa muspekare för att indikera att den är klickbar
     carboyWrapper.style.cursor = 'pointer';
 
-    // 3. Byt färg vid varje klick/tap!
+    // 4. Byt färg vid varje klick!
     carboyWrapper.addEventListener('click', () => {
-        // Hoppa till nästa färg i listan
         currentBeerStyleIndex++;
-        
-        // Börja om från noll om vi nått slutet
         if (currentBeerStyleIndex >= beerStyles.length) {
-            currentBeerStyleIndex = 0;
+            currentBeerStyleIndex = 0; // Börja om
         }
         
-        const newColor = beerStyles[currentBeerStyleIndex];
-        
-        // Uppdatera färgen på skärmen
-        document.documentElement.style.setProperty('--beer-color', newColor);
-        
-        // Spara till minnet
-        localStorage.setItem('myBeerColor', newColor);
+        applyBeerStyle(currentBeerStyleIndex);
+        localStorage.setItem('myBeerStyleIndex', currentBeerStyleIndex);
     });
 }
 
-// Starta funktionen direkt
+// NY FUNKTION: Applicerar alla tre färger samtidigt
+function applyBeerStyle(index) {
+    const style = beerStyles[index];
+    document.documentElement.style.setProperty('--beer-color', style.fill);
+    document.documentElement.style.setProperty('--beer-inner', style.inner);
+    document.documentElement.style.setProperty('--beer-stroke', style.stroke);
+}
+
+// Starta funktionen när sidan laddas
 document.addEventListener('DOMContentLoaded', () => {
     initBeerCycler();
 });
-
