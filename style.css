@@ -1366,10 +1366,17 @@ body.light-mode .phase-row {
     color: #333 !important;
 }
 
-/* --- DEN ÄKTA SKVALPANDE VÅGEN --- */
-@keyframes wave-slide {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50px); }
+/* --- DEN LUGNA VAGGADE YTAN --- */
+@keyframes wave-slosh {
+    0%, 100% { transform: translateX(-5px); } /* Startar lite till vänster */
+    50%      { transform: translateX(5px); }  /* Vaggar lite till höger */
+}
+
+.beer-liquid {
+    /* ease-in-out gör rörelsen mjukare vid vändningarna. 
+       6 sekunder gör den riktigt långsam. */
+    animation: wave-slosh 6s ease-in-out infinite; 
+    transition: fill 0.4s ease; /* Mjukt färgbyte när vi byter ölsort */
 }
 
 .beer-liquid {
