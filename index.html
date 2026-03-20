@@ -146,14 +146,13 @@
        <div class="chart-section" style="margin: 20px; padding: 20px; border-radius: 15px;">
     <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 10px; letter-spacing: 1px;">PROFILE BUILDER</div>
     
-    <div class="chart-container" style="height: 300px; width: 100%; position: relative;">
-        <div id="chart-placeholder" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; color: #555; font-size: 1.1rem; font-weight: 600; padding: 20px;">
-            Pick a base yeast and name your profile above 👆
-        </div>
-        
-        <div id="chart-scroll-area" style="width: 100%; height: 100%; opacity: 0; pointer-events: none; transition: opacity 0.5s ease;">
-            <canvas id="lab-chart"></canvas>
-        </div>
+<div class="chart-container" style="height: 300px; width: 100%; position: relative; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;">
+    <div id="chart-placeholder" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; color: #555; font-size: 1.1rem; font-weight: 600; padding: 20px;">
+        Pick a base yeast and name your profile above 👆
+    </div>
+    
+    <div id="chart-scroll-area" style="min-width: 600px; height: 100%; opacity: 0; transition: opacity 0.5s ease;">
+        <canvas id="lab-chart"></canvas>
     </div>
 </div>
 
