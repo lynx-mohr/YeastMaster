@@ -1368,16 +1368,7 @@ body.light-mode .phase-row {
 
 
 .beer-liquid {
-    /* ease-in-out gör rörelsen mjukare vid vändningarna. 
-       6 sekunder gör den riktigt långsam. */
-    animation: wave-slosh 6s ease-in-out infinite; 
     transition: fill 0.4s ease; /* Mjukt färgbyte när vi byter ölsort */
-}
-
-.beer-liquid {
-    /* linear gör att den rullar i samma jämna takt utan att sakta in */
-    animation: wave-slide 3s linear infinite; 
-    transition: fill 0.4s ease; /* Behåller mjukt färgbyte när vi byter ölsort */
 }
 
 /* För att JS fortfarande ska kunna hitta färgen */
