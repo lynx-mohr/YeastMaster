@@ -138,25 +138,25 @@ section {
 }
 
 /* -- SIFFRORNAS INSIDA (Den osynliga basen) -- */
+/* -- SIFFRORNAS INSIDA -- */
 .beer-temp {
     position: absolute;
     top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
-    
     font-family: 'Roboto Mono', monospace;
     font-size: 1.4rem; 
     letter-spacing: normal; 
     z-index: 10;
     
-    /* MAGIN: Siffran blir samma färg som vätskan! */
-    color: var(--beer-color, #4a4a4a) !important; 
+    /* Ny variabel för insidan! Om den saknas används vätskans färg */
+    color: var(--beer-inner, var(--beer-color, #4a4a4a)) !important; 
     transition: color 0.4s ease;
 }
 
-/* -- SIFFRORNAS KONTUR (Den synliga linjen ovanpå) -- */
+/* -- SIFFRORNAS KONTUR -- */
 .beer-temp::after {
-    content: attr(data-text); /* Lånar texten från HTML */
+    content: attr(data-text); 
     position: absolute;
     left: 0;
     top: 0;
@@ -165,10 +165,10 @@ section {
     z-index: 11;
     pointer-events: none;
     
-    color: transparent !important; /* Insidan är helt genomskinlig */
+    color: transparent !important; 
     
-    /* Konturen byter färg automatiskt via JS! */
-    -webkit-text-stroke: 1px var(--beer-text-color, var(--oled-color)) !important;
+    /* Ny variabel för konturen! */
+    -webkit-text-stroke: 1px var(--beer-stroke, var(--oled-color)) !important;
     transition: -webkit-text-stroke-color 0.4s ease;
 }
 
