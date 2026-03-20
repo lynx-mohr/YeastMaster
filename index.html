@@ -53,10 +53,21 @@
     <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
 
     <path class="glass-line beer-liquid" 
-          d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" 
+          d="M44,14 V30 A 30 30 0 1 0 56 30 V14 C52,14 48,14 44,14" 
           style="fill: url(#liquid-fill) !important;" 
           stroke="var(--oled-color)" 
-          stroke-width="2.5" />
+          stroke-width="2.5">
+          
+          <animate attributeName="d" 
+                   dur="3s" 
+                   repeatCount="indefinite" 
+                   values="
+                   M44,14 V30 A 30 30 0 1 0 56 30 V14 C52,13.5 48,15.5 44,14;
+                   M44,14 V30 A 30 30 0 1 0 56 30 V14 C52,15.5 48,13.5 44,14;
+                   M44,14 V30 A 30 30 0 1 0 56 30 V14 C52,13.5 48,15.5 44,14
+                   " />
+                   
+    </path>
 
     <g id="bubble-stream"></g>
 </svg>

@@ -214,30 +214,7 @@ section {
 
 /* --- ANIMERING AV ÖL-YTAN --- */
 
-@keyframes surfaceSlosh {
-    0%, 100% { 
-        /* Startläge (synkat med dina ID:n i HTML:en) */
-        fill-opacity: 0.98;
-        filter: blur(0.5px);
-    }
-    50% { 
-        /* Ytan rör sig en gnutta nedåt, blir lite disigare och mörkare */
-        fill-opacity: 0.94;
-        filter: blur(1px);
-    }
-}
 
-/* Denna klass applicerar animationen på vätskan */
-.beer-liquid {
-    animation: surfaceSlosh 4s ease-in-out infinite;
-    transform-origin: bottom center; /* Gör att "gungandet" känns mer naturligt */
-}
-
-/* Liten justering för att göra ytan ännu tydligare mot glaskonturen */
-.glass-line {
-    /* Vi sätter en svag text-shadow inuti glaset för en extra 3D-effekt */
-    filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.1));
-}
 
 /* --- 6. PROGRESS & CHART --- */
 .progress-section { 
@@ -1397,16 +1374,6 @@ body.light-mode .phase-row {
     100% { transform: rotate(-1deg); }
 }
 
-.beer-liquid-group {
-    /* Vi sätter rotationspunkten till mitten av flaskan */
-    transform-origin: 50% 60%; 
-    animation: liquidSway 3s ease-in-out infinite;
-}
-
-.animated-liquid {
-    /* Gör ytan lite mjukare */
-    filter: drop-shadow(0 -1px 1px rgba(255,255,255,0.1));
-}
 
 /* För att JS fortfarande ska kunna hitta färgen */
 #beer-color-stop {
