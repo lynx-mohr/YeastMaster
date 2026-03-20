@@ -157,14 +157,24 @@
     </div>
 </div>
 
-<div id="profile-summary" style="margin: 0 20px 20px 20px; border-radius: 10px; padding: 20px;" class="phase-info">
-    <div style="font-size: 0.85rem; font-weight: 800; color: var(--accent-color); margin-bottom: 15px; letter-spacing: 1px;">PROFILE SUMMARY</div>
+<div id="profile-summary" class="phase-info">
+    <div class="summary-header">PROFILE SUMMARY</div>
     
-    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem;">
-        <div id="sum-step1"><strong>Pitch / Primary:</strong> Start at <span id="val-t1" style="font-weight:bold;">19°C</span>.</div>
-        <div id="sum-step2"><strong>Cleanup / D-Rest:</strong> Rise to <span id="val-t2" style="font-weight:bold;">22°C</span> on Day <span id="val-d2" style="font-weight:bold;">5</span>.</div>
-        <div id="sum-step3"><strong>Cold Crash:</strong> Drop to <span id="val-t3" style="font-weight:bold;">3°C</span> on Day <span id="val-d3" style="font-weight:bold;">8</span>.</div>
-        <div id="sum-step4"><strong>Conditioning:</strong> Hold at <span id="val-t4" style="font-weight:bold;">3°C</span> until Day <span id="val-d4" style="font-weight:bold;">14</span>.</div>
+    <div class="summary-row">
+        <span class="label">Primary</span>
+        <span class="value">Start <strong id="val-t1">19.0°C</strong></span>
+    </div>
+    <div class="summary-row">
+        <span class="label">Cleanup</span>
+        <span class="value">Day <span id="val-d2">5</span> @ <strong id="val-t2">22.0°C</strong></span>
+    </div>
+    <div class="summary-row">
+        <span class="label">Cold Crash</span>
+        <span class="value">Day <span id="val-d3">8</span> @ <strong id="val-t3">3.0°C</strong></span>
+    </div>
+    <div class="summary-row">
+        <span class="label">Condition</span>
+        <span class="value">Until Day <span id="val-d4">14</span></span>
     </div>
 </div>
 
