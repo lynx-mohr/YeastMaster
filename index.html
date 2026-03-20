@@ -51,10 +51,7 @@
 
     <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
 
-    <path class="glass-line" fill="none" stroke="var(--oled-color)" stroke-width="2.5" d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" />
-
     <g clip-path="url(#bottle-clip)">
-        
         <g>
             <animateTransform attributeName="transform" type="translate" 
                               values="-5,0; 5,0; -5,0" 
@@ -66,6 +63,9 @@
             <g id="bubble-stream"></g>
         </g>
     </g>
+
+    <path class="glass-line" fill="none" stroke="var(--oled-color)" stroke-width="2.5" 
+          d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" />
 </svg>
              <div class="beer-temp" data-text="--°C"><span id="temp-beer-val">--</span>°C</div>
                     </div>
