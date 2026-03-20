@@ -718,15 +718,29 @@ function toggleDryHopLine() {
 }
 
 function updateSummaryText() {
-    document.getElementById('val-t1').innerText = profilePoints[0].y.toFixed(1) + "°C";
-    document.getElementById('val-t2').innerText = profilePoints[1].y.toFixed(1) + "°C";
-    document.getElementById('val-d2').innerText = profilePoints[1].x.toFixed(1);
-    document.getElementById('val-t3').innerText = profilePoints[2].y.toFixed(1) + "°C";
-    document.getElementById('val-d3').innerText = profilePoints[2].x.toFixed(1);
-    document.getElementById('val-t4').innerText = profilePoints[3].y.toFixed(1) + "°C";
-    document.getElementById('val-d4').innerText = profilePoints[3].x.toFixed(1);
+    // 1. Temperaturer (Vi behåller en decimal för precision)
+    document.getElementById('val-t1').innerText = profilePoints[0].y.toFixed(1);
+    document.getElementById('val-t2').innerText = profilePoints[1].y.toFixed(1);
+    document.getElementById('val-t3').innerText = profilePoints[2].y.toFixed(1);
+    // Vi lägger inte till °C här inne i JS eftersom det redan ligger i HTML-mallen
+
+    // 2. Dagar (Här kör vi Math.round för att få bort .0 helt!)
+    document.getElementById('val-d2').innerText = Math.round(profilePoints[1].x);
+    document.getElementById('val-d3').innerText = Math.round(profilePoints[2].x);
+    
+    // FIXEN FÖR CONDITION:
+    // Denna rad letar nu upp 'val-d4' och sätter det till sista punktens dag
+    const conditionElement = document.getElementById('val-d4');
+    if (conditionElement) {
+        conditionElement.innerText = Math.round(profilePoints[3].x);
+    }
+
+    // 3. Torrhumling (Om den är aktiv)
     if (dryHopData.enabled) {
-        document.getElementById('hop-day-val').innerText = dryHopData.day.toFixed(1);
+        const hopVal = document.getElementById('hop-day-val');
+        if (hopVal) {
+            hopVal.innerText = dryHopData.day.toFixed(1); // Humle kan få ha en decimal om du vill ha precision
+        }
     }
 }
 
