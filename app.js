@@ -333,11 +333,11 @@ function startBubbles() {
             // PRIMARY / DEFAULT: Stegrande aktivitet!
             // 6 timmar = 0.25 dagar. 12 timmar = 0.5 dagar.
             
-            if (phaseDays < 0.25) {
+            if (phaseDays < 0) {
                 // Första 6 timmarna (Lag phase): Ingen aktivitet alls
                 spawnInterval = 9999999; 
             } 
-            else if (phaseDays >= 0.25 && phaseDays < 0.5) {
+            else if (phaseDays >= 0 && phaseDays < 0.5) {
                 // 6 till 12 timmar: Stegrande aktivitet
                 // Räkna ut hur långt vi har kommit i denna "uppstarts-fas" (ger ett värde mellan 0 och 1)
                 let progress = (phaseDays - 0.25) / 0.25; 

@@ -1366,11 +1366,6 @@ body.light-mode .phase-row {
     color: #333 !important;
 }
 
-/* --- DEN LUGNA VAGGADE YTAN --- */
-@keyframes wave-slosh {
-    0%, 100% { transform: translateX(-5px); } /* Startar lite till vänster */
-    50%      { transform: translateX(5px); }  /* Vaggar lite till höger */
-}
 
 .beer-liquid {
     /* ease-in-out gör rörelsen mjukare vid vändningarna. 
