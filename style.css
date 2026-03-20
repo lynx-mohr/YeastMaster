@@ -1366,16 +1366,21 @@ body.light-mode .phase-row {
     color: #333 !important;
 }
 
-/* --- DEN NYA VÅG-ANIMERINGEN --- */
-
-@keyframes liquidSway {
-    0% { transform: rotate(-1deg); }
-    50% { transform: rotate(1.5deg); }
-    100% { transform: rotate(-1deg); }
+/* --- DEN ÄKTA SKVALPANDE VÅGEN --- */
+@keyframes wave-slide {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50px); }
 }
 
+.beer-liquid {
+    /* linear gör att den rullar i samma jämna takt utan att sakta in */
+    animation: wave-slide 3s linear infinite; 
+    transition: fill 0.4s ease; /* Behåller mjukt färgbyte när vi byter ölsort */
+}
 
 /* För att JS fortfarande ska kunna hitta färgen */
 #beer-color-stop {
     stop-color: var(--beer-color, #4a4a4a);
 }
+
+

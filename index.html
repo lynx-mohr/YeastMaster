@@ -52,17 +52,12 @@
     <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
 
     <g clip-path="url(#bottle-clip)">
-        <path id="beer-color-stop" class="beer-liquid" fill="var(--beer-color, #4a4a4a)" d="M0,38 Q25,35 50,38 T100,38 V100 H0 Z">
-            <animate attributeName="d" dur="3s" repeatCount="indefinite"
-                     values="
-                     M0,38 Q25,35 50,38 T100,38 V100 H0 Z;
-                     M0,38 Q25,41 50,38 T100,38 V100 H0 Z;
-                     M0,38 Q25,35 50,38 T100,38 V100 H0 Z
-                     " />
-        </path>
+        <path class="beer-liquid" fill="var(--beer-color, #4a4a4a)" 
+              d="M 0,38 Q 12.5,35 25,38 T 50,38 T 75,38 T 100,38 T 125,38 T 150,38 V 100 H 0 Z" />
     </g>
 
-    <path class="glass-line" d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" fill="none" stroke="var(--oled-color)" stroke-width="2.5" />
+    <path class="glass-line" fill="none" stroke="var(--oled-color)" stroke-width="2.5" 
+          d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" />
 
     <g id="bubble-stream"></g>
 </svg>
