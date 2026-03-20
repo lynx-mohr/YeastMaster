@@ -465,6 +465,10 @@ canvas#beer-chart {
         flex-direction: row !important;
         justify-content: space-between !important;
     }
+    #lab-chart {
+        width: 100% !important;
+        height: 100% !important;
+    }
 }
 
 /* ========================================= */
