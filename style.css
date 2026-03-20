@@ -239,20 +239,68 @@ section {
 .progress-widget { margin-bottom: 25px; }
 #profile-val { margin-bottom: 2px !important; }
 
+/* --- UPPDATERAD SUMMARY-BOX --- */
 .phase-info {
-    margin-top: 25px;
-    margin-bottom: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
     background-color: rgba(255, 255, 255, 0.04);
     border: 1px solid #333;
-    border-radius: 8px;
-    padding: 15px;
-    border-left: 3px solid var(--accent-color);
+    border-radius: 12px;
+    padding: 15px !important; /* Ger jämn luft runt om */
+    border-left: 4px solid var(--accent-color);
 }
 
-.phase-info div {
+/* Light mode-anpassning för boxen */
+body.light-mode .phase-info {
+    background-color: #ffffff;
+    border-color: #ddd;
+}
+
+.summary-header {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--accent-color);
     margin-bottom: 12px;
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between; /* Trycker namnet till vänster och värdet till höger */
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Light mode-linjer */
+body.light-mode .summary-row {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.summary-row:last-child {
+    border-bottom: none; /* Ingen linje efter sista raden */
+}
+
+.summary-row .label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--oled-color);
+}
+
+.summary-row .value {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--oled-color);
+    text-align: right;
+}
+
+/* Om skärmen är riktigt smal, minska texten pyttelite till */
+@media (max-width: 360px) {
+    .summary-row .label, 
+    .summary-row .value {
+        font-size: 0.75rem;
+    }
 }
 
 /* Standard (Dark Mode) */
