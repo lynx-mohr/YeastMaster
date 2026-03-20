@@ -71,7 +71,6 @@ body.light-mode .btn-primary { border: 1px solid #ccc; }
     max-width: 350px;
 }
 
-/* --- 3. VYER & OLED SCREEN (HÄR ÄR FIXEN) --- */
 /* --- 3. VYER & SEKTIONER (FIXEN FÖR PC-HOPP) --- */
 section {
     width: 100%;
@@ -137,7 +136,6 @@ section {
     height: 100%; 
 }
 
-/* -- SIFFRORNAS INSIDA (Den osynliga basen) -- */
 /* -- SIFFRORNAS INSIDA -- */
 .beer-temp {
     position: absolute;
@@ -211,10 +209,6 @@ section {
     align-items: center;
     gap: 8px;
 }
-
-/* --- ANIMERING AV ÖL-YTAN --- */
-
-
 
 /* --- 6. PROGRESS & CHART --- */
 .progress-section { 
@@ -314,14 +308,29 @@ body.light-mode .summary-row {
     transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-.chart-container {
-    height: 300px; /* Eller den höjd du valt */
+/* --- 1. DASHBOARD GRAFEN (Kompakt och fast) --- */
+#view-dashboard .chart-container {
+    height: 110px !important; /* Styr höjden här */
+    min-height: 110px !important;
+    max-height: 110px !important;
     width: 100%;
     position: relative;
-    /* --- HÄR ÄR FIXEN --- */
-    overflow-x: auto !important; /* Tillåter scroll i sidled */
-    overflow-y: hidden;         /* Förhindrar scroll på höjden */
-    -webkit-overflow-scrolling: touch; /* Gör scrollen mjuk på iPhone/Android */
+    overflow: hidden !important;
+}
+
+#view-dashboard canvas#beer-chart {
+    height: 110px !important;
+    max-height: 110px !important;
+}
+
+/* --- 2. THE PROFILER GRAFEN (Stor och scrollbar) --- */
+#view-lab .chart-container {
+    height: 300px; 
+    width: 100%;
+    position: relative;
+    overflow-x: auto !important; 
+    overflow-y: hidden;        
+    -webkit-overflow-scrolling: touch; 
 }
 
 /* Säkerställ att själva området inuti faktiskt är bredare än skärmen på mobil */
@@ -423,7 +432,6 @@ canvas#beer-chart {
 
 .logout-btn:hover { opacity: 1; border-color: var(--accent-color); }
 
-/* --- 8. NAVIGATION --- */
 /* --- 8. NAVIGATION (GLOBALA REGLER) --- */
 .main-nav {
     position: fixed;
@@ -846,11 +854,6 @@ canvas#beer-chart {
 
 /* --- LIGHT MODE JUSTERINGAR FÖR NYA MODULER --- */
 
-/* -- DAMEJEANGENS FÄRG (Styrs nu av JS-variabeln --beer-color) -- */
-/* -- 1. FÄRGEN PÅ VÄTSKAN -- */
-
-/* --- LIGHT MODE JUSTERINGAR FÖR NYA MODULER --- */
-
 /* -- BÖRJAN: NYA REGLER FÖR YEAST-CARDS I LIGHT MODE -- */
 /* --- YEAST CARDS I LIGHT MODE --- */
 
@@ -891,15 +894,14 @@ body.light-mode .yeast-card.selected .favorite-star {
 /* -- SLUT: NYA REGLER FÖR YEAST-CARDS I LIGHT MODE -- */
 
 /* -- DAMEJEANGENS FÄRG (Styrs nu av JS-variabeln --beer-color) -- */
-/* -- 1. FÄRGEN PÅ VÄTSKAN -- */
 
+/* För att JS fortfarande ska kunna hitta färgen */
 #beer-color-stop {
-    stop-color: var(--beer-color, #4a4a4a) !important;
-    transition: stop-color 0.4s ease;
+    stop-color: var(--beer-color, #4a4a4a);
 }
 
 .beer-liquid {
-    transition: fill 0.4s ease; /* Mjuk övergång tillbaka till grått */
+    transition: fill 0.4s ease; /* Mjukt färgbyte när vi byter ölsort */
 }
 
 .light-mode .yeast-card.selected {
@@ -951,6 +953,129 @@ body.light-mode .yeast-card.selected .favorite-star {
     background: #f9f9f9;
     border-color: #ccc;
     color: #222;
+}
+
+/* --- THE PROFILER - LIGHT MODE JUSTERINGAR --- */
+
+/* Light Mode */
+body.light-mode .chart-section {
+    background: #ffffff !important;
+    border: 1px solid #ddd !important;
+}
+
+/* Texten "PROFILE BUILDER" */
+.chart-section div[style*="color: #888"] {
+    color: var(--oled-color) !important; /* Denna följer nu temat automatiskt */
+}
+
+/* Placeholder-texten ("Pick a base yeast...") */
+body.light-mode #chart-placeholder {
+    color: #999 !important;
+}
+
+/* Inmatningsfälten (Namn och Jäst) */
+body.light-mode .step-inputs input, 
+body.light-mode .input-group input, 
+body.light-mode .input-group select,
+body.light-mode #yeast-search {
+    background-color: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid #ccc !important;
+}
+
+/* Sammanfattningsboxen under grafen */
+body.light-mode .phase-info,
+body.light-mode #profile-summary {
+    background-color: #f9f9f9 !important;
+    border: 1px solid #ddd !important;
+    color: #333 !important;
+}
+
+/* Text i labels och sammanfattning */
+body.light-mode .step-inputs label,
+body.light-mode .input-group label,
+body.light-mode .res-label {
+    color: #666 !important;
+}
+
+/* Om du använder en mörk ruta för JSON-output eller liknande */
+body.light-mode #lab-json-out {
+    background: #f4f4f4 !important;
+    color: #222 !important;
+    border-color: #ccc !important;
+}
+
+/* --- KORRIGERAD CSS FÖR INPUTS I LIGHT MODE --- */
+
+/* 1. Gemensam bas för båda fälten (Vänster & Höger) */
+body.light-mode #custom-profile-name,
+body.light-mode #custom-base-yeast {
+    /* Tvingar fram vit bakgrund och mörk text */
+    background-color: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid #ccc !important;
+    
+    /* Jämnar ut storlekarna */
+    height: 48px !important;
+    padding: 0 12px !important; /* Lite mindre padding för att rymma texten */
+    border-radius: 8px;
+    font-family: 'Lexend', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 800; /* Båda blir kraftiga */
+    text-transform: uppercase; /* Båda får stora bokstäver */
+    
+    /* Rensar webbläsarens standard */
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    
+    transition: all 0.2s ease;
+}
+
+/* 2. Hover/Focus-effekt för båda */
+body.light-mode #custom-profile-name:focus,
+body.light-mode #custom-base-yeast:focus,
+body.light-mode #custom-base-yeast:hover {
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
+}
+
+/* 3. Specifikt för textfältet (Vänster) */
+body.light-mode #custom-profile-name::placeholder {
+    color: #999 !important; /* Placeholder-texten blir grå */
+    opacity: 1;
+}
+
+/* 4. Specifikt för dropdown (Höger) - Fixar pilen */
+body.light-mode #custom-base-yeast {
+    /* Vi lägger till en mörk dropdown-pil manuellt i CSS */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23111111'%3E%3Cpath d='M7,10L12,15L17,10H7Z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    background-size: 20px !important;
+    padding-right: 35px !important; /* Ger plats åt pilen */
+}
+
+/* Färg på texten inuti dropdown-alternativen */
+body.light-mode #custom-base-yeast option {
+    background-color: #ffffff !important;
+    color: #111111 !important;
+}
+
+/* Färg på "Pick strain..." (när inget är valt) */
+body.light-mode #custom-base-yeast option[value=""] {
+    color: #999 !important;
+}
+
+/* Denna regel ser till att statusen (t.ex. COLD CRASH) blir mörk i Light Mode */
+body.light-mode #status-text {
+    color: #111111 !important;
+}
+
+/* Du kan även passa på att snygga till raden för "Days since start" om den känns blek */
+body.light-mode .day-row, 
+body.light-mode .phase-row {
+    color: #333 !important;
 }
 
 /* --- YEAST INFO MODAL --- */
@@ -1063,7 +1188,6 @@ body.light-mode .yeast-card.selected .favorite-star {
 body.light-mode .lib-dark { display: none !important; }
 body.light-mode .lib-light { display: block !important; }
 
-/* --- VI TAR BORT REGLERNA NEDANFÖR SOM GAV BILDEN EN EGEN BAKGRUND --- */
 
 /* --- THE ARCANE LAB PROFILER STYLES --- */
 
@@ -1242,138 +1366,3 @@ body .sync-button:hover {
 .slide-in-left {
     animation: slideInFromLeft 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
 }
-
-/* --- THE PROFILER - LIGHT MODE JUSTERINGAR --- */
-
-/* Light Mode */
-body.light-mode .chart-section {
-    background: #ffffff !important;
-    border: 1px solid #ddd !important;
-}
-
-/* Texten "PROFILE BUILDER" */
-.chart-section div[style*="color: #888"] {
-    color: var(--oled-color) !important; /* Denna följer nu temat automatiskt */
-}
-
-/* Placeholder-texten ("Pick a base yeast...") */
-body.light-mode #chart-placeholder {
-    color: #999 !important;
-}
-
-/* Inmatningsfälten (Namn och Jäst) */
-body.light-mode .step-inputs input, 
-body.light-mode .input-group input, 
-body.light-mode .input-group select,
-body.light-mode #yeast-search {
-    background-color: #ffffff !important;
-    color: #111111 !important;
-    border: 1px solid #ccc !important;
-}
-
-/* Sammanfattningsboxen under grafen */
-body.light-mode .phase-info,
-body.light-mode #profile-summary {
-    background-color: #f9f9f9 !important;
-    border: 1px solid #ddd !important;
-    color: #333 !important;
-}
-
-/* Text i labels och sammanfattning */
-body.light-mode .step-inputs label,
-body.light-mode .input-group label,
-body.light-mode .res-label {
-    color: #666 !important;
-}
-
-/* Om du använder en mörk ruta för JSON-output eller liknande */
-body.light-mode #lab-json-out {
-    background: #f4f4f4 !important;
-    color: #222 !important;
-    border-color: #ccc !important;
-}
-
-/* --- KORRIGERAD CSS FÖR INPUTS I LIGHT MODE --- */
-
-/* 1. Gemensam bas för båda fälten (Vänster & Höger) */
-body.light-mode #custom-profile-name,
-body.light-mode #custom-base-yeast {
-    /* Tvingar fram vit bakgrund och mörk text */
-    background-color: #ffffff !important;
-    color: #111111 !important;
-    border: 1px solid #ccc !important;
-    
-    /* Jämnar ut storlekarna */
-    height: 48px !important;
-    padding: 0 12px !important; /* Lite mindre padding för att rymma texten */
-    border-radius: 8px;
-    font-family: 'Lexend', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 800; /* Båda blir kraftiga */
-    text-transform: uppercase; /* Båda får stora bokstäver */
-    
-    /* Rensar webbläsarens standard */
-    -webkit-appearance: none;
-    appearance: none;
-    outline: none;
-    
-    transition: all 0.2s ease;
-}
-
-/* 2. Hover/Focus-effekt för båda */
-body.light-mode #custom-profile-name:focus,
-body.light-mode #custom-base-yeast:focus,
-body.light-mode #custom-base-yeast:hover {
-    border-color: var(--accent-color) !important;
-    box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
-}
-
-/* 3. Specifikt för textfältet (Vänster) */
-body.light-mode #custom-profile-name::placeholder {
-    color: #999 !important; /* Placeholder-texten blir grå */
-    opacity: 1;
-}
-
-/* 4. Specifikt för dropdown (Höger) - Fixar pilen */
-body.light-mode #custom-base-yeast {
-    /* Vi lägger till en mörk dropdown-pil manuellt i CSS */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23111111'%3E%3Cpath d='M7,10L12,15L17,10H7Z'/%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 10px center !important;
-    background-size: 20px !important;
-    padding-right: 35px !important; /* Ger plats åt pilen */
-}
-
-/* Färg på texten inuti dropdown-alternativen */
-body.light-mode #custom-base-yeast option {
-    background-color: #ffffff !important;
-    color: #111111 !important;
-}
-
-/* Färg på "Pick strain..." (när inget är valt) */
-body.light-mode #custom-base-yeast option[value=""] {
-    color: #999 !important;
-}
-
-/* Denna regel ser till att statusen (t.ex. COLD CRASH) blir mörk i Light Mode */
-body.light-mode #status-text {
-    color: #111111 !important;
-}
-
-/* Du kan även passa på att snygga till raden för "Days since start" om den känns blek */
-body.light-mode .day-row, 
-body.light-mode .phase-row {
-    color: #333 !important;
-}
-
-
-.beer-liquid {
-    transition: fill 0.4s ease; /* Mjukt färgbyte när vi byter ölsort */
-}
-
-/* För att JS fortfarande ska kunna hitta färgen */
-#beer-color-stop {
-    stop-color: var(--beer-color, #4a4a4a);
-}
-
-
