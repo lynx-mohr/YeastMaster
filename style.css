@@ -592,7 +592,7 @@ canvas#beer-chart {
     }
    /* --- TEMPERATUR-TEXTEN PÅ MOBIL --- */
     .beer-temp { 
-        font-size: 1.1rem !important; /* Här styr du textstorleken på mobilen! */
+        font-size: 1.0rem !important; /* Här styr du textstorleken på mobilen! */
         top: 58% !important;          /* Här styr du höjden på mobilen! */
         width: 100% !important; 
         text-align: center !important; 
@@ -775,14 +775,6 @@ canvas#beer-chart {
 }
 
 /* --- LIGHT MODE JUSTERINGAR FÖR NYA MODULER --- */
-
-/* Samma sak för Light Mode så det syns bra där också */
-
-/* --- ÖLFÄRG I LIGHT MODE (Via Gradient-stoppet) --- */
-body.light-mode #beer-color-stop {
-    stop-color: #e8992e !important; /* Gyllene bärnstensfärg */
-    transition: stop-color 0.4s ease;
-}
 
 /* -- DAMEJEANGENS FÄRG (Styrs nu av JS-variabeln --beer-color) -- */
 /* -- 1. FÄRGEN PÅ VÄTSKAN -- */
