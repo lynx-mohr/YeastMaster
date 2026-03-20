@@ -784,41 +784,45 @@ canvas#beer-chart {
     border-radius: 15px;
     border: 1px solid #222;
 }
+/* --- UPPDATERAD KALKYLATOR FÖR MOBIL --- */
+
 .calc-inputs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap; /* Låter fälten hoppa ner på ny rad om det behövs */
     gap: 15px;
     margin-bottom: 25px;
 }
-.input-group label {
-    display: block;
-    font-size: 0.7rem;
-    color: #888;
-    margin-bottom: 5px;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-.input-group input, .input-group select {
-    width: 100%;
-    background: #000;
-    border: 1px solid #333;
-    color: #fff;
-    padding: 10px;
-    border-radius: 8px;
-   font-family: 'Lexend', sans-serif;
+
+.input-group {
+    flex: 1 1 140px; /* Säger: Försök vara 140px bred, men väx om det finns plats */
+    min-width: 0;   /* Förhindrar att flex-items trycker ut boxen */
 }
 
 .calc-results {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    display: flex;
+    gap: 10px;
 }
+
 .res-card {
-    background: #1a1a1a;
-    padding: 15px;
-    border-radius: 12px;
-    text-align: center;
-    border-left: 4px solid #444;
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrerar innehållet vertikalt */
+    min-height: 100px;       /* Tvingar dem att vara lika höga */
+}
+
+/* Specifik mobiljustering */
+@media (max-width: 400px) {
+    .input-group label {
+        font-size: 0.6rem; /* Pyttelite mindre etiketter */
+    }
+    .input-group input, .input-group select {
+        padding: 10px 5px; /* Mindre luft inuti svarta rutorna */
+        font-size: 0.9rem;
+    }
+    .res-val {
+        font-size: 1.2rem; /* Gör siffran lite mindre så den inte krockar med % */
+    }
 }
 .res-card.accent { border-left-color: var(--accent-color); }
 .res-label { display: block; font-size: 0.6rem; color: #888; font-weight: 800; margin-bottom: 5px;}
