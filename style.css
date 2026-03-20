@@ -137,6 +137,7 @@ section {
     height: 100%; 
 }
 
+/* -- SIFFRORNAS INSIDA (Den osynliga basen) -- */
 .beer-temp {
     position: absolute;
     top: 60%;
@@ -144,19 +145,31 @@ section {
     transform: translate(-50%, -50%);
     
     font-family: 'Roboto Mono', monospace;
-    
-    /* Betydligt mindre storlek för att få plats snyggt i vätskan */
     font-size: 1.4rem; 
-    
-    /* Återställer avståndet så konturerna inte krockar med varandra */
     letter-spacing: normal; 
-    
-    color: #000 !important; 
-    -webkit-text-stroke: 1px #fff !important; 
-    text-stroke: 1px #fff !important;
-    text-shadow: none !important; 
-    
     z-index: 10;
+    
+    /* MAGIN: Siffran blir samma färg som vätskan! */
+    color: var(--beer-color, #4a4a4a) !important; 
+    transition: color 0.4s ease;
+}
+
+/* -- SIFFRORNAS KONTUR (Den synliga linjen ovanpå) -- */
+.beer-temp::after {
+    content: attr(data-text); /* Lånar texten från HTML */
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 11;
+    pointer-events: none;
+    
+    color: transparent !important; /* Insidan är helt genomskinlig */
+    
+    /* Konturen byter färg automatiskt via JS! */
+    -webkit-text-stroke: 1px var(--beer-text-color, var(--oled-color)) !important;
+    transition: -webkit-text-stroke-color 0.4s ease;
 }
 
 .air-floating {
@@ -761,8 +774,8 @@ body.light-mode #beer-color-stop {
 }
 
 /* -- DAMEJEANGENS FÄRG (Styrs nu av JS-variabeln --beer-color) -- */
+/* -- 1. FÄRGEN PÅ VÄTSKAN -- */
 #beer-color-stop {
-    /* Om variabeln saknas (t.ex. vid start), använd mörkgrå #4a4a4a */
     stop-color: var(--beer-color, #4a4a4a) !important;
     transition: stop-color 0.4s ease;
 }
