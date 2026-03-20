@@ -590,7 +590,18 @@ canvas#beer-chart {
         text-align: right;
         padding-bottom: 60px !important; 
     }
-    
+   /* --- TEMPERATUR-TEXTEN PÅ MOBIL --- */
+    .beer-temp { 
+        font-size: 1.1rem !important; /* Här styr du textstorleken på mobilen! */
+        top: 58% !important;          /* Här styr du höjden på mobilen! */
+        width: 100% !important; 
+        text-align: center !important; 
+    }
+
+    .beer-temp::after {
+        /* Gör konturen lite tunnare på mobilen så det inte grötar ihop sig */
+        -webkit-text-stroke: 0.8px var(--beer-stroke, var(--oled-color)) !important; 
+    } 
     
 }
 
