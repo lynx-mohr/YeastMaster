@@ -1172,3 +1172,43 @@ body .sync-button:hover {
 .slide-in-left {
     animation: slideInFromLeft 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
 }
+
+/* --- THE PROFILER - LIGHT MODE JUSTERINGAR --- */
+
+/* Bakgrunden för hela sektionen/graf-behållaren */
+body.light-mode .chart-section {
+    background-color: #ffffff !important;
+    border-color: #ddd !important;
+}
+
+/* Inmatningsfälten (Namn och Jäst) */
+body.light-mode .step-inputs input, 
+body.light-mode .input-group input, 
+body.light-mode .input-group select,
+body.light-mode #yeast-search {
+    background-color: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid #ccc !important;
+}
+
+/* Sammanfattningsboxen under grafen */
+body.light-mode .phase-info,
+body.light-mode #profile-summary {
+    background-color: #f9f9f9 !important;
+    border: 1px solid #ddd !important;
+    color: #333 !important;
+}
+
+/* Text i labels och sammanfattning */
+body.light-mode .step-inputs label,
+body.light-mode .input-group label,
+body.light-mode .res-label {
+    color: #666 !important;
+}
+
+/* Om du använder en mörk ruta för JSON-output eller liknande */
+body.light-mode #lab-json-out {
+    background: #f4f4f4 !important;
+    color: #222 !important;
+    border-color: #ccc !important;
+}
