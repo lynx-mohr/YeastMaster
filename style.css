@@ -782,33 +782,41 @@ canvas#beer-chart {
 /* --- LIGHT MODE JUSTERINGAR FÖR NYA MODULER --- */
 
 /* -- BÖRJAN: NYA REGLER FÖR YEAST-CARDS I LIGHT MODE -- */
+/* --- YEAST CARDS I LIGHT MODE --- */
+
+/* Tvinga fram vit bakgrund på alla kort */
 body.light-mode .yeast-card {
-    background: #ffffff;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
+    background: #ffffff !important;
+    border: 1px solid #ccc !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important; 
 }
 
+/* Tvinga texten att bli svart */
 body.light-mode .yeast-card h3 {
-    color: #222 !important; /* Mörkgrå text som syns bra mot vitt */
+    color: #111111 !important;
 }
 
-body.light-mode .favorite-star {
-    color: #aaa; /* Grå stjärna när den inte är markerad */
-}
-
+/* Hover-effekt (när man drar musen över) */
 body.light-mode .yeast-card:hover {
-    background: #f9f9f9 !important;
+    background: #f4f4f4 !important;
     border-color: var(--accent-color) !important;
 }
 
+/* Markerade kort */
 body.light-mode .yeast-card.selected {
     background: #ffffff !important;
     border-color: var(--accent-color) !important;
-    box-shadow: 0 0 8px rgba(0, 229, 255, 0.25);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.4) !important;
 }
 
+/* Stjärnan (Omarkerad) */
+body.light-mode .yeast-card .favorite-star {
+    color: #ccc !important; 
+}
+
+/* Stjärnan (Markerad) */
 body.light-mode .yeast-card.selected .favorite-star {
-    color: var(--accent-color);
+    color: var(--accent-color) !important; 
 }
 /* -- SLUT: NYA REGLER FÖR YEAST-CARDS I LIGHT MODE -- */
 
