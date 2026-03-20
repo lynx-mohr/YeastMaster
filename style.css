@@ -255,10 +255,11 @@ section {
     letter-spacing: 0.5px;
 }
 
-.chart-section { 
-    margin-top: 15px; 
-    padding-top: 10px; 
-    border-top: 1px solid #333; 
+/* Standard (Dark Mode) */
+.chart-section {
+    background: #111;
+    border: 1px solid #333;
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .chart-container { 
@@ -1175,10 +1176,20 @@ body .sync-button:hover {
 
 /* --- THE PROFILER - LIGHT MODE JUSTERINGAR --- */
 
-/* Bakgrunden för hela sektionen/graf-behållaren */
+/* Light Mode */
 body.light-mode .chart-section {
-    background-color: #ffffff !important;
-    border-color: #ddd !important;
+    background: #ffffff !important;
+    border: 1px solid #ddd !important;
+}
+
+/* Texten "PROFILE BUILDER" */
+.chart-section div[style*="color: #888"] {
+    color: var(--oled-color) !important; /* Denna följer nu temat automatiskt */
+}
+
+/* Placeholder-texten ("Pick a base yeast...") */
+body.light-mode #chart-placeholder {
+    color: #999 !important;
 }
 
 /* Inmatningsfälten (Namn och Jäst) */
