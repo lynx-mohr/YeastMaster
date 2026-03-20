@@ -310,12 +310,21 @@ body.light-mode .summary-row {
     transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-.chart-container { 
-    height: 110px; 
-    position: relative; 
+.chart-container {
+    height: 300px; /* Eller den höjd du valt */
     width: 100%;
-    max-width: 100%;
-    overflow: hidden;
+    position: relative;
+    /* --- HÄR ÄR FIXEN --- */
+    overflow-x: auto !important; /* Tillåter scroll i sidled */
+    overflow-y: hidden;         /* Förhindrar scroll på höjden */
+    -webkit-overflow-scrolling: touch; /* Gör scrollen mjuk på iPhone/Android */
+}
+
+/* Säkerställ att själva området inuti faktiskt är bredare än skärmen på mobil */
+#chart-scroll-area {
+    min-width: 600px; /* Detta tvingar fram scrollen på små skärmar */
+    height: 100%;
+    position: relative;
 }
 
 canvas#beer-chart {
