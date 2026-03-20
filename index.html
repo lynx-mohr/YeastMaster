@@ -144,17 +144,29 @@
         </div>
 
        <div class="chart-section" style="margin: 20px; padding: 20px; border-radius: 15px;">
-           
-        <div id="profile-summary" style="margin: 0 20px 20px 20px; background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 20px;">
-            <div style="font-size: 0.85rem; font-weight: 800; color: var(--accent-color); margin-bottom: 15px; letter-spacing: 1px;">PROFILE SUMMARY</div>
-            
-            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem; color: #ccc;">
-                <div id="sum-step1"><strong>Pitch / Primary:</strong> Start at <span id="val-t1" style="color:#fff; font-weight:bold;">19°C</span>.</div>
-                <div id="sum-step2"><strong>Cleanup / D-Rest:</strong> Rise to <span id="val-t2" style="color:#fff; font-weight:bold;">22°C</span> on Day <span id="val-d2" style="color:#fff; font-weight:bold;">5</span>.</div>
-                <div id="sum-step3"><strong>Cold Crash:</strong> Drop to <span id="val-t3" style="color:#fff; font-weight:bold;">3°C</span> on Day <span id="val-d3" style="color:#fff; font-weight:bold;">8</span>.</div>
-                <div id="sum-step4"><strong>Conditioning:</strong> Hold at <span id="val-t4" style="color:#fff; font-weight:bold;">3°C</span> until Day <span id="val-d4" style="color:#fff; font-weight:bold;">14</span>.</div>
-            </div>
+    <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 10px; letter-spacing: 1px;">PROFILE BUILDER</div>
+    
+    <div class="chart-container" style="height: 300px; width: 100%; position: relative;">
+        <div id="chart-placeholder" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; color: #555; font-size: 1.1rem; font-weight: 600; padding: 20px;">
+            Pick a base yeast and name your profile above 👆
         </div>
+        
+        <div id="chart-scroll-area" style="width: 100%; height: 100%; opacity: 0; pointer-events: none; transition: opacity 0.5s ease;">
+            <canvas id="lab-chart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div id="profile-summary" style="margin: 0 20px 20px 20px; border-radius: 10px; padding: 20px;" class="phase-info">
+    <div style="font-size: 0.85rem; font-weight: 800; color: var(--accent-color); margin-bottom: 15px; letter-spacing: 1px;">PROFILE SUMMARY</div>
+    
+    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem;">
+        <div id="sum-step1"><strong>Pitch / Primary:</strong> Start at <span id="val-t1" style="font-weight:bold;">19°C</span>.</div>
+        <div id="sum-step2"><strong>Cleanup / D-Rest:</strong> Rise to <span id="val-t2" style="font-weight:bold;">22°C</span> on Day <span id="val-d2" style="font-weight:bold;">5</span>.</div>
+        <div id="sum-step3"><strong>Cold Crash:</strong> Drop to <span id="val-t3" style="font-weight:bold;">3°C</span> on Day <span id="val-d3" style="font-weight:bold;">8</span>.</div>
+        <div id="sum-step4"><strong>Conditioning:</strong> Hold at <span id="val-t4" style="font-weight:bold;">3°C</span> until Day <span id="val-d4" style="font-weight:bold;">14</span>.</div>
+    </div>
+</div>
 
         <div class="lab-actions" style="margin: 20px; text-align: center; border-top: 1px solid #333; padding-top: 20px;">
             <button id="btn-add-hops" class="btn-secondary" style="width: auto; padding: 10px 20px; font-size: 0.9rem;" onclick="toggleDryHopLine()">+ ADD DRY HOPS</button>
