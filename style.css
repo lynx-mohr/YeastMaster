@@ -760,8 +760,11 @@ body.light-mode #beer-color-stop {
     transition: stop-color 0.4s ease;
 }
 
+/* -- DAMEJEANGENS FÄRG (Styrs nu av JS-variabeln --beer-color) -- */
 #beer-color-stop {
-    transition: stop-color 0.4s ease; /* Mjuk övergång tillbaka till mörkgrått */
+    /* Om variabeln saknas (t.ex. vid start), använd mörkgrå #4a4a4a */
+    stop-color: var(--beer-color, #4a4a4a) !important;
+    transition: stop-color 0.4s ease;
 }
 
 .beer-liquid {
