@@ -319,8 +319,8 @@ body.light-mode .summary-row {
 }
 
 #view-dashboard canvas#beer-chart {
-    height: 110px !important;
-    max-height: 110px !important;
+    height: 150px !important;
+    max-height: 150px !important;
 }
 
 /* --- 2. THE PROFILER GRAFEN (Stor och scrollbar) --- */
