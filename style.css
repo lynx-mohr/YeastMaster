@@ -310,9 +310,9 @@ body.light-mode .summary-row {
 
 /* --- 1. DASHBOARD GRAFEN (Kompakt och fast) --- */
 #view-dashboard .chart-container {
-    height: 130px !important; /* Styr höjden här */
-    min-height: 130px !important;
-    max-height: 130px !important;
+    height: 150px !important; /* Styr höjden här */
+    min-height: 150px !important;
+    max-height: 150px !important;
     width: 100%;
     position: relative;
     overflow: hidden !important;
