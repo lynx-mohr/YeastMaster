@@ -642,12 +642,13 @@ function setActive(clickedElement) {
 
 let labChart;
 
-// Grundläggande data för de 4 stegen (Dag, Temp)
+// 5 punkter istället för 4!
 let profilePoints = [
-    { x: 0, y: 19 },   // Steg 1: Pitch / Primary
-    { x: 5, y: 22 },   // Steg 2: Cleanup / D-Rest
-    { x: 8, y: 3 },    // Steg 3: Cold Crash
-    { x: 14, y: 3 }    // Steg 4: Conditioning
+    { x: 0, y: 19 },   // Punkt 0: Pitch
+    { x: 3, y: 19 },   // Punkt 1: Slutet på Primary (Platt linje)
+    { x: 5, y: 22 },   // Punkt 2: Cleanup / D-Rest (Ramp)
+    { x: 8, y: 3 },    // Punkt 3: Cold Crash (Ramp ner)
+    { x: 14, y: 3 }    // Punkt 4: Conditioning (Platt linje)
 ];
 
 // Data-tillstånd för torrhumlingen
@@ -718,29 +719,23 @@ function toggleDryHopLine() {
 }
 
 function updateSummaryText() {
-    // 1. Temperaturer (Vi behåller en decimal för precision)
+    // Uppdatera Temperaturer
     document.getElementById('val-t1').innerText = profilePoints[0].y.toFixed(1);
-    document.getElementById('val-t2').innerText = profilePoints[1].y.toFixed(1);
     document.getElementById('val-t3').innerText = profilePoints[2].y.toFixed(1);
-    // Vi lägger inte till °C här inne i JS eftersom det redan ligger i HTML-mallen
+    document.getElementById('val-t4').innerText = profilePoints[3].y.toFixed(1);
 
-    // 2. Dagar (Här kör vi Math.round för att få bort .0 helt!)
+    // Uppdatera Dagar
     document.getElementById('val-d2').innerText = Math.round(profilePoints[1].x);
     document.getElementById('val-d3').innerText = Math.round(profilePoints[2].x);
+    document.getElementById('val-d4').innerText = Math.round(profilePoints[3].x);
     
-    // FIXEN FÖR CONDITION:
-    // Denna rad letar nu upp 'val-d4' och sätter det till sista punktens dag
-    const conditionElement = document.getElementById('val-d4');
-    if (conditionElement) {
-        conditionElement.innerText = Math.round(profilePoints[3].x);
-    }
+    const conditionElement = document.getElementById('val-d5');
+    if (conditionElement) conditionElement.innerText = Math.round(profilePoints[4].x);
 
-    // 3. Torrhumling (Om den är aktiv)
+    // Torrhumling
     if (dryHopData.enabled) {
         const hopVal = document.getElementById('hop-day-val');
-        if (hopVal) {
-            hopVal.innerText = dryHopData.day.toFixed(1); // Humle kan få ha en decimal om du vill ha precision
-        }
+        if (hopVal) hopVal.innerText = dryHopData.day.toFixed(1);
     }
 }
 
@@ -912,6 +907,16 @@ function initLabChart() {
             profilePoints[draggedPointIndex].x = Math.round(newX * 2) / 2;
             profilePoints[draggedPointIndex].y = Math.round(newY * 2) / 2;
 
+            // --- LÄGG TILL DETTA: MAGISK LÅSNING AV FASERNA ---
+            // Om du drar Pitch-tempen (Punkt 0), följer Primary-slutet (Punkt 1) med!
+            if (draggedPointIndex === 0) profilePoints[1].y = profilePoints[0].y;
+            if (draggedPointIndex === 1) profilePoints[0].y = profilePoints[1].y;
+            
+            // Samma sak för Cold Crash & Conditioning (Den nedre platta linjen)
+            if (draggedPointIndex === 3) profilePoints[4].y = profilePoints[3].y;
+            if (draggedPointIndex === 4) profilePoints[3].y = profilePoints[4].y;
+            // --------------------------------------------------
+
             // --- NYTT: ADAPTERA X-AXELN DYNAMISKT ---
             const currentMax = profilePoints[profilePoints.length - 1].x;
             labChart.options.scales.x.max = Math.max(10, currentMax + 2); // Följer med sista punkten utåt
@@ -1008,11 +1013,12 @@ function saveProfileToLibrary() {
         s: profileName,             
         p: `Custom (${baseYeast})`, 
         dryHopDay: dryHopData.enabled ? dryHopData.day : null, 
-        steps: [
+      steps: [
             [profilePoints[0].x, profilePoints[0].y],
             [profilePoints[1].x, profilePoints[1].y],
             [profilePoints[2].x, profilePoints[2].y],
-            [profilePoints[3].x, profilePoints[3].y]
+            [profilePoints[3].x, profilePoints[3].y],
+            [profilePoints[4].x, profilePoints[4].y]
         ]
     };
 
@@ -1428,11 +1434,12 @@ function openYeastModal(yeast) {
                     <p style="color: var(--accent-color); font-weight: 800; margin-bottom: 15px;">Created by you!</p>
                     <p>This profile is used with <strong>${baseYeast}</strong> and these are the profile steps:</p>
                     
-                    <ul style="list-style: none; padding: 0; margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
-                        <li><strong style="color: #fff;">Pitch / Primary:</strong> Start at ${s[0][1]}°C.</li>
-                        <li><strong style="color: #fff;">Cleanup / D-Rest:</strong> Rise to ${s[1][1]}°C on Day ${s[1][0]}.</li>
-                        <li><strong style="color: #fff;">Cold Crash:</strong> Drop to ${s[2][1]}°C on Day ${s[2][0]}.</li>
-                        <li><strong style="color: #fff;">Conditioning:</strong> Hold at ${s[3][1]}°C until Day ${s[3][0]}.</li>
+                 <ul style="list-style: none; padding: 0; margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
+                        <li><strong style="color: #fff;">Pitch:</strong> Start at ${s[0][1]}°C.</li>
+                        <li><strong style="color: #fff;">Primary:</strong> Hold until Day ${s[1][0]}.</li>
+                        <li><strong style="color: #fff;">Cleanup:</strong> Rise to ${s[2][1]}°C on Day ${s[2][0]}.</li>
+                        <li><strong style="color: #fff;">Cold Crash:</strong> Drop to ${s[3][1]}°C on Day ${s[3][0]}.</li>
+                        <li><strong style="color: #fff;">Condition:</strong> Hold at ${s[4][1]}°C until Day ${s[4][0]}.</li>
                     </ul>
                     
                     ${profileData.dryHopDay ? `<p style="margin-top: 15px; color: #00e5ff;"><strong>Dry Hop:</strong> Scheduled for Day ${profileData.dryHopDay}</p>` : ''}
