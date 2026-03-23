@@ -749,7 +749,6 @@ function updateSummaryText() {
 }
 
 // --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
-// --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
 function initLabChart() {
     if (profilePoints && profilePoints.length < 6) {
         const p0 = profilePoints[0] || {x: 0, y: 19};
@@ -797,7 +796,7 @@ function initLabChart() {
                 data: profilePoints,
                 borderColor: themeAccent,
                 backgroundColor: gradient,
-                borderWidth: lineWidth,           // Dynamisk tjocklek
+                borderWidth: lineWidth,           
                 pointBackgroundColor: pointFill,  
                 pointBorderColor: themeAccent,    
                 pointRadius: 5,                   
@@ -808,7 +807,6 @@ function initLabChart() {
                 fill: true,
                 segment: {
                     borderDash: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? [6, 6] : undefined,
-                    // Mycket svagare streckade linjer i Light Mode
                     borderColor: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? (isLightMode ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.3)') : themeAccent
                 }
             }]
@@ -852,42 +850,26 @@ function initLabChart() {
 
                 ctx.save();
                 ctx.font = '800 10px "Lexend", sans-serif';
-                
-                // --- NYTT: Mörkgrå text i Light Mode, halvt genomskinlig vit i Dark Mode ---
                 ctx.fillStyle = isLightMode ? '#333333' : 'rgba(255, 255, 255, 0.5)'; 
-                
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'bottom';
 
-           // Nu har vi lagt till offsetX och offsetY (med standardvärden 0 och -12)
                 function drawText(text, p1, p2, offsetX = 0, offsetY = -12) {
                     const x1 = meta.data[p1].x;
                     const y1 = meta.data[p1].y;
                     const x2 = meta.data[p2].x;
                     const y2 = meta.data[p2].y;
 
-                    // Räkna ut mitten, och plussa på dina egna justeringar!
                     const midX = ((x1 + x2) / 2) + offsetX;
                     const midY = ((y1 + y2) / 2) + offsetY; 
 
                     ctx.fillText(text, midX, midY);
                 }
 
-                // De platta linjerna ritas ut precis som vanligt
                 drawText('PRIM', 0, 1);    
                 drawText('CLEAN', 2, 3);   
-                
-                // --- MAGIN FÖR COLD CRASH ---
-                // Här flyttar vi den: 15 pixlar åt höger (framåt på linjen) 
-                // och ändrar höjden från -12 till +5 så den hamnar lite under istället för över!
                 drawText('COLD CRASH', 3, 4, 15, 5);      
-                
                 drawText('COND', 4, 5);
-
-                drawText('PRIM', 0, 1);    
-                drawText('CLEAN', 2, 3);   
-                drawText('COLD CRASH', 3, 4);      
-                drawText('COND', 4, 5);    
 
                 ctx.restore();
             }
@@ -899,19 +881,19 @@ function initLabChart() {
     // =======================================================
     let isDragging = false;
     let dragIndex = -1;
-    let isDraggingDryHop = false; // <-- NY LOGIK FÖR HUMLE-LINJEN
+    let isDraggingDryHop = false; 
 
     canvas.addEventListener('pointerdown', (e) => {
         const rect = canvas.getBoundingClientRect();
         const xPos = e.clientX - rect.left;
         let xVal = labChart.scales.x.getValueForPixel(xPos);
 
-        // 1. Klicka på Dry Hop-linjen? (Tillåter ett par pixlars felmarginal)
+        // 1. Klicka på Dry Hop-linjen? 
         if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
             if (Math.abs(xVal - dryHopData.day) < 0.6) {
                 isDraggingDryHop = true;
-                canvas.style.cursor = 'ew-resize'; // Muspekare som visar vänster/höger-drag
-                return; // Stoppa här så vi inte råkar dra i en vanlig punkt samtidigt
+                canvas.style.cursor = 'ew-resize'; 
+                return; 
             }
         }
 
@@ -925,7 +907,6 @@ function initLabChart() {
     });
 
     canvas.addEventListener('touchstart', (e) => {
-        // Förhindra att mobilen scrollar när vi försöker dra i linjer eller punkter
         if (isDragging || isDraggingDryHop) e.preventDefault();
         const points = labChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, false);
         if (points.length > 0 || isDraggingDryHop) e.preventDefault(); 
@@ -938,37 +919,67 @@ function initLabChart() {
             const xPos = e.clientX - rect.left;
             let xVal = labChart.scales.x.getValueForPixel(xPos);
             
-            // Lås linjen till max 14 dagar (eller vad profilen maxar ut på) och hoppa jämnt
             xVal = Math.max(0, Math.round(xVal * 2) / 2);
             dryHopData.day = xVal;
             
+            labChart.update('none');
+            if (typeof updateSummaryText === 'function') updateSummaryText();
+            return; 
+        }
+
+        // DRA VANLIGA PUNKTER
+        if (isDragging && dragIndex !== -1) {
+            const rect = canvas.getBoundingClientRect();
+            const xPos = e.clientX - rect.left;
+            const yPos = e.clientY - rect.top;
+
+            let xVal = labChart.scales.x.getValueForPixel(xPos);
+            let yVal = labChart.scales.y.getValueForPixel(yPos);
+
+            xVal = Math.max(0, Math.round(xVal * 2) / 2);
+            yVal = Math.max(-2, Math.min(40, Math.round(yVal)));
+
+            if (dragIndex === 0) xVal = 0; 
+            if (dragIndex > 0 && xVal < profilePoints[dragIndex - 1].x) {
+                xVal = profilePoints[dragIndex - 1].x;
+            }
+            if (dragIndex < profilePoints.length - 1 && xVal > profilePoints[dragIndex + 1].x) {
+                xVal = profilePoints[dragIndex + 1].x;
+            }
+
+            profilePoints[dragIndex] = { x: xVal, y: yVal };
+
             // --- MAGIN: TVINGA LINJERNA ATT VARA PLATTA! ---
             if (dragIndex === 0) profilePoints[1].y = yVal; // Primary
             if (dragIndex === 1) profilePoints[0].y = yVal; 
-            
             if (dragIndex === 2) profilePoints[3].y = yVal; // Cleanup
             if (dragIndex === 3) profilePoints[2].y = yVal; 
-            
             if (dragIndex === 4) profilePoints[5].y = yVal; // Cold Crash / Condition
             if (dragIndex === 5) profilePoints[4].y = yVal; 
 
             // --- NYTT: EXPANDERA X-AXELN DYNAMISKT ---
-            // Titta på den sista punkten och se till att grafen alltid har lite marginal åt höger
             const lastPointX = profilePoints[profilePoints.length - 1].x;
             labChart.options.scales.x.max = Math.max(10, lastPointX + 2);
 
-            // Rita om grafen blixtsnabbt
             labChart.update('none'); 
-
-            // Uppdatera texten i Profile Summary i realtid medan vi drar!
             if (typeof updateSummaryText === 'function') updateSummaryText();
         }
     });
-    
-            labChart.update('none');
+
+    window.addEventListener('pointerup', () => {
+        if (isDraggingDryHop) {
+            isDraggingDryHop = false;
+            canvas.style.cursor = 'default';
             if (typeof updateSummaryText === 'function') updateSummaryText();
-            return; // Gå inte vidare till punkt-dragningen
         }
+        if (isDragging) {
+            isDragging = false;
+            dragIndex = -1;
+            canvas.style.cursor = 'default';
+            if (typeof updateSummaryText === 'function') updateSummaryText();
+        }
+    });
+}
 
         // DRA VANLIGA PUNKTER
         if (isDragging && dragIndex !== -1) {

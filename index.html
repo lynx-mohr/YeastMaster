@@ -52,17 +52,12 @@
 
     <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
 
-    <g clip-path="url(#bottle-clip)">
-        <g>
-            <animateTransform attributeName="transform" type="translate" 
-                              values="-2.5,0; 2.5,0; -2.5,0" 
-                              dur="3s" repeatCount="indefinite" />
-            
-            <path class="beer-liquid" fill="var(--beer-color, #4a4a4a)" 
-                  d="M 0,38 Q 12.5,36.5 25,38 T 50,38 T 75,38 T 100,38 T 125,38 T 150,38 V 100 H 0 Z" />
-            
-            <g id="bubble-stream"></g>
-        </g>
+  <g clip-path="url(#bottle-clip)">
+        <path class="beer-liquid" fill="var(--beer-color, #4a4a4a)" 
+              d="M 0,38 Q 12.5,36.5 25,38 T 50,38 T 75,38 T 100,38 T 125,38 T 150,38 V 100 H 0 Z" />
+        
+        <g id="bubble-stream"></g>
+    </g>
     </g>
 
     <path class="glass-line" fill="none" stroke="var(--oled-color)" stroke-width="2.5" 
