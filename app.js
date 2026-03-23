@@ -1965,3 +1965,42 @@ function toggleChartZoom() {
     
     isZoomedIn = !isZoomedIn;
 }
+
+function setTheme(mode) {
+    const body = document.body;
+    const btnDark = document.getElementById('btn-theme-dark');
+    const btnLight = document.getElementById('btn-theme-light');
+
+    if (mode === 'light') {
+        body.classList.add('light-mode');
+        btnLight.classList.add('active');
+        btnDark.classList.remove('active');
+    } else {
+        body.classList.remove('light-mode');
+        btnDark.classList.add('active');
+        btnLight.classList.remove('active');
+    }
+
+    // Valfritt: Spara valet i webbläsaren så den kommer ihåg det nästa gång
+    localStorage.setItem('yeastmaster-theme', mode);
+}
+
+function setAccent(color, element) {
+    // 1. Uppdatera själva CSS-variabeln i hela appen
+    document.documentElement.style.setProperty('--accent-color', color);
+
+    // 2. Flytta .active-klassen till den klickade pricken
+    document.querySelectorAll('.color-dot').forEach(dot => dot.classList.remove('active'));
+    element.classList.add('active');
+
+    // 3. Om du har en graf öppen, trigga en uppdatering så linjen byter färg direkt
+    if (typeof updateChart === "function" && lastData) {
+        updateChart(lastData);
+    }
+}
+
+// Kolla om användaren har ett sparat tema när sidan laddas
+const savedTheme = localStorage.getItem('yeastmaster-theme');
+if (savedTheme) {
+    setTheme(savedTheme);
+}
