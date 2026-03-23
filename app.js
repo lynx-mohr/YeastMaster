@@ -1085,8 +1085,26 @@ function saveProfileToLibrary() {
     btn.style.color = "#fff";
 
     // Ladda om sidan efter 1.2 sekunder så att allt synkas in i biblioteket
+// --- NYTT: Byt vy snyggt utan omladdning ---
     setTimeout(() => {
-        location.reload(); 
+        // 1. Ladda in den nya profilen i dina listor direkt
+        loadCustomProfiles();
+        
+        // 2. Byt skärm till Yeast Library
+        showView('library');
+        
+        // 3. Uppdatera ikonen i bottenmenyn så att Library lyser (istället för Lab)
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        const libIcon = document.querySelector('.nav-item[onclick*="library"]');
+        if (libIcon) libIcon.classList.add('active');
+        
+        // 4. Återställ knappen och töm textfältet utifall man går tillbaka till labbet
+        btn.innerText = originalText;
+        btn.style.backgroundColor = ""; 
+        btn.style.borderColor = "";
+        btn.style.color = "";
+        document.getElementById('custom-profile-name').value = '';
+        
     }, 1200);
 }
 
