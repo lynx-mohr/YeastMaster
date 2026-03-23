@@ -35,11 +35,15 @@ body {
     --oled-color: #e0e0e0; 
     --oled-bg: #000000; 
     --accent-color: #00e5ff;
+    --text-main: #ffffff;    /* För citat och stark text */
+    --text-dim: #bbbbbb;     /* För den gråa brödtexten */
 }
 
 body.light-mode {
     --oled-bg: #ffffff;    
     --oled-color: #111111; 
+    --text-main: #111111;    /* Blir nästan svart i ljust läge */
+    --text-dim: #555555;     /* Blir mörkgrå i ljust läge */
     background-color: #f0f0f0; 
 }
 
