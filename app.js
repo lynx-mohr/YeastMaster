@@ -894,7 +894,7 @@ function initLabChart() {
             }
         }]
     });
-}}
+}
 
 
 // --- 1. FYLL RULLISTAN MED BASJÄSTER ---
