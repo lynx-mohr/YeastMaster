@@ -678,11 +678,16 @@ let dryHopData = {
 const dryHopPlugin = {
     id: 'dryHopLine',
     afterDraw: (chart) => {
+        // 1. Spärr för att inte rita i live-dashboarden
+        if (chart.canvas.closest('#view-dashboard')) return;
+
+        // 2. Kolla om dry hop är aktiverat
         if (!dryHopData.enabled) return;
 
         const {ctx, chartArea: {top, bottom, left, right}, scales: {x}} = chart;
         const xPix = x.getPixelForValue(dryHopData.day);
 
+        // 3. Rita inte om linjen hamnar utanför grafens x-axel
         if (xPix < left || xPix > right) return;
 
         ctx.save();
@@ -1682,32 +1687,49 @@ if (localStorage.getItem('theme') === 'light') {
 });
 
 // --- FUNKTION FÖR ATT RADERA EN PROFIL ---
-function deleteCustomProfile(profileId) {
+function deleteCustomProfile(profileName) {
     if (!confirm("Are you sure you want to delete this profile? It cannot be undone.")) return;
 
-    // Radera från Firebase
-    db.collection("custom_profiles").doc(profileId).delete().then(() => {
-        console.log("Profile deleted from database.");
+    // 1. Hämta de sparade profilerna från enhetens minne
+    let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
+    
+    // 2. Filtrera bort den profil vi vill radera (behåll alla som INTE heter samma sak)
+    savedProfiles = savedProfiles.filter(p => p.s !== profileName);
+    
+    // Spara tillbaka den uppdaterade listan till minnet
+    localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
 
-        // 1. Stäng modalen (om raderingsknappen satt inuti infokortet)
-        const modal = document.getElementById('yeast-info-modal');
-        if (modal) modal.style.display = 'none';
+    // 3. Ta bort den från den visuella biblioteks-listan (yeastStrains)
+    // Vi återskapar ID:t exakt så som det genererades när profilen sparades
+    const customId = "custom-" + profileName.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const strainIndex = yeastStrains.findIndex(y => y.id === customId);
+    if (strainIndex > -1) {
+        yeastStrains.splice(strainIndex, 1);
+    }
 
-        // 2. Uppdatera listan med custom-profiler i biblioteket direkt
-        loadCustomProfiles();
+    // 4. (Bonus) Om profilen råkade vara vald för synkning, avmarkera den
+    const selectedIndex = selectedStrains.indexOf(customId);
+    if (selectedIndex > -1) {
+        selectedStrains.splice(selectedIndex, 1);
+        const favCount = document.getElementById('fav-count');
+        if (favCount) favCount.innerText = selectedStrains.length;
+    }
 
-        // 3. Tvinga vyn att stanna kvar på (eller gå till) biblioteket
-        showView('library');
+    console.log("Profile deleted from local storage:", profileName);
 
-        // 4. Dubbelkolla att rätt flik i bottenmenyn lyser
-        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-        const libIcon = document.querySelector('.nav-item[onclick*="library"]');
-        if (libIcon) libIcon.classList.add('active');
+    // 5. Stäng modalen om den är öppen
+    const modal = document.getElementById('yeast-info-modal');
+    if (modal) modal.style.display = 'none';
 
-    }).catch((error) => {
-        console.error("Error removing profile: ", error);
-        alert("Could not delete profile: " + error.message);
-    });
+    // 6. Rita om hela biblioteket direkt (korten försvinner framför ögonen)
+    const searchBox = document.getElementById('yeast-search');
+    renderYeastLibrary(searchBox ? searchBox.value : "");
+
+    // 7. Dubbelkolla att vi är på rätt flik och att ikonen lyser
+    showView('library');
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    const libIcon = document.querySelector('.nav-item[onclick*="library"]');
+    if (libIcon) libIcon.classList.add('active');
 }
 
 
