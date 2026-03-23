@@ -777,16 +777,16 @@ function initLabChart() {
     const isLightMode = document.body.classList.contains('light-mode');
     
     // --- NYA FÄRGSCHEMAT ---
-    const themeAccent = '#800000'; // Maroon
+    const themeAccent = '#f4c95d'; // Den ljusaste gula (Pilsner-färgen)
     const pointFill = '#888888';   // Grå fyllning i punkterna
     
     // Tunnare och mer elegant linje i Light Mode
     const lineWidth = isLightMode ? 2 : 3; 
     
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-    // Svagare toning i Light Mode så den inte tar över
-    gradient.addColorStop(0, isLightMode ? 'rgba(128, 0, 0, 0.15)' : 'rgba(128, 0, 0, 0.4)'); 
-    gradient.addColorStop(1, 'rgba(128, 0, 0, 0.0)');
+    // Svagare toning i Light Mode. Uppdaterad till gul (RGB: 244, 201, 93)
+    gradient.addColorStop(0, isLightMode ? 'rgba(244, 201, 93, 0.15)' : 'rgba(244, 201, 93, 0.4)'); 
+    gradient.addColorStop(1, 'rgba(244, 201, 93, 0.0)');
 
     labChart = new Chart(ctx, {
         type: 'scatter',
