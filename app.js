@@ -662,7 +662,7 @@ let dryHopData = {
     enabled: false,
     day: 5.0,
     isDragging: false,
-    color: '#00e5ff'
+    color: '#8CC63F'
 };
 
 // --- CHART.JS PLUGIN: Torrhumlingslinjen ---
@@ -859,17 +859,30 @@ function initLabChart() {
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'bottom';
 
-                function drawText(text, p1, p2) {
+           // Nu har vi lagt till offsetX och offsetY (med standardvärden 0 och -12)
+                function drawText(text, p1, p2, offsetX = 0, offsetY = -12) {
                     const x1 = meta.data[p1].x;
                     const y1 = meta.data[p1].y;
                     const x2 = meta.data[p2].x;
                     const y2 = meta.data[p2].y;
 
-                    const midX = (x1 + x2) / 2;
-                    const midY = ((y1 + y2) / 2) - 12; 
+                    // Räkna ut mitten, och plussa på dina egna justeringar!
+                    const midX = ((x1 + x2) / 2) + offsetX;
+                    const midY = ((y1 + y2) / 2) + offsetY; 
 
                     ctx.fillText(text, midX, midY);
                 }
+
+                // De platta linjerna ritas ut precis som vanligt
+                drawText('PRIM', 0, 1);    
+                drawText('CLEAN', 2, 3);   
+                
+                // --- MAGIN FÖR COLD CRASH ---
+                // Här flyttar vi den: 15 pixlar åt höger (framåt på linjen) 
+                // och ändrar höjden från -12 till +5 så den hamnar lite under istället för över!
+                drawText('COLD CRASH', 3, 4, 15, 5);      
+                
+                drawText('COND', 4, 5);
 
                 drawText('PRIM', 0, 1);    
                 drawText('CLEAN', 2, 3);   
@@ -929,6 +942,29 @@ function initLabChart() {
             xVal = Math.max(0, Math.round(xVal * 2) / 2);
             dryHopData.day = xVal;
             
+            // --- MAGIN: TVINGA LINJERNA ATT VARA PLATTA! ---
+            if (dragIndex === 0) profilePoints[1].y = yVal; // Primary
+            if (dragIndex === 1) profilePoints[0].y = yVal; 
+            
+            if (dragIndex === 2) profilePoints[3].y = yVal; // Cleanup
+            if (dragIndex === 3) profilePoints[2].y = yVal; 
+            
+            if (dragIndex === 4) profilePoints[5].y = yVal; // Cold Crash / Condition
+            if (dragIndex === 5) profilePoints[4].y = yVal; 
+
+            // --- NYTT: EXPANDERA X-AXELN DYNAMISKT ---
+            // Titta på den sista punkten och se till att grafen alltid har lite marginal åt höger
+            const lastPointX = profilePoints[profilePoints.length - 1].x;
+            labChart.options.scales.x.max = Math.max(10, lastPointX + 2);
+
+            // Rita om grafen blixtsnabbt
+            labChart.update('none'); 
+
+            // Uppdatera texten i Profile Summary i realtid medan vi drar!
+            if (typeof updateSummaryText === 'function') updateSummaryText();
+        }
+    });
+    
             labChart.update('none');
             if (typeof updateSummaryText === 'function') updateSummaryText();
             return; // Gå inte vidare till punkt-dragningen

@@ -1382,3 +1382,10 @@ body .sync-button:hover {
     pointer-events: auto !important;
     cursor: pointer !important;
 }
+
+/* --- GÖM ZOOM-KNAPPEN PÅ DATORER --- */
+@media (min-width: 768px) {
+    #btn-zoom {
+        display: none !important;
+    }
+}
