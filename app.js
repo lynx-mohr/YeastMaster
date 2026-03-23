@@ -840,7 +840,7 @@ function initLabChart() {
                         if (typeof updateSummaryText === 'function') {
                             updateSummaryText();
                         }
-                    }
+                
                 }
                 // ------------------------------
             },
