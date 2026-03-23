@@ -746,17 +746,23 @@ function initLabChart() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    let themeAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#00e5ff';
-    dryHopData.color = themeAccent;
+    if (labChart) {
+        labChart.destroy();
+    }
 
+    // Kolla temat för accentfärgen
+    const isLightMode = document.body.classList.contains('light-mode');
+    const themeAccent = isLightMode ? '#00bcd4' : '#00e5ff'; // Anpassa färg efter tema om du vill
+    
+    // Skapa en snygg toning under linjen
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)'); 
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    gradient.addColorStop(0, isLightMode ? 'rgba(0, 188, 212, 0.4)' : 'rgba(0, 229, 255, 0.4)');
+    gradient.addColorStop(1, isLightMode ? 'rgba(0, 188, 212, 0.0)' : 'rgba(0, 229, 255, 0.0)');
 
     labChart = new Chart(ctx, {
         type: 'scatter',
         data: {
-      datasets: [{
+            datasets: [{
                 label: 'Profile Target Temp',
                 data: profilePoints,
                 borderColor: themeAccent,
@@ -767,222 +773,119 @@ function initLabChart() {
                 pointRadius: 8,         
                 pointHoverRadius: 12,   
                 showLine: true,
-                tension: 0.1,
-                clip: false, // Glöm inte kommatecknet här!
+                tension: 0.1, // Ger pyttelite mjukhet, sätt till 0 för spikraka hörn
+                clip: false,
+                fill: true,
                 
                 // --- NYTT: GÖR RAMPARNA STRECKADE ---
                 segment: {
                     // Om linjen ritas från punkt 1 (uppvärmning) eller punkt 3 (nedkylning), gör den streckad
                     borderDash: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? [6, 6] : undefined,
                     // Gör ramperna lite svagare i färgen
-                    borderColor: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? 'rgba(255, 255, 255, 0.3)' : themeAccent
+                    borderColor: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? (isLightMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)') : themeAccent
                 }
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            animation: false, 
             layout: {
-                padding: { top: 10, right: 15, left: 5, bottom: 5 } // Ger lite extra luft inuti rutan
+                padding: { top: 30, right: 30, bottom: 10, left: 10 }
             },
             scales: {
                 x: {
                     type: 'linear',
-                    min: -1, // <--- NYTT: Trycker in axeln så punkt 0 får plats
-                    max: Math.max(10, profilePoints[profilePoints.length - 1].x + 2), // <--- NYTT: Dynamisk startlängd
-                    title: { display: true, text: 'Days', color: '#888', font: {family: 'Lexend', weight: 600} },
-                    ticks: { 
-                        color: '#666',
-                        callback: function(value) {
-                            return value < 0 ? '' : value; // Döljer "-1" så det ser snyggt ut
-                        }
-                    },
-                    grid: { color: 'rgba(255,255,255,0.05)' }
+                    min: 0,
+                    max: Math.max(10, profilePoints[profilePoints.length - 1].x + 2),
+                    grid: { color: isLightMode ? '#eee' : '#222' },
+                    ticks: { color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '600' } },
+                    title: { display: true, text: 'Days', color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '800' } }
                 },
                 y: {
+                    type: 'linear',
                     min: -2,
-                    suggestedMax: 30,
-                    title: { display: true, text: 'Temp (°C)', color: '#888', font: {family: 'Lexend', weight: 600} },
-                    ticks: { color: '#666', callback: v => Number(v).toFixed(1) + '°' },
-                    grid: { color: 'rgba(255,255,255,0.05)' }
+                    max: 40,
+                    grid: { color: isLightMode ? '#eee' : '#222' },
+                    ticks: { color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '600' } },
+                    title: { display: true, text: 'Temp (°C)', color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '800' } }
                 }
             },
             plugins: {
                 legend: { display: false },
                 tooltip: {
-                    enabled: true,
-                    callbacks: {
-                        label: (context) => `Day ${context.parsed.x.toFixed(1)}: ${context.parsed.y.toFixed(1)}°C`
-                    }
+                    enabled: false // Vi stänger av standard-tooltipen eftersom vi har Summary-rutan
                 }
+            },
+            animation: {
+                duration: 0 // Stänger av animationen så att linjen inte laggar när man drar
             }
-        }
+        },
+        
+        // =======================================================
+        // CUSTOM PLUGINS: RITAR UT TEXT & HUMLE-LINJEN
+        // =======================================================
+        plugins: [{
+            id: 'customCanvasDrawing',
+            afterDatasetsDraw(chart) {
+                const ctx = chart.ctx;
+                
+                // 1. RITA TORRHUMLE-LINJEN (om den är aktiverad)
+                if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
+                    const xPix = chart.scales.x.getPixelForValue(dryHopData.day);
+                    const topY = chart.scales.y.top;
+                    const bottomY = chart.scales.y.bottom;
+                    
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.moveTo(xPix, topY);
+                    ctx.lineTo(xPix, bottomY);
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#a6e22e'; // Grön färg för humle
+                    ctx.setLineDash([5, 5]);
+                    ctx.stroke();
+                    
+                    // Text för humlen
+                    ctx.fillStyle = '#a6e22e';
+                    ctx.font = '800 10px "Lexend", sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'bottom';
+                    ctx.fillText('HOPS', xPix, topY - 5);
+                    ctx.restore();
+                }
+
+                // 2. RITA FAS-RUBRIKERNA (PRIM, CLEAN, CC, COND)
+                const meta = chart.getDatasetMeta(0);
+                if (!meta || !meta.data || meta.data.length < 6) return;
+
+                ctx.save();
+                ctx.font = '800 10px "Lexend", sans-serif';
+                ctx.fillStyle = isLightMode ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.5)'; 
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+
+                // Hjälpfunktion för att räkna ut mitten av en linje och skriva texten där
+                function drawText(text, p1, p2) {
+                    const x1 = meta.data[p1].x;
+                    const y1 = meta.data[p1].y;
+                    const x2 = meta.data[p2].x;
+                    const y2 = meta.data[p2].y;
+
+                    const midX = (x1 + x2) / 2;
+                    // Flytta upp texten pyttelite extra (12 pixlar) för att den inte ska krocka med linjen
+                    const midY = ((y1 + y2) / 2) - 12; 
+
+                    ctx.fillText(text, midX, midY);
+                }
+
+                drawText('PRIM', 0, 1);    // Primary (Platt)
+                drawText('CLEAN', 2, 3);   // Cleanup (Platt)
+                drawText('CC', 3, 4);      // Cold Crash (Ramp)
+                drawText('COND', 4, 5);    // Conditioning (Platt)
+
+                ctx.restore();
+            }
+        }]
     });
-
-    // --- GEMENSAM LOGIK FÖR ATT HANTERA DRAG (MÖSS OCH FINGRAR) ---
-    
-    let draggedPointIndex = null;
-    const hitRadius = 20;
-
-    function getCanvasCoords(e) {
-        const rect = canvas.getBoundingClientRect();
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        return {
-            x: clientX - rect.left,
-            y: clientY - rect.top
-        };
-    }
-
-    function handleStart(e) {
-        if (!labChart) return;
-        const coords = getCanvasCoords(e);
-        const mouseX = coords.x;
-        const mouseY = coords.y;
-
-        if (dryHopData.enabled) {
-            const lineXPix = labChart.scales.x.getPixelForValue(dryHopData.day);
-            if (Math.abs(mouseX - lineXPix) < hitRadius) {
-                dryHopData.isDragging = true;
-                if (e.cancelable) e.preventDefault(); 
-                return;
-            }
-        }
-
-        for (let i = 0; i < profilePoints.length; i++) {
-            const ptX = labChart.scales.x.getPixelForValue(profilePoints[i].x);
-            const ptY = labChart.scales.y.getPixelForValue(profilePoints[i].y);
-
-            const distance = Math.sqrt(Math.pow(mouseX - ptX, 2) + Math.pow(mouseY - ptY, 2));
-            if (distance < hitRadius) {
-                draggedPointIndex = i;
-                labChart.options.plugins.tooltip.enabled = false;
-                if (e.cancelable) e.preventDefault(); 
-                return;
-            }
-        }
-    }
-
-function handleMove(e) {
-        if (!labChart) return;
-        const coords = getCanvasCoords(e);
-        const mouseX = coords.x;
-        const mouseY = coords.y;
-
-        if (!e.touches) {
-            let hoveringSomething = false;
-            if (dryHopData.enabled) {
-                const lineXPix = labChart.scales.x.getPixelForValue(dryHopData.day);
-                if (Math.abs(mouseX - lineXPix) < hitRadius || dryHopData.isDragging) {
-                    canvas.style.cursor = 'ew-resize';
-                    hoveringSomething = true;
-                }
-            }
-            if (!hoveringSomething && draggedPointIndex === null) {
-                for (let i = 0; i < profilePoints.length; i++) {
-                    const ptX = labChart.scales.x.getPixelForValue(profilePoints[i].x);
-                    const ptY = labChart.scales.y.getPixelForValue(profilePoints[i].y);
-                    if (Math.sqrt(Math.pow(mouseX - ptX, 2) + Math.pow(mouseY - ptY, 2)) < hitRadius) {
-                        canvas.style.cursor = 'grab';
-                        hoveringSomething = true;
-                        break;
-                    }
-                }
-            }
-            if (!hoveringSomething) canvas.style.cursor = 'default';
-            if (draggedPointIndex !== null) canvas.style.cursor = 'grabbing';
-        }
-
-        if (draggedPointIndex !== null || dryHopData.isDragging) {
-            if (e.cancelable) e.preventDefault(); 
-        }
-
-        // A. Dra temperatur-punkt
-        if (draggedPointIndex !== null) {
-            let newX = labChart.scales.x.getValueForPixel(mouseX);
-            let newY = labChart.scales.y.getValueForPixel(mouseY);
-
-            // Tvinga punkt 0 att alltid ligga på startdagen (Day 0)
-            if (draggedPointIndex === 0) {
-                newX = 0; 
-            }
-            
-            // Begränsa temperatur (Y-led) och maxdagar (X-led)
-            newY = Math.max(-2, Math.min(newY, 40));
-            newX = Math.min(newX, 60);
-
-            // Avrunda till halva steg
-            profilePoints[draggedPointIndex].x = Math.round(newX * 2) / 2;
-            profilePoints[draggedPointIndex].y = Math.round(newY * 2) / 2;
-
-            // =======================================================
-            // MAGISK LÅSNING AV DE 3 FASERNA (6 punkter)
-            // =======================================================
-
-            // --- 1. LÅS Y-AXELN FÖR FAS-PAREN (Tvingar horisontella linjer) ---
-            if (draggedPointIndex === 0) profilePoints[1].y = profilePoints[0].y;
-            if (draggedPointIndex === 1) profilePoints[0].y = profilePoints[1].y;
-            
-            if (draggedPointIndex === 2) profilePoints[3].y = profilePoints[2].y;
-            if (draggedPointIndex === 3) profilePoints[2].y = profilePoints[3].y;
-            
-            if (draggedPointIndex === 4) profilePoints[5].y = profilePoints[4].y;
-            if (draggedPointIndex === 5) profilePoints[4].y = profilePoints[5].y;
-
-            // --- 2. FÖRHINDRA ATT X-AXELN KORSAR SIG SJÄLV ---
-            // Se till att ramperna aldrig backar i tiden (minst 0.5 dagars avstånd)
-            
-            // Ramp Upp (Mellan punkt 1 och 2)
-            if (draggedPointIndex === 1 && profilePoints[1].x > profilePoints[2].x - 0.5) profilePoints[1].x = profilePoints[2].x - 0.5;
-            if (draggedPointIndex === 2 && profilePoints[2].x < profilePoints[1].x + 0.5) profilePoints[2].x = profilePoints[1].x + 0.5;
-            
-            // Ramp Ner (Mellan punkt 3 och 4)
-            if (draggedPointIndex === 3 && profilePoints[3].x > profilePoints[4].x - 0.5) profilePoints[3].x = profilePoints[4].x - 0.5;
-            if (draggedPointIndex === 4 && profilePoints[4].x < profilePoints[3].x + 0.5) profilePoints[4].x = profilePoints[3].x + 0.5;
-
-
-            // --- ADAPTERA GRAFENS BREDD DYNAMISKT ---
-            const currentMax = profilePoints[profilePoints.length - 1].x;
-            labChart.options.scales.x.max = Math.max(10, currentMax + 2); // Följer med sista punkten utåt
-
-            labChart.update('none'); 
-            updateSummaryText();
-        }
-
-        // B. Dra humle-linjen
-        else if (dryHopData.isDragging) {
-            let newDay = labChart.scales.x.getValueForPixel(mouseX);
-            const maxDay = profilePoints[profilePoints.length - 1].x;
-            newDay = Math.max(0, Math.min(newDay, maxDay));
-            dryHopData.day = Math.round(newDay * 10) / 10;
-            
-            labChart.update('none');
-            updateSummaryText();
-        }
-    }
-
-    function handleEnd() {
-        if (draggedPointIndex !== null || dryHopData.isDragging) {
-            draggedPointIndex = null;
-            dryHopData.isDragging = false;
-            canvas.style.cursor = 'default';
-            labChart.options.plugins.tooltip.enabled = true; 
-            labChart.update('none');
-        }
-    }
-
-    canvas.addEventListener('mousedown', handleStart);
-    canvas.addEventListener('mousemove', handleMove);
-    canvas.addEventListener('mouseup', handleEnd);
-    canvas.addEventListener('mouseleave', handleEnd);
-
-    canvas.addEventListener('touchstart', handleStart, { passive: false });
-    canvas.addEventListener('touchmove', handleMove, { passive: false });
-    canvas.addEventListener('touchend', handleEnd);
-    canvas.addEventListener('touchcancel', handleEnd);
-    
-    updateSummaryText(); 
 }
 
 
