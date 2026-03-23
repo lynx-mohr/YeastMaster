@@ -721,20 +721,23 @@ function toggleDryHopLine() {
 
 function updateSummaryText() {
     // Uppdatera Temperaturer
-    document.getElementById('val-t1').innerText = profilePoints[0].y.toFixed(1);
-    document.getElementById('val-t3').innerText = profilePoints[2].y.toFixed(1);
-    document.getElementById('val-t4').innerText = profilePoints[3].y.toFixed(1);
+    document.getElementById('val-t1').innerText = profilePoints[0].y.toFixed(1); // Primary temp
+    document.getElementById('val-t3').innerText = profilePoints[2].y.toFixed(1); // Cleanup temp
+    
+    // HÄR VAR FELET! Den hämtade temp från fel punkt. Nu hämtar den från punkt 4 (Cold Crash)
+    document.getElementById('val-t4').innerText = profilePoints[4].y.toFixed(1); 
 
     // Uppdatera Dagar
-    document.getElementById('val-d2').innerText = Math.round(profilePoints[1].x);
-    document.getElementById('val-d3').innerText = Math.round(profilePoints[2].x);
-    document.getElementById('val-d4').innerText = Math.round(profilePoints[3].x);
+    document.getElementById('val-d2').innerText = Math.round(profilePoints[1].x); // Slut Primary
+    document.getElementById('val-d3').innerText = Math.round(profilePoints[2].x); // Start Cleanup
+    document.getElementById('val-d4').innerText = Math.round(profilePoints[4].x); // Slut Cold Crash
     
+    // Slut Condition är nu punkt 5
     const conditionElement = document.getElementById('val-d5');
-    if (conditionElement) conditionElement.innerText = Math.round(profilePoints[4].x);
+    if (conditionElement) conditionElement.innerText = Math.round(profilePoints[5].x);
 
     // Torrhumling
-    if (dryHopData.enabled) {
+    if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
         const hopVal = document.getElementById('hop-day-val');
         if (hopVal) hopVal.innerText = dryHopData.day.toFixed(1);
     }
@@ -890,7 +893,7 @@ function initLabChart() {
         }
     }, { passive: false });
 
-    // När musen/fingret rör sig
+   // När musen/fingret rör sig
     window.addEventListener('pointermove', (e) => {
         if (isDragging && dragIndex !== -1) {
             const rect = canvas.getBoundingClientRect();
@@ -904,7 +907,8 @@ function initLabChart() {
             xVal = Math.max(0, Math.round(xVal * 2) / 2);
             yVal = Math.max(-2, Math.min(40, Math.round(yVal)));
 
-            // Anti-tidsresa! (Se till att man inte kan dra en punkt förbi sina grannar)
+            // Anti-tidsresa! 
+            if (dragIndex === 0) xVal = 0; // Lås fast punkt 0 på dag 0
             if (dragIndex > 0 && xVal < profilePoints[dragIndex - 1].x) {
                 xVal = profilePoints[dragIndex - 1].x;
             }
@@ -912,9 +916,24 @@ function initLabChart() {
                 xVal = profilePoints[dragIndex + 1].x;
             }
 
-            // Uppdatera värdet i arrayen och rita om
+            // Uppdatera värdet för den punkt du faktiskt drar i
             profilePoints[dragIndex] = { x: xVal, y: yVal };
-            labChart.update('none'); // Update utan animation gör det blixtsnabbt
+
+            // --- MAGIN: TVINGA LINJERNA ATT VARA PLATTA! ---
+            if (dragIndex === 0) profilePoints[1].y = yVal; // Primary
+            if (dragIndex === 1) profilePoints[0].y = yVal; 
+            
+            if (dragIndex === 2) profilePoints[3].y = yVal; // Cleanup
+            if (dragIndex === 3) profilePoints[2].y = yVal; 
+            
+            if (dragIndex === 4) profilePoints[5].y = yVal; // Cold Crash / Condition
+            if (dragIndex === 5) profilePoints[4].y = yVal; 
+
+            // Rita om grafen blixtsnabbt
+            labChart.update('none'); 
+
+            // Uppdatera texten i Profile Summary i realtid medan vi drar!
+            if (typeof updateSummaryText === 'function') updateSummaryText();
         }
     });
 
@@ -924,7 +943,7 @@ function initLabChart() {
             isDragging = false;
             dragIndex = -1;
             canvas.style.cursor = 'default';
-            // Uppdatera textsammanfattningen under grafen
+            // Gör en sista säkerhets-uppdatering av texten när vi släpper
             if (typeof updateSummaryText === 'function') updateSummaryText();
         }
     });
