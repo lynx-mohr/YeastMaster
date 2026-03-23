@@ -1608,7 +1608,7 @@ function openYeastModal(yeast) {
                         <li><strong style="color: #fff;">Condition:</strong> Hold at ${s[4][1]}°C until Day ${s[4][0]}.</li>
                     </ul>
                     
-                    ${profileData.dryHopDay ? `<p style="margin-top: 15px; color: #00e5ff;"><strong>Dry Hop:</strong> Scheduled for Day ${profileData.dryHopDay}</p>` : ''}
+                    ${profileData.dryHopDay ? `<p style="margin-top: 15px; color: #8CC63F;"><strong>Dry Hop:</strong> Scheduled for Day ${profileData.dryHopDay}</p>` : ''}
                 </div>
             `;
         } else {
