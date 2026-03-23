@@ -1682,20 +1682,32 @@ if (localStorage.getItem('theme') === 'light') {
 });
 
 // --- FUNKTION FÖR ATT RADERA EN PROFIL ---
-function deleteCustomProfile(profileName) {
-    if (!confirm(`Are you sure you want to delete "${profileName}"?`)) return;
+function deleteCustomProfile(profileId) {
+    if (!confirm("Are you sure you want to delete this profile? It cannot be undone.")) return;
 
-    // 1. Hämta befintliga profiler
-    let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
-    
-    // 2. Filtrera bort den vi vill radera
-    savedProfiles = savedProfiles.filter(p => p.s !== profileName);
-    
-    // 3. Spara tillbaka till localStorage
-    localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
+    // Radera från Firebase
+    db.collection("custom_profiles").doc(profileId).delete().then(() => {
+        console.log("Profile deleted from database.");
 
-    // 4. Ladda om sidan för att uppdatera alla listor och grafer
-    location.reload();
+        // 1. Stäng modalen (om raderingsknappen satt inuti infokortet)
+        const modal = document.getElementById('yeast-info-modal');
+        if (modal) modal.style.display = 'none';
+
+        // 2. Uppdatera listan med custom-profiler i biblioteket direkt
+        loadCustomProfiles();
+
+        // 3. Tvinga vyn att stanna kvar på (eller gå till) biblioteket
+        showView('library');
+
+        // 4. Dubbelkolla att rätt flik i bottenmenyn lyser
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        const libIcon = document.querySelector('.nav-item[onclick*="library"]');
+        if (libIcon) libIcon.classList.add('active');
+
+    }).catch((error) => {
+        console.error("Error removing profile: ", error);
+        alert("Could not delete profile: " + error.message);
+    });
 }
 
 
