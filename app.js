@@ -613,6 +613,11 @@ function toggleTheme() {
     // Spara valet i webbläsaren så det komms ihåg nästa gång
     const isLight = document.body.classList.contains('light-mode');
     localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    
+    // --- NYTT: Tvinga grafen att rita om sig med rätt färger! ---
+    if (typeof initLabChart === 'function') {
+        initLabChart();
+    }
 }
 
 function setAccent(color) {
@@ -776,8 +781,12 @@ function initLabChart() {
     const themeAccent = '#800000'; // Maroon
     const pointFill = '#888888';   // Grå fyllning i punkterna
     
+    // Tunnare och mer elegant linje i Light Mode
+    const lineWidth = isLightMode ? 2 : 3; 
+    
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-    gradient.addColorStop(0, 'rgba(128, 0, 0, 0.4)'); // Maroon-tonad skugga
+    // Svagare toning i Light Mode så den inte tar över
+    gradient.addColorStop(0, isLightMode ? 'rgba(128, 0, 0, 0.15)' : 'rgba(128, 0, 0, 0.4)'); 
     gradient.addColorStop(1, 'rgba(128, 0, 0, 0.0)');
 
     labChart = new Chart(ctx, {
@@ -788,18 +797,19 @@ function initLabChart() {
                 data: profilePoints,
                 borderColor: themeAccent,
                 backgroundColor: gradient,
-                borderWidth: 3,
-                pointBackgroundColor: pointFill,  // Grå punkter
-                pointBorderColor: themeAccent,    // Maroon kant
-                pointRadius: 5,                   // Krympt från 8 till 5
-                pointHoverRadius: 8,              // Krympt från 12 till 8
+                borderWidth: lineWidth,           // Dynamisk tjocklek
+                pointBackgroundColor: pointFill,  
+                pointBorderColor: themeAccent,    
+                pointRadius: 5,                   
+                pointHoverRadius: 8,              
                 showLine: true,
                 tension: 0.1, 
                 clip: false,
                 fill: true,
                 segment: {
                     borderDash: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? [6, 6] : undefined,
-                    borderColor: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? (isLightMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)') : themeAccent
+                    // Mycket svagare streckade linjer i Light Mode
+                    borderColor: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? (isLightMode ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.3)') : themeAccent
                 }
             }]
         },
@@ -814,7 +824,6 @@ function initLabChart() {
                     type: 'linear',
                     min: 0,
                     max: Math.max(10, profilePoints[profilePoints.length - 1].x + 2),
-                    // SVAGARE RUTNÄT I LIGHT MODE
                     grid: { color: isLightMode ? 'rgba(0, 0, 0, 0.04)' : '#222' },
                     ticks: { color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '600' } },
                     title: { display: true, text: 'Days', color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '800' } }
@@ -823,7 +832,6 @@ function initLabChart() {
                     type: 'linear',
                     min: -2,
                     max: 40,
-                    // SVAGARE RUTNÄT I LIGHT MODE
                     grid: { color: isLightMode ? 'rgba(0, 0, 0, 0.04)' : '#222' },
                     ticks: { color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '600' } },
                     title: { display: true, text: 'Temp (°C)', color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '800' } }
@@ -844,7 +852,10 @@ function initLabChart() {
 
                 ctx.save();
                 ctx.font = '800 10px "Lexend", sans-serif';
-                ctx.fillStyle = isLightMode ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.5)'; 
+                
+                // --- NYTT: Mörkgrå text i Light Mode, halvt genomskinlig vit i Dark Mode ---
+                ctx.fillStyle = isLightMode ? '#333333' : 'rgba(255, 255, 255, 0.5)'; 
+                
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'bottom';
 
