@@ -831,6 +831,20 @@ function initLabChart() {
                 legend: { display: false },
                 tooltip: { enabled: false }
             },
+
+            dragData: {
+                    round: 1, // Får punkterna att snäppa till snygga heltal
+                    showTooltip: true, // Visar en liten siffra när du drar
+                    onDragEnd: function(e, datasetIndex, index, value) {
+                        // Uppdaterar sammanfattningen under grafen när du släpper
+                        if (typeof updateSummaryText === 'function') {
+                            updateSummaryText();
+                        }
+                    }
+                }
+                // ------------------------------
+            },
+
             animation: { duration: 0 }
         },
         
@@ -841,28 +855,7 @@ function initLabChart() {
             id: 'customCanvasDrawing',
             afterDatasetsDraw(chart) {
                 const ctx = chart.ctx;
-                
-                if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
-                    const xPix = chart.scales.x.getPixelForValue(dryHopData.day);
-                    const topY = chart.scales.y.top;
-                    const bottomY = chart.scales.y.bottom;
-                    
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.moveTo(xPix, topY);
-                    ctx.lineTo(xPix, bottomY);
-                    ctx.lineWidth = 2;
-                    ctx.strokeStyle = '#a6e22e'; 
-                    ctx.setLineDash([5, 5]);
-                    ctx.stroke();
-                    
-                    ctx.fillStyle = '#a6e22e';
-                    ctx.font = '800 10px "Lexend", sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'bottom';
-                    ctx.fillText('HOPS', xPix, topY - 5);
-                    ctx.restore();
-                }
+
 
                 const meta = chart.getDatasetMeta(0);
                 if (!meta || !meta.data || meta.data.length < 6) return;
