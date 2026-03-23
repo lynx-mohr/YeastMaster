@@ -87,15 +87,15 @@ function setActive(clickedElement) {
     clickedElement.classList.add('active');
 }
 
-// --- 2. INLOGGNINGS-VAKT ---
+// --- 2. INLOGGNINGS-VAKT & SÄKERHET ---
 auth.onAuthStateChanged(async (user) => {
     const soulLoginPrompt = document.getElementById('soul-login-prompt');
     
     if (user) {
-        // Om användaren är inloggad, dölj login-knappen
+        // --- ANVÄNDARE ÄR INLOGGAD ---
         if (soulLoginPrompt) soulLoginPrompt.style.display = 'none';
 
-        // MAGIN: Vi fyller rullistan i biblioteket direkt!
+        // Här kör vi din befintliga logik för att hämta enheter
         populateSyncDevices(user.uid); 
 
         try {
@@ -104,17 +104,24 @@ auth.onAuthStateChanged(async (user) => {
             if (devices.length > 0) {
                 activeDeviceId = devices[0].device_id;
                 showView('dashboard');
-                updateDashboard();
+                updateDashboard(); // Din funktion körs precis som vanligt!
             } else {
                 showView('claim');
             }
         } catch (err) {
-            console.error(err);
+            console.error("Auth fetch error:", err);
         }
     } else {
-        // Om användaren är utloggad, visa login-knappen
+        // --- ANVÄNDARE ÄR UTLOGGAD ---
+        // Viktigt: Rensa ID så att updateDashboard slutar hämta data
+        activeDeviceId = null; 
+        selectedStrains = []; 
+
         if (soulLoginPrompt) soulLoginPrompt.style.display = 'block';
-        showView('soul');
+        
+        // Tvinga till login-vyn så man inte kan tjuvlyssna på Dashboarden
+        showView('login');
+        console.log("Säkerhetsvakt: Ingen användare, visar login.");
     }
 });
 
@@ -453,16 +460,18 @@ const nicknameInput = document.getElementById('input-nickname').value.trim() || 
     });
 }
 
+// LOGGA UT (DEN SÄKRA VERSIONEN)
 if(document.getElementById('btn-logout')) {
     document.getElementById('btn-logout').addEventListener('click', () => {
         auth.signOut().then(() => {
-            // Nollställ lokala variabler
+            // Nollställ allt lokalt direkt
             activeDeviceId = null;
-            // Tvinga fram Soul of Beer-vyn
-            showView('soul');
-            console.log("Utloggad och skickad till Soul of Beer");
+            selectedStrains = [];
+            showView('login');
+            console.log("Utloggning bekräftad och ID nollställt.");
         }).catch((error) => {
             console.error("Logout-fel:", error);
+            alert("Kunde inte logga ut: " + error.message);
         });
     });
 }
