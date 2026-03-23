@@ -642,13 +642,14 @@ function setActive(clickedElement) {
 
 let labChart;
 
-// 5 punkter istället för 4!
+// Vi har nu 6 punkter för att bygga perfekta platta linjer och rampar!
 let profilePoints = [
-    { x: 0, y: 19 },   // Punkt 0: Pitch
-    { x: 3, y: 19 },   // Punkt 1: Slutet på Primary (Platt linje)
-    { x: 5, y: 22 },   // Punkt 2: Cleanup / D-Rest (Ramp)
-    { x: 8, y: 3 },    // Punkt 3: Cold Crash (Ramp ner)
-    { x: 14, y: 3 }    // Punkt 4: Conditioning (Platt linje)
+    { x: 0, y: 19 },    // Punkt 0: Start Primary
+    { x: 3, y: 19 },    // Punkt 1: Slut Primary (Platt linje hit)
+    { x: 4, y: 22 },    // Punkt 2: Slut Uppvärmning (Streckad ramp upp hit)
+    { x: 6, y: 22 },    // Punkt 3: Slut Cleanup (Platt linje hit)
+    { x: 8, y: 3 },     // Punkt 4: Start Cold Crash (Streckad ramp NER hit)
+    { x: 14, y: 3 }     // Punkt 5: Slut Cold Crash / Condition (Platt linje hit)
 ];
 
 // Data-tillstånd för torrhumlingen
@@ -755,7 +756,7 @@ function initLabChart() {
     labChart = new Chart(ctx, {
         type: 'scatter',
         data: {
-            datasets: [{
+      datasets: [{
                 label: 'Profile Target Temp',
                 data: profilePoints,
                 borderColor: themeAccent,
@@ -767,7 +768,15 @@ function initLabChart() {
                 pointHoverRadius: 12,   
                 showLine: true,
                 tension: 0.1,
-                clip: false // <--- NYTT: Förhindrar att prickarna klipps av i kanterna!
+                clip: false, // Glöm inte kommatecknet här!
+                
+                // --- NYTT: GÖR RAMPARNA STRECKADE ---
+                segment: {
+                    // Om linjen ritas från punkt 1 (uppvärmning) eller punkt 3 (nedkylning), gör den streckad
+                    borderDash: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? [6, 6] : undefined,
+                    // Gör ramperna lite svagare i färgen
+                    borderColor: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? 'rgba(255, 255, 255, 0.3)' : themeAccent
+                }
             }]
         },
         options: {
@@ -855,7 +864,7 @@ function initLabChart() {
         }
     }
 
-    function handleMove(e) {
+function handleMove(e) {
         if (!labChart) return;
         const coords = getCanvasCoords(e);
         const mouseX = coords.x;
@@ -894,30 +903,46 @@ function initLabChart() {
             let newX = labChart.scales.x.getValueForPixel(mouseX);
             let newY = labChart.scales.y.getValueForPixel(mouseY);
 
+            // Tvinga punkt 0 att alltid ligga på startdagen (Day 0)
             if (draggedPointIndex === 0) {
                 newX = 0; 
-            } else {
-                let minX = profilePoints[draggedPointIndex - 1].x + 0.5;
-                let maxX = (draggedPointIndex < profilePoints.length - 1) ? (profilePoints[draggedPointIndex + 1].x - 0.5) : 60;
-                newX = Math.max(minX, Math.min(newX, maxX));
             }
-
+            
+            // Begränsa temperatur (Y-led) och maxdagar (X-led)
             newY = Math.max(-2, Math.min(newY, 40));
+            newX = Math.min(newX, 60);
 
+            // Avrunda till halva steg
             profilePoints[draggedPointIndex].x = Math.round(newX * 2) / 2;
             profilePoints[draggedPointIndex].y = Math.round(newY * 2) / 2;
 
-            // --- LÄGG TILL DETTA: MAGISK LÅSNING AV FASERNA ---
-            // Om du drar Pitch-tempen (Punkt 0), följer Primary-slutet (Punkt 1) med!
+            // =======================================================
+            // MAGISK LÅSNING AV DE 3 FASERNA (6 punkter)
+            // =======================================================
+
+            // --- 1. LÅS Y-AXELN FÖR FAS-PAREN (Tvingar horisontella linjer) ---
             if (draggedPointIndex === 0) profilePoints[1].y = profilePoints[0].y;
             if (draggedPointIndex === 1) profilePoints[0].y = profilePoints[1].y;
             
-            // Samma sak för Cold Crash & Conditioning (Den nedre platta linjen)
-            if (draggedPointIndex === 3) profilePoints[4].y = profilePoints[3].y;
-            if (draggedPointIndex === 4) profilePoints[3].y = profilePoints[4].y;
-            // --------------------------------------------------
+            if (draggedPointIndex === 2) profilePoints[3].y = profilePoints[2].y;
+            if (draggedPointIndex === 3) profilePoints[2].y = profilePoints[3].y;
+            
+            if (draggedPointIndex === 4) profilePoints[5].y = profilePoints[4].y;
+            if (draggedPointIndex === 5) profilePoints[4].y = profilePoints[5].y;
 
-            // --- NYTT: ADAPTERA X-AXELN DYNAMISKT ---
+            // --- 2. FÖRHINDRA ATT X-AXELN KORSAR SIG SJÄLV ---
+            // Se till att ramperna aldrig backar i tiden (minst 0.5 dagars avstånd)
+            
+            // Ramp Upp (Mellan punkt 1 och 2)
+            if (draggedPointIndex === 1 && profilePoints[1].x > profilePoints[2].x - 0.5) profilePoints[1].x = profilePoints[2].x - 0.5;
+            if (draggedPointIndex === 2 && profilePoints[2].x < profilePoints[1].x + 0.5) profilePoints[2].x = profilePoints[1].x + 0.5;
+            
+            // Ramp Ner (Mellan punkt 3 och 4)
+            if (draggedPointIndex === 3 && profilePoints[3].x > profilePoints[4].x - 0.5) profilePoints[3].x = profilePoints[4].x - 0.5;
+            if (draggedPointIndex === 4 && profilePoints[4].x < profilePoints[3].x + 0.5) profilePoints[4].x = profilePoints[3].x + 0.5;
+
+
+            // --- ADAPTERA GRAFENS BREDD DYNAMISKT ---
             const currentMax = profilePoints[profilePoints.length - 1].x;
             labChart.options.scales.x.max = Math.max(10, currentMax + 2); // Följer med sista punkten utåt
 
