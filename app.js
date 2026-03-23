@@ -980,56 +980,6 @@ function initLabChart() {
         }
     });
 }
-        // DRA VANLIGA PUNKTER
-        if (isDragging && dragIndex !== -1) {
-            const rect = canvas.getBoundingClientRect();
-            const xPos = e.clientX - rect.left;
-            const yPos = e.clientY - rect.top;
-
-            let xVal = labChart.scales.x.getValueForPixel(xPos);
-            let yVal = labChart.scales.y.getValueForPixel(yPos);
-
-            xVal = Math.max(0, Math.round(xVal * 2) / 2);
-            yVal = Math.max(-2, Math.min(40, Math.round(yVal)));
-
-            if (dragIndex === 0) xVal = 0; 
-            if (dragIndex > 0 && xVal < profilePoints[dragIndex - 1].x) {
-                xVal = profilePoints[dragIndex - 1].x;
-            }
-            if (dragIndex < profilePoints.length - 1 && xVal > profilePoints[dragIndex + 1].x) {
-                xVal = profilePoints[dragIndex + 1].x;
-            }
-
-            profilePoints[dragIndex] = { x: xVal, y: yVal };
-
-            if (dragIndex === 0) profilePoints[1].y = yVal;
-            if (dragIndex === 1) profilePoints[0].y = yVal; 
-            if (dragIndex === 2) profilePoints[3].y = yVal; 
-            if (dragIndex === 3) profilePoints[2].y = yVal; 
-            if (dragIndex === 4) profilePoints[5].y = yVal; 
-            if (dragIndex === 5) profilePoints[4].y = yVal; 
-
-            labChart.update('none'); 
-            if (typeof updateSummaryText === 'function') updateSummaryText();
-        }
-    });
-
-    window.addEventListener('pointerup', () => {
-        // Släpp humlelinjen
-        if (isDraggingDryHop) {
-            isDraggingDryHop = false;
-            canvas.style.cursor = 'default';
-            if (typeof updateSummaryText === 'function') updateSummaryText();
-        }
-        // Släpp vanlig punkt
-        if (isDragging) {
-            isDragging = false;
-            dragIndex = -1;
-            canvas.style.cursor = 'default';
-            if (typeof updateSummaryText === 'function') updateSummaryText();
-        }
-    });
-}
 
 
 // --- 1. FYLL RULLISTAN MED BASJÄSTER ---
