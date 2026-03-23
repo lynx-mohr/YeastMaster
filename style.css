@@ -552,12 +552,14 @@ canvas#beer-chart {
         padding-left: 10px !important; 
         padding-right: 10px !important;
         padding-top: 10px !important;
-        padding-bottom: 80px !important; 
+        /* ÄNDRAD: Sänkt från 80px till 65px för att matcha den smalare menyn */
+        padding-bottom: 65px !important; 
     }
 
-    .main-nav {
+   .main-nav {
         bottom: 0; left: 0; right: 0; top: auto;
-        height: 70px;
+        /* ÄNDRAD: Sänkt från 70px till 55px (eller det du tycker ser bäst ut) */
+        height: 55px; 
         width: 100%;
         border-radius: 0;
         flex-direction: row;
@@ -567,9 +569,7 @@ canvas#beer-chart {
         border-right: none;
         transform: none;
         padding: 0;
-    }
-
- 
+    } 
     
 /* ========================================= */
     /* MAXA BREDD OCH SYMMETRISKA AVSTÅND I LAB  */
