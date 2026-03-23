@@ -209,36 +209,44 @@
         </div>
     </section>
 
-    <section id="view-settings" style="display: none;">
-        <div class="library-header">
-            <h2>Settings</h2>
-            <p style="opacity: 0.6; font-size: 0.9rem;">Anpassa din YeastMaster</p>
-        </div>
-        <div style="padding: 20px; display: flex; flex-direction: column; gap: 35px;">
-            <div>
-                <h3 style="margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 1px; opacity: 0.8;">VISUAL MODE</h3>
-                <button onclick="toggleTheme()" class="logout-btn" style="width: 100%; opacity: 1; border-color: var(--accent-color); margin: 0; background: var(--oled-bg); color: var(--oled-color);">
-                    SWITCH LIGHT / DARK
-                </button>
-            </div>
-            <div>
-                <h3 style="margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 1px; opacity: 0.8;">ACCENT COLOR</h3>
-                <div style="display: flex; gap: 20px; justify-content: flex-start;">
-                    <div onclick="setAccent('#00e5ff')" style="width: 45px; height: 45px; background: #00e5ff; border-radius: 50%; cursor: pointer; border: 2px solid #fff;"></div>
-                    <div onclick="setAccent('#f39c12')" style="width: 45px; height: 45px; background: #f39c12; border-radius: 50%; cursor: pointer;"></div>
-                    <div onclick="setAccent('#ff003c')" style="width: 45px; height: 45px; background: #ff003c; border-radius: 50%; cursor: pointer;"></div>
-                </div>
+    <section id="view-settings" style="display: none; padding: 20px;">
+    <h2 style="margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">SETTINGS</h2>
+
+    <div class="settings-group">
+        <div class="settings-row">
+            <span class="settings-label">Visual Mode</span>
+            <div class="theme-toggle-compact">
+                <button class="theme-btn-small active" id="btn-theme-dark" onclick="setTheme('dark')">Dark</button>
+                <button class="theme-btn-small" id="btn-theme-light" onclick="setTheme('light')">Light</button>
             </div>
         </div>
-        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; text-align: center;">
-            <p style="color: #888; font-size: 0.8rem; margin-bottom: 15px;">Inloggad som aktiv användare</p>
-            <button id="btn-logout" class="btn-primary" style="background-color: transparent; color: #ff4444; border: 1px solid #ff4444; width: 100%;">
-                LOGGA UT
-            </button>
+
+        <div class="settings-row">
+            <span class="settings-label">Accent Color</span>
+            <div class="color-picker">
+                <div class="color-dot active" style="background: #00e5ff;" onclick="setAccent('#00e5ff', this)"></div>
+                <div class="color-dot" style="background: #ff4444;" onclick="setAccent('#ff4444', this)"></div>
+                <div class="color-dot" style="background: #8CC63F;" onclick="setAccent('#8CC63F', this)"></div>
+                <div class="color-dot" style="background: #b142ff;" onclick="setAccent('#b142ff', this)"></div>
+                <div class="color-dot" style="background: #ff9800;" onclick="setAccent('#ff9800', this)"></div>
+            </div>
         </div>
     </div>
 
-    </section>
+    <div class="settings-group">
+        <div class="settings-row">
+            <span class="settings-label">Device Status</span>
+            <span style="font-size: 0.8rem; color: #8CC63F; font-weight: 800;">CONNECTED</span>
+        </div>
+    </div>
+
+    <div style="margin-top: 40px; text-align: center;">
+        <button id="btn-logout" style="background: transparent; color: #ff4444; border: 1px solid #ff4444; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer;">
+            LOG OUT
+        </button>
+        <p style="margin-top: 15px; font-size: 0.7rem; opacity: 0.4;">YeastMaster v1.0.4 - Pro Edition</p>
+    </div>
+</section>
 
 <section id="view-soul" style="display: none; padding: 30px 20px;">
     

@@ -1415,3 +1415,86 @@ body .sync-button:hover {
 .delay-1 { animation-delay: 0.2s; }
 .delay-2 { animation-delay: 0.5s; }
 .delay-3 { animation-delay: 0.8s; }
+
+/* --- SETTINGS NY DESIGN --- */
+.settings-group {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #222;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+body.light-mode .settings-group {
+    background: #fff;
+    border-color: #eee;
+}
+
+.settings-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #222;
+}
+
+.settings-row:last-child { border-bottom: none; }
+
+body.light-mode .settings-row { border-bottom-color: #eee; }
+
+.settings-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+/* Accentfärg-prickarna */
+.color-picker {
+    display: flex;
+    gap: 12px;
+}
+
+.color-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.color-dot:hover { transform: scale(1.2); }
+.color-dot.active {
+    border-color: #fff;
+    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+
+body.light-mode .color-dot.active { border-color: #000; }
+
+/* Kompakt Theme-switch */
+.theme-toggle-compact {
+    display: flex;
+    background: #111;
+    padding: 3px;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+body.light-mode .theme-toggle-compact { background: #eee; border-color: #ccc; }
+
+.theme-btn-small {
+    padding: 6px 12px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.theme-btn-small.active {
+    background: var(--accent-color);
+    color: #000;
+}
