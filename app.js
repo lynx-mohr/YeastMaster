@@ -995,6 +995,7 @@ function populateBaseYeastDropdown() {
     dropdown.addEventListener('change', function() {
         const placeholder = document.getElementById('chart-placeholder');
         const chartArea = document.getElementById('chart-scroll-area');
+        const zoomBtn = document.getElementById('btn-zoom');
         
         if (this.value !== "") {
             // En jäst är vald -> Göm texten och tona in grafen!
@@ -1003,6 +1004,7 @@ function populateBaseYeastDropdown() {
                 chartArea.style.opacity = '1';
                 chartArea.style.pointerEvents = 'auto'; // Slå på drag-funktionen
             }
+            if (zoomBtn) zoomBtn.style.display = 'block';
         } else {
             // Inget är valt (eller man ångrade sig) -> Visa texten igen
             if (placeholder) placeholder.style.display = 'flex';
@@ -1010,6 +1012,7 @@ function populateBaseYeastDropdown() {
                 chartArea.style.opacity = '0';
                 chartArea.style.pointerEvents = 'none'; // Stäng av drag-funktionen
             }
+            if (zoomBtn) zoomBtn.style.display = 'none';
         }
     });
 }
@@ -1759,3 +1762,24 @@ function applyBeerStyle(index) {
 document.addEventListener('DOMContentLoaded', () => {
     initBeerCycler();
 });
+
+// --- ZOOM-FUNKTION FÖR MOBIL (OVERVIEW / DETALJ) ---
+let isZoomedIn = true; // Grafen är 600px bred från början
+function toggleChartZoom() {
+    const area = document.getElementById('chart-scroll-area');
+    const btn = document.getElementById('btn-zoom');
+    
+    if (!area || !btn) return;
+
+    if (isZoomedIn) {
+        // Zooma ut: Låt grafen krympa för att få plats på skärmen
+        area.style.minWidth = '100%';
+        btn.innerText = '🔍 ZOOM IN';
+    } else {
+        // Zooma in: Tvinga grafen att bli 600px bred för scroll & precision
+        area.style.minWidth = '600px';
+        btn.innerText = '🔍 OVERVIEW';
+    }
+    
+    isZoomedIn = !isZoomedIn;
+}
