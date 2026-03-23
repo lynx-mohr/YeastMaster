@@ -746,9 +746,6 @@ function updateSummaryText() {
 // --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
 // --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
 function initLabChart() {
-    // =======================================================
-    // MAGISK UPPGRADERING AV GAMLA PROFILER (4 -> 6 punkter)
-    // =======================================================
     if (profilePoints && profilePoints.length < 6) {
         const p0 = profilePoints[0] || {x: 0, y: 19};
         const p1 = profilePoints[1] || {x: 5, y: 22};
@@ -774,11 +771,14 @@ function initLabChart() {
     }
 
     const isLightMode = document.body.classList.contains('light-mode');
-    const themeAccent = isLightMode ? '#00bcd4' : '#00e5ff'; 
+    
+    // --- NYA FÄRGSCHEMAT ---
+    const themeAccent = '#800000'; // Maroon
+    const pointFill = '#888888';   // Grå fyllning i punkterna
     
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-    gradient.addColorStop(0, isLightMode ? 'rgba(0, 188, 212, 0.4)' : 'rgba(0, 229, 255, 0.4)');
-    gradient.addColorStop(1, isLightMode ? 'rgba(0, 188, 212, 0.0)' : 'rgba(0, 229, 255, 0.0)');
+    gradient.addColorStop(0, 'rgba(128, 0, 0, 0.4)'); // Maroon-tonad skugga
+    gradient.addColorStop(1, 'rgba(128, 0, 0, 0.0)');
 
     labChart = new Chart(ctx, {
         type: 'scatter',
@@ -789,10 +789,10 @@ function initLabChart() {
                 borderColor: themeAccent,
                 backgroundColor: gradient,
                 borderWidth: 3,
-                pointBackgroundColor: '#fff',
-                pointBorderColor: themeAccent,
-                pointRadius: 8,         
-                pointHoverRadius: 12,   
+                pointBackgroundColor: pointFill,  // Grå punkter
+                pointBorderColor: themeAccent,    // Maroon kant
+                pointRadius: 5,                   // Krympt från 8 till 5
+                pointHoverRadius: 8,              // Krympt från 12 till 8
                 showLine: true,
                 tension: 0.1, 
                 clip: false,
@@ -814,7 +814,8 @@ function initLabChart() {
                     type: 'linear',
                     min: 0,
                     max: Math.max(10, profilePoints[profilePoints.length - 1].x + 2),
-                    grid: { color: isLightMode ? '#eee' : '#222' },
+                    // SVAGARE RUTNÄT I LIGHT MODE
+                    grid: { color: isLightMode ? 'rgba(0, 0, 0, 0.04)' : '#222' },
                     ticks: { color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '600' } },
                     title: { display: true, text: 'Days', color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '800' } }
                 },
@@ -822,7 +823,8 @@ function initLabChart() {
                     type: 'linear',
                     min: -2,
                     max: 40,
-                    grid: { color: isLightMode ? '#eee' : '#222' },
+                    // SVAGARE RUTNÄT I LIGHT MODE
+                    grid: { color: isLightMode ? 'rgba(0, 0, 0, 0.04)' : '#222' },
                     ticks: { color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '600' } },
                     title: { display: true, text: 'Temp (°C)', color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '800' } }
                 }
@@ -833,7 +835,6 @@ function initLabChart() {
             },
             animation: { duration: 0 }
         },
-        
         plugins: [{
             id: 'customCanvasDrawing',
             afterDatasetsDraw(chart) {
@@ -870,13 +871,27 @@ function initLabChart() {
     });
 
     // =======================================================
-    // VÅR EGEN SKOTTSÄKRA DRAG-MOTOR (För både mobil och PC)
+    // VÅR SKOTTSÄKRA DRAG-MOTOR (Nu med Dry Hop-stöd!)
     // =======================================================
     let isDragging = false;
     let dragIndex = -1;
+    let isDraggingDryHop = false; // <-- NY LOGIK FÖR HUMLE-LINJEN
 
-    // När musen/fingret trycks ner
     canvas.addEventListener('pointerdown', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const xPos = e.clientX - rect.left;
+        let xVal = labChart.scales.x.getValueForPixel(xPos);
+
+        // 1. Klicka på Dry Hop-linjen? (Tillåter ett par pixlars felmarginal)
+        if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
+            if (Math.abs(xVal - dryHopData.day) < 0.6) {
+                isDraggingDryHop = true;
+                canvas.style.cursor = 'ew-resize'; // Muspekare som visar vänster/höger-drag
+                return; // Stoppa här så vi inte råkar dra i en vanlig punkt samtidigt
+            }
+        }
+
+        // 2. Annars, klicka på en vanlig punkt
         const points = labChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, false);
         if (points.length > 0) {
             isDragging = true;
@@ -885,16 +900,30 @@ function initLabChart() {
         }
     });
 
-    // Special för mobil: Stoppa skärmen från att rulla när vi drar en punkt
     canvas.addEventListener('touchstart', (e) => {
+        // Förhindra att mobilen scrollar när vi försöker dra i linjer eller punkter
+        if (isDragging || isDraggingDryHop) e.preventDefault();
         const points = labChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, false);
-        if (points.length > 0) {
-            e.preventDefault(); 
-        }
+        if (points.length > 0 || isDraggingDryHop) e.preventDefault(); 
     }, { passive: false });
 
-   // När musen/fingret rör sig
     window.addEventListener('pointermove', (e) => {
+        // DRA HUMLELINJEN
+        if (isDraggingDryHop) {
+            const rect = canvas.getBoundingClientRect();
+            const xPos = e.clientX - rect.left;
+            let xVal = labChart.scales.x.getValueForPixel(xPos);
+            
+            // Lås linjen till max 14 dagar (eller vad profilen maxar ut på) och hoppa jämnt
+            xVal = Math.max(0, Math.round(xVal * 2) / 2);
+            dryHopData.day = xVal;
+            
+            labChart.update('none');
+            if (typeof updateSummaryText === 'function') updateSummaryText();
+            return; // Gå inte vidare till punkt-dragningen
+        }
+
+        // DRA VANLIGA PUNKTER
         if (isDragging && dragIndex !== -1) {
             const rect = canvas.getBoundingClientRect();
             const xPos = e.clientX - rect.left;
@@ -903,12 +932,10 @@ function initLabChart() {
             let xVal = labChart.scales.x.getValueForPixel(xPos);
             let yVal = labChart.scales.y.getValueForPixel(yPos);
 
-            // Avrunda snyggt: Steg om 0.5 dagar på X-axeln, hela grader på Y-axeln
             xVal = Math.max(0, Math.round(xVal * 2) / 2);
             yVal = Math.max(-2, Math.min(40, Math.round(yVal)));
 
-            // Anti-tidsresa! 
-            if (dragIndex === 0) xVal = 0; // Lås fast punkt 0 på dag 0
+            if (dragIndex === 0) xVal = 0; 
             if (dragIndex > 0 && xVal < profilePoints[dragIndex - 1].x) {
                 xVal = profilePoints[dragIndex - 1].x;
             }
@@ -916,34 +943,32 @@ function initLabChart() {
                 xVal = profilePoints[dragIndex + 1].x;
             }
 
-            // Uppdatera värdet för den punkt du faktiskt drar i
             profilePoints[dragIndex] = { x: xVal, y: yVal };
 
-            // --- MAGIN: TVINGA LINJERNA ATT VARA PLATTA! ---
-            if (dragIndex === 0) profilePoints[1].y = yVal; // Primary
+            if (dragIndex === 0) profilePoints[1].y = yVal;
             if (dragIndex === 1) profilePoints[0].y = yVal; 
-            
-            if (dragIndex === 2) profilePoints[3].y = yVal; // Cleanup
+            if (dragIndex === 2) profilePoints[3].y = yVal; 
             if (dragIndex === 3) profilePoints[2].y = yVal; 
-            
-            if (dragIndex === 4) profilePoints[5].y = yVal; // Cold Crash / Condition
+            if (dragIndex === 4) profilePoints[5].y = yVal; 
             if (dragIndex === 5) profilePoints[4].y = yVal; 
 
-            // Rita om grafen blixtsnabbt
             labChart.update('none'); 
-
-            // Uppdatera texten i Profile Summary i realtid medan vi drar!
             if (typeof updateSummaryText === 'function') updateSummaryText();
         }
     });
 
-    // När man släpper knappen/skärmen
     window.addEventListener('pointerup', () => {
+        // Släpp humlelinjen
+        if (isDraggingDryHop) {
+            isDraggingDryHop = false;
+            canvas.style.cursor = 'default';
+            if (typeof updateSummaryText === 'function') updateSummaryText();
+        }
+        // Släpp vanlig punkt
         if (isDragging) {
             isDragging = false;
             dragIndex = -1;
             canvas.style.cursor = 'default';
-            // Gör en sista säkerhets-uppdatering av texten när vi släpper
             if (typeof updateSummaryText === 'function') updateSummaryText();
         }
     });
