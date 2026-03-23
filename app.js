@@ -741,28 +741,26 @@ function updateSummaryText() {
 }
 
 // --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
+// --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
 function initLabChart() {
     // =======================================================
     // MAGISK UPPGRADERING AV GAMLA PROFILER (4 -> 6 punkter)
     // =======================================================
     if (profilePoints && profilePoints.length < 6) {
-        // Vi fångar upp de gamla 4 punkterna
         const p0 = profilePoints[0] || {x: 0, y: 19};
         const p1 = profilePoints[1] || {x: 5, y: 22};
         const p2 = profilePoints[2] || {x: 8, y: 3};
         const p3 = profilePoints[3] || {x: 14, y: 3};
 
-        // ...och bygger om dem till 6 punkter med perfekta ramper!
         profilePoints = [
             { x: p0.x, y: p0.y },
-            { x: Math.max(p0.x + 0.5, p1.x - 1.5), y: p0.y }, // Slut Primary
-            { x: p1.x, y: p1.y },                             // Slut Uppvärmning
-            { x: Math.max(p1.x + 0.5, p2.x - 1.0), y: p1.y }, // Slut Cleanup
-            { x: p2.x, y: p2.y },                             // Start Cold Crash
-            { x: p3.x, y: p3.y }                              // Slut Condition
+            { x: Math.max(p0.x + 0.5, p1.x - 1.5), y: p0.y },
+            { x: p1.x, y: p1.y },
+            { x: Math.max(p1.x + 0.5, p2.x - 1.0), y: p1.y },
+            { x: p2.x, y: p2.y },
+            { x: p3.x, y: p3.y }
         ];
     }
-    // =======================================================
 
     const canvas = document.getElementById('lab-chart');
     if (!canvas) return;
@@ -796,7 +794,6 @@ function initLabChart() {
                 tension: 0.1, 
                 clip: false,
                 fill: true,
-                
                 segment: {
                     borderDash: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? [6, 6] : undefined,
                     borderColor: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? (isLightMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)') : themeAccent
@@ -831,32 +828,13 @@ function initLabChart() {
                 legend: { display: false },
                 tooltip: { enabled: false }
             },
-
-            dragData: {
-                    round: 1, // Får punkterna att snäppa till snygga heltal
-                    showTooltip: true, // Visar en liten siffra när du drar
-                    onDragEnd: function(e, datasetIndex, index, value) {
-                        // Uppdaterar sammanfattningen under grafen när du släpper
-                        if (typeof updateSummaryText === 'function') {
-                            updateSummaryText();
-                        }
-                
-                }
-                // ------------------------------
-            },
-
             animation: { duration: 0 }
         },
         
-        // =======================================================
-        // CUSTOM PLUGINS: RITAR UT TEXT & HUMLE-LINJEN
-        // =======================================================
         plugins: [{
             id: 'customCanvasDrawing',
             afterDatasetsDraw(chart) {
                 const ctx = chart.ctx;
-
-
                 const meta = chart.getDatasetMeta(0);
                 if (!meta || !meta.data || meta.data.length < 6) return;
 
@@ -886,6 +864,69 @@ function initLabChart() {
                 ctx.restore();
             }
         }]
+    });
+
+    // =======================================================
+    // VÅR EGEN SKOTTSÄKRA DRAG-MOTOR (För både mobil och PC)
+    // =======================================================
+    let isDragging = false;
+    let dragIndex = -1;
+
+    // När musen/fingret trycks ner
+    canvas.addEventListener('pointerdown', (e) => {
+        const points = labChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, false);
+        if (points.length > 0) {
+            isDragging = true;
+            dragIndex = points[0].index;
+            canvas.style.cursor = 'grabbing';
+        }
+    });
+
+    // Special för mobil: Stoppa skärmen från att rulla när vi drar en punkt
+    canvas.addEventListener('touchstart', (e) => {
+        const points = labChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, false);
+        if (points.length > 0) {
+            e.preventDefault(); 
+        }
+    }, { passive: false });
+
+    // När musen/fingret rör sig
+    window.addEventListener('pointermove', (e) => {
+        if (isDragging && dragIndex !== -1) {
+            const rect = canvas.getBoundingClientRect();
+            const xPos = e.clientX - rect.left;
+            const yPos = e.clientY - rect.top;
+
+            let xVal = labChart.scales.x.getValueForPixel(xPos);
+            let yVal = labChart.scales.y.getValueForPixel(yPos);
+
+            // Avrunda snyggt: Steg om 0.5 dagar på X-axeln, hela grader på Y-axeln
+            xVal = Math.max(0, Math.round(xVal * 2) / 2);
+            yVal = Math.max(-2, Math.min(40, Math.round(yVal)));
+
+            // Anti-tidsresa! (Se till att man inte kan dra en punkt förbi sina grannar)
+            if (dragIndex > 0 && xVal < profilePoints[dragIndex - 1].x) {
+                xVal = profilePoints[dragIndex - 1].x;
+            }
+            if (dragIndex < profilePoints.length - 1 && xVal > profilePoints[dragIndex + 1].x) {
+                xVal = profilePoints[dragIndex + 1].x;
+            }
+
+            // Uppdatera värdet i arrayen och rita om
+            profilePoints[dragIndex] = { x: xVal, y: yVal };
+            labChart.update('none'); // Update utan animation gör det blixtsnabbt
+        }
+    });
+
+    // När man släpper knappen/skärmen
+    window.addEventListener('pointerup', () => {
+        if (isDragging) {
+            isDragging = false;
+            dragIndex = -1;
+            canvas.style.cursor = 'default';
+            // Uppdatera textsammanfattningen under grafen
+            if (typeof updateSummaryText === 'function') updateSummaryText();
+        }
     });
 }
 
