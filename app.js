@@ -1433,6 +1433,124 @@ const yeastDescriptions = {
         <p>Wyeast 2565 is notoriously "dusty." By incorporating a 14-day lagering at 2 °C, we finally force it to the bottom. The result is that brilliant, golden beer that looks like a lager but tastes like an ale.</p>
     `,
 
+    "s-23": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Saflager S-23 (The Fruity Bohemian)</h3>
+        <p>Originating from the famous VLB institute in Berlin, this is the wild child of lager yeasts. While W-34/70 is laser-focused and clean, S-23 is loved for producing slightly more fruity and estery notes, making it fantastic for Bohemian Pilsners or Baltic Porters.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. The Ester Profile (9-15 °C)</h4>
+        <p>If you ferment this at the warmer end of the lager spectrum (13-15 °C), it will give off beautiful, subtle notes of apple and pear that play incredibly well with spicy Saaz hops.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">Brewer's Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">"Crisp German" (10 °C):</strong> Keep it cold and steady for a traditional, clean profile. D-rest at 15 °C on Day 10.</li>
+            <li><strong style="color: #fff;">"Bohemian Fruit" (13 °C):</strong> Start slightly warmer to unlock those unique S-23 esters. Perfect for a malt-forward Czech amber.</li>
+        </ul>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: S-23 can sometimes struggle to finish the last gravity points. A solid, warm Diacetyl Rest is crucial to help it cross the finish line.</i></p>
+    `,
+
+    "wlp002": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">WLP002 English Ale (The Brick)</h3>
+        <p>The legendary Fuller’s strain! This yeast is famous for two things: leaving a wonderful, malty residual sweetness, and dropping out of suspension so fast it looks like cottage cheese.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. Extreme Flocculation</h4>
+        <p>Because it drops like a stone the second it feels "done", you have to actively fight to keep it awake. If it goes to sleep too early, your beer will taste like a butterscotch candy (Diacetyl).</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">Brewer's Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">"Classic ESB" (19 °C):</strong> Hold at 19 °C for 3 days to build the fruitiness, then aggressively ramp up to 21 °C to keep the yeast swimming and cleaning.</li>
+            <li><strong style="color: #fff;">"Sweet Stout" (18 °C):</strong> Keep it slightly cooler to retain even more unfermented sugars, giving your dark beers a massive, silky mouthfeel.</li>
+        </ul>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: When you Cold Crash this, the beer will become brilliantly clear almost overnight. No need for fining agents!</i></p>
+    `,
+
+    "wlp500": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">WLP500 Trappist (The Monk's Madness)</h3>
+        <p>Sourced directly from the Chimay monastery. This is the yeast you want when brewing massive, complex Belgian Quads or fruity Tripels. It produces an explosion of plum, raisin, and distinct bubblegum notes.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. Let it ride (18-22 °C... and beyond)</h4>
+        <p>Belgian monks historically didn't use chillers. They pitched the yeast and let the natural exothermic heat of fermentation drive the temperature up. We want to mimic this!</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">Brewer's Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">"Trappist Gold" (Balanced):</strong> Start at 18 °C to suppress fusel alcohols, then slowly let it free-rise to 22 °C by Day 5 for an elegant fruit profile.</li>
+            <li><strong style="color: #fff;">"Monk's Madness" (High Ester):</strong> Pitch at 20 °C and ramp it aggressively to 25 °C! This stresses the yeast into throwing massive dark fruit and bubblegum flavors.</li>
+        </ul>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: It has very low flocculation. You will need a long, cold conditioning phase to drop this stubborn yeast out of the beer.</i></p>
+    `,
+
+    "diamond": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Lallemand Diamond (The Munich Master)</h3>
+        <p>A true German lager yeast originating from the Doemens Institute in Munich. Diamond is renowned for its robust nature and ability to produce incredibly clean, crisp, and authentic German lagers without the fuss.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. Pristine and Professional</h4>
+        <p>While some lager yeasts can throw sulfur (rhino farts) during fermentation, Diamond is generally very well-behaved and produces a highly polished beer that lets the Pilsner malt shine.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">Brewer's Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">"Munich Crisp" (10 °C):</strong> The traditional way. Hold 10 °C for 7-10 days, followed by a strict Diacetyl Rest at 16 °C.</li>
+            <li><strong style="color: #fff;">"Fast Helles" (14 °C):</strong> Diamond handles slightly warmer temperatures remarkably well. Run it at 14 °C to cut your fermentation time in half!</li>
+        </ul>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: Diamond has fantastic attenuation. It will dry out a Pilsner beautifully, making it extremely refreshing.</i></p>
+    `,
+
+    "wlp066": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">WLP066 London Fog (The Haze Craze)</h3>
+        <p>This is the liquid magic behind some of the best NEIPAs in the world. It leaves a velvety, creamy mouthfeel and throws off beautiful esters of pineapple and ruby red grapefruit.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. The Body Builder</h4>
+        <p>Unlike West Coast yeasts, London Fog doesn't ferment all the complex sugars. It leaves a higher Final Gravity, which provides that thick, juice-like body that modern hazy IPAs require.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">Brewer's Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">"Smooth Juice" (19 °C):</strong> Keep it locked at 19 °C. This provides a clean fermentation where the biotransformation of your dry hops takes center stage.</li>
+            <li><strong style="color: #fff;">"Tropical Punch" (21 °C):</strong> Start at 19 °C, but ramp to 21.5 °C by Day 3. The added heat forces the yeast to produce more of its own tropical esters to blend with the hops.</li>
+        </ul>
+    `,
+
+    "s-33": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">SafAle S-33 (The Body Booster)</h3>
+        <p>Often misunderstood, S-33 is a secret weapon. It is incapable of eating complex malt sugars (maltotriose negative), which means it will ALWAYS leave your beer thick, full-bodied, and slightly sweet.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. Not just for Belgians</h4>
+        <p>Despite being labeled a Belgian ale yeast, it produces very little phenols (spice). Instead, it's increasingly used in Hazy IPAs and Milk Stouts purely for its ability to build an incredible mouthfeel.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">Brewer's Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">"Thick Stout" (18 °C):</strong> Keep it cool to minimize esters. You will end up with a luscious, thick dark beer with great foam retention.</li>
+            <li><strong style="color: #fff;">"Haze Cheat Code" (20 °C):</strong> Use it in a NEIPA! The unfermented sugars will make your IPA taste exactly like a glass of tropical breakfast juice.</li>
+        </ul>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: Don't panic if your Final Gravity is high (e.g., 1.020). S-33 simply cannot ferment it any further. It's done!</i></p>
+    `,
+
+    "wlp800": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">WLP800 Pilsner Lager (The Czech Legend)</h3>
+        <p>The famous Pilsner Urquell strain. If you want to brew an authentic Bohemian Pilsner, look no further. It provides a rich, complex maltiness and a very smooth, rounded profile.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. The Diacetyl Debate</h4>
+        <p>Historically, Czech Pilsners have a tiny, tiny hint of diacetyl (butter) in the background. If you want to be 100% true to style, you actually do a slightly shorter Diacetyl Rest than with German lagers!</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">Brewer's Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">"Bohemian Rhapsody" (10 °C):</strong> Ferment low and slow. Ramp up to 15 °C for just 48 hours to clean up *most* of the butterscotch, then drop to lagering.</li>
+            <li><strong style="color: #fff;">"Modern Crisp" (11 °C):</strong> Run it slightly warmer and do a full 4-day D-rest at 16 °C for a completely clean, modern interpretation of a Pilsner.</li>
+        </ul>
+    `,
+
+    "novalager": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Lallemand NovaLager (The Bio-Engineered Miracle)</h3>
+        <p>A true game-changer. NovaLager is a modern hybrid yeast (a novel Saccharomyces pastorianus lineage) designed to ferment like an ale, but taste exactly like a clean lager.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. Breaking the rules (10-20 °C)</h4>
+        <p>You no longer need 5 weeks and a dedicated lager fridge. NovaLager ferments cleanly at 18-20 °C with low ester production, no sulfur (H2S), and very low diacetyl.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">Brewer's Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">"The Cheat Code" (18 °C):</strong> Treat it like an ale! Primary at 18 °C for 5 days, ramp to 20 °C for 2 days to finish up, and crash. A clean lager in a week!</li>
+            <li><strong style="color: #fff;">"Modern Cold" (14 °C):</strong> If you want absolute pristine perfection, ferment it at 14 °C. It's still significantly faster than traditional strains but delivers award-winning crispness.</li>
+        </ul>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: It has very high attenuation. Be prepared for your beer to dry out significantly, making the hop bitterness feel sharper.</i></p>
+    `,
+
     "wlp095": `
         <h3 style="color: var(--accent-color); margin-top: 0;">WLP095 (Burlington Ale)</h3>
         <p>The yeast that put the Vermont style on the map (widely known as the "Conan" strain). Famous for producing intense notes of ripe peach and apricot.</p>
