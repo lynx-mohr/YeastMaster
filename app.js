@@ -742,6 +742,28 @@ function updateSummaryText() {
 
 // --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
 function initLabChart() {
+    // =======================================================
+    // MAGISK UPPGRADERING AV GAMLA PROFILER (4 -> 6 punkter)
+    // =======================================================
+    if (profilePoints && profilePoints.length < 6) {
+        // Vi fångar upp de gamla 4 punkterna
+        const p0 = profilePoints[0] || {x: 0, y: 19};
+        const p1 = profilePoints[1] || {x: 5, y: 22};
+        const p2 = profilePoints[2] || {x: 8, y: 3};
+        const p3 = profilePoints[3] || {x: 14, y: 3};
+
+        // ...och bygger om dem till 6 punkter med perfekta ramper!
+        profilePoints = [
+            { x: p0.x, y: p0.y },
+            { x: Math.max(p0.x + 0.5, p1.x - 1.5), y: p0.y }, // Slut Primary
+            { x: p1.x, y: p1.y },                             // Slut Uppvärmning
+            { x: Math.max(p1.x + 0.5, p2.x - 1.0), y: p1.y }, // Slut Cleanup
+            { x: p2.x, y: p2.y },                             // Start Cold Crash
+            { x: p3.x, y: p3.y }                              // Slut Condition
+        ];
+    }
+    // =======================================================
+
     const canvas = document.getElementById('lab-chart');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -750,11 +772,9 @@ function initLabChart() {
         labChart.destroy();
     }
 
-    // Kolla temat för accentfärgen
     const isLightMode = document.body.classList.contains('light-mode');
-    const themeAccent = isLightMode ? '#00bcd4' : '#00e5ff'; // Anpassa färg efter tema om du vill
+    const themeAccent = isLightMode ? '#00bcd4' : '#00e5ff'; 
     
-    // Skapa en snygg toning under linjen
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, isLightMode ? 'rgba(0, 188, 212, 0.4)' : 'rgba(0, 229, 255, 0.4)');
     gradient.addColorStop(1, isLightMode ? 'rgba(0, 188, 212, 0.0)' : 'rgba(0, 229, 255, 0.0)');
@@ -773,15 +793,12 @@ function initLabChart() {
                 pointRadius: 8,         
                 pointHoverRadius: 12,   
                 showLine: true,
-                tension: 0.1, // Ger pyttelite mjukhet, sätt till 0 för spikraka hörn
+                tension: 0.1, 
                 clip: false,
                 fill: true,
                 
-                // --- NYTT: GÖR RAMPARNA STRECKADE ---
                 segment: {
-                    // Om linjen ritas från punkt 1 (uppvärmning) eller punkt 3 (nedkylning), gör den streckad
                     borderDash: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? [6, 6] : undefined,
-                    // Gör ramperna lite svagare i färgen
                     borderColor: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? (isLightMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)') : themeAccent
                 }
             }]
@@ -812,13 +829,9 @@ function initLabChart() {
             },
             plugins: {
                 legend: { display: false },
-                tooltip: {
-                    enabled: false // Vi stänger av standard-tooltipen eftersom vi har Summary-rutan
-                }
+                tooltip: { enabled: false }
             },
-            animation: {
-                duration: 0 // Stänger av animationen så att linjen inte laggar när man drar
-            }
+            animation: { duration: 0 }
         },
         
         // =======================================================
@@ -829,7 +842,6 @@ function initLabChart() {
             afterDatasetsDraw(chart) {
                 const ctx = chart.ctx;
                 
-                // 1. RITA TORRHUMLE-LINJEN (om den är aktiverad)
                 if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
                     const xPix = chart.scales.x.getPixelForValue(dryHopData.day);
                     const topY = chart.scales.y.top;
@@ -840,11 +852,10 @@ function initLabChart() {
                     ctx.moveTo(xPix, topY);
                     ctx.lineTo(xPix, bottomY);
                     ctx.lineWidth = 2;
-                    ctx.strokeStyle = '#a6e22e'; // Grön färg för humle
+                    ctx.strokeStyle = '#a6e22e'; 
                     ctx.setLineDash([5, 5]);
                     ctx.stroke();
                     
-                    // Text för humlen
                     ctx.fillStyle = '#a6e22e';
                     ctx.font = '800 10px "Lexend", sans-serif';
                     ctx.textAlign = 'center';
@@ -853,7 +864,6 @@ function initLabChart() {
                     ctx.restore();
                 }
 
-                // 2. RITA FAS-RUBRIKERNA (PRIM, CLEAN, CC, COND)
                 const meta = chart.getDatasetMeta(0);
                 if (!meta || !meta.data || meta.data.length < 6) return;
 
@@ -863,7 +873,6 @@ function initLabChart() {
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'bottom';
 
-                // Hjälpfunktion för att räkna ut mitten av en linje och skriva texten där
                 function drawText(text, p1, p2) {
                     const x1 = meta.data[p1].x;
                     const y1 = meta.data[p1].y;
@@ -871,22 +880,21 @@ function initLabChart() {
                     const y2 = meta.data[p2].y;
 
                     const midX = (x1 + x2) / 2;
-                    // Flytta upp texten pyttelite extra (12 pixlar) för att den inte ska krocka med linjen
                     const midY = ((y1 + y2) / 2) - 12; 
 
                     ctx.fillText(text, midX, midY);
                 }
 
-                drawText('PRIM', 0, 1);    // Primary (Platt)
-                drawText('CLEAN', 2, 3);   // Cleanup (Platt)
-                drawText('CC', 3, 4);      // Cold Crash (Ramp)
-                drawText('COND', 4, 5);    // Conditioning (Platt)
+                drawText('PRIM', 0, 1);    
+                drawText('CLEAN', 2, 3);   
+                drawText('COLD CRASH', 3, 4);      
+                drawText('COND', 4, 5);    
 
                 ctx.restore();
             }
         }]
     });
-}
+}}
 
 
 // --- 1. FYLL RULLISTAN MED BASJÄSTER ---

@@ -1366,3 +1366,19 @@ body .sync-button:hover {
 .slide-in-left {
     animation: slideInFromLeft 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
 }
+
+/* ========================================= */
+/* --- TVINGA RULLISTAN KLICKBAR PÅ PC --- */
+/* ========================================= */
+#view-lab #profile-inputs {
+    position: relative !important;
+    z-index: 500 !important; /* Tvingar hela input-raden att ligga överst */
+    pointer-events: auto !important;
+}
+
+#custom-base-yeast {
+    position: relative !important;
+    z-index: 501 !important; /* Tvingar själva rullistan ännu ett snäpp upp */
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
