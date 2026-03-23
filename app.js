@@ -980,7 +980,6 @@ function initLabChart() {
         }
     });
 }
-
         // DRA VANLIGA PUNKTER
         if (isDragging && dragIndex !== -1) {
             const rect = canvas.getBoundingClientRect();
