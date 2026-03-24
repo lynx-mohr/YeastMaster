@@ -123,6 +123,61 @@ app.get('/api/my-devices', async (req, res) => {
     }
 });
 
+// ==========================================
+// --- 6. SYNK-MOTOR FÖR JÄSTPROFILER ---
+// ==========================================
+
+// A. Appen skickar en skräddarsydd lista till en specifik enhet
+app.post('/api/sync-profiles', async (req, res) => {
+    const { uid, device_id, yeastData } = req.body;
+
+    if (!uid || !device_id || !yeastData) {
+        return res.status(400).send({ error: "Saknar data för synkning" });
+    }
+
+    try {
+        // Vi sparar hela den anpassade JSON-filen direkt på enhets-dokumentet
+        await userDevicesCollection.updateOne(
+            { uid: uid, device_id: device_id },
+            { $set: { syncedProfiles: yeastData } }
+        );
+        res.status(200).send({ message: "Profilerna är nu sparade i molnet för denna enhet!" });
+    } catch (e) {
+        console.error("Kunde inte synka profiler:", e);
+        res.status(500).send({ error: "Databasfel vid synkning" });
+    }
+});
+
+// B. ESP32 ropar på denna URL för att hämta SIN specifika lista!
+app.get('/api/device-sync/:mac', async (req, res) => {
+    const mac = req.params.mac;
+
+    try {
+        const device = await userDevicesCollection.findOne({ device_id: mac });
+        
+        // Om kylen har en sparad lista i databasen, skicka den!
+        if (device && device.syncedProfiles) {
+            res.json(device.syncedProfiles);
+        } else {
+            // Fallback: Om användaren inte har synkat något än, skicka ett tomt/standard format
+            // så att ESP32:an inte kraschar när den försöker läsa filen.
+            res.json({
+                "yeasts": [
+                    {
+                        "n": "AWAITING SYNC",
+                        "s": "No Data",
+                        "p": "Please sync from app",
+                        "steps": [[0, 20.0], [14, 20.0]]
+                    }
+                ]
+            });
+        }
+    } catch (e) {
+        console.error("Fel vid hämtning av enhetens profiler:", e);
+        res.status(500).send({ error: "Databasfel" });
+    }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server körs på port ${PORT}`);
 });

@@ -126,6 +126,22 @@ const views = {
     });
 }
 
+// --- VISA CLAIM-RUTAN FÖR NYA ENHETER ---
+function showAddDevice() {
+    // Gömmer alla vanliga vyer (Dashboard, Lab, Settings etc)
+    document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
+    
+    // Visar Claim-rutan
+    const claimContainer = document.getElementById('claim-container');
+    if (claimContainer) claimContainer.style.display = 'flex';
+    
+    // Sätter en avvikande färg på knappen som en liten detalj
+    const claimBtn = document.getElementById('btn-claim');
+    if (claimBtn) {
+        claimBtn.innerText = "AKTIVERA NY ENHET";
+    }
+}
+
 // Och se till att denna finns för att tända ikonerna!
 function setActive(clickedElement) {
     document.querySelectorAll('.nav-item').forEach(item => {
@@ -2000,53 +2016,94 @@ async function populateSyncDevices(uid) {
         dropdown.appendChild(testOption);
     }
 }
+// ==========================================
+// --- CLOUD SYNC MOTOR ---
+// ==========================================
 async function syncToSelectedDevice() {
-    const targetId = document.getElementById('sync-target-device').value;
-    const btn = document.getElementById('sync-btn');
+    const syncBtn = document.getElementById('sync-btn');
+    const syncDropdown = document.getElementById('sync-target-device');
+    const targetDeviceId = syncDropdown ? syncDropdown.value : null;
 
-    if (!targetId) {
-        alert("Välj en enhet att synka till!");
+    // 1. Säkerhetskontroller
+    if (!targetDeviceId) {
+        alert("Vänligen välj en målenhet i rullistan ovanför knappen!");
         return;
     }
 
-    if (selectedStrains.length === 0) {
-        alert("Välj minst en jäststam att synka!");
+    if (!selectedStrains || selectedStrains.length === 0) {
+        alert("Du måste välja minst en jäst/profil (markera med stjärnan ★) för att kunna synka!");
         return;
     }
 
-    // Animation: Visa att något händer
-    const originalText = btn.innerText;
-    btn.innerText = "SYNCING... ⚡";
-    btn.disabled = true;
+    const user = auth.currentUser;
+    if (!user) {
+        alert("Du måste vara inloggad för att kunna synka till molnet.");
+        return;
+    }
+
+    // 2. Visuell feedback: Vi jobbar!
+    const originalText = syncBtn.innerText;
+    syncBtn.innerText = "SYNCING TO CLOUD... ☁️";
+    syncBtn.style.opacity = "0.7";
+    syncBtn.style.pointerEvents = "none";
 
     try {
-        // Här bygger vi paketet som ska skickas till ditt API
-        const payload = {
-            device_id: targetId,
-            strains: selectedStrains // Dina 10 valda ID:n
+        // 3. Bygg objektet PRECIS så som ESP32:an och C++ koden förväntar sig det
+        const payloadData = {
+            yeasts: selectedStrains
         };
 
-        const res = await fetch(`${API_BASE}/sync-yeast`, {
+        // 4. Skicka till din Node.js Backend
+        const response = await fetch(`${API_BASE}/sync-profiles`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({
+                uid: user.uid,
+                device_id: targetDeviceId,
+                yeastData: payloadData
+            })
         });
 
-        if (res.ok) {
-            btn.innerText = "SYNC SUCCESSFUL! ✓";
-            btn.style.backgroundColor = "#2ecc71"; // Grön för succé
+        if (response.ok) {
+            // 5. Visuell feedback: Succé!
+            syncBtn.innerText = "SYNC SUCCESSFUL! ✓";
+            syncBtn.style.backgroundColor = "rgba(140, 198, 63, 0.2)"; // Mjuk grön
+            syncBtn.style.borderColor = "#8CC63F"; // YeastMaster-grön
+            syncBtn.style.color = "#8CC63F";
+            
+            // Återställ knappen efter 3 sekunder
             setTimeout(() => {
-                btn.innerText = originalText;
-                btn.style.backgroundColor = ""; 
-                btn.disabled = false;
+                syncBtn.innerText = originalText;
+                syncBtn.style.backgroundColor = "";
+                syncBtn.style.borderColor = "";
+                syncBtn.style.color = "";
+                syncBtn.style.opacity = "1";
+                syncBtn.style.pointerEvents = "auto";
             }, 3000);
+            
+            console.log(`Synkade ${selectedStrains.length} profiler till ${targetDeviceId}`);
         } else {
-            throw new Error("Synk misslyckades");
+            throw new Error("Servern nekade synkningen.");
         }
-    } catch (err) {
-        alert("Fel vid synk: " + err.message);
-        btn.innerText = originalText;
-        btn.disabled = false;
+    } catch (error) {
+        console.error("Synk-fel:", error);
+        
+        // Visuell feedback: Fel
+        syncBtn.innerText = "SYNC FAILED ✖";
+        syncBtn.style.backgroundColor = "rgba(255, 68, 68, 0.2)";
+        syncBtn.style.borderColor = "#ff4444";
+        syncBtn.style.color = "#ff4444";
+        
+        setTimeout(() => {
+            syncBtn.innerText = originalText;
+            syncBtn.style.backgroundColor = "";
+            syncBtn.style.borderColor = "";
+            syncBtn.style.color = "";
+            syncBtn.style.opacity = "1";
+            syncBtn.style.pointerEvents = "auto";
+        }, 3000);
+        
+        alert("Kunde inte nå molnet. Kontrollera din anslutning och försök igen.");
     }
 }
 
