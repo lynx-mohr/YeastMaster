@@ -982,15 +982,13 @@ function initLabChart() {
         if (points.length > 0 || isDraggingDryHop) e.preventDefault(); 
     }, { passive: false });
 
-    window.addEventListener('pointermove', (e) => {
+window.addEventListener('pointermove', (e) => {
         if (isDraggingDryHop) {
             const rect = canvas.getBoundingClientRect();
             const xPos = e.clientX - rect.left;
             let xVal = labChart.scales.x.getValueForPixel(xPos);
-            
             xVal = Math.max(0, Math.round(xVal * 2) / 2);
             dryHopData.day = xVal;
-            
             labChart.update('none');
             if (typeof updateSummaryText === 'function') updateSummaryText();
             return; 
@@ -1004,21 +1002,40 @@ function initLabChart() {
             let xVal = labChart.scales.x.getValueForPixel(xPos);
             let yVal = labChart.scales.y.getValueForPixel(yPos);
 
+            // Grundinställningar för avrundning och skalor
             xVal = Math.max(0, Math.round(xVal * 2) / 2);
-            
-            // --- NYTT: Begränsa yVal beroende på Fahrenheit eller Celsius ---
             const yMin = currentTempUnit === 'F' ? 28 : -2;
             const yMax = currentTempUnit === 'F' ? 104 : 40;
             yVal = Math.max(yMin, Math.min(yMax, Math.round(yVal)));
 
-            if (dragIndex === 0) xVal = 0; 
-            if (dragIndex > 0 && xVal < profilePoints[dragIndex - 1].x) {
-                xVal = profilePoints[dragIndex - 1].x;
-            }
-            if (dragIndex < profilePoints.length - 1 && xVal > profilePoints[dragIndex + 1].x) {
-                xVal = profilePoints[dragIndex + 1].x;
+            // --- NY DYNAMISK RAMP-LOGIK (0.5 dagar min, men kan dras ut) ---
+            
+            if (dragIndex === 0) {
+                // Start PRIM: Alltid x=0
+                xVal = 0;
+            } 
+            else if (dragIndex === 1) {
+                // Slut PRIM: Kan dras, men lämna 0.5 d till nästa fas start
+                xVal = Math.max(0, Math.min(xVal, profilePoints[2].x - rampDuration));
+            } 
+            else if (dragIndex === 2) {
+                // Start CLEAN (Rampens slut): Måste vara minst 0.5 d efter föregående punkt
+                xVal = Math.max(profilePoints[1].x + rampDuration, Math.min(xVal, profilePoints[3].x));
+            } 
+            else if (dragIndex === 3) {
+                // Slut CLEAN: Kan dras, men lämna 0.5 d till cold crash start
+                xVal = Math.max(profilePoints[2].x, Math.min(xVal, profilePoints[4].x - rampDuration));
+            } 
+            else if (dragIndex === 4) {
+                // Start COLD CRASH: Måste vara minst 0.5 d efter föregående punkt
+                xVal = Math.max(profilePoints[3].x + rampDuration, Math.min(xVal, profilePoints[5].x));
+            } 
+            else if (dragIndex === 5) {
+                // Slut COND: Kan dras fritt åt höger
+                xVal = Math.max(profilePoints[4].x, xVal);
             }
 
+            // --- Y-AXELNS DÖRRVAKT (Biologiska skyddsräcken) ---
             if (dragIndex === 0 || dragIndex === 1) {
                 yVal = Math.min(yVal, profilePoints[2].y);
                 yVal = Math.max(yVal, profilePoints[4].y);
@@ -1030,17 +1047,20 @@ function initLabChart() {
                 yVal = Math.min(yVal, profilePoints[0].y);
             }
 
+            // Uppdatera den aktuella punkten
             profilePoints[dragIndex] = { x: xVal, y: yVal };
 
-            if (dragIndex === 0) profilePoints[1].y = yVal; 
-            if (dragIndex === 1) profilePoints[0].y = yVal; 
-            if (dragIndex === 2) profilePoints[3].y = yVal; 
-            if (dragIndex === 3) profilePoints[2].y = yVal; 
-            if (dragIndex === 4) profilePoints[5].y = yVal; 
-            if (dragIndex === 5) profilePoints[4].y = yVal; 
+            // --- LÄNKNING AV TEMPERATURER (Håll de flata segmenten horisontella) ---
+            if (dragIndex === 0) profilePoints[1].y = yVal;
+            if (dragIndex === 1) profilePoints[0].y = yVal;
+            if (dragIndex === 2) profilePoints[3].y = yVal;
+            if (dragIndex === 3) profilePoints[2].y = yVal;
+            if (dragIndex === 4) profilePoints[5].y = yVal;
+            if (dragIndex === 5) profilePoints[4].y = yVal;
 
+            // Dynamisk X-axel
             const lastPointX = profilePoints[profilePoints.length - 1].x;
-            labChart.options.scales.x.max = Math.max(10, lastPointX + 2);
+            labChart.options.scales.x.max = Math.max(16, lastPointX + 1);
 
             labChart.update('none'); 
             if (typeof updateSummaryText === 'function') updateSummaryText();
