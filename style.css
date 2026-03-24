@@ -1500,20 +1500,43 @@ body.light-mode .theme-toggle-compact { background: #eee; border-color: #ccc; }
 }
 
 /* ========================================== */
-/* VÄNSTERJUSTERA INNEHÅLL PÅ PC (LIBRARY & PROFILER) */
+/* KRAFTFULL VÄNSTERJUSTERING PÅ PC (769px+)  */
 /* ========================================== */
 @media (min-width: 769px) {
-    /* 1. Dra tillbaka sökfältet och graf-containern till vänsterkanten */
+    /* 1. Justera sektionen så att rubriken hamnar längst till vänster i 800px-boxen */
+    section {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    /* 2. Flytta headern så den linjerar med resten (valfritt, men ger renast look) */
+    .library-header {
+        padding-left: 0 !important;
+    }
+
+    /* 3. Nollställ vänster-padding på gridet så korten nuddar samma osynliga linje som rubriken */
+    .yeast-grid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        justify-content: flex-start !important; /* Tvingar korten att börja ritas från vänster */
+        display: grid !important;
+    }
+
+    /* 4. Sökfältet och grafen ska också krama vänsterkanten */
     #yeast-search,
+    .chart-section,
     #chart-scroll-area,
     #chart-placeholder {
         margin-left: 0 !important;
+        width: 100% !important; /* Se till att de fyller hela sektionens bredd */
+        max-width: 100% !important;
     }
 
-    /* 2. Dra tillbaka rutnätet (grid/flex) till vänsterkanten */
-    #yeast-grid {
-        margin-left: 0 !important;
-        justify-content: flex-start !important; 
-        /* flex-start tvingar korten att börja ritas från vänster istället för mitten */
+    /* 5. Om du vill ha lite luft från skärmkanten på PC (eftersom vi nollställde sektionen) */
+    body {
+        padding-left: 40px !important;
+        padding-right: 40px !important;
     }
 }
