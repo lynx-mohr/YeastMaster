@@ -2397,27 +2397,53 @@ function formatDaysToHuman(decimalDays) {
     return `${d} d and ${h} h`;
 }
 
-// --- DEVICE NICKNAME MANAGER ---
+// ==========================================
+// --- MULTI-DEVICE & NICKNAME MANAGER ---
+// ==========================================
 const nickInput = document.getElementById('setting-nickname');
+const deviceSelect = document.getElementById('setting-active-device');
 
-if (nickInput) {
-    // 1. Ladda sparat namn vid start
-    const savedNick = localStorage.getItem('yeastmaster-nickname') || "MIN YEASTMASTER";
-    nickInput.value = savedNick !== "MIN YEASTMASTER" ? savedNick : "";
-    updateDashboardNickname(savedNick);
+// Hjälpfunktioner för det "Smarta Arkivskåpet"
+function getSavedNickname(deviceId) {
+    if (!deviceId) return "MIN YEASTMASTER";
+    const nicknames = JSON.parse(localStorage.getItem('yeastmaster-nicknames') || '{}');
+    return nicknames[deviceId] || "MIN YEASTMASTER";
+}
 
-    // 2. Lyssna på när användaren skriver
-    nickInput.addEventListener('input', (e) => {
-        const val = e.target.value.trim() || "MIN YEASTMASTER";
-        localStorage.setItem('yeastmaster-nickname', val);
-        updateDashboardNickname(val);
-    });
+function saveNickname(deviceId, name) {
+    if (!deviceId) return;
+    const nicknames = JSON.parse(localStorage.getItem('yeastmaster-nicknames') || '{}');
+    nicknames[deviceId] = name;
+    localStorage.setItem('yeastmaster-nicknames', JSON.stringify(nicknames));
 }
 
 function updateDashboardNickname(name) {
-    // Vi letar efter elementet vi skapade i OLED-skärmen tidigare
     const display = document.querySelector('.device-name-display');
-    if (display) {
-        display.innerText = name.toUpperCase();
-    }
+    if (display) display.innerText = name.toUpperCase();
+}
+
+// Lyssna på när användaren byter namn
+if (nickInput) {
+    nickInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim() || "MIN YEASTMASTER";
+        if (activeDeviceId) {
+            saveNickname(activeDeviceId, val);
+            updateDashboardNickname(val);
+        }
+    });
+}
+
+// Lyssna på när användaren byter aktiv enhet i rullistan
+if (deviceSelect) {
+    deviceSelect.addEventListener('change', (e) => {
+        activeDeviceId = e.target.value; // Byt det globala ID:t!
+        
+        // Uppdatera namnfältet så det visar namnet på den nya kylen
+        const currentNick = getSavedNickname(activeDeviceId);
+        if (nickInput) nickInput.value = currentNick !== "MIN YEASTMASTER" ? currentNick : "";
+        updateDashboardNickname(currentNick);
+        
+        // Ladda om Dashboarden med data från den nya kylen!
+        if (typeof updateDashboard === 'function') updateDashboard();
+    });
 }
