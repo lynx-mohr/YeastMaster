@@ -54,7 +54,7 @@ firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth(); // Se till att Firebase är länkat i index.html!
 
-// --- 1. VY-HANTERARE (Viktig för att tända sidan!) ---
+// --- 1. VY-HANTERARE (Smart version som tänder rätt ikon direkt!) ---
 function showView(viewName) {
     const views = {
         login: document.getElementById('login-container'),
@@ -67,16 +67,25 @@ function showView(viewName) {
         settings: document.getElementById('view-settings')      // SETTINGS
     };
     
+    // Släck och tänd rätt vyer
     Object.keys(views).forEach(key => {
         if (views[key]) {
             if (key === viewName) {
-                // Dashboard, Library, Lab och Settings kör 'block'
-                // Login och Claim kör 'flex' för centrering
                 const isFlexView = (key === 'login' || key === 'claim');
                 views[key].style.display = isFlexView ? 'flex' : 'block';
             } else {
                 views[key].style.display = 'none';
             }
+        }
+    });
+
+    // --- MAGIN SOM TÄNDER IKONERNA ÄVEN VID SVEP ---
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+        const clickEvent = item.getAttribute('onclick');
+        // Om HTML-ikonen pekar på den vy vi just bytte till, tänd den!
+        if (clickEvent && clickEvent.includes(`'${viewName}'`)) {
+            item.classList.add('active');
         }
     });
 }
