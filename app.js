@@ -2037,3 +2037,24 @@ const savedTheme = localStorage.getItem('yeastmaster-theme');
 if (savedTheme) {
     setTheme(savedTheme);
 }
+
+// ==========================================
+// --- TOGGLE FÖR PROFILER INFO ---
+// ==========================================
+function toggleProfilerInfo(btn) {
+    const infoBox = document.getElementById('profiler-info-box');
+    
+    // Kollar om boxen är stängd
+    if (infoBox.style.display === 'none' || infoBox.style.display === '') {
+        infoBox.style.display = 'block';
+        // Få knappen att lysa i din snygga accentfärg
+        btn.style.borderColor = 'var(--accent-color)';
+        btn.style.color = 'var(--accent-color)';
+    } else {
+        // Stäng boxen
+        infoBox.style.display = 'none';
+        // Återställ knappen till den dämpade färgen
+        btn.style.borderColor = 'var(--text-dim)';
+        btn.style.color = 'var(--text-dim)';
+    }
+}

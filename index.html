@@ -131,12 +131,21 @@
 
 <section id="view-lab" style="display: none;">
     <div class="library-header">
-        <h2>The Profiler</h2> 
-        <p style="opacity: 0.6; font-size: 0.9rem;">
-    Pick a strain and drag the points to build your fermentation profile.<br>
-    When you're done, save and find your tailored profile in the Yeast library. 
-    Don't forget the dry hops!
-</p>
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+            <h2 style="margin: 0;">The Profiler</h2> 
+            
+            <button onclick="toggleProfilerInfo(this)" style="background: none; border: 1px solid var(--text-dim); color: var(--text-dim); border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; transition: all 0.3s ease; padding: 0;">
+                i
+            </button>
+        </div>
+
+        <div id="profiler-info-box" style="display: none; background: rgba(255,255,255,0.05); border-left: 3px solid var(--accent-color); padding: 12px 15px; border-radius: 0 8px 8px 0; margin-bottom: 15px; font-size: 0.9rem; line-height: 1.5; opacity: 0.8;">
+            Pick a strain and drag the points to build your fermentation profile.<br>
+            When you're done, save and find your tailored profile in the Yeast library. <br>
+            Don't forget the dry hops!
+        </div>
+
     </div>
 
    <div id="profile-inputs" style="margin: 0 20px 20px 20px; display: flex; gap: 10px; align-items: flex-end;">
