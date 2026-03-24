@@ -1498,3 +1498,22 @@ body.light-mode .theme-toggle-compact { background: #eee; border-color: #ccc; }
     background: var(--accent-color);
     color: #000;
 }
+
+/* ========================================== */
+/* VÄNSTERJUSTERA INNEHÅLL PÅ PC (LIBRARY & PROFILER) */
+/* ========================================== */
+@media (min-width: 769px) {
+    /* 1. Dra tillbaka sökfältet och graf-containern till vänsterkanten */
+    #yeast-search,
+    #chart-scroll-area,
+    #chart-placeholder {
+        margin-left: 0 !important;
+    }
+
+    /* 2. Dra tillbaka rutnätet (grid/flex) till vänsterkanten */
+    #yeast-grid {
+        margin-left: 0 !important;
+        justify-content: flex-start !important; 
+        /* flex-start tvingar korten att börja ritas från vänster istället för mitten */
+    }
+}
