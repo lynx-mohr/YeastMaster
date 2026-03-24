@@ -72,7 +72,8 @@ const views = {
         librarian: document.getElementById('view-librarian'),
         lab: document.getElementById('view-lab'),
         dashboard: document.getElementById('view-dashboard'), // <-- Fixat!
-        settings: document.getElementById('view-settings')
+        settings: document.getElementById('view-settings'),
+        about: document.getElementById('view-about')
     };
 
     if (!views[viewName]) return;
