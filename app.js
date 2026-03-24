@@ -1649,7 +1649,6 @@ function openYeastModal(yeast) {
     if (yeast.isCustom) {
         // Hitta den sparade profildatan i localStorage för att få tag i stegen
         const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
-        // Vi matchar på namnet (eller så kan vi skicka med hela objektet i framtiden)
         const profileData = savedProfiles.find(p => p.s === yeast.name);
 
         if (profileData) {
@@ -1661,7 +1660,7 @@ function openYeastModal(yeast) {
                     <p style="color: var(--accent-color); font-weight: 800; margin-bottom: 15px;">Created by you!</p>
                     <p>This profile is used with <strong>${baseYeast}</strong> and these are the profile steps:</p>
                     
-                 <ul style="list-style: none; padding: 0; margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
+                    <ul style="list-style: none; padding: 0; margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
                         <li><strong style="color: #fff;">Pitch:</strong> Start at ${s[0][1]}°C.</li>
                         <li><strong style="color: #fff;">Primary:</strong> Hold until Day ${s[1][0]}.</li>
                         <li><strong style="color: #fff;">Cleanup:</strong> Rise to ${s[2][1]}°C on Day ${s[2][0]}.</li>
@@ -1676,10 +1675,79 @@ function openYeastModal(yeast) {
             detailedText = `<p>Custom profile data not found.</p>`;
         }
     } else {
-        // Om det är en vanlig jäst från databasen, kör som vanligt
+        // --- VANLIG JÄST FRÅN DATABASEN ---
         detailedText = yeastDescriptions[yeast.name] || yeastDescriptions[yeast.id];
         if (!detailedText) {
             detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:15px;">Passar till:</h3><p>${yeast.styles}</p>`;
+        }
+
+        // --- LÄGG TILL INKLUDERADE PROFILER ---
+        // Denna lilla ordlista mappar jästens ID till namnet i din maskindatabas
+        const hwStrainNames = {
+            "us-05": "US-05",
+            "s-04": "S-04",
+            "w-34-70": "W-34/70",
+            "be-256": "BE-256",
+            "wb-06": "WB-06",
+            "verdant": "Verdant IPA",
+            "voss": "Voss Kveik",
+            "nottingham": "Nottingham",
+            "wlp001": "California Ale",
+            "wlp300": "Hefeweizen",
+            "belle-saison": "Belle Saison",
+            "t-58": "T-58",
+            "s-23": "S-23",
+            "wlp002": "English Ale",
+            "wlp500": "Trappist",
+            "diamond": "Diamond",
+            "wlp066": "London Fog",
+            "s-33": "S-33",
+            "wlp800": "Pilsner Lager",
+            "novalager": "NovaLager",
+            "wyeast-1968": "London ESB", // Här är Wyeast 1968!
+            "wlp920": "Old Bavarian",
+            "imperial-b45": "Gnome",
+            "wyeast-1084": "Irish Ale",
+            "wyeast-3944": "Witbier",
+            "wlp833": "Bock Lager",
+            "wlp007": "Dry English",
+            "wyeast-1318": "London III",
+            "wyeast-2565": "Kölsch",
+            "wlp095": "Burlington"
+        };
+
+        const targetStrainName = hwStrainNames[yeast.id];
+
+        // Om vi har definierat yeastDatabase (som vi förmodligen har i din skarpa app)
+        // och vi hittade ett matchande namn, letar vi upp dess profiler.
+        if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
+            const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
+            
+            if (matchingProfiles.length > 0) {
+                let profileListHtml = `
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
+                        <h4 style="color: var(--accent-color); margin-bottom: 10px;">Included Hardware Profiles:</h4>
+                        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem;">
+                `;
+                
+                matchingProfiles.forEach(prof => {
+                    // Visar Namn, starttemp och sluttemp (Cold crash) för snabb överblick
+                    const startTemp = prof.steps[0][1];
+                    const crashTemp = prof.steps[3] ? prof.steps[3][1] : '?';
+                    profileListHtml += `<li><strong style="color: #fff;">${prof.p}</strong> (Starts @ ${startTemp}°C)</li>`;
+                });
+
+                profileListHtml += `</ul></div>`;
+                detailedText += profileListHtml; // Klistra fast listan i slutet av beskrivningen!
+            }
+        } else {
+             // Fallback ifall yeastDatabase inte är inladdad just här, men vi vill ändå visa att funktionen finns
+             /* detailedText += `
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
+                        <h4 style="color: var(--accent-color); margin-bottom: 10px;">Included Hardware Profiles:</h4>
+                        <p style="font-size: 0.85rem; color: #888; font-style: italic;">Sync to device to explore specific temperature ramps.</p>
+                    </div>`;
+             */
         }
     }
     
