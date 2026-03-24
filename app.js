@@ -257,8 +257,8 @@ if (action === "COOLING") {
             const percent = Math.min((currentDay / targetDays) * 100, 100).toFixed(0);
 
             // Uppdatera värdena i HTML
-            document.getElementById('day-val').innerText = currentDay.toFixed(1);
-            document.getElementById('phase-day-val').innerText = phaseDay.toFixed(1);
+           document.getElementById('day-val').innerText = formatDaysToHuman(currentDay);
+document.getElementById('phase-day-val').innerText = formatDaysToHuman(phaseDay);
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
 
@@ -1061,7 +1061,7 @@ window.addEventListener('pointermove', (e) => {
             if (typeof updateSummaryText === 'function') updateSummaryText();
         }
     });
-    
+
     window.addEventListener('pointerup', () => {
         if (isDraggingDryHop) {
             isDraggingDryHop = false;
@@ -2375,3 +2375,20 @@ window.addEventListener('DOMContentLoaded', () => {
     
     // ... resten av din DOMContentLoaded-kod (loadCustomProfiles, etc) ...
 });
+
+// Hjälpfunktion för att göra decimaldagar läsbara (t.ex. 3.2 -> "3 d and 5 h")
+function formatDaysToHuman(decimalDays) {
+    let d = Math.floor(decimalDays);
+    let h = Math.round((decimalDays - d) * 24);
+    
+    // Om timmarna avrundas upp till 24, lägg till en dag istället
+    if (h === 24) {
+        d++;
+        h = 0;
+    }
+    
+    if (d === 0) return h + " h"; // Om det gått mindre än ett dygn, visa bara timmar
+    if (h === 0) return d + " d"; // Om det är exakta dygn, visa bara dagar
+    
+    return `${d} d and ${h} h`;
+}
