@@ -59,10 +59,12 @@ function showView(viewName) {
     const views = {
         login: document.getElementById('login-container'),
         claim: document.getElementById('claim-container'),
-        dashboard: document.getElementById('dashboard-container'),
-        library: document.getElementById('view-library'), // Ny!
-        lab: document.getElementById('view-lab'),         // Ny!
-        settings: document.getElementById('view-settings') // Ny!
+        soul: document.getElementById('view-soul'),             // HOME
+        library: document.getElementById('view-library'),       // LIBRARY
+        librarian: document.getElementById('view-librarian'),   // LAB (Kalkylatorn)
+        lab: document.getElementById('view-lab'),               // PROFILER (Grafen)
+        dashboard: document.getElementById('dashboard-container'), // LIVE
+        settings: document.getElementById('view-settings')      // SETTINGS
     };
     
     Object.keys(views).forEach(key => {
