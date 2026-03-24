@@ -2236,35 +2236,42 @@ function toggleLibraryInfo(btn) {
 // ==========================================
 // --- TEMPERATURE UNIT MANAGER ---
 // ==========================================
-let currentTempUnit = 'C'; // Appen "tänker" alltid i Celsius från start
+let currentTempUnit = localStorage.getItem('yeastmaster-unit') || 'C';
 
 function setTempUnit(unit) {
-    if (currentTempUnit === unit) return; // Gör inget om man klickar på den som redan är aktiv
+    if (currentTempUnit === unit && document.getElementById('btn-unit-c')) {
+        // Initiera knapparnas status vid laddning
+        document.getElementById('btn-unit-c').classList.toggle('active', unit === 'C');
+        document.getElementById('btn-unit-f').classList.toggle('active', unit === 'F');
+    }
     
+    const oldUnit = currentTempUnit;
     currentTempUnit = unit;
     localStorage.setItem('yeastmaster-unit', unit);
     
     // Uppdatera knapparnas utseende
-    document.getElementById('btn-unit-c').classList.toggle('active', unit === 'C');
-    document.getElementById('btn-unit-f').classList.toggle('active', unit === 'F');
+    if (document.getElementById('btn-unit-c')) {
+        document.getElementById('btn-unit-c').classList.toggle('active', unit === 'C');
+        document.getElementById('btn-unit-f').classList.toggle('active', unit === 'F');
+    }
 
-    // --- MAGIN: Räkna om alla punkter i Labbet! ---
-    if (typeof profilePoints !== 'undefined') {
+    // --- MAGIN: Räkna om alla punkter i Labbet om vi faktiskt byter enhet manuellt ---
+    if (oldUnit !== unit && typeof profilePoints !== 'undefined') {
         profilePoints.forEach(p => {
             if (unit === 'F') {
-                p.y = (p.y * 9/5) + 32; // Konvertera C till F
+                p.y = (p.y * 9/5) + 32; 
             } else {
-                p.y = (p.y - 32) * 5/9; // Konvertera F till C
+                p.y = (p.y - 32) * 5/9;
             }
         });
     }
 
-    // Tvinga appen att rita om allt med de nya siffrorna
+    // Tvinga appen att rita om allt
     const searchBox = document.getElementById('yeast-search');
     if (typeof renderYeastLibrary === 'function') renderYeastLibrary(searchBox ? searchBox.value : "");
     if (typeof initLabChart === 'function') initLabChart();
     if (typeof updateSummaryText === 'function') updateSummaryText();
-    if (typeof updateDashboard === 'function') updateDashboard(); // Uppdaterar LIVE-vyn
+    if (typeof updateDashboard === 'function') updateDashboard(); 
 }
 
 // Hjälpfunktion för att konvertera råa siffror från servern
@@ -2275,13 +2282,22 @@ function convertTemp(celsiusValue) {
 
 // Hjälpfunktion för att översätta text (till Library-korten)
 function formatTempText(text) {
-    if (!text || currentTempUnit === 'C') return text || "";
+    if (!text) return "";
+    if (currentTempUnit === 'C') return text;
     return text.replace(/(\d+(?:\.\d+)?)\s*°C/g, (match, tempC) => {
         return `${Math.round((parseFloat(tempC) * 9/5) + 32)} °F`;
     });
 }
 
-// Hjälpfunktion: Tvinga alltid ner värdet till Celsius i databasen!
+// --- UPPDATERAD SPARFUNKTION (Spara alltid som Celsius) ---
+function saveProfileToLibrary() {
+    let rawName = document.getElementById('custom-profile-name').value.trim().toUpperCase();
+    const profileName = rawName !== "" ? rawName : "CUSTOM_1";
+    
+    let baseYeast = document.getElementById('custom-base-yeast').value;
+    if(baseYeast === "") baseYeast = "Unknown Base";
+
+    // Intern hjälpfunktion för att tvinga ner värdet till Celsius innan lagring
     function toCelsius(val) {
         return currentTempUnit === 'F' ? (val - 32) * 5/9 : val;
     }
@@ -2290,7 +2306,7 @@ function formatTempText(text) {
         s: profileName,             
         p: `Custom (${baseYeast})`, 
         dryHopDay: dryHopData.enabled ? dryHopData.day : null, 
-      steps: [
+        steps: [
             [profilePoints[0].x, parseFloat(toCelsius(profilePoints[0].y).toFixed(1))],
             [profilePoints[1].x, parseFloat(toCelsius(profilePoints[1].y).toFixed(1))],
             [profilePoints[2].x, parseFloat(toCelsius(profilePoints[2].y).toFixed(1))],
@@ -2298,3 +2314,37 @@ function formatTempText(text) {
             [profilePoints[4].x, parseFloat(toCelsius(profilePoints[4].y).toFixed(1))]
         ]
     };
+
+    let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
+    savedProfiles.push(profileData);
+    localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
+
+    const btn = document.getElementById('btn-save-profile');
+    const originalText = btn.innerText;
+    btn.innerText = "SAVED TO LIBRARY! ✓";
+    btn.style.backgroundColor = "#b142ff"; 
+    btn.style.borderColor = "#b142ff";
+    btn.style.color = "#fff";
+
+    setTimeout(() => {
+        loadCustomProfiles();
+        showView('library');
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        const libIcon = document.querySelector('.nav-item[onclick*="library"]');
+        if (libIcon) libIcon.classList.add('active');
+        
+        btn.innerText = originalText;
+        btn.style.backgroundColor = ""; 
+        btn.style.borderColor = "";
+        btn.style.color = "";
+        document.getElementById('custom-profile-name').value = '';
+    }, 1200);
+}
+
+// Slutligen: Kör en initiering av enheten vid start
+window.addEventListener('DOMContentLoaded', () => {
+    const savedUnit = localStorage.getItem('yeastmaster-unit') || 'C';
+    // Vi sätter currentTempUnit till motsatsen först för att setTempUnit ska trigga konverteringen korrekt
+    currentTempUnit = savedUnit === 'C' ? 'F' : 'C'; 
+    setTempUnit(savedUnit);
+});
