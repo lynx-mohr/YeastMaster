@@ -2396,3 +2396,28 @@ function formatDaysToHuman(decimalDays) {
     
     return `${d} d and ${h} h`;
 }
+
+// --- DEVICE NICKNAME MANAGER ---
+const nickInput = document.getElementById('setting-nickname');
+
+if (nickInput) {
+    // 1. Ladda sparat namn vid start
+    const savedNick = localStorage.getItem('yeastmaster-nickname') || "MIN YEASTMASTER";
+    nickInput.value = savedNick !== "MIN YEASTMASTER" ? savedNick : "";
+    updateDashboardNickname(savedNick);
+
+    // 2. Lyssna på när användaren skriver
+    nickInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim() || "MIN YEASTMASTER";
+        localStorage.setItem('yeastmaster-nickname', val);
+        updateDashboardNickname(val);
+    });
+}
+
+function updateDashboardNickname(name) {
+    // Vi letar efter elementet vi skapade i OLED-skärmen tidigare
+    const display = document.querySelector('.device-name-display');
+    if (display) {
+        display.innerText = name.toUpperCase();
+    }
+}
