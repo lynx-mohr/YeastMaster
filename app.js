@@ -2426,12 +2426,10 @@ function formatDaysToHuman(decimalDays) {
 }
 
 // ==========================================
-// --- MULTI-DEVICE & NICKNAME MANAGER ---
+// --- MULTI-DEVICE, NICKNAME & AUTH ---
 // ==========================================
-const nickInput = document.getElementById('setting-nickname');
-const deviceSelect = document.getElementById('setting-active-device');
 
-// Hjälpfunktioner för det "Smarta Arkivskåpet"
+// Hjälpfunktioner för "Det Smarta Arkivskåpet" (Nicknames)
 function getSavedNickname(deviceId) {
     if (!deviceId) return "MIN YEASTMASTER";
     const nicknames = JSON.parse(localStorage.getItem('yeastmaster-nicknames') || '{}');
@@ -2450,28 +2448,101 @@ function updateDashboardNickname(name) {
     if (display) display.innerText = name.toUpperCase();
 }
 
-// Lyssna på när användaren byter namn
+// Lyssna på Namnfältet i Settings
+const nickInput = document.getElementById('setting-nickname');
 if (nickInput) {
     nickInput.addEventListener('input', (e) => {
         const val = e.target.value.trim() || "MIN YEASTMASTER";
         if (activeDeviceId) {
             saveNickname(activeDeviceId, val);
             updateDashboardNickname(val);
+            
+            // Uppdatera namnet i rullistan direkt så det ser snyggt ut
+            const activeOption = document.querySelector(`#setting-active-device option[value="${activeDeviceId}"]`);
+            if(activeOption) activeOption.textContent = val;
         }
     });
 }
 
-// Lyssna på när användaren byter aktiv enhet i rullistan
+// Lyssna på Rullistan i Settings
+const deviceSelect = document.getElementById('setting-active-device');
 if (deviceSelect) {
     deviceSelect.addEventListener('change', (e) => {
-        activeDeviceId = e.target.value; // Byt det globala ID:t!
+        activeDeviceId = e.target.value; 
         
-        // Uppdatera namnfältet så det visar namnet på den nya kylen
+        // Uppdatera Namnfältet
         const currentNick = getSavedNickname(activeDeviceId);
         if (nickInput) nickInput.value = currentNick !== "MIN YEASTMASTER" ? currentNick : "";
         updateDashboardNickname(currentNick);
         
-        // Ladda om Dashboarden med data från den nya kylen!
+        // Uppdatera Dashboarden
         if (typeof updateDashboard === 'function') updateDashboard();
     });
 }
+
+// Huvudmotorn: Inloggningsvakten
+auth.onAuthStateChanged(async (user) => {
+    const soulLoginPrompt = document.getElementById('soul-login-prompt');
+    
+    if (user) {
+        if (soulLoginPrompt) soulLoginPrompt.style.display = 'none';
+
+        try {
+            // EN HÄMTNING FRÅN SERVER
+            const res = await fetch(`${API_BASE}/my-devices?uid=${user.uid}`);
+            const devices = await res.json();
+            
+            if (devices.length > 0) {
+                activeDeviceId = devices[0].device_id; 
+                
+                // 1. FYLL RULLISTAN I SETTINGS (Dashboard Switcher)
+                if (deviceSelect) {
+                    deviceSelect.innerHTML = ""; 
+                    devices.forEach(dev => {
+                        const opt = document.createElement('option');
+                        opt.value = dev.device_id;
+                        const localName = getSavedNickname(dev.device_id);
+                        opt.textContent = localName !== "MIN YEASTMASTER" ? localName : (dev.name || dev.device_id);
+                        deviceSelect.appendChild(opt);
+                    });
+                    deviceSelect.value = activeDeviceId; 
+                }
+
+                // 2. FYLL RULLISTAN I BIBLIOTEKET (Sync Target)
+                const syncDropdown = document.getElementById('sync-target-device');
+                if (syncDropdown) {
+                    syncDropdown.innerHTML = "";
+                    devices.forEach(dev => {
+                        const opt = document.createElement('option');
+                        opt.value = dev.device_id;
+                        const localName = getSavedNickname(dev.device_id);
+                        opt.textContent = localName !== "MIN YEASTMASTER" ? localName : (dev.name || dev.device_id);
+                        syncDropdown.appendChild(opt);
+                    });
+                }
+                
+                // 3. LADDA NAMN TILL DASHBOARD & FÄLT
+                const currentNick = getSavedNickname(activeDeviceId);
+                if (nickInput) nickInput.value = currentNick !== "MIN YEASTMASTER" ? currentNick : "";
+                updateDashboardNickname(currentNick);
+
+                showView('dashboard');
+                updateDashboard(); 
+            } else {
+                showView('claim');
+            }
+        } catch (err) {
+            console.error("Auth fetch error:", err);
+            // Nödåtgärd om servern strular: Lägg till Demo-Kylen
+            if (deviceSelect) deviceSelect.innerHTML = '<option value="TEST">Demo Kyl</option>';
+        }
+    } else {
+        // --- UTLOGGAD ---
+        activeDeviceId = null; 
+        selectedStrains = []; 
+        if (deviceSelect) deviceSelect.innerHTML = '<option value="">Logga in för att se enheter</option>';
+        
+        if (soulLoginPrompt) soulLoginPrompt.style.display = 'block';
+        showView('soul');
+    }
+});
