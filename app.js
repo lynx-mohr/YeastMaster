@@ -2091,3 +2091,24 @@ function toggleProfilerInfo(btn) {
         btn.style.color = 'var(--text-dim)';
     }
 }
+
+// ==========================================
+// --- TOGGLE FÖR LIBRARY INFO ---
+// ==========================================
+function toggleLibraryInfo(btn) {
+    const infoBox = document.getElementById('library-info-box');
+    
+    if (infoBox.style.display === 'none' || infoBox.style.display === '') {
+        // Öppna lådan
+        infoBox.style.display = 'block';
+        // Fyll knappen med solid Cascade-grön färg och mörk text
+        btn.style.background = '#8CC63F';
+        btn.style.color = '#111';
+    } else {
+        // Stäng lådan
+        infoBox.style.display = 'none';
+        // Återgå till ihålig grön knapp
+        btn.style.background = 'rgba(140, 198, 63, 0.15)';
+        btn.style.color = '#8CC63F';
+    }
+}
