@@ -1431,17 +1431,20 @@ const yeastDescriptions = {
         </ul>
     `,
 
-    "wyeast-1968": `
+ "wyeast-1968": `
         <h3 style="color: var(--accent-color); margin-top: 0;">Wyeast 1968 (London ESB Ale)</h3>
-        <h4 style="margin-top: 15px; color: #ccc;">1. Temperature Range (18-22 °C)</h4>
-        <p>Wyeast 1968 thrives between 18 and 22 degrees Celsius. Starting at 19 °C is perfect for a balanced ester profile (fruitiness) without becoming too solvent-like.</p>
-        <h4 style="margin-top: 15px; color: #ccc;">2. Extreme Flocculation (Crucial!)</h4>
-        <p>It has "Very High" flocculation. This means the yeast drops to the bottom like a rock. If it goes to sleep too fast, it can leave behind Diacetyl (butterscotch).</p>
-        <h4 style="margin-top: 15px; color: #ccc;">Brewer's Profile:</h4>
-        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
-            <li><strong style="color: #fff;">Day 0-3:</strong> Active Ferm. Keep at 19 °C for classic British maltiness.</li>
-            <li><strong style="color: #fff;">Day 4-7:</strong> Diacetyl Rest. Raise to 22 °C to keep it awake and consume byproducts.</li>
+        <p>The legendary Fuller’s strain! This yeast is famous for leaving a wonderful, malty residual sweetness, and dropping out of suspension so fast it looks like cottage cheese.</p>
+        
+        <h4 style="margin-top: 15px; color: #ccc;">1. Extreme Flocculation (Crucial!)</h4>
+        <p>Because it drops like a stone the second it feels "done", you have to actively fight to keep it awake. If it goes to sleep too early, your beer will taste like a butterscotch candy (Diacetyl).</p>
+
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 12px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">"Standard" & "ESB Clean":</strong> Starts cooler (18.5-19 °C) to keep the yeast focused on maltiness without throwing too much fruit. A solid diacetyl rest at 21 °C cleans up the butterscotch.</li>
+            <li><strong style="color: #fff;">"High Ester" & "ESB Fruity":</strong> For a true British fruit-bomb! We pitch warm (21-22 °C) and let it ramp to 23 °C. Expect massive notes of marmalade and jam.</li>
+            <li><strong style="color: #fff;">"Low Ester":</strong> The cheat-code for a super clean profile. Ferments low at 18 °C and crashes gently to avoid stressing the yeast.</li>
         </ul>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: This yeast clears the beer so fast during the Cold Crash that you rarely need fining agents!</i></p>
     `,
 
     "wlp920": `
