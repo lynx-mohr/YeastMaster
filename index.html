@@ -270,76 +270,77 @@
 </section>
 
 <section id="view-soul" style="display: none; padding: 30px 20px;">
-    
-    <div style="margin-top: 20px;">
-        <h1 class="animate-fade delay-1" style="font-size: 5.5rem; font-weight: 900; line-height: 0.8; margin: 0; color: var(--accent-color); letter-spacing: -3px; font-family: 'Lexend', sans-serif;">
-            YEAST
-        </h1>
-        <p class="animate-fade delay-2" style="font-size: 1.6rem; font-weight: 300; margin: 5px 0 40px 2px; font-family: 'Lexend', sans-serif; letter-spacing: 1px; color: var(--text-dim);">
-            The Soul of beer.
-        </p>
-    </div>
-
-    <div class="animate-fade delay-3" style="line-height: 1.7; font-size: 1.1rem; color: var(--text-dim); font-weight: 400; max-width: 600px;">
-        <p style="margin-bottom: 25px;">
-            We believe the true soul of beer lives within the yeast. As the old brewing adage goes: 
-            <span style="color: var(--text-main); font-style: italic; font-weight: 600;">"The brewer makes wort, but the yeast makes beer."</span> 
-            There is a profound wonder in how these microscopic artisans transform a simple, sweet liquid into the infinitely complex and soulful elixir we call beer.
-        </p>
         
-        <p style="margin-bottom: 40px;">
-            Soulof.beer is a tribute to this biological magic. Whether you are here to explore our library of historic strains or to take full command of your fermentation, this is your laboratory. Monitor your brew in real-time, sync custom profiles to your YeastMaster-unit, and master the art of the craft.
-        </p>
-    </div>
-
-<div onclick="showView('about')" class="about-card-btn" style="background: rgba(0, 229, 255, 0.05); border: 1px solid var(--accent-color); border-radius: 12px; padding: 20px; margin-bottom: 40px; cursor: pointer; transition: all 0.3s ease; text-align: left; display: flex; justify-content: space-between; align-items: center;">
-        <div>
-            <h3 style="color: var(--accent-color); margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 800;">What is YeastMaster?</h3>
-            <p style="margin: 0; color: var(--text-dim); font-size: 0.9rem;">Discover the hardware and the app features.</p>
+        <div style="margin-top: 20px;">
+            <h1 class="animate-fade delay-1" style="font-size: 5.5rem; font-weight: 900; line-height: 0.8; margin: 0; color: var(--accent-color); letter-spacing: -3px; font-family: 'Lexend', sans-serif;">
+                YEAST
+            </h1>
+            <p class="animate-fade delay-2" style="font-size: 1.6rem; font-weight: 300; margin: 5px 0 40px 2px; font-family: 'Lexend', sans-serif; letter-spacing: 1px; color: var(--text-dim);">
+                The Soul of beer.
+            </p>
         </div>
-        <div style="color: var(--accent-color); font-size: 1.5rem; font-weight: bold;">→</div>
-    </div>
 
-    <div id="soul-login-prompt" class="animate-fade delay-3" style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #222;">
-        <p style="margin-bottom: 20px; font-size: 0.9rem; color: var(--text-dim); letter-spacing: 0.5px;">
-            Ready to manage your library or monitor your unit?
-        </p>
-        <button class="btn-primary" style="width: 100%; max-width: 300px;" onclick="showView('login')">
-            GO TO LOGIN
+        <div class="animate-fade delay-3" style="line-height: 1.7; font-size: 1.1rem; color: var(--text-dim); font-weight: 400; max-width: 600px;">
+            <p style="margin-bottom: 25px;">
+                We believe the true soul of beer lives within the yeast. As the old brewing adage goes: 
+                <span style="color: var(--text-main); font-style: italic; font-weight: 600;">"The brewer makes wort, but the yeast makes beer."</span> 
+                There is a profound wonder in how these microscopic artisans transform a simple, sweet liquid into the infinitely complex and soulful elixir we call beer.
+            </p>
+            
+            <p style="margin-bottom: 40px;">
+                Soulof.beer is a tribute to this biological magic. Whether you are here to explore our library of historic strains or to take full command of your fermentation, this is your laboratory. Monitor your brew in real-time, sync custom profiles to your YeastMaster-unit, and master the art of the craft.
+            </p>
+        </div>
+
+        <div onclick="showView('about')" class="about-card-btn animate-fade delay-3" style="background: rgba(0, 229, 255, 0.05); border: 1px solid var(--accent-color); border-radius: 12px; padding: 20px; margin-bottom: 40px; cursor: pointer; transition: all 0.3s ease; text-align: left; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h3 style="color: var(--accent-color); margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 800;">What is YeastMaster?</h3>
+                <p style="margin: 0; color: var(--text-dim); font-size: 0.9rem;">Discover the hardware and the app features.</p>
+            </div>
+            <div style="color: var(--accent-color); font-size: 1.5rem; font-weight: bold;">→</div>
+        </div>
+
+        <div id="soul-login-prompt" class="animate-fade delay-3" style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #222;">
+            <p style="margin-bottom: 20px; font-size: 0.9rem; color: var(--text-dim); letter-spacing: 0.5px;">
+                Ready to manage your library or monitor your unit?
+            </p>
+            <button class="btn-primary" style="width: 100%; max-width: 300px;" onclick="showView('login')">
+                GO TO LOGIN
+            </button>
+        </div>
+
+    </section>
+
+    <section id="view-about" style="display: none; padding: 30px 20px;">
+        <button onclick="showView('soul')" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;">
+            ← BACK
         </button>
-    </div>
-</section>
 
-<section id="view-about" style="display: none; padding: 30px 20px;">
-    <button onclick="showView('soul')" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;">
-        ← BACK
-    </button>
+        <h2 style="margin-bottom: 20px; font-weight: 900; letter-spacing: -1px; font-size: 2rem; color: var(--text-main);">
+            THE YEASTMASTER
+        </h2>
 
-    <h2 style="margin-bottom: 20px; font-weight: 900; letter-spacing: -1px; font-size: 2rem; color: var(--text-main);">
-        THE YEASTMASTER
-    </h2>
+        <div style="line-height: 1.6; font-size: 1rem; color: var(--text-dim);">
+            <p style="margin-bottom: 20px;">
+                YeastMaster is a complete ecosystem for the modern homebrewer. It bridges the gap between biological art and precise data control.
+            </p>
 
-    <div style="line-height: 1.6; font-size: 1rem; color: var(--text-dim);">
-        <p style="margin-bottom: 20px;">
-            YeastMaster is a complete ecosystem for the modern homebrewer. It bridges the gap between biological art and precise data control.
-        </p>
+            <h3 style="color: var(--text-main); margin-top: 30px; margin-bottom: 10px; font-size: 1.1rem;">📟 The Hardware Unit</h3>
+            <p style="margin-bottom: 20px;">
+                A dedicated physical controller with a crisp OLED display that connects directly to your fermentation fridge and heating element. It runs your profiles offline and locally, ensuring your beer is safe even if the internet goes down.
+            </p>
 
-        <h3 style="color: var(--text-main); margin-top: 30px; margin-bottom: 10px; font-size: 1.1rem;">📟 The Hardware Unit</h3>
-        <p style="margin-bottom: 20px;">
-            A dedicated physical controller with a crisp OLED display that connects directly to your fermentation fridge and heating element. It runs your profiles offline and locally, ensuring your beer is safe even if the internet goes down.
-        </p>
+            <h3 style="color: var(--text-main); margin-top: 20px; margin-bottom: 10px; font-size: 1.1rem;">☁️ The Cloud App</h3>
+            <p style="margin-bottom: 20px;">
+                Monitor your fermentation in real-time from anywhere in the world. Build custom temperature profiles in the Arcane Lab, manage your dry hop schedules, and sync everything effortlessly to your physical unit.
+            </p>
 
-        <h3 style="color: var(--text-main); margin-top: 20px; margin-bottom: 10px; font-size: 1.1rem;">☁️ The Cloud App</h3>
-        <p style="margin-bottom: 20px;">
-            Monitor your fermentation in real-time from anywhere in the world. Build custom temperature profiles in the Arcane Lab, manage your dry hop schedules, and sync everything effortlessly to your physical unit.
-        </p>
-
-        <h3 style="color: var(--text-main); margin-top: 20px; margin-bottom: 10px; font-size: 1.1rem;">🔬 The Yeast Library</h3>
-        <p style="margin-bottom: 40px;">
-            Stop guessing. Our built-in library contains detailed guides on how to treat the world's most popular yeast strains to coax out the perfect esters and phenols for your specific beer style.
-        </p>
-    </div>
-</section>
+            <h3 style="color: var(--text-main); margin-top: 20px; margin-bottom: 10px; font-size: 1.1rem;">🔬 The Yeast Library</h3>
+            <p style="margin-bottom: 40px;">
+                Stop guessing. Our built-in library contains detailed guides on how to treat the world's most popular yeast strains to coax out the perfect esters and phenols for your specific beer style.
+            </p>
+        </div>
+    </section>
 
     <section id="view-librarian" style="display: none;">
         <div class="library-header">
