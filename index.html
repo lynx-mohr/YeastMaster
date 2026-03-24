@@ -111,10 +111,22 @@
     
     </section>
 
-    <section id="view-library" style="display: none;">
-        <div class="library-header">
-            <h2>Yeast Library</h2>
-            <div class="sync-status">Selected: <span id="fav-count">0</span>/10</div>
+    <div class="library-header">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 5px;">
+                <h2 style="margin: 0;">Yeast Library</h2>
+                
+                <button onclick="toggleLibraryInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; transition: all 0.3s ease; padding: 0;">
+                    i
+                </button>
+            </div>
+
+            <div id="library-info-box" style="display: none; background: rgba(255,255,255,0.05); border-left: 3px solid #8CC63F; padding: 12px 15px; border-radius: 0 8px 8px 0; margin-bottom: 15px; margin-top: 10px; font-size: 0.9rem; line-height: 1.5; opacity: 0.8;">
+                Browse our curated collection of yeast strains. <br>
+                <strong>Double-click</strong> (or long-press) a card to read the brewer's profile.<br>
+                Select up to 10 favorites (★) and sync them directly to your YeastMaster unit!
+            </div>
+
+            <div class="sync-status" style="margin-bottom: 10px;">Selected: <span id="fav-count">0</span>/10</div>
             <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
         </div>
         <div class="yeast-grid" id="yeast-grid">
