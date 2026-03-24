@@ -142,14 +142,42 @@ auth.onAuthStateChanged(async (user) => {
         // --- ANVÄNDARE ÄR INLOGGAD ---
         if (soulLoginPrompt) soulLoginPrompt.style.display = 'none';
 
-        // Här kör vi din befintliga logik för att hämta enheter
+        // Här kör vi din befintliga logik för att hämta enheter (till synk-funktionen)
         populateSyncDevices(user.uid); 
 
         try {
             const res = await fetch(`${API_BASE}/my-devices?uid=${user.uid}`);
             const devices = await res.json();
+            
             if (devices.length > 0) {
-                activeDeviceId = devices[0].device_id;
+                // Sätter den första enheten som aktiv från start
+                activeDeviceId = devices[0].device_id; 
+                
+                // --- NYTT: Fyll rullistan i Settings (Multi-device) ---
+                const deviceSelect = document.getElementById('setting-active-device');
+                if (deviceSelect) {
+                    deviceSelect.innerHTML = ""; // Rensa gamla alternativ
+                    devices.forEach(dev => {
+                        const opt = document.createElement('option');
+                        opt.value = dev.device_id;
+                        // Kolla om vi har ett sparat lokalt namn, annars ta server-namnet eller MAC-id
+                        const localName = typeof getSavedNickname === 'function' ? getSavedNickname(dev.device_id) : "MIN YEASTMASTER";
+                        opt.textContent = localName !== "MIN YEASTMASTER" 
+                                          ? localName 
+                                          : (dev.name || dev.device_id);
+                        deviceSelect.appendChild(opt);
+                    });
+                    // Se till att rätt enhet är vald i rullistan
+                    deviceSelect.value = activeDeviceId;
+                }
+                
+                // --- NYTT: Ladda namnet för den valda enheten på Dashboarden ---
+                const nickInput = document.getElementById('setting-nickname');
+                const currentNick = typeof getSavedNickname === 'function' ? getSavedNickname(activeDeviceId) : "MIN YEASTMASTER";
+                
+                if (nickInput) nickInput.value = currentNick !== "MIN YEASTMASTER" ? currentNick : "";
+                if (typeof updateDashboardNickname === 'function') updateDashboardNickname(currentNick);
+
                 showView('dashboard');
                 updateDashboard(); // Din funktion körs precis som vanligt!
             } else {
