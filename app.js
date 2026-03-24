@@ -54,36 +54,60 @@ firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth(); // Se till att Firebase är länkat i index.html!
 
-// --- 1. VY-HANTERARE (Smart version som tänder rätt ikon direkt!) ---
+// Vi skapar en variabel för att hålla koll på var vi VAR någonstans
+let currentActiveView = 'soul'; 
+
 function showView(viewName) {
     const views = {
         login: document.getElementById('login-container'),
         claim: document.getElementById('claim-container'),
-        soul: document.getElementById('view-soul'),             // HOME
-        library: document.getElementById('view-library'),       // LIBRARY
-        librarian: document.getElementById('view-librarian'),   // LAB (Kalkylatorn)
-        lab: document.getElementById('view-lab'),               // PROFILER (Grafen)
-        dashboard: document.getElementById('dashboard-container'), // LIVE
-        settings: document.getElementById('view-settings')      // SETTINGS
+        soul: document.getElementById('view-soul'),
+        library: document.getElementById('view-library'),
+        librarian: document.getElementById('view-librarian'),
+        lab: document.getElementById('view-lab'),
+        dashboard: document.getElementById('dashboard-container'),
+        settings: document.getElementById('view-settings')
     };
+
+    if (!views[viewName]) return;
+
+    // --- LOGIK FÖR ANIMATIONSRIKTNING ---
+    const oldIndex = viewOrder.indexOf(currentActiveView);
+    const newIndex = viewOrder.indexOf(viewName);
     
-    // Släck och tänd rätt vyer
+    let animClass = '';
+    if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
+        // Om nya indexet är högre = vi går till höger i menyn = bilden kommer från höger
+        animClass = (newIndex > oldIndex) ? 'slide-in-right' : 'slide-in-left';
+    }
+
+    // Växla vyer
     Object.keys(views).forEach(key => {
         if (views[key]) {
+            // Ta bort gamla animationsklasser så de kan spelas upp igen
+            views[key].classList.remove('slide-in-right', 'slide-in-left');
+            
             if (key === viewName) {
                 const isFlexView = (key === 'login' || key === 'claim');
                 views[key].style.display = isFlexView ? 'flex' : 'block';
+                
+                // Lägg på animationen på den NYA vyn
+                if (animClass) {
+                    views[key].classList.add(animClass);
+                }
             } else {
                 views[key].style.display = 'none';
             }
         }
     });
 
-    // --- MAGIN SOM TÄNDER IKONERNA ÄVEN VID SVEP ---
+    // Uppdatera vilken vy som är aktiv nu för nästa gång vi klickar
+    currentActiveView = viewName;
+
+    // --- UPPDATERA MENYN (Glow-effekten) ---
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
         const clickEvent = item.getAttribute('onclick');
-        // Om HTML-ikonen pekar på den vy vi just bytte till, tänd den!
         if (clickEvent && clickEvent.includes(`'${viewName}'`)) {
             item.classList.add('active');
         }
