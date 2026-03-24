@@ -64,14 +64,14 @@ const viewOrder = ['soul', 'library', 'librarian', 'lab', 'dashboard', 'settings
 let currentActiveView = 'soul'; 
 
 function showView(viewName) {
-    const views = {
+const views = {
         login: document.getElementById('login-container'),
         claim: document.getElementById('claim-container'),
         soul: document.getElementById('view-soul'),
         library: document.getElementById('view-library'),
         librarian: document.getElementById('view-librarian'),
         lab: document.getElementById('view-lab'),
-        dashboard: document.getElementById('dashboard-container'),
+        dashboard: document.getElementById('view-dashboard'), // <-- Fixat!
         settings: document.getElementById('view-settings')
     };
 
