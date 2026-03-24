@@ -190,11 +190,17 @@ async function updateDashboard() {
             console.log("Här är senaste datan från servern:");
             console.log(latest);
 
-            // 1. Temperaturer
-     // 1. Temperaturer (NU MED C/F STÖD)
-            const displayTemp = convertTemp(latest.temp).toFixed(1) + '°' + currentTempUnit;
-            document.getElementById('temp-beer-val').innerText = displayTemp;
-            document.querySelector('.beer-temp').setAttribute('data-text', displayTemp);
+    // 1. Temperaturer (NU MED C/F STÖD)
+const displayTemp = convertTemp(latest.temp).toFixed(1) + '°' + currentTempUnit;
+
+// Denna rad uppdaterar den riktiga texten (den vita i mitten)
+document.getElementById('temp-beer-val').innerText = displayTemp;
+
+// DENNA RAD VAR BOVEN! Vi måste se till att konturen också får den nya enheten:
+const beerTempEl = document.querySelector('.beer-temp');
+if (beerTempEl) {
+    beerTempEl.setAttribute('data-text', displayTemp);
+}
             
             document.getElementById('air-temp-val').innerText = convertTemp(latest.air_temp).toFixed(1) + '°' + currentTempUnit;
 
