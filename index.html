@@ -42,7 +42,7 @@
             <div class="main-display">
                 <div class="left-col"> 
                     <div class="carboy-wrapper">
-                        <div class="air-floating">Air: <span id="air-temp-val">--</span>°C</div>
+                        <div class="air-floating">Air: <span id="air-temp-val">--°C</span></div>
 <svg viewBox="0 0 100 92" class="carboy-svg">
     <defs>
         <clipPath id="bottle-clip">
@@ -242,13 +242,15 @@
                 <button class="theme-btn-small active" id="btn-theme-dark" onclick="setTheme('dark')">Dark</button>
                 <button class="theme-btn-small" id="btn-theme-light" onclick="setTheme('light')">Light</button>
             </div>
-            <div class="settings-row">
+    
+        </div>
+
+        <div class="settings-row">
             <span class="settings-label">Temperature Unit</span>
             <div class="theme-toggle-compact">
                 <button class="theme-btn-small active" id="btn-unit-c" onclick="setTempUnit('C')">°C</button>
                 <button class="theme-btn-small" id="btn-unit-f" onclick="setTempUnit('F')">°F</button>
             </div>
-        </div>
         </div>
 
         <div class="settings-row">

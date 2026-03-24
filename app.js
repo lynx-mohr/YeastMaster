@@ -2248,9 +2248,11 @@ function toggleLibraryInfo(btn) {
 // ==========================================
 // --- TEMPERATURE UNIT MANAGER ---
 // ==========================================
-let currentTempUnit = localStorage.getItem('yeastmaster-unit') || 'C';
+let currentTempUnit = 'C'; // Appen "tänker" alltid i Celsius från start
 
 function setTempUnit(unit) {
+    if (currentTempUnit === unit) return; // Gör inget om man klickar på den som redan är aktiv
+    
     currentTempUnit = unit;
     localStorage.setItem('yeastmaster-unit', unit);
     
@@ -2258,37 +2260,35 @@ function setTempUnit(unit) {
     document.getElementById('btn-unit-c').classList.toggle('active', unit === 'C');
     document.getElementById('btn-unit-f').classList.toggle('active', unit === 'F');
 
-    // Tvinga appen att rita om de vyer som påverkas!
+    // --- MAGIN: Räkna om alla punkter i Labbet! ---
+    if (typeof profilePoints !== 'undefined') {
+        profilePoints.forEach(p => {
+            if (unit === 'F') {
+                p.y = (p.y * 9/5) + 32; // Konvertera C till F
+            } else {
+                p.y = (p.y - 32) * 5/9; // Konvertera F till C
+            }
+        });
+    }
+
+    // Tvinga appen att rita om allt med de nya siffrorna
     const searchBox = document.getElementById('yeast-search');
     if (typeof renderYeastLibrary === 'function') renderYeastLibrary(searchBox ? searchBox.value : "");
     if (typeof initLabChart === 'function') initLabChart();
-    
-    // Obs: Dashboarden uppdateras automatiskt nästa gång data hämtas, 
-    // men vi kan rita om den direkt om vi vill (kommer i nästa steg).
+    if (typeof updateSummaryText === 'function') updateSummaryText();
+    if (typeof updateDashboard === 'function') updateDashboard(); // Uppdaterar LIVE-vyn
 }
 
-// Ladda sparat val när appen startar
-window.addEventListener('DOMContentLoaded', () => {
-    setTempUnit(currentTempUnit);
-});
-
-// --- DEN MAGISKA TEXT-ÖVERSÄTTAREN ---
-// Denna funktion tar in en textsträng. Om enheten är 'F', letar den upp 
-// alla X °C eller X°C och räknar om dem till Fahrenheit dynamiskt!
-function formatTempText(text) {
-    if (!text) return "";
-    if (currentTempUnit === 'C') return text; // Gör ingenting om vi kör Celsius
-
-    // Letar efter ett nummer (t.ex. 18 eller 21.5), eventuellt ett mellanslag, och sedan °C
-    return text.replace(/(\d+(?:\.\d+)?)\s*°C/g, (match, tempCelsius) => {
-        const c = parseFloat(tempCelsius);
-        const f = (c * 9/5) + 32;
-        return `${Math.round(f)} °F`; // Avrundar till heltal för snyggare läsning i text
-    });
-}
-
-// Hjälpfunktion för att konvertera råa siffror (för grafer och dashboard)
+// Hjälpfunktion för att konvertera råa siffror från servern
 function convertTemp(celsiusValue) {
     if (currentTempUnit === 'C') return celsiusValue;
     return (celsiusValue * 9/5) + 32;
+}
+
+// Hjälpfunktion för att översätta text (till Library-korten)
+function formatTempText(text) {
+    if (!text || currentTempUnit === 'C') return text || "";
+    return text.replace(/(\d+(?:\.\d+)?)\s*°C/g, (match, tempC) => {
+        return `${Math.round((parseFloat(tempC) * 9/5) + 32)} °F`;
+    });
 }
