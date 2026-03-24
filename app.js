@@ -1837,7 +1837,7 @@ async function syncToSelectedDevice() {
 // ==========================================
 
 // Ordningen på flikarna, exakt så som de ligger i din meny
-const viewOrder = ['soul', 'librarian', 'lab', 'library', 'dashboard', 'settings'];
+const viewOrder = ['soul', 'library', 'librarian', 'lab', 'dashboard', 'settings'];
 
 let touchStartX = 0;
 let touchStartY = 0;
