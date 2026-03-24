@@ -191,10 +191,12 @@ async function updateDashboard() {
             console.log(latest);
 
             // 1. Temperaturer
-            document.getElementById('temp-beer-val').innerText = latest.temp.toFixed(1);
-            // Uppdatera hela text-strängen så pseudo-elementet kan rita konturen!
-document.querySelector('.beer-temp').setAttribute('data-text', latest.temp.toFixed(1) + '°C');
-            document.getElementById('air-temp-val').innerText = latest.air_temp.toFixed(1);
+     // 1. Temperaturer (NU MED C/F STÖD)
+            const displayTemp = convertTemp(latest.temp).toFixed(1) + '°' + currentTempUnit;
+            document.getElementById('temp-beer-val').innerText = displayTemp;
+            document.querySelector('.beer-temp').setAttribute('data-text', displayTemp);
+            
+            document.getElementById('air-temp-val').innerText = convertTemp(latest.air_temp).toFixed(1) + '°' + currentTempUnit;
 
             // 2. Höger kolumn (Hierarki enligt din OLED)
             document.getElementById('strain-val').innerText = (latest.strain || "IRISH ALE").toUpperCase();
@@ -260,12 +262,11 @@ if (action === "COOLING") {
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
 
-            // --- NY KOD FÖR MÅLTEMPERATUR ---
-            // OBS: Kolla vad din variabel heter i ditt API. Ofta heter den target_temp, set_temp eller setpoint.
+        // --- NY KOD FÖR MÅLTEMPERATUR ---
             const targetTemp = latest.target_temp || 0; 
             const targetTempElement = document.getElementById('target-temp-val');
             if (targetTempElement) {
-                targetTempElement.innerText = targetTemp.toFixed(1);
+                targetTempElement.innerText = convertTemp(targetTemp).toFixed(1) + '°' + currentTempUnit;
             }
             
             updateChart(data);
@@ -293,7 +294,7 @@ function updateChart(data) {
 
     // Säkerställ att vi bara försöker plotta riktiga siffror, annars kraschar hela Chart.js
     const labels = data.map(d => new Date(d.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    const temps = data.map(d => Number(d.temp) || 0); // <-- NYTT: Säkerhetsnät! Om d.temp är skumt, sätt 0.
+    const temps = data.map(d => convertTemp(Number(d.temp) || 0));
 
     if (beerChart) {
         beerChart.data.labels = labels;
@@ -787,8 +788,9 @@ function toggleDryHopLine() {
 
 function updateSummaryText() {
     // Uppdatera Temperaturer
-    document.getElementById('val-t1').innerText = profilePoints[0].y.toFixed(1); // Primary temp
-    document.getElementById('val-t3').innerText = profilePoints[2].y.toFixed(1); // Cleanup temp
+   document.getElementById('val-t1').innerText = profilePoints[0].y.toFixed(1) + '°' + currentTempUnit;
+    document.getElementById('val-t3').innerText = profilePoints[2].y.toFixed(1) + '°' + currentTempUnit;
+    document.getElementById('val-t4').innerText = profilePoints[4].y.toFixed(1) + '°' + currentTempUnit;
     
     // HÄR VAR FELET! Den hämtade temp från fel punkt. Nu hämtar den från punkt 4 (Cold Crash)
     document.getElementById('val-t4').innerText = profilePoints[4].y.toFixed(1); 
@@ -836,18 +838,16 @@ function initLabChart() {
     }
 
     const isLightMode = document.body.classList.contains('light-mode');
-    const isMobile = window.innerWidth <= 768; // --- NYTT: Kolla om vi är på mobil ---
+    const isMobile = window.innerWidth <= 768;
     
-    // --- NYA FÄRGSCHEMAT ---
-    const themeAccent = '#f4c95d'; // Den ljusa gula
+    const themeAccent = '#f4c95d'; 
     const pointFill = '#888888';   
     
     const lineWidth = isLightMode ? 2 : 3; 
     
-    // --- NYTT: Smarta storlekar för mobil vs PC ---
-    const dotSize = isMobile ? 8 : 5;         // Själva pricken blir lite större på mobil
-    const hoverSize = isMobile ? 12 : 8;      // Hover-effekten
-    const touchMagnet = isMobile ? 25 : 10;   // DET OSYNLIGA MAGNETFÄLTET (Mycket större på mobil!)
+    const dotSize = isMobile ? 8 : 5;         
+    const hoverSize = isMobile ? 12 : 8;      
+    const touchMagnet = isMobile ? 25 : 10;   
 
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, isLightMode ? 'rgba(244, 201, 93, 0.15)' : 'rgba(244, 201, 93, 0.4)'); 
@@ -861,12 +861,12 @@ function initLabChart() {
                 data: profilePoints,
                 borderColor: themeAccent,
                 backgroundColor: gradient,
-                borderWidth: lineWidth,           
+                borderWidth: lineWidth,            
                 pointBackgroundColor: pointFill,  
                 pointBorderColor: themeAccent,    
-                pointRadius: dotSize,             // Dynamisk storlek
-                pointHoverRadius: hoverSize,      // Dynamisk storlek
-                pointHitRadius: touchMagnet,      // <-- MAGIN! Skapar den osynliga grepp-ytan
+                pointRadius: dotSize,             
+                pointHoverRadius: hoverSize,      
+                pointHitRadius: touchMagnet,      
                 showLine: true,
                 tension: 0.1, 
                 clip: false,
@@ -892,13 +892,14 @@ function initLabChart() {
                     ticks: { color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '600' } },
                     title: { display: true, text: 'Days', color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '800' } }
                 },
+                // --- NYTT: Y-axeln som anpassar sig efter Fahrenheit/Celsius ---
                 y: {
                     type: 'linear',
-                    min: -2,
-                    max: 40,
+                    min: currentTempUnit === 'F' ? 28 : -2,
+                    max: currentTempUnit === 'F' ? 104 : 40,
                     grid: { color: isLightMode ? 'rgba(0, 0, 0, 0.04)' : '#222' },
                     ticks: { color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '600' } },
-                    title: { display: true, text: 'Temp (°C)', color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '800' } }
+                    title: { display: true, text: `Temp (°${currentTempUnit})`, color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '800' } }
                 }
             },
             plugins: {
@@ -942,9 +943,6 @@ function initLabChart() {
         }]
     });
 
-    // =======================================================
-    // VÅR SKOTTSÄKRA DRAG-MOTOR (Nu med Dry Hop-stöd!)
-    // =======================================================
     let isDragging = false;
     let dragIndex = -1;
     let isDraggingDryHop = false; 
@@ -954,8 +952,6 @@ function initLabChart() {
         const xPos = e.clientX - rect.left;
         let xVal = labChart.scales.x.getValueForPixel(xPos);
 
-        // 1. Klicka på Dry Hop-linjen?
-        // --- NYTT: Mycket större felmarginal på mobilen för humle-linjen ---
         const hopMagnet = isMobile ? 1.5 : 0.6; 
         
         if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
@@ -966,7 +962,6 @@ function initLabChart() {
             }
         }
 
-        // 2. Annars, klicka på en vanlig punkt
         const points = labChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, false);
         if (points.length > 0) {
             isDragging = true;
@@ -981,8 +976,7 @@ function initLabChart() {
         if (points.length > 0 || isDraggingDryHop) e.preventDefault(); 
     }, { passive: false });
 
-window.addEventListener('pointermove', (e) => {
-        // DRA HUMLELINJEN
+    window.addEventListener('pointermove', (e) => {
         if (isDraggingDryHop) {
             const rect = canvas.getBoundingClientRect();
             const xPos = e.clientX - rect.left;
@@ -996,7 +990,6 @@ window.addEventListener('pointermove', (e) => {
             return; 
         }
 
-        // DRA VANLIGA PUNKTER
         if (isDragging && dragIndex !== -1) {
             const rect = canvas.getBoundingClientRect();
             const xPos = e.clientX - rect.left;
@@ -1005,11 +998,13 @@ window.addEventListener('pointermove', (e) => {
             let xVal = labChart.scales.x.getValueForPixel(xPos);
             let yVal = labChart.scales.y.getValueForPixel(yPos);
 
-            // Avrundning
             xVal = Math.max(0, Math.round(xVal * 2) / 2);
-            yVal = Math.max(-2, Math.min(40, Math.round(yVal)));
+            
+            // --- NYTT: Begränsa yVal beroende på Fahrenheit eller Celsius ---
+            const yMin = currentTempUnit === 'F' ? 28 : -2;
+            const yMax = currentTempUnit === 'F' ? 104 : 40;
+            yVal = Math.max(yMin, Math.min(yMax, Math.round(yVal)));
 
-            // --- 1. X-AXELNS DÖRRVAKT (Anti-tidsresa) ---
             if (dragIndex === 0) xVal = 0; 
             if (dragIndex > 0 && xVal < profilePoints[dragIndex - 1].x) {
                 xVal = profilePoints[dragIndex - 1].x;
@@ -1018,25 +1013,19 @@ window.addEventListener('pointermove', (e) => {
                 xVal = profilePoints[dragIndex + 1].x;
             }
 
-            // --- 2. Y-AXELNS DÖRRVAKT (Biologiska skyddsräcken!) ---
             if (dragIndex === 0 || dragIndex === 1) {
-                // Primary får inte bli varmare än Cleanup, och inte kallare än Cold Crash
                 yVal = Math.min(yVal, profilePoints[2].y);
                 yVal = Math.max(yVal, profilePoints[4].y);
             } 
             else if (dragIndex === 2 || dragIndex === 3) {
-                // Cleanup får inte dras ner så den blir kallare än Primary
                 yVal = Math.max(yVal, profilePoints[0].y);
             }
             else if (dragIndex === 4 || dragIndex === 5) {
-                // Cold Crash får inte dras upp så den blir varmare än Primary
                 yVal = Math.min(yVal, profilePoints[0].y);
             }
 
-            // Uppdatera punkten
             profilePoints[dragIndex] = { x: xVal, y: yVal };
 
-            // Tvinga linjerna att vara platta
             if (dragIndex === 0) profilePoints[1].y = yVal; 
             if (dragIndex === 1) profilePoints[0].y = yVal; 
             if (dragIndex === 2) profilePoints[3].y = yVal; 
@@ -1044,7 +1033,6 @@ window.addEventListener('pointermove', (e) => {
             if (dragIndex === 4) profilePoints[5].y = yVal; 
             if (dragIndex === 5) profilePoints[4].y = yVal; 
 
-            // Expandera X-axeln dynamiskt
             const lastPointX = profilePoints[profilePoints.length - 1].x;
             labChart.options.scales.x.max = Math.max(10, lastPointX + 2);
 
@@ -2292,3 +2280,21 @@ function formatTempText(text) {
         return `${Math.round((parseFloat(tempC) * 9/5) + 32)} °F`;
     });
 }
+
+// Hjälpfunktion: Tvinga alltid ner värdet till Celsius i databasen!
+    function toCelsius(val) {
+        return currentTempUnit === 'F' ? (val - 32) * 5/9 : val;
+    }
+
+    const profileData = {
+        s: profileName,             
+        p: `Custom (${baseYeast})`, 
+        dryHopDay: dryHopData.enabled ? dryHopData.day : null, 
+      steps: [
+            [profilePoints[0].x, parseFloat(toCelsius(profilePoints[0].y).toFixed(1))],
+            [profilePoints[1].x, parseFloat(toCelsius(profilePoints[1].y).toFixed(1))],
+            [profilePoints[2].x, parseFloat(toCelsius(profilePoints[2].y).toFixed(1))],
+            [profilePoints[3].x, parseFloat(toCelsius(profilePoints[3].y).toFixed(1))],
+            [profilePoints[4].x, parseFloat(toCelsius(profilePoints[4].y).toFixed(1))]
+        ]
+    };
