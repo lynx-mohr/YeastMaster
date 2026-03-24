@@ -567,7 +567,7 @@ function renderYeastLibrary(filter = "") {
                 tooltip.style.display = "block";
                 tooltip.style.left = (e.clientX + 15) + "px";
                 tooltip.style.top = (e.clientY + 15) + "px";
-                tooltip.innerHTML = `<strong>${yeast.name}</strong><br>${yeast.temp}<br>${yeast.tags.join(', ')}`;
+                tooltip.innerHTML = `<strong>${yeast.name}</strong><br>${formatTempText(yeast.temp)}<br>${yeast.tags.join(', ')}`;
             }
         };
         card.onmouseleave = () => { if(tooltip) tooltip.style.display = "none"; };
@@ -1700,6 +1700,9 @@ const yeastDescriptions = {
 // --- POPUP-FUNKTIONER (MODAL) ---
 function openYeastModal(yeast) {
     const modal = document.getElementById('yeast-info-modal');
+
+
+
     document.getElementById('modal-yeast-name').innerText = yeast.name;
     
     let detailedText = "";
@@ -1810,6 +1813,8 @@ function openYeastModal(yeast) {
         }
     }
     
+detailedText = formatTempText(detailedText);
+
     document.getElementById('modal-yeast-desc').innerHTML = detailedText;
     modal.style.display = 'flex';
 }
@@ -2238,4 +2243,52 @@ function toggleLibraryInfo(btn) {
         btn.style.background = 'rgba(140, 198, 63, 0.15)';
         btn.style.color = '#8CC63F';
     }
+}
+
+// ==========================================
+// --- TEMPERATURE UNIT MANAGER ---
+// ==========================================
+let currentTempUnit = localStorage.getItem('yeastmaster-unit') || 'C';
+
+function setTempUnit(unit) {
+    currentTempUnit = unit;
+    localStorage.setItem('yeastmaster-unit', unit);
+    
+    // Uppdatera knapparnas utseende
+    document.getElementById('btn-unit-c').classList.toggle('active', unit === 'C');
+    document.getElementById('btn-unit-f').classList.toggle('active', unit === 'F');
+
+    // Tvinga appen att rita om de vyer som påverkas!
+    const searchBox = document.getElementById('yeast-search');
+    if (typeof renderYeastLibrary === 'function') renderYeastLibrary(searchBox ? searchBox.value : "");
+    if (typeof initLabChart === 'function') initLabChart();
+    
+    // Obs: Dashboarden uppdateras automatiskt nästa gång data hämtas, 
+    // men vi kan rita om den direkt om vi vill (kommer i nästa steg).
+}
+
+// Ladda sparat val när appen startar
+window.addEventListener('DOMContentLoaded', () => {
+    setTempUnit(currentTempUnit);
+});
+
+// --- DEN MAGISKA TEXT-ÖVERSÄTTAREN ---
+// Denna funktion tar in en textsträng. Om enheten är 'F', letar den upp 
+// alla X °C eller X°C och räknar om dem till Fahrenheit dynamiskt!
+function formatTempText(text) {
+    if (!text) return "";
+    if (currentTempUnit === 'C') return text; // Gör ingenting om vi kör Celsius
+
+    // Letar efter ett nummer (t.ex. 18 eller 21.5), eventuellt ett mellanslag, och sedan °C
+    return text.replace(/(\d+(?:\.\d+)?)\s*°C/g, (match, tempCelsius) => {
+        const c = parseFloat(tempCelsius);
+        const f = (c * 9/5) + 32;
+        return `${Math.round(f)} °F`; // Avrundar till heltal för snyggare läsning i text
+    });
+}
+
+// Hjälpfunktion för att konvertera råa siffror (för grafer och dashboard)
+function convertTemp(celsiusValue) {
+    if (currentTempUnit === 'C') return celsiusValue;
+    return (celsiusValue * 9/5) + 32;
 }
