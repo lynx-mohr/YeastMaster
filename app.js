@@ -190,17 +190,11 @@ async function updateDashboard() {
             console.log("Här är senaste datan från servern:");
             console.log(latest);
 
-    // 1. Temperaturer (NU MED C/F STÖD)
-const displayTemp = convertTemp(latest.temp).toFixed(1) + '°' + currentTempUnit;
-
-// Denna rad uppdaterar den riktiga texten (den vita i mitten)
-document.getElementById('temp-beer-val').innerText = displayTemp;
-
-// DENNA RAD VAR BOVEN! Vi måste se till att konturen också får den nya enheten:
-const beerTempEl = document.querySelector('.beer-temp');
-if (beerTempEl) {
-    beerTempEl.setAttribute('data-text', displayTemp);
-}
+            // 1. Temperaturer
+     // 1. Temperaturer (NU MED C/F STÖD)
+            const displayTemp = convertTemp(latest.temp).toFixed(1) + '°' + currentTempUnit;
+            document.getElementById('temp-beer-val').innerText = displayTemp;
+            document.querySelector('.beer-temp').setAttribute('data-text', displayTemp);
             
             document.getElementById('air-temp-val').innerText = convertTemp(latest.air_temp).toFixed(1) + '°' + currentTempUnit;
 
@@ -2242,15 +2236,9 @@ function toggleLibraryInfo(btn) {
 // ==========================================
 // --- TEMPERATURE UNIT MANAGER ---
 // ==========================================
-let currentTempUnit = localStorage.getItem('yeastmaster-unit') || 'C';
+let currentTempUnit = 'C'; // Starta alltid som Celsius internt 
 
 function setTempUnit(unit) {
-    if (currentTempUnit === unit && document.getElementById('btn-unit-c')) {
-        // Initiera knapparnas status vid laddning
-        document.getElementById('btn-unit-c').classList.toggle('active', unit === 'C');
-        document.getElementById('btn-unit-f').classList.toggle('active', unit === 'F');
-    }
-    
     const oldUnit = currentTempUnit;
     currentTempUnit = unit;
     localStorage.setItem('yeastmaster-unit', unit);
@@ -2261,20 +2249,21 @@ function setTempUnit(unit) {
         document.getElementById('btn-unit-f').classList.toggle('active', unit === 'F');
     }
 
-    // --- MAGIN: Räkna om alla punkter i Labbet om vi faktiskt byter enhet manuellt ---
+    // --- MAGIN: Konvertera BARA om vi faktiskt byter (t.ex. C -> F) ---
     if (oldUnit !== unit && typeof profilePoints !== 'undefined') {
         profilePoints.forEach(p => {
             if (unit === 'F') {
+                // Konvertera punktens Celsius-värde till Fahrenheit
                 p.y = (p.y * 9/5) + 32; 
             } else {
+                // Konvertera punktens Fahrenheit-värde tillbaka till Celsius
                 p.y = (p.y - 32) * 5/9;
             }
         });
     }
 
-    // Tvinga appen att rita om allt
-    const searchBox = document.getElementById('yeast-search');
-    if (typeof renderYeastLibrary === 'function') renderYeastLibrary(searchBox ? searchBox.value : "");
+    // Rita om allt
+    if (typeof renderYeastLibrary === 'function') renderYeastLibrary(document.getElementById('yeast-search')?.value || "");
     if (typeof initLabChart === 'function') initLabChart();
     if (typeof updateSummaryText === 'function') updateSummaryText();
     if (typeof updateDashboard === 'function') updateDashboard(); 
@@ -2349,8 +2338,19 @@ function saveProfileToLibrary() {
 
 // Slutligen: Kör en initiering av enheten vid start
 window.addEventListener('DOMContentLoaded', () => {
+    // 1. Hämta sparad enhet
     const savedUnit = localStorage.getItem('yeastmaster-unit') || 'C';
-    // Vi sätter currentTempUnit till motsatsen först för att setTempUnit ska trigga konverteringen korrekt
-    currentTempUnit = savedUnit === 'C' ? 'F' : 'C'; 
+    
+    // 2. Om användaren hade 'F' sparat, måste vi räkna om startpunkterna en gång
+    if (savedUnit === 'F') {
+        currentTempUnit = 'F'; // Sätt enheten direkt
+        profilePoints.forEach(p => {
+            p.y = (p.y * 9/5) + 32;
+        });
+    }
+
+    // 3. Uppdatera UI:t (detta tänder rätt knappar och ritar grafen)
     setTempUnit(savedUnit);
+    
+    // ... resten av din DOMContentLoaded-kod (loadCustomProfiles, etc) ...
 });
