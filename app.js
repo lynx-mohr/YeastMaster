@@ -54,6 +54,12 @@ firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth(); // Se till att Firebase är länkat i index.html!
 
+
+
+// --- KONFIGURATION FÖR VYER & ANIMATIONER ---
+// Flyttad upp hit så att appen har stenkoll på ordningen från start!
+const viewOrder = ['soul', 'library', 'librarian', 'lab', 'dashboard', 'settings'];
+
 // Vi skapar en variabel för att hålla koll på var vi VAR någonstans
 let currentActiveView = 'soul'; 
 
@@ -76,22 +82,27 @@ function showView(viewName) {
     const newIndex = viewOrder.indexOf(viewName);
     
     let animClass = '';
+    // Kollar om vi flyttar oss i huvudmenyn
     if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-        // Om nya indexet är högre = vi går till höger i menyn = bilden kommer från höger
+        // Går vi till höger i menyn (t.ex. Home -> Library) så ska bilden komma IN från höger
         animClass = (newIndex > oldIndex) ? 'slide-in-right' : 'slide-in-left';
     }
 
     // Växla vyer
     Object.keys(views).forEach(key => {
         if (views[key]) {
-            // Ta bort gamla animationsklasser så de kan spelas upp igen
+            // 1. Ta bort de gamla animationsklasserna
             views[key].classList.remove('slide-in-right', 'slide-in-left');
             
             if (key === viewName) {
                 const isFlexView = (key === 'login' || key === 'claim');
                 views[key].style.display = isFlexView ? 'flex' : 'block';
                 
-                // Lägg på animationen på den NYA vyn
+                // 2. DET MAGISKA HACKET: Tvinga webbläsaren att registrera att vi tagit bort klassen
+                // Genom att be om offsetWidth, tvingar vi fram en "Reflow" (omritning)
+                void views[key].offsetWidth; 
+                
+                // 3. Lägg på animationen igen – nu är webbläsaren med på noterna!
                 if (animClass) {
                     views[key].classList.add(animClass);
                 }
@@ -104,7 +115,7 @@ function showView(viewName) {
     // Uppdatera vilken vy som är aktiv nu för nästa gång vi klickar
     currentActiveView = viewName;
 
-    // --- UPPDATERA MENYN (Glow-effekten) ---
+    // --- UPPDATERA MENYN ---
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
         const clickEvent = item.getAttribute('onclick');
@@ -1868,9 +1879,6 @@ async function syncToSelectedDevice() {
 // ==========================================
 // SWIPE NAVIGATION (Mobil)
 // ==========================================
-
-// Ordningen på flikarna, exakt så som de ligger i din meny
-const viewOrder = ['soul', 'library', 'librarian', 'lab', 'dashboard', 'settings'];
 
 let touchStartX = 0;
 let touchStartY = 0;
