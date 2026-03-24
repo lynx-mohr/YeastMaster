@@ -257,8 +257,12 @@ if (action === "COOLING") {
             const percent = Math.min((currentDay / targetDays) * 100, 100).toFixed(0);
 
             // Uppdatera värdena i HTML
-           document.getElementById('day-val').innerText = formatDaysToHuman(currentDay);
-document.getElementById('phase-day-val').innerText = formatDaysToHuman(phaseDay);
+    // NY KOD - KLISTRA IN:
+const dayValEl = document.getElementById('day-val');
+const phaseDayValEl = document.getElementById('phase-day-val');
+
+if (dayValEl) dayValEl.innerText = formatDaysToHuman(currentDay);
+if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(phaseDay);
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
 
