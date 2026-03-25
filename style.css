@@ -1601,5 +1601,5 @@ body.light-mode .info-icon {
 /* Light Mode: Vi gör bakgrunden LITE starkare (10%) i ljust läge för att den ska synas bra mot det vita */
 body.light-mode #library-info-box,
 body.light-mode #profiler-info-box {
-    background-color: rgba(140, 198, 63, 0.1);
+    background-color: rgba(140, 198, 63, 0.30);
 }
