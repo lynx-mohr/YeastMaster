@@ -2648,3 +2648,24 @@ function toggleAcademyInfo(btn) {
         btn.style.color = '#8CC63F'; // Grön ikon
     }
 }
+
+// ==========================================
+// --- TOGGLE FÖR ACADEMY INFO ---
+// ==========================================
+function toggleAcademyInfo(btn) {
+    const infoBox = document.getElementById('academy-info-box');
+    
+    if (infoBox.style.display === 'none' || infoBox.style.display === '') {
+        // ÖPPEN: Helt fylld, solid klargrön!
+        infoBox.style.display = 'block';
+        btn.style.backgroundColor = '#8CC63F'; 
+        btn.style.borderColor = '#8CC63F';
+        btn.style.color = '#111111'; 
+    } else {
+        // STÄNGD: Dämpad och transparent
+        infoBox.style.display = 'none';
+        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)'; 
+        btn.style.borderColor = '#8CC63F';
+        btn.style.color = '#8CC63F'; 
+    }
+}
