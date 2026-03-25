@@ -771,21 +771,51 @@ canvas#beer-chart {
     line-height: 1.5;
 }
 
+/* ========================================== */
+/* --- LAB TABS (STANDARD FORM DESIGN)   --- */
+/* ========================================== */
+
 .lab-tabs {
     display: flex;
     gap: 15px; 
-    margin-top: 15px;
+    margin-top: 5px;
     margin-bottom: 25px;
-    width: 100%; /* Låt containern ta hela bredden */
+    width: 100%; /* Fortfarande full bredd */
 }
 
-/* Få piller-tabbarna att växa och dela på utrymmet */
-.lab-tab-pill {
-    flex: 1; /* Låt varje tabb ta hälften av utrymmet */
-    /* ... (resten av din befintliga .lab-tab-pill CSS förblir oförändrad) ... */
+/* Den nya, mer strama designen */
+.lab-tab-button {
+    flex: 1; /* Delar ytan lika */
     background: transparent;
-    border: 1px solid #444; 
-    /* osv... */
+    border: 2px solid #333; /* Lite tjockare ram, matchar inmatningsfält */
+    color: #666; /* Mer dämpad färg när inaktiv */
+    padding: 12px 20px; /* Justerad padding för ny form */
+    border-radius: 12px; /* KONSISTENS: Stram form, ej rund */
+    font-size: 0.8rem; /* Samma som i The Profiler */
+    font-weight: 800;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Lexend', sans-serif; /* Säkerställ typsnitt */
+}
+
+/* Hover-effekt */
+.lab-tab-button:hover {
+    border-color: #555;
+    color: #aaa;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* AKTIV TABB (Orange glöd) */
+.lab-tab-button.active {
+    border-color: #ff9800; /* Orange ram */
+    color: #ff9800; /* Orange text */
+    background: rgba(255, 152, 0, 0.05); /* Svag orange bakgrund */
+    box-shadow: 0 0 15px rgba(255, 152, 0, 0.2); /* Mjuk orange glöd */
 }
 }
 .lab-tab {
