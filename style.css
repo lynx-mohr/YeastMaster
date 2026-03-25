@@ -1572,3 +1572,34 @@ body.light-mode .theme-toggle-compact { background: #eee; border-color: #ccc; }
 body.light-mode .info-icon {
     /* Om du vill ha en annan färg i light mode, ändra här. Annars behåller den grön! */
 }
+
+/* ========================================== */
+/* --- INFO BOXES (PROFILER & LIBRARY)    --- */
+/* ========================================== */
+#library-info-box,
+#profiler-info-box {
+    /* Den svagt gröna bakgrunden (5% färgstyrka) */
+    background-color: rgba(140, 198, 63, 0.05);
+    
+    /* Den solida Cascadehumle-gröna kanten till vänster */
+    border-left: 4px solid #8CC63F;
+    
+    /* Luft inuti boxen så texten andas */
+    padding: 15px;
+    
+    /* Lite avstånd från rubriken ovanför */
+    margin-top: 15px;
+    
+    /* Mjukt rundade hörn på högersidan (vänstersidan är platt mot kanten) */
+    border-radius: 0 8px 8px 0;
+    
+    /* Finjustering av texten inuti boxen */
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* Light Mode: Vi gör bakgrunden LITE starkare (10%) i ljust läge för att den ska synas bra mot det vita */
+body.light-mode #library-info-box,
+body.light-mode #profiler-info-box {
+    background-color: rgba(140, 198, 63, 0.1);
+}
