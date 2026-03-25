@@ -2606,3 +2606,28 @@ auth.onAuthStateChanged(async (user) => {
         showView('soul');
     }
 });
+
+// ==========================================
+// --- ACADEMY: NAVIGATION ---
+// ==========================================
+
+function openAcademyModule(moduleId) {
+    // Dölj akademi-startsidan och tabbarna i toppen
+    document.getElementById('lab-content-academy').style.display = 'none';
+    document.querySelector('.lab-tabs').style.display = 'none';
+    
+    // Visar lektions-vyn
+    document.getElementById('academy-module-view').style.display = 'block';
+    
+    // (Framtidsplan: Här kan man lägga in en if(moduleId === 'agar') för att 
+    // ladda in olika texter beroende på vilket kort man klickade på!)
+}
+
+function closeAcademyModule() {
+    // Dölj lektions-vyn
+    document.getElementById('academy-module-view').style.display = 'none';
+    
+    // Visa akademi-startsidan och tabbarna igen
+    document.getElementById('lab-content-academy').style.display = 'block';
+    document.querySelector('.lab-tabs').style.display = 'flex';
+}
