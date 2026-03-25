@@ -124,6 +124,9 @@ const views = {
             item.classList.add('active');
         }
     });
+    // Scrolla mjukt och snyggt högst upp på sidan
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
 }
 
 // --- VISA CLAIM-RUTAN FÖR NYA ENHETER ---
