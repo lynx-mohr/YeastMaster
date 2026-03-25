@@ -2631,3 +2631,20 @@ function closeAcademyModule() {
     document.getElementById('lab-content-academy').style.display = 'block';
     document.querySelector('.lab-tabs').style.display = 'flex';
 }
+
+// ==========================================
+// --- TOGGLE FÖR ACADEMY INFO ---
+// ==========================================
+function toggleAcademyInfo(btn) {
+    const infoBox = document.getElementById('academy-info-box');
+    
+    if (infoBox.style.display === 'none' || infoBox.style.display === '') {
+        infoBox.style.display = 'block';
+        btn.style.backgroundColor = '#8CC63F'; // 100% grön
+        btn.style.color = '#111111'; // Mörk ikon
+    } else {
+        infoBox.style.display = 'none';
+        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)'; // Dimmig
+        btn.style.color = '#8CC63F'; // Grön ikon
+    }
+}
