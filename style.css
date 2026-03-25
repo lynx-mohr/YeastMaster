@@ -1540,3 +1540,35 @@ body.light-mode .theme-toggle-compact { background: #eee; border-color: #ccc; }
         padding-right: 40px !important;
     }
 }
+
+/* ========================================= */
+/* --- RUBRIKER MED INFO-IKON (FLEXBOX)  --- */
+/* ========================================= */
+.header-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Detta styr exakt hur nära ikonen ligger sista bokstaven! */
+    margin-bottom: 20px; /* Behåller luft ner till innehållet under */
+}
+
+.info-icon {
+    width: 22px;
+    height: 22px;
+    fill: var(--accent-color); /* MAGIN: Gör SVG-ikonen Cascadehumle-grön! */
+    color: var(--accent-color); /* Backup om du använder text/font-ikoner */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    /* Finjustering ifall ikonen har inbyggd osynlig luft */
+    margin-top: -2px; 
+}
+
+.info-icon:hover {
+    filter: drop-shadow(0 0 8px var(--accent-color));
+    transform: scale(1.1);
+}
+
+/* Light mode support för ikonen (frivilligt, men snyggt om du vill ha den mörkare där) */
+body.light-mode .info-icon {
+    /* Om du vill ha en annan färg i light mode, ändra här. Annars behåller den grön! */
+}
