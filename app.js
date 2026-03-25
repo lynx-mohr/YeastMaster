@@ -2311,17 +2311,17 @@ function toggleProfilerInfo(btn) {
     const infoBox = document.getElementById('profiler-info-box');
     
     if (infoBox.style.display === 'none' || infoBox.style.display === '') {
-        // ÖPPEN: Klargrön och lysande!
+        // ÖPPEN: Helt fylld, solid klargrön!
         infoBox.style.display = 'block';
-        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.4)'; // Tydligt tänd
+        btn.style.backgroundColor = '#8CC63F'; // 100% grön bakgrund
         btn.style.borderColor = '#8CC63F';
-        btn.style.color = '#8CC63F';
+        btn.style.color = '#111111'; // Mörkt 'i' för maximal kontrast mot det gröna
     } else {
         // STÄNGD: Dämpad och transparent
         infoBox.style.display = 'none';
-        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)'; // Dimmig
+        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)'; // Dimmig bakgrund
         btn.style.borderColor = '#8CC63F';
-        btn.style.color = '#8CC63F';
+        btn.style.color = '#8CC63F'; // Grönt 'i'
     }
 }
 
@@ -2329,20 +2329,20 @@ function toggleProfilerInfo(btn) {
 // --- TOGGLE FÖR LIBRARY INFO ---
 // ==========================================
 function toggleLibraryInfo(btn) {
-    const infoBox = document.getElementById('library-info-box'); // Dubbelkolla att detta id matchar din info-box i Library!
+    const infoBox = document.getElementById('library-info-box'); 
     
     if (infoBox.style.display === 'none' || infoBox.style.display === '') {
-        // ÖPPEN: Klargrön och lysande!
+        // ÖPPEN: Helt fylld, solid klargrön!
         infoBox.style.display = 'block';
-        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.4)'; // Tydligt tänd
+        btn.style.backgroundColor = '#8CC63F'; // 100% grön bakgrund
         btn.style.borderColor = '#8CC63F';
-        btn.style.color = '#8CC63F';
+        btn.style.color = '#111111'; // Mörkt 'i' för maximal kontrast mot det gröna
     } else {
         // STÄNGD: Dämpad och transparent
         infoBox.style.display = 'none';
-        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)'; // Dimmig
+        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)'; // Dimmig bakgrund
         btn.style.borderColor = '#8CC63F';
-        btn.style.color = '#8CC63F';
+        btn.style.color = '#8CC63F'; // Grönt 'i'
     }
 }
 
