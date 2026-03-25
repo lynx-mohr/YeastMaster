@@ -369,7 +369,7 @@
             <h3 style="color: var(--text-main); margin-top: 20px; margin-bottom: 10px; font-size: 1.1rem;">🔬 The Yeast Library</h3>
             <p style="margin-bottom: 40px;">
                 Stop guessing. Our built-in library contains detailed guides on how to treat the world's most popular yeast strains to coax out the perfect esters and phenols for your specific beer style.
-            <section id="view-librarian" style="display: none;">
+         <section id="view-librarian" style="display: none;">
     
     <div class="library-header" style="margin-bottom: 20px;">
         <h2 style="margin: 0; line-height: 1;">In the lab</h2> 
@@ -382,75 +382,63 @@
 
     <div id="lab-content-academy" style="display:block;">
         
-        <div class="settings-group" style="padding: 20px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+            <h3 style="margin: 0; color: var(--accent-color); font-size: 1.3rem; font-weight: 900; letter-spacing: -0.5px;">Yeast Management Academy</h3>
             
-            <div class="academy-hero" style="align-items: flex-start;">
-                
-                <div class="academy-hero-text" style="width: 100%;">
-                    
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
-                        <h3 style="color:var(--accent-color); font-size: 1.3rem; font-weight: 900; margin: 0; letter-spacing: -0.5px;">Yeast Management Academy</h3>
-                        
-                        <button onclick="toggleAcademyInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; font-size: 0.9rem; transition: all 0.3s ease; padding: 0; flex-shrink: 0;">
-                            i
-                        </button>
-                    </div>
+            <button onclick="toggleAcademyInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; font-size: 0.9rem; transition: all 0.3s ease; padding: 0;">
+                i
+            </button>
+        </div>
 
-                    <div id="academy-info-box" style="display: none;">
-                        <strong style="color: var(--text-main);">Roll up your sleeves and become a microbiologist!</strong><br><br>
-                        Step into the Arcane Lab and discover the fascinating world of yeast management. Whether you're looking to master the art of building robust yeast starters, learn how to streak agar plates, or venture out to capture wild yeast from the apple trees in your backyard—this is where your journey begins. Maintain your own private yeast library at home and unlock the true soul of your beer.
-                    </div>
-                </div>
+        <div id="academy-info-box" style="display: none;">
+            <strong style="color: var(--text-main);">Roll up your sleeves and become a microbiologist!</strong><br><br>
+            Step into the Arcane Lab and discover the fascinating world of yeast management. Whether you're looking to master the art of building robust yeast starters, learn how to streak agar plates, or venture out to capture wild yeast from the apple trees in your backyard—this is where your journey begins. Maintain your own private yeast library at home and unlock the true soul of your beer.
+        </div>
 
-                <div class="academy-hero-image">
-                    <img src="librarian-dark.png" class="librarian-illustration lib-dark" alt="The Yeast Librarian">
-                    <img src="librarian-light.png" class="librarian-illustration lib-light" alt="The Yeast Librarian">
+        <div style="text-align: center; margin-bottom: 30px; margin-top: 20px;">
+            <img src="librarian-dark.png" class="librarian-illustration lib-dark" alt="The Yeast Librarian" style="width: 180px; margin: 0 auto;">
+            <img src="librarian-light.png" class="librarian-illustration lib-light" alt="The Yeast Librarian" style="width: 180px; margin: 0 auto;">
+        </div>
+
+        <div class="academy-grid">
+            <div class="academy-card" onclick="openAcademyModule('starters')">
+                <div class="academy-card-icon">🧪</div>
+                <div class="academy-card-content">
+                    <h4>Yeast Starters 101</h4>
+                    <p>Wake up your yeast and ensure a healthy fermentation.</p>
                 </div>
+                <div class="academy-card-arrow">→</div>
             </div>
 
-            <div class="academy-grid" style="padding: 15px 0 0 0; margin-top: 5px; border-top: 1px solid rgba(255,255,255,0.05);">
-                
-                <div class="academy-card" onclick="openAcademyModule('starters')">
-                    <div class="academy-card-icon">🧪</div>
-                    <div class="academy-card-content">
-                        <h4>Yeast Starters 101</h4>
-                        <p>Wake up your yeast and ensure a healthy fermentation.</p>
-                    </div>
-                    <div class="academy-card-arrow">→</div>
+            <div class="academy-card" onclick="openAcademyModule('agar')">
+                <div class="academy-card-icon">🧫</div>
+                <div class="academy-card-content">
+                    <h4>Mastering Agar Plates</h4>
+                    <p>Learn to pour, streak, and isolate pure strains.</p>
                 </div>
+                <div class="academy-card-arrow">→</div>
+            </div>
 
-                <div class="academy-card" onclick="openAcademyModule('agar')">
-                    <div class="academy-card-icon">🧫</div>
-                    <div class="academy-card-content">
-                        <h4>Mastering Agar Plates</h4>
-                        <p>Learn to pour, streak, and isolate pure strains.</p>
-                    </div>
-                    <div class="academy-card-arrow">→</div>
+            <div class="academy-card" onclick="openAcademyModule('slants')">
+                <div class="academy-card-icon">🧬</div>
+                <div class="academy-card-content">
+                    <h4>Slants & Storage</h4>
+                    <p>Build and maintain your own yeast bank.</p>
                 </div>
+                <div class="academy-card-arrow">→</div>
+            </div>
 
-                <div class="academy-card" onclick="openAcademyModule('slants')">
-                    <div class="academy-card-icon">🧬</div>
-                    <div class="academy-card-content">
-                        <h4>Slants & Storage</h4>
-                        <p>Build and maintain your own yeast bank.</p>
-                    </div>
-                    <div class="academy-card-arrow">→</div>
+            <div class="academy-card" onclick="openAcademyModule('wild')">
+                <div class="academy-card-icon">🍏</div>
+                <div class="academy-card-content">
+                    <h4>Capturing Wild Yeast</h4>
+                    <p>Hunt for local microbes and brew something unique.</p>
                 </div>
-
-                <div class="academy-card" onclick="openAcademyModule('wild')">
-                    <div class="academy-card-icon">🍏</div>
-                    <div class="academy-card-content">
-                        <h4>Capturing Wild Yeast</h4>
-                        <p>Hunt for local microbes and brew something unique.</p>
-                    </div>
-                    <div class="academy-card-arrow">→</div>
-                </div>
-
+                <div class="academy-card-arrow">→</div>
             </div>
         </div>
-    </div></p>
-        </div>
-    </section>
+
+    </div>
 
 
 
