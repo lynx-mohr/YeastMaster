@@ -1851,3 +1851,58 @@ body.light-mode .module-protip {
     background-color: rgba(140, 198, 63, 0.15);
     color: #111;
 }
+
+/* ========================================== */
+/* --- LAB TABS (PILL DESIGN)             --- */
+/* ========================================== */
+
+.lab-tabs {
+    display: flex;
+    gap: 15px; /* Samma avstånd som i 'Profiler' */
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+.lab-tab-pill {
+    /* Bas-designen (Dämpad färg när den INTE är aktiv) */
+    background: transparent;
+    border: 1px solid #444; /* Lite mörkare grå för den inaktiva kanten */
+    color: #888; /* Dämpad grå färg */
+    padding: 10px 20px; /* Snygg 'Pill'-storlek */
+    border-radius: 30px; /* Gör den helt rund */
+    font-size: 0.75rem; /* Samma som i 'Profiler' */
+    font-weight: 800; /* Tjock, fet text för att matcha stilen */
+    cursor: pointer;
+    text-transform: uppercase; /* Alltid stora bokstäver */
+    letter-spacing: 1px; /* Lite luft mellan bokstäverna */
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover-effekt för PC */
+.lab-tab-pill:hover {
+    border-color: #666;
+    color: #aaa;
+}
+
+/* AKTIV TABB (Cascadehumle-grön) */
+.lab-tab-pill.active {
+    border-color: #8CC63F; /* Cascadehumle-grön kant */
+    color: #8CC63F; /* Cascadehumle-grön text */
+    background: rgba(140, 198, 63, 0.05); /* En extremt svag, grön bakgrundsfärg */
+    box-shadow: 0 0 10px rgba(140, 198, 63, 0.15); /* En mjuk, grön glöd */
+}
+
+/* Light mode support */
+body.light-mode .lab-tab-pill {
+    border-color: #ccc;
+    color: #666;
+}
+
+body.light-mode .lab-tab-pill.active {
+    background: #fdfdfd;
+    border-color: #8CC63F;
+    color: #8CC63F;
+}
