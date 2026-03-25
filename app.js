@@ -2315,8 +2315,7 @@ function toggleProfilerInfo(btn) {
         // Öppna boxen
         infoBox.style.display = 'block';
         
-        // Byt text till X och gör bakgrunden LITE starkare grön för att visa att den är aktiv
-        btn.innerHTML = 'X';
+        // Gör bakgrunden LITE starkare grön för att visa att den är aktiv (inget kryss!)
         btn.style.backgroundColor = 'rgba(140, 198, 63, 0.3)';
         btn.style.borderColor = '#8CC63F';
         btn.style.color = '#8CC63F';
@@ -2324,8 +2323,7 @@ function toggleProfilerInfo(btn) {
         // Stäng boxen
         infoBox.style.display = 'none';
         
-        // Återställ till 'i' och din ursprungliga, snygga transparenta gröna
-        btn.innerHTML = 'i';
+        // Återställ till den snygga transparenta gröna
         btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)';
         btn.style.borderColor = '#8CC63F';
         btn.style.color = '#8CC63F';
