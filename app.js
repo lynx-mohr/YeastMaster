@@ -2312,19 +2312,25 @@ function toggleProfilerInfo(btn) {
     
     // Kollar om boxen är stängd
     if (infoBox.style.display === 'none' || infoBox.style.display === '') {
+        // Öppna boxen
         infoBox.style.display = 'block';
-        // Få knappen att lysa i din snygga accentfärg
-        btn.style.borderColor = 'var(--accent-color)';
-        btn.style.color = 'var(--accent-color)';
+        
+        // Byt text till X och gör bakgrunden LITE starkare grön för att visa att den är aktiv
+        btn.innerHTML = 'X';
+        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.3)';
+        btn.style.borderColor = '#8CC63F';
+        btn.style.color = '#8CC63F';
     } else {
         // Stäng boxen
         infoBox.style.display = 'none';
-        // Återställ knappen till den dämpade färgen
-        btn.style.borderColor = 'var(--text-dim)';
-        btn.style.color = 'var(--text-dim)';
+        
+        // Återställ till 'i' och din ursprungliga, snygga transparenta gröna
+        btn.innerHTML = 'i';
+        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)';
+        btn.style.borderColor = '#8CC63F';
+        btn.style.color = '#8CC63F';
     }
 }
-
 // ==========================================
 // --- TOGGLE FÖR LIBRARY INFO ---
 // ==========================================
