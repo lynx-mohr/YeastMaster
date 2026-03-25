@@ -1600,14 +1600,20 @@ body.light-mode .info-icon {
 
 #academy-info-box {
     background-color: rgba(140, 198, 63, 0.08); 
-    border-left: 4px solid #8CC63F; 
-    padding: 12px 15px; 
+    border-left: 4px solid #8CC63F;
+    padding: 12px 15px;
     border-radius: 0 8px 8px 0;
     margin-bottom: 15px;
     margin-top: 10px;
     font-size: 0.9rem;
     line-height: 1.5;
-    opacity: 0.9; 
+}
+
+body.light-mode #library-info-box,
+body.light-mode #profiler-info-box,
+body.light-mode #academy-info-box {
+    background-color: rgba(140, 198, 63, 0.15); 
+    color: #111;
 }
 
 body.light-mode #library-info-box,
