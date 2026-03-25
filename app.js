@@ -2669,3 +2669,33 @@ function toggleAcademyInfo(btn) {
         btn.style.color = '#8CC63F'; 
     }
 }
+
+// ==========================================
+// --- BYT FLIK I LABBET (ACADEMY / CALC) ---
+// ==========================================
+function switchLabTab(tabName, clickedElement) {
+    // 1. Göm allt innehåll i labbet
+    const academyContent = document.getElementById('lab-content-academy');
+    const calcContent = document.getElementById('lab-content-calc');
+    
+    // Nollställ display
+    academyContent.style.display = 'none';
+    calcContent.style.display = 'none';
+
+    // 2. Visa det valda innehållet
+    if (tabName === 'academy') {
+        academyContent.style.display = 'block';
+    } else if (tabName === 'calc') {
+        calcContent.style.display = 'block';
+    }
+
+    // 3. Hantera den visuella stilen på knapparna
+    // Hämta alla knappar i labbet
+    const buttons = document.querySelectorAll('.lab-tab-button');
+    
+    // Ta bort 'active' klassen från alla
+    buttons.forEach(btn => btn.classList.remove('active'));
+
+    // Lägg till 'active' klassen på den klickade knappen
+    clickedElement.classList.add('active');
+}
