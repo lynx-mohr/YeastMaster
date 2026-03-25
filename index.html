@@ -426,11 +426,62 @@
             </div>
         </div>
 
-        <div id="lab-content-academy" style="display:block; padding: 20px;">
-            <img src="librarian-dark.png" class="librarian-illustration lib-dark" alt="The Yeast Librarian (Transparent Dark Mode)">
-            <img src="librarian-light.png" class="librarian-illustration lib-light" alt="The Yeast Librarian (Transparent Light Mode)">
-            <h3 style="color:var(--accent-color)">Yeast Management Academy</h3>
+       <div id="lab-content-academy" style="display:block;">
+    
+    <div class="academy-hero">
+        <div class="academy-hero-text">
+            <h3 style="color:var(--accent-color); font-size: 1.8rem; font-weight: 900; margin-bottom: 15px; letter-spacing: -0.5px;">Yeast Management Academy</h3>
+            <p style="color: var(--text-dim); font-size: 1rem; line-height: 1.6; margin-bottom: 20px;">
+                <strong style="color: var(--text-main);">Roll up your sleeves and become a microbiologist!</strong><br><br>
+                Step into the Arcane Lab and discover the fascinating world of yeast management. Whether you're looking to master the art of building robust yeast starters, learn how to streak agar plates, or venture out to capture wild yeast from the apple trees in your backyard—this is where your journey begins. Maintain your own private yeast library at home and unlock the true soul of your beer.
+            </p>
         </div>
+        <div class="academy-hero-image">
+            <img src="librarian-dark.png" class="librarian-illustration lib-dark" alt="The Yeast Librarian">
+            <img src="librarian-light.png" class="librarian-illustration lib-light" alt="The Yeast Librarian">
+        </div>
+    </div>
+
+    <div class="academy-grid">
+        
+        <div class="academy-card" onclick="openAcademyModule('starters')">
+            <div class="academy-card-icon">🧪</div>
+            <div class="academy-card-content">
+                <h4>Yeast Starters 101</h4>
+                <p>Wake up your yeast and ensure a healthy, vigorous fermentation.</p>
+            </div>
+            <div class="academy-card-arrow">→</div>
+        </div>
+
+        <div class="academy-card" onclick="openAcademyModule('agar')">
+            <div class="academy-card-icon">🧫</div>
+            <div class="academy-card-content">
+                <h4>Mastering Agar Plates</h4>
+                <p>Learn to pour, streak, and isolate pure strains like a pro.</p>
+            </div>
+            <div class="academy-card-arrow">→</div>
+        </div>
+
+        <div class="academy-card" onclick="openAcademyModule('slants')">
+            <div class="academy-card-icon">🧬</div>
+            <div class="academy-card-content">
+                <h4>Slants & Long-term Storage</h4>
+                <p>Build and maintain your own yeast bank in the fridge.</p>
+            </div>
+            <div class="academy-card-arrow">→</div>
+        </div>
+
+        <div class="academy-card" onclick="openAcademyModule('wild')">
+            <div class="academy-card-icon">🍏</div>
+            <div class="academy-card-content">
+                <h4>Capturing Wild Yeast</h4>
+                <p>Hunt for local microbes and brew something truly unique.</p>
+            </div>
+            <div class="academy-card-arrow">→</div>
+        </div>
+
+    </div>
+</div>
     </section>
 
 <nav class="main-nav">
