@@ -2310,42 +2310,38 @@ if (savedTheme) {
 function toggleProfilerInfo(btn) {
     const infoBox = document.getElementById('profiler-info-box');
     
-    // Kollar om boxen är stängd
     if (infoBox.style.display === 'none' || infoBox.style.display === '') {
-        // Öppna boxen
+        // ÖPPEN: Klargrön och lysande!
         infoBox.style.display = 'block';
-        
-        // Gör bakgrunden LITE starkare grön för att visa att den är aktiv (inget kryss!)
-        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.3)';
+        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.4)'; // Tydligt tänd
         btn.style.borderColor = '#8CC63F';
         btn.style.color = '#8CC63F';
     } else {
-        // Stäng boxen
+        // STÄNGD: Dämpad och transparent
         infoBox.style.display = 'none';
-        
-        // Återställ till den snygga transparenta gröna
-        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)';
+        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)'; // Dimmig
         btn.style.borderColor = '#8CC63F';
         btn.style.color = '#8CC63F';
     }
 }
+
 // ==========================================
 // --- TOGGLE FÖR LIBRARY INFO ---
 // ==========================================
 function toggleLibraryInfo(btn) {
-    const infoBox = document.getElementById('library-info-box');
+    const infoBox = document.getElementById('library-info-box'); // Dubbelkolla att detta id matchar din info-box i Library!
     
     if (infoBox.style.display === 'none' || infoBox.style.display === '') {
-        // Öppna lådan
+        // ÖPPEN: Klargrön och lysande!
         infoBox.style.display = 'block';
-        // Fyll knappen med solid Cascade-grön färg och mörk text
-        btn.style.background = '#8CC63F';
-        btn.style.color = '#111';
+        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.4)'; // Tydligt tänd
+        btn.style.borderColor = '#8CC63F';
+        btn.style.color = '#8CC63F';
     } else {
-        // Stäng lådan
+        // STÄNGD: Dämpad och transparent
         infoBox.style.display = 'none';
-        // Återgå till ihålig grön knapp
-        btn.style.background = 'rgba(140, 198, 63, 0.15)';
+        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)'; // Dimmig
+        btn.style.borderColor = '#8CC63F';
         btn.style.color = '#8CC63F';
     }
 }
