@@ -2053,15 +2053,17 @@ body.light-mode .floating-info-box {
 /* Containern för bakgrundsbilden */
 .academy-librarian-bg {
     position: absolute !important;
-    top: 50% !important;     /* Centrera vertikalt i griden */
-    left: 50% !important;    /* Centrera horisontellt i griden */
-    transform: translate(-50%, -50%) !important; /* Offset för sann centrering */
+    top: 60% !important;     /* Ändrad från 50% för att trycka ner henne */
+    left: 50% !important;    
+    /* Ändrad från -50% till -35% på Y-axeln för att flytta ner hennes tyngdpunkt */
+    transform: translate(-50%, -35%) !important; 
     
-    width: 100% !important;  /* Ta upp 100% av gridens bredd, kant till kant */
+    width: 100% !important;  
+    max-width: 550px !important; /* Spärr så hon inte blir extremt massiv på stora skärmar */
     height: auto !important;
     
-    pointer-events: none !important; /* JÄTTEVIKTIGT: Klicka IGENOM bilden till knapparna */
-    opacity: 0.15 !important;        /* "Ghosted" effekt. Justera vid behov (0.0-1.0) */
+    pointer-events: none !important; /* Klicka IGENOM bilden */
+    opacity: 0.15 !important;        /* "Ghosted" effekt */
     
     z-index: -1 !important;          /* Tryck bilden BAKOM korten */
 }
