@@ -2039,3 +2039,48 @@ body.light-mode .floating-info-box {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
     color: #222 !important;
 }
+
+/* ========================================== */
+/* --- LAB: BAKGRUNDS-BIBLIOTEKARIE --- */
+/* ========================================== */
+
+/* Gör griden till containern för absolut positionering */
+.academy-grid {
+    position: relative !important;
+    z-index: 10 !important; /* Grundnivå för innehållet i denna grid */
+}
+
+/* Containern för bakgrundsbilden */
+.academy-librarian-bg {
+    position: absolute !important;
+    top: 50% !important;     /* Centrera vertikalt i griden */
+    left: 50% !important;    /* Centrera horisontellt i griden */
+    transform: translate(-50%, -50%) !important; /* Offset för sann centrering */
+    
+    width: 100% !important;  /* Ta upp 100% av gridens bredd, kant till kant */
+    height: auto !important;
+    
+    pointer-events: none !important; /* JÄTTEVIKTIGT: Klicka IGENOM bilden till knapparna */
+    opacity: 0.15 !important;        /* "Ghosted" effekt. Justera vid behov (0.0-1.0) */
+    
+    z-index: -1 !important;          /* Tryck bilden BAKOM korten */
+}
+
+/* Skala själva bilderna inuti containern */
+.academy-librarian-bg img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important; /* Säkerställer att bilden skalar snyggt */
+}
+
+/* Valfritt: Lite lägre opacitet i light mode för bättre textkontrast */
+body.light-mode .academy-librarian-bg {
+    opacity: 0.1 !important;
+}
+
+/* Säkerställ att korten/knapparna sitter stadigt framför */
+.academy-card {
+    position: relative !important;
+    z-index: 20 !important; /* Högre z-index än bakgrundsbilden */
+    background-color: var(--card-bg) !important; /* Säkerställ att korten har en solid bakgrund */
+}
