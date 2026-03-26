@@ -2243,13 +2243,13 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 /* ================= ========================= */
 
 .glass-container {
-    /* Basstorlek (PC) */
-    width: 70px; 
-    height: 90px;
+    /* Ny storlek: Skräddarsydd för att exakt matcha textens höjd */
+    width: 80px; 
+    height: 105px;
     cursor: pointer;
     position: relative;
-    /* Flytta upp glaset lite så det linjerar med rubriken "YEAST" */
-    margin-top: -15px; 
+    /* Inga negativa marginaler behövs längre tack vare align-items: center */
+    margin: 0; 
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
@@ -2272,6 +2272,30 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 }
 
 body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
+
+/*========================================= */
+/* --- RESPONSIVA JUSTERINGAR (MOBIL) --- */
+/* ========================================= */
+@media (max-width: 600px) {
+    /* 1. Krymp avståndet mellan text och glas lite */
+    .home-title-section {
+        gap: 15px !important;
+    }
+
+    /* 2. Minska textrubriken */
+    .yeast-title {
+        font-size: 3.5rem !important; 
+    }
+    .yeast-subtitle {
+        font-size: 1.1rem !important;
+    }
+
+    /* 3. Minska glaset proportionerligt så det fortsätter matcha texten */
+    #interactive-beer-glass {
+        width: 55px !important; 
+        height: 72px !important; 
+    }
+}
 
 /* --- ANIMATIONS-LOGIK (Samma som tidigare) --- */
 #interactive-beer-glass .beer-liquid {
