@@ -113,18 +113,18 @@ const views = {
         }
     });
 
-    // --- MAGI: FYLL PÅ GLASET AUTOMATISKT NÄR VI GÅR TILL HOME ---
+ // --- MAGI: FYLL PÅ GLASET AUTOMATISKT NÄR VI GÅR TILL HOME ---
     if (viewName === 'soul') {
         const glass = document.getElementById('interactive-beer-glass');
         if (glass) {
-            // 1. Ta bort eventuella gamla animationer
+            // 1. Töm glaset och ta bort gamla animationer direkt
             glass.classList.remove('anim-drain', 'anim-fill');
-            
-            // 2. Tvinga webbläsaren att uppdatera (reflow) så den "glömmer" att glaset var fullt
             void glass.offsetWidth; 
             
-            // 3. Lägg på fyll-animationen!
-            glass.classList.add('anim-fill');
+            // 2. VÄNTA 800ms (medan "YEAST"-texten tonar in) och fyll sedan på!
+            setTimeout(() => {
+                glass.classList.add('anim-fill');
+            }, 800);
         }
     }
 
