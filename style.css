@@ -1150,24 +1150,28 @@ html.modal-open, body.modal-open {
     overscroll-behavior: none !important; /* Stoppar iPhones från att "studsa" förbi låset */
 }
 
+/* --- FRYS BAKGRUNDEN NÄR MODAL ÄR ÖPPEN --- */
+html.modal-open, body.modal-open {
+    overflow: hidden !important;
+    overscroll-behavior: none !important; 
+}
+
 /* --- YEAST INFO MODAL --- */
 .modal-overlay {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
     width: 100vw !important;
-    height: 100dvh !important; /* 'dvh' är magin som ignorerar mobilens adressfälts-höjd! */
+    height: 100dvh !important; 
     background-color: rgba(0, 0, 0, 0.85) !important;
     z-index: 99999 !important;
     
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important; /* Centrerar boxen spikrakt i mitten (horisontellt & vertikalt) */
+    /* VIKTIGT: Vi tog bort display: flex !important härifrån! JS sköter det nu. */
     
-    /* PC: 90px top-padding så vi inte krockar med top-menyn */
-    padding: 90px 20px 20px 20px !important; 
+    justify-content: center !important;
+    align-items: center !important; 
+    
+    padding: 80px 20px 20px 20px !important; /* PC: Trycker ner den från top-menyn */
     box-sizing: border-box !important;
     backdrop-filter: blur(5px) !important;
 }
@@ -1179,9 +1183,9 @@ html.modal-open, body.modal-open {
     width: 100% !important;
     max-width: 600px !important;
     
-    /* Boxen får aldrig bli högre än det tillgängliga (vadderade) utrymmet inuti overlayen */
+    /* Tvingar den att stanna inuti den säkra zonen vi skapat med padding ovan */
     max-height: 100% !important; 
-    margin: 0 !important; /* Tar BORT auto-marginalen som knuffade ut kortet */
+    margin: 0 !important; 
     
     display: flex !important;
     flex-direction: column !important;
@@ -1189,10 +1193,10 @@ html.modal-open, body.modal-open {
     animation: modalFadeIn 0.3s ease-out !important;
 }
 
-/* Mobil: Vänd på paddingen eftersom menyn ligger i botten där! */
+/* MOBIL: Vänder på marginalerna eftersom menyn är i botten! */
 @media (max-width: 600px) {
     .modal-overlay {
-        padding: 20px 20px 90px 20px !important; 
+        padding: 20px 20px 80px 20px !important; 
     }
 }
 
