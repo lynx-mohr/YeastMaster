@@ -1150,12 +1150,14 @@ body.light-mode .phase-row {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.85); /* Mörk transparent bakgrund */
-    z-index: 1000;
+    height: 100%; /* Eller 100vh */
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 99999 !important; /* Tvingar den ligga över menyn (som har 2000) */
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px; /* Ser till att modalen aldrig slår i skärmens kanter */
+    box-sizing: border-box;
     backdrop-filter: blur(5px);
 }
 
@@ -1163,12 +1165,12 @@ body.light-mode .phase-row {
     background-color: #1a1a1a;
     border: 1px solid #333;
     border-radius: 12px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 85vh;
+    width: 100%; /* Låter den fylla mobilskärmen (minus paddingen från overlay) */
+    max-width: 600px; /* Men blir aldrig bredare än 600px på PC */
+    max-height: 85vh; /* Max 85% av skärmhöjden så den alltid får plats */
     display: flex;
     flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
     animation: modalFadeIn 0.3s ease-out;
 }
 
