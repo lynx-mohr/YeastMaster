@@ -2236,10 +2236,14 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
     transition: transform 0.2s ease-out;
 }
 
-/* Tömning */
+/* 1. Tömning (Tvingad hastighet med keyframes!) */
 .glass-container.anim-drain .liquid-group {
-    transform: translateY(100px); 
-    transition: transform 2.0s cubic-bezier(0.4, 0.0, 0.2, 1); 
+    animation: drainGlassDown 2.0s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+}
+
+@keyframes drainGlassDown {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(100px); }
 }
 
 /* Påfyllning (OBS: All delay styrs nu från JavaScriptet, precis som vi bestämde!) */
