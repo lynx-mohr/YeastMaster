@@ -1150,13 +1150,18 @@ body.light-mode .phase-row {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%; /* Eller 100vh */
+    height: 100%;
     background-color: rgba(0, 0, 0, 0.85);
-    z-index: 99999 !important; /* Tvingar den ligga över menyn (som har 2000) */
+    z-index: 99999 !important;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 20px; /* Ser till att modalen aldrig slår i skärmens kanter */
+    
+    /* FIX 1: Låt den börja från toppen, men centrerar den med margin:auto på barnet */
+    align-items: flex-start; 
+    
+    /* FIX 2: Tvingar ner den under PC-menyn (70px meny + 20px marginal) */
+    padding: 90px 20px 20px 20px; 
+    
     box-sizing: border-box;
     backdrop-filter: blur(5px);
 }
@@ -1165,13 +1170,26 @@ body.light-mode .phase-row {
     background-color: #1a1a1a;
     border: 1px solid #333;
     border-radius: 12px;
-    width: 100%; /* Låter den fylla mobilskärmen (minus paddingen från overlay) */
-    max-width: 600px; /* Men blir aldrig bredare än 600px på PC */
-    max-height: 85vh; /* Max 85% av skärmhöjden så den alltid får plats */
+    width: 100%;
+    max-width: 600px;
+    
+    /* FIX 3: Centrerar boxen automatiskt om den får plats */
+    margin: auto; 
+    
+    /* FIX 4: Begränsar höjden så att texten inuti (modal-body) måste scrollas */
+    max-height: calc(100vh - 120px); 
+    
     display: flex;
     flex-direction: column;
     box-shadow: 0 10px 40px rgba(0,0,0,0.8);
     animation: modalFadeIn 0.3s ease-out;
+}
+
+/* FIX 5: Vänd på marginalerna för mobil eftersom menyn ligger i botten där! */
+@media (max-width: 600px) {
+    .modal-overlay {
+        padding: 20px 20px 90px 20px; 
+    }
 }
 
 @keyframes modalFadeIn {
