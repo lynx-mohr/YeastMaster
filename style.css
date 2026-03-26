@@ -1669,6 +1669,12 @@ body.light-mode .theme-toggle-compact { background: #eee; border-color: #ccc; }
         width: 100% !important; /* Se till att de fyller hela sektionens bredd */
         max-width: 100% !important;
     }
+    #profile-inputs {  /* <--- Denna rad är ny! */
+    margin-left: 0 !important;
+    margin-right: 0 !important; /* Säkerställ att den sträcker sig hela vägen */
+    width: 100% !important; 
+    max-width: 100% !important;
+}
 
     /* 5. Om du vill ha lite luft från skärmkanten på PC (eftersom vi nollställde sektionen) */
     body {
