@@ -594,14 +594,14 @@ function renderYeastLibrary(filter = "") {
         return nameMatch || tagMatch || styleMatch;
     });
 
-    filtered.forEach(yeast => {
- const isSelected = selectedStrains.includes(yeast.id);
-        const isCustom = yeast.isCustom ? 'custom-profile' : ''; // Kollar om det är din egen
+filtered.forEach(yeast => {
+        const isSelected = selectedStrains.includes(yeast.id);
+        const isCustom = yeast.isCustom ? 'custom-profile' : ''; 
         
         const card = document.createElement('div');
         card.className = `yeast-card ${isCustom} ${isSelected ? 'selected' : ''}`;
         
-      const deleteBtn = yeast.isCustom ? 
+        const deleteBtn = yeast.isCustom ? 
             `<div class="delete-custom-btn" onclick="event.stopPropagation(); deleteCustomProfile('${yeast.name}')">×</div>` 
             : '';
 
@@ -613,7 +613,12 @@ function renderYeastLibrary(filter = "") {
             </div>
         `;
 
-// 1. HOVER-logik (PC - Tooltip)
+        // --- TIMERS ---
+        let clickTimer = null;
+        let touchTimer = null;
+
+        // 1. HOVER (PC - Tooltip)
+        const tooltip = document.getElementById('yeast-tooltip');
         card.onmousemove = (e) => {
             if (tooltip) {
                 tooltip.style.display = "block";
@@ -624,26 +629,21 @@ function renderYeastLibrary(filter = "") {
         };
         card.onmouseleave = () => { if(tooltip) tooltip.style.display = "none"; };
 
-        // --- MAGIN FÖR DUBBELKLICK & LÅNGKLICK ---
-        let clickTimer = null;
-        let touchTimer = null;
-
-        // 2. ENKELKLICK (Öppnar detaljvyn för att välja)
-        card.onclick = (e) => {
-            // Avbryt om vi precis dubbelklickade
+        // 2. ENKELKLICK (Detaljvy)
+        card.onclick = () => {
             if (clickTimer) clearTimeout(clickTimer);
             clickTimer = setTimeout(() => {
                 openYeastDetail(yeast);
-            }, 250); // 250ms är den perfekta fördröjningen för att vänta på dubbelklick
+            }, 250); 
         };
 
-        // 3. DUBBELKLICK (PC - Öppnar Modalen med peppig text)
-        card.ondblclick = (e) => {
-            clearTimeout(clickTimer); // Förhindra enkelklicket från att triggas
+        // 3. DUBBELKLICK (PC - Modal)
+        card.ondblclick = () => {
+            clearTimeout(clickTimer); 
             openYeastModal(yeast);
         };
 
-    // 4. LÅNGKLICK (Mobil - Originalversionen)
+        // 4. LÅNGKLICK (Mobil - Originalversionen)
         card.addEventListener('touchstart', () => {
             touchTimer = setTimeout(() => {
                 openYeastModal(yeast);
@@ -653,8 +653,9 @@ function renderYeastLibrary(filter = "") {
         card.addEventListener('touchend', () => clearTimeout(touchTimer));
         card.addEventListener('touchmove', () => clearTimeout(touchTimer));
 
+        // Lägg till kortet i gridet
         grid.appendChild(card);
-    });
+    }); // <--- Här stängs forEach-loopen korrekt!
 }
 
 function openYeastDetail(yeast) {
