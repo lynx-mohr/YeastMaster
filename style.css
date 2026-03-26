@@ -2238,17 +2238,18 @@ body.light-mode .academy-librarian-bg {
 /* Light mode support för glaskanten */
 body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 
-/* ========================================= */
+/* ================= ========================= */
 /* --- INTERAKTIVT KUPIGT ÖLGLAS (HOME) --- */
-/* ========================================= */
+/* ================= ========================= */
 
 .glass-container {
-    width: 70px; /* Lite bredare för kupan */
+    /* Basstorlek (PC) */
+    width: 70px; 
     height: 90px;
     cursor: pointer;
     position: relative;
-    margin-right: 15px;
-    margin-top: -10px; /* Justera höjden mot rubriken */
+    /* Flytta upp glaset lite så det linjerar med rubriken "YEAST" */
+    margin-top: -15px; 
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
@@ -2257,24 +2258,22 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 
 .glass-container:active { transform: scale(0.95) translateY(2px); }
 
-/* Färgklasser (Matchar LIVE-vyn) */
+/* Färgklasser (Samma som tidigare) */
 .glass-container.color-pilsner { color: #f4c95d; } 
 .glass-container.color-amber   { color: #d67f1a; } 
 .glass-container.color-ipa     { color: #f2994a; } 
-.glass-container.color-red     { color: #a12b28; } /* Lite mörkare röd för kupan */
-.glass-container.color-stout   { color: #231100; } /* Riktigt mörk */
+.glass-container.color-red     { color: #a12b28; }
+.glass-container.color-stout   { color: #231100; }
 
 /* Glasets outline */
-.glass-outline, .glass-foot {
+.glass-outline {
     stroke: rgba(255,255,255,0.25);
     transition: stroke 0.3s ease;
 }
 
-body.light-mode .glass-outline, body.light-mode .glass-foot {
-    stroke: rgba(0,0,0,0.3);
-}
+body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 
-/* --- ANIMATIONS-LOGIK (Positions-baserad) --- */
+/* --- ANIMATIONS-LOGIK (Samma som tidigare) --- */
 #interactive-beer-glass .beer-liquid {
     fill: currentColor;
     transition: color 0.3s ease; 
@@ -2285,13 +2284,13 @@ body.light-mode .glass-outline, body.light-mode .glass-foot {
     transition: transform 0.2s ease-out;
 }
 
-/* 1. Tömning (Sjunka snabbt) */
+/* Tömning */
 .glass-container.anim-drain .liquid-group {
-    transform: translateY(100px); /* Drar ner allt ur masken */
+    transform: translateY(100px); 
     transition: transform 0.8s cubic-bezier(0.5, 0, 0.7, 0.5); 
 }
 
-/* 2. Påfyllning (Stiga mjukt med bounce) */
+/* Påfyllning */
 .glass-container.anim-fill .liquid-group {
     transform: translateY(0); 
     animation: fillGlassUpPosition 2.0s cubic-bezier(0.2, 1, 0.3, 1) forwards;
@@ -2300,6 +2299,23 @@ body.light-mode .glass-outline, body.light-mode .glass-foot {
 @keyframes fillGlassUpPosition {
     0%   { transform: translateY(100px); }
     80%  { transform: translateY(0); }
-    85%  { transform: translateY(-3px); } /* Liten studs */
+    85%  { transform: translateY(-3px); }
     100% { transform: translateY(0); }
+}
+
+/* ========================================= */
+/* --- RESPONSIVA JUSTERINGAR (MOBIL) --- */
+/* ========================================= */
+@media (max-width: 600px) {
+    /* 1. Minska textrubriken */
+    .yeast-title {
+        font-size: 3.5rem !important; /* Minskar från 5.5rem */
+    }
+
+    /* 2. Minska storleken på glaset */
+    #interactive-beer-glass {
+        width: 50px !important; /* Minskar bredden */
+        height: 70px !important; /* Minskar höjden */
+        margin-top: -10px !important; /* Justera höjden mot mindre text */
+    }
 }
