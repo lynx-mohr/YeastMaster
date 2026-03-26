@@ -1749,17 +1749,18 @@ const yeastDescriptions = {
 
 
 
+// --- POPUP-FUNKTIONER (MODAL) ---
 function openYeastModal(yeast) {
     const modal = document.getElementById('yeast-info-modal');
-    document.getElementById('modal-yeast-name').innerText = yeast.name;
+    const modalTitle = document.getElementById('modal-yeast-name');
+    const modalDesc = document.getElementById('modal-yeast-desc');
+
+    modalTitle.innerText = yeast.name;
     
-    let detailedText = yeastDescriptions[yeast.id] || yeastDescriptions[yeast.name] || `<p>${yeast.desc}</p>`;
+    let detailedText = "";
 
-
-
-    // Kolla om detta är en egengjord profil (vi kollar efter flaggan 'isCustom')
+    // 1. KOLLA OM DET ÄR EN EGEN PROFIL
     if (yeast.isCustom) {
-        // Hitta den sparade profildatan i localStorage för att få tag i stegen
         const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
         const profileData = savedProfiles.find(p => p.s === yeast.name);
 
@@ -1787,50 +1788,33 @@ function openYeastModal(yeast) {
             detailedText = `<p>Custom profile data not found.</p>`;
         }
     } else {
-        // --- VANLIG JÄST FRÅN DATABASEN ---
-        detailedText = yeastDescriptions[yeast.name] || yeastDescriptions[yeast.id];
+        // 2. VANLIG JÄST FRÅN BESKRIVNINGARNA
+        detailedText = yeastDescriptions[yeast.id] || yeastDescriptions[yeast.name];
+        
         if (!detailedText) {
-            detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:15px;">Passar till:</h3><p>${yeast.styles}</p>`;
+            detailedText = `
+                <p>${yeast.desc}</p>
+                <h3 style="margin-top:20px; color: #fff;">Passar till:</h3>
+                <p>${yeast.styles}</p>
+            `;
         }
 
-        // --- LÄGG TILL INKLUDERADE PROFILER ---
-        // Denna lilla ordlista mappar jästens ID till namnet i din maskindatabas
+        // 3. LÄGG TILL INKLUDERADE MASKINPROFILER (Hardware Profiles)
         const hwStrainNames = {
-            "us-05": "US-05",
-            "s-04": "S-04",
-            "w-34-70": "W-34/70",
-            "be-256": "BE-256",
-            "wb-06": "WB-06",
-            "verdant": "Verdant IPA",
-            "voss": "Voss Kveik",
-            "nottingham": "Nottingham",
-            "wlp001": "California Ale",
-            "wlp300": "Hefeweizen",
-            "belle-saison": "Belle Saison",
-            "t-58": "T-58",
-            "s-23": "S-23",
-            "wlp002": "English Ale",
-            "wlp500": "Trappist",
-            "diamond": "Diamond",
-            "wlp066": "London Fog",
-            "s-33": "S-33",
-            "wlp800": "Pilsner Lager",
-            "novalager": "NovaLager",
-            "wyeast-1968": "London ESB",
-            "wlp920": "Old Bavarian",
-            "imperial-b45": "Gnome",
-            "wyeast-1084": "Irish Ale",
-            "wyeast-3944": "Witbier",
-            "wlp833": "Bock Lager",
-            "wlp007": "Dry English",
-            "wyeast-1318": "London III",
-            "wyeast-2565": "Kölsch",
-            "wlp095": "Burlington"
+            "us-05": "US-05", "s-04": "S-04", "w-34-70": "W-34/70", "be-256": "BE-256",
+            "wb-06": "WB-06", "verdant": "Verdant IPA", "voss": "Voss Kveik",
+            "nottingham": "Nottingham", "wlp001": "California Ale", "wlp300": "Hefeweizen",
+            "belle-saison": "Belle Saison", "t-58": "T-58", "s-23": "S-23",
+            "wlp002": "English Ale", "wlp500": "Trappist", "diamond": "Diamond",
+            "wlp066": "London Fog", "s-33": "S-33", "wlp800": "Pilsner Lager",
+            "novalager": "NovaLager", "wyeast-1968": "London ESB", "wlp920": "Old Bavarian",
+            "imperial-b45": "Gnome", "wyeast-1084": "Irish Ale", "wyeast-3944": "Witbier",
+            "wlp833": "Bock Lager", "wlp007": "Dry English", "wyeast-1318": "London III",
+            "wyeast-2565": "Kölsch", "wlp095": "Burlington"
         };
 
         const targetStrainName = hwStrainNames[yeast.id];
 
-        // Om vi har definierat yeastDatabase och hittade ett matchande namn
         if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
             const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
             
@@ -1852,27 +1836,29 @@ function openYeastModal(yeast) {
         }
     }
     
-    detailedText = formatTempText(detailedText);
-
-document.getElementById('modal-yeast-desc').innerHTML = formatTempText(detailedText);
-    modal.style.display = 'flex';
+    // Slutlig formatering (Temperaturkonvertering C/F) och injicering
+    modalDesc.innerHTML = formatTempText(detailedText);
     
-    // Den gamla hederliga låsningen
+    // Visa modalen och lås bakgrundsskrollen
+    modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
 
+// STÄNG MODALEN
 window.closeYeastModal = function() {
-    document.getElementById('yeast-info-modal').style.display = 'none';
-    document.body.style.overflow = '';
+    const modal = document.getElementById('yeast-info-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = ''; // Släpp loss scrollen igen
+    }
 }
 
-// Stäng modalen om man klickar utanför rutan
+// STÄNG VID KLICK UTANFÖR RUTAN
 document.getElementById('yeast-info-modal').addEventListener('click', function(event) {
     if (event.target === this) {
         closeYeastModal();
     }
 });
-
 // ==========================================
 // MASTER STARTUP (Körs när sidan är helt redo)
 // ==========================================
