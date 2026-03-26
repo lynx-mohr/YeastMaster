@@ -1164,31 +1164,35 @@ html.modal-open, body.modal-open {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.85);
-    z-index: 10000; /* Lite högre bara för att gå över nav */
+    z-index: 10000; /* Ligger över nav (som har 2000) */
+    
+    /* Detta är Flexbox-magin som centrerar rutan perfekt lodrätt och horisontellt */
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; 
+    
+    /* En jämn stötdämpare runt om */
+    padding: 20px;
+    box-sizing: border-box;
+    backdrop-filter: blur(5px);
 }
 
 .modal-content {
     background-color: #1a1a1a;
     border: 1px solid #333;
     border-radius: 12px;
-    width: 90%;
+    
+    /* Sätt bredden till 90% av skärmen på mobil, men maxa på 600px på PC */
+    width: 90%; 
     max-width: 600px;
-    max-height: 85vh;
+    
+    /* Låt rutan vara max 85% av skärmens höjd, sedan får man scrolla inuti */
+    max-height: 85vh; 
+    
     display: flex;
     flex-direction: column;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     animation: modalFadeIn 0.3s ease-out;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid #333;
 }
 
 .modal-body {
