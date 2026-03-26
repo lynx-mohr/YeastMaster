@@ -1144,51 +1144,55 @@ body.light-mode .phase-row {
     color: #333 !important;
 }
 
+/* --- FRYS BAKGRUNDEN NÄR MODAL ÄR ÖPPEN --- */
+html.modal-open, body.modal-open {
+    overflow: hidden !important;
+    overscroll-behavior: none !important; /* Stoppar iPhones från att "studsa" förbi låset */
+}
+
 /* --- YEAST INFO MODAL --- */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.85);
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important; /* 'dvh' är magin som ignorerar mobilens adressfälts-höjd! */
+    background-color: rgba(0, 0, 0, 0.85) !important;
     z-index: 99999 !important;
-    display: flex;
-    justify-content: center;
     
-    /* FIX 1: Låt den börja från toppen, men centrerar den med margin:auto på barnet */
-    align-items: flex-start; 
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important; /* Centrerar boxen spikrakt i mitten (horisontellt & vertikalt) */
     
-    /* FIX 2: Tvingar ner den under PC-menyn (70px meny + 20px marginal) */
-    padding: 90px 20px 20px 20px; 
-    
-    box-sizing: border-box;
-    backdrop-filter: blur(5px);
+    /* PC: 90px top-padding så vi inte krockar med top-menyn */
+    padding: 90px 20px 20px 20px !important; 
+    box-sizing: border-box !important;
+    backdrop-filter: blur(5px) !important;
 }
 
 .modal-content {
-    background-color: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 600px;
+    background-color: #1a1a1a !important;
+    border: 1px solid #333 !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    max-width: 600px !important;
     
-    /* FIX 3: Centrerar boxen automatiskt om den får plats */
-    margin: auto; 
+    /* Boxen får aldrig bli högre än det tillgängliga (vadderade) utrymmet inuti overlayen */
+    max-height: 100% !important; 
+    margin: 0 !important; /* Tar BORT auto-marginalen som knuffade ut kortet */
     
-    /* FIX 4: Begränsar höjden så att texten inuti (modal-body) måste scrollas */
-    max-height: calc(100vh - 120px); 
-    
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-    animation: modalFadeIn 0.3s ease-out;
+    display: flex !important;
+    flex-direction: column !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8) !important;
+    animation: modalFadeIn 0.3s ease-out !important;
 }
 
-/* FIX 5: Vänd på marginalerna för mobil eftersom menyn ligger i botten där! */
+/* Mobil: Vänd på paddingen eftersom menyn ligger i botten där! */
 @media (max-width: 600px) {
     .modal-overlay {
-        padding: 20px 20px 90px 20px; 
+        padding: 20px 20px 90px 20px !important; 
     }
 }
 

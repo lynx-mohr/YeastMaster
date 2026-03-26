@@ -1853,22 +1853,22 @@ function openYeastModal(yeast) {
         }
     }
     
-detailedText = formatTempText(detailedText);
+    detailedText = formatTempText(detailedText);
 
     document.getElementById('modal-yeast-desc').innerHTML = detailedText;
     modal.style.display = 'flex';
     
-    // --- NYTT: Frys skärmen HELT i bakgrunden ---
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden'; // Låser även det yttre höljet!
+    // --- NYTT: Lägg till CSS-klassen som totalfryser skärmen ---
+    document.body.classList.add('modal-open');
+    document.documentElement.classList.add('modal-open');
 }
 
 window.closeYeastModal = function() {
     document.getElementById('yeast-info-modal').style.display = 'none';
     
-    // --- NYTT: Lås upp skärmen i bakgrunden ---
-    document.body.style.overflow = '';
-    document.documentElement.style.overflow = '';
+    // --- NYTT: Ta bort klassen och släpp skärmen fri ---
+    document.body.classList.remove('modal-open');
+    document.documentElement.classList.remove('modal-open');
 }
 
 // Stäng modalen om man klickar utanför rutan
