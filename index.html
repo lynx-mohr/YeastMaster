@@ -115,25 +115,24 @@
     </section>
 
 <section id="view-library" style="display: none;">
-    <div class="library-header">
-        
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
-            <h2 style="margin: 0; line-height: 1;">Yeast Library</h2>
-            
-            <button onclick="toggleLibraryInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; font-size: 0.9rem; transition: all 0.3s ease; padding: 0; margin-top: 3px;">
-                i
-            </button>
-        </div>
-        
-        <div id="library-info-box" style="display: none;">
-            Browse our curated collection of yeast strains. <br>
-            <strong>Double-click</strong> (or long-press) a card to read the brewer's profile.<br>
-            Select up to 10 favorites (★) and sync them directly to your YeastMaster unit!
-        </div>
+   <div class="library-header">
+            <div style="position: relative; display: flex; align-items: center; gap: 15px; margin-bottom: 5px;">
+                <h2 style="margin: 0;">Yeast Library</h2>
+                
+                <button onclick="toggleLibraryInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; transition: all 0.3s ease; padding: 0;">
+                    i
+                </button>
 
-        <div class="sync-status" style="margin-bottom: 10px;">Selected: <span id="fav-count">0</span>/10</div>
-        <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
-    </div>
+                <div id="library-info-box" class="floating-info-box" style="display: none;">
+                    Browse our curated collection of yeast strains. <br>
+                    <strong>Double-click</strong> (or long-press) a card to read the brewer's profile.<br>
+                    Select up to 10 favorites (★) and sync them directly to your YeastMaster unit!
+                </div>
+            </div>
+
+            <div class="sync-status" style="margin-bottom: 10px;">Selected: <span id="fav-count">0</span>/10</div>
+            <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
+        </div>
         
         <div class="yeast-grid" id="yeast-grid">
         </div>
@@ -148,22 +147,20 @@
     </section> 
 
 <section id="view-lab" style="display: none;">
-    <div class="library-header">
-        
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
-            <h2 style="margin: 0; line-height: 1;">The Profiler</h2> 
+<div class="library-header">
+        <div style="position: relative; display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+            <h2 style="margin: 0;">The Profiler</h2> 
             
-            <button onclick="toggleProfilerInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; font-size: 0.9rem; transition: all 0.3s ease; padding: 0; margin-top: 3px;">
+            <button onclick="toggleProfilerInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; transition: all 0.3s ease; padding: 0;">
                 i
             </button>
-        </div>
 
-        <div id="profiler-info-box" style="display: none;">
-            Pick a strain and drag the points to build your fermentation profile.<br>
-            When you're done, save and find your tailored profile in the Yeast library. <br>
-            Don't forget the dry hops!
+            <div id="profiler-info-box" class="floating-info-box" style="display: none;">
+                Pick a strain and drag the points to build your fermentation profile.<br>
+                When you're done, save and find your tailored profile in the Yeast library. <br>
+                Don't forget the dry hops!
+            </div>
         </div>
-
     </div>
 
    <div id="profile-inputs" style="margin: 0 20px 20px 20px; display: flex; gap: 10px; align-items: flex-end;">
@@ -373,6 +370,77 @@
         </div>
     </section>
 
+    <section id="view-librarian" style="display: none;">
+        <div class="library-header" style="margin-bottom: 20px;">
+            <div style="position: relative; display: flex; align-items: center; gap: 10px;">
+                <h2 style="margin: 0; line-height: 1;">In the lab</h2> 
+                
+                <button onclick="toggleAcademyInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; transition: all 0.3s ease; padding: 0;">
+                    i
+                </button>
+
+                <div id="academy-info-box" class="floating-info-box" style="display: none;">
+                    <h3 style="color: var(--accent-color); margin-bottom: 10px; font-size: 1.2rem;">Yeast Management Academy</h3>
+                    <strong style="color: var(--text-main);">Roll up your sleeves and become a microbiologist!</strong><br><br>
+                    Step into the Arcane Lab and discover the fascinating world of yeast management. Whether you're looking to master the art of building robust yeast starters, learn how to streak agar plates, or venture out to capture wild yeast from the apple trees in your backyard—this is where your journey begins. Maintain your own private yeast library at home and unlock the true soul of your beer.
+                </div>
+            </div>
+        </div>
+
+        <div id="lab-content-academy" style="display:block;">
+            <div style="text-align: center; margin-bottom: 30px; margin-top: 10px;">
+                <img src="librarian-dark.png" class="librarian-illustration lib-dark" alt="The Yeast Librarian" style="width: 220px; margin: 0 auto;">
+                <img src="librarian-light.png" class="librarian-illustration lib-light" alt="The Yeast Librarian" style="width: 220px; margin: 0 auto;">
+            </div>
+
+            <div class="academy-grid" style="padding: 0;">
+                <div class="academy-card" onclick="openAcademyModule('starters')">
+                    <div class="academy-card-icon">🧪</div>
+                    <div class="academy-card-content">
+                        <h4>Yeast Starters 101</h4>
+                        <p>Wake up your yeast and ensure a healthy fermentation.</p>
+                    </div>
+                    <div class="academy-card-arrow">→</div>
+                </div>
+
+                <div class="academy-card" onclick="openAcademyModule('agar')">
+                    <div class="academy-card-icon">🧫</div>
+                    <div class="academy-card-content">
+                        <h4>Mastering Agar Plates</h4>
+                        <p>Learn to pour, streak, and isolate pure strains.</p>
+                    </div>
+                    <div class="academy-card-arrow">→</div>
+                </div>
+
+                <div class="academy-card" onclick="openAcademyModule('wild')">
+                    <div class="academy-card-icon">🍏</div>
+                    <div class="academy-card-content">
+                        <h4>Capturing Wild Yeast</h4>
+                        <p>Hunt for local microbes and brew something unique.</p>
+                    </div>
+                    <div class="academy-card-arrow">→</div>
+                </div>
+
+                <div class="academy-card" onclick="openAcademyModule('calc')">
+                    <div class="academy-card-icon" style="color: var(--accent-color);">🧮</div>
+                    <div class="academy-card-content">
+                        <h4 style="color: var(--accent-color);">Pitch Calculator</h4>
+                        <p>Calculate the exact cell count needed for your next brew.</p>
+                    </div>
+                    <div class="academy-card-arrow" style="color: var(--accent-color);">→</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="academy-module-view" style="display: none; padding: 0; animation: fadeUp 0.4s ease-out;">
+            <button onclick="closeAcademyModule()" class="back-btn-academy" style="background: transparent; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; padding: 0; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; gap: 5px;">
+                ← BACK TO ACADEMY
+            </button>
+            <div id="academy-module-content"></div>
+        </div>
+    </section>
+
+    <nav class="main-nav">
 <section id="view-librarian" style="display: none;">
         
    <div class="library-header" style="position: relative; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
