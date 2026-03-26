@@ -1602,3 +1602,394 @@ body.light-mode .theme-toggle-compact { background: #eee; border-color: #ccc; }
         padding-right: 40px !important;
     }
 }
+
+/* ========================================= */
+/* --- RUBRIKER MED INFO-IKON (FLEXBOX)  --- */
+/* ========================================= */
+.header-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Detta styr exakt hur nära ikonen ligger sista bokstaven! */
+    margin-bottom: 20px; /* Behåller luft ner till innehållet under */
+}
+
+.info-icon {
+    width: 22px;
+    height: 22px;
+    fill: var(--accent-color); /* MAGIN: Gör SVG-ikonen Cascadehumle-grön! */
+    color: var(--accent-color); /* Backup om du använder text/font-ikoner */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    /* Finjustering ifall ikonen har inbyggd osynlig luft */
+    margin-top: -2px; 
+}
+
+.info-icon:hover {
+    filter: drop-shadow(0 0 8px var(--accent-color));
+    transform: scale(1.1);
+}
+
+/* Light mode support för ikonen (frivilligt, men snyggt om du vill ha den mörkare där) */
+body.light-mode .info-icon {
+    /* Om du vill ha en annan färg i light mode, ändra här. Annars behåller den grön! */
+}
+
+/* ========================================== */
+/* --- INFO BOXES (PROFILER & LIBRARY)    --- */
+/* ========================================== */
+#library-info-box,
+#profiler-info-box {
+    /* Den svagt gröna bakgrunden (5% färgstyrka) */
+    background-color: rgba(140, 198, 63, 0.05);
+    
+    /* Den solida Cascadehumle-gröna kanten till vänster */
+    border-left: 4px solid #8CC63F;
+    
+    /* Luft inuti boxen så texten andas */
+    padding: 15px;
+    
+    /* Lite avstånd från rubriken ovanför */
+    margin-top: 15px;
+    
+    /* Mjukt rundade hörn på högersidan (vänstersidan är platt mot kanten) */
+    border-radius: 0 8px 8px 0;
+    
+    /* Finjustering av texten inuti boxen */
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+#academy-info-box {
+    background-color: rgba(140, 198, 63, 0.08); 
+    border-left: 4px solid #8CC63F;
+    padding: 12px 15px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+body.light-mode #library-info-box,
+body.light-mode #profiler-info-box,
+body.light-mode #academy-info-box {
+    background-color: rgba(140, 198, 63, 0.15); 
+    color: #111;
+}
+
+body.light-mode #library-info-box,
+body.light-mode #profiler-info-box,
+body.light-mode #academy-info-box {
+    background-color: rgba(140, 198, 63, 0.15); 
+    color: #111;
+}
+
+/* Light Mode: Vi gör bakgrunden LITE starkare (10%) i ljust läge för att den ska synas bra mot det vita */
+body.light-mode #library-info-box,
+body.light-mode #profiler-info-box {
+    background-color: rgba(140, 198, 63, 0.30);
+}
+
+/* ========================================== */
+/* --- YEAST ACADEMY (HERO & CARDS)       --- */
+/* ========================================== */
+
+/* Hero Container (Standard för mobil: Staplad) */
+.academy-hero {
+    display: flex;
+    flex-direction: column-reverse; /* Tvingar bilden att hamna överst på mobil! */
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.academy-hero-text {
+    text-align: center;
+}
+
+/* Bilden krymper lite på mobilen så den inte tar över */
+.academy-hero-image .librarian-illustration {
+    width: 180px;
+    margin: 0 auto;
+}
+
+/* --- Academy Grid (Korten) --- */
+.academy-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 20px 30px 20px;
+}
+
+/* Själva Kurs-korten */
+.academy-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.academy-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.academy-card-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.academy-card-content {
+    flex: 1;
+}
+
+.academy-card-content h4 {
+    margin: 0 0 5px 0;
+    color: var(--text-main);
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.academy-card-content p {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.academy-card-arrow {
+    color: var(--accent-color);
+    font-size: 1.5rem;
+    font-weight: bold;
+    opacity: 0.5;
+    transition: all 0.2s ease;
+}
+
+.academy-card:hover .academy-card-arrow {
+    opacity: 1;
+    transform: translateX(5px);
+}
+
+/* --- LIGHT MODE SUPPORT FÖR KORTEN --- */
+body.light-mode .academy-card {
+    background: #ffffff;
+    border-color: #ddd;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+body.light-mode .academy-card:hover {
+    border-color: var(--accent-color);
+    background: #fdfdfd;
+}
+
+
+/* ========================================== */
+/* --- ACADEMY: PC LAYOUT (Bred Skärm)    --- */
+/* ========================================== */
+@media (min-width: 769px) {
+    /* På PC lägger vi dem bredvid varandra! */
+    .academy-hero {
+        flex-direction: row; /* Text vänster, Bild höger */
+        justify-content: space-between;
+        align-items: center;
+        padding: 40px 20px;
+    }
+
+    .academy-hero-text {
+        text-align: left; /* Vänsterställ texten på PC */
+        flex: 1; /* Låt texten ta upp den plats den behöver */
+        padding-right: 40px; /* Ge lite luft mellan text och bild */
+    }
+
+    /* Gör bilden lite större på PC */
+    .academy-hero-image .librarian-illustration {
+        width: 250px;
+        margin: 0; /* Tar bort centreringen */
+    }
+
+    /* Gör om listan till ett 2-kolumns rutnät på PC! */
+    .academy-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+}
+
+/* ========================================== */
+/* --- ACADEMY: LEKTIONS-DESIGN (INSIDAN) --- */
+/* ========================================== */
+
+.back-btn-academy {
+    background: transparent;
+    border: none;
+    color: var(--accent-color);
+    font-family: 'Lexend', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.back-btn-academy:hover {
+    transform: translateX(-5px); /* Studsar lite snyggt till vänster när man hovrar */
+}
+
+/* Utrustningslådan */
+.module-ingredients {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.module-ingredients ul {
+    list-style: none; /* Tar bort tråkiga standard-prickar */
+    padding: 0;
+    margin: 0;
+}
+
+.module-ingredients li {
+    color: var(--text-dim);
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    border-bottom: 1px dashed #333;
+    padding-bottom: 10px;
+}
+
+.module-ingredients li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.module-ingredients strong {
+    color: var(--text-main);
+}
+
+/* Steg-för-steg listan */
+.step-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+/* De runda, snygga numren */
+.step-number {
+    background: var(--accent-color);
+    color: #000;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 900;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.step-text {
+    color: var(--text-dim);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.step-text strong {
+    color: var(--text-main);
+    display: block;
+    margin-bottom: 3px;
+}
+
+/* Pro-Tip Rutan (Samma känsla som info-boxarna) */
+.module-protip {
+    background-color: rgba(140, 198, 63, 0.08); 
+    border-left: 4px solid #8CC63F;
+    padding: 20px;
+    border-radius: 0 8px 8px 0;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Light Mode Support */
+body.light-mode .module-ingredients {
+    background: #ffffff;
+    border-color: #ddd;
+}
+body.light-mode .module-ingredients li { border-bottom-color: #eee; }
+body.light-mode .module-protip {
+    background-color: rgba(140, 198, 63, 0.15);
+    color: #111;
+}
+
+/* ========================================== */
+/* --- LAB TABS (PILL DESIGN)             --- */
+/* ========================================== */
+
+.lab-tabs {
+    display: flex;
+    gap: 15px; /* Samma avstånd som i 'Profiler' */
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+.lab-tab-pill {
+    /* Bas-designen (Dämpad färg när den INTE är aktiv) */
+    background: transparent;
+    border: 1px solid #444; /* Lite mörkare grå för den inaktiva kanten */
+    color: #888; /* Dämpad grå färg */
+    padding: 10px 20px; /* Snygg 'Pill'-storlek */
+    border-radius: 30px; /* Gör den helt rund */
+    font-size: 0.75rem; /* Samma som i 'Profiler' */
+    font-weight: 800; /* Tjock, fet text för att matcha stilen */
+    cursor: pointer;
+    text-transform: uppercase; /* Alltid stora bokstäver */
+    letter-spacing: 1px; /* Lite luft mellan bokstäverna */
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover-effekt för PC */
+.lab-tab-pill:hover {
+    border-color: #666;
+    color: #aaa;
+}
+
+/* AKTIV TABB (Cascadehumle-grön) */
+.lab-tab-pill.active {
+    border-color: #8CC63F; /* Cascadehumle-grön kant */
+    color: #8CC63F; /* Cascadehumle-grön text */
+    background: rgba(140, 198, 63, 0.05); /* En extremt svag, grön bakgrundsfärg */
+    box-shadow: 0 0 10px rgba(140, 198, 63, 0.15); /* En mjuk, grön glöd */
+}
+
+/* Light mode support */
+body.light-mode .lab-tab-pill {
+    border-color: #ccc;
+    color: #666;
+}
+
+body.light-mode .lab-tab-pill.active {
+    background: #fdfdfd;
+    border-color: #8CC63F;
+    color: #8CC63F;
+}

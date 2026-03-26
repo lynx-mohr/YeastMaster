@@ -115,24 +115,25 @@
     </section>
 
 <section id="view-library" style="display: none;">
-        <div class="library-header">
-            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 5px;">
-                <h2 style="margin: 0;">Yeast Library</h2>
-                
-                <button onclick="toggleLibraryInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; transition: all 0.3s ease; padding: 0;">
-                    i
-                </button>
-            </div>
-
-            <div id="library-info-box" style="display: none; background: rgba(255,255,255,0.05); border-left: 3px solid #8CC63F; padding: 12px 15px; border-radius: 0 8px 8px 0; margin-bottom: 15px; margin-top: 10px; font-size: 0.9rem; line-height: 1.5; opacity: 0.8;">
-                Browse our curated collection of yeast strains. <br>
-                <strong>Double-click</strong> (or long-press) a card to read the brewer's profile.<br>
-                Select up to 10 favorites (★) and sync them directly to your YeastMaster unit!
-            </div>
-
-            <div class="sync-status" style="margin-bottom: 10px;">Selected: <span id="fav-count">0</span>/10</div>
-            <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
+    <div class="library-header">
+        
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+            <h2 style="margin: 0; line-height: 1;">Yeast Library</h2>
+            
+            <button onclick="toggleLibraryInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; font-size: 0.9rem; transition: all 0.3s ease; padding: 0; margin-top: 3px;">
+                i
+            </button>
         </div>
+        
+        <div id="library-info-box" style="display: none;">
+            Browse our curated collection of yeast strains. <br>
+            <strong>Double-click</strong> (or long-press) a card to read the brewer's profile.<br>
+            Select up to 10 favorites (★) and sync them directly to your YeastMaster unit!
+        </div>
+
+        <div class="sync-status" style="margin-bottom: 10px;">Selected: <span id="fav-count">0</span>/10</div>
+        <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
+    </div>
         
         <div class="yeast-grid" id="yeast-grid">
         </div>
@@ -149,15 +150,15 @@
 <section id="view-lab" style="display: none;">
     <div class="library-header">
         
-<div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
-            <h2 style="margin: 0;">The Profiler</h2> 
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+            <h2 style="margin: 0; line-height: 1;">The Profiler</h2> 
             
-            <button onclick="toggleProfilerInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; transition: all 0.3s ease; padding: 0;">
+            <button onclick="toggleProfilerInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; font-size: 0.9rem; transition: all 0.3s ease; padding: 0; margin-top: 3px;">
                 i
             </button>
         </div>
 
-        <div id="profiler-info-box" style="display: none; background: rgba(255,255,255,0.05); border-left: 3px solid #8CC63F; padding: 12px 15px; border-radius: 0 8px 8px 0; margin-bottom: 15px; font-size: 0.9rem; line-height: 1.5; opacity: 0.8;">
+        <div id="profiler-info-box" style="display: none;">
             Pick a strain and drag the points to build your fermentation profile.<br>
             When you're done, save and find your tailored profile in the Yeast library. <br>
             Don't forget the dry hops!
@@ -318,7 +319,7 @@
             </p>
             
             <p style="margin-bottom: 40px;">
-                Soulof.beer is a tribute to this biological magic. Whether you are here to explore our library of historic strains or to take full command of your fermentation, this is your laboratory. Monitor your brew in real-time, sync custom profiles to your YeastMaster-unit, and master the art of the craft.
+                Soulof.beer is a tribute to this biological magic. Whether you are here to explore our library of historic strains or to take full command of your fermentation, this is your laboratory. Monitor your brew in real-time, sync custom profiles to your YeastMaster-unit, and master the art of fermentation.
             </p>
         </div>
 
@@ -341,7 +342,7 @@
 
     </section>
 
-    <section id="view-about" style="display: none; padding: 30px 20px;">
+   <section id="view-about" style="display: none; padding: 30px 20px;">
         <button onclick="showView('soul')" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;">
             ← BACK
         </button>
@@ -445,6 +446,7 @@
             <div id="academy-module-content"></div>
             
         </div>
+    </div>
 
     </section>
 

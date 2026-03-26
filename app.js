@@ -124,6 +124,9 @@ const views = {
             item.classList.add('active');
         }
     });
+    // Scrolla mjukt och snyggt högst upp på sidan
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
 }
 
 // --- VISA CLAIM-RUTAN FÖR NYA ENHETER ---
@@ -2298,18 +2301,18 @@ if (savedTheme) {
 function toggleProfilerInfo(btn) {
     const infoBox = document.getElementById('profiler-info-box');
     
-    // Kollar om boxen är stängd
     if (infoBox.style.display === 'none' || infoBox.style.display === '') {
+        // ÖPPEN: Helt fylld, solid klargrön!
         infoBox.style.display = 'block';
-        // Få knappen att lysa i din snygga accentfärg
-        btn.style.borderColor = 'var(--accent-color)';
-        btn.style.color = 'var(--accent-color)';
+        btn.style.backgroundColor = '#8CC63F'; // 100% grön bakgrund
+        btn.style.borderColor = '#8CC63F';
+        btn.style.color = '#111111'; // Mörkt 'i' för maximal kontrast mot det gröna
     } else {
-        // Stäng boxen
+        // STÄNGD: Dämpad och transparent
         infoBox.style.display = 'none';
-        // Återställ knappen till den dämpade färgen
-        btn.style.borderColor = 'var(--text-dim)';
-        btn.style.color = 'var(--text-dim)';
+        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)'; // Dimmig bakgrund
+        btn.style.borderColor = '#8CC63F';
+        btn.style.color = '#8CC63F'; // Grönt 'i'
     }
 }
 
@@ -2317,20 +2320,20 @@ function toggleProfilerInfo(btn) {
 // --- TOGGLE FÖR LIBRARY INFO ---
 // ==========================================
 function toggleLibraryInfo(btn) {
-    const infoBox = document.getElementById('library-info-box');
+    const infoBox = document.getElementById('library-info-box'); 
     
     if (infoBox.style.display === 'none' || infoBox.style.display === '') {
-        // Öppna lådan
+        // ÖPPEN: Helt fylld, solid klargrön!
         infoBox.style.display = 'block';
-        // Fyll knappen med solid Cascade-grön färg och mörk text
-        btn.style.background = '#8CC63F';
-        btn.style.color = '#111';
+        btn.style.backgroundColor = '#8CC63F'; // 100% grön bakgrund
+        btn.style.borderColor = '#8CC63F';
+        btn.style.color = '#111111'; // Mörkt 'i' för maximal kontrast mot det gröna
     } else {
-        // Stäng lådan
+        // STÄNGD: Dämpad och transparent
         infoBox.style.display = 'none';
-        // Återgå till ihålig grön knapp
-        btn.style.background = 'rgba(140, 198, 63, 0.15)';
-        btn.style.color = '#8CC63F';
+        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)'; // Dimmig bakgrund
+        btn.style.borderColor = '#8CC63F';
+        btn.style.color = '#8CC63F'; // Grönt 'i'
     }
 }
 
