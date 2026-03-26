@@ -2685,3 +2685,102 @@ function toggleAcademyInfo(btn) {
         btn.style.color = '#8CC63F';
     }
 }
+
+// =========================================================
+// ================= INTERAKTIVT ÖLGLAS (HOME) =============
+// =========================================================
+function initInteractiveGlass() {
+    const glass = document.getElementById('interactive-beer-glass');
+    if (!glass) return;
+
+    const beerStyles = ['pilsner', 'amber', 'ipa', 'red', 'stout'];
+    let currentStyleIndex = 0;
+    
+    let pressTimer;
+    let isPressing = false;
+    let isAnimating = false;
+    const PRESS_DURATION = 600; // 600ms = perfekt tid för ett mobil-långtryck
+
+    // 1. Byt Färg (Klick)
+    function cycleColor() {
+        if (isAnimating) return;
+        currentStyleIndex = (currentStyleIndex + 1) % beerStyles.length;
+        beerStyles.forEach(style => glass.classList.remove('color-' + style));
+        glass.classList.add('color-' + beerStyles[currentStyleIndex]);
+    }
+
+    // 2. Drick & Fyll på (Långtryck)
+    function startDrain() {
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        glass.classList.remove('anim-fill');
+        glass.classList.add('anim-drain');
+        
+        // Fyll automatiskt upp efter att det runnit ur
+        setTimeout(() => {
+            glass.classList.remove('anim-drain');
+            glass.classList.add('anim-fill');
+            
+            // Lås upp animationen när glaset är fyllt igen (1.8 sekunder)
+            setTimeout(() => {
+                isAnimating = false;
+            }, 1800); 
+        }, 800); // Tiden det tar att "dricka" ur glaset
+    }
+
+    // --- LYSSNARE FÖR DATOR (MUS) ---
+    glass.addEventListener('mousedown', () => {
+        isPressing = true;
+        pressTimer = setTimeout(() => {
+            if (isPressing) {
+                isPressing = false;
+                startDrain();
+            }
+        }, PRESS_DURATION);
+    });
+
+    glass.addEventListener('mouseup', () => {
+        if (isPressing) {
+            clearTimeout(pressTimer);
+            isPressing = false;
+            cycleColor(); // Det var ett kort klick -> Byt färg
+        }
+    });
+
+    glass.addEventListener('mouseleave', () => {
+        if (isPressing) {
+            clearTimeout(pressTimer);
+            isPressing = false;
+        }
+    });
+
+    // --- LYSSNARE FÖR MOBIL (TOUCH) ---
+    glass.addEventListener('touchstart', () => {
+        isPressing = true;
+        pressTimer = setTimeout(() => {
+            if (isPressing) {
+                isPressing = false;
+                startDrain();
+            }
+        }, PRESS_DURATION);
+    }, {passive: true});
+
+    glass.addEventListener('touchend', () => {
+        if (isPressing) {
+            clearTimeout(pressTimer);
+            isPressing = false;
+            cycleColor();
+        }
+    });
+    
+    glass.addEventListener('touchcancel', () => {
+        clearTimeout(pressTimer);
+        isPressing = false;
+    });
+}
+
+// Starta magin när sidan laddar
+window.addEventListener('DOMContentLoaded', () => {
+    initInteractiveGlass();
+});

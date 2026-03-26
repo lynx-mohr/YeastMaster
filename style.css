@@ -2204,3 +2204,72 @@ body.light-mode .academy-librarian-bg {
         gap: 15px !important;
     }
 }
+
+/* ========================================= */
+/* --- INTERAKTIVT ÖLGLAS (HOME-VYN) --- */
+/* ========================================= */
+
+.glass-container {
+    width: 65px; /* Perfekt storlek bredvid rubriken */
+    height: 85px;
+    cursor: pointer;
+    position: relative;
+    margin-right: 20px;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    transition: transform 0.1s ease;
+}
+
+/* Klick-effekt när man trycker ner */
+.glass-container:active { transform: scale(0.92) translateY(2px); }
+
+/* Grundfärger för ölet (Följer LIVE-färgschemat) */
+.glass-container.color-pilsner { color: #f4c95d; } 
+.glass-container.color-amber   { color: #d67f1a; } 
+.glass-container.color-ipa     { color: #f2994a; } 
+.glass-container.color-stout   { color: #2b1500; } 
+.glass-container.color-red     { color: #82211e; } 
+
+.glass-outline {
+    stroke: rgba(255,255,255,0.25); /* Subtil glaskant */
+}
+
+/* Light mode support för glaskanten */
+body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
+
+/* Fysiken för vätskan */
+.beer-liquid {
+    fill: currentColor;
+    transform-origin: bottom center; /* Animationen sker nerifrån/uppifrån */
+    transition: transform 0.2s ease-out, color 0.3s ease; 
+}
+
+.beer-foam {
+    fill: rgba(255,255,255,0.9);
+    transform-origin: bottom center;
+    transition: transform 0.2s ease-out; 
+}
+
+/* --- ANIMATIONER FÖR LÅNGTRYCK (DRINK / REFILL) --- */
+
+/* 1. Tömning (Sveps) */
+.glass-container.anim-drain .beer-liquid,
+.glass-container.anim-drain .beer-foam {
+    transform: scaleY(0);
+    transition: transform 0.7s cubic-bezier(0.55, 0.085, 0.68, 0.53); /* Accelererande fall */
+}
+
+/* 2. Påfyllning (Mjukt med en liten studs) */
+.glass-container.anim-fill .beer-liquid,
+.glass-container.anim-fill .beer-foam {
+    transform: scaleY(1);
+    animation: fillGlassUp 1.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes fillGlassUp {
+    0% { transform: scaleY(0); }
+    85% { transform: scaleY(1); }
+    90% { transform: scaleY(1.03); } /* Lätt översvämning/bounce */
+    100% { transform: scaleY(1); }
+}
