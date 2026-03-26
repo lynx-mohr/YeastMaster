@@ -2239,13 +2239,14 @@ body.light-mode .academy-librarian-bg {
 body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 
 /* Fysiken för vätskan */
-.beer-liquid {
+/* Tvingar dessa regler att BARA gälla glaset på startsidan */
+#interactive-beer-glass .beer-liquid {
     fill: currentColor;
-    transform-origin: bottom center; /* Animationen sker nerifrån/uppifrån */
+    transform-origin: bottom center; 
     transition: transform 0.2s ease-out, color 0.3s ease; 
 }
 
-.beer-foam {
+#interactive-beer-glass .beer-foam {
     fill: rgba(255,255,255,0.9);
     transform-origin: bottom center;
     transition: transform 0.2s ease-out; 
