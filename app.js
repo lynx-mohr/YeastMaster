@@ -1748,11 +1748,11 @@ const yeastDescriptions = {
     `
 };
 
+
+
 // --- POPUP-FUNKTIONER (MODAL) ---
 function openYeastModal(yeast) {
     const modal = document.getElementById('yeast-info-modal');
-
-
 
     document.getElementById('modal-yeast-name').innerText = yeast.name;
     
@@ -1817,7 +1817,7 @@ function openYeastModal(yeast) {
             "s-33": "S-33",
             "wlp800": "Pilsner Lager",
             "novalager": "NovaLager",
-            "wyeast-1968": "London ESB", // Här är Wyeast 1968!
+            "wyeast-1968": "London ESB",
             "wlp920": "Old Bavarian",
             "imperial-b45": "Gnome",
             "wyeast-1084": "Irish Ale",
@@ -1831,8 +1831,7 @@ function openYeastModal(yeast) {
 
         const targetStrainName = hwStrainNames[yeast.id];
 
-        // Om vi har definierat yeastDatabase (som vi förmodligen har i din skarpa app)
-        // och vi hittade ett matchande namn, letar vi upp dess profiler.
+        // Om vi har definierat yeastDatabase och hittade ett matchande namn
         if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
             const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
             
@@ -1844,34 +1843,30 @@ function openYeastModal(yeast) {
                 `;
                 
                 matchingProfiles.forEach(prof => {
-                    // Visar Namn, starttemp och sluttemp (Cold crash) för snabb överblick
                     const startTemp = prof.steps[0][1];
-                    const crashTemp = prof.steps[3] ? prof.steps[3][1] : '?';
                     profileListHtml += `<li><strong style="color: #fff;">${prof.p}</strong> (Starts @ ${startTemp}°C)</li>`;
                 });
 
                 profileListHtml += `</ul></div>`;
-                detailedText += profileListHtml; // Klistra fast listan i slutet av beskrivningen!
+                detailedText += profileListHtml; 
             }
-        } else {
-             // Fallback ifall yeastDatabase inte är inladdad just här, men vi vill ändå visa att funktionen finns
-             /* detailedText += `
-                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
-                        <h4 style="color: var(--accent-color); margin-bottom: 10px;">Included Hardware Profiles:</h4>
-                        <p style="font-size: 0.85rem; color: #888; font-style: italic;">Sync to device to explore specific temperature ramps.</p>
-                    </div>`;
-             */
         }
     }
     
-detailedText = formatTempText(detailedText);
+    detailedText = formatTempText(detailedText);
 
     document.getElementById('modal-yeast-desc').innerHTML = detailedText;
     modal.style.display = 'flex';
+    
+    // --- NYTT: Frys skärmen i bakgrunden ---
+    document.body.style.overflow = 'hidden';
 }
 
 window.closeYeastModal = function() {
     document.getElementById('yeast-info-modal').style.display = 'none';
+    
+    // --- NYTT: Lås upp skärmen i bakgrunden ---
+    document.body.style.overflow = '';
 }
 
 // Stäng modalen om man klickar utanför rutan
