@@ -113,6 +113,21 @@ const views = {
         }
     });
 
+    // --- MAGI: FYLL PÅ GLASET AUTOMATISKT NÄR VI GÅR TILL HOME ---
+    if (viewName === 'soul') {
+        const glass = document.getElementById('interactive-beer-glass');
+        if (glass) {
+            // 1. Ta bort eventuella gamla animationer
+            glass.classList.remove('anim-drain', 'anim-fill');
+            
+            // 2. Tvinga webbläsaren att uppdatera (reflow) så den "glömmer" att glaset var fullt
+            void glass.offsetWidth; 
+            
+            // 3. Lägg på fyll-animationen!
+            glass.classList.add('anim-fill');
+        }
+    }
+    
     // Uppdatera vilken vy som är aktiv nu för nästa gång vi klickar
     currentActiveView = viewName;
 
