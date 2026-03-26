@@ -2266,7 +2266,7 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 
     /* Fixat mellanslaget i 7.0rem! Nu kommer den växa! */
     .yeast-title {
-        font-size: 7.0rem !important; 
+        font-size: 5.2rem !important; 
     }
     .yeast-subtitle {
         font-size: 1.1rem !important;
