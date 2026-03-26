@@ -2724,24 +2724,43 @@ function initInteractiveGlass() {
         glass.classList.add('color-' + beerStyles[currentStyleIndex]);
     }
 
-    // 2. Drick & Fyll på (Långtryck)
+ // 2. Drick & Fyll på (Långtryck med Slumpmässig Påfyllning!)
     function startDrain() {
         if (isAnimating) return;
         isAnimating = true;
         
         glass.classList.remove('anim-fill');
         glass.classList.add('anim-drain');
+
+        // ========================================================
+        // MAGI: Skapa en slumpmässig väntetid mellan 800ms och 7000ms (7s)
+        // Vi tar bort den fasta fördröjningen i CSS:en (0.8s delay)
+        // och styr allt från denna slumptimer istället för att det ska bli rätt!
+        // ========================================================
+        const minWait = 800;  // Som det var förut
+        const maxWait = 7000; // Sju sekunder
         
-        // Fyll automatiskt upp efter att det runnit ur
+        // Formel: Math.random() ger 0.0 till 1.0. Vi gör om det till millisekunder.
+        const randomWaitTime = Math.floor(Math.random() * (maxWait - minWait + 1)) + minWait;
+        
+        // Konstanter för fyllnings-animationen (måste matcha din CSS, t.ex. 2.0s)
+        const refillAnimationDuration = 2000; 
+
+        // 1. Töm glaset och låt det stå tomt i den SLUMPMÄSSIGA tiden
         setTimeout(() => {
             glass.classList.remove('anim-drain');
+            
+            // Innan vi lägger på .anim-fill måste vi se till att det inte är någon delay i CSS!
+            // Men eftersom du redan har delay i din CSS (från förra steget) måste vi tala om för JS
+            // att animationen ska starta NU utan extra väntan.
             glass.classList.add('anim-fill');
             
-            // Lås upp animationen när glaset är fyllt igen (1.8 sekunder)
+            // 2. Lås upp animationen när glaset är fyllt igen
             setTimeout(() => {
                 isAnimating = false;
-            }, 2800); 
-        }, 800); // Tiden det tar att "dricka" ur glaset
+            }, refillAnimationDuration); 
+
+        }, randomWaitTime); // <-- Här använder vi slump-värdet!
     }
 
     // --- LYSSNARE FÖR DATOR (MUS) ---
