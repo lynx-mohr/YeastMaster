@@ -127,7 +127,7 @@ const views = {
             glass.classList.add('anim-fill');
         }
     }
-    
+
     // Uppdatera vilken vy som är aktiv nu för nästa gång vi klickar
     currentActiveView = viewName;
 
@@ -2740,7 +2740,7 @@ function initInteractiveGlass() {
             // Lås upp animationen när glaset är fyllt igen (1.8 sekunder)
             setTimeout(() => {
                 isAnimating = false;
-            }, 1800); 
+            }, 2800); 
         }, 800); // Tiden det tar att "dricka" ur glaset
     }
 
