@@ -2725,11 +2725,16 @@ function initInteractiveGlass() {
     }
 
 // 2. Drick & Fyll på (Långtryck med symmetrisk fart och slump!)
-    function startDrain() {
+function startDrain() {
         if (isAnimating) return;
         isAnimating = true;
         
         glass.classList.remove('anim-fill');
+        
+        // --- DEN MAGISKA RADEN ---
+        // Tvingar webbläsaren att rita om (reflow) innan den tömmer
+        void glass.offsetWidth; 
+        
         glass.classList.add('anim-drain');
 
         // Tömningen i CSS tar nu 2000ms (2 sekunder)
