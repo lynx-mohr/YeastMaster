@@ -1164,13 +1164,15 @@ html.modal-open, body.modal-open {
     width: 100% !important;
     height: 100% !important; 
     background-color: rgba(0, 0, 0, 0.85) !important;
-    z-index: 999999 !important; /* Ligger över ALLA menyer */
+    z-index: 999999 !important; 
     
-    /* Centrerar rutan spikrakt i mitten, alltid */
-    justify-content: center !important;
-    align-items: center !important; 
+    /* OBS: Ingen display: flex !important; här! JS sköter det. */
     
-    padding: 20px !important; /* Jämn, fin marginal runt om */
+    /* Låt den börja från toppen för att förhindra att den klipps av */
+    align-items: flex-start !important; 
+    overflow-y: auto !important; /* Säkerhets-scroll om skärmen är extremt liten */
+    
+    padding: 60px 15px !important; /* Marginaler runt om så den aldrig rör kanten */
     box-sizing: border-box !important;
     backdrop-filter: blur(5px) !important;
 }
@@ -1182,9 +1184,11 @@ html.modal-open, body.modal-open {
     width: 100% !important;
     max-width: 600px !important;
     
-    /* Boxen får vara max 85% av skärmens höjd, oavsett enhet */
+    /* MAGIN: Detta centrerar rutan perfekt lodrätt och horisontellt! */
+    margin: auto !important; 
+    
+    /* Rutan får ta upp max 85% av skärmen, sedan måste man scrolla *inuti* den */
     max-height: 85vh !important; 
-    margin: 0 !important; 
     
     display: flex !important;
     flex-direction: column !important;
@@ -1192,6 +1196,14 @@ html.modal-open, body.modal-open {
     animation: modalFadeIn 0.3s ease-out !important;
 }
 
+/* Modal Body måste kunna scrollas när texten blir lång */
+.modal-body {
+    padding: 20px !important;
+    overflow-y: auto !important; 
+    color: #ddd !important;
+    line-height: 1.6 !important;
+    font-size: 0.95rem !important;
+}
 /* MOBIL: Vänder på marginalerna eftersom menyn är i botten! */
 @media (max-width: 600px) {
     .modal-overlay {
