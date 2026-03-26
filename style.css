@@ -2086,3 +2086,41 @@ body.light-mode .academy-librarian-bg {
     z-index: 20 !important; /* Högre z-index än bakgrundsbilden */
     background-color: var(--card-bg) !important; /* Säkerställ att korten har en solid bakgrund */
 }
+
+/* ========================================== */
+/* --- MOBILANPASSNING FÖR LABBET --- */
+/* ========================================== */
+
+@media (max-width: 768px) {
+    /* För containern som håller den STORA bakgrundsbilden */
+    .academy-librarian-bg {
+        /* Återställ positioneringen från 'absolut' (som spöke bakom) till normalt flöde */
+        position: static !important;
+        
+        /* Centrera och ge den en mindre, lagom storlek för mobil */
+        display: block !important;
+        margin: 20px auto !important; /* Spacing runt bilden (20px topp/botten, auto vänster/höger) */
+        width: 140px !important;    /* Välj en lagom storlek, t.ex. 140px bred */
+        height: auto !important;
+        
+        /* Återställ opaciteten till full läsbarhet */
+        opacity: 1 !important;
+        
+        /* Nollställ transform och top/left */
+        transform: none !important;
+        top: 0 !important;
+        left: 0 !important;
+        
+        /* Z-index är ej längre relevant */
+        z-index: auto !important;
+    }
+
+    /* Om bilden ligger inuti en grid, se till att griden 
+       visar saker på rad */
+    .academy-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 15px !important;
+    }
+}
