@@ -2334,7 +2334,7 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 @media (max-width: 600px) {
     /* 1. Minska textrubriken */
     .yeast-title {
-        font-size: 4.8 rem !important; /* Minskar från 5.5rem */
+        font-size: 5.2 rem !important; /* Minskar från 5.5rem */
     }
 
     /* 2. Minska storleken på glaset */
