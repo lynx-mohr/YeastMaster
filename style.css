@@ -1993,3 +1993,73 @@ body.light-mode .lab-tab-pill.active {
     border-color: #8CC63F;
     color: #8CC63F;
 }
+
+/* ========================================== */
+/* --- SVÄVANDE INFO-RUTOR (OVERLAYS) --- */
+/* ========================================== */
+
+/* Gör så att rutorna vet var de ska fästa sig */
+.library-header {
+    position: relative;
+}
+
+#library-info-box,
+#profiler-info-box,
+#academy-info-box {
+    position: absolute; /* Nu svävar de ovanpå allt! */
+    top: 100%;          /* Placerar sig exakt under rubriken */
+    left: 0;
+    z-index: 2000;      /* Tvingar dem att ligga framför grafer och kort */
+    
+    /* Designen på den svävande rutan */
+    background-color: rgba(20, 20, 20, 0.95); /* Nästan helt svart */
+    backdrop-filter: blur(10px);              /* Frostad glaseffekt bakom */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8); /* Tung, snygg skugga */
+    
+    border: 1px solid #333;
+    border-left: 4px solid #8CC63F; /* Din gröna YeastMaster-färg */
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-top: 10px; /* Luft mellan 'i'-knapp och rutan */
+    
+    /* Snygg animering när den poppar fram */
+    animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% { opacity: 0; transform: translateY(-10px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Anpassning för datorer - gör den till en smidig pratbubbla */
+@media (min-width: 601px) {
+    #library-info-box,
+    #profiler-info-box,
+    #academy-info-box {
+        width: 450px; /* Låser bredden så den inte spänner över hela skärmen */
+    }
+}
+
+/* Anpassning för mobiler - Låt den spänna från kant till kant */
+@media (max-width: 600px) {
+    #library-info-box,
+    #profiler-info-box,
+    #academy-info-box {
+        left: -10px; /* Drar ut den till kanten för att maxa läsbarhet */
+        right: -10px;
+        width: auto;
+    }
+}
+
+/* Light mode-stöd */
+body.light-mode #library-info-box,
+body.light-mode #profiler-info-box,
+body.light-mode #academy-info-box {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-color: #ddd;
+    border-left-color: #8CC63F;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    color: #222;
+}
