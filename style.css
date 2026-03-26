@@ -2238,39 +2238,77 @@ body.light-mode .academy-librarian-bg {
 /* Light mode support för glaskanten */
 body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 
-/* Fysiken för vätskan */
-/* Tvingar dessa regler att BARA gälla glaset på startsidan */
+/* ========================================= */
+/* --- INTERAKTIVT KUPIGT ÖLGLAS (HOME) --- */
+/* ========================================= */
+
+.glass-container {
+    width: 70px; /* Lite bredare för kupan */
+    height: 90px;
+    cursor: pointer;
+    position: relative;
+    margin-right: 15px;
+    margin-top: -10px; /* Justera höjden mot rubriken */
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    transition: transform 0.1s ease;
+}
+
+.glass-container:active { transform: scale(0.95) translateY(2px); }
+
+/* Färgklasser (Matchar LIVE-vyn) */
+.glass-container.color-pilsner { color: #f4c95d; } 
+.glass-container.color-amber   { color: #d67f1a; } 
+.glass-container.color-ipa     { color: #f2994a; } 
+.glass-container.color-red     { color: #a12b28; } /* Lite mörkare röd för kupan */
+.glass-container.color-stout   { color: #231100; } /* Riktigt mörk */
+
+/* Glasets outline */
+.glass-outline, .glass-foot {
+    stroke: rgba(255,255,255,0.25);
+    transition: stroke 0.3s ease;
+}
+
+body.light-mode .glass-outline, body.light-mode .glass-foot {
+    stroke: rgba(0,0,0,0.3);
+}
+
+/* --- ANIMATIONS-LOGIK (Positions-baserad) --- */
+
 #interactive-beer-glass .beer-liquid {
     fill: currentColor;
-    transform-origin: bottom center; 
+    /* Ölet startar fullt (position 0) */
+    transform: translateY(0);
     transition: transform 0.2s ease-out, color 0.3s ease; 
 }
 
 #interactive-beer-glass .beer-foam {
-    fill: rgba(255,255,255,0.9);
-    transform-origin: bottom center;
+    /* Skummet följer med vätskan */
+    transform: translateY(0);
     transition: transform 0.2s ease-out; 
 }
 
-/* --- ANIMATIONER FÖR LÅNGTRYCK (DRINK / REFILL) --- */
+/* --- NYA ANIMATIONER (DRINK / REFILL) --- */
 
-/* 1. Tömning (Sveps) */
+/* 1. Tömning (Sjunka snabbt) */
 .glass-container.anim-drain .beer-liquid,
 .glass-container.anim-drain .beer-foam {
-    transform: scaleY(0);
-    transition: transform 0.7s cubic-bezier(0.55, 0.085, 0.68, 0.53); /* Accelererande fall */
+    /* Flytta ner vätskan och skummet utanför masken (100% ner) */
+    transform: translateY(100%); 
+    transition: transform 0.8s cubic-bezier(0.5, 0, 0.7, 0.5); /* Accelererande fall */
 }
 
-/* 2. Påfyllning (Mjukt med en liten studs) */
+/* 2. Påfyllning (Stiga mjukt med bounce) */
 .glass-container.anim-fill .beer-liquid,
 .glass-container.anim-fill .beer-foam {
-    transform: scaleY(1);
-    animation: fillGlassUp 1.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    transform: translateY(0); /* Tillbaka till toppen */
+    animation: fillGlassUpPosition 2.0s cubic-bezier(0.2, 1, 0.3, 1) forwards;
 }
 
-@keyframes fillGlassUp {
-    0% { transform: scaleY(0); }
-    85% { transform: scaleY(1); }
-    90% { transform: scaleY(1.03); } /* Lätt översvämning/bounce */
-    100% { transform: scaleY(1); }
+@keyframes fillGlassUpPosition {
+    0%   { transform: translateY(100%); } /* Starta tom */
+    80%  { transform: translateY(0); }    /* Upp till toppen */
+    85%  { transform: translateY(-3px); }  /* Liten översvämning (bounce upp) */
+    100% { transform: translateY(0); }     /* Landar perfekt */
 }
