@@ -1156,59 +1156,42 @@ html.modal-open, body.modal-open {
     overscroll-behavior: none !important; 
 }
 
-/* --- YEAST INFO MODAL --- */
+/* --- YEAST INFO MODAL (ÅTERSTÄLLD TILL ORIGINALET) --- */
 .modal-overlay {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important; 
-    background-color: rgba(0, 0, 0, 0.85) !important;
-    z-index: 999999 !important; 
-    
-    /* OBS: Ingen display: flex !important; här! JS sköter det. */
-    
-    /* Låt den börja från toppen för att förhindra att den klipps av */
-    align-items: flex-start !important; 
-    overflow-y: auto !important; /* Säkerhets-scroll om skärmen är extremt liten */
-    
-    padding: 60px 15px !important; /* Marginaler runt om så den aldrig rör kanten */
-    box-sizing: border-box !important;
-    backdrop-filter: blur(5px) !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 99999; /* Enda tillägget: tvingar den över menyn (som har 2000) */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Detta centrerar den perfekt, precis som du hade förut */
+    padding: 20px; /* Håller den borta från skärmens kanter */
+    box-sizing: border-box;
+    backdrop-filter: blur(5px);
 }
 
 .modal-content {
-    background-color: #1a1a1a !important;
-    border: 1px solid #333 !important;
-    border-radius: 12px !important;
-    width: 100% !important;
-    max-width: 600px !important;
-    
-    /* MAGIN: Detta centrerar rutan perfekt lodrätt och horisontellt! */
-    margin: auto !important; 
-    
-    /* Rutan får ta upp max 85% av skärmen, sedan måste man scrolla *inuti* den */
-    max-height: 85vh !important; 
-    
-    display: flex !important;
-    flex-direction: column !important;
-    box-shadow: 0 10px 50px rgba(0,0,0,0.9) !important;
-    animation: modalFadeIn 0.3s ease-out !important;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 85vh; /* Låter innehållet scrolla om texten är lång */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    animation: modalFadeIn 0.3s ease-out;
 }
 
-/* Modal Body måste kunna scrollas när texten blir lång */
 .modal-body {
-    padding: 20px !important;
-    overflow-y: auto !important; 
-    color: #ddd !important;
-    line-height: 1.6 !important;
-    font-size: 0.95rem !important;
-}
-/* MOBIL: Vänder på marginalerna eftersom menyn är i botten! */
-@media (max-width: 600px) {
-    .modal-overlay {
-        padding: 20px 20px 80px 20px !important; 
-    }
+    padding: 20px;
+    overflow-y: auto; 
+    color: #ddd;
+    line-height: 1.6;
+    font-size: 0.95rem;
 }
 
 @keyframes modalFadeIn {
