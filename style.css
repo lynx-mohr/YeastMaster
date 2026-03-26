@@ -2004,36 +2004,38 @@ body.light-mode .lab-tab-pill.active {
     left: 0 !important;
     z-index: 9999 !important;  /* Tvingar den över grafer, kort och Bibliotekarier */
     
-    /* Premium-designen */
-    background-color: rgba(20, 20, 20, 0.95) !important; 
-    backdrop-filter: blur(10px) !important;              
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8) !important; 
+    /* premium, glas-liknande mörkgrön design */
+    background-color: rgba(10, 30, 10, 0.98) !important; /* Mycket mörkt grön tint */
+    backdrop-filter: blur(10px) !important;              /* Frostad glaseffekt */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8) !important; /* Tung, snygg skugga */
     
-    border: 1px solid #333 !important;
-    border-left: 4px solid #8CC63F !important; /* Gröna kanten */
-    border-radius: 8px !important;
-    padding: 15px !important;
+    border: 1px solid rgba(140, 198, 63, 0.2) !important; /* Subtil grön ram */
+    border-left: 4px solid #8CC63F !important;            /* Accent-grön kant */
+    border-radius: 12px !important;                       /* Lite mjukare hörn */
+    padding: 20px !important;
     
+    /* Textstyling för premium-känslan */
     font-size: 0.95rem !important;
     line-height: 1.6 !important;
     margin-top: 15px !important; 
+    color: rgba(255, 255, 255, 0.9) !important; /* Nästan vit text */
     
-    /* Standardbredd för PC */
+    /* PC-bredd */
     width: 450px !important; 
 }
 
 /* Anpassning för mobiler */
 @media (max-width: 600px) {
     .floating-info-box {
-        width: 280px !important; /* Smalare så den ryms på små skärmar */
+        width: 300px !important; /* Smalare så den ryms på små skärmar */
     }
 }
 
 /* Light mode-stöd */
 body.light-mode .floating-info-box {
-    background-color: rgba(255, 255, 255, 0.95) !important;
-    border-color: #ddd !important;
+    background-color: rgba(240, 255, 240, 0.98) !important; /* Ljus, krämfärgad grön */
+    border-color: rgba(140, 198, 63, 0.3) !important;
     border-left-color: #8CC63F !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
     color: #222 !important;
 }
