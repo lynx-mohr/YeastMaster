@@ -1156,34 +1156,39 @@ html.modal-open, body.modal-open {
     overscroll-behavior: none !important; 
 }
 
-/* --- YEAST INFO MODAL (ÅTERSTÄLLD TILL ORIGINALET) --- */
+/* --- YEAST INFO MODAL --- */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     background-color: rgba(0, 0, 0, 0.85);
-    z-index: 99999; /* Enda tillägget: tvingar den över menyn (som har 2000) */
+    z-index: 10000; /* Lite högre bara för att gå över nav */
     display: flex;
     justify-content: center;
-    align-items: center; /* Detta centrerar den perfekt, precis som du hade förut */
-    padding: 20px; /* Håller den borta från skärmens kanter */
-    box-sizing: border-box;
-    backdrop-filter: blur(5px);
+    align-items: center;
 }
 
 .modal-content {
     background-color: #1a1a1a;
     border: 1px solid #333;
     border-radius: 12px;
-    width: 100%;
+    width: 90%;
     max-width: 600px;
-    max-height: 85vh; /* Låter innehållet scrolla om texten är lång */
+    max-height: 85vh;
     display: flex;
     flex-direction: column;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     animation: modalFadeIn 0.3s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #333;
 }
 
 .modal-body {
@@ -1198,7 +1203,6 @@ html.modal-open, body.modal-open {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
 .modal-header {
     display: flex;
     justify-content: space-between;

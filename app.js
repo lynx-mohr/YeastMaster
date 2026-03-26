@@ -1750,13 +1750,13 @@ const yeastDescriptions = {
 
 
 
-// --- POPUP-FUNKTIONER (MODAL) ---
 function openYeastModal(yeast) {
     const modal = document.getElementById('yeast-info-modal');
-
     document.getElementById('modal-yeast-name').innerText = yeast.name;
     
-    let detailedText = "";
+    let detailedText = yeastDescriptions[yeast.id] || yeastDescriptions[yeast.name] || `<p>${yeast.desc}</p>`;
+
+
 
     // Kolla om detta är en egengjord profil (vi kollar efter flaggan 'isCustom')
     if (yeast.isCustom) {
@@ -1855,17 +1855,15 @@ function openYeastModal(yeast) {
     
     detailedText = formatTempText(detailedText);
 
-    document.getElementById('modal-yeast-desc').innerHTML = detailedText;
+document.getElementById('modal-yeast-desc').innerHTML = formatTempText(detailedText);
     modal.style.display = 'flex';
     
-    // --- Frys skärmen i bakgrunden ---
+    // Den gamla hederliga låsningen
     document.body.style.overflow = 'hidden';
 }
 
 window.closeYeastModal = function() {
     document.getElementById('yeast-info-modal').style.display = 'none';
-    
-    // --- Lås upp skärmen i bakgrunden ---
     document.body.style.overflow = '';
 }
 
