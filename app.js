@@ -2725,33 +2725,44 @@ function initInteractiveGlass() {
         glass.classList.add('color-' + beerStyles[currentStyleIndex]);
     }
 
-// 2. Drick & Fyll på (Långtryck med symmetrisk fart och slump!)
-function startDrain() {
+// 2. Drick & Fyll på (Med slumpad väntetid OCH slumpad ölsort!)
+    function startDrain() {
         if (isAnimating) return;
         isAnimating = true;
         
         glass.classList.remove('anim-fill');
         
-        // --- DEN MAGISKA RADEN ---
         // Tvingar webbläsaren att rita om (reflow) innan den tömmer
         void glass.offsetWidth; 
         
         glass.classList.add('anim-drain');
 
-        // Tömningen i CSS tar nu 2000ms (2 sekunder)
         const drainDuration = 2000; 
-        
-        // Slumpa fram hur länge glaset ska stå tomt (mellan 0 och 5 sekunder)
         const randomEmptyWait = Math.floor(Math.random() * 5000); 
-        
-        // Total tid innan vi börjar hälla upp igen = tömningstid + väntetid
         const totalWaitBeforeRefill = drainDuration + randomEmptyWait;
-        
-        const refillAnimationDuration = 2000; // Påfyllningen tar också 2 sekunder
+        const refillAnimationDuration = 2000; 
 
         // 1. Vänta tills glaset är tomt OCH den slumpmässiga pausen är över
         setTimeout(() => {
             glass.classList.remove('anim-drain');
+            
+            // ==========================================
+            // --- MAGI: SLUMPA FRAM EN NY ÖLSORT! ---
+            // ==========================================
+            // Lista med alla dina förberedda färger från CSS:en
+            const beerColors = ['color-pilsner', 'color-amber', 'color-ipa', 'color-red', 'color-stout'];
+            
+            // Ta bort ALLA eventuella gamla färgklasser från glaset först
+            glass.classList.remove(...beerColors);
+            
+            // Dra en vinnare ur hatten (slumpa fram ett index mellan 0 och 4)
+            const randomColor = beerColors[Math.floor(Math.random() * beerColors.length)];
+            
+            // Lägg på den vinnande färgen på glaset
+            glass.classList.add(randomColor);
+            // ==========================================
+
+            // Nu när glaset har fått sin nya färg (medan det är tomt), börjar vi hälla!
             glass.classList.add('anim-fill');
             
             // 2. Lås upp animationen när glaset är fyllt igen
