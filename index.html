@@ -370,32 +370,26 @@
         </div>
     </section>
 
-    <section id="view-librarian" style="display: none;">
+<section id="view-librarian" style="display: none;">
         <div class="library-header" style="margin-bottom: 20px;">
             <div style="position: relative; display: flex; align-items: center; gap: 10px;">
                 <h2 style="margin: 0; line-height: 1;">In the lab</h2> 
-                
-                <button onclick="toggleAcademyInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; transition: all 0.3s ease; padding: 0;">
-                    i
-                </button>
-
+                <button onclick="toggleAcademyInfo(this)" class="info-circle-btn">i</button>
                 <div id="academy-info-box" class="floating-info-box" style="display: none;">
                     <h3 style="color: var(--accent-color); margin-bottom: 10px; font-size: 1.2rem;">Yeast Management Academy</h3>
                     <strong style="color: var(--text-main);">Roll up your sleeves and become a microbiologist!</strong><br><br>
-                    Step into the Arcane Lab and discover the fascinating world of yeast management. Whether you're looking to master the art of building robust yeast starters, learn how to streak agar plates, or venture out to capture wild yeast from the apple trees in your backyard—this is where your journey begins. Maintain your own private yeast library at home and unlock the true soul of your beer.
+                    Step into the Arcane Lab and discover the fascinating world of yeast management.
                 </div>
             </div>
         </div>
 
-  <div id="lab-content-academy" style="display:block;">
-            
+        <div id="lab-content-academy" style="display:block;">
             <div class="academy-grid" style="padding: 0;">
-                
                 <div class="academy-librarian-bg">
                     <img src="librarian-dark.png" class="lib-dark" alt="Librarian BG">
                     <img src="librarian-light.png" class="lib-light" alt="Librarian BG">
                 </div>
-                
+
                 <div class="academy-card" onclick="openAcademyModule('starters')">
                     <div class="academy-card-icon">🧪</div>
                     <div class="academy-card-content">
@@ -404,7 +398,6 @@
                     </div>
                     <div class="academy-card-arrow">→</div>
                 </div>
-
                 <div class="academy-card" onclick="openAcademyModule('agar')">
                     <div class="academy-card-icon">🧫</div>
                     <div class="academy-card-content">
@@ -413,7 +406,6 @@
                     </div>
                     <div class="academy-card-arrow">→</div>
                 </div>
-
                 <div class="academy-card" onclick="openAcademyModule('wild')">
                     <div class="academy-card-icon">🍏</div>
                     <div class="academy-card-content">
@@ -422,7 +414,6 @@
                     </div>
                     <div class="academy-card-arrow">→</div>
                 </div>
-
                 <div class="academy-card" onclick="openAcademyModule('calc')">
                     <div class="academy-card-icon" style="color: var(--accent-color);">🧮</div>
                     <div class="academy-card-content">
@@ -434,145 +425,46 @@
             </div>
         </div>
 
-        <div id="academy-module-view" style="display: none; padding: 0; animation: fadeUp 0.4s ease-out;">
-            <button onclick="closeAcademyModule()" class="back-btn-academy" style="background: transparent; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; padding: 0; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; gap: 5px;">
-                ← BACK TO ACADEMY
-            </button>
+        <div id="academy-module-view" style="display: none; padding: 0;">
+            <button onclick="closeAcademyModule()" class="back-btn-academy">← BACK TO ACADEMY</button>
             <div id="academy-module-content"></div>
         </div>
     </section>
 
     <nav class="main-nav">
-<section id="view-librarian" style="display: none;">
-        
-   <div class="library-header" style="position: relative; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <h2 style="margin: 0; line-height: 1;">In the lab</h2> 
-            
-            <button onclick="toggleAcademyInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; transition: all 0.3s ease; padding: 0;">
-                i
-            </button>
-
-            <div id="academy-info-box" style="display: none;">
-                <h3 style="color: var(--accent-color); margin-bottom: 10px; font-size: 1.2rem;">Yeast Management Academy</h3>
-                <strong style="color: var(--text-main);">Roll up your sleeves and become a microbiologist!</strong><br><br>
-                Step into the Arcane Lab and discover the fascinating world of yeast management. Whether you're looking to master the art of building robust yeast starters, learn how to streak agar plates, or venture out to capture wild yeast from the apple trees in your backyard—this is where your journey begins. Maintain your own private yeast library at home and unlock the true soul of your beer.
-            </div>
+        <div class="nav-item active" onclick="showView('soul')">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+            <span class="nav-text">HOME</span>
         </div>
-
-        <div id="lab-content-academy" style="display:block;">
-            
-            <div style="text-align: center; margin-bottom: 30px; margin-top: 10px;">
-                <img src="librarian-dark.png" class="librarian-illustration lib-dark" alt="The Yeast Librarian" style="width: 220px; margin: 0 auto;">
-                <img src="librarian-light.png" class="librarian-illustration lib-light" alt="The Yeast Librarian" style="width: 220px; margin: 0 auto;">
-            </div>
-
-            <div class="academy-grid" style="padding: 0;">
-                
-                <div class="academy-card" onclick="openAcademyModule('starters')">
-                    <div class="academy-card-icon">🧪</div>
-                    <div class="academy-card-content">
-                        <h4>Yeast Starters 101</h4>
-                        <p>Wake up your yeast and ensure a healthy fermentation.</p>
-                    </div>
-                    <div class="academy-card-arrow">→</div>
-                </div>
-
-                <div class="academy-card" onclick="openAcademyModule('agar')">
-                    <div class="academy-card-icon">🧫</div>
-                    <div class="academy-card-content">
-                        <h4>Mastering Agar Plates</h4>
-                        <p>Learn to pour, streak, and isolate pure strains.</p>
-                    </div>
-                    <div class="academy-card-arrow">→</div>
-                </div>
-
-                <div class="academy-card" onclick="openAcademyModule('wild')">
-                    <div class="academy-card-icon">🍏</div>
-                    <div class="academy-card-content">
-                        <h4>Capturing Wild Yeast</h4>
-                        <p>Hunt for local microbes and brew something unique.</p>
-                    </div>
-                    <div class="academy-card-arrow">→</div>
-                </div>
-
-                <div class="academy-card" onclick="openAcademyModule('calc')">
-                    <div class="academy-card-icon" style="color: var(--accent-color);">🧮</div>
-                    <div class="academy-card-content">
-                        <h4 style="color: var(--accent-color);">Pitch Calculator</h4>
-                        <p>Calculate the exact cell count needed for your next brew.</p>
-                    </div>
-                    <div class="academy-card-arrow" style="color: var(--accent-color);">→</div>
-                </div>
-
-            </div>
+        <div class="nav-item" onclick="showView('library')">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h2v7l2-1.5 2 1.5V4h6v16z"/></svg>
+            <span class="nav-text">LIBRARY</span>
         </div>
-
-        <div id="academy-module-view" style="display: none; padding: 0; animation: fadeUp 0.4s ease-out;">
-            
-            <button onclick="closeAcademyModule()" class="back-btn-academy" style="background: transparent; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; padding: 0; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; gap: 5px;">
-                ← BACK TO ACADEMY
-            </button>
-
-            <div id="academy-module-content"></div>
-            
+        <div class="nav-item" onclick="showView('librarian')">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 19.92L14.07 8V4h1V2H8.93v2h1v4L3 19.92c-.37.75.17 1.65 1.01 1.65h15.98c.84 0 1.38-.9.1-1.65zM12 4h1.07v3.52l1.6 3.12-5.34.01 1.6-3.13V4H12zm-5.74 12l2.31-4.5h6.86l2.31 4.5H6.26z"/></svg>
+            <span class="nav-text">LAB</span>
         </div>
-    </div>
+        <div class="nav-item" onclick="showView('lab')">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 21V3h2v16h16v2H3z"/><path d="M7 12h3l3-4h2l3 6h3v2h-4l-3-6h-2l-3 4H7z"/></svg>
+            <span class="nav-text">PROFILER</span>
+        </div>
+        <div class="nav-item" onclick="showView('dashboard')">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 2.21.72 4.25 1.94 5.91l1.46-1.46C4.52 15.12 4 13.62 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.62-.52 3.12-1.4 4.45l1.46 1.46C21.28 16.25 22 14.21 22 12c0-5.52-4.48-10-10-10zm2 10c0-1.1-.9-2-2-2s-2 .9-2 2c0 .74.4 1.39 1 1.73V20h2v-6.27c.6-.34 1-.99 1-1.73z"/></svg>
+            <span class="nav-text">LIVE</span>
+        </div>
+        <div class="nav-item" onclick="showView('settings')">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19.4 13l-2.1-1.7c.1-.3.1-.6.1-.9s0-.6-.1-.9l2.1-1.7c.2-.2.3-.4.2-.6l-2-3.5c-.1-.2-.3-.3-.6-.2l-2.5 1c-.5-.4-1-.7-1.6-.9l-.4-2.6c0-.2-.2-.4-.5-.4h-4c-.2 0-.4.2-.5.4l-.4 2.6c-.6.2-1.1.6-1.6.9l-2.5-1c-.2-.1-.5 0-.6.2l-2 3.5c-.1.2 0 .5.2.6l2.1 1.7c-.1.3-.1.6-.1.9s0 .6.1.9l-2.1 1.7c-.2.2-.3.4-.2.6l2 3.5c.1.2.3.3.6.2l2.5-1c.5.4 1 .7 1.6.9l.4 2.6c0 .2.2.4.5.4h4c.2 0 .4-.2.5-.4l.4-2.6c.6-.2 1.1-.6 1.6-.9l2.5 1c.2.1.5 0 .6-.2l2-3.5c.1-.2 0-.5-.2-.6zM12 15.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z"/></svg>
+            <span class="nav-text">SETTINGS</span>
+        </div>
+    </nav>
 
-    </section>
-
-<nav class="main-nav">
-    <div class="nav-item active" onclick="showView('soul')">
-        <svg class="nav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/>
-        </svg>
-        <span class="nav-text">HOME</span>
-    </div>
-
-    <div class="nav-item" onclick="showView('library')">
-        <svg class="nav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h2v7l2-1.5 2 1.5V4h6v16z"/>
-        </svg>
-        <span class="nav-text">LIBRARY</span>
-    </div>
-
-    <div class="nav-item" onclick="showView('librarian')">
-        <svg class="nav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 19.92L14.07 8V4h1V2H8.93v2h1v4L3 19.92c-.37.75.17 1.65 1.01 1.65h15.98c.84 0 1.38-.9.1-1.65zM12 4h1.07v3.52l1.6 3.12-5.34.01 1.6-3.13V4H12zm-5.74 12l2.31-4.5h6.86l2.31 4.5H6.26z"/>
-        </svg>
-        <span class="nav-text">LAB</span>
-    </div>
-
-    <div class="nav-item" onclick="showView('lab')">
-        <svg class="nav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 21V3h2v16h16v2H3z"/>
-            <path d="M7 12h3l3-4h2l3 6h3v2h-4l-3-6h-2l-3 4H7z"/>
-        </svg>
-        <span class="nav-text">PROFILER</span>
-    </div>
-
-    <div class="nav-item" onclick="showView('dashboard')">
-        <svg class="nav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C6.48 2 2 6.48 2 12c0 2.21.72 4.25 1.94 5.91l1.46-1.46C4.52 15.12 4 13.62 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.62-.52 3.12-1.4 4.45l1.46 1.46C21.28 16.25 22 14.21 22 12c0-5.52-4.48-10-10-10zm2 10c0-1.1-.9-2-2-2s-2 .9-2 2c0 .74.4 1.39 1 1.73V20h2v-6.27c.6-.34 1-.99 1-1.73z"/>
-        </svg>
-        <span class="nav-text">LIVE</span>
-    </div>
-
-    <div class="nav-item" onclick="showView('settings')">
-        <svg class="nav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19.4 13l-2.1-1.7c.1-.3.1-.6.1-.9s0-.6-.1-.9l2.1-1.7c.2-.2.3-.4.2-.6l-2-3.5c-.1-.2-.3-.3-.6-.2l-2.5 1c-.5-.4-1-.7-1.6-.9l-.4-2.6c0-.2-.2-.4-.5-.4h-4c-.2 0-.4.2-.5.4l-.4 2.6c-.6.2-1.1.6-1.6.9l-2.5-1c-.2-.1-.5 0-.6.2l-2 3.5c-.1.2 0 .5.2.6l2.1 1.7c-.1.3-.1.6-.1.9s0 .6.1.9l-2.1 1.7c-.2.2-.3.4-.2.6l2 3.5c.1.2.3.3.6.2l2.5-1c.5.4 1 .7 1.6.9l.4 2.6c0 .2.2.4.5.4h4c.2 0 .4-.2.5-.4l.4-2.6c.6-.2 1.1-.6 1.6-.9l2.5 1c.2.1.5 0 .6-.2l2-3.5c.1-.2 0-.5-.2-.6zM12 15.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z"/>
-        </svg>
-        <span class="nav-text">SETTINGS</span>
-    </div>
-</nav>
-
-    <div id="yeast-info-modal" class="modal-overlay" style="display: none;">
+    <div id="yeast-info-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modal-yeast-name">Yeast Name</h2>
                 <button class="close-btn" onclick="closeYeastModal()">×</button>
             </div>
-            <div class="modal-body" id="modal-yeast-desc">
-            </div>
+            <div class="modal-body" id="modal-yeast-desc"></div>
         </div>
     </div>
 
@@ -580,6 +472,5 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="yeastdata.js"></script>
     <script src="app.js"></script>
-
 </body>
 </html>

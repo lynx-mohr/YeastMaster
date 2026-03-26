@@ -1756,8 +1756,9 @@ function openYeastModal(yeast) {
     const modalTitle = document.getElementById('modal-yeast-name');
     const modalDesc = document.getElementById('modal-yeast-desc');
 
+    if (!modal || !modalTitle || !modalDesc) return;
+
     modalTitle.innerText = yeast.name;
-    
     let detailedText = "";
 
     // 1. KOLLA OM DET ÄR EN EGEN PROFIL
@@ -1773,7 +1774,6 @@ function openYeastModal(yeast) {
                 <div style="line-height: 1.6;">
                     <p style="color: var(--accent-color); font-weight: 800; margin-bottom: 15px;">Created by you!</p>
                     <p>This profile is used with <strong>${baseYeast}</strong> and these are the profile steps:</p>
-                    
                     <ul style="list-style: none; padding: 0; margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
                         <li><strong style="color: #fff;">Pitch:</strong> Start at ${s[0][1]}°C.</li>
                         <li><strong style="color: #fff;">Primary:</strong> Hold until Day ${s[1][0]}.</li>
@@ -1781,7 +1781,6 @@ function openYeastModal(yeast) {
                         <li><strong style="color: #fff;">Cold Crash:</strong> Drop to ${s[3][1]}°C on Day ${s[3][0]}.</li>
                         <li><strong style="color: #fff;">Condition:</strong> Hold at ${s[4][1]}°C until Day ${s[4][0]}.</li>
                     </ul>
-                    
                     ${profileData.dryHopDay ? `<p style="margin-top: 15px; color: #8CC63F;"><strong>Dry Hop:</strong> Scheduled for Day ${profileData.dryHopDay}</p>` : ''}
                 </div>
             `;
@@ -1791,16 +1790,11 @@ function openYeastModal(yeast) {
     } else {
         // 2. VANLIG JÄST FRÅN BESKRIVNINGARNA
         detailedText = yeastDescriptions[yeast.id] || yeastDescriptions[yeast.name];
-        
         if (!detailedText) {
-            detailedText = `
-                <p>${yeast.desc}</p>
-                <h3 style="margin-top:20px; color: #fff;">Passar till:</h3>
-                <p>${yeast.styles}</p>
-            `;
+            detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:20px; color: #fff;">Passar till:</h3><p>${yeast.styles}</p>`;
         }
 
-        // 3. LÄGG TILL INKLUDERADE MASKINPROFILER (Hardware Profiles)
+        // 3. LÄGG TILL INKLUDERADE MASKINPROFILER
         const hwStrainNames = {
             "us-05": "US-05", "s-04": "S-04", "w-34-70": "W-34/70", "be-256": "BE-256",
             "wb-06": "WB-06", "verdant": "Verdant IPA", "voss": "Voss Kveik",
@@ -1815,51 +1809,46 @@ function openYeastModal(yeast) {
         };
 
         const targetStrainName = hwStrainNames[yeast.id];
-
         if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
             const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
-            
             if (matchingProfiles.length > 0) {
                 let profileListHtml = `
                     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
                         <h4 style="color: var(--accent-color); margin-bottom: 10px;">Included Hardware Profiles:</h4>
                         <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem;">
                 `;
-                
                 matchingProfiles.forEach(prof => {
                     const startTemp = prof.steps[0][1];
                     profileListHtml += `<li><strong style="color: #fff;">${prof.p}</strong> (Starts @ ${startTemp}°C)</li>`;
                 });
-
                 profileListHtml += `</ul></div>`;
-                detailedText += profileListHtml; 
+                detailedText += profileListHtml;
             }
         }
     }
-    
-    // Slutlig formatering (Temperaturkonvertering C/F) och injicering
+
+    // Slutlig formatering och visning
     modalDesc.innerHTML = formatTempText(detailedText);
-    
-    // Visa modalen och lås bakgrundsskrollen
     modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden'; // Lås bakgrunden
 }
 
-// STÄNG MODALEN
 window.closeYeastModal = function() {
     const modal = document.getElementById('yeast-info-modal');
     if (modal) {
         modal.style.display = 'none';
-        document.body.style.overflow = ''; // Släpp loss scrollen igen
+        document.body.style.overflow = ''; // Släpp bakgrunden fri
     }
 }
 
-// STÄNG VID KLICK UTANFÖR RUTAN
+// Stäng vid klick utanför rutan
 document.getElementById('yeast-info-modal').addEventListener('click', function(event) {
     if (event.target === this) {
         closeYeastModal();
     }
 });
+
+
 // ==========================================
 // MASTER STARTUP (Körs när sidan är helt redo)
 // ==========================================
