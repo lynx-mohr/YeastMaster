@@ -2292,3 +2292,65 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
         margin-top: 0 !important; 
     }
 }
+
+/* ========================================= */
+/* --- DEMO TOUR / ONBOARDING (LIVE VIEW) -- */
+/* ========================================= */
+
+.tour-overlay {
+    position: fixed; 
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.75); /* Dämpar hela skärmen */
+    z-index: 9000;
+    display: none; 
+    opacity: 0; 
+    transition: opacity 0.3s ease;
+    cursor: pointer; /* Visar att man kan klicka för nästa */
+}
+
+.tour-tooltip {
+    position: absolute; 
+    z-index: 9002; 
+    display: none;
+    background-color: rgba(10, 30, 10, 0.95);
+    border: 1px solid var(--accent-color);
+    border-left: 4px solid var(--accent-color);
+    color: #fff; 
+    padding: 12px 20px; 
+    border-radius: 8px;
+    font-size: 1rem; 
+    font-weight: 800; 
+    font-family: 'Lexend', sans-serif;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    pointer-events: none; /* Klick går rakt igenom rutan till overlayen */
+    text-align: center; 
+    white-space: nowrap;
+}
+
+/* Den lilla pilen som pekar UPPÅT mot elementet */
+.tour-arrow {
+    position: absolute; 
+    top: -10px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid var(--accent-color);
+}
+
+/* MAGIN: Denna klass läggs på elementet vi pekar på för att lyfta fram det i ljuset */
+.tour-highlight {
+    position: relative !important;
+    z-index: 9001 !important;
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.2); /* Svag cyan-glow runt elementet */
+    border-radius: 8px;
+    background: #111; /* Säkrar att elementet inte är genomskinligt mot skuggan */
+    transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+
+/* Cool inhopp-animation varje gång rutan byter plats */
+@keyframes popIn {
+    0%   { opacity: 0; transform: translate(-50%, 15px) scale(0.9); }
+    100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}

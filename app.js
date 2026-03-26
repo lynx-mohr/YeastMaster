@@ -2817,3 +2817,104 @@ function startDrain() {
 window.addEventListener('DOMContentLoaded', () => {
     initInteractiveGlass();
 });
+
+// =========================================
+// --- LIVE DEMO TOUR LOGIK ---
+// =========================================
+
+let currentDemoStep = -1;
+
+// Här bestämmer vi VAD vi ska peka på, och VILKEN TEXT som ska visas
+const demoSteps = [
+    { selector: '.carboy-wrapper', text: 'Temp inside vessel' },
+    { selector: '.air-floating', text: 'Ambient temp' },
+    { selector: '.action-status', text: 'Cooling ambient temp' },
+    { selector: '.progress-section', text: 'Fermentation completion' },
+    { selector: '.phase-info', text: 'Current phase details' }
+];
+
+function startDemoTour() {
+    const overlay = document.getElementById('demo-overlay');
+    overlay.style.display = 'block';
+    // Liten fördröjning för att CSS-övergången (fade in) ska triggas
+    setTimeout(() => overlay.style.opacity = '1', 10); 
+    
+    currentDemoStep = -1;
+    nextDemoStep();
+}
+
+function nextDemoStep() {
+    // 1. Ta bort highlight från det förra elementet
+    if (currentDemoStep >= 0 && currentDemoStep < demoSteps.length) {
+        const prevEl = document.querySelector(demoSteps[currentDemoStep].selector);
+        if (prevEl) prevEl.classList.remove('tour-highlight');
+    }
+
+    currentDemoStep++;
+
+    const tooltip = document.getElementById('demo-tour-tooltip');
+    const overlay = document.getElementById('demo-overlay');
+
+    // 2. KONTROLL: Är touren slut?
+    if (currentDemoStep >= demoSteps.length) {
+        tooltip.style.display = 'none';
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.style.display = 'none', 300);
+        
+        // Final message (här kan vi bygga en snygg ruta senare, vi tar en alert så länge)
+        setTimeout(() => {
+            alert("Connect your YeastMaster unit to see your own live data!");
+        }, 300);
+        return;
+    }
+
+    // 3. Hitta nästa element i din HTML
+    const targetEl = document.querySelector(demoSteps[currentDemoStep].selector);
+    
+    if (!targetEl) {
+        console.warn("Tour: Hittade inte " + demoSteps[currentDemoStep].selector);
+        nextDemoStep(); // Hittas den inte? Hoppa snabbt till nästa!
+        return;
+    }
+
+    // 4. Lys upp elementet!
+    targetEl.classList.add('tour-highlight');
+
+    // 5. Scrolla mjukt så elementet alltid syns på mobilen
+    targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // 6. Uppdatera texten i rutan
+    document.getElementById('demo-tour-text').innerText = demoSteps[currentDemoStep].text;
+
+    // 7. Beräkna positionen (Vänta 300ms så scrollen hinner klart först)
+    setTimeout(() => {
+        const rect = targetEl.getBoundingClientRect();
+        
+        // Räkna ut botten på elementet + 15px marginal neråt
+        const topPos = rect.bottom + window.scrollY + 15; 
+        
+        // Hitta mitten på elementet i sidled
+        const leftPos = rect.left + window.scrollX + (rect.width / 2);
+
+        tooltip.style.display = 'block';
+        tooltip.style.top = topPos + 'px';
+        tooltip.style.left = leftPos + 'px';
+        
+        // Tvinga webbläsaren att spela inhopp-animationen igen
+        tooltip.style.animation = 'none';
+        void tooltip.offsetWidth; 
+        tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+        
+    }, 300); 
+}
+
+// Koppla klick-lyssnare när sidan laddas
+document.addEventListener('DOMContentLoaded', () => {
+    // Klicka var som helst på mörkret för att gå till nästa steg
+    const overlay = document.getElementById('demo-overlay');
+    if(overlay) overlay.addEventListener('click', nextDemoStep);
+    
+    // Klicka på "i"-knappen för att starta
+    const startBtn = document.getElementById('start-demo-btn');
+    if(startBtn) startBtn.addEventListener('click', startDemoTour);
+});
