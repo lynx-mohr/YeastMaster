@@ -1222,17 +1222,6 @@ body.modal-open {
 
 .academy-librarian-bg img { width: 100%; height: auto; object-fit: contain; }
 
-@media (max-width: 768px) {
-    .academy-librarian-bg {
-        position: static;
-        display: block;
-        margin: 20px auto;
-        width: 140px;
-        opacity: 1;
-        transform: none;
-    }
-}
-
 /* Extra knappar för labbet */
 .info-circle-btn {
     background: rgba(140, 198, 63, 0.15);
@@ -2206,49 +2195,13 @@ body.light-mode .academy-librarian-bg {
 }
 
 /* ========================================= */
-/* --- INTERAKTIVT ÖLGLAS (HOME-VYN) --- */
-/* ========================================= */
-
-.glass-container {
-    width: 65px; /* Perfekt storlek bredvid rubriken */
-    height: 85px;
-    cursor: pointer;
-    position: relative;
-    margin-right: 20px;
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
-    transition: transform 0.1s ease;
-}
-
-/* Klick-effekt när man trycker ner */
-.glass-container:active { transform: scale(0.92) translateY(2px); }
-
-/* Grundfärger för ölet (Följer LIVE-färgschemat) */
-.glass-container.color-pilsner { color: #f4c95d; } 
-.glass-container.color-amber   { color: #d67f1a; } 
-.glass-container.color-ipa     { color: #f2994a; } 
-.glass-container.color-stout   { color: #2b1500; } 
-.glass-container.color-red     { color: #82211e; } 
-
-.glass-outline {
-    stroke: rgba(255,255,255,0.25); /* Subtil glaskant */
-}
-
-/* Light mode support för glaskanten */
-body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
-
-/* ================= ========================= */
 /* --- INTERAKTIVT KUPIGT ÖLGLAS (HOME) --- */
-/* ================= ========================= */
-
+/* ========================================= */
 .glass-container {
-    /* Ny storlek: Skräddarsydd för att exakt matcha textens höjd */
     width: 80px; 
     height: 105px;
     cursor: pointer;
     position: relative;
-    /* Inga negativa marginaler behövs längre tack vare align-items: center */
     margin: 0; 
     user-select: none;
     -webkit-user-select: none;
@@ -2258,7 +2211,7 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 
 .glass-container:active { transform: scale(0.95) translateY(2px); }
 
-/* Färgklasser (Samma som tidigare) */
+/* Färgklasser */
 .glass-container.color-pilsner { color: #f4c95d; } 
 .glass-container.color-amber   { color: #d67f1a; } 
 .glass-container.color-ipa     { color: #f2994a; } 
@@ -2270,34 +2223,9 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
     stroke: rgba(255,255,255,0.25);
     transition: stroke 0.3s ease;
 }
-
 body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 
-/*========================================= */
-/* --- RESPONSIVA JUSTERINGAR (MOBIL) --- */
-/* ========================================= */
-@media (max-width: 600px) {
-    /* 1. Krymp avståndet mellan text och glas lite */
-    .home-title-section {
-        gap: 15px !important;
-    }
-
-    /* 2. Minska textrubriken */
-    .yeast-title {
-        font-size: 3.5rem !important; 
-    }
-    .yeast-subtitle {
-        font-size: 1.1rem !important;
-    }
-
-    /* 3. Minska glaset proportionerligt så det fortsätter matcha texten */
-    #interactive-beer-glass {
-        width: 55px !important; 
-        height: 72px !important; 
-    }
-}
-
-/* --- ANIMATIONS-LOGIK (Samma som tidigare) --- */
+/* --- ANIMATIONS-LOGIK --- */
 #interactive-beer-glass .beer-liquid {
     fill: currentColor;
     transition: color 0.3s ease; 
@@ -2308,17 +2236,15 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
     transition: transform 0.2s ease-out;
 }
 
-/* 1. Tömning (Lika långsam som påfyllningen) */
+/* Tömning */
 .glass-container.anim-drain .liquid-group {
     transform: translateY(100px); 
-    transition: transform 2.0s cubic-bezier(0.4, 0.0, 0.2, 1); /* Bytte även till en lite mjukare kurva */
+    transition: transform 2.0s cubic-bezier(0.4, 0.0, 0.2, 1); 
 }
 
-/* Påfyllning (Med fördröjning!) */
+/* Påfyllning (OBS: All delay styrs nu från JavaScriptet, precis som vi bestämde!) */
 .glass-container.anim-fill .liquid-group {
-    /* Vi lägger till '0.8s' delay, och byter 'forwards' till 'both' 
-       för att tvinga glaset att vara helt tomt under väntetiden! */
-    animation: fillGlassUpPosition 2.0s cubic-bezier(0.2, 1, 0.3, 1) 0.8s both;
+    animation: fillGlassUpPosition 2.0s cubic-bezier(0.2, 1, 0.3, 1) forwards;
 }
 
 @keyframes fillGlassUpPosition {
@@ -2332,15 +2258,19 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 /* --- RESPONSIVA JUSTERINGAR (MOBIL) --- */
 /* ========================================= */
 @media (max-width: 600px) {
-   
+    .home-title-section { gap: 15px !important; }
+
+    /* Fixat mellanslaget i 7.0rem! Nu kommer den växa! */
     .yeast-title {
-        font-size: 7.0 rem !important; 
+        font-size: 7.0rem !important; 
+    }
+    .yeast-subtitle {
+        font-size: 1.1rem !important;
     }
 
-    /* 2. Minska storleken på glaset */
     #interactive-beer-glass {
-        width: 50px !important; /* Minskar bredden */
-        height: 70px !important; /* Minskar höjden */
-        margin-top: -10px !important; /* Justera höjden mot mindre text */
+        width: 55px !important; 
+        height: 72px !important; 
+        margin-top: 0 !important; 
     }
 }
