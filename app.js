@@ -2724,7 +2724,7 @@ function initInteractiveGlass() {
         glass.classList.add('color-' + beerStyles[currentStyleIndex]);
     }
 
- // 2. Drick & Fyll på (Långtryck med Slumpmässig Påfyllning!)
+// 2. Drick & Fyll på (Långtryck med symmetrisk fart och slump!)
     function startDrain() {
         if (isAnimating) return;
         isAnimating = true;
@@ -2732,27 +2732,20 @@ function initInteractiveGlass() {
         glass.classList.remove('anim-fill');
         glass.classList.add('anim-drain');
 
-        // ========================================================
-        // MAGI: Skapa en slumpmässig väntetid mellan 800ms och 7000ms (7s)
-        // Vi tar bort den fasta fördröjningen i CSS:en (0.8s delay)
-        // och styr allt från denna slumptimer istället för att det ska bli rätt!
-        // ========================================================
-        const minWait = 800;  // Som det var förut
-        const maxWait = 7000; // Sju sekunder
+        // Tömningen i CSS tar nu 2000ms (2 sekunder)
+        const drainDuration = 2000; 
         
-        // Formel: Math.random() ger 0.0 till 1.0. Vi gör om det till millisekunder.
-        const randomWaitTime = Math.floor(Math.random() * (maxWait - minWait + 1)) + minWait;
+        // Slumpa fram hur länge glaset ska stå tomt (mellan 0 och 5 sekunder)
+        const randomEmptyWait = Math.floor(Math.random() * 5000); 
         
-        // Konstanter för fyllnings-animationen (måste matcha din CSS, t.ex. 2.0s)
-        const refillAnimationDuration = 2000; 
+        // Total tid innan vi börjar hälla upp igen = tömningstid + väntetid
+        const totalWaitBeforeRefill = drainDuration + randomEmptyWait;
+        
+        const refillAnimationDuration = 2000; // Påfyllningen tar också 2 sekunder
 
-        // 1. Töm glaset och låt det stå tomt i den SLUMPMÄSSIGA tiden
+        // 1. Vänta tills glaset är tomt OCH den slumpmässiga pausen är över
         setTimeout(() => {
             glass.classList.remove('anim-drain');
-            
-            // Innan vi lägger på .anim-fill måste vi se till att det inte är någon delay i CSS!
-            // Men eftersom du redan har delay i din CSS (från förra steget) måste vi tala om för JS
-            // att animationen ska starta NU utan extra väntan.
             glass.classList.add('anim-fill');
             
             // 2. Lås upp animationen när glaset är fyllt igen
@@ -2760,7 +2753,7 @@ function initInteractiveGlass() {
                 isAnimating = false;
             }, refillAnimationDuration); 
 
-        }, randomWaitTime); // <-- Här använder vi slump-värdet!
+        }, totalWaitBeforeRefill);
     }
 
     // --- LYSSNARE FÖR DATOR (MUS) ---

@@ -2308,10 +2308,10 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
     transition: transform 0.2s ease-out;
 }
 
-/* Tömning */
+/* 1. Tömning (Lika långsam som påfyllningen) */
 .glass-container.anim-drain .liquid-group {
     transform: translateY(100px); 
-    transition: transform 0.8s cubic-bezier(0.5, 0, 0.7, 0.5); 
+    transition: transform 2.0s cubic-bezier(0.4, 0.0, 0.2, 1); /* Bytte även till en lite mjukare kurva */
 }
 
 /* Påfyllning (Med fördröjning!) */
