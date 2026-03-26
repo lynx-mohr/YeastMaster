@@ -643,12 +643,11 @@ function renderYeastLibrary(filter = "") {
             openYeastModal(yeast);
         };
 
-        // 4. LÅNGKLICK (Mobil - Öppnar Modalen)
-        card.addEventListener('touchstart', (e) => {
+    // 4. LÅNGKLICK (Mobil - Originalversionen)
+        card.addEventListener('touchstart', () => {
             touchTimer = setTimeout(() => {
-                clearTimeout(clickTimer); // Förhindra enkelklicket
                 openYeastModal(yeast);
-            }, 600); // 600 millisekunder känns naturligt på mobil
+            }, 600); 
         }, {passive: true});
 
         card.addEventListener('touchend', () => clearTimeout(touchTimer));
