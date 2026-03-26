@@ -2258,6 +2258,20 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
     100% { transform: translateY(0); }
 }
 
+/* --- STANDARDSTORLEK OCH FÄRG FÖR DATOR --- */
+.yeast-title {
+    font-size: 5.5rem; 
+    
+    /* HÄR ÄR MAGIN SOM GER TILLBAKA FÄRGEN! */
+    color: var(--accent-color); 
+    
+    font-weight: 900; 
+    line-height: 0.8; 
+    margin: 0; 
+    letter-spacing: -3px; 
+    font-family: 'Lexend', sans-serif;
+}
+
 /* ========================================= */
 /* --- RESPONSIVA JUSTERINGAR (MOBIL) --- */
 /* ========================================= */
