@@ -395,14 +395,14 @@ function updateChart(data) {
                     },
                     y: { 
                         ticks: { 
-                            color: '#666', 
+                            color: '#bbbbbb', 
                            font: { family: 'Lexend', size: 10 },
                             // <-- NYTT: Här är skyddet som förhindrar att funktionen kraschar
                             callback: function(value) {
                                 return Number(value).toFixed(1) + '°';
                             }
                         }, 
-                        grid: { color: 'rgba(255, 255, 255, 0.05)' } 
+                        grid: { color: 'rgba(255, 255, 255, 0.2)' } 
                     }
                 },
                 plugins: { 
@@ -939,6 +939,7 @@ function initLabChart() {
                 fill: true,
                 segment: {
                     borderDash: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? [6, 6] : undefined,
+                    lineWidth: 1.5,
                     borderColor: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? (isLightMode ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.3)') : themeAccent
                 }
             }]
