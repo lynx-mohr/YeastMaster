@@ -1301,15 +1301,6 @@ function calculatePitch() {
     }
 }
 
-function switchLabTab(tab) {
-    document.getElementById('lab-content-calc').style.display = tab === 'calc' ? 'block' : 'none';
-    document.getElementById('lab-content-academy').style.display = tab === 'academy' ? 'block' : 'none';
-    
-    document.querySelectorAll('.lab-tab').forEach(btn => {
-        btn.classList.toggle('active', btn.innerText.toLowerCase().includes(tab));
-    });
-}
-
 // Sätt dagens datum som default i kalkylatorn
 window.addEventListener('DOMContentLoaded', () => {
     const dateInput = document.getElementById('pitch-date');
@@ -2603,3 +2594,123 @@ auth.onAuthStateChanged(async (user) => {
         showView('soul');
     }
 });
+
+// ==========================================
+// --- ARCANE LAB NAVIGATION & CONTENT ---
+// ==========================================
+
+// Innehållet för de olika modulerna
+const academyModules = {
+    'calc': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Pitch Calculator</h2>
+        <div class="calc-container" style="margin: 0; padding: 0; background: transparent; border: none;">
+            <div class="calc-inputs">
+                <div class="input-group">
+                    <label>Batch Volume (L)</label>
+                    <input type="number" id="pitch-vol" value="20" oninput="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                </div>
+                <div class="input-group">
+                    <label>Gravity (OG)</label>
+                    <input type="number" id="pitch-og" value="1.050" step="0.001" oninput="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                </div>
+                <div class="input-group">
+                    <label>Pitch Rate (M/ml/°P)</label>
+                    <select id="pitch-rate" onchange="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                        <option value="0.75">0.75 (Standard Ale)</option>
+                        <option value="1.0">1.0 (High Gravity Ale)</option>
+                        <option value="1.5">1.5 (Standard Lager)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Harvest Date</label>
+                    <input type="date" id="pitch-date" onchange="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                </div>
+            </div>
+
+            <div class="calc-results" style="display: flex; gap: 15px; margin-top: 20px;">
+                <div class="res-card" style="flex: 1; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #333;">
+                    <span class="res-label" style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">CELLS NEEDED</span>
+                    <span class="res-val" id="res-needed" style="display: block; font-size: 2rem; font-weight: 800; color: #fff;">--</span>
+                    <span class="res-unit" style="font-size: 0.8rem; color: #666;">Billion cells</span>
+                </div>
+                <div class="res-card accent" style="flex: 1; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #333; border-left: 4px solid var(--accent-color);">
+                    <span class="res-label" style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">EST. VIABILITY</span>
+                    <span class="res-val" id="res-viability" style="display: block; font-size: 2rem; font-weight: 800; color: #fff;">--</span>
+                    <span class="res-unit" id="res-days-old" style="font-size: 0.8rem; color: #666;">New</span>
+                </div>
+            </div>
+
+            <div id="pitch-warning" class="warning-box" style="display:none; margin-top: 20px; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 15px; border-radius: 8px; font-size: 0.9rem; text-align: center; font-weight: 600;">
+                ⚠️ Warning: Underpitching detected. Consider building a starter!
+            </div>
+        </div>
+    `,
+    'starters': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 5px; font-weight: 900; letter-spacing: -1px;">Yeast Starters 101</h2>
+        <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">Wake up your yeast and ensure a healthy, vigorous fermentation.</p>
+        <p style="color: #888;"><em>Lesson content coming soon...</em></p>
+    `,
+    'agar': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 5px; font-weight: 900; letter-spacing: -1px;">Mastering Agar Plates</h2>
+        <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">Learn to pour, streak, and isolate pure yeast strains like a pro.</p>
+        <div class="module-ingredients" style="margin-bottom: 30px;">
+            <h3 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1.1rem; font-weight: 800;">🧪 Ingredients & Gear</h3>
+            <ul style="color: #ddd; line-height: 1.6; padding-left: 20px;">
+                <li><strong>10g</strong> Light DME (Dry Malt Extract)</li>
+                <li><strong>10g</strong> Agar-Agar powder</li>
+                <li><strong>500ml</strong> Water (Distilled or RO)</li>
+                <li>Borosilicate Flask (Erlenmeyer)</li>
+                <li>Petri Dishes (Sterile) & Parafilm</li>
+                <li>Pressure Cooker or Instant Pot</li>
+            </ul>
+        </div>
+        <div class="module-protip" style="background: rgba(140, 198, 63, 0.1); border-left: 4px solid #8CC63F; padding: 15px; border-radius: 4px;">
+            <strong style="color: #8CC63F; font-size: 1rem; display: block; margin-bottom: 5px;">💡 Pro-Tip from the Librarian:</strong>
+            <span style="color: #ccc;">If you get too much condensation on the inside of the lids after pouring, try stacking the plates on top of each other while they cool. The heat from the top plates prevents condensation on the ones below!</span>
+        </div>
+    `,
+    'wild': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 5px; font-weight: 900; letter-spacing: -1px;">Capturing Wild Yeast</h2>
+        <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">Hunt for local microbes and brew something truly unique.</p>
+        <p style="color: #888;"><em>Lesson content coming soon...</em></p>
+    `
+};
+
+function openAcademyModule(moduleId) {
+    const overview = document.getElementById('lab-content-academy');
+    const moduleView = document.getElementById('academy-module-view');
+    const contentArea = document.getElementById('academy-module-content');
+
+    // Kolla om modulen finns, annars visa ett felmeddelande
+    contentArea.innerHTML = academyModules[moduleId] || '<p style="color: #ff4444;">Module not found.</p>';
+
+    // Göm översikten och visa lektionen
+    overview.style.display = 'none';
+    moduleView.style.display = 'block';
+
+    // Om det var kalkylatorn som öppnades, tvinga den att räkna direkt!
+    if (moduleId === 'calc') {
+        const dateInput = document.getElementById('pitch-date');
+        if (dateInput && !dateInput.value) dateInput.valueAsDate = new Date();
+        if (typeof calculatePitch === 'function') calculatePitch();
+    }
+}
+
+function closeAcademyModule() {
+    document.getElementById('academy-module-view').style.display = 'none';
+    document.getElementById('lab-content-academy').style.display = 'block';
+}
+
+function toggleAcademyInfo(btn) {
+    const infoBox = document.getElementById('academy-info-box');
+    
+    if (infoBox.style.display === 'none' || infoBox.style.display === '') {
+        infoBox.style.display = 'block';
+        btn.style.background = '#8CC63F';
+        btn.style.color = '#111';
+    } else {
+        infoBox.style.display = 'none';
+        btn.style.background = 'rgba(140, 198, 63, 0.15)';
+        btn.style.color = '#8CC63F';
+    }
+}

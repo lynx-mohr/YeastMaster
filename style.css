@@ -692,6 +692,88 @@ canvas#beer-chart {
 }
 
 /* --- THE ARCANE LAB --- */
+
+/* ========================================== */
+/* --- THE ARCANE LAB (Academy Grid & Cards)  --- */
+/* ========================================== */
+
+.academy-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* En kolumn på mobil */
+    gap: 15px;
+    width: 100%;
+}
+
+@media (min-width: 600px) {
+    .academy-grid {
+        grid-template-columns: 1fr 1fr; /* Två kolumner på PC */
+    }
+}
+
+.academy-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+body.light-mode .academy-card {
+    background: #ffffff;
+    border-color: #ddd;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.academy-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+body.light-mode .academy-card:hover {
+    background: #f9f9f9;
+}
+
+.academy-card-icon {
+    font-size: 2rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.academy-card-content {
+    flex: 1;
+}
+
+.academy-card-content h4 {
+    margin: 0 0 5px 0;
+    color: var(--text-main);
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.academy-card-content p {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.academy-card-arrow {
+    font-size: 1.5rem;
+    color: #666;
+    font-weight: bold;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.academy-card:hover .academy-card-arrow {
+    transform: translateX(5px);
+    color: var(--accent-color);
+}
+
 .lab-controls {
     margin: 20px;
     display: flex;
@@ -771,26 +853,6 @@ canvas#beer-chart {
     line-height: 1.5;
 }
 
-/* Librarian Tabs */
-.lab-tabs {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-.lab-tab {
-    background: transparent;
-    border: 1px solid #333;
-    color: #666;
-    padding: 6px 15px;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 800;
-    cursor: pointer;
-}
-.lab-tab.active {
-    border-color: var(--accent-color);
-    color: var(--accent-color);
-}
 
 /* Calc Styling */
 .calc-container {
