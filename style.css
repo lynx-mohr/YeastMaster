@@ -1156,47 +1156,71 @@ html.modal-open, body.modal-open {
     overscroll-behavior: none !important; 
 }
 
-/* --- YEAST INFO MODAL (ÅTERSTÄLLD TILL ORIGINALET) --- */
+/* --- YEAST INFO MODAL --- */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.85);
-    z-index: 99999; /* Enda tillägget: tvingar den över menyn (som har 2000) */
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Detta centrerar den perfekt, precis som du hade förut */
-    padding: 20px; /* Håller den borta från skärmens kanter */
-    box-sizing: border-box;
-    backdrop-filter: blur(5px);
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important; /* Fixar mobilens höjd-bugg */
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    z-index: 999999 !important;
+    display: none; /* Styrs av JS */
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    backdrop-filter: blur(5px) !important;
+}
+
+/* --- PC-VERSION (Här behåller vi det som funkade) --- */
+@media (min-width: 601px) {
+    .modal-overlay {
+        align-items: flex-start !important;
+        padding: 80px 20px 20px 20px !important;
+    }
+    .modal-content {
+        margin: auto !important; /* Centrerar snyggt lodrätt på PC */
+    }
+}
+
+/* --- MOBIL-VERSION (Här tvingar vi centrering) --- */
+@media (max-width: 600px) {
+    .modal-overlay {
+        align-items: center !important; /* Tvingar rutan till mitten */
+        padding: 15px !important;
+    }
+    .modal-content {
+        margin: 0 !important;
+        max-height: 80vh !important; /* Lite lägre för att inte krocka med menyer */
+    }
 }
 
 .modal-content {
-    background-color: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 600px;
-    max-height: 85vh; /* Låter innehållet scrolla om texten är lång */
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    animation: modalFadeIn 0.3s ease-out;
+    background-color: #1a1a1a !important;
+    border: 1px solid #333 !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    max-width: 600px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.9) !important;
+    animation: modalFadeIn 0.3s ease-out !important;
 }
 
 .modal-body {
-    padding: 20px;
-    overflow-y: auto; 
-    color: #ddd;
-    line-height: 1.6;
-    font-size: 0.95rem;
+    padding: 20px !important;
+    overflow-y: auto !important;
 }
 
 @keyframes modalFadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Scroll-låset (Behövs för JS) --- */
+html.modal-open, body.modal-open {
+    overflow: hidden !important;
+    height: 100% !important;
 }
 
 .modal-header {
