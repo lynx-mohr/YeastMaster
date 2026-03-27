@@ -2778,8 +2778,9 @@ window.addEventListener('DOMContentLoaded', () => {
 let currentDemoStep = -1;
 
 const demoSteps = [
-    // 1. Temp inside vessel - Pekar nu exakt på glaset istället för hela rutan
-    { selector: '#interactive-beer-glass', text: 'Temp inside vessel', offsetY: 0 },
+    // 1. Temp inside vessel
+    // Vi använder carboy-wrapper för perfekt centrering, och drar upp den med offsetY!
+    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -50 }, // Ändra -50 om den ska högre/lägre
     
     // 2. Ambient temp
     { selector: '.air-floating', text: 'Ambient temp', offsetY: 0 },
@@ -2787,13 +2788,13 @@ const demoSteps = [
     // 3. Uppdaterad text för Heating/Cooling
     { selector: '.action-status', text: 'HEATING / COOLING CHAMBER', offsetY: 0 },
     
-    // 4. Progress bar - Vi drar upp den rejält så den slickar mätaren
+    // 4. Progress bar 
     { selector: '.progress-section', text: 'Fermentation completion', offsetY: -25 },
     
-    // 5. Phase info - Uppdragen lite grann
+    // 5. Phase info
     { selector: '.phase-info', text: 'Current phase details', offsetY: -15 },
     
-    // 6. NY! Temp History - Pekar rakt in i grafen
+    // 6. Temp History
     { selector: '#beer-chart', text: 'Temp change over time', offsetY: -20 }
 ];
 
