@@ -2371,14 +2371,20 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 }
 
 .intro-modal-content {
-    background-color: #222; /* Mörkgrå, ändra till #fff om du kör ljust tema */
+    background-color: #1a1a1a; /* Samma mörka färg som dina andra boxar */
     color: #eee;
     padding: 30px;
-    border-radius: 12px;
+    border-radius: 8px; /* Lite kantigare för att matcha */
+    border: 2px solid #32cd32; /* DEN VIKTIGA GRÖNA KANTEN! */
     max-width: 400px;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    border: 1px solid #333;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+/* Se till att rubriken är YeastMaster-grön */
+.intro-modal-content h2 {
+    color: #32cd32 !important; 
+    margin-top: 0;
 }
 
 .intro-modal-buttons {
@@ -2400,13 +2406,25 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 }
 
 .btn-cancel {
-    background-color: #444;
+    background-color: #333;
     color: #fff;
+    border: 1px solid #555;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    flex: 1;
 }
 
 .btn-primary {
-    background-color: #8bc34a; /* YeastMaster-grön */
+    background-color: #32cd32; /* Grön knapp för Continue */
     color: #111;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    flex: 1;
 }
 
 /* --- DEMO SKYLTS CSS (GRÖN STIL) --- */
