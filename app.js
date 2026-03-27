@@ -2780,7 +2780,7 @@ let currentDemoStep = -1;
 const demoSteps = [
     // --- 1. TEMPERATURERNA ---
     // 1. Temp inside vessel
-    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -40 },
+    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -35 },
     
     // 2. Ambient temp (Flyttad upp hit!)
     { selector: '.air-floating', text: 'Ambient temp', offsetY: -5 },
@@ -2800,7 +2800,7 @@ const demoSteps = [
     { selector: '.progress-section', text: 'Fermentation completion', offsetY: -155 },
     
     // 7. Phase info
-    { selector: '.phase-info', text: 'Current phase details', offsetY: 5 },
+    { selector: '.phase-info', text: 'Current phase details', offsetY: -5 },
     
     // 8. Temp History
     { selector: '#beer-chart', text: 'Temp change over time', offsetY: 0 }
