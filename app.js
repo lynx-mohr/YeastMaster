@@ -2450,9 +2450,12 @@ if (deviceSelect) {
 // Huvudmotorn: Inloggningsvakten
 auth.onAuthStateChanged(async (user) => {
     const soulLoginPrompt = document.getElementById('soul-login-prompt');
-    
-    if (user) {
+    const logoutBtn = document.getElementById('btn-logout'); // <-- 1. Hämta knappen
+
+if (user) {
+        // --- ANVÄNDAREN ÄR INLOGGAD ---
         if (soulLoginPrompt) soulLoginPrompt.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'block'; // <-- 2. Visa knappen!
 
         try {
             // EN HÄMTNING FRÅN SERVER
