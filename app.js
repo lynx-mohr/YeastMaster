@@ -2790,7 +2790,7 @@ const demoSteps = [
     { selector: '#strain-val', text: 'Yeast Strain', offsetY: 0, mobileOffsetY: 10 },
     
     // 4. Fermentation profile
-  { selector: '#profile-val', text: 'Fermentation profile', offsetY: -5, mobileOffsetY: 0, mobileOffsetX: -50 },
+{ selector: '#profile-val', text: 'Fermentation profile', offsetY: -5, mobileOffsetY: 0, mobileOffsetX: -50 },
     
     // 5. Action Status
     { selector: '.action-status', text: 'HEATING / COOLING', offsetY: -10, mobileOffsetY: -5 },
@@ -2852,7 +2852,7 @@ function nextDemoStep() {
     // 3. Scrolla mjukt så elementet alltid syns
     targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-   // 4. Beräkna positionen (Vänta 300ms så scrollen hinner klart först)
+// 4. Beräkna positionen (Vänta 300ms så scrollen hinner klart först)
     setTimeout(() => {
         const tourTextEl = document.getElementById('demo-tour-text');
         if (tourTextEl) tourTextEl.innerText = demoSteps[currentDemoStep].text;
@@ -2875,16 +2875,19 @@ function nextDemoStep() {
             // --- SIDLED (X-axel) ---
             let stepOffsetX = 0;
             if (isMobile && demoSteps[currentDemoStep].mobileOffsetX !== undefined) {
+                // Använd sidoförflyttning om vi är på mobil och ett värde finns
                 stepOffsetX = demoSteps[currentDemoStep].mobileOffsetX;
             }
             
-            // Vår gamla hederliga uträkning, fast med möjlighet att knuffa!
-            // Om du manuellt måste dra av halva bredden för att centrera, använd koden nedan:
-            let leftPos = rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2) + stepOffsetX;
+            // --- TILLBAKA TILL DITT ORIGINAL SOM FUNKADE PERFEKT! ---
+            // Din CSS centrerar redan, så vi lägger bara till eventuell manuell knuff (stepOffsetX)
+            let leftPos = rect.left + window.scrollX + (rect.width / 2) + stepOffsetX;
 
+            // --- SÄTT POSITIONERNA ---
             tooltip.style.top = topPos + 'px';
             tooltip.style.left = leftPos + 'px';
             
+            // Tvinga webbläsaren att spela inhopp-animationen
             tooltip.style.animation = 'none';
             void tooltip.offsetWidth; 
             tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
