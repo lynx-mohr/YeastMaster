@@ -35,8 +35,8 @@ const yeastStrains = [
 document.addEventListener('DOMContentLoaded', () => {
     // Tvinga INGEN till login! 
     // Vi låter dem börja på SOUL-vyn (där glaset fylls) eller den flik de klickat på.
-    // Skulle vi vilja kan vi lägga in showView('soul') här, 
-    // men din app sköter nog det snyggt redan!
+ // Berätta för mobilens bakåtknapp att "soul" är startplatsen
+    history.replaceState({ view: 'soul' }, null, "");
 });
 // --- KONFIGURATION ---
 let activeDeviceId = null;
@@ -64,20 +64,26 @@ const viewOrder = ['soul', 'library', 'librarian', 'lab', 'dashboard', 'settings
 // Vi skapar en variabel för att hålla koll på var vi VAR någonstans
 let currentActiveView = 'soul'; 
 
-function showView(viewName) {
-const views = {
+// Lägg till 'pushToHistory = true' i parentesen!
+function showView(viewName, pushToHistory = true) {
+    const views = {
         login: document.getElementById('login-container'),
         claim: document.getElementById('claim-container'),
         soul: document.getElementById('view-soul'),
         library: document.getElementById('view-library'),
         librarian: document.getElementById('view-librarian'),
         lab: document.getElementById('view-lab'),
-        dashboard: document.getElementById('view-dashboard'), // <-- Fixat!
+        dashboard: document.getElementById('view-dashboard'),
         settings: document.getElementById('view-settings'),
         about: document.getElementById('view-about')
     };
 
     if (!views[viewName]) return;
+
+    // Lägg en brödsmula i webbläsarens historik!
+    if (pushToHistory) {
+        history.pushState({ view: viewName }, null, "");
+    }
 
     // --- LOGIK FÖR ANIMATIONSRIKTNING ---
     const oldIndex = viewOrder.indexOf(currentActiveView);
@@ -678,11 +684,33 @@ document.getElementById('yeast-search').addEventListener('input', (e) => {
 renderYeastLibrary();
 
 window.onpopstate = function(event) {
-    // Om användaren trycker bakåt och detaljvyn är öppen -> stäng den
+    // 1. Kolla om vi har en "pop-up" öppen (Detaljvyn eller Info-modalen)
     const detail = document.getElementById('yeast-detail-view');
-    if (detail.style.display === "block") {
-        // Vi döljer vyn utan att trigga history.back() igen
+    const modal = document.getElementById('yeast-info-modal');
+    
+    // Stäng detaljvyn om den är öppen
+    if (detail && detail.style.display === "block") {
         detail.style.display = "none";
+        return; // Stoppa koden här så vi inte byter flik i bakgrunden
+    }
+    
+    // Stäng modaler (inforutor) om de är öppna
+    if (modal && modal.style.display === "flex") {
+        modal.style.display = "none";
+        document.body.style.overflow = ''; 
+        return; // Stoppa koden här
+    }
+
+    // 2. Vilken huvudflik ska vi backa till? (Läs historiken/brödsmulan)
+    if (event.state && event.state.view) {
+        // Eftersom vi hanterar 'yeast-detail' ovanför, vill vi inte skicka det till showView
+        if (event.state.view !== 'yeast-detail') {
+            // False betyder: "Gör ingen NY brödsmula, vi backar ju!"
+            showView(event.state.view, false);
+        }
+    } else {
+        // Om användaren på något sätt backar förbi den allra första sidan, tvinga dem till Home
+        showView('soul', false);
     }
 };
 
