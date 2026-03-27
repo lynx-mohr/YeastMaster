@@ -2900,6 +2900,8 @@ function nextDemoStep() {
         }
     }, 300);
 
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Klicka var som helst på mörkret för att gå till nästa pil i touren
     const overlay = document.getElementById('demo-overlay');
