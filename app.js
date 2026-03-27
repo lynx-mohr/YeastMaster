@@ -490,11 +490,20 @@ if (loginBtn) {
 // --- 7. KOPPLA ENHET (CLAIM) ---
 if(document.getElementById('btn-claim')) {
     document.getElementById('btn-claim').addEventListener('click', async () => {
-       const macInput = document.getElementById('input-mac').value.trim().toUpperCase();
-const nicknameInput = document.getElementById('input-nickname').value.trim() || "Min YeastMaster";
         const user = auth.currentUser;
 
-        if (macInput.length < 12 || !user) {
+        // 1. KONTROLL: Är du inte inloggad? Gå till Login-skärmen direkt!
+        if (!user) {
+            showView('login');
+            return;
+        }
+
+        // 2. Om du ÄR inloggad, läs av fälten och fortsätt som vanligt
+        const macInput = document.getElementById('input-mac').value.trim().toUpperCase();
+        const nicknameInput = document.getElementById('input-nickname').value.trim() || "Min YeastMaster";
+        
+        // 3. Kolla så att MAC-adressen är tillräckligt lång
+        if (macInput.length < 12) {
             alert("Ange ett giltigt ID!");
             return;
         }
@@ -504,9 +513,9 @@ const nicknameInput = document.getElementById('input-nickname').value.trim() || 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-    uid: user.uid,
-    device_id: macInput,
-    name: nicknameInput
+                    uid: user.uid,
+                    device_id: macInput,
+                    name: nicknameInput
                 })
             });
 
