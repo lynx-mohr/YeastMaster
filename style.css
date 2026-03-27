@@ -2300,15 +2300,15 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 /* --- DEMO TOUR / ONBOARDING (LIVE VIEW) -- */
 /* ========================================= */
 
+/* --- TOUR OVERLAY (NY, ENHETLIG STIL) --- */
 .tour-overlay {
-    position: fixed; 
+    position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.75); /* Dämpar hela skärmen */
-    z-index: 9000;
-    display: none; 
-    opacity: 0; 
-    transition: opacity 0.3s ease;
-    cursor: pointer; /* Visar att man kan klicka för nästa */
+    /* En jämn, mörk, halvgenomskinlig bakgrund över hela skärmen */
+    background-color: rgba(0, 0, 0, 0.8); 
+    z-index: 9999;
+    display: none;
+    cursor: pointer;
 }
 
 .tour-tooltip {
@@ -2342,14 +2342,15 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
     border-bottom: 10px solid var(--accent-color);
 }
 
-/* MAGIN: Denna klass läggs på elementet vi pekar på för att lyfta fram det i ljuset */
+/* Enkel highlight-ram runt elementet (ingen spotlight) */
 .tour-highlight {
-    position: relative !important;
-    z-index: 9001 !important;
-    box-shadow: 0 0 25px rgba(0, 229, 255, 0.2); /* Svag cyan-glow runt elementet */
-    border-radius: 8px;
-    background: #111; /* Säkrar att elementet inte är genomskinligt mot skuggan */
-    transition: box-shadow 0.3s ease, background 0.3s ease;
+    position: absolute;
+    /* Enkel ram för enhetlighet, kan skippas om du vill */
+    /* border: 2px solid rgba(255, 255, 255, 0.1); */ 
+    border-radius: 12px;
+    z-index: 10000;
+    pointer-events: none;
+    box-shadow: 0 0 0 9999px rgba(0,0,0,0.8); /* Fyller hela skärmen utom elementet */
 }
 
 /* Cool inhopp-animation varje gång rutan byter plats */
@@ -2406,4 +2407,43 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 .btn-primary {
     background-color: #8bc34a; /* YeastMaster-grön */
     color: #111;
+}
+
+/* --- DEMO SKYLTS CSS (GRÖN STIL) --- */
+#demo-tour-tooltip {
+    position: absolute;
+    /* Mörk bakgrund för att matcha de andra */
+    background-color: #1a1a1a; 
+    /* Grön kant för enhetlighet */
+    border: 2px solid #32cd32; 
+    border-radius: 8px;
+    padding: 12px 18px;
+    width: 250px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10001;
+}
+
+/* Pilen på skylten (grön border-color) */
+#demo-tour-tooltip::after {
+    content: '';
+    position: absolute;
+    top: -10px; /* Peka uppåt */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 10px 10px 10px;
+    border-style: solid;
+    /* Viktigt: Ändra till grön! */
+    border-color: transparent transparent #32cd32 transparent; 
+}
+
+/* Texten inuti skylten (grön text) */
+#demo-tour-text {
+    color: #32cd32; 
+    font-size: 15px;
+    margin: 0;
+    font-weight: bold;
+    text-align: center;
 }

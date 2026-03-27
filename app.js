@@ -2822,6 +2822,7 @@ function nextDemoStep() {
 
     const tooltip = document.getElementById('demo-tour-tooltip');
     const overlay = document.getElementById('demo-overlay');
+    const highlight = document.getElementById('demo-highlight'); // Kan behövas ta bort om du skippar ram
 
     // 1. KONTROLL: Är touren slut?
     if (currentDemoStep >= demoSteps.length) {
@@ -2845,7 +2846,7 @@ function nextDemoStep() {
         return;
     }
 
-    // --- NYHET: Göm skylten DIREKT så den inte hänger kvar med gammal text! ---
+    // --- Göm skylten DIREKT så den inte hänger kvar med gammal text! ---
     if (tooltip) tooltip.style.display = 'none';
 
     // 3. Scrolla mjukt så elementet alltid syns
@@ -2853,14 +2854,19 @@ function nextDemoStep() {
 
     // 4. Beräkna positionen (Vänta 300ms så scrollen hinner klart först)
     setTimeout(() => {
-        // --- NYHET: Uppdatera texten FÖRST NÄR skylten är framme! ---
+        // --- Uppdatera texten FÖRST NÄR skylten är framme! ---
         const tourTextEl = document.getElementById('demo-tour-text');
         if (tourTextEl) tourTextEl.innerText = demoSteps[currentDemoStep].text;
 
         const rect = targetEl.getBoundingClientRect();
         
+        // --- Positionera den nya enhetliga skylten ---
         const stepOffset = demoSteps[currentDemoStep].offsetY || 0;
+        
+        // Beräkna botten på elementet + 15px standardmarginal + din offsetY-finjustering
         const topPos = rect.bottom + window.scrollY + 15 + stepOffset; 
+        
+        // Hitta mitten på elementet i sidled
         const leftPos = rect.left + window.scrollX + (rect.width / 2);
 
         if (tooltip) {
@@ -2873,6 +2879,7 @@ function nextDemoStep() {
             void tooltip.offsetWidth; 
             tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
         }
+
     }, 300); 
 }
 
