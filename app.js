@@ -2780,7 +2780,7 @@ let currentDemoStep = -1;
 const demoSteps = [
     // --- 1. TEMPERATURERNA ---
     // 1. Temp inside vessel
-    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -35, mobileOffsetY: -10 },
+    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -35, mobileOffsetY: -25 },
     
     // 2. Ambient temp 
     { selector: '.air-floating', text: 'Ambient temp', offsetY: -5, mobileOffsetY: 5 },
@@ -2852,36 +2852,53 @@ function nextDemoStep() {
     // 3. Scrolla mjukt så elementet alltid syns
     targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-    // 4. Beräkna positionen (Vänta 300ms så scrollen hinner klart först)
     setTimeout(() => {
-        // --- Uppdatera texten FÖRST NÄR skylten är framme! ---
         const tourTextEl = document.getElementById('demo-tour-text');
         if (tourTextEl) tourTextEl.innerText = demoSteps[currentDemoStep].text;
 
-        const rect = targetEl.getBoundingClientRect();
-        
-        // --- Positionera den nya enhetliga skylten ---
-        const stepOffset = demoSteps[currentDemoStep].offsetY || 0;
-        
-        // Beräkna botten på elementet + 15px standardmarginal + din offsetY-finjustering
-        const topPos = rect.bottom + window.scrollY + 15 + stepOffset; 
-        
-        // Hitta mitten på elementet i sidled
-        const leftPos = rect.left + window.scrollX + (rect.width / 2);
-
         if (tooltip) {
+            // --- NYTT: Vi MÅSTE visa skylten innan vi kan mäta hur bred texten blev ---
             tooltip.style.display = 'block';
+
+            const rect = targetEl.getBoundingClientRect();
+            const isMobile = window.innerWidth <= 768;
+            
+            // Välj rätt höjd-offset (Mobil eller PC)
+            let stepOffset = 0;
+            if (isMobile && demoSteps[currentDemoStep].mobileOffsetY !== undefined) {
+                stepOffset = demoSteps[currentDemoStep].mobileOffsetY;
+            } else {
+                stepOffset = demoSteps[currentDemoStep].offsetY || 0;
+            }
+            const topPos = rect.bottom + window.scrollY + 15 + stepOffset; 
+            
+            // --- KANTSKYDD LOGIK ---
+            // 1. Grundposition: Centrera skylten över elementet (minus halva skyltens bredd)
+            let leftPos = rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
+            
+            const screenWidth = window.innerWidth;
+            const margin = 15; // Vi vill alltid ha 15px luft till skärmens kant
+            
+            // 2. Åker den ut till HÖGER? Knuffa tillbaka den!
+            if (leftPos + tooltip.offsetWidth > screenWidth - margin) {
+                leftPos = screenWidth - tooltip.offsetWidth - margin;
+            }
+            
+            // 3. Åker den ut till VÄNSTER? Knuffa tillbaka den!
+            if (leftPos < margin) {
+                leftPos = margin;
+            }
+
+            // --- SÄTT POSITIONERNA ---
             tooltip.style.top = topPos + 'px';
             tooltip.style.left = leftPos + 'px';
             
-            // Tvinga webbläsaren att spela inhopp-animationen igen
+            // Tvinga webbläsaren att spela inhopp-animationen
             tooltip.style.animation = 'none';
             void tooltip.offsetWidth; 
             tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
         }
-
-    }, 300); 
-}
+    }, 300);
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Klicka var som helst på mörkret för att gå till nästa pil i touren

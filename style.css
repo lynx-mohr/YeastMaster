@@ -2199,7 +2199,7 @@ body.light-mode .academy-librarian-bg {
     /* 1. Flytta "i"-knappen så den ligger fritt */
     #start-demo-btn {
         /* Beroende på hur din knapp är kodad, kan vi använda transform för att knuffa den */
-        transform: translate(-10px, -15px); /* Knuffar den 10px till vänster och 15px uppåt */
+        transform: translate(-10px, -10px); /* Knuffar den 10px till vänster och 10px uppåt */
         /* Om transform inte räcker, testa att byta ut det mot: 
            top: 5px !important; 
            right: 15px !important; 
