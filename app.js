@@ -2833,28 +2833,26 @@ function nextDemoStep() {
     
     if (!targetEl) {
         console.warn("Tour: Hittade inte " + demoSteps[currentDemoStep].selector);
-        nextDemoStep(); // Hoppa över om elementet saknas
+        nextDemoStep(); 
         return;
     }
+
+    // --- NYHET: Göm skylten DIREKT så den inte hänger kvar med gammal text! ---
+    if (tooltip) tooltip.style.display = 'none';
 
     // 3. Scrolla mjukt så elementet alltid syns
     targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-    // 4. Uppdatera texten i skylten
-    const tourTextEl = document.getElementById('demo-tour-text');
-    if (tourTextEl) tourTextEl.innerText = demoSteps[currentDemoStep].text;
-
-    // 5. Beräkna positionen med din nya offsetY-finjustering!
+    // 4. Beräkna positionen (Vänta 300ms så scrollen hinner klart först)
     setTimeout(() => {
+        // --- NYHET: Uppdatera texten FÖRST NÄR skylten är framme! ---
+        const tourTextEl = document.getElementById('demo-tour-text');
+        if (tourTextEl) tourTextEl.innerText = demoSteps[currentDemoStep].text;
+
         const rect = targetEl.getBoundingClientRect();
         
-        // Hämta den individuella justeringen för detta steg (eller 0 om den saknas)
         const stepOffset = demoSteps[currentDemoStep].offsetY || 0;
-        
-        // Botten på elementet + 15px standardmarginal + din justering
         const topPos = rect.bottom + window.scrollY + 15 + stepOffset; 
-        
-        // Hitta mitten på elementet i sidled
         const leftPos = rect.left + window.scrollX + (rect.width / 2);
 
         if (tooltip) {
@@ -2862,6 +2860,7 @@ function nextDemoStep() {
             tooltip.style.top = topPos + 'px';
             tooltip.style.left = leftPos + 'px';
             
+            // Tvinga webbläsaren att spela inhopp-animationen igen
             tooltip.style.animation = 'none';
             void tooltip.offsetWidth; 
             tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
