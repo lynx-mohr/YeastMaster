@@ -964,22 +964,37 @@ function initLabChart() {
             layout: {
                 padding: { top: 30, right: 30, bottom: 10, left: 10 }
             },
-            scales: {
-                x: {
-                    type: 'linear',
-                    min: 0,
-                    max: Math.max(10, profilePoints[profilePoints.length - 1].x + 2),
-                    grid: { color: gridColor },
-                    ticks: { color: textColor, font: { family: 'Lexend', weight: '600' } },
-                    title: { display: true, text: 'Days', color: textColor, font: { family: 'Lexend', weight: '800' } }
-                },
+  scales: {
+                // --- NYHET: En svagare och elegantare Y-axel ---
                 y: {
                     type: 'linear',
                     min: currentTempUnit === 'F' ? 28 : -2,
                     max: currentTempUnit === 'F' ? 104 : 40,
-                  grid: { color: gridColor, borderColor: gridBorderColor },
-                    ticks: { color: textColor, font: { family: 'Lexend', weight: '600' } },
+                    grid: { 
+                        // BYT UT FÄRGEN: rgba(255, 255, 255, 0.08) är en extremt svag vit dimma
+                        color: 'rgba(255, 255, 255, 0.08)', // 92% genomskinligt grid!
+                        borderColor: gridBorderColor,
+                        tickLength: 8 
+                    },
+                    ticks: { 
+                        color: '#888888', // Gör siffrorna gråa istället för kritvita
+                        font: { family: 'Lexend', weight: '600' },
+                        padding: 6 
+                    },
                     title: { display: true, text: `Temp (°${currentTempUnit})`, color: textColor, font: { family: 'Lexend', weight: '800' } }
+                },
+                // --- NYHET: Samma svaga grid även på X-axeln ---
+                x: {
+                    type: 'linear',
+                    // ... (behåll min/max för x som förut) ...
+                    grid: { 
+                        color: 'rgba(255, 255, 255, 0.08)' // Samma dimmiga färg
+                    },
+                    ticks: { 
+                        color: '#888888', // Gråa siffror här med
+                        font: { family: 'Lexend', weight: '600' }
+                    },
+                    title: { display: true, text: 'Days', color: textColor, font: { family: 'Lexend', weight: '800' } }
                 }
             },
             plugins: {
