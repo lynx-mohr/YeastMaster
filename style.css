@@ -2200,11 +2200,22 @@ body.light-mode .academy-librarian-bg {
     #start-demo-btn {
         /* Beroende på hur din knapp är kodad, kan vi använda transform för att knuffa den */
         transform: translate(-10px, -10px); /* Knuffar den 10px till vänster och 10px uppåt */
-        /* Om transform inte räcker, testa att byta ut det mot: 
-           top: 5px !important; 
-           right: 15px !important; 
-        */
+     position: relative; 
+    z-index: 100 !important; /* Tvingar knappen att ligga över alla andra osynliga rutor */
+    cursor: pointer;
     }
+
+    /* Skapa en osynlig sköld runt knappen som gör klickytan 20 pixlar större på alla håll, 
+   utan att knappen faktiskt ser större ut! Detta är magi för mobilskärmar. */
+#start-demo-btn::after {
+    content: '';
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    bottom: -15px;
+    left: -15px;
+    z-index: 101;
+}
 
 /* Gör demo-skylten lite nättare på mobila skärmar */
     #demo-tour-tooltip {
