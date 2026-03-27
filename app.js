@@ -2780,24 +2780,24 @@ let currentDemoStep = -1;
 const demoSteps = [
     // --- 1. TEMPERATURERNA ---
     // 1. Temp inside vessel
-    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -45 },
+    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -40 },
     
     // 2. Ambient temp (Flyttad upp hit!)
     { selector: '.air-floating', text: 'Ambient temp', offsetY: 0 },
     
     // --- 2. JÄST & PROFIL (Uppe till höger) ---
     // 3. Yeast Strain
-    { selector: '#strain-val', text: 'Yeast Strain', offsetY: 0 },
+    { selector: '#strain-val', text: 'Yeast Strain', offsetY: 5 },
     
     // 4. Fermentation profile
-    { selector: '#profile-val', text: 'Fermentation profile', offsetY: -10 },
+    { selector: '#profile-val', text: 'Fermentation profile', offsetY: -5 },
     
     // 5. Action Status
     { selector: '.action-status', text: 'HEATING / COOLING', offsetY: -10 },
     
     // --- 3. STATUS & HISTORIK (Nedre halvan) ---
     // 6. Progress bar 
-    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -120 },
+    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -150 },
     
     // 7. Phase info
     { selector: '.phase-info', text: 'Current phase details', offsetY: -20 },
