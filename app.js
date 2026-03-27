@@ -2888,20 +2888,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.getElementById('demo-overlay');
     if(overlay) overlay.addEventListener('click', nextDemoStep);
     
-    // --- INTRO-RUTAN ---
+// --- INTRO-RUTAN (PROFILER-STIL) ---
     const startBtn = document.getElementById('start-demo-btn');
-    const introModal = document.getElementById('live-intro-modal');
+    const infoBox = document.getElementById('live-info-box');
     
     if(startBtn) {
-        // Vi tar bort eventuella gamla lyssnare genom att klona knappen 
-        // (Detta garanterar att touren INTE tjuvstartar)
-        const newStartBtn = startBtn.cloneNode(true);
-        startBtn.parentNode.replaceChild(newStartBtn, startBtn);
-        
-        // Den Nya knappen gör BARA en enda sak: Visar välkomstrutan!
-        newStartBtn.addEventListener('click', () => {
-            if(introModal) {
-                introModal.style.display = 'flex';
+        // Toggla rutan när man klickar på [i]
+        startBtn.addEventListener('click', () => {
+            if(infoBox) {
+                if (infoBox.style.display === 'none') {
+                    infoBox.style.display = 'block';
+                } else {
+                    infoBox.style.display = 'none';
+                }
             }
         });
     }
@@ -2910,26 +2909,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const exitBtn = document.getElementById('btn-exit-intro');
     const startTourBtn = document.getElementById('btn-start-tour');
 
-    // EXIT: Stäng bara rutan
+    // EXIT: Göm rutan
     if(exitBtn) {
         exitBtn.addEventListener('click', () => {
-            if(introModal) introModal.style.display = 'none';
+            if(infoBox) infoBox.style.display = 'none';
         });
     }
 
-    // CONTINUE: Stäng rutan OCH starta pilarna!
+    // CONTINUE: Göm rutan OCH starta demon!
     if(startTourBtn) {
         startTourBtn.addEventListener('click', () => {
-            if(introModal) introModal.style.display = 'none';
+            if(infoBox) infoBox.style.display = 'none';
             
-            // Kolla om du har "Hollywood-läget" (startDemoMode) eller vanliga touren
+            // Starta Hollywood-läget om det finns, annars direkt till pilarna
             if (typeof startDemoMode === "function") {
-                startDemoMode(); // Om du har Hollywood-hack kvar, kör det
+                startDemoMode(); 
             } else {
-                startDemoTour(); // Annars startar vi pilarna direkt!
+                startDemoTour(); 
             }
         });
     }
+
 });
 
 function renderDemoDashboard() {

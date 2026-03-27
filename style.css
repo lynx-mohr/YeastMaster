@@ -2465,3 +2465,60 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
     font-weight: bold;
     text-align: center;
 }
+
+/* --- INFO BOX (PROFILER STIL) --- */
+.profiler-style-info {
+    position: absolute; /* Svävar över innehållet under */
+    margin-top: 10px; /* Avstånd från "i"-knappen */
+    z-index: 100;
+    
+    background-color: #0d170d; /* Riktigt mörkgrön bakgrund */
+    border-left: 5px solid #8bc34a; /* Den klassiska gröna vänsterkanten */
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    
+    padding: 20px;
+    width: 90%;
+    max-width: 450px;
+    color: #f1f1f1;
+    font-size: 14px;
+    line-height: 1.6;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    text-align: left; /* Vänsterställd text som på bilden */
+}
+
+.profiler-style-info p {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.info-box-buttons {
+    display: flex;
+    justify-content: flex-start; /* Knappar till vänster för att följa texten */
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.text-btn {
+    background: transparent;
+    border: none;
+    color: #ccc;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+}
+
+.text-btn:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.action-btn {
+    color: #8bc34a; /* Grön text för Continue */
+}
+.action-btn:hover {
+    color: #a2db5c;
+}
