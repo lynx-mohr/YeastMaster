@@ -2790,17 +2790,17 @@ const demoSteps = [
     { selector: '#strain-val', text: 'Yeast Strain', offsetY: 0 },
     
     // 4. Fermentation profile
-    { selector: '#profile-val', text: 'Fermentation profile', offsetY: 0 },
+    { selector: '#profile-val', text: 'Fermentation profile', offsetY: -10 },
     
     // 5. Action Status
-    { selector: '.action-status', text: 'HEATING / COOLING CHAMBER', offsetY: 0 },
+    { selector: '.action-status', text: 'HEATING / COOLING', offsetY: 0 },
     
     // --- 3. STATUS & HISTORIK (Nedre halvan) ---
     // 6. Progress bar 
-    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -35 },
+    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -60 },
     
     // 7. Phase info
-    { selector: '.phase-info', text: 'Current phase details', offsetY: -15 },
+    { selector: '.phase-info', text: 'Current phase details', offsetY: -20 },
     
     // 8. Temp History
     { selector: '#beer-chart', text: 'Temp change over time', offsetY: -20 }
