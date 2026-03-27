@@ -2780,7 +2780,7 @@ let currentDemoStep = -1;
 const demoSteps = [
     // --- 1. TEMPERATURERNA ---
     // 1. Temp inside vessel
-    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -50 },
+    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -45 },
     
     // 2. Ambient temp (Flyttad upp hit!)
     { selector: '.air-floating', text: 'Ambient temp', offsetY: 0 },
@@ -2793,11 +2793,11 @@ const demoSteps = [
     { selector: '#profile-val', text: 'Fermentation profile', offsetY: -10 },
     
     // 5. Action Status
-    { selector: '.action-status', text: 'HEATING / COOLING', offsetY: 0 },
+    { selector: '.action-status', text: 'HEATING / COOLING', offsetY: -10 },
     
     // --- 3. STATUS & HISTORIK (Nedre halvan) ---
     // 6. Progress bar 
-    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -60 },
+    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -120 },
     
     // 7. Phase info
     { selector: '.phase-info', text: 'Current phase details', offsetY: -20 },
