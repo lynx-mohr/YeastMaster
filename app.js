@@ -903,21 +903,18 @@ function initLabChart() {
         labChart.destroy();
     }
 
-    const isLightMode = document.body.classList.contains('light-mode');
-    const isMobile = window.innerWidth <= 768;
-    
+if (typeof labChart !== 'undefined' && labChart !== null) {
+        labChart.destroy();
+    }
+
+    // 3. Nu sätter vi färgerna baserat på den dagsfärska isLightMode-kollen
     const themeAccent = '#f4c95d'; 
     const pointFill = '#888888';   
-    
     const lineWidth = isLightMode ? 2 : 3; 
-    
-    const dotSize = isMobile ? 8 : 5;         
-    const hoverSize = isMobile ? 12 : 8;      
-    const touchMagnet = isMobile ? 25 : 10;   
 
-    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-    gradient.addColorStop(0, isLightMode ? 'rgba(244, 201, 93, 0.15)' : 'rgba(244, 201, 93, 0.4)'); 
-    gradient.addColorStop(1, 'rgba(244, 201, 93, 0.0)');
+    // OCH DIN GRID BLIR NU HELT RÄTT! (0.04 i light mode, #222 i dark mode)
+    const gridColor = isLightMode ? 'rgba(0, 0, 0, 0.04)' : '#222';
+    const textColor = isLightMode ? '#666' : '#888';
 
     labChart = new Chart(ctx, {
         type: 'scatter',
@@ -940,7 +937,11 @@ function initLabChart() {
                 segment: {
                     borderDash: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? [6, 6] : undefined,
                     lineWidth: 1.5,
-                    borderColor: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? (isLightMode ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.3)') : themeAccent
+                   borderColor: ctx => {
+                        // --- LIVE-KOLL FÖR LINJERNA ---
+                        const isLightNow = document.body.classList.contains('light-mode');
+                        return (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? (isLightNow ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.3)') : themeAccent;
+                    }
                 }
             }]
         },
@@ -981,6 +982,8 @@ function initLabChart() {
                 const ctx = chart.ctx;
                 const meta = chart.getDatasetMeta(0);
                 if (!meta || !meta.data || meta.data.length < 6) return;
+
+                const isLightNow = document.body.classList.contains('light-mode');
 
                 ctx.save();
                 ctx.font = '800 10px "Lexend", sans-serif';
