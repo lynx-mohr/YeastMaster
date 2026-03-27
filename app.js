@@ -177,6 +177,9 @@ auth.getRedirectResult().catch((error) => {
 
 async function updateDashboard() {
 
+    // --- 1. DEFINIERA KNAPPEN FÖRST! (Denna rad saknades) ---
+    const demoBtn = document.getElementById('start-demo-btn');
+
  // HAR VI INGEN ENHET? KÖR DEMO-LÄGET!
     if (!activeDeviceId) {
         renderDemoDashboard();
