@@ -33,10 +33,11 @@ const yeastStrains = [
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Om vi inte vet statusen än, visa login-vyn som default
-    if (!activeDeviceId) showView('login');
+    // Tvinga INGEN till login! 
+    // Vi låter dem börja på SOUL-vyn (där glaset fylls) eller den flik de klickat på.
+    // Skulle vi vilja kan vi lägga in showView('soul') här, 
+    // men din app sköter nog det snyggt redan!
 });
-
 // --- KONFIGURATION ---
 let activeDeviceId = null;
 const API_BASE = "https://soulofbeer-live.onrender.com/api";
@@ -168,72 +169,6 @@ function setActive(clickedElement) {
     clickedElement.classList.add('active');
 }
 
-// --- 2. INLOGGNINGS-VAKT & SÄKERHET ---
-auth.onAuthStateChanged(async (user) => {
-    const soulLoginPrompt = document.getElementById('soul-login-prompt');
-    
-    if (user) {
-        // --- ANVÄNDARE ÄR INLOGGAD ---
-        if (soulLoginPrompt) soulLoginPrompt.style.display = 'none';
-
-        // Här kör vi din befintliga logik för att hämta enheter (till synk-funktionen)
-        populateSyncDevices(user.uid); 
-
-        try {
-            const res = await fetch(`${API_BASE}/my-devices?uid=${user.uid}`);
-            const devices = await res.json();
-            
-            if (devices.length > 0) {
-                // Sätter den första enheten som aktiv från start
-                activeDeviceId = devices[0].device_id; 
-                
-                // --- NYTT: Fyll rullistan i Settings (Multi-device) ---
-                const deviceSelect = document.getElementById('setting-active-device');
-                if (deviceSelect) {
-                    deviceSelect.innerHTML = ""; // Rensa gamla alternativ
-                    devices.forEach(dev => {
-                        const opt = document.createElement('option');
-                        opt.value = dev.device_id;
-                        // Kolla om vi har ett sparat lokalt namn, annars ta server-namnet eller MAC-id
-                        const localName = typeof getSavedNickname === 'function' ? getSavedNickname(dev.device_id) : "MIN YEASTMASTER";
-                        opt.textContent = localName !== "MIN YEASTMASTER" 
-                                          ? localName 
-                                          : (dev.name || dev.device_id);
-                        deviceSelect.appendChild(opt);
-                    });
-                    // Se till att rätt enhet är vald i rullistan
-                    deviceSelect.value = activeDeviceId;
-                }
-                
-                // --- NYTT: Ladda namnet för den valda enheten på Dashboarden ---
-                const nickInput = document.getElementById('setting-nickname');
-                const currentNick = typeof getSavedNickname === 'function' ? getSavedNickname(activeDeviceId) : "MIN YEASTMASTER";
-                
-                if (nickInput) nickInput.value = currentNick !== "MIN YEASTMASTER" ? currentNick : "";
-                if (typeof updateDashboardNickname === 'function') updateDashboardNickname(currentNick);
-
-                showView('dashboard');
-                updateDashboard(); // Din funktion körs precis som vanligt!
-            } else {
-                showView('claim');
-            }
-        } catch (err) {
-            console.error("Auth fetch error:", err);
-        }
-    } else {
-        // --- ANVÄNDARE ÄR UTLOGGAD ---
-        // Viktigt: Rensa ID så att updateDashboard slutar hämta data
-        activeDeviceId = null; 
-        selectedStrains = []; 
-
-        if (soulLoginPrompt) soulLoginPrompt.style.display = 'block';
-        
-        // Tvinga till login-vyn så man inte kan tjuvlyssna på Dashboarden
-        showView('login');
-        console.log("Säkerhetsvakt: Ingen användare, visar login.");
-    }
-});
-
 // Denna behövs för att slutföra inloggningen efter en redirect (på mobil)
 auth.getRedirectResult().catch((error) => {
     console.error("Redirect-fel:", error);
@@ -241,7 +176,12 @@ auth.getRedirectResult().catch((error) => {
 
 
 async function updateDashboard() {
-    if (!activeDeviceId) return; 
+
+ // HAR VI INGEN ENHET? KÖR DEMO-LÄGET!
+    if (!activeDeviceId) {
+        renderDemoDashboard();
+        return; 
+    }
 
     try {
         const response = await fetch(`${API_BASE}/data?device_id=${activeDeviceId}`);
@@ -2558,13 +2498,29 @@ auth.onAuthStateChanged(async (user) => {
             if (deviceSelect) deviceSelect.innerHTML = '<option value="TEST">Demo Kyl</option>';
         }
     } else {
-        // --- UTLOGGAD ---
+        // ==========================================
+        // --- ANVÄNDARE ÄR UTLOGGAD (GÄST-LÄGE) ---
+        // ==========================================
         activeDeviceId = null; 
         selectedStrains = []; 
-        if (deviceSelect) deviceSelect.innerHTML = '<option value="">Logga in för att se enheter</option>';
         
+        // Återställ rullistor
+        if (deviceSelect) deviceSelect.innerHTML = '<option value="">Logga in för att se enheter</option>';
+        const syncDropdown = document.getElementById('sync-target-device');
+        if (syncDropdown) syncDropdown.innerHTML = '<option value="">Logga in för att synka</option>';
+        
+        // Visa login-uppmaningen på startsidan
         if (soulLoginPrompt) soulLoginPrompt.style.display = 'block';
-        showView('soul');
+        
+        // 1. VIKTIGT: Kör uppdateringen! Eftersom activeDeviceId är null, 
+        // kommer din updateDashboard att direkt rendera din Demo-vy!
+        if (typeof updateDashboard === 'function') updateDashboard();
+        
+        // 2. Tvinga dem inte till login! Om de laddar sidan på nytt, låt dem 
+        // stanna på 'soul'-vyn (startsidan) eller den vy de just nu befinner sig i.
+        // Vi tar bort showView('login') helt.
+        
+        console.log("Gäst-läge aktiverat. Full tillgång till demo och inställningar!");
     }
 });
 
@@ -2852,15 +2808,17 @@ function nextDemoStep() {
     const tooltip = document.getElementById('demo-tour-tooltip');
     const overlay = document.getElementById('demo-overlay');
 
-    // 2. KONTROLL: Är touren slut?
+// 2. KONTROLL: Är touren slut?
     if (currentDemoStep >= demoSteps.length) {
         tooltip.style.display = 'none';
         overlay.style.opacity = '0';
         setTimeout(() => overlay.style.display = 'none', 300);
         
-        // Final message (här kan vi bygga en snygg ruta senare, vi tar en alert så länge)
         setTimeout(() => {
-            alert("Connect your YeastMaster unit to see your own live data!");
+            // Om de är i demo-läge, uppmana dem att skaffa en enhet!
+            if (!activeDeviceId) {
+                alert("Connect your own YeastMaster unit to monitor real data!");
+            }
         }, 300);
         return;
     }
@@ -2915,3 +2873,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const startBtn = document.getElementById('start-demo-btn');
     if(startBtn) startBtn.addEventListener('click', startDemoTour);
 });
+
+function renderDemoDashboard() {
+    // 1. Fyll in all text med perfekta demo-värden
+    const displayElement = document.querySelector('.device-name-display');
+    if (displayElement) displayElement.innerHTML = "<span style='color:#ff4444;'>DEMO MODE</span>";
+
+    document.getElementById('strain-val').innerText = "OLD BAVARIAN";
+    document.getElementById('profile-val').innerText = "Brulosophy";
+    document.getElementById('action-val').innerText = "COOLING";
+
+    const displayTemp = currentTempUnit === 'F' ? "73.0°F" : "22.8°C";
+    document.getElementById('temp-beer-val').innerText = displayTemp;
+    
+    // Om du har bubbel-animationen kopplad till data-text
+    const beerTempEl = document.querySelector('.beer-temp');
+    if (beerTempEl) beerTempEl.setAttribute('data-text', displayTemp);
+    
+    document.getElementById('air-temp-val').innerText = currentTempUnit === 'F' ? "73.4°F" : "23.0°C";
+    document.getElementById('status-text').innerText = "CLEANING UP";
+    document.getElementById('day-val').innerText = "4 d and 2 h";
+    document.getElementById('phase-day-val').innerText = "4 d and 2 h";
+    document.getElementById('target-temp-val').innerText = currentTempUnit === 'F' ? "69.8°F" : "21.0°C";
+
+    // 2. Sätt progress-baren till 29%
+    document.getElementById('progress-percent').innerText = "29%";
+    document.getElementById('progress-fill').style.width = "29%";
+
+    // 3. Ställ in pilen så den pekar neråt och är blå
+    const arrow = document.getElementById('status-arrow');
+    if(arrow) {
+        arrow.innerText = "▼";
+        arrow.style.color = "#0088ff";
+        arrow.style.visibility = "visible";
+        arrow.classList.add('blink-active');
+    }
+
+    // 4. Fejkad graf-data (för att få till den snygga lilla dropp-kurvan i slutet)
+    const now = Date.now();
+    const fakeChartData = [
+        { time: new Date(now - 4000000).toISOString(), temp: 23.0 },
+        { time: new Date(now - 3000000).toISOString(), temp: 23.0 },
+        { time: new Date(now - 2000000).toISOString(), temp: 23.0 },
+        { time: new Date(now - 1000000).toISOString(), temp: 22.9 },
+        { time: new Date(now).toISOString(), temp: 22.8 }
+    ];
+    
+    // Använder din vanliga graf-funktion för att rita ut detta!
+    if (typeof updateChart === 'function') {
+        updateChart(fakeChartData); 
+    }
+}
