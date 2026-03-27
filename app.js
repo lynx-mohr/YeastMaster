@@ -878,6 +878,7 @@ function updateSummaryText() {
 }
 
 // --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
+// --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
 function initLabChart() {
     if (profilePoints && profilePoints.length < 6) {
         const p0 = profilePoints[0] || {x: 0, y: 19};
@@ -899,23 +900,34 @@ function initLabChart() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    if (labChart) {
+    // FÖRSTÖR DEN GAMLA GRAFEN INNAN VI RITAR EN NY
+    if (typeof labChart !== 'undefined' && labChart !== null) {
         labChart.destroy();
     }
 
-if (typeof labChart !== 'undefined' && labChart !== null) {
-        labChart.destroy();
-    }
+    // --- LIVE-KOLL AV TEMAT ---
+    const isLightMode = document.body.classList.contains('light-mode');
+    const isMobile = window.innerWidth <= 768;
 
-    // 3. Nu sätter vi färgerna baserat på den dagsfärska isLightMode-kollen
+    // --- FÄRGER OCH VARIABLER ---
     const themeAccent = '#f4c95d'; 
     const pointFill = '#888888';   
     const lineWidth = isLightMode ? 2 : 3; 
+    
+    const dotSize = isMobile ? 8 : 5;         
+    const hoverSize = isMobile ? 12 : 8;      
+    const touchMagnet = isMobile ? 25 : 10;   
 
-    // OCH DIN GRID BLIR NU HELT RÄTT! (0.04 i light mode, #222 i dark mode)
+    // GRADIENT (Måste definieras här inne, annars finns den inte!)
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, isLightMode ? 'rgba(244, 201, 93, 0.15)' : 'rgba(244, 201, 93, 0.4)'); 
+    gradient.addColorStop(1, 'rgba(244, 201, 93, 0.0)');
+
+    // AXEL-FÄRGER
     const gridColor = isLightMode ? 'rgba(0, 0, 0, 0.04)' : '#222';
     const textColor = isLightMode ? '#666' : '#888';
 
+    // RITA GRAFEN
     labChart = new Chart(ctx, {
         type: 'scatter',
         data: {
@@ -937,8 +949,7 @@ if (typeof labChart !== 'undefined' && labChart !== null) {
                 segment: {
                     borderDash: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? [6, 6] : undefined,
                     lineWidth: 1.5,
-                   borderColor: ctx => {
-                        // --- LIVE-KOLL FÖR LINJERNA ---
+                    borderColor: ctx => {
                         const isLightNow = document.body.classList.contains('light-mode');
                         return (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? (isLightNow ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.3)') : themeAccent;
                     }
@@ -956,18 +967,17 @@ if (typeof labChart !== 'undefined' && labChart !== null) {
                     type: 'linear',
                     min: 0,
                     max: Math.max(10, profilePoints[profilePoints.length - 1].x + 2),
-                    grid: { color: isLightMode ? 'rgba(0, 0, 0, 0.04)' : '#222' },
-                    ticks: { color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '600' } },
-                    title: { display: true, text: 'Days', color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '800' } }
+                    grid: { color: gridColor },
+                    ticks: { color: textColor, font: { family: 'Lexend', weight: '600' } },
+                    title: { display: true, text: 'Days', color: textColor, font: { family: 'Lexend', weight: '800' } }
                 },
-                // --- NYTT: Y-axeln som anpassar sig efter Fahrenheit/Celsius ---
                 y: {
                     type: 'linear',
                     min: currentTempUnit === 'F' ? 28 : -2,
                     max: currentTempUnit === 'F' ? 104 : 40,
-                    grid: { color: isLightMode ? 'rgba(0, 0, 0, 0.04)' : '#222' },
-                    ticks: { color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '600' } },
-                    title: { display: true, text: `Temp (°${currentTempUnit})`, color: isLightMode ? '#666' : '#888', font: { family: 'Lexend', weight: '800' } }
+                    grid: { color: gridColor },
+                    ticks: { color: textColor, font: { family: 'Lexend', weight: '600' } },
+                    title: { display: true, text: `Temp (°${currentTempUnit})`, color: textColor, font: { family: 'Lexend', weight: '800' } }
                 }
             },
             plugins: {
@@ -987,7 +997,7 @@ if (typeof labChart !== 'undefined' && labChart !== null) {
 
                 ctx.save();
                 ctx.font = '800 10px "Lexend", sans-serif';
-                ctx.fillStyle = isLightMode ? '#333333' : 'rgba(255, 255, 255, 0.5)'; 
+                ctx.fillStyle = isLightNow ? '#555555' : 'rgba(255, 255, 255, 0.5)'; 
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'bottom';
 
@@ -1013,6 +1023,7 @@ if (typeof labChart !== 'undefined' && labChart !== null) {
         }]
     });
 
+    // --- DRAG LOGIKEN FORTSÄTTER HÄR NERE ---
     let isDragging = false;
     let dragIndex = -1;
     let isDraggingDryHop = false; 
@@ -1046,7 +1057,7 @@ if (typeof labChart !== 'undefined' && labChart !== null) {
         if (points.length > 0 || isDraggingDryHop) e.preventDefault(); 
     }, { passive: false });
 
-window.addEventListener('pointermove', (e) => {
+    window.addEventListener('pointermove', (e) => {
         if (isDraggingDryHop) {
             const rect = canvas.getBoundingClientRect();
             const xPos = e.clientX - rect.left;
@@ -1066,57 +1077,29 @@ window.addEventListener('pointermove', (e) => {
             let xVal = labChart.scales.x.getValueForPixel(xPos);
             let yVal = labChart.scales.y.getValueForPixel(yPos);
 
-            // Grundinställningar
             xVal = Math.max(0, Math.round(xVal * 2) / 2);
             const yMin = currentTempUnit === 'F' ? 28 : -2;
             const yMax = currentTempUnit === 'F' ? 104 : 40;
             yVal = Math.max(yMin, Math.min(yMax, Math.round(yVal)));
 
-            // ==========================================
-            // --- FRYS-SPÄRR: MIN 0.5 DAGAR RAMP ---
-            // ==========================================
-            const minGap = 0.5; // Vår ramptid (12 timmar)
+            const minGap = 0.5;
 
-            if (dragIndex === 0) {
-                xVal = 0; // Start kan aldrig flyttas i X
-            } 
-            else if (dragIndex === 1) {
-                // Slut PRIM: Kan flyttas, men måste lämna 0.5 d till punkt 2
-                xVal = Math.max(0, Math.min(xVal, profilePoints[2].x - minGap));
-            } 
-            else if (dragIndex === 2) {
-                // Start CLEAN: Måste vara minst 0.5 d efter punkt 1 OCH före punkt 3
-                xVal = Math.max(profilePoints[1].x + minGap, Math.min(xVal, profilePoints[3].x));
-            } 
-            else if (dragIndex === 3) {
-                // Slut CLEAN: Måste vara efter punkt 2 OCH minst 0.5 d före punkt 4
-                xVal = Math.max(profilePoints[2].x, Math.min(xVal, profilePoints[4].x - minGap));
-            } 
-            else if (dragIndex === 4) {
-                // Start COLD CRASH: Måste vara minst 0.5 d efter punkt 3 OCH före punkt 5
-                xVal = Math.max(profilePoints[3].x + minGap, Math.min(xVal, profilePoints[5].x));
-            } 
-            else if (dragIndex === 5) {
-                // Slut COND: Måste vara efter punkt 4
-                xVal = Math.max(profilePoints[4].x, xVal);
-            }
+            if (dragIndex === 0) xVal = 0; 
+            else if (dragIndex === 1) xVal = Math.max(0, Math.min(xVal, profilePoints[2].x - minGap));
+            else if (dragIndex === 2) xVal = Math.max(profilePoints[1].x + minGap, Math.min(xVal, profilePoints[3].x));
+            else if (dragIndex === 3) xVal = Math.max(profilePoints[2].x, Math.min(xVal, profilePoints[4].x - minGap));
+            else if (dragIndex === 4) xVal = Math.max(profilePoints[3].x + minGap, Math.min(xVal, profilePoints[5].x));
+            else if (dragIndex === 5) xVal = Math.max(profilePoints[4].x, xVal);
 
-            // --- Y-AXELNS DÖRRVAKT (Biologiska skyddsräcken) ---
             if (dragIndex === 0 || dragIndex === 1) {
                 yVal = Math.min(yVal, profilePoints[2].y);
                 yVal = Math.max(yVal, profilePoints[4].y);
             } 
-            else if (dragIndex === 2 || dragIndex === 3) {
-                yVal = Math.max(yVal, profilePoints[0].y);
-            }
-            else if (dragIndex === 4 || dragIndex === 5) {
-                yVal = Math.min(yVal, profilePoints[0].y);
-            }
+            else if (dragIndex === 2 || dragIndex === 3) yVal = Math.max(yVal, profilePoints[0].y);
+            else if (dragIndex === 4 || dragIndex === 5) yVal = Math.min(yVal, profilePoints[0].y);
 
-            // Uppdatera punkten
             profilePoints[dragIndex] = { x: xVal, y: yVal };
 
-            // --- TEMPERATURLÄNKNING (Håll linjerna flata) ---
             if (dragIndex === 0) profilePoints[1].y = yVal;
             if (dragIndex === 1) profilePoints[0].y = yVal;
             if (dragIndex === 2) profilePoints[3].y = yVal;
