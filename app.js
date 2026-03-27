@@ -2780,14 +2780,14 @@ let currentDemoStep = -1;
 const demoSteps = [
     // --- 1. TEMPERATURERNA ---
     // 1. Temp inside vessel
-    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -40 },
+    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -35 },
     
     // 2. Ambient temp (Flyttad upp hit!)
-    { selector: '.air-floating', text: 'Ambient temp', offsetY: 0 },
+    { selector: '.air-floating', text: 'Ambient temp', offsetY: -5 },
     
     // --- 2. JÄST & PROFIL (Uppe till höger) ---
     // 3. Yeast Strain
-    { selector: '#strain-val', text: 'Yeast Strain', offsetY: 5 },
+    { selector: '#strain-val', text: 'Yeast Strain', offsetY: 10 },
     
     // 4. Fermentation profile
     { selector: '#profile-val', text: 'Fermentation profile', offsetY: -5 },
@@ -2797,13 +2797,13 @@ const demoSteps = [
     
     // --- 3. STATUS & HISTORIK (Nedre halvan) ---
     // 6. Progress bar 
-    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -150 },
+    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -160 },
     
     // 7. Phase info
-    { selector: '.phase-info', text: 'Current phase details', offsetY: -20 },
+    { selector: '.phase-info', text: 'Current phase details', offsetY: 0 },
     
     // 8. Temp History
-    { selector: '#beer-chart', text: 'Temp change over time', offsetY: -20 }
+    { selector: '#beer-chart', text: 'Temp change over time', offsetY: 0 }
 ];
 
 function startDemoTour() {
