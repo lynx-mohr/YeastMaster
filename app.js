@@ -2790,7 +2790,7 @@ const demoSteps = [
     { selector: '#strain-val', text: 'Yeast Strain', offsetY: 0, mobileOffsetY: 10 },
     
     // 4. Fermentation profile
-    { selector: '#profile-val', text: 'Fermentation profile', offsetY: -5, mobileOffsetY: 0 },
+  { selector: '#profile-val', text: 'Fermentation profile', offsetY: -5, mobileOffsetY: 0, mobileOffsetX: -50 },
     
     // 5. Action Status
     { selector: '.action-status', text: 'HEATING / COOLING', offsetY: -10, mobileOffsetY: -5 },
@@ -2852,48 +2852,39 @@ function nextDemoStep() {
     // 3. Scrolla mjukt så elementet alltid syns
     targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
+   // 4. Beräkna positionen (Vänta 300ms så scrollen hinner klart först)
     setTimeout(() => {
         const tourTextEl = document.getElementById('demo-tour-text');
         if (tourTextEl) tourTextEl.innerText = demoSteps[currentDemoStep].text;
 
         if (tooltip) {
-            // --- NYTT: Vi MÅSTE visa skylten innan vi kan mäta hur bred texten blev ---
             tooltip.style.display = 'block';
 
             const rect = targetEl.getBoundingClientRect();
             const isMobile = window.innerWidth <= 768;
             
-            // Välj rätt höjd-offset (Mobil eller PC)
-            let stepOffset = 0;
+            // --- HÖJD (Y-axel) ---
+            let stepOffsetY = 0;
             if (isMobile && demoSteps[currentDemoStep].mobileOffsetY !== undefined) {
-                stepOffset = demoSteps[currentDemoStep].mobileOffsetY;
+                stepOffsetY = demoSteps[currentDemoStep].mobileOffsetY;
             } else {
-                stepOffset = demoSteps[currentDemoStep].offsetY || 0;
+                stepOffsetY = demoSteps[currentDemoStep].offsetY || 0;
             }
-            const topPos = rect.bottom + window.scrollY + 15 + stepOffset; 
+            const topPos = rect.bottom + window.scrollY + 15 + stepOffsetY; 
             
-            // --- KANTSKYDD LOGIK ---
-            // 1. Grundposition: Centrera skylten över elementet (minus halva skyltens bredd)
-            let leftPos = rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2);
-            
-            const screenWidth = window.innerWidth;
-            const margin = 15; // Vi vill alltid ha 15px luft till skärmens kant
-            
-            // 2. Åker den ut till HÖGER? Knuffa tillbaka den!
-            if (leftPos + tooltip.offsetWidth > screenWidth - margin) {
-                leftPos = screenWidth - tooltip.offsetWidth - margin;
+            // --- SIDLED (X-axel) ---
+            let stepOffsetX = 0;
+            if (isMobile && demoSteps[currentDemoStep].mobileOffsetX !== undefined) {
+                stepOffsetX = demoSteps[currentDemoStep].mobileOffsetX;
             }
             
-            // 3. Åker den ut till VÄNSTER? Knuffa tillbaka den!
-            if (leftPos < margin) {
-                leftPos = margin;
-            }
+            // Vår gamla hederliga uträkning, fast med möjlighet att knuffa!
+            // Om du manuellt måste dra av halva bredden för att centrera, använd koden nedan:
+            let leftPos = rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2) + stepOffsetX;
 
-            // --- SÄTT POSITIONERNA ---
             tooltip.style.top = topPos + 'px';
             tooltip.style.left = leftPos + 'px';
             
-            // Tvinga webbläsaren att spela inhopp-animationen
             tooltip.style.animation = 'none';
             void tooltip.offsetWidth; 
             tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
