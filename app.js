@@ -61,6 +61,11 @@ const auth = firebase.auth(); // Se till att Firebase är länkat i index.html!
 // Flyttad upp hit så att appen har stenkoll på ordningen från start!
 const viewOrder = ['soul', 'library', 'librarian', 'lab', 'dashboard', 'settings'];
 
+// Tvinga webbläsaren att sluta lägga sig i scrollningen vid bakåt-klick!
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+
 // Vi skapar en variabel för att hålla koll på var vi VAR någonstans
 let currentActiveView = 'soul'; 
 
@@ -155,15 +160,13 @@ function showView(viewName, pushToHistory = true) {
         }
     });
 
-    // --- NY FIX: Scrolla högst upp (med en liten fördröjning så webbläsaren hinner med) ---
+// --- NY FIX: Brutal scroll till toppen ---
     setTimeout(() => {
-        // Försök scrolla hela fönstret
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        
-        // Säkerhetsåtgärd för mobila webbläsare som ibland låser scrollen på 'body' eller 'html'
+        // Hoppa direkt till toppen utan 'smooth' för att undvika konflikter
+        window.scrollTo(0, 0);
         document.body.scrollTop = 0; 
         document.documentElement.scrollTop = 0;
-    }, 50); // 50 millisekunder räcker för att vinna över webbläsarens inbyggda minne
+    }, 10);
 }
 
 
