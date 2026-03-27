@@ -146,10 +146,26 @@ function showView(viewName, pushToHistory = true) {
             item.classList.add('active');
         }
     });
-    // Scrolla mjukt och snyggt högst upp på sidan
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // --- UPPDATERA MENYN ---
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+        const clickEvent = item.getAttribute('onclick');
+        if (clickEvent && clickEvent.includes(`'${viewName}'`)) {
+            item.classList.add('active');
+        }
+    });
 
+    // --- NY FIX: Scrolla högst upp (med en liten fördröjning så webbläsaren hinner med) ---
+    setTimeout(() => {
+        // Försök scrolla hela fönstret
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Säkerhetsåtgärd för mobila webbläsare som ibland låser scrollen på 'body' eller 'html'
+        document.body.scrollTop = 0; 
+        document.documentElement.scrollTop = 0;
+    }, 50); // 50 millisekunder räcker för att vinna över webbläsarens inbyggda minne
 }
+
 
 // --- VISA CLAIM-RUTAN FÖR NYA ENHETER ---
 function showAddDevice() {
