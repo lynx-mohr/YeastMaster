@@ -2899,7 +2899,7 @@ function renderDemoDashboard() {
     document.getElementById('status-text').innerText = "RAMPING";
     
     document.getElementById('day-val').innerText = "4 d and 2 h";
-    document.getElementById('phase-day-val').innerText = "4 d and 2 h";
+    document.getElementById('phase-day-val').innerText = "0 d and 1 h";
     
     // Målet är 21.0 grader
     document.getElementById('target-temp-val').innerText = currentTempUnit === 'F' ? "69.8°F" : "21.0°C";
