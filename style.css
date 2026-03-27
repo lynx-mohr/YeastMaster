@@ -2357,3 +2357,53 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
     0%   { opacity: 0; transform: translate(-50%, 15px) scale(0.9); }
     100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }
+
+/* --- LIVE INTRO MODAL --- */
+.intro-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.intro-modal-content {
+    background-color: #222; /* Mörkgrå, ändra till #fff om du kör ljust tema */
+    color: #eee;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid #333;
+}
+
+.intro-modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    gap: 15px;
+}
+
+/* Återanvänd dina befintliga knapp-stilar om du har, annars är dessa snygga: */
+.intro-modal-buttons button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-cancel {
+    background-color: #444;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #8bc34a; /* YeastMaster-grön */
+    color: #111;
+}

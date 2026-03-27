@@ -2882,9 +2882,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.getElementById('demo-overlay');
     if(overlay) overlay.addEventListener('click', nextDemoStep);
     
-    // Klicka på "i"-knappen för att starta
+    // ---------------------------------------------------------
+    // --- NYHET: INTRO-RUTAN INNAN TOUREN STARTAR ---
+    // ---------------------------------------------------------
     const startBtn = document.getElementById('start-demo-btn');
-    if(startBtn) startBtn.addEventListener('click', startDemoTour);
+    const introModal = document.getElementById('live-intro-modal');
+    
+    // 1. "i"-knappen visar nu inforutan istället för att starta pilarna direkt
+    if(startBtn) {
+        startBtn.addEventListener('click', () => {
+            if(introModal) {
+                introModal.style.display = 'flex'; // Visa inforutan!
+            } else {
+                startDemoTour(); // Fallback ifall HTML-koden råkar saknas
+            }
+        });
+    }
+
+    // 2. Knappar INUTI inforutan (Exit och Continue)
+    const exitBtn = document.getElementById('btn-exit-intro');
+    const startTourBtn = document.getElementById('btn-start-tour');
+
+    // Klickar man Exit -> Stäng rutan bara
+    if(exitBtn) {
+        exitBtn.addEventListener('click', () => {
+            if(introModal) introModal.style.display = 'none';
+        });
+    }
+
+    // Klickar man Continue -> Stäng rutan OCH starta pilarna
+    if(startTourBtn) {
+        startTourBtn.addEventListener('click', () => {
+            if(introModal) introModal.style.display = 'none';
+            startDemoTour(); // Nu kickar din tour igång!
+        });
+    }
 });
 
 function renderDemoDashboard() {
