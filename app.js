@@ -2789,7 +2789,7 @@ const demoSteps = [
     { selector: '.action-status', text: 'HEATING / COOLING CHAMBER', offsetY: 0 },
     
     // 4. Progress bar 
-    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -10 },
+    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -50 },
     
     // 5. Phase info
     { selector: '.phase-info', text: 'Current phase details', offsetY: -15 },
