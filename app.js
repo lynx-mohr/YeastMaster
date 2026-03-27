@@ -2778,19 +2778,30 @@ window.addEventListener('DOMContentLoaded', () => {
 let currentDemoStep = -1;
 
 const demoSteps = [
-    { selector: '.carboy-wrapper', text: 'Temp inside vessel' },
-    { selector: '.air-floating', text: 'Ambient temp' },
-    { selector: '.action-status', text: 'Heating ambient temp' }, // Uppdaterat texten till Heating
-    { selector: '.progress-section', text: 'Fermentation completion' },
-    { selector: '.phase-info', text: 'Current phase details' }
+    // 1. Temp inside vessel - Pekar nu exakt på glaset istället för hela rutan
+    { selector: '#interactive-beer-glass', text: 'Temp inside vessel', offsetY: 0 },
+    
+    // 2. Ambient temp
+    { selector: '.air-floating', text: 'Ambient temp', offsetY: 0 },
+    
+    // 3. Uppdaterad text för Heating/Cooling
+    { selector: '.action-status', text: 'HEATING / COOLING CHAMBER', offsetY: 0 },
+    
+    // 4. Progress bar - Vi drar upp den rejält så den slickar mätaren
+    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -25 },
+    
+    // 5. Phase info - Uppdragen lite grann
+    { selector: '.phase-info', text: 'Current phase details', offsetY: -15 },
+    
+    // 6. NY! Temp History - Pekar rakt in i grafen
+    { selector: '#beer-chart', text: 'Temp change over time', offsetY: -20 }
 ];
 
 function startDemoTour() {
     const overlay = document.getElementById('demo-overlay');
     if (overlay) {
         overlay.style.display = 'block';
-        // Gör "overlayen" helt osynlig så den bara agerar som en klick-fångare!
-        overlay.style.backgroundColor = 'transparent'; 
+        overlay.style.backgroundColor = 'transparent'; // Helt osynlig klick-fångare
     }
     
     currentDemoStep = -1;
@@ -2806,7 +2817,7 @@ function nextDemoStep() {
     // 1. KONTROLL: Är touren slut?
     if (currentDemoStep >= demoSteps.length) {
         if (tooltip) tooltip.style.display = 'none';
-        if (overlay) overlay.style.display = 'none'; // Stäng klick-fångaren
+        if (overlay) overlay.style.display = 'none'; 
         
         setTimeout(() => {
             if (!activeDeviceId) {
@@ -2821,23 +2832,26 @@ function nextDemoStep() {
     
     if (!targetEl) {
         console.warn("Tour: Hittade inte " + demoSteps[currentDemoStep].selector);
-        nextDemoStep(); // Hittas den inte? Hoppa snabbt till nästa!
+        nextDemoStep(); // Hoppa över om elementet saknas
         return;
     }
 
-    // 3. Scrolla mjukt så elementet alltid syns på mobilen
+    // 3. Scrolla mjukt så elementet alltid syns
     targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     // 4. Uppdatera texten i skylten
     const tourTextEl = document.getElementById('demo-tour-text');
     if (tourTextEl) tourTextEl.innerText = demoSteps[currentDemoStep].text;
 
-    // 5. Beräkna positionen (Vänta 300ms så scrollen hinner klart först)
+    // 5. Beräkna positionen med din nya offsetY-finjustering!
     setTimeout(() => {
         const rect = targetEl.getBoundingClientRect();
         
-        // Räkna ut botten på elementet + 15px marginal neråt
-        const topPos = rect.bottom + window.scrollY + 15; 
+        // Hämta den individuella justeringen för detta steg (eller 0 om den saknas)
+        const stepOffset = demoSteps[currentDemoStep].offsetY || 0;
+        
+        // Botten på elementet + 15px standardmarginal + din justering
+        const topPos = rect.bottom + window.scrollY + 15 + stepOffset; 
         
         // Hitta mitten på elementet i sidled
         const leftPos = rect.left + window.scrollX + (rect.width / 2);
@@ -2847,7 +2861,6 @@ function nextDemoStep() {
             tooltip.style.top = topPos + 'px';
             tooltip.style.left = leftPos + 'px';
             
-            // Tvinga webbläsaren att spela inhopp-animationen igen
             tooltip.style.animation = 'none';
             void tooltip.offsetWidth; 
             tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
