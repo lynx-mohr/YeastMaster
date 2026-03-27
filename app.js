@@ -2513,6 +2513,8 @@ if (user) {
         activeDeviceId = null; 
         selectedStrains = []; 
         
+        if (logoutBtn) logoutBtn.style.display = 'none'; // <--- GÖM KNAPPEN! (LÄGG TILL)
+        
         // Återställ rullistor
         if (deviceSelect) deviceSelect.innerHTML = '<option value="">Logga in för att se enheter</option>';
         const syncDropdown = document.getElementById('sync-target-device');
