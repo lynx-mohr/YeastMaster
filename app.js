@@ -183,6 +183,9 @@ async function updateDashboard() {
         return; 
     }
 
+    // --- HAR VI EN RIKTIG ENHET? GÖM DEMO-KNAPPEN! ---
+    if (demoBtn) demoBtn.style.display = 'none';
+
     try {
         const response = await fetch(`${API_BASE}/data?device_id=${activeDeviceId}`);
         const data = await response.json();
