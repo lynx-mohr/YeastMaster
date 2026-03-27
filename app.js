@@ -878,7 +878,6 @@ function updateSummaryText() {
 }
 
 // --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
-// --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
 function initLabChart() {
     if (profilePoints && profilePoints.length < 6) {
         const p0 = profilePoints[0] || {x: 0, y: 19};
@@ -924,8 +923,9 @@ function initLabChart() {
     gradient.addColorStop(1, 'rgba(244, 201, 93, 0.0)');
 
     // AXEL-FÄRGER
-    const gridColor = isLightMode ? 'rgba(0, 0, 0, 0.04)' : '#222';
-    const textColor = isLightMode ? '#666' : '#888';
+    const gridColor = isLightMode ? '#ebebeb' : '#222222';
+    const gridBorderColor = isLightMode ? '#cccccc' : '#444444'; // För den yttre ramen
+    const textColor = isLightMode ? '#666666' : '#888888';
 
     // RITA GRAFEN
     labChart = new Chart(ctx, {
@@ -975,7 +975,7 @@ function initLabChart() {
                     type: 'linear',
                     min: currentTempUnit === 'F' ? 28 : -2,
                     max: currentTempUnit === 'F' ? 104 : 40,
-                    grid: { color: gridColor },
+                  grid: { color: gridColor, borderColor: gridBorderColor },
                     ticks: { color: textColor, font: { family: 'Lexend', weight: '600' } },
                     title: { display: true, text: `Temp (°${currentTempUnit})`, color: textColor, font: { family: 'Lexend', weight: '800' } }
                 }
