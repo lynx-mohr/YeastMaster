@@ -2875,32 +2875,37 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function renderDemoDashboard() {
-    // 1. Fyll in all text med perfekta demo-värden
+    // 1. Fyll in all text med det nya "Ramping"-scenariot
     const displayElement = document.querySelector('.device-name-display');
     if (displayElement) displayElement.innerHTML = "<span style='color:#ff4444;'>DEMO MODE</span>";
 
     document.getElementById('strain-val').innerText = "OLD BAVARIAN";
     document.getElementById('profile-val').innerText = "Brulosophy";
-    document.getElementById('action-val').innerText = "COOLING";
+    // --- ÄNDRAT HÄR ---
+    document.getElementById('action-val').innerText = "RAMPING";
 
-    const displayTemp = currentTempUnit === 'F' ? "73.0°F" : "22.8°C";
+    // Vi sätter nuvarande temp till 22.1 grader (på väg ner från 23 till 21)
+    const displayTemp = currentTempUnit === 'F' ? "71.8°F" : "22.1°C";
     document.getElementById('temp-beer-val').innerText = displayTemp;
     
     // Om du har bubbel-animationen kopplad till data-text
     const beerTempEl = document.querySelector('.beer-temp');
     if (beerTempEl) beerTempEl.setAttribute('data-text', displayTemp);
     
+    // Ambient temp och status
     document.getElementById('air-temp-val').innerText = currentTempUnit === 'F' ? "73.4°F" : "23.0°C";
-    document.getElementById('status-text').innerText = "CLEANING UP";
+    // --- ÄNDRAT HÄR ---
+    document.getElementById('status-text').innerText = "PRIMARY FERMENTATION";
     document.getElementById('day-val').innerText = "4 d and 2 h";
     document.getElementById('phase-day-val').innerText = "4 d and 2 h";
+    // --- ÄNDRAT HÄR: Målet är 21 grader ---
     document.getElementById('target-temp-val').innerText = currentTempUnit === 'F' ? "69.8°F" : "21.0°C";
 
     // 2. Sätt progress-baren till 29%
     document.getElementById('progress-percent').innerText = "29%";
     document.getElementById('progress-fill').style.width = "29%";
 
-    // 3. Ställ in pilen så den pekar neråt och är blå
+    // 3. Ställ in pilen så den pekar neråt och är blå (för cooling)
     const arrow = document.getElementById('status-arrow');
     if(arrow) {
         arrow.innerText = "▼";
@@ -2909,14 +2914,16 @@ function renderDemoDashboard() {
         arrow.classList.add('blink-active');
     }
 
-    // 4. Fejkad graf-data (för att få till den snygga lilla dropp-kurvan i slutet)
+    // 4. --- NY HÄFTIG GRAF-LINJE! ---
+    // Den visar en "platt" Primary-fermentation (23.0°C) 
+    // som precis har börjat en snygg kurva nedåt mot målet på 21.0°C!
     const now = Date.now();
     const fakeChartData = [
         { time: new Date(now - 4000000).toISOString(), temp: 23.0 },
         { time: new Date(now - 3000000).toISOString(), temp: 23.0 },
         { time: new Date(now - 2000000).toISOString(), temp: 23.0 },
-        { time: new Date(now - 1000000).toISOString(), temp: 22.9 },
-        { time: new Date(now).toISOString(), temp: 22.8 }
+        { time: new Date(now - 1000000).toISOString(), temp: 22.8 }, // Viker neråt...
+        { time: new Date(now).toISOString(), temp: 22.1 }            // ...och nu är vi på 22.1!
     ];
     
     // Använder din vanliga graf-funktion för att rita ut detta!
