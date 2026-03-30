@@ -2802,7 +2802,9 @@ function initInteractiveGlass() {
         glass.classList.add('anim-drain');
 
         const drainDuration = 2000; 
-        const randomEmptyWait = Math.floor(Math.random() * 5000); 
+// Slumpar ett värde mellan 0 och 4750, och plussar sedan alltid på 250.
+// Resultat: Alltid minst 250ms, och som mest 5000ms!
+const randomEmptyWait = Math.floor(Math.random() * 4750) + 250;
         const totalWaitBeforeRefill = drainDuration + randomEmptyWait;
         const refillAnimationDuration = 2000; 
 
