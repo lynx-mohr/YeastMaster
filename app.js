@@ -203,112 +203,97 @@ auth.getRedirectResult().catch((error) => {
 
 
 async function updateDashboard() {
-
-    // --- 1. DEFINIERA KNAPPEN FÖRST! (Denna rad saknades) ---
     const demoBtn = document.getElementById('start-demo-btn');
 
- // HAR VI INGEN ENHET? KÖR DEMO-LÄGET!
     if (!activeDeviceId) {
         renderDemoDashboard();
         return; 
     }
 
-    // --- HAR VI EN RIKTIG ENHET? GÖM DEMO-KNAPPEN! ---
     if (demoBtn) demoBtn.style.display = 'none';
 
     try {
         const response = await fetch(`${API_BASE}/data?device_id=${activeDeviceId}`);
         const data = await response.json();
 
-        if (data.length > 0) {
-            const latest = data[data.length - 1];
-            console.log("Här är senaste datan från servern:");
-            console.log(latest);
+        if (data && data.length > 0) {
+            // --- KRITISK FIX: Sortera datan efter tid direkt ---
+            const sortedData = data.sort((a, b) => new Date(a.time) - new Date(b.time));
+            
+            // Använd sortedData för att plocka ut det SENASTE värdet
+            const latest = sortedData[sortedData.length - 1];
+            console.log("Senaste sorterade datan:", latest);
 
             // 1. Temperaturer
-     // 1. Temperaturer (NU MED C/F STÖD)
             const displayTemp = convertTemp(latest.temp).toFixed(1) + '°' + currentTempUnit;
             document.getElementById('temp-beer-val').innerText = displayTemp;
             document.querySelector('.beer-temp').setAttribute('data-text', displayTemp);
-            
             document.getElementById('air-temp-val').innerText = convertTemp(latest.air_temp).toFixed(1) + '°' + currentTempUnit;
 
-            // 2. Höger kolumn (Hierarki enligt din OLED)
+            // 2. Info
             document.getElementById('strain-val').innerText = (latest.strain || "IRISH ALE").toUpperCase();
             document.getElementById('profile-val').innerText = latest.profile || "LOW ESTER";
             
             const action = (latest.action || "IDLE").toUpperCase();
             document.getElementById('action-val').innerText = action;
 
-// 3. Pil-logik (Vänster om texten, färg och riktning)
-const arrow = document.getElementById('status-arrow');
-if (action === "COOLING") {
-    arrow.innerText = "▼";
-    arrow.style.color = "#0088ff"; 
-    arrow.style.visibility = "visible";  // Visa den
-    arrow.classList.add('blink-active'); // Starta blinket
-} else if (action === "HEATING") {
-    arrow.innerText = "▲";
-    arrow.style.color = "#ff4444"; 
-    arrow.style.visibility = "visible";  // Visa den
-    arrow.classList.add('blink-active'); // Starta blinket
-} else {
-    // IDLE-LÄGE
-    arrow.style.visibility = "hidden";      // Göm den helt men behåll platsen
-    arrow.classList.remove('blink-active'); // Döda animationen så den inte blinkar vitt
-}
+            // 3. Pil-logik
+            const arrow = document.getElementById('status-arrow');
+            if (action === "COOLING") {
+                arrow.innerText = "▼";
+                arrow.style.color = "#0088ff"; 
+                arrow.style.visibility = "visible";
+                arrow.classList.add('blink-active');
+            } else if (action === "HEATING") {
+                arrow.innerText = "▲";
+                arrow.style.color = "#ff4444"; 
+                arrow.style.visibility = "visible";
+                arrow.classList.add('blink-active');
+            } else {
+                arrow.style.visibility = "hidden";
+                arrow.classList.remove('blink-active');
+            }
 
-// 4. Statusrad (Fas)
+            // 4. Status & Fas-dagar
             document.getElementById('status-text').innerText = latest.status.toUpperCase();
             
-            // --- DAGAR I FAS ---
-            // Vi försöker först hämta det riktiga värdet från servern (t.ex. latest.phase_day).
-            // Finns inte det, kör vi din uträkning som en nöd-backup (som maxar ut på historikens längd).
             let phaseDay = 0;
-            
             if (latest.phase_day !== undefined) {
-                phaseDay = latest.phase_day; // Det perfekta sättet!
+                phaseDay = latest.phase_day;
             } else {
-                // Nöd-uträkning om servern inte skickar phase_day
                 let phaseStartTime = latest.time; 
-                for (let i = data.length - 1; i >= 0; i--) {
-                    if (data[i].status !== latest.status) {
-                        phaseStartTime = data[i + 1].time;
+                for (let i = sortedData.length - 1; i >= 0; i--) {
+                    if (sortedData[i].status !== latest.status) {
+                        phaseStartTime = sortedData[i + 1].time;
                         break;
                     }
-                    if (i === 0) {
-                        phaseStartTime = data[0].time;
-                    }
+                    if (i === 0) phaseStartTime = sortedData[0].time;
                 }
                 const msInADay = 1000 * 60 * 60 * 24;
                 phaseDay = (latest.time && phaseStartTime) ? (new Date(latest.time) - new Date(phaseStartTime)) / msInADay : 0;
             }
 
-            // 5. Dag och Progress-mätare (Logiken för den orangea mätaren)
+            // 5. Progress
             const currentDay = latest.day || 0;
-            const targetDays = 14; // Här sätter vi målet för mätaren (t.ex. 14 dagar)
-            
-            // Räkna ut procenten (0-100%)
+            const targetDays = 14; 
             const percent = Math.min((currentDay / targetDays) * 100, 100).toFixed(0);
 
-            // Uppdatera värdena i HTML
-    // NY KOD - KLISTRA IN:
-const dayValEl = document.getElementById('day-val');
-const phaseDayValEl = document.getElementById('phase-day-val');
+            const dayValEl = document.getElementById('day-val');
+            const phaseDayValEl = document.getElementById('phase-day-val');
 
-if (dayValEl) dayValEl.innerText = formatDaysToHuman(currentDay);
-if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(phaseDay);
+            if (dayValEl) dayValEl.innerText = formatDaysToHuman(currentDay);
+            if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(phaseDay);
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
 
-        // --- NY KOD FÖR MÅLTEMPERATUR ---
             const targetTemp = latest.target_temp || 0; 
             const targetTempElement = document.getElementById('target-temp-val');
             if (targetTempElement) {
                 targetTempElement.innerText = convertTemp(targetTemp).toFixed(1) + '°' + currentTempUnit;
             }
             
-            updateChart(data);
+            // Skicka den sorterade datan till grafen
+            updateChart(sortedData);
         }
     } catch (error) {
         console.error("Kunde inte hämta data:", error);
@@ -322,26 +307,28 @@ function updateChart(data) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     
-    // Hämtar färgen från CSS, om den inte hittas används orange som reserv!
+    // Dubbelkolla sorteringen en gång till för säkerhets skull
+    const sortedData = data.sort((a, b) => new Date(a.time) - new Date(b.time));
+    
     let themeAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
     if (!themeAccent) themeAccent = '#f39c12'; 
 
-    // TYDLIGARE GRÅ GRADIENT
     const gradient = ctx.createLinearGradient(0, 0, 0, 120);
     gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)'); 
     gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');   
 
-    // Säkerställ att vi bara försöker plotta riktiga siffror, annars kraschar hela Chart.js
-    const labels = data.map(d => new Date(d.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    const temps = data.map(d => convertTemp(Number(d.temp) || 0));
+    // Mappa tider och temperaturer från den sorterade datan
+    const labels = sortedData.map(d => new Date(d.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const temps = sortedData.map(d => convertTemp(Number(d.temp) || 0));
 
-    if (beerChart) {
-        beerChart.data.labels = labels;
-        beerChart.data.datasets[0].data = temps;
-        beerChart.data.datasets[0].borderColor = themeAccent; 
-        beerChart.update('none');
+    if (window.beerChart) {
+        window.beerChart.data.labels = labels;
+        window.beerChart.data.datasets[0].data = temps;
+        window.beerChart.data.datasets[0].borderColor = themeAccent; 
+        window.beerChart.data.datasets[0].backgroundColor = gradient;
+        window.beerChart.update('none');
     } else {
-        beerChart = new Chart(ctx, {
+        window.beerChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
@@ -369,13 +356,12 @@ function updateChart(data) {
                     y: { 
                         ticks: { 
                             color: '#bbbbbb', 
-                           font: { family: 'Lexend', size: 10 },
-                            // <-- NYTT: Här är skyddet som förhindrar att funktionen kraschar
+                            font: { family: 'Lexend', size: 10 },
                             callback: function(value) {
                                 return Number(value).toFixed(1) + '°';
                             }
                         }, 
-                        grid: { color: 'rgba(255, 255, 255, 0.2)' } 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' } 
                     }
                 },
                 plugins: { 
