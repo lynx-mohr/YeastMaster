@@ -1997,6 +1997,7 @@ async function populateSyncDevices(uid) {
         dropdown.appendChild(testOption);
     }
 }
+
 // ==========================================
 // --- CLOUD SYNC MOTOR ---
 // ==========================================
@@ -2024,55 +2025,67 @@ async function syncToSelectedDevice() {
 
     // 2. Visuell feedback: Vi jobbar!
     const originalText = syncBtn.innerText;
-    syncBtn.innerText = "SYNCING TO CLOUD... ☁️";
+    syncBtn.innerText = "PACKING PROFILES... 📦";
     syncBtn.style.opacity = "0.7";
     syncBtn.style.pointerEvents = "none";
 
- try {
+    try {
         // --- 3. MAGIN BÖRJAR HÄR: VI BYGGER OM ID-LISTAN TILL RIKTIGA PROFILER! ---
         let profilesToSend = [];
 
-        // Översättningstabellen (för att matcha appens korta ID:n med databasens exakta namn)
+        // Översättningstabellen: Måste matcha värdena för "s" i yeastDatabase EXAKT!
         const hwStrainNames = {
-            "us-05": "US-05", "s-04": "S-04", "w-34-70": "W-34/70", "be-256": "BE-256",
-            "wb-06": "WB-06", "verdant": "Verdant IPA", "voss": "Voss Kveik",
-            "nottingham": "Nottingham", "wlp001": "California Ale", "wlp300": "Hefeweizen",
-            "belle-saison": "Belle Saison", "t-58": "T-58", "s-23": "S-23",
-            "wlp002": "English Ale", "wlp500": "Trappist", "diamond": "Diamond",
-            "wlp066": "London Fog", "s-33": "S-33", "wlp800": "Pilsner Lager",
-            "novalager": "NovaLager", "wyeast-1968": "London ESB", "wlp920": "Old Bavarian",
-            "imperial-b45": "Gnome", "wyeast-1084": "Irish Ale", "wyeast-3944": "Witbier",
-            "wlp833": "Bock Lager", "wlp007": "Dry English", "wyeast-1318": "London III",
-            "wyeast-2565": "Kölsch", "wlp095": "Burlington"
+            "wyeast-1318": "London III",
+            "wyeast-2565": "Kolsch",
+            "wlp095": "Burlington",
+            "wlp007": "Dry English",
+            "wlp833": "German Bock",
+            "wyeast-3944": "Belgian Wit",
+            "wlp920": "Old Bavarian",
+            "imperial-b45": "Imp. Gnome",
+            "wyeast-1084": "Irish Ale",
+            "wyeast-1968": "London ESB"
+            // (Du kan lägga till fler här om du väljer nya jäster i UI:t)
         };
 
         selectedStrains.forEach(id => {
-            // Hitta jäst-kortet i vår stora app-lista
+            // Kolla först om det är en egengjord custom-jäst
             const strainObj = yeastStrains.find(y => y.id === id);
-            if (!strainObj) return;
+            
+            // Vad heter jästen i maskinens databas?
+            let targetStrainName = "";
+            if (strainObj && strainObj.isCustom) {
+                targetStrainName = strainObj.name;
+            } else {
+                targetStrainName = hwStrainNames[id];
+            }
 
-            // Custom jäster har redan rätt namn, annars slår vi upp det i tabellen ovan
-            let targetStrainName = strainObj.isCustom ? strainObj.name : hwStrainNames[id];
-
-            // Leta upp ALLA profiler (High Ester, Crisp, etc) som hör till den här jästen i maskin-databasen
-            if (typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
+            // Om vi har ett namn (s), hämta ALLA profiler med det namnet
+            if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
                 const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
-                profilesToSend.push(...matchingProfiles); // Lägg till dem i väskan!
+                if (matchingProfiles.length > 0) {
+                    profilesToSend.push(...matchingProfiles); 
+                } else {
+                    console.warn("Hittade ingen data i databasen för:", targetStrainName);
+                }
             }
         });
 
+        // Avbryt om vi inte hittade något vettigt att skicka
         if (profilesToSend.length === 0) {
-            alert("Internt fel: Hittade inga temperatur-profiler för dina valda jäster. Kolla så att databasen (profiles.js) är laddad!");
+            alert("Kunde inte packa profilerna! Dubbelkolla att namnen matchar databasen.");
             syncBtn.innerText = originalText;
             syncBtn.style.opacity = "1";
             syncBtn.style.pointerEvents = "auto";
             return;
         }
 
+        // Packa in det precis som ESP:n vill ha det: { "yeasts": [ ... ] }
         const payloadData = {
             yeasts: profilesToSend
         };
-        // --- MAGIN SLUTAR HÄR ---
+
+        syncBtn.innerText = "SYNCING TO CLOUD... ☁️";
 
         // 4. Skicka till din Node.js Backend
         const response = await fetch(`${API_BASE}/sync-profiles`, {
@@ -2092,7 +2105,6 @@ async function syncToSelectedDevice() {
             syncBtn.style.borderColor = "#8CC63F"; // YeastMaster-grön
             syncBtn.style.color = "#8CC63F";
             
-            // Återställ knappen efter 3 sekunder
             setTimeout(() => {
                 syncBtn.innerText = originalText;
                 syncBtn.style.backgroundColor = "";
@@ -2102,14 +2114,13 @@ async function syncToSelectedDevice() {
                 syncBtn.style.pointerEvents = "auto";
             }, 3000);
             
-            console.log(`Synkade ${selectedStrains.length} profiler till ${targetDeviceId}`);
+            console.log(`Synkade ${profilesToSend.length} profiler till molnet!`);
         } else {
             throw new Error("Servern nekade synkningen.");
         }
     } catch (error) {
         console.error("Synk-fel:", error);
         
-        // Visuell feedback: Fel
         syncBtn.innerText = "SYNC FAILED ✖";
         syncBtn.style.backgroundColor = "rgba(255, 68, 68, 0.2)";
         syncBtn.style.borderColor = "#ff4444";
