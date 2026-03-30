@@ -204,8 +204,16 @@ auth.getRedirectResult().catch((error) => {
 
 async function updateDashboard() {
     const demoBtn = document.getElementById('start-demo-btn');
+const user = auth.currentUser;
 
-    if (!activeDeviceId) {
+
+// --- NY LOGIK: VÄNTA PÅ AUTH ---
+    // Om Firebase inte har bestämt sig än om användaren är inloggad, gör ingenting.
+    // Det förhindrar att Demon ritas upp i onödan.
+    if (user === undefined) return; 
+
+    // Om vi INTE är inloggade alls, DÅ kör vi demo direkt
+    if (!user && !activeDeviceId) {
         renderDemoDashboard();
         return; 
     }
