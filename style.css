@@ -372,10 +372,10 @@ canvas#beer-chart {
 
 /* Standard (Dark Mode) */
 .yeast-card {
-    background: #1a1a1a; /* Mörkgrå för Dark Mode istället för vit! */
+    background: #1a1a1a; /* Mörk bakgrund (eller white om du kör light-mode som standard) */
     border: 2px solid #333;
     border-radius: 8px;
-    padding: 15px;
+    padding: 10px 15px; /* Mycket mindre luft inuti (topp/botten 10px, sidor 15px) */
     cursor: pointer;
     position: relative;
     transition: all 0.2s ease;
@@ -386,8 +386,7 @@ canvas#beer-chart {
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-height: 80px;
-    color: #ffffff; /* Tvingar fram vit text */
+    min-height: 50px; /* Sänkt från 80px till en nättare standardhöjd */
 }
 
 /* Göm stjärnan permanent! */
@@ -401,13 +400,12 @@ canvas#beer-chart {
 }
 
 /* När kortet är VALT (Dark Mode) */
+/* När kortet är valt (Behåll den snygga gröna ramen!) */
 .yeast-card.selected {
-    border: 3px solid var(--accent-color) !important; /* Tjockare grön kant */
-    background: rgba(140, 198, 63, 0.1) !important; /* Svagt grön toning inuti */
+    border: 3px solid var(--accent-color) !important;
+    background: rgba(140, 198, 63, 0.1) !important; 
     transform: scale(0.98);
-    box-shadow: 0 0 15px rgba(140, 198, 63, 0.2);
 }
-
 /* --- SÖKRUTAN I BIBLIOTEKET --- */
 #yeast-search {
     width: 100%;
@@ -621,20 +619,17 @@ canvas#beer-chart {
     }
 
     /* Gör korten lite mer kompakta inuti */
-    .yeast-card {
-        padding: 0 8px !important;
-        min-width: 0; /* Tvingar kortet att krympa om skärmen är liten */
+  .yeast-card {
+        padding: 8px 5px !important; /* Tajtare padding på mobil */
+        min-height: 45px !important; /* Ännu nättare höjd på små skärmar */
     }
 
     /* Minska texten och tvinga tre punkter "..." om namnet är för långt */
-    .yeast-card h3 {
-        font-size: 0.75rem !important;
+.yeast-card h3 {
+        font-size: 0.85rem !important; /* Lite mindre text så hela namnet får plats */
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        margin-right: 5px; 
-        min-width: 0; /* Superviktigt: låter texten klippas istället för att trycka ut rutan */
-        flex: 1; /* Tvingar texten att ta all tillgänglig plats fram till stjärnan */
     }
 
     /* Se till att stjärnan aldrig trycks ihop och blir oval */
