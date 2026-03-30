@@ -2800,10 +2800,10 @@ body.light-mode .wizard-dot.active { background: var(--accent-color); }
         margin-top: -10px !important;
     }
 
+ /* === 3. SÄKERSTÄLL ATT INGEN ANNAN RUTTA TAR PLATS === */
     .wizard-layout {
-        flex-direction: column !important;
-        gap: 8px !important;
-        width: 100% !important;
+        /* Tvinga innehållet att packa sig tätt */
+        gap: 0px !important; 
     }
 
     /* 2. Gör materialboxen superkompakt */
@@ -2831,21 +2831,31 @@ body.light-mode .wizard-dot.active { background: var(--accent-color); }
     }
 
   .wizard-checklist li {
+        /* Ta bort de tidigare minimala värdena */
+        padding: 5px 12px !important; /* Återställ padding så taggarna ser bra ut */
+        font-size: 0.8rem !important; /* Betydligt större och mer läsbar text */
+        
+        /* Behåll dessa för att de ska ligga på rad */
         border: 1px solid #333 !important;
         border-radius: 4px !important;
-        padding: 2px 6px !important;
-        font-size: 0.55rem !important;
-        color: #666 !important; /* Nedsläckt som standard */
+        color: #666 !important;
         background: transparent !important;
         margin: 0 !important;
-        display: block !important; /* Tar bort flex-beteendet som skapade cirklarna */
+        display: block !important;
     }
 
-  /* 4. Optimera själva guiden (den nedre boxen) */
-    .wizard-container {
-        padding: 12px 15px !important;
-        min-height: auto !important;
+  .wizard-container {
+        /* Ta bort den tvingade min-height som skapade tomrummet */
+        min-height: auto !important; /* Detta är den viktigaste ändringen! */
+        
+        /* Behåll dessa för att rutan ska se bra ut i övrigt */
+        padding: 15px 10px !important;
         background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid #222 !important;
+        border-radius: 12px !important;
+        text-align: center;
+        width: 100%;
+        margin: 0;
     }
 
     .wizard-icon {
