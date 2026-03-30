@@ -3262,8 +3262,17 @@ function renderDemoDashboard() {
 // ==========================================
 // --- STÄNG INFO-RUTOR VID KLICK UTANFÖR ---
 // ==========================================
+let lastBoxCloseTime = 0; // Håller koll på exakt när vi stängde en ruta senast
+
 function handleOutsideClick(event) {
-    // 1. Spärr för "i"-knapparna (så att de själva kan öppna/stänga)
+    // 1. SPÖK-SKÖLDEN: Om vi PRECIS stängde en ruta (inom 400ms), ät upp klicket direkt!
+    if (Date.now() - lastBoxCloseTime < 400) {
+        event.stopPropagation();
+        event.preventDefault();
+        return;
+    }
+
+    // 2. Spärr för "i"-knapparna
     if (event.target.closest('svg') || event.target.closest('.info-icon') || event.target.closest('[onclick*="toggle"]')) {
         return; 
     }
@@ -3274,16 +3283,12 @@ function handleOutsideClick(event) {
     infoBoxes.forEach(boxId => {
         const box = document.getElementById(boxId);
         
-        // Kolla om rutan är öppen
         if (box && (box.style.display === 'block' || box.style.display === 'flex')) {
-            // Klickade vi någonstans som INTE är inuti rutan?
             if (!box.contains(event.target)) {
                 
-                // Stäng rutan!
                 box.style.display = 'none'; 
-                boxWasClosed = true; // Flagga att vi just stängde en ruta
+                boxWasClosed = true; 
                 
-                // Återställ färgerna på "i"-knappar
                 document.querySelectorAll('[onclick*="toggle"]').forEach(btn => {
                     if (btn.style && btn.style.backgroundColor === 'rgb(140, 198, 63)') {
                         btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)';
@@ -3294,15 +3299,14 @@ function handleOutsideClick(event) {
         }
     });
 
-    // 2. DEN MAGISKA SPÄRREN: 
-    // Om vi precis stängde en ruta, "ät upp" klicket så att det inte går vidare!
+    // 3. Om vi stängde rutan: Starta timer-skölden och ät upp originalklicket
     if (boxWasClosed) {
-        event.stopPropagation(); // Stoppa klicket från att vandra vidare i koden
-        event.preventDefault();  // Stoppa webbläsarens standardbeteende
+        lastBoxCloseTime = Date.now(); // Uppdatera tiden för stängningen
+        event.stopPropagation(); 
+        event.preventDefault();  
     }
 }
 
-// Vi använder "true" som tredje argument (Capture Phase). 
-// Det betyder att dokumentet fångar klicket FÖRST, innan jästkorten hinner se det!
+// Vi behöver bara lyssna på 'click' nu, mobilen skickar ändå ett klick efter touchen.
+// (Jag tog bort touchend-lyssnaren för att göra det ännu stabilare på iOS/Android)
 document.addEventListener('click', handleOutsideClick, true);
-document.addEventListener('touchend', handleOutsideClick, true); // Gäller även för touch på mobilen
