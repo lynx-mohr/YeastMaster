@@ -3258,3 +3258,32 @@ function renderDemoDashboard() {
         updateChart(fakeChartData); 
     }
 }
+
+// ==========================================
+// --- STÄNG INFO-RUTOR VID KLICK UTANFÖR ---
+// ==========================================
+document.addEventListener('click', function(event) {
+    // Här lägger vi in ID:n på de inforutor som finns i appen
+    const infoBoxes = ['library-info-box', 'profiler-info-box', 'academy-info-box'];
+
+    infoBoxes.forEach(boxId => {
+        const box = document.getElementById(boxId);
+        
+        // Kolla om rutan finns och faktiskt är öppen just nu
+        // (Vi antar att du visar dem med style.display = 'block' eller 'flex')
+        if (box && box.style.display !== 'none' && box.style.display !== '') {
+            
+            // 1. Klickade vi INUTI rutan? (Då ska den inte stängas, t.ex. om man vill markera text)
+            const clickedInsideBox = box.contains(event.target);
+            
+            // 2. Klickade vi på själva "i"-knappen? 
+            // (Om vi inte kollar detta kommer knappen att direkt stänga rutan den precis öppnade)
+            const clickedOnButton = event.target.closest('.info-icon');
+
+            // Om vi klickade någon annanstans i appen -> Stäng rutan!
+            if (!clickedInsideBox && !clickedOnButton) {
+                box.style.display = 'none';
+            }
+        }
+    });
+});
