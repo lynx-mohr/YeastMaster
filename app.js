@@ -2775,12 +2775,9 @@ if (user) {
     }
 });
 
-// ==========================================
-// --- ARCANE LAB NAVIGATION & CONTENT ---
-// ==========================================
-
 // Innehållet för de olika modulerna
 const academyModules = {
+    // --- 1. Kalkylatorn (Behålls som den var) ---
     'calc': `
         <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Pitch Calculator</h2>
         <div class="calc-container" style="margin: 0; padding: 0; background: transparent; border: none;">
@@ -2819,20 +2816,58 @@ const academyModules = {
                     <span class="res-unit" id="res-days-old" style="font-size: 0.8rem; color: #666;">New</span>
                 </div>
             </div>
-
             <div id="pitch-warning" class="warning-box" style="display:none; margin-top: 20px; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 15px; border-radius: 8px; font-size: 0.9rem; text-align: center; font-weight: 600;">
                 ⚠️ Warning: Underpitching detected. Consider building a starter!
             </div>
         </div>
     `,
+
+    // --- 2. YEAST STARTERS 101 (DEN NYA INTERAKTIVA WIZARDEN!) ---
     'starters': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 5px; font-weight: 900; letter-spacing: -1px;">Yeast Starters 101</h2>
-        <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">Wake up your yeast and ensure a healthy, vigorous fermentation.</p>
-        <p style="color: #888;"><em>Lesson content coming soon...</em></p>
+        <div class="wizard-container" id="starter-wizard">
+            
+            <div class="wizard-dots" id="wizard-dots">
+                <div class="wizard-dot active"></div>
+                <div class="wizard-dot"></div>
+                <div class="wizard-dot"></div>
+                <div class="wizard-dot"></div>
+            </div>
+
+            <div class="wizard-step active" data-step="0">
+                <div class="wizard-icon">⚖️🧪</div>
+                <h3>1. Gather Your Gear</h3>
+                <p>To build a starter, you need a clean Erlenmeyer flask, a precision scale, and Dry Malt Extract (DME). Ensure your flask is sanitized.</p>
+            </div>
+
+            <div class="wizard-step" data-step="1">
+                <div class="wizard-icon">🌾💧</div>
+                <h3>2. The Golden Ratio</h3>
+                <p>Weigh exactly <strong>100g of DME</strong> for every <strong>1 Liter of water</strong>. This creates a perfect 1.036 - 1.040 specific gravity, which is ideal for yeast growth without stressing the cells.</p>
+            </div>
+
+            <div class="wizard-step" data-step="2">
+                <div class="wizard-icon">🔥🌡️</div>
+                <h3>3. Boil & Sterilize</h3>
+                <p>Mix the DME and water in your flask. Boil gently for 10-15 minutes to sterilize the wort. <br><br><em>Pro-tip: Add a drop of Fermcap-S to prevent explosive boil-overs!</em></p>
+            </div>
+
+            <div class="wizard-step" data-step="3">
+                <div class="wizard-icon">❄️🌪️</div>
+                <h3>4. Chill, Pitch & Spin</h3>
+                <p>Cool the flask in an ice bath to around 20°C (68°F). Pitch your yeast, drop in a sanitized stir bar, and let it spin on a stir plate for 24-48 hours. Watch those cells multiply!</p>
+            </div>
+
+            <div class="wizard-controls">
+                <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
+                <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
+            </div>
+        </div>
     `,
+
+    // --- 3. Agar (Behålls som den var) ---
     'agar': `
         <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 5px; font-weight: 900; letter-spacing: -1px;">Mastering Agar Plates</h2>
-        <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">Learn to pour, streak, and isolate pure yeast strains like a pro.</p>
+        <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">Learn to pour, streak, and isolate pure strains like a pro.</p>
         <div class="module-ingredients" style="margin-bottom: 30px;">
             <h3 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1.1rem; font-weight: 800;">🧪 Ingredients & Gear</h3>
             <ul style="color: #ddd; line-height: 1.6; padding-left: 20px;">
@@ -2844,10 +2879,6 @@ const academyModules = {
                 <li>Pressure Cooker or Instant Pot</li>
             </ul>
         </div>
-        <div class="module-protip" style="background: rgba(140, 198, 63, 0.1); border-left: 4px solid #8CC63F; padding: 15px; border-radius: 4px;">
-            <strong style="color: #8CC63F; font-size: 1rem; display: block; margin-bottom: 5px;">💡 Pro-Tip from the Librarian:</strong>
-            <span style="color: #ccc;">If you get too much condensation on the inside of the lids after pouring, try stacking the plates on top of each other while they cool. The heat from the top plates prevents condensation on the ones below!</span>
-        </div>
     `,
     'wild': `
         <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 5px; font-weight: 900; letter-spacing: -1px;">Capturing Wild Yeast</h2>
@@ -2856,43 +2887,83 @@ const academyModules = {
     `
 };
 
+// ==========================================
+// --- LOGIK FÖR WIZARDEN ---
+// ==========================================
+let currentWizardStep = 0;
+const totalWizardSteps = 4; // Hur många steg vi har i starters-modulen
+
+// Körs när man trycker Next eller Back
+function changeWizardStep(direction) {
+    currentWizardStep += direction;
+
+    // Säkerhetsgränser
+    if (currentWizardStep < 0) currentWizardStep = 0;
+    
+    // Om vi trycker Next på sista steget: Stäng modulen!
+    if (currentWizardStep >= totalWizardSteps) {
+        closeAcademyModule();
+        return;
+    }
+
+    // 1. Uppdatera HTML: Visa rätt steg, göm de andra
+    document.querySelectorAll('.wizard-step').forEach(step => {
+        step.classList.remove('active');
+        if (parseInt(step.getAttribute('data-step')) === currentWizardStep) {
+            step.classList.add('active');
+        }
+    });
+
+    // 2. Uppdatera framstegsprickarna
+    document.querySelectorAll('.wizard-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentWizardStep);
+    });
+
+    // 3. Uppdatera Knapparna (Text och disabled-status)
+    const prevBtn = document.getElementById('wiz-prev');
+    const nextBtn = document.getElementById('wiz-next');
+
+    if (prevBtn && nextBtn) {
+        prevBtn.disabled = currentWizardStep === 0; // Gråa ut "Back" om vi är på första steget
+        
+        if (currentWizardStep === totalWizardSteps - 1) {
+            nextBtn.innerText = "Finish! ✓"; // Byt text på sista steget
+        } else {
+            nextBtn.innerText = "Next ➔";
+        }
+    }
+}
+
+// ==========================================
+// --- ÖPPNA/STÄNG MODULER ---
+// ==========================================
 function openAcademyModule(moduleId) {
     const overview = document.getElementById('lab-content-academy');
     const moduleView = document.getElementById('academy-module-view');
     const contentArea = document.getElementById('academy-module-content');
 
-    // Kolla om modulen finns, annars visa ett felmeddelande
     contentArea.innerHTML = academyModules[moduleId] || '<p style="color: #ff4444;">Module not found.</p>';
 
-    // Göm översikten och visa lektionen
     overview.style.display = 'none';
     moduleView.style.display = 'block';
 
-    // Om det var kalkylatorn som öppnades, tvinga den att räkna direkt!
+    // Om kalkylatorn öppnas: Tvinga den att räkna direkt
     if (moduleId === 'calc') {
         const dateInput = document.getElementById('pitch-date');
         if (dateInput && !dateInput.value) dateInput.valueAsDate = new Date();
         if (typeof calculatePitch === 'function') calculatePitch();
+    }
+    
+    // Nollställ Wizard-räknaren om vi öppnar Yeast Starters!
+    if (moduleId === 'starters') {
+        currentWizardStep = 0;
+        setTimeout(() => changeWizardStep(0), 10); // Uppdatera UI direkt
     }
 }
 
 function closeAcademyModule() {
     document.getElementById('academy-module-view').style.display = 'none';
     document.getElementById('lab-content-academy').style.display = 'block';
-}
-
-function toggleAcademyInfo(btn) {
-    const infoBox = document.getElementById('academy-info-box');
-    
-    if (infoBox.style.display === 'none' || infoBox.style.display === '') {
-        infoBox.style.display = 'block';
-        btn.style.background = '#8CC63F';
-        btn.style.color = '#111';
-    } else {
-        infoBox.style.display = 'none';
-        btn.style.background = 'rgba(140, 198, 63, 0.15)';
-        btn.style.color = '#8CC63F';
-    }
 }
 
 // =========================================================
