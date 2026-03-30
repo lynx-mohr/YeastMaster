@@ -2791,16 +2791,74 @@ body.light-mode .wizard-dot.active { background: var(--accent-color); }
     min-height: 380px;
 }
 
-/* Mobil-anpassning: Stapla dem på varandra! */
+/* ========================================== */
+/* --- MOBILANPASSAD WIZARD (INGEN SCROLL) --- */
+/* ========================================== */
 @media (max-width: 768px) {
     .wizard-layout {
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
     }
+
+    /* Listan blir en kompakt horisontell rad istället */
     .wizard-sidebar {
         width: 100%;
-        flex: none;
-        padding: 15px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .wizard-sidebar h4 {
+        font-size: 0.7rem;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    .wizard-checklist {
+        display: flex;
+        flex-wrap: wrap; /* Låter dem flöda på flera rader om det behövs */
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .wizard-checklist li {
+        border: 1px solid #333;
+        border-radius: 20px;
+        padding: 4px 10px !important;
+        font-size: 0.65rem !important;
+        white-space: nowrap;
+        border-bottom: 1px solid #333 !important; /* Tar bort dashed line */
+    }
+
+    .wizard-checklist li::before {
+        display: none; /* Gömmer bollarna på mobil för att spara plats */
+    }
+
+    /* När ett objekt är aktivt på mobilen */
+    .wizard-checklist li.active-item {
+        background: var(--accent-color);
+        color: #000 !important;
+        border-color: var(--accent-color);
+        transform: scale(1.05);
+    }
+
+    /* Wizarden får mer plats */
+    .wizard-container {
+        padding: 20px 15px;
+        min-height: auto; /* Låt den krympa */
+    }
+
+    .wizard-icon {
+        font-size: 3rem; /* Lite mindre ikoner på mobil */
+        margin-bottom: 10px;
+    }
+
+    .wizard-step h3 {
+        font-size: 1.1rem;
+    }
+
+    .wizard-step p {
+        font-size: 0.85rem;
+        margin-bottom: 20px;
     }
 }
 
