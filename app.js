@@ -2822,44 +2822,62 @@ const academyModules = {
         </div>
     `,
 
-    // --- 2. YEAST STARTERS 101 (DEN NYA INTERAKTIVA WIZARDEN!) ---
+   // --- 2. YEAST STARTERS 101 (Med interaktiv checklista!) ---
     'starters': `
-        <div class="wizard-container" id="starter-wizard">
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Starters 101</h2>
+        
+        <div class="wizard-layout">
             
-            <div class="wizard-dots" id="wizard-dots">
-                <div class="wizard-dot active"></div>
-                <div class="wizard-dot"></div>
-                <div class="wizard-dot"></div>
-                <div class="wizard-dot"></div>
+            <div class="wizard-sidebar">
+                <h4>You will need:</h4>
+                <ul class="wizard-checklist" id="starter-checklist">
+                    <li id="item-flask">Erlenmeyer Flask</li>
+                    <li id="item-scale">Precision Scale</li>
+                    <li id="item-dme">Light DME</li>
+                    <li id="item-water">Clean Water</li>
+                    <li id="item-heat">Heat Source</li>
+                    <li id="item-yeast">Yeast Pack</li>
+                    <li id="item-stirbar">Stir Bar</li>
+                    <li id="item-stirplate">Stir Plate</li>
+                </ul>
             </div>
 
-            <div class="wizard-step active" data-step="0">
-                <div class="wizard-icon">⚖️🧪</div>
-                <h3>1. Gather Your Gear</h3>
-                <p>To build a starter, you need a clean Erlenmeyer flask, a precision scale, and Dry Malt Extract (DME). Ensure your flask is sanitized.</p>
-            </div>
+            <div class="wizard-container" id="starter-wizard">
+                <div class="wizard-dots" id="wizard-dots">
+                    <div class="wizard-dot active"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                </div>
 
-            <div class="wizard-step" data-step="1">
-                <div class="wizard-icon">🌾💧</div>
-                <h3>2. The Golden Ratio</h3>
-                <p>Weigh exactly <strong>100g of DME</strong> for every <strong>1 Liter of water</strong>. This creates a perfect 1.036 - 1.040 specific gravity, which is ideal for yeast growth without stressing the cells.</p>
-            </div>
+                <div class="wizard-step active" data-step="0">
+                    <div class="wizard-icon">🧽🧪</div>
+                    <h3>1. Clean & Prepare</h3>
+                    <p>Before we start, hygiene is everything. Make sure your Erlenmeyer flask is completely clean and sanitized.</p>
+                </div>
 
-            <div class="wizard-step" data-step="2">
-                <div class="wizard-icon">🔥🌡️</div>
-                <h3>3. Boil & Sterilize</h3>
-                <p>Mix the DME and water in your flask. Boil gently for 10-15 minutes to sterilize the wort. <br><br><em>Pro-tip: Add a drop of Fermcap-S to prevent explosive boil-overs!</em></p>
-            </div>
+                <div class="wizard-step" data-step="1">
+                    <div class="wizard-icon">⚖️🌾</div>
+                    <h3>2. The Golden Ratio</h3>
+                    <p>Place the flask on the scale. Weigh exactly <strong>100g of DME</strong> for every <strong>1 Liter of water</strong>. This creates a perfect 1.036 specific gravity.</p>
+                </div>
 
-            <div class="wizard-step" data-step="3">
-                <div class="wizard-icon">❄️🌪️</div>
-                <h3>4. Chill, Pitch & Spin</h3>
-                <p>Cool the flask in an ice bath to around 20°C (68°F). Pitch your yeast, drop in a sanitized stir bar, and let it spin on a stir plate for 24-48 hours. Watch those cells multiply!</p>
-            </div>
+                <div class="wizard-step" data-step="2">
+                    <div class="wizard-icon">🔥🌡️</div>
+                    <h3>3. Boil & Sterilize</h3>
+                    <p>Move the flask to your heat source. Boil gently for 10-15 minutes to sterilize the wort. <br><br><em>Pro-tip: Add a drop of Fermcap-S to prevent boil-overs!</em></p>
+                </div>
 
-            <div class="wizard-controls">
-                <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
-                <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
+                <div class="wizard-step" data-step="3">
+                    <div class="wizard-icon">❄️🌪️</div>
+                    <h3>4. Chill, Pitch & Spin</h3>
+                    <p>Cool the flask to 20°C (68°F). Pitch your yeast, drop in the stir bar, and place it on the stir plate for 24-48 hours. Watch those cells multiply!</p>
+                </div>
+
+                <div class="wizard-controls">
+                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
+                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
+                </div>
             </div>
         </div>
     `,
@@ -2897,16 +2915,14 @@ const totalWizardSteps = 4; // Hur många steg vi har i starters-modulen
 function changeWizardStep(direction) {
     currentWizardStep += direction;
 
-    // Säkerhetsgränser
     if (currentWizardStep < 0) currentWizardStep = 0;
     
-    // Om vi trycker Next på sista steget: Stäng modulen!
     if (currentWizardStep >= totalWizardSteps) {
         closeAcademyModule();
         return;
     }
 
-    // 1. Uppdatera HTML: Visa rätt steg, göm de andra
+    // 1. Uppdatera Wizarden (Text och Prickar)
     document.querySelectorAll('.wizard-step').forEach(step => {
         step.classList.remove('active');
         if (parseInt(step.getAttribute('data-step')) === currentWizardStep) {
@@ -2914,23 +2930,44 @@ function changeWizardStep(direction) {
         }
     });
 
-    // 2. Uppdatera framstegsprickarna
     document.querySelectorAll('.wizard-dot').forEach((dot, index) => {
         dot.classList.toggle('active', index === currentWizardStep);
     });
 
-    // 3. Uppdatera Knapparna (Text och disabled-status)
     const prevBtn = document.getElementById('wiz-prev');
     const nextBtn = document.getElementById('wiz-next');
 
     if (prevBtn && nextBtn) {
-        prevBtn.disabled = currentWizardStep === 0; // Gråa ut "Back" om vi är på första steget
-        
-        if (currentWizardStep === totalWizardSteps - 1) {
-            nextBtn.innerText = "Finish! ✓"; // Byt text på sista steget
-        } else {
-            nextBtn.innerText = "Next ➔";
-        }
+        prevBtn.disabled = currentWizardStep === 0;
+        nextBtn.innerText = currentWizardStep === totalWizardSteps - 1 ? "Finish! ✓" : "Next ➔";
+    }
+
+    // ==========================================
+    // --- NYTT: DEN LEVANDE CHECKLISTAN! ---
+    // ==========================================
+    
+    // Denna karta mappar steg-nummer (0-3) till ID:n på <li> i din HTML
+    const stepActiveItems = {
+        0: ['item-flask'], // Steg 1: Rengöring
+        1: ['item-flask', 'item-scale', 'item-dme', 'item-water'], // Steg 2: Vägning
+        2: ['item-flask', 'item-heat'], // Steg 3: Kokning
+        3: ['item-flask', 'item-yeast', 'item-stirbar', 'item-stirplate'] // Steg 4: Pitching
+    };
+
+    // Släck alla objekt i listan först
+    document.querySelectorAll('.wizard-checklist li').forEach(li => {
+        li.classList.remove('active-item');
+    });
+
+    // Tänd upp de som används i just det här steget
+    const itemsToHighlight = stepActiveItems[currentWizardStep];
+    if (itemsToHighlight) {
+        itemsToHighlight.forEach(itemId => {
+            const element = document.getElementById(itemId);
+            if (element) {
+                element.classList.add('active-item');
+            }
+        });
     }
 }
 
