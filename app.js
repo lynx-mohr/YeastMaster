@@ -1581,7 +1581,7 @@ const yeastDescriptions = {
         <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: It has very high attenuation. Be prepared for your beer to dry out significantly, making the hop bitterness feel sharper.</i></p>
     `,
 
-    // ==========================================
+// ==========================================
     // --- LIQUID YEASTS (Flytande Jäst) ---
     // ==========================================
 
@@ -1597,6 +1597,7 @@ const yeastDescriptions = {
         <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
         <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
             <li><strong style="color: #fff;">Standard:</strong> Start crisp around 19.5 °C. We want zero esters and zero fusels. Then release up to 22 °C for a Diacetyl Rest. WLP001 is good at cleaning, but a little heat helps.</li>
+            <li><strong style="color: #fff;">Low Ester:</strong> Drops the temperature down to 18 °C. Fermentation takes slightly longer, but yields an impossibly clean, lager-like ale profile.</li>
         </ul>
     `,
 
@@ -1611,7 +1612,8 @@ const yeastDescriptions = {
         <p>Pushing WLP300 above the 20-mark is the trick to unlocking the fruity isoamyl acetate (banana) esters and suppressing the clove.</p>
         <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
         <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
-            <li><strong style="color: #fff;">Classic:</strong> Ferment warm! Lock the temp at 21-22°C and let the banana party begin. Drop to serving temp (approx. 6 °C) for conditioning.</li>
+            <li><strong style="color: #fff;">Standard:</strong> Held firmly at 19 °C. Focuses on the spicy clove phenols, keeping the banana esters subtle and balanced.</li>
+            <li><strong style="color: #fff;">Classic:</strong> Ferment warm! Lock the temp at 20 °C and ramp to 22°C to let the banana party begin. Drop to serving temp (approx. 4 °C) for conditioning.</li>
         </ul>
     `,
 
@@ -1644,7 +1646,7 @@ const yeastDescriptions = {
         <p>By keeping the fermentation cold and steady, we prevent the yeast from producing byproducts that would otherwise mask the delicate toasted and caramel notes from the Munich and Vienna malts.</p>
         <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
         <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 12px; display: flex; flex-direction: column;">
-            <li><strong style="color: #fff;">Lager (Traditional):</strong> The old-school way. Starts low at 10.5 °C for 10 full days, followed by a slow D-rest and a massive 28-day cold lagering phase.</li>
+            <li><strong style="color: #fff;">Traditional Lager:</strong> The old-school way. Starts low at 10.5 °C for 10 full days, followed by a slow D-rest and a massive 28-day cold lagering phase.</li>
             <li><strong style="color: #fff;">Quick Lager:</strong> The modern approach. Pitches at 12.5 °C for faster yeast growth, finishes the cleanup by day 10, and cuts the lagering time in half.</li>
             <li><strong style="color: #fff;">Brulosophy:</strong> The warm-fermented lager hack! Runs at ale temperatures (19 °C). Surprisingly clean, but done in a fraction of the time.</li>
         </ul>
@@ -1695,9 +1697,9 @@ const yeastDescriptions = {
         <p>This yeast refuses to drop, and that's exactly what we want! We want the yeast and wheat proteins to stay in suspension for that milky, white appearance.</p>
         <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
         <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 12px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Standard:</strong> Kept strictly at 19 °C. The fruitiness takes a back seat, and the clove/pepper phenols become the star of the show.</li>
             <li><strong style="color: #fff;">Classic Wit:</strong> A balanced 18 °C start, ramping to 21.5 °C. Notice the "Condition" phase sits at 6 °C instead of near freezing? This prevents the beer from clearing up too much!</li>
             <li><strong style="color: #fff;">Summer Wit & High Ester:</strong> Pushed warmer (20-23 °C). Expect massive amounts of citrus, orange peel, and banana.</li>
-            <li><strong style="color: #fff;">Standard & Low Ester:</strong> Kept strictly under 20 °C. The fruitiness takes a back seat, and the clove/pepper phenols become the star of the show.</li>
         </ul>
     `,
 
@@ -1712,6 +1714,7 @@ const yeastDescriptions = {
         <p>Bock yeast can be stubborn and slow. It needs time to properly attenuate high-gravity worts without creating rocket-fuel fusel alcohols.</p>
         <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
         <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 12px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Traditional Lager:</strong> Runs slightly warmer at 11 °C to speed up attenuation without sacrificing the clean, malty profile.</li>
             <li><strong style="color: #fff;">Trad. Bock:</strong> The authentic approach. A chilly 10 °C primary fermentation, a solid D-rest at 16 °C, and then a grueling 35-day lagering phase to achieve liquid perfection.</li>
             <li><strong style="color: #fff;">Fast Bock:</strong> When you can't wait. Pitched at 12 °C, warming to 17 °C. It finishes the job in just over three weeks but still delivers a massive malt backbone.</li>
         </ul>
@@ -1760,8 +1763,8 @@ const yeastDescriptions = {
         <p>Wyeast 2565 is notoriously powdery. It refuses to clear up on its own. A long, cold lagering phase is absolutely mandatory to achieve that brilliant, golden Kölsch clarity.</p>
         <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
         <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 12px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Standard & Low Ester:</strong> Faster ale-like fermentation (18-19 °C). Still very clean, but finishes much quicker. Great for crisp Blonde Ales.</li>
             <li><strong style="color: #fff;">Authentic:</strong> The Cologne way! A chilly 14.5 °C primary fermentation, a slow D-rest at 18 °C, and a strict 2-week cold lagering. Tastes exactly like a German lager, but brewed with ale yeast.</li>
-            <li><strong style="color: #fff;">Hybrid & Standard:</strong> Faster ale-like fermentation (18-19 °C). Still very clean, but finishes much quicker. Great for crisp Blonde Ales.</li>
         </ul>
     `,
 
@@ -1776,8 +1779,8 @@ const yeastDescriptions = {
         <p>Because it drops like a stone the second it feels "done", you have to actively fight to keep it awake. If it goes to sleep too early, your beer will taste like a butterscotch candy (Diacetyl).</p>
         <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
         <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
-            <li><strong style="color: #fff;">Classic ESB (19 °C):</strong> Hold at 19 °C for 3 days to build the fruitiness, then aggressively ramp up to 21 °C to keep the yeast swimming and cleaning.</li>
-            <li><strong style="color: #fff;">Sweet Stout (18 °C):</strong> Keep it slightly cooler to retain even more unfermented sugars, giving your dark beers a massive, silky mouthfeel.</li>
+            <li><strong style="color: #fff;">Standard:</strong> A steady 19 °C fermentation, jumping up to 21 °C at the end to keep the yeast active for cleanup.</li>
+            <li><strong style="color: #fff;">Low Ester:</strong> Keep it slightly cooler (18.5 °C) to retain even more unfermented sugars, giving your dark beers a massive, silky mouthfeel.</li>
         </ul>
         <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: When you Cold Crash this, the beer will become brilliantly clear almost overnight. No need for fining agents!</i></p>
     `,
@@ -1793,8 +1796,8 @@ const yeastDescriptions = {
         <p>Belgian monks historically didn't use chillers. They pitched the yeast and let the natural exothermic heat of fermentation drive the temperature up. We want to mimic this!</p>
         <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
         <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
-            <li><strong style="color: #fff;">Trappist Gold (Balanced):</strong> Start at 18 °C to suppress fusel alcohols, then slowly let it free-rise to 22 °C by Day 5 for an elegant fruit profile.</li>
-            <li><strong style="color: #fff;">Monk's Madness (High Ester):</strong> Pitch at 20 °C and ramp it aggressively to 25 °C! This stresses the yeast into throwing massive dark fruit and bubblegum flavors.</li>
+            <li><strong style="color: #fff;">Standard:</strong> Start at 19 °C to suppress fusel alcohols, then slowly let it free-rise to 21 °C by Day 3 for an elegant fruit profile.</li>
+            <li><strong style="color: #fff;">Monk's Madness:</strong> Pitch at 20 °C and ramp it aggressively to 25 °C! This stresses the yeast into throwing massive dark fruit and bubblegum flavors.</li>
         </ul>
         <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: It has very low flocculation. You will need a long, cold conditioning phase to drop this stubborn yeast out of the beer.</i></p>
     `,
@@ -1810,8 +1813,8 @@ const yeastDescriptions = {
         <p>Unlike West Coast yeasts, London Fog doesn't ferment all the complex sugars. It leaves a higher Final Gravity, which provides that thick, juice-like body that modern hazy IPAs require.</p>
         <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
         <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
-            <li><strong style="color: #fff;">Smooth Juice (19 °C):</strong> Keep it locked at 19 °C. This provides a clean fermentation where the biotransformation of your dry hops takes center stage.</li>
-            <li><strong style="color: #fff;">Tropical Punch (21 °C):</strong> Start at 19 °C, but ramp to 21.5 °C by Day 3. The added heat forces the yeast to produce more of its own tropical esters to blend with the hops.</li>
+            <li><strong style="color: #fff;">Standard:</strong> Keep it locked at 19 °C. This provides a clean fermentation where the biotransformation of your dry hops takes center stage.</li>
+            <li><strong style="color: #fff;">Smooth Juice:</strong> Start at 19 °C, but ramp to 22 °C by Day 8. The added heat forces the yeast to produce more of its own tropical esters to blend with the hops.</li>
         </ul>
     `,
 
@@ -1826,8 +1829,8 @@ const yeastDescriptions = {
         <p>Historically, Czech Pilsners have a tiny, tiny hint of diacetyl (butter) in the background. If you want to be 100% true to style, you actually do a slightly shorter Diacetyl Rest than with German lagers!</p>
         <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
         <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
-            <li><strong style="color: #fff;">Bohemian Rhapsody (10 °C):</strong> Ferment low and slow. Ramp up to 15 °C for just 48 hours to clean up *most* of the butterscotch, then drop to lagering.</li>
-            <li><strong style="color: #fff;">Modern Crisp (11 °C):</strong> Run it slightly warmer and do a full 4-day D-rest at 16 °C for a completely clean, modern interpretation of a Pilsner.</li>
+            <li><strong style="color: #fff;">Bohemian:</strong> Ferment low and slow. Ramp up to 12 °C for just 48 hours to clean up *most* of the butterscotch, then drop to lagering.</li>
+            <li><strong style="color: #fff;">Traditional Lager:</strong> Run it slightly warmer (11°C) and do a full 5-day D-rest at 16 °C for a completely clean, modern interpretation of a Pilsner.</li>
         </ul>
     `,
 
@@ -1843,7 +1846,7 @@ const yeastDescriptions = {
         <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
         <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 12px; display: flex; flex-direction: column;">
             <li><strong style="color: #fff;">Conan IPA & Standard:</strong> 19-21 °C. The classic Vermont curve. Gives a perfect balance between hop bitterness and stone-fruit esters.</li>
-            <li><strong style="color: #fff;">Hazy & High Ester:</strong> Pushed to 20 °C and ramping up to 22-23 °C. This stresses the yeast to maximize the peach and apricot notes.</li>
+            <li><strong style="color: #fff;">High Ester:</strong> Pushed to 21 °C and ramping up to 23 °C. This stresses the yeast to maximize the peach and apricot notes.</li>
             <li><strong style="color: #fff;">Low Ester:</strong> Fermented cool (18 °C) to tame the fruitiness, making it behave more like a standard West Coast IPA yeast.</li>
         </ul>
     `
