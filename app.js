@@ -302,13 +302,19 @@ async function updateDashboard() {
 
 //Grafen
 let beerChart;
+
 function updateChart(data) {
     const canvas = document.getElementById('beer-chart');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     
-    // Dubbelkolla sorteringen en gång till för säkerhets skull
-    const sortedData = data.sort((a, b) => new Date(a.time) - new Date(b.time));
+    // --- MAGISKA FIXEN: Om en graf redan finns (demo eller gammal live), DÖDA DEN! ---
+    if (window.beerChart && typeof window.beerChart.destroy === 'function') {
+        window.beerChart.destroy();
+    }
+
+    // Sortera datan för säkerhets skull
+    data.sort((a, b) => new Date(a.time) - new Date(b.time));
     
     let themeAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
     if (!themeAccent) themeAccent = '#f39c12'; 
@@ -317,60 +323,49 @@ function updateChart(data) {
     gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)'); 
     gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');   
 
-    // Mappa tider och temperaturer från den sorterade datan
-    const labels = sortedData.map(d => new Date(d.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    const temps = sortedData.map(d => convertTemp(Number(d.temp) || 0));
+    const labels = data.map(d => new Date(d.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const temps = data.map(d => convertTemp(Number(d.temp) || 0));
 
-    if (window.beerChart) {
-        window.beerChart.data.labels = labels;
-        window.beerChart.data.datasets[0].data = temps;
-        window.beerChart.data.datasets[0].borderColor = themeAccent; 
-        window.beerChart.data.datasets[0].backgroundColor = gradient;
-        window.beerChart.update('none');
-    } else {
-        window.beerChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Beer Temp',
-                    data: temps,
-                    borderColor: themeAccent, 
-                    borderWidth: 2,
-                    fill: true, 
-                    backgroundColor: gradient, 
-                    tension: 0.3,
-                    pointRadius: 0 
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                resizeDelay: 10, 
-                layout: { padding: 0 },
-                scales: {
-                    x: { 
-                        ticks: { color: '#666', maxTicksLimit: 5, font: { family: 'Lexend', size: 10 } },
-                        grid: { display: false } 
-                    },
-                    y: { 
-                        ticks: { 
-                            color: '#bbbbbb', 
-                            font: { family: 'Lexend', size: 10 },
-                            callback: function(value) {
-                                return Number(value).toFixed(1) + '°';
-                            }
-                        }, 
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' } 
-                    }
+    // Skapa ALLTID en helt ny graf-instans
+    window.beerChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Beer Temp',
+                data: temps,
+                borderColor: themeAccent, 
+                borderWidth: 2,
+                fill: true, 
+                backgroundColor: gradient, 
+                tension: 0.3,
+                pointRadius: 0 
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 400 }, // Lite mjukare övergång
+            scales: {
+                x: { 
+                    ticks: { color: '#666', maxTicksLimit: 5, font: { family: 'Lexend', size: 10 } },
+                    grid: { display: false } 
                 },
-                plugins: { 
-                    legend: { display: false },
-                    tooltip: { enabled: true }
+                y: { 
+                    ticks: { 
+                        color: '#bbbbbb', 
+                        font: { family: 'Lexend', size: 10 },
+                        callback: (value) => value.toFixed(1) + '°'
+                    }, 
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' } 
                 }
+            },
+            plugins: { 
+                legend: { display: false },
+                tooltip: { enabled: true }
             }
-        });
-    }
+        }
+    });
 }
 
 // --- 5. BUBBEL-MOTOR (Startar automatiskt) ---
