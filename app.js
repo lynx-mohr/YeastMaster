@@ -585,37 +585,36 @@ function renderYeastLibrary(filter = "") {
     // Här är den lagade fixen: Vi kollar namn, tags OCH styles!
     const filtered = yeastStrains.filter(s => {
         const nameMatch = s.name.toLowerCase().includes(searchTerm);
-        const tagMatch = s.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+        const tagMatch = s.tags && s.tags.some(tag => tag.toLowerCase().includes(searchTerm));
         const styleMatch = s.styles && s.styles.toLowerCase().includes(searchTerm);
         
         return nameMatch || tagMatch || styleMatch;
     });
 
-filtered.forEach(yeast => {
+    filtered.forEach(yeast => {
         const isSelected = selectedStrains.includes(yeast.id);
         const isCustom = yeast.isCustom ? 'custom-profile' : ''; 
         
         const card = document.createElement('div');
+        // Lägger till "selected" om den är vald, så CSS kan rita den tjocka ramen
         card.className = `yeast-card ${isCustom} ${isSelected ? 'selected' : ''}`;
         
         const deleteBtn = yeast.isCustom ? 
             `<div class="delete-custom-btn" onclick="event.stopPropagation(); deleteCustomProfile('${yeast.name}')">×</div>` 
             : '';
 
+        // HELT REN HTML: Ingen stjärna, bara krysset (om custom) och rubriken!
         card.innerHTML = `
             ${deleteBtn}
             <h3>${yeast.name}</h3>
-            <div class="favorite-star" onclick="event.stopPropagation(); toggleFavorite('${yeast.id}')">
-                ${isSelected ? '★' : '☆'}
-            </div>
         `;
 
-        // --- TIMERS ---
+        // --- TIMERS OCH LOGIK ---
         let clickTimer = null;
         let touchTimer = null;
+        let isLongPress = false;
 
         // 1. HOVER (PC - Tooltip)
-        const tooltip = document.getElementById('yeast-tooltip');
         card.onmousemove = (e) => {
             if (tooltip) {
                 tooltip.style.display = "block";
@@ -626,33 +625,43 @@ filtered.forEach(yeast => {
         };
         card.onmouseleave = () => { if(tooltip) tooltip.style.display = "none"; };
 
-        // 2. ENKELKLICK (Detaljvy)
+        // 2. ENKELKLICK (Välj / Avvälj)
         card.onclick = () => {
+            if (isLongPress) return; // Ignorera om vi just gjorde ett långtryck
+            
             if (clickTimer) clearTimeout(clickTimer);
             clickTimer = setTimeout(() => {
-                openYeastDetail(yeast);
+                // Denna funktion väljer/avväljer jästen nu!
+                toggleFavorite(yeast.id);
             }, 250); 
         };
 
-        // 3. DUBBELKLICK (PC - Modal)
+        // 3. DUBBELKLICK (PC - Läs mer i Modal)
         card.ondblclick = () => {
-            clearTimeout(clickTimer); 
+            clearTimeout(clickTimer); // Avbryt enkelklicket
             openYeastModal(yeast);
         };
 
-        // 4. LÅNGKLICK (Mobil - Originalversionen)
+        // 4. LÅNGKLICK (Mobil - Läs mer i Modal)
         card.addEventListener('touchstart', () => {
+            isLongPress = false;
             touchTimer = setTimeout(() => {
+                isLongPress = true; // Flaggas som långtryck
                 openYeastModal(yeast);
-            }, 600); 
+            }, 500); // 500ms känns oftast lite snärtigare på mobil
         }, {passive: true});
 
         card.addEventListener('touchend', () => clearTimeout(touchTimer));
-        card.addEventListener('touchmove', () => clearTimeout(touchTimer));
+        
+        // Avbryt långtrycket (och förhindra felklick) om man börjar scrolla
+        card.addEventListener('touchmove', () => {
+            clearTimeout(touchTimer);
+            isLongPress = true; 
+        }, {passive: true});
 
         // Lägg till kortet i gridet
         grid.appendChild(card);
-    }); // <--- Här stängs forEach-loopen korrekt!
+    }); 
 }
 
 function openYeastDetail(yeast) {

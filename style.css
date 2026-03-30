@@ -366,36 +366,46 @@ canvas#beer-chart {
     width: 100%;
 }
 
-/* Grundutseende för jästkorten */
+/* ========================================= */
+/* --- YEAST CARDS (NY, REN DESIGN) --- */
+/* ========================================= */
+
+/* Standard (Dark Mode) */
 .yeast-card {
-    background: white;
-    border: 2px solid #eee;
+    background: #1a1a1a; /* Mörkgrå för Dark Mode istället för vit! */
+    border: 2px solid #333;
     border-radius: 8px;
     padding: 15px;
     cursor: pointer;
     position: relative;
     transition: all 0.2s ease;
-    user-select: none; /* Förhindrar textmarkering vid långtryck */
-    -webkit-tap-highlight-color: transparent; /* Tar bort blå blinkning på mobil */
-    box-sizing: border-box; /* Ser till att ramen växer inåt, så kortet inte ändrar storlek */
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-height: 80px; /* Ger alla kort en snygg enhetlig höjd */
+    min-height: 80px;
+    color: #ffffff; /* Tvingar fram vit text */
 }
 
-/* 1. HOVER-EFFEKTEN FÖR PC (Denna hade försvunnit!) */
+/* Göm stjärnan permanent! */
+.favorite-star {
+    display: none !important;
+}
+
+/* Hover-effekt på dator */
 .yeast-card:hover {
-    border-color: var(--accent-color) !important;
-    background: #111 !important;
+    border-color: #666;
 }
 
-/* När kortet är valt */
+/* När kortet är VALT (Dark Mode) */
 .yeast-card.selected {
-    border: 4px solid var(--accent-color) !important;
-    background: #f0fdf4; /* Mycket svag grön bakgrund */
-    transform: scale(0.98); /* En subtil tryck-effekt */
+    border: 3px solid var(--accent-color) !important; /* Tjockare grön kant */
+    background: rgba(140, 198, 63, 0.1) !important; /* Svagt grön toning inuti */
+    transform: scale(0.98);
+    box-shadow: 0 0 15px rgba(140, 198, 63, 0.2);
 }
 
 /* --- SÖKRUTAN I BIBLIOTEKET --- */
@@ -930,9 +940,9 @@ body.light-mode .academy-card:hover {
 
 /* Tvinga fram vit bakgrund på alla kort */
 body.light-mode .yeast-card {
-    background: #ffffff !important;
-    border: 1px solid #ccc !important;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important; 
+    background: #ffffff;
+    border: 2px solid #eee;
+    color: #111111; /* Svart text */
 }
 
 /* Tvinga texten att bli svart */
@@ -942,15 +952,14 @@ body.light-mode .yeast-card h3 {
 
 /* Hover-effekt (när man drar musen över) */
 body.light-mode .yeast-card:hover {
-    background: #f4f4f4 !important;
-    border-color: var(--accent-color) !important;
+    border-color: #ccc;
 }
 
 /* Markerade kort */
 body.light-mode .yeast-card.selected {
-    background: #ffffff !important;
-    border-color: var(--accent-color) !important;
-    box-shadow: 0 0 8px rgba(0, 229, 255, 0.4) !important;
+    border: 3px solid var(--accent-color) !important;
+    background: #f0fdf4 !important;
+    box-shadow: 0 0 15px rgba(140, 198, 63, 0.3);
 }
 
 /* Stjärnan (Omarkerad) */
