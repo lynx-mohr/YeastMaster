@@ -3262,28 +3262,30 @@ function renderDemoDashboard() {
 // ==========================================
 // --- STÄNG INFO-RUTOR VID KLICK UTANFÖR ---
 // ==========================================
-document.addEventListener('click', function(event) {
-    // 1. SÄKERHETSSPÄRR: Om användaren klickar på en ikon eller knapp som öppnar rutor, AVBRYT direkt! Låt knappen sköta sitt.
+function handleOutsideClick(event) {
+    // 1. Spärr för "i"-knapparna (så att de själva kan öppna/stänga)
     if (event.target.closest('svg') || event.target.closest('.info-icon') || event.target.closest('[onclick*="toggle"]')) {
         return; 
     }
 
-    // 2. Alla inforutor vi vill kunna stänga automatiskt
     const infoBoxes = ['library-info-box', 'profiler-info-box', 'academy-info-box'];
+    let boxWasClosed = false;
 
     infoBoxes.forEach(boxId => {
         const box = document.getElementById(boxId);
         
-        // Är rutan öppen?
+        // Kolla om rutan är öppen
         if (box && (box.style.display === 'block' || box.style.display === 'flex')) {
             // Klickade vi någonstans som INTE är inuti rutan?
             if (!box.contains(event.target)) {
+                
                 // Stäng rutan!
                 box.style.display = 'none'; 
+                boxWasClosed = true; // Flagga att vi just stängde en ruta
                 
-                // Återställ färgerna på alla "i"-knappar så de inte "fastnar" som helgröna
+                // Återställ färgerna på "i"-knappar
                 document.querySelectorAll('[onclick*="toggle"]').forEach(btn => {
-                    if (btn.style && btn.style.backgroundColor === 'rgb(140, 198, 63)') { // #8CC63F
+                    if (btn.style && btn.style.backgroundColor === 'rgb(140, 198, 63)') {
                         btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)';
                         btn.style.color = '#8CC63F';
                     }
@@ -3291,4 +3293,16 @@ document.addEventListener('click', function(event) {
             }
         }
     });
-});
+
+    // 2. DEN MAGISKA SPÄRREN: 
+    // Om vi precis stängde en ruta, "ät upp" klicket så att det inte går vidare!
+    if (boxWasClosed) {
+        event.stopPropagation(); // Stoppa klicket från att vandra vidare i koden
+        event.preventDefault();  // Stoppa webbläsarens standardbeteende
+    }
+}
+
+// Vi använder "true" som tredje argument (Capture Phase). 
+// Det betyder att dokumentet fångar klicket FÖRST, innan jästkorten hinner se det!
+document.addEventListener('click', handleOutsideClick, true);
+document.addEventListener('touchend', handleOutsideClick, true); // Gäller även för touch på mobilen
