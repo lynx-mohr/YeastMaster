@@ -3263,26 +3263,31 @@ function renderDemoDashboard() {
 // --- STÄNG INFO-RUTOR VID KLICK UTANFÖR ---
 // ==========================================
 document.addEventListener('click', function(event) {
-    // Här lägger vi in ID:n på de inforutor som finns i appen
+    // 1. SÄKERHETSSPÄRR: Om användaren klickar på en ikon eller knapp som öppnar rutor, AVBRYT direkt! Låt knappen sköta sitt.
+    if (event.target.closest('svg') || event.target.closest('.info-icon') || event.target.closest('[onclick*="toggle"]')) {
+        return; 
+    }
+
+    // 2. Alla inforutor vi vill kunna stänga automatiskt
     const infoBoxes = ['library-info-box', 'profiler-info-box', 'academy-info-box'];
 
     infoBoxes.forEach(boxId => {
         const box = document.getElementById(boxId);
         
-        // Kolla om rutan finns och faktiskt är öppen just nu
-        // (Vi antar att du visar dem med style.display = 'block' eller 'flex')
-        if (box && box.style.display !== 'none' && box.style.display !== '') {
-            
-            // 1. Klickade vi INUTI rutan? (Då ska den inte stängas, t.ex. om man vill markera text)
-            const clickedInsideBox = box.contains(event.target);
-            
-            // 2. Klickade vi på själva "i"-knappen? 
-            // (Om vi inte kollar detta kommer knappen att direkt stänga rutan den precis öppnade)
-            const clickedOnButton = event.target.closest('.info-icon');
-
-            // Om vi klickade någon annanstans i appen -> Stäng rutan!
-            if (!clickedInsideBox && !clickedOnButton) {
-                box.style.display = 'none';
+        // Är rutan öppen?
+        if (box && (box.style.display === 'block' || box.style.display === 'flex')) {
+            // Klickade vi någonstans som INTE är inuti rutan?
+            if (!box.contains(event.target)) {
+                // Stäng rutan!
+                box.style.display = 'none'; 
+                
+                // Återställ färgerna på alla "i"-knappar så de inte "fastnar" som helgröna
+                document.querySelectorAll('[onclick*="toggle"]').forEach(btn => {
+                    if (btn.style && btn.style.backgroundColor === 'rgb(140, 198, 63)') { // #8CC63F
+                        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)';
+                        btn.style.color = '#8CC63F';
+                    }
+                });
             }
         }
     });
