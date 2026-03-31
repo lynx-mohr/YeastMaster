@@ -2483,6 +2483,29 @@ function toggleLibraryInfo(btn) {
 }
 
 // ==========================================
+// --- TOGGLE FÖR IN THE LAB (ACADEMY) INFO ---
+// ==========================================
+function toggleAcademyInfo(btn) {
+    const infoBox = document.getElementById('academy-info-box'); 
+    
+    if (!infoBox) return; // Felsäkring ifall HTML-id:t skulle saknas
+    
+    if (infoBox.style.display === 'none' || infoBox.style.display === '') {
+        // ÖPPEN: Helt fylld, solid klargrön!
+        infoBox.style.display = 'block';
+        btn.style.backgroundColor = '#8CC63F'; // 100% grön bakgrund
+        btn.style.borderColor = '#8CC63F';
+        btn.style.color = '#111111'; // Mörkt 'i' för maximal kontrast
+    } else {
+        // STÄNGD: Dämpad och transparent
+        infoBox.style.display = 'none';
+        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)'; // Dimmig bakgrund
+        btn.style.borderColor = '#8CC63F';
+        btn.style.color = '#8CC63F'; // Grönt 'i'
+    }
+}
+
+// ==========================================
 // --- TEMPERATURE UNIT MANAGER ---
 // ==========================================
 let currentTempUnit = 'C'; // Starta alltid som Celsius internt 
