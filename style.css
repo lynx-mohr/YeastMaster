@@ -2961,7 +2961,6 @@ body.light-mode .wizard-checklist li.active-item { color: #111; }
 }
 
 /* --- MODAL (POPUP) FÖR KÄLKYLATOR --- */
-/* --- MODAL (POPUP) FÖR KÄLKYLATOR --- */
 .ym-modal {
     position: fixed;
     z-index: 1000;
@@ -2972,10 +2971,14 @@ body.light-mode .wizard-checklist li.active-item { color: #111; }
     background-color: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(4px);
     
-    /* Centrerar rutan säkert */
+    /* MAGIN: Centrera i sidled, men starta från toppen! */
     display: flex;
     justify-content: center;
-    align-items: center; 
+    align-items: flex-start; /* Ändrat från center! Tvingar rutan att växa nedåt. */
+    
+    /* Skapar garanterad luft mot skärmens överkant och underkant */
+    padding-top: 8vh; 
+    padding-bottom: 2vh; 
 }
 
 .ym-modal-content {
@@ -2989,8 +2992,7 @@ body.light-mode .wizard-checklist li.active-item { color: #111; }
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     animation: slideIn 0.3s ease-out;
     
-    /* MAGIN: Rutan får max ta upp 85% av skärmens höjd (85vh). 
-       Blir innehållet större skapas scrollen inuti rutan! */
+    /* Maxhöjden räknas nu ut så att den får plats perfekt inom paddingen */
     max-height: 85vh; 
     overflow-y: auto; 
     
