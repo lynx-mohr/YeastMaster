@@ -2985,17 +2985,22 @@ body.light-mode .wizard-checklist li.active-item { color: #111; }
     position: relative;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     animation: slideIn 0.3s ease-out;
+    max-height: 90vh; /* Begränsar höjden till 90% av skärmens höjd */
+    overflow-y: auto; /* Slår på vertikal scrollning om innehållet är för lång
 }
 
 .ym-close-btn {
-    color: #aaa;
-    position: absolute;
-    top: 15px;
-    right: 20px;
+   color: #aaa;
+    position: sticky; /* Ändrat från absolute */
+    top: 0;           /* Håller den klistrad i toppen */
+    float: right;     /* Ser till att den lägger sig till höger */
+    margin-top: -10px;/* Finjustering för att den ska ligga snyggt */
+    margin-right: -5px;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
     transition: color 0.2s;
+    z-index: 10;      /* Ser till att den ligger över t
 }
 
 .ym-close-btn:hover {

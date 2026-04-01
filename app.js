@@ -3461,14 +3461,11 @@ let currentCalcType = '';
 
 function selectCalc(type, clickedBtn) {
     currentCalcType = type;
-
-    // 1. Dölj rutan med 4 knappar & Visa "Selected"-raden
     document.getElementById('main-calc-buttons').style.display = 'none';
     const header = document.getElementById('selected-yeast-header');
     document.getElementById('selected-yeast-text').innerText = clickedBtn.innerText;
     header.style.display = 'flex';
 
-    // 2. Hantera undermenyn för "Yeast Bank"
     const subOptions = document.getElementById('bank-sub-options');
     if (type === 'bank') {
         subOptions.style.display = 'block';
@@ -3476,54 +3473,51 @@ function selectCalc(type, clickedBtn) {
         subOptions.style.display = 'none';
     }
 
-    // 3. Visa inmatningsfälten och dölj resultat
     document.getElementById('calc-input-section').style.display = 'block';
     document.getElementById('calc-result-box').style.display = 'none';
 
-    // 4. Bygg in "extrafält" beroende på jästtyp
     const dynamicSection = document.getElementById('dynamic-extra-fields');
-    dynamicSection.innerHTML = ''; // Rensa tidigare fält
+    dynamicSection.innerHTML = ''; 
 
     if (type === 'dry') {
         dynamicSection.innerHTML = `
             <div class="ym-input-group" style="margin-bottom: 20px;">
                 <label>Cells per gram (Billions)</label>
                 <input type="number" id="calc-dry-density" value="10" step="1">
-                <small style="color: #777; font-size: 0.8em; margin-top: 4px;">Standard for dry yeast is ~10-20 billion cells/g.</small>
             </div>
         `;
     } 
     else if (type === 'liquid') {
-        // Bygg en container för flytande jästpaket så vi kan lägga till flera
         const today = new Date().toISOString().split('T')[0];
         dynamicSection.innerHTML = `
             <div id="liquid-packs-container">
-                <div class="liquid-pack-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; background: #222; padding: 12px; border-radius: 6px; border-left: 3px solid #8CC63F;">
+                <div class="liquid-pack-row" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 10px; background: #222; padding: 12px; border-radius: 6px; border-left: 3px solid #8CC63F; align-items: end;">
                     <div class="ym-input-group">
                         <label>Cells in pack</label>
                         <input type="number" class="calc-liquid-pack" value="100" step="10">
                     </div>
                     <div class="ym-input-group">
-                        <label>Manufacture Date</label>
+                        <label>Mfg Date</label>
                         <input type="date" class="calc-liquid-date" value="${today}">
                     </div>
+                    <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
                 </div>
             </div>
-            <button onclick="addLiquidPack()" style="background: none; border: 1px dashed #8CC63F; color: #8CC63F; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; margin-bottom: 20px; font-size: 0.9em; transition: 0.2s;">
+            <button onclick="addLiquidPack()" style="background: none; border: 1px dashed #8CC63F; color: #8CC63F; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; margin-bottom: 20px; font-size: 0.9em;">
                 + Add another package
             </button>
         `;
     }
 }
 
-// NY FUNKTION: För att lägga till fler paket flytande jäst
 function addLiquidPack() {
     const container = document.getElementById('liquid-packs-container');
     const today = new Date().toISOString().split('T')[0];
     
     const newPack = document.createElement('div');
     newPack.className = 'liquid-pack-row';
-    newPack.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; background: #222; padding: 12px; border-radius: 6px; border-left: 3px solid #555; animation: fadeIn 0.3s;';
+    // Notera grid-template-columns: 1fr 1fr auto; för att få plats med krysset
+    newPack.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 10px; background: #222; padding: 12px; border-radius: 6px; border-left: 3px solid #555; animation: fadeIn 0.3s; align-items: end;';
     
     newPack.innerHTML = `
         <div class="ym-input-group">
@@ -3531,12 +3525,20 @@ function addLiquidPack() {
             <input type="number" class="calc-liquid-pack" value="100" step="10">
         </div>
         <div class="ym-input-group">
-            <label>Manufacture Date</label>
+            <label>Mfg Date</label>
             <input type="date" class="calc-liquid-date" value="${today}">
         </div>
+        <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
     `;
     
     container.appendChild(newPack);
+}
+
+// NY FUNKTION: För att ta bort en rad
+function removeLiquidPack(btn) {
+    // Hittar den närmaste föräldern med klassen .liquid-pack-row och raderar den
+    const row = btn.closest('.liquid-pack-row');
+    row.remove();
 }
 
 
