@@ -394,80 +394,69 @@
     </section>
 
 <section id="view-librarian" style="display: none;">
-        <div class="library-header" style="margin-bottom: 20px;">
-            <div style="position: relative; display: flex; align-items: center; gap: 10px;">
-                <h2 style="margin: 0; line-height: 1;">In the lab</h2> 
-                <button onclick="toggleAcademyInfo(this)" class="info-circle-btn">i</button>
-                <div id="academy-info-box" class="floating-info-box" style="display: none;">
-                    <h3 style="color: var(--accent-color); margin-bottom: 10px; font-size: 1.2rem;">Yeast Management Academy</h3>
-                    <strong style="color: var(--text-main);">Roll up your sleeves and become a microbiologist!</strong><br><br>
-                    Step into the Arcane Lab and discover the fascinating world of yeast management.
-                </div>
+    <div class="library-header" style="margin-bottom: 20px;">
+        <div style="position: relative; display: flex; align-items: center; gap: 10px;">
+            <h2 style="margin: 0; line-height: 1;">In the lab</h2> 
+            <button onclick="toggleAcademyInfo(this)" class="info-circle-btn">i</button>
+            <div id="academy-info-box" class="floating-info-box" style="display: none;">
+                <h3 style="color: var(--accent-color); margin-bottom: 10px; font-size: 1.2rem;">Yeast Management Academy</h3>
+                <strong style="color: var(--text-main);">Roll up your sleeves and become a microbiologist!</strong><br><br>
+                Step into the Arcane Lab and discover the fascinating world of yeast management.
             </div>
         </div>
-
-        <div id="lab-content-academy" style="display:block;">
-            <div class="academy-grid" style="padding: 0;">
-                <div class="academy-librarian-bg">
-                    <img src="librarian-dark.png" class="lib-dark" alt="Librarian BG">
-                    <img src="librarian-light.png" class="lib-light" alt="Librarian BG">
-                </div>
-
-                <div class="lab-card pitch-calc-card">
-    <div class="card-header">
-        <h3>Pitch Calculators</h3>
-        </div>
-    
-    <p class="lab-description">Choose your yeast source to calculate the optimal pitch rate and starter steps.</p>
-
-<div class="academy-card" onclick="openPitchCalcModal()">
-    <div class="academy-card-icon">🧮</div>
-    <div class="academy-card-content">
-        <h4>Pitch Calculators</h4>
-        <p>Calculate optimal pitch rates and starter steps.</p>
     </div>
-    <div class="academy-card-arrow">→</div>
-</div>
-                <div class="academy-card" onclick="openAcademyModule('starters')">
-                    <div class="academy-card-icon">🧪</div>
-                    <div class="academy-card-content">
-                        <h4>Yeast Starters 101</h4>
-                        <p>Wake up your yeast and ensure a healthy fermentation.</p>
-                    </div>
-                    <div class="academy-card-arrow">→</div>
-                </div>
-                <div class="academy-card" onclick="openAcademyModule('agar')">
-                    <div class="academy-card-icon">🧫</div>
-                    <div class="academy-card-content">
-                        <h4>Mastering Agar Plates</h4>
-                        <p>Learn to pour, streak, and isolate pure strains.</p>
-                    </div>
-                    <div class="academy-card-arrow">→</div>
-                </div>
-                <div class="academy-card" onclick="openAcademyModule('wild')">
-                    <div class="academy-card-icon">🍏</div>
-                    <div class="academy-card-content">
-                        <h4>Capturing Wild Yeast</h4>
-                        <p>Hunt for local microbes and brew something unique.</p>
-                    </div>
-                    <div class="academy-card-arrow">→</div>
-                </div>
-                <div class="academy-card" onclick="openAcademyModule('calc')">
-                    <div class="academy-card-icon" style="color: var(--accent-color);">🧮</div>
-                    <div class="academy-card-content">
-                        <h4 style="color: var(--accent-color);">Pitch Calculator</h4>
-                        <p>Calculate the exact cell count needed for your next brew.</p>
-                    </div>
-                    <div class="academy-card-arrow" style="color: var(--accent-color);">→</div>
-                </div>
-            </div>
-        </div>
 
-        <div id="academy-module-view" style="display: none; padding: 0;">
-            <button onclick="closeAcademyModule()" class="back-btn-academy">← BACK TO ACADEMY</button>
-            <div id="academy-module-content"></div>
+    <div id="lab-content-academy" style="display:block;">
+        <div class="academy-grid" style="padding: 0;">
+            <div class="academy-librarian-bg">
+                <img src="librarian-dark.png" class="lib-dark" alt="Librarian BG">
+                <img src="librarian-light.png" class="lib-light" alt="Librarian BG">
+            </div>
+
+            <div class="academy-card" onclick="openPitchCalcModal()">
+                <div class="academy-card-icon">🧮</div>
+                <div class="academy-card-content">
+                    <h4>Pitch Calculators</h4>
+                    <p>Calculate optimal pitch rates and starter steps.</p>
+                </div>
+                <div class="academy-card-arrow">→</div>
+            </div>
+
+            <div class="academy-card" onclick="openAcademyModule('starters')">
+                <div class="academy-card-icon">🧪</div>
+                <div class="academy-card-content">
+                    <h4>Yeast Starters 101</h4>
+                    <p>Wake up your yeast and ensure a healthy fermentation.</p>
+                </div>
+                <div class="academy-card-arrow">→</div>
+            </div>
+
+            <div class="academy-card" onclick="openAcademyModule('agar')">
+                <div class="academy-card-icon">🧫</div>
+                <div class="academy-card-content">
+                    <h4>Mastering Agar Plates</h4>
+                    <p>Learn to pour, streak, and isolate pure strains.</p>
+                </div>
+                <div class="academy-card-arrow">→</div>
+            </div>
+
+            <div class="academy-card" onclick="openAcademyModule('wild')">
+                <div class="academy-card-icon">🍏</div>
+                <div class="academy-card-content">
+                    <h4>Capturing Wild Yeast</h4>
+                    <p>Hunt for local microbes and brew something unique.</p>
+                </div>
+                <div class="academy-card-arrow">→</div>
+            </div>
+
         </div>
-    </section>
+    </div>
+
+    <div id="academy-module-view" style="display: none; padding: 0;">
+        <button onclick="closeAcademyModule()" class="back-btn-academy">← BACK TO ACADEMY</button>
+        <div id="academy-module-content"></div>
+    </div>
+</section>
 
     <nav class="main-nav">
         <div class="nav-item active" onclick="showView('soul')">
