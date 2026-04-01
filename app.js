@@ -3494,26 +3494,50 @@ function selectCalc(type, clickedBtn) {
         `;
     } 
     else if (type === 'liquid') {
-        // Räkna ut dagens datum för att sätta som standard i fältet
+        // Bygg en container för flytande jästpaket så vi kan lägga till flera
         const today = new Date().toISOString().split('T')[0];
-        
         dynamicSection.innerHTML = `
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
-                <div class="ym-input-group">
-                    <label>Cells per pack (Billions)</label>
-                    <input type="number" id="calc-liquid-pack" value="100" step="10">
-                </div>
-                <div class="ym-input-group">
-                    <label>Manufacture Date</label>
-                    <input type="date" id="calc-liquid-date" value="${today}">
+            <div id="liquid-packs-container">
+                <div class="liquid-pack-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; background: #222; padding: 12px; border-radius: 6px; border-left: 3px solid #8CC63F;">
+                    <div class="ym-input-group">
+                        <label>Cells in pack</label>
+                        <input type="number" class="calc-liquid-pack" value="100" step="10">
+                    </div>
+                    <div class="ym-input-group">
+                        <label>Manufacture Date</label>
+                        <input type="date" class="calc-liquid-date" value="${today}">
+                    </div>
                 </div>
             </div>
+            <button onclick="addLiquidPack()" style="background: none; border: 1px dashed #8CC63F; color: #8CC63F; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; margin-bottom: 20px; font-size: 0.9em; transition: 0.2s;">
+                + Add another package
+            </button>
         `;
     }
-    // Fält för Slurry och Bank bygger vi snart!
 }
 
-// ... behåll din resetCalcSelection() och selectSub() precis som de är ...
+// NY FUNKTION: För att lägga till fler paket flytande jäst
+function addLiquidPack() {
+    const container = document.getElementById('liquid-packs-container');
+    const today = new Date().toISOString().split('T')[0];
+    
+    const newPack = document.createElement('div');
+    newPack.className = 'liquid-pack-row';
+    newPack.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; background: #222; padding: 12px; border-radius: 6px; border-left: 3px solid #555; animation: fadeIn 0.3s;';
+    
+    newPack.innerHTML = `
+        <div class="ym-input-group">
+            <label>Cells in pack</label>
+            <input type="number" class="calc-liquid-pack" value="100" step="10">
+        </div>
+        <div class="ym-input-group">
+            <label>Manufacture Date</label>
+            <input type="date" class="calc-liquid-date" value="${today}">
+        </div>
+    `;
+    
+    container.appendChild(newPack);
+}
 
 
 // ==========================================
@@ -3545,49 +3569,61 @@ function calculatePitch() {
         `;
     }
     
-    // --- FLYTANDE JÄST ---
+    // --- FLYTANDE JÄST (Multipel-paket & Starter) ---
     else if (currentCalcType === 'liquid') {
-        const cellsPerPack = parseFloat(document.getElementById('calc-liquid-pack').value);
-        const mfgDateInput = document.getElementById('calc-liquid-date').value;
+        const packInputs = document.querySelectorAll('.calc-liquid-pack');
+        const dateInputs = document.querySelectorAll('.calc-liquid-date');
+        
+        let totalViableCells = 0;
+        let packDetailsHTML = '';
+        const todayDate = new Date();
 
-        if (!mfgDateInput) {
-            resultHTML += `<span style="color: #ff6b6b;">Please enter a valid manufacture date.</span>`;
-        } else {
-            // Räkna ut ålder i dagar
+        // Loopa igenom alla paket användaren har lagt till
+        for(let i = 0; i < packInputs.length; i++) {
+            const cells = parseFloat(packInputs[i].value);
+            const mfgDateInput = dateInputs[i].value;
+            
+            if (!mfgDateInput) continue; // Hoppa över om datum saknas
+            
             const mfgDate = new Date(mfgDateInput);
-            const todayDate = new Date();
             const timeDiff = todayDate.getTime() - mfgDate.getTime();
             let daysOld = Math.floor(timeDiff / (1000 * 3600 * 24));
+            if (daysOld < 0) daysOld = 0;
             
-            if (daysOld < 0) daysOld = 0; // Ifall man valt ett framtida datum av misstag
-
-            // Standardformel för Liquid Yeast Viability (-0.7% per dag)
             let viability = 100 - (daysOld * 0.7);
-            if (viability < 10) viability = 10; // Jäst blir sällan 100% död, sätter en botten på 10%
+            if (viability < 10) viability = 10; // Jäst dör sällan helt
+            
+            const viable = cells * (viability / 100);
+            totalViableCells += viable;
+            
+            packDetailsHTML += `<div style="font-size: 0.85em; color: #aaa; margin-bottom: 4px;">Pack ${i+1} (${daysOld} days old): ${viability.toFixed(0)}% viability = <strong>${viable.toFixed(1)}B cells</strong></div>`;
+        }
 
-            const viableCellsPerPack = cellsPerPack * (viability / 100);
-            const packsNeeded = Math.ceil(totalCellsBillion / viableCellsPerPack);
-            const shortfall = totalCellsBillion - viableCellsPerPack;
+        const shortfall = totalCellsBillion - totalViableCells;
 
-            // Skriv ut jästens hälsostatus
+        resultHTML += `
+            <div style="background: rgba(0,0,0,0.25); padding: 12px; border-radius: 6px; border: 1px solid #444; margin-bottom: 15px;">
+                <strong style="color: #8CC63F; font-size: 1.1em;">Combined Viable Cells: ${totalViableCells.toFixed(1)} Billion</strong><br>
+                <div style="margin-top: 8px; border-top: 1px dashed #444; padding-top: 8px;">
+                    ${packDetailsHTML}
+                </div>
+            </div>
+        `;
+
+        if (totalViableCells >= totalCellsBillion) {
+            resultHTML += `<span style="color: #8CC63F; font-size: 1.1em;">✅ <strong>Pitch is perfect!</strong> You have enough healthy cells.</span>`;
+        } else {
+            // Beräkna Starter (ca 100 miljarder celler tillväxt per liter på magnetomrörare)
+            const starterLiters = shortfall / 100;
+            
             resultHTML += `
-                <div style="background: rgba(0,0,0,0.25); padding: 12px; border-radius: 6px; border: 1px solid #444; margin-bottom: 12px;">
-                    <strong style="color: #8CC63F;">Yeast Health:</strong> ${viability.toFixed(0)}% Viability<br>
-                    <span style="color: #aaa; font-size: 0.9em;">(${daysOld} days old = ${viableCellsPerPack.toFixed(1)}B living cells per pack)</span>
+                <span style="color: #ffcc00; font-size: 1.1em;">⚠️ <strong>Warning:</strong> You are short ${shortfall.toFixed(1)}B cells.</span><br><br>
+                <strong style="color: #fff;">Recommendation:</strong><br>
+                <div style="margin-top: 8px; border-left: 2px solid #8CC63F; padding-left: 10px; line-height: 1.5;">
+                    <span style="color: #ccc;">Option A:</span> Add another pack to your inventory above to cover the gap.<br>
+                    <span style="color: #ccc;">Option B:</span> Make a <strong>${starterLiters.toFixed(2)} Liter starter</strong> (at SG 1.036 - 1.040) on a stir plate to grow the missing cells.
                 </div>
             `;
-
-            // Ge rekommendation
-            if (viableCellsPerPack >= totalCellsBillion) {
-                resultHTML += `<span style="color: #8CC63F; font-size: 1.1em;">✅ <strong>1 package</strong> is enough! Pitch directly.</span>`;
-            } else {
-                resultHTML += `
-                    <span style="color: #ffcc00; font-size: 1.1em;">⚠️ <strong>Warning:</strong> You are short ${shortfall.toFixed(1)}B cells (using 1 pack).</span><br><br>
-                    <strong style="color: #fff;">Recommendation:</strong><br>
-                    <span style="color: #ccc;">Option A:</span> Buy and pitch <strong>${packsNeeded} packages</strong>.<br>
-                    <span style="color: #ccc;">Option B:</span> Make a <strong>Yeast Starter</strong> to multiply your 1 package.
-                `;
-            }
         }
     }
 
