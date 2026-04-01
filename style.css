@@ -2977,7 +2977,7 @@ body.light-mode .wizard-checklist li.active-item { color: #111; }
 
 .ym-modal-content {
     background-color: #1a1a1a;
-    border: 1px solid #8CC63F; /* Grön ram för YeastMaster-känsla */
+    border: 1px solid #8CC63F; 
     border-radius: 12px;
     width: 90%;
     max-width: 500px;
@@ -2985,22 +2985,26 @@ body.light-mode .wizard-checklist li.active-item { color: #111; }
     position: relative;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     animation: slideIn 0.3s ease-out;
-    max-height: 90vh; /* Begränsar höjden till 90% av skärmens höjd */
-    overflow-y: auto; /* Slår på vertikal scrollning om innehållet är för lång
+    max-height: 90vh; 
+    overflow-y: auto; /* Slår på vertikal scrollning om innehållet är för långt */
+        font-size: 16px; /* Tvingar en normal grundstorlek */
+    box-sizing: border-box;
+    overflow-x: hidden; /* Dödar den horisontella scrollbaren */
+    font-family: var(--font-main, sans-serif); /* Se till att den använder brödtext-typsnittet */
 }
 
 .ym-close-btn {
-   color: #aaa;
-    position: sticky; /* Ändrat från absolute */
-    top: 0;           /* Håller den klistrad i toppen */
-    float: right;     /* Ser till att den lägger sig till höger */
-    margin-top: -10px;/* Finjustering för att den ska ligga snyggt */
+    color: #aaa;
+    position: sticky; 
+    top: 0;           
+    float: right;     
+    margin-top: -10px;
     margin-right: -5px;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
     transition: color 0.2s;
-    z-index: 10;      /* Ser till att den ligger över t
+    z-index: 10;      /* Ser till att den ligger över texten */
 }
 
 .ym-close-btn:hover {
@@ -3058,4 +3062,46 @@ body.light-mode .wizard-checklist li.active-item { color: #111; }
 
 .ym-btn-primary:hover {
     background-color: #7ab036;
+}
+
+/* =========================================
+   --- MODAL TYPOGRAPHY & LAYOUT FIX ---
+   ========================================= */
+
+/* Lås grundstorleken i rutan och ta bort sidscroll */
+
+/* Minska rubrikerna inuti rutan */
+.ym-modal-content h3 {
+    font-size: 1.4rem;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.ym-modal-content h4 {
+    font-size: 1.1rem;
+}
+
+/* Smidigare beskrivningstexter */
+.ym-modal-content p, 
+.ym-modal-content .lab-description {
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+
+/* Gör etiketterna (Batch size etc) tunnare och snyggare */
+.ym-input-group label {
+    font-size: 0.75rem;
+    font-weight: 600; /* Halvfet istället för extremt fet */
+    letter-spacing: 0.5px;
+    color: #aaa;
+    font-family: inherit;
+}
+
+/* Håll inmatningsfälten inom ramarna */
+.ym-input-group input,
+.ym-select {
+    font-size: 1rem;
+    font-weight: normal;
+    box-sizing: border-box; /* Det här hindrar dem från att trycka ut rutan i sidled */
+    width: 100%;
 }
