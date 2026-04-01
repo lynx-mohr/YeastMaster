@@ -3632,7 +3632,7 @@ function calculatePitch() {
             </div>
         `;
 
-        if (totalViableCells >= totalCellsBillion) {
+    if (totalViableCells >= totalCellsBillion) {
             resultHTML += `<span style="color: #8CC63F; font-size: 1.1em;">✅ <strong>Pitch is perfect!</strong> You have enough healthy cells.</span>`;
         } else {
             // Beräkna Starter (ca 100 miljarder celler tillväxt per liter på magnetomrörare)
@@ -3641,10 +3641,14 @@ function calculatePitch() {
             resultHTML += `
                 <span style="color: #ffcc00; font-size: 1.1em;">⚠️ <strong>Warning:</strong> You are short ${shortfall.toFixed(1)}B cells.</span><br><br>
                 <strong style="color: #fff;">Recommendation:</strong><br>
-                <div style="margin-top: 8px; border-left: 2px solid #8CC63F; padding-left: 10px; line-height: 1.5;">
+                <div style="margin-top: 8px; border-left: 2px solid #8CC63F; padding-left: 10px; line-height: 1.5; margin-bottom: 20px;">
                     <span style="color: #ccc;">Option A:</span> Add another pack to your inventory above to cover the gap.<br>
                     <span style="color: #ccc;">Option B:</span> Make a <strong>${starterLiters.toFixed(2)} Liter starter</strong> (at SG 1.036 - 1.040) on a stir plate to grow the missing cells.
                 </div>
+                
+                <button onclick="closePitchCalcModal(); openAcademyModule('starters');" class="ym-btn-outline" style="width: 100%; border-color: #555; color: #ccc;">
+                    📖 Read: How to make a Yeast Starter
+                </button>
             `;
         }
     }
