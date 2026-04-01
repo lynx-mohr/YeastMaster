@@ -3169,52 +3169,36 @@ body.light-mode .wizard-checklist li.active-item { color: #111; }
 }
 
 /* =========================================
-   --- DYNAMISKA KALKYLATOR-BOXAR: LIGHT MODE FIX ---
+   --- PITCH CALCULATOR: LIGHT MODE FIX 2.0 ---
    ========================================= */
 
-/* 1. Paketrutorna ("Cells in pack" / "Mfg Date") */
-/* Fångar upp element via klasser eller hårdkodade bakgrundsfärger */
-body.light-mode .package-row,
-body.light-mode .yeast-package,
-body.light-mode .pack-item,
-body.light-mode div[style*="background-color: #222"],
-body.light-mode div[style*="background-color: #1a1a1a"] {
+/* 1. Lådorna för jästpaketen (Hittar rutor som innehåller inmatningsfält) */
+body.light-mode .ym-modal-content div[style]:has(.ym-input-group) {
     background-color: #f1f1f1 !important;
     border: 1px solid #ccc !important;
+    /* Vi ser till att den snygga gröna kanten till vänster överlever! */
+    border-left: 4px solid #8CC63F !important; 
 }
 
-/* Fixar etiketterna inuti paketrutorna */
-body.light-mode .package-row label,
-body.light-mode .yeast-package label,
-body.light-mode div[style*="background-color: #222"] label,
-body.light-mode div[style*="background-color: #1a1a1a"] label {
+/* Etiketterna ovanför inmatningen ("Cells in pack", "Mfg date") */
+body.light-mode .ym-modal-content div[style]:has(.ym-input-group) label {
     color: #555 !important;
 }
 
-/* 2. Resultatrutan i botten (Combined Viable Cells) */
-body.light-mode #pitch-result,
-body.light-mode div[style*="background-color: #444"],
-body.light-mode div[style*="background-color: #333"] {
+/* 2. Text inuti Resultat-rutan */
+body.light-mode #pitch-result {
+    color: #111 !important;
+}
+
+/* Tvinga all ljus text (som "Target:" och "Pack 1...") att bli mörk, 
+   MEN bevara den gröna färgen (RGB 140, 198, 63) och guld/gul för varningar */
+body.light-mode #pitch-result span:not([style*="140, 198, 63"]):not([style*="8CC63F"]):not([style*="ffcc00"]),
+body.light-mode #pitch-result strong {
+    color: #444 !important;
+}
+
+/* 3. Den inre bakgrundsrutan runt "Combined Viable Cells" */
+body.light-mode #pitch-result div[style] {
     background-color: #e8e8e8 !important;
-    border-color: #ccc !important;
-    color: #111111 !important;
-}
-
-/* 3. Tvinga vit/ljusgrå text från JavaScriptet att bli mörk och läsbar */
-body.light-mode #pitch-result span[style*="color: #fff"],
-body.light-mode #pitch-result span[style*="color: white"],
-body.light-mode #pitch-result span[style*="color: var(--text-main)"] {
-    color: #111111 !important;
-}
-
-body.light-mode #pitch-result span[style*="color: #aaa"],
-body.light-mode #pitch-result span[style*="color: #ccc"],
-body.light-mode #pitch-result span[style*="color: #999"],
-body.light-mode #pitch-result span[style*="color: var(--text-dim)"] {
-    color: #555555 !important;
-}
-
-/* 4. Valfritt: Gör den neongröna färgen aningen mörkare för bättre kontrast på ljus bakgrund */
-body.light-mode #pitch-result span[style*="color: #8CC63F"] {
-    color: #5b9e22 !important;
+    border: 1px solid #ccc !important;
 }
