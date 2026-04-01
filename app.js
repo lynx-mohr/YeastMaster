@@ -3432,45 +3432,6 @@ function handleOutsideClick(event) {
 document.addEventListener('click', handleOutsideClick, true);
 
 // ==========================================
-// --- PITCH CALCULATOR LOGIK ---
-// ==========================================
-
-function selectCalc(type, clickedBtn) {
-    // 1. Återställ alla huvudknappar
-    const mainButtons = document.querySelectorAll('#main-calc-buttons .ym-btn-outline');
-    mainButtons.forEach(btn => btn.classList.remove('active'));
-
-    // 2. Sätt den klickade knappen till aktiv
-    clickedBtn.classList.add('active');
-
-    // 3. Hantera undermenyn för "Yeast Bank"
-    const subOptions = document.getElementById('bank-sub-options');
-    
-    if (type === 'bank') {
-        subOptions.style.display = 'block';
-    } else {
-        subOptions.style.display = 'none';
-        
-        // Återställ även undermenyns knappar om man klickar bort från Yeast Bank
-        const subButtons = document.querySelectorAll('.sub-btn');
-        subButtons.forEach(btn => btn.classList.remove('active'));
-    }
-    
-    // (Här kommer vi senare lägga in logik för att visa rätt input-fält för rätt kalkylator)
-}
-
-function selectSub(type, clickedBtn) {
-    // 1. Återställ alla underknappar
-    const subButtons = document.querySelectorAll('.sub-btn');
-    subButtons.forEach(btn => btn.classList.remove('active'));
-
-    // 2. Sätt den klickade till aktiv
-    clickedBtn.classList.add('active');
-    
-    // (Här kommer logiken för att räkna ut stege från Single Loop vs Wash)
-}
-
-// ==========================================
 // --- ÖPPNA/STÄNG PITCH CALCULATOR MODAL ---
 // ==========================================
 
@@ -3484,7 +3445,7 @@ function closePitchCalcModal() {
     modal.style.display = 'none';
 }
 
-// (Frivilligt) Stäng rutan om man klickar utanför den (på den mörka bakgrunden)
+// Stäng rutan om man klickar utanför den (på den mörka bakgrunden)
 window.addEventListener('click', function(event) {
     const modal = document.getElementById('pitch-calc-modal');
     if (event.target === modal) {
@@ -3500,15 +3461,16 @@ window.addEventListener('click', function(event) {
 let currentCalcType = '';
 
 function selectCalc(type, clickedBtn) {
-    // 1. Återställ alla huvudknappar
-    const mainButtons = document.querySelectorAll('#main-calc-buttons .ym-btn-outline');
-    mainButtons.forEach(btn => btn.classList.remove('active'));
-
-    // 2. Sätt den klickade knappen till aktiv
-    clickedBtn.classList.add('active');
-    
-    // Spara valet globalt
     currentCalcType = type;
+
+    // 1. Dölj hela rutan med de 4 valknapparna
+    document.getElementById('main-calc-buttons').style.display = 'none';
+
+    // 2. Visa den nya "Selected"-raden och skriv ut knappens text
+    const header = document.getElementById('selected-yeast-header');
+    const headerText = document.getElementById('selected-yeast-text');
+    headerText.innerText = clickedBtn.innerText;
+    header.style.display = 'flex';
 
     // 3. Hantera undermenyn för "Yeast Bank"
     const subOptions = document.getElementById('bank-sub-options');
@@ -3520,7 +3482,7 @@ function selectCalc(type, clickedBtn) {
         subButtons.forEach(btn => btn.classList.remove('active'));
     }
 
-    // 4. Visa inmatningsfälten och dölj gamla resultat
+    // 4. Visa själva kalkylatorfälten och dölj gamla resultat
     document.getElementById('calc-input-section').style.display = 'block';
     document.getElementById('calc-result-box').style.display = 'none';
 
@@ -3537,7 +3499,35 @@ function selectCalc(type, clickedBtn) {
             </div>
         `;
     }
-    // (Här bygger vi in fälten för liquid, slurry och bank senare!)
+    // Fält för Liquid, Slurry och Bank kommer här senare!
+}
+
+function selectSub(type, clickedBtn) {
+    // 1. Återställ alla underknappar
+    const subButtons = document.querySelectorAll('.sub-btn');
+    subButtons.forEach(btn => btn.classList.remove('active'));
+
+    // 2. Sätt den klickade till aktiv
+    clickedBtn.classList.add('active');
+    
+    // (Här kommer logiken för att räkna ut stege från Single Loop vs Wash)
+}
+
+function resetCalcSelection() {
+    currentCalcType = '';
+    
+    // Visa de 4 knapparna igen
+    document.getElementById('main-calc-buttons').style.display = 'grid';
+    
+    // Dölj "Selected"-raden, undermenyer, inmatningsfält och resultat
+    document.getElementById('selected-yeast-header').style.display = 'none';
+    document.getElementById('bank-sub-options').style.display = 'none';
+    document.getElementById('calc-input-section').style.display = 'none';
+    document.getElementById('calc-result-box').style.display = 'none';
+
+    // Avmarkera alla knappar så de ser nollställda ut
+    const mainButtons = document.querySelectorAll('#main-calc-buttons .ym-btn-outline');
+    mainButtons.forEach(btn => btn.classList.remove('active'));
 }
 
 // ==========================================
@@ -3551,14 +3541,11 @@ function calculatePitch() {
     const pitchRate = parseFloat(document.getElementById('calc-rate').value);
 
     // 2. Omvandla Specific Gravity (SG) till grader Plato (°P)
-    // Detta är standardformeln som alla bryggprogram använder:
     const plato = 259 - (259 / ogSG);
 
     // 3. The Universal Pitch Rate Formula
     // Totalt antal celler (i miljoner) = Rate * Volym(ml) * Plato
     const totalCellsMillion = pitchRate * (volLiters * 1000) * plato;
-    
-    // Gör om till Miljarder (Billions) för att det är lättare att läsa
     const totalCellsBillion = totalCellsMillion / 1000;
 
     let resultHTML = `<strong style="color: #fff;">Target:</strong> ${totalCellsBillion.toFixed(1)} Billion cells<br><br>`;

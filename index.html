@@ -525,6 +525,11 @@
         <h3>Pitch Calculators</h3>
         <p class="lab-description">Choose your yeast source:</p>
 
+<div id="selected-yeast-header" style="display: none; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px dashed #444;">
+            <h4 style="margin: 0; color: #8CC63F;">Selected: <span id="selected-yeast-text" style="color: #fff;"></span></h4>
+            <button onclick="resetCalcSelection()" style="background: none; border: 1px solid #555; color: #aaa; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em;">Change</button>
+        </div>
+
         <div class="calc-btn-grid" id="main-calc-buttons">
             <button class="ym-btn-outline" onclick="selectCalc('dry', this)">Dry Yeast</button>
             <button class="ym-btn-outline" onclick="selectCalc('liquid', this)">Liquid Yeast</button>
