@@ -3640,13 +3640,13 @@ function calculatePitch() {
             
             resultHTML += `
                 <span style="color: #ffcc00; font-size: 1.1em;">⚠️ <strong>Warning:</strong> You are short ${shortfall.toFixed(1)}B cells.</span><br><br>
-                <strong style="color: #fff;">Recommendation:</strong><br>
+                <strong style="color: var(--text-main);">Recommendation:</strong><br>
                 <div style="margin-top: 8px; border-left: 2px solid #8CC63F; padding-left: 10px; line-height: 1.5; margin-bottom: 20px;">
-                    <span style="color: #ccc;">Option A:</span> Add another pack to your inventory above to cover the gap.<br>
-                    <span style="color: #ccc;">Option B:</span> Make a <strong>${starterLiters.toFixed(2)} Liter starter</strong> (at SG 1.036 - 1.040) on a stir plate to grow the missing cells.
+                    <span style="color: var(--text-dim);">Option A:</span> <span style="color: var(--text-main);">Add another pack to your inventory above to cover the gap.</span><br>
+                    <span style="color: var(--text-dim);">Option B:</span> <span style="color: var(--text-main);">Make a <strong>${starterLiters.toFixed(2)} Liter starter</strong> (at SG 1.036 - 1.040) on a stir plate to grow the missing cells.</span>
                 </div>
                 
-                <button onclick="closePitchCalcModal(); openAcademyModule('starters');" class="ym-btn-outline" style="width: 100%; border-color: #555; color: #ccc;">
+                <button onclick="closePitchCalcModal(); openAcademyModule('starters');" class="ym-btn-outline" style="width: 100%;">
                     📖 Read: How to make a Yeast Starter
                 </button>
             `;

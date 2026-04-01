@@ -55,6 +55,59 @@ body.light-mode .oled-screen {
 body.light-mode .separator-line { border-top: 2px solid #eee; }
 body.light-mode .btn-primary { border: 1px solid #ccc; }
 
+/* =========================================
+   --- PITCH CALCULATOR: LIGHT MODE ---
+   ========================================= */
+
+/* Huvudrutan */
+body.light-mode .ym-modal-content {
+    background-color: #ffffff;
+    color: #111111;
+    /* Vi behåller den snygga gröna kanten, men gör skuggan ljusare! */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); 
+}
+
+/* Texter och Rubriker */
+body.light-mode .ym-modal-content h3,
+body.light-mode .ym-modal-content h4,
+body.light-mode .ym-modal-content p,
+body.light-mode .lab-description {
+    color: #111111;
+}
+
+/* Stäng-krysset */
+body.light-mode .ym-close-btn {
+    color: #888;
+}
+body.light-mode .ym-close-btn:hover {
+    color: #8CC63F;
+}
+
+/* Inmatningsfält och Dropdowns */
+body.light-mode .ym-input-group label {
+    color: #666;
+    font-weight: 700;
+}
+
+body.light-mode .ym-input-group input,
+body.light-mode .ym-select {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    color: #111111;
+}
+
+body.light-mode .ym-input-group input:focus,
+body.light-mode .ym-select:focus {
+    border-color: #8CC63F;
+    background-color: #ffffff;
+    box-shadow: 0 0 8px rgba(140, 198, 63, 0.2);
+}
+
+/* Streckad linje för undermenyn (Yeast Bank) */
+body.light-mode .sub-options-container {
+    border-top-color: #ddd;
+}
+
 /* --- 2. CONTAINERS & AUTH --- */
 #login-container, #claim-container {
     display: none;
