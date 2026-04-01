@@ -539,6 +539,39 @@
                 <button class="ym-btn-outline sub-btn" onclick="selectSub('wash', this)">Whole Slant Wash</button>
             </div>
         </div>
+        <div id="calc-input-section" style="display: none; margin-top: 25px; padding-top: 20px; border-top: 1px solid #333;">
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div class="ym-input-group">
+                    <label>Batch Size (Liters)</label>
+                    <input type="number" id="calc-vol" value="20" step="0.5">
+                </div>
+                <div class="ym-input-group">
+                    <label>Original Gravity (SG)</label>
+                    <input type="number" id="calc-og" value="1.050" step="0.001">
+                </div>
+            </div>
+
+            <div class="ym-input-group" style="margin-bottom: 20px;">
+                <label>Target Pitch Rate</label>
+                <select id="calc-rate" class="ym-select">
+                    <option value="0.35">0.35 (Low / Manufacturer rec.)</option>
+                    <option value="0.50">0.50 (Standard Ale)</option>
+                    <option value="0.75" selected>0.75 (Pro Ale Pitch)</option>
+                    <option value="1.00">1.00 (High Gravity Ale)</option>
+                    <option value="1.50">1.50 (Standard Lager)</option>
+                </select>
+            </div>
+
+            <div id="dynamic-extra-fields"></div>
+
+            <button class="ym-btn-primary" onclick="calculatePitch()" style="width: 100%; margin-top: 10px;">Calculate</button>
+            
+            <div id="calc-result-box" style="display: none; margin-top: 20px; padding: 15px; background: rgba(140, 198, 63, 0.1); border-left: 4px solid #8CC63F; border-radius: 4px;">
+                <h4 style="margin: 0 0 5px 0; color: #8CC63F;">Results</h4>
+                <p id="calc-result-text" style="margin: 0; font-size: 0.95em; line-height: 1.4;"></p>
+            </div>
+        </div>
         
     </div>
 </div>

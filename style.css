@@ -3006,3 +3006,51 @@ body.light-mode .wizard-checklist li.active-item { color: #111; }
     from { transform: translateY(30px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
+
+/* --- CALCULATOR INPUTS --- */
+.ym-input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.ym-input-group label {
+    font-size: 0.85em;
+    color: #aaa;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ym-input-group input,
+.ym-select {
+    background-color: #222;
+    border: 1px solid #444;
+    color: #f1f1f1;
+    padding: 10px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 1em;
+    transition: border-color 0.2s;
+}
+
+.ym-input-group input:focus,
+.ym-select:focus {
+    outline: none;
+    border-color: #8CC63F;
+}
+
+.ym-btn-primary {
+    background-color: #8CC63F;
+    color: #111;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.ym-btn-primary:hover {
+    background-color: #7ab036;
+}

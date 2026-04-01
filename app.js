@@ -3491,3 +3491,100 @@ window.addEventListener('click', function(event) {
         closePitchCalcModal();
     }
 });
+
+// ==========================================
+// --- PITCH CALCULATOR LOGIK ---
+// ==========================================
+
+// Global variabel för att minnas vilken jästtyp vi räknar på
+let currentCalcType = '';
+
+function selectCalc(type, clickedBtn) {
+    // 1. Återställ alla huvudknappar
+    const mainButtons = document.querySelectorAll('#main-calc-buttons .ym-btn-outline');
+    mainButtons.forEach(btn => btn.classList.remove('active'));
+
+    // 2. Sätt den klickade knappen till aktiv
+    clickedBtn.classList.add('active');
+    
+    // Spara valet globalt
+    currentCalcType = type;
+
+    // 3. Hantera undermenyn för "Yeast Bank"
+    const subOptions = document.getElementById('bank-sub-options');
+    if (type === 'bank') {
+        subOptions.style.display = 'block';
+    } else {
+        subOptions.style.display = 'none';
+        const subButtons = document.querySelectorAll('.sub-btn');
+        subButtons.forEach(btn => btn.classList.remove('active'));
+    }
+
+    // 4. Visa inmatningsfälten och dölj gamla resultat
+    document.getElementById('calc-input-section').style.display = 'block';
+    document.getElementById('calc-result-box').style.display = 'none';
+
+    // 5. Bygg in "extrafält" beroende på vilken jästtyp man klickade på
+    const dynamicSection = document.getElementById('dynamic-extra-fields');
+    dynamicSection.innerHTML = ''; // Rensa tidigare fält
+
+    if (type === 'dry') {
+        dynamicSection.innerHTML = `
+            <div class="ym-input-group" style="margin-bottom: 20px;">
+                <label>Cells per gram (Billions)</label>
+                <input type="number" id="calc-dry-density" value="10" step="1">
+                <small style="color: #777; font-size: 0.8em; margin-top: 4px;">Standard for dry yeast is ~10-20 billion cells/g. Defaulting to a safe 10B.</small>
+            </div>
+        `;
+    }
+    // (Här bygger vi in fälten för liquid, slurry och bank senare!)
+}
+
+// ==========================================
+// --- THE MASTER CALCULATION ---
+// ==========================================
+
+function calculatePitch() {
+    // 1. Hämta värdena från grundfälten
+    const volLiters = parseFloat(document.getElementById('calc-vol').value);
+    const ogSG = parseFloat(document.getElementById('calc-og').value);
+    const pitchRate = parseFloat(document.getElementById('calc-rate').value);
+
+    // 2. Omvandla Specific Gravity (SG) till grader Plato (°P)
+    // Detta är standardformeln som alla bryggprogram använder:
+    const plato = 259 - (259 / ogSG);
+
+    // 3. The Universal Pitch Rate Formula
+    // Totalt antal celler (i miljoner) = Rate * Volym(ml) * Plato
+    const totalCellsMillion = pitchRate * (volLiters * 1000) * plato;
+    
+    // Gör om till Miljarder (Billions) för att det är lättare att läsa
+    const totalCellsBillion = totalCellsMillion / 1000;
+
+    let resultHTML = `<strong style="color: #fff;">Target:</strong> ${totalCellsBillion.toFixed(1)} Billion cells<br><br>`;
+
+    // 4. Räkna ut slutresultatet baserat på jästtyp
+    if (currentCalcType === 'dry') {
+        const cellsPerGram = parseFloat(document.getElementById('calc-dry-density').value);
+        
+        // Hur många gram behöver vi?
+        const gramsNeeded = totalCellsBillion / cellsPerGram;
+        
+        // Hur många standardpaket à 11 gram är det?
+        const packetsNeeded = Math.ceil(gramsNeeded / 11); 
+
+        resultHTML += `
+            <span style="font-size: 1.2em; color: #fff;">
+                ⚖️ You need to pitch <strong>${gramsNeeded.toFixed(1)} grams</strong> of dry yeast.
+            </span><br>
+            <span style="color: #aaa; font-size: 0.9em;">(Approx. ${packetsNeeded} standard 11g packets)</span>
+        `;
+    }
+
+    // 5. Skriv ut resultatet på skärmen
+    const resultBox = document.getElementById('calc-result-box');
+    const resultText = document.getElementById('calc-result-text');
+    
+    resultText.innerHTML = resultHTML;
+    resultBox.style.display = 'block';
+}
