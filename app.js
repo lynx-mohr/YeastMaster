@@ -3430,3 +3430,42 @@ function handleOutsideClick(event) {
 // Vi behöver bara lyssna på 'click' nu, mobilen skickar ändå ett klick efter touchen.
 // (Jag tog bort touchend-lyssnaren för att göra det ännu stabilare på iOS/Android)
 document.addEventListener('click', handleOutsideClick, true);
+
+// ==========================================
+// --- PITCH CALCULATOR LOGIK ---
+// ==========================================
+
+function selectCalc(type, clickedBtn) {
+    // 1. Återställ alla huvudknappar
+    const mainButtons = document.querySelectorAll('#main-calc-buttons .ym-btn-outline');
+    mainButtons.forEach(btn => btn.classList.remove('active'));
+
+    // 2. Sätt den klickade knappen till aktiv
+    clickedBtn.classList.add('active');
+
+    // 3. Hantera undermenyn för "Yeast Bank"
+    const subOptions = document.getElementById('bank-sub-options');
+    
+    if (type === 'bank') {
+        subOptions.style.display = 'block';
+    } else {
+        subOptions.style.display = 'none';
+        
+        // Återställ även undermenyns knappar om man klickar bort från Yeast Bank
+        const subButtons = document.querySelectorAll('.sub-btn');
+        subButtons.forEach(btn => btn.classList.remove('active'));
+    }
+    
+    // (Här kommer vi senare lägga in logik för att visa rätt input-fält för rätt kalkylator)
+}
+
+function selectSub(type, clickedBtn) {
+    // 1. Återställ alla underknappar
+    const subButtons = document.querySelectorAll('.sub-btn');
+    subButtons.forEach(btn => btn.classList.remove('active'));
+
+    // 2. Sätt den klickade till aktiv
+    clickedBtn.classList.add('active');
+    
+    // (Här kommer logiken för att räkna ut stege från Single Loop vs Wash)
+}

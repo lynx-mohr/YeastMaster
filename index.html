@@ -413,6 +413,28 @@
                     <img src="librarian-light.png" class="lib-light" alt="Librarian BG">
                 </div>
 
+                <div class="lab-card pitch-calc-card">
+    <div class="card-header">
+        <h3>Pitch Calculators</h3>
+        </div>
+    
+    <p class="lab-description">Choose your yeast source to calculate the optimal pitch rate and starter steps.</p>
+
+    <div class="calc-btn-grid" id="main-calc-buttons">
+        <button class="ym-btn-outline" onclick="selectCalc('dry', this)">Dry Yeast</button>
+        <button class="ym-btn-outline" onclick="selectCalc('liquid', this)">Liquid Yeast</button>
+        <button class="ym-btn-outline" onclick="selectCalc('slurry', this)">Slurry</button>
+        <button class="ym-btn-outline" onclick="selectCalc('bank', this)">From Yeast Bank</button>
+    </div>
+
+    <div id="bank-sub-options" class="sub-options-container" style="display: none;">
+        <h4>Inoculation Method</h4>
+        <div class="calc-btn-grid sub-grid">
+            <button class="ym-btn-outline sub-btn" onclick="selectSub('loop', this)">Single Loop</button>
+            <button class="ym-btn-outline sub-btn" onclick="selectSub('wash', this)">Whole Slant Wash</button>
+        </div>
+    </div>
+</div>
                 <div class="academy-card" onclick="openAcademyModule('starters')">
                     <div class="academy-card-icon">🧪</div>
                     <div class="academy-card-content">

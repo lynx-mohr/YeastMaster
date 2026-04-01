@@ -2888,3 +2888,74 @@ body.light-mode .wizard-dot.active { background: var(--accent-color); }
 body.light-mode .wizard-sidebar, body.light-mode .wizard-container { background: #fff; border-color: #ddd; }
 body.light-mode .wizard-checklist li { border-bottom-color: #eee; color: #aaa; }
 body.light-mode .wizard-checklist li.active-item { color: #111; }
+
+/* --- PITCH CALCULATOR KORT --- */
+.lab-card {
+    background-color: #1a1a1a; /* Mörk bakgrund */
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: #f1f1f1;
+}
+
+.lab-description {
+    font-size: 0.9em;
+    color: #aaa;
+    margin-bottom: 15px;
+}
+
+/* Grid för knapparna (2x2 på stora skärmar, 1x4 på mobiler om det behövs) */
+.calc-btn-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+/* YeastMaster Standardknapp */
+.ym-btn-outline {
+    background-color: rgba(140, 198, 63, 0.05);
+    border: 2px solid #8CC63F;
+    color: #8CC63F;
+    padding: 14px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    font-family: inherit;
+    transition: all 0.2s ease-in-out;
+}
+
+.ym-btn-outline:hover {
+    background-color: rgba(140, 198, 63, 0.2);
+}
+
+/* Aktivt läge (Klickad knapp) */
+.ym-btn-outline.active {
+    background-color: #8CC63F;
+    color: #111111; /* Mörk text på grön bakgrund */
+    box-shadow: 0 0 10px rgba(140, 198, 63, 0.4);
+}
+
+/* Sub-menyn för Yeast Bank */
+.sub-options-container {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px dashed #444;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.sub-options-container h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #8CC63F;
+    font-size: 0.95em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Animation för när undermenyn dyker upp */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
