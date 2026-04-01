@@ -3469,3 +3469,25 @@ function selectSub(type, clickedBtn) {
     
     // (Här kommer logiken för att räkna ut stege från Single Loop vs Wash)
 }
+
+// ==========================================
+// --- ÖPPNA/STÄNG PITCH CALCULATOR MODAL ---
+// ==========================================
+
+function openPitchCalcModal() {
+    const modal = document.getElementById('pitch-calc-modal');
+    modal.style.display = 'flex'; // 'flex' centrerar innehållet
+}
+
+function closePitchCalcModal() {
+    const modal = document.getElementById('pitch-calc-modal');
+    modal.style.display = 'none';
+}
+
+// (Frivilligt) Stäng rutan om man klickar utanför den (på den mörka bakgrunden)
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('pitch-calc-modal');
+    if (event.target === modal) {
+        closePitchCalcModal();
+    }
+});

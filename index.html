@@ -420,20 +420,13 @@
     
     <p class="lab-description">Choose your yeast source to calculate the optimal pitch rate and starter steps.</p>
 
-    <div class="calc-btn-grid" id="main-calc-buttons">
-        <button class="ym-btn-outline" onclick="selectCalc('dry', this)">Dry Yeast</button>
-        <button class="ym-btn-outline" onclick="selectCalc('liquid', this)">Liquid Yeast</button>
-        <button class="ym-btn-outline" onclick="selectCalc('slurry', this)">Slurry</button>
-        <button class="ym-btn-outline" onclick="selectCalc('bank', this)">From Yeast Bank</button>
+<div class="academy-card" onclick="openPitchCalcModal()">
+    <div class="academy-card-icon">🧮</div>
+    <div class="academy-card-content">
+        <h4>Pitch Calculators</h4>
+        <p>Calculate optimal pitch rates and starter steps.</p>
     </div>
-
-    <div id="bank-sub-options" class="sub-options-container" style="display: none;">
-        <h4>Inoculation Method</h4>
-        <div class="calc-btn-grid sub-grid">
-            <button class="ym-btn-outline sub-btn" onclick="selectSub('loop', this)">Single Loop</button>
-            <button class="ym-btn-outline sub-btn" onclick="selectSub('wash', this)">Whole Slant Wash</button>
-        </div>
-    </div>
+    <div class="academy-card-arrow">→</div>
 </div>
                 <div class="academy-card" onclick="openAcademyModule('starters')">
                     <div class="academy-card-icon">🧪</div>
@@ -536,6 +529,29 @@
         <button id="btn-start-tour" class="text-btn action-btn">Continue</button>
     </div>
 </div>
+<div id="pitch-calc-modal" class="ym-modal" style="display: none;">
+    <div class="ym-modal-content">
+        <span class="ym-close-btn" onclick="closePitchCalcModal()">&times;</span>
+        
+        <h3>Pitch Calculators</h3>
+        <p class="lab-description">Choose your yeast source:</p>
 
+        <div class="calc-btn-grid" id="main-calc-buttons">
+            <button class="ym-btn-outline" onclick="selectCalc('dry', this)">Dry Yeast</button>
+            <button class="ym-btn-outline" onclick="selectCalc('liquid', this)">Liquid Yeast</button>
+            <button class="ym-btn-outline" onclick="selectCalc('slurry', this)">Slurry</button>
+            <button class="ym-btn-outline" onclick="selectCalc('bank', this)">From Yeast Bank</button>
+        </div>
+
+        <div id="bank-sub-options" class="sub-options-container" style="display: none;">
+            <h4>Inoculation Method</h4>
+            <div class="calc-btn-grid sub-grid">
+                <button class="ym-btn-outline sub-btn" onclick="selectSub('loop', this)">Single Loop</button>
+                <button class="ym-btn-outline sub-btn" onclick="selectSub('wash', this)">Whole Slant Wash</button>
+            </div>
+        </div>
+        
+    </div>
+</div>
 </body>
 </html>
