@@ -3167,3 +3167,54 @@ body.light-mode .wizard-checklist li.active-item { color: #111; }
     box-sizing: border-box; /* Det här hindrar dem från att trycka ut rutan i sidled */
     width: 100%;
 }
+
+/* =========================================
+   --- DYNAMISKA KALKYLATOR-BOXAR: LIGHT MODE FIX ---
+   ========================================= */
+
+/* 1. Paketrutorna ("Cells in pack" / "Mfg Date") */
+/* Fångar upp element via klasser eller hårdkodade bakgrundsfärger */
+body.light-mode .package-row,
+body.light-mode .yeast-package,
+body.light-mode .pack-item,
+body.light-mode div[style*="background-color: #222"],
+body.light-mode div[style*="background-color: #1a1a1a"] {
+    background-color: #f1f1f1 !important;
+    border: 1px solid #ccc !important;
+}
+
+/* Fixar etiketterna inuti paketrutorna */
+body.light-mode .package-row label,
+body.light-mode .yeast-package label,
+body.light-mode div[style*="background-color: #222"] label,
+body.light-mode div[style*="background-color: #1a1a1a"] label {
+    color: #555 !important;
+}
+
+/* 2. Resultatrutan i botten (Combined Viable Cells) */
+body.light-mode #pitch-result,
+body.light-mode div[style*="background-color: #444"],
+body.light-mode div[style*="background-color: #333"] {
+    background-color: #e8e8e8 !important;
+    border-color: #ccc !important;
+    color: #111111 !important;
+}
+
+/* 3. Tvinga vit/ljusgrå text från JavaScriptet att bli mörk och läsbar */
+body.light-mode #pitch-result span[style*="color: #fff"],
+body.light-mode #pitch-result span[style*="color: white"],
+body.light-mode #pitch-result span[style*="color: var(--text-main)"] {
+    color: #111111 !important;
+}
+
+body.light-mode #pitch-result span[style*="color: #aaa"],
+body.light-mode #pitch-result span[style*="color: #ccc"],
+body.light-mode #pitch-result span[style*="color: #999"],
+body.light-mode #pitch-result span[style*="color: var(--text-dim)"] {
+    color: #555555 !important;
+}
+
+/* 4. Valfritt: Gör den neongröna färgen aningen mörkare för bättre kontrast på ljus bakgrund */
+body.light-mode #pitch-result span[style*="color: #8CC63F"] {
+    color: #5b9e22 !important;
+}
