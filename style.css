@@ -2963,34 +2963,41 @@ body.light-mode .wizard-checklist li.active-item { color: #111; }
 /* --- MODAL (POPUP) FÖR KÄLKYLATOR --- */
 .ym-modal {
     position: fixed;
-    z-index: 1000; /* Se till att den ligger överst av allt */
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.85); /* Halvgenomskinlig svart bakgrund */
-    backdrop-filter: blur(4px); /* Suddar ut bakgrunden lite extra */
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
-    align-items: center;
+    /* ÄNDRING: Bytt från 'center' till 'flex-start' och lagt till padding */
+    align-items: flex-start; 
+    padding: 5vh 15px; 
+    box-sizing: border-box;
 }
 
 .ym-modal-content {
     background-color: #1a1a1a;
     border: 1px solid #8CC63F; 
     border-radius: 12px;
-    width: 90%;
+    width: 100%; /* Sätter den till 100% av det tillgängliga utrymmet (som begränsas av max-width) */
     max-width: 500px;
     padding: 25px;
     position: relative;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     animation: slideIn 0.3s ease-out;
     max-height: 90vh; 
-    overflow-y: auto; /* Slår på vertikal scrollning om innehållet är för långt */
-        font-size: 16px; /* Tvingar en normal grundstorlek */
+    overflow-y: auto;
+    font-size: 16px;
     box-sizing: border-box;
-    overflow-x: hidden; /* Dödar den horisontella scrollbaren */
-    font-family: var(--font-main, sans-serif); /* Se till att den använder brödtext-typsnittet */
+    overflow-x: hidden;
+    font-family: var(--font-main, sans-serif);
+    
+    /* ÄNDRING: Detta centrerar rutan vertikalt om den är kort, 
+       men låter den växa säkert inuti den säkra padding-zonen om den är lång */
+    margin: auto; 
 }
 
 .ym-close-btn {

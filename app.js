@@ -3510,6 +3510,26 @@ function selectCalc(type, clickedBtn) {
     }
 }
 
+// ==========================================
+// --- ÅTERSTÄLL KALKYLATORN ("Change") ---
+// ==========================================
+function resetCalcSelection() {
+    currentCalcType = '';
+    
+    // Visa de 4 huvudknapparna igen
+    document.getElementById('main-calc-buttons').style.display = 'grid';
+    
+    // Dölj "Selected"-raden, undermenyer, inmatningsfält och resultat
+    document.getElementById('selected-yeast-header').style.display = 'none';
+    document.getElementById('bank-sub-options').style.display = 'none';
+    document.getElementById('calc-input-section').style.display = 'none';
+    document.getElementById('calc-result-box').style.display = 'none';
+
+    // Avmarkera alla knappar så de ser nollställda ut
+    const mainButtons = document.querySelectorAll('#main-calc-buttons .ym-btn-outline');
+    mainButtons.forEach(btn => btn.classList.remove('active'));
+}
+
 function addLiquidPack() {
     const container = document.getElementById('liquid-packs-container');
     const today = new Date().toISOString().split('T')[0];
