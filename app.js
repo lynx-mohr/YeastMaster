@@ -3457,36 +3457,30 @@ window.addEventListener('click', function(event) {
 // --- PITCH CALCULATOR LOGIK ---
 // ==========================================
 
-// Global variabel för att minnas vilken jästtyp vi räknar på
 let currentCalcType = '';
 
 function selectCalc(type, clickedBtn) {
     currentCalcType = type;
 
-    // 1. Dölj hela rutan med de 4 valknapparna
+    // 1. Dölj rutan med 4 knappar & Visa "Selected"-raden
     document.getElementById('main-calc-buttons').style.display = 'none';
-
-    // 2. Visa den nya "Selected"-raden och skriv ut knappens text
     const header = document.getElementById('selected-yeast-header');
-    const headerText = document.getElementById('selected-yeast-text');
-    headerText.innerText = clickedBtn.innerText;
+    document.getElementById('selected-yeast-text').innerText = clickedBtn.innerText;
     header.style.display = 'flex';
 
-    // 3. Hantera undermenyn för "Yeast Bank"
+    // 2. Hantera undermenyn för "Yeast Bank"
     const subOptions = document.getElementById('bank-sub-options');
     if (type === 'bank') {
         subOptions.style.display = 'block';
     } else {
         subOptions.style.display = 'none';
-        const subButtons = document.querySelectorAll('.sub-btn');
-        subButtons.forEach(btn => btn.classList.remove('active'));
     }
 
-    // 4. Visa själva kalkylatorfälten och dölj gamla resultat
+    // 3. Visa inmatningsfälten och dölj resultat
     document.getElementById('calc-input-section').style.display = 'block';
     document.getElementById('calc-result-box').style.display = 'none';
 
-    // 5. Bygg in "extrafält" beroende på vilken jästtyp man klickade på
+    // 4. Bygg in "extrafält" beroende på jästtyp
     const dynamicSection = document.getElementById('dynamic-extra-fields');
     dynamicSection.innerHTML = ''; // Rensa tidigare fält
 
@@ -3495,83 +3489,111 @@ function selectCalc(type, clickedBtn) {
             <div class="ym-input-group" style="margin-bottom: 20px;">
                 <label>Cells per gram (Billions)</label>
                 <input type="number" id="calc-dry-density" value="10" step="1">
-                <small style="color: #777; font-size: 0.8em; margin-top: 4px;">Standard for dry yeast is ~10-20 billion cells/g. Defaulting to a safe 10B.</small>
+                <small style="color: #777; font-size: 0.8em; margin-top: 4px;">Standard for dry yeast is ~10-20 billion cells/g.</small>
+            </div>
+        `;
+    } 
+    else if (type === 'liquid') {
+        // Räkna ut dagens datum för att sätta som standard i fältet
+        const today = new Date().toISOString().split('T')[0];
+        
+        dynamicSection.innerHTML = `
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                <div class="ym-input-group">
+                    <label>Cells per pack (Billions)</label>
+                    <input type="number" id="calc-liquid-pack" value="100" step="10">
+                </div>
+                <div class="ym-input-group">
+                    <label>Manufacture Date</label>
+                    <input type="date" id="calc-liquid-date" value="${today}">
+                </div>
             </div>
         `;
     }
-    // Fält för Liquid, Slurry och Bank kommer här senare!
+    // Fält för Slurry och Bank bygger vi snart!
 }
 
-function selectSub(type, clickedBtn) {
-    // 1. Återställ alla underknappar
-    const subButtons = document.querySelectorAll('.sub-btn');
-    subButtons.forEach(btn => btn.classList.remove('active'));
+// ... behåll din resetCalcSelection() och selectSub() precis som de är ...
 
-    // 2. Sätt den klickade till aktiv
-    clickedBtn.classList.add('active');
-    
-    // (Här kommer logiken för att räkna ut stege från Single Loop vs Wash)
-}
-
-function resetCalcSelection() {
-    currentCalcType = '';
-    
-    // Visa de 4 knapparna igen
-    document.getElementById('main-calc-buttons').style.display = 'grid';
-    
-    // Dölj "Selected"-raden, undermenyer, inmatningsfält och resultat
-    document.getElementById('selected-yeast-header').style.display = 'none';
-    document.getElementById('bank-sub-options').style.display = 'none';
-    document.getElementById('calc-input-section').style.display = 'none';
-    document.getElementById('calc-result-box').style.display = 'none';
-
-    // Avmarkera alla knappar så de ser nollställda ut
-    const mainButtons = document.querySelectorAll('#main-calc-buttons .ym-btn-outline');
-    mainButtons.forEach(btn => btn.classList.remove('active'));
-}
 
 // ==========================================
 // --- THE MASTER CALCULATION ---
 // ==========================================
 
 function calculatePitch() {
-    // 1. Hämta värdena från grundfälten
     const volLiters = parseFloat(document.getElementById('calc-vol').value);
     const ogSG = parseFloat(document.getElementById('calc-og').value);
     const pitchRate = parseFloat(document.getElementById('calc-rate').value);
 
-    // 2. Omvandla Specific Gravity (SG) till grader Plato (°P)
     const plato = 259 - (259 / ogSG);
-
-    // 3. The Universal Pitch Rate Formula
-    // Totalt antal celler (i miljoner) = Rate * Volym(ml) * Plato
     const totalCellsMillion = pitchRate * (volLiters * 1000) * plato;
     const totalCellsBillion = totalCellsMillion / 1000;
 
     let resultHTML = `<strong style="color: #fff;">Target:</strong> ${totalCellsBillion.toFixed(1)} Billion cells<br><br>`;
 
-    // 4. Räkna ut slutresultatet baserat på jästtyp
+    // --- TORRJÄST ---
     if (currentCalcType === 'dry') {
         const cellsPerGram = parseFloat(document.getElementById('calc-dry-density').value);
-        
-        // Hur många gram behöver vi?
         const gramsNeeded = totalCellsBillion / cellsPerGram;
-        
-        // Hur många standardpaket à 11 gram är det?
         const packetsNeeded = Math.ceil(gramsNeeded / 11); 
 
         resultHTML += `
             <span style="font-size: 1.2em; color: #fff;">
-                ⚖️ You need to pitch <strong>${gramsNeeded.toFixed(1)} grams</strong> of dry yeast.
+                ⚖️ Pitch <strong>${gramsNeeded.toFixed(1)} grams</strong> of dry yeast.
             </span><br>
             <span style="color: #aaa; font-size: 0.9em;">(Approx. ${packetsNeeded} standard 11g packets)</span>
         `;
     }
+    
+    // --- FLYTANDE JÄST ---
+    else if (currentCalcType === 'liquid') {
+        const cellsPerPack = parseFloat(document.getElementById('calc-liquid-pack').value);
+        const mfgDateInput = document.getElementById('calc-liquid-date').value;
 
-    // 5. Skriv ut resultatet på skärmen
+        if (!mfgDateInput) {
+            resultHTML += `<span style="color: #ff6b6b;">Please enter a valid manufacture date.</span>`;
+        } else {
+            // Räkna ut ålder i dagar
+            const mfgDate = new Date(mfgDateInput);
+            const todayDate = new Date();
+            const timeDiff = todayDate.getTime() - mfgDate.getTime();
+            let daysOld = Math.floor(timeDiff / (1000 * 3600 * 24));
+            
+            if (daysOld < 0) daysOld = 0; // Ifall man valt ett framtida datum av misstag
+
+            // Standardformel för Liquid Yeast Viability (-0.7% per dag)
+            let viability = 100 - (daysOld * 0.7);
+            if (viability < 10) viability = 10; // Jäst blir sällan 100% död, sätter en botten på 10%
+
+            const viableCellsPerPack = cellsPerPack * (viability / 100);
+            const packsNeeded = Math.ceil(totalCellsBillion / viableCellsPerPack);
+            const shortfall = totalCellsBillion - viableCellsPerPack;
+
+            // Skriv ut jästens hälsostatus
+            resultHTML += `
+                <div style="background: rgba(0,0,0,0.25); padding: 12px; border-radius: 6px; border: 1px solid #444; margin-bottom: 12px;">
+                    <strong style="color: #8CC63F;">Yeast Health:</strong> ${viability.toFixed(0)}% Viability<br>
+                    <span style="color: #aaa; font-size: 0.9em;">(${daysOld} days old = ${viableCellsPerPack.toFixed(1)}B living cells per pack)</span>
+                </div>
+            `;
+
+            // Ge rekommendation
+            if (viableCellsPerPack >= totalCellsBillion) {
+                resultHTML += `<span style="color: #8CC63F; font-size: 1.1em;">✅ <strong>1 package</strong> is enough! Pitch directly.</span>`;
+            } else {
+                resultHTML += `
+                    <span style="color: #ffcc00; font-size: 1.1em;">⚠️ <strong>Warning:</strong> You are short ${shortfall.toFixed(1)}B cells (using 1 pack).</span><br><br>
+                    <strong style="color: #fff;">Recommendation:</strong><br>
+                    <span style="color: #ccc;">Option A:</span> Buy and pitch <strong>${packsNeeded} packages</strong>.<br>
+                    <span style="color: #ccc;">Option B:</span> Make a <strong>Yeast Starter</strong> to multiply your 1 package.
+                `;
+            }
+        }
+    }
+
+    // Skriv ut resultatet
     const resultBox = document.getElementById('calc-result-box');
     const resultText = document.getElementById('calc-result-text');
-    
     resultText.innerHTML = resultHTML;
     resultBox.style.display = 'block';
 }
