@@ -1857,6 +1857,156 @@ const yeastDescriptions = {
             <li><strong style="color: #fff;">High Ester:</strong> Pushed to 21 °C and ramping up to 23 °C. This stresses the yeast to maximize the peach and apricot notes.</li>
             <li><strong style="color: #fff;">Low Ester:</strong> Fermented cool (18 °C) to tame the fruitiness, making it behave more like a standard West Coast IPA yeast.</li>
         </ul>
+    `,
+
+"wlp090": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">WLP090 San Diego Super</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> None directly. Similar to WLP001 but faster/higher flocc.
+        </p>
+        <p>A true giant in the craft beer world. It ferments blazingly fast, finishes with an impossibly crisp profile, and drops out of suspension like a rock. If you are brewing a highly hopped Double IPA or West Coast IPA, this is your weapon of choice.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Standard:</strong> A reliable 19 °C fermentation, stepping up to 21 °C for a solid cleanup.</li>
+            <li><strong style="color: #fff;">Low / High Ester:</strong> Adjust the starting temperature to either suppress or slightly elevate the subtle fruit notes to balance your hop bill.</li>
+            <li><strong style="color: #fff;">Fast & Crisp:</strong> Pushes the yeast slightly warmer from the start (19.5 °C). This yeast is so clean that you can speed-run a West Coast IPA without generating off-flavors.</li>
+        </ul>
+    `,
+
+    "wyeast-1272": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Wyeast 1272 (American Ale II)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> WLP051 (California V)
+        </p>
+        <p>The fruitier cousin to standard American ale yeast (like US-05/WLP001). It produces a more complex, slightly nutty, and softer profile. It leaves a bit more residual sweetness, making it the absolute perfect choice for Amber Ales, Pale Ales, and Brown Ales.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Standard & Low Ester:</strong> Keeps the yeast grounded for a clean American profile, slightly suppressing its signature nutty notes.</li>
+            <li><strong style="color: #fff;">Amber Nutty:</strong> Starts at 19.5 °C and ramps to 21 °C. This specific profile is designed to coax out the soft fruit and slightly nutty character that makes Amber ales shine.</li>
+        </ul>
+    `,
+
+    "imperial-a24": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Imperial A24 (Dry Hop)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> Blend of Barbarian (Conan) & Citrus strains.
+        </p>
+        <p>A modern marvel! This is a unique blend of two amazing IPA strains designed specifically to handle massive dry-hop charges. It provides an incredible blast of peach, apricot, and citrus while keeping the hops in suspension for that perfect haze.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Standard:</strong> A steady 19 °C baseline that balances the yeast expression with your hops.</li>
+            <li><strong style="color: #fff;">Hazy Citrus:</strong> Starts warm at 20 °C and pushes to 22.5 °C. Stresses the blend to produce massive amounts of its own citrus esters to back up your tropical hops.</li>
+            <li><strong style="color: #fff;">Dry Hop Burst:</strong> A cooler start (18.5 °C) to establish a clean base, then a rapid rise to 22 °C right when you drop in your heavy dry hops to maximize biotransformation.</li>
+        </ul>
+    `,
+
+    "wlp530": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">WLP530 (Westmalle Trappist)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> Wyeast 3787, BE-256 (Dry version)
+        </p>
+        <p>The liquid original behind the famous Westmalle brewery. This is the undisputed king of dark, strong Belgian ales. It produces a gorgeous, complex symphony of plum, raisin, and mild spice, while easily chewing through massive amounts of sugar (up to 15% ABV).</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Standard:</strong> A controlled 19 °C to 21 °C profile. Keeps the intense Belgian character restrained for a more refined Dubbel.</li>
+            <li><strong style="color: #fff;">Trappist Ramp:</strong> The traditional monastery method. Pitch cool at 18 °C to avoid hot solvent alcohols, then let the yeast's own exothermic heat drive the tank up to 25 °C!</li>
+            <li><strong style="color: #fff;">Dark Fruit:</strong> Starts slightly warmer (20 °C) and pushes hard to 24 °C to maximize the rich plum and raisin esters needed for a massive Belgian Quad.</li>
+        </ul>
+    `,
+
+    "wyeast-3711": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Wyeast 3711 (French Saison)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> Belle Saison (Dry version), WLP590
+        </p>
+        <p>An absolute beast of a yeast! It is famous for its aggressive fermentation, chewing through every single complex sugar it can find (Diastaticus). The result is a bone-dry, highly carbonated beer with a beautiful balance of black pepper spice and citrus.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Standard:</strong> A balanced start at 20 °C, slowly ramping to 24 °C. Creates a perfect, highly drinkable table-saison.</li>
+            <li><strong style="color: #fff;">Bone Dry:</strong> Starts warm (22 °C) and pushes to 26 °C to ensure absolutely 0% residual sugar is left behind.</li>
+            <li><strong style="color: #fff;">Farmhouse Spice:</strong> Starts hot at 24 °C and lets the yeast run wild up to 28 °C. This drives extreme levels of rustic, peppery phenols.</li>
+        </ul>
+    `,
+
+    "wlp028": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">WLP028 (Scottish Ale)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> Wyeast 1728 (Scottish Ale)
+        </p>
+        <p>A highly unique ale yeast that loves the cold! It ferments incredibly clean at lower temperatures, which preserves and elevates the deep, roasted, and smoky malt flavors without masking them behind fruity esters.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Standard:</strong> A traditional 18 °C ale fermentation. Clean, neutral, and reliable.</li>
+            <li><strong style="color: #fff;">Wee Heavy:</strong> Dropped down to 16 °C. A long, slow fermentation that allows the massive malt complexity of a strong Scottish ale to take center stage.</li>
+            <li><strong style="color: #fff;">Cold & Clean:</strong> Pushed to its absolute limit at 14.5 °C. Acts almost exactly like a lager yeast, producing an incredibly crisp, malt-forward profile.</li>
+        </ul>
+    `,
+
+    "wyeast-1469": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Wyeast 1469 (West Yorkshire)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> Timothy Taylor strain, Imperial A10
+        </p>
+        <p>The holy grail for traditional English Bitters! Sourced from a legendary Yorkshire brewery, this yeast produces a wonderfully complex, slightly nutty, and mildly fruity profile that pairs perfectly with English malt and Fuggles hops.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Standard:</strong> Ferments at 19 °C, followed by a warm D-rest. Perfect for modern English Pale Ales.</li>
+            <li><strong style="color: #fff;">Yorkshire Bitter:</strong> Starts at 20 °C to coax out its signature stone fruit esters. Notice the "crash" stops at 5 °C to leave a slight haze and body.</li>
+            <li><strong style="color: #fff;">Pub Temp:</strong> A highly authentic profile. Ferments at 18.5 °C and "conditions" at 8 °C, mimicking the cellar temperature of a traditional British pub cask.</li>
+        </ul>
+    `,
+
+    "lutra": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Omega Lutra Kveik</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid / Dry Hybrid<br>
+            <strong>Equivalents:</strong> A highly isolated Kveik strain.
+        </p>
+        <p>A modern brewing cheat code! Lutra is an isolated Kveik strain that has shocked the brewing world. Despite fermenting at hot ale temperatures, it produces an outrageously clean, crisp profile that tastes virtually indistinguishable from a traditional, slow-fermented lager.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Standard:</strong> A steady 25 °C. Fast, completely clean, and reliable for everything from Hard Seltzers to Cream Ales.</li>
+            <li><strong style="color: #fff;">Pseudo-Lager:</strong> Dropped to 20 °C. The ultimate mock-lager profile. Crisp, sulfur-free, and incredibly refreshing.</li>
+            <li><strong style="color: #fff;">Speed Run:</strong> Ferments at a scorching 32 °C. Turns a wort into beer in under 4 days while somehow remaining shockingly clean.</li>
+        </ul>
+    `,
+
+    "philly-sour": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Lallemand Philly Sour</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Dry Yeast<br>
+            <strong>Equivalents:</strong> Unique (Lachancea species)
+        </p>
+        <p>Pure bio-engineering magic. Discovered on a tree in Philadelphia, this unique yeast produces lactic acid (sourness) during the first few days, and THEN switches over to producing alcohol! It allows you to brew sour beers safely without introducing dangerous bacteria to your gear.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Standard:</strong> A steady 22 °C profile. Yields a moderate, refreshing tartness.</li>
+            <li><strong style="color: #fff;">Lactic Boost:</strong> Held warm at 25 °C for the first 4 days to force the yeast to produce massive amounts of lactic acid, then dropped to 20 °C for a clean alcoholic finish. Very sour!</li>
+            <li><strong style="color: #fff;">Sour Fruit:</strong> Tailored for fruited sours. Balances acid production before crashing cleanly to let your added fruit purees shine.</li>
+        </ul>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;"><i>Pro-tip: Philly Sour needs simple sugars (like Dextrose) to produce high levels of acid! Add 5% dextrose to your boil.</i></p>
+    `,
+
+    "wlp820": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">WLP820 (Oktoberfest / Märzen)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> Wyeast 2633, Imperial L17
+        </p>
+        <p>The heart and soul of the Munich Oktoberfest. While Pilsner yeast focuses on a crisp, hoppy finish, this strain is designed to elevate rich, toasty, and bready Munich and Vienna malts. It leaves a remarkably smooth and full-bodied lager behind.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Traditional Lager:</strong> The classic German approach. Slow 11 °C primary, followed by a long, cold lagering phase for liquid perfection.</li>
+            <li><strong style="color: #fff;">Fast Festbier:</strong> Pitched slightly warmer (13 °C) for a quicker fermentation. Perfect for brewing a Festbier right before the party starts.</li>
+            <li><strong style="color: #fff;">Malty Marzen:</strong> Held strictly at 10 °C. Demands immense patience, but rewards you with the deepest, most complex malt profile possible.</li>
+        </ul>
     `
 };
 
