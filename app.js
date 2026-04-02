@@ -2017,6 +2017,150 @@ const yeastDescriptions = {
             <li><strong style="color: #fff;">Fast Festbier:</strong> Pitched slightly warmer (13 °C) for a quicker fermentation. Perfect for brewing a Festbier right before the party starts.</li>
             <li><strong style="color: #fff;">Malty Marzen:</strong> Held strictly at 10 °C. Demands immense patience, but rewards you with the deepest, most complex malt profile possible.</li>
         </ul>
+    `,
+
+    "bry-97": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Lallemand BRY-97</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Dry Yeast<br>
+            <strong>Equivalents:</strong> WLP090 (Similar fast/clean profile)
+        </p>
+        <p>A West Coast legend in dry form! Many brewers prefer BRY-97 over US-05 because it produces slightly less peach esters and leaves a sharper, cleaner finish that really lets the hop bitterness bite.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">1. The Slow Starter</h4>
+        <p>Don't panic if your airlock isn't bubbling after 24 hours. BRY-97 is notoriously slow to wake up, but once it gets going, it ferments vigorously and flocculates beautifully.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Standard / Low Ester:</strong> Keeps the yeast at 17.5 - 19 °C for an incredibly neutral base.</li>
+            <li><strong style="color: #fff;">West Coast Crisp:</strong> Starts at 18 °C and slowly ramps up. Ensures a bone-dry finish where your expensive hops can shine.</li>
+        </ul>
+    `,
+
+    "k-97": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">SafAle K-97 (German Ale)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Dry Yeast<br>
+            <strong>Equivalents:</strong> Wyeast 1007, WLP036
+        </p>
+        <p>A fantastic, clean German ale strain. This is your go-to dry yeast for brewing Altbier, Kölsch, or any beer where you want a crisp, lager-like profile but don't have the time to actually brew a lager.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">1. The Massive Krausen</h4>
+        <p>K-97 produces a massive, thick foam head (krausen) during fermentation that can linger for days after it's done. Make sure you have plenty of headspace in your fermenter!</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Altbier Crisp:</strong> Ferments cool at 15 °C. Supresses fruitiness and brings out the toasted malt character of a classic Düsseldorf Altbier.</li>
+            <li><strong style="color: #fff;">Kölsch Style:</strong> Held at 16 °C and ramps to 20 °C. Crisp, slightly vinous, and very clean.</li>
+        </ul>
+    `,
+
+    "windsor": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Lallemand Windsor</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Dry Yeast<br>
+            <strong>Equivalents:</strong> WLP002 (Similar attenuation profile)
+        </p>
+        <p>A classic British ale strain known for its fruity esters and full body. Just like S-33, Windsor is maltotriose negative – meaning it cannot ferment complex sugars. Your final gravity will be high, but the beer will feel incredibly rich and velvety.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Sweet Stout:</strong> Ferments at 18 °C. Maximizes the residual sweetness to balance heavily roasted malts.</li>
+            <li><strong style="color: #fff;">Fruity Bitter:</strong> Pushed warmer to 20-21.5 °C. Unleashes beautiful English ester notes of fresh berries and jam.</li>
+        </ul>
+    `,
+
+    "mexican-lager": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">WLP040 (Mexican Lager)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> Imperial L05 (Urkel), Wyeast 2124
+        </p>
+        <p>The perfect yeast for a sunny day! Sourced from Mexico City, this strain produces an exceptionally crisp and clean lager profile that pairs flawlessly with flaked corn and a slice of lime.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Traditional Lager:</strong> Runs at 11 °C. Takes time, but produces liquid gold.</li>
+            <li><strong style="color: #fff;">Fast Cerveza:</strong> A modern approach. Pitched at 13 °C and actively ramped to 16.5 °C to finish the beer in half the time without losing the crispness.</li>
+        </ul>
+    `,
+
+    "hornindal": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Omega OYL-091 Hornindal Kveik</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> Unique Kveik blend
+        </p>
+        <p>If Voss Kveik gives you oranges, Hornindal gives you a tropical fruit salad! This Norwegian farmhouse blend thrives in extreme heat and produces massive notes of fresh pineapple, mango, and tangerine.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Tropical Bomb:</strong> Ferments at an insane 35-36 °C. The heat stresses the yeast into throwing incredible amounts of tropical fruit esters. Perfect for Hazy IPAs!</li>
+            <li><strong style="color: #fff;">Clean Pseudo:</strong> Dropped down to 24-26 °C. Restrains the tropical notes for a much cleaner, everyday Pale Ale profile.</li>
+        </ul>
+    `,
+
+    "wyeast-3724": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Wyeast 3724 (Belgian Saison)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> WLP565 (Saison I)
+        </p>
+        <p>The legendary Dupont strain. It produces the most complex, earthy, peppery, and spicy Saison profile in the world. But it comes with a major catch...</p>
+        <h4 style="margin-top: 15px; color: #ccc;">1. The Infamous Stall</h4>
+        <p>This yeast is notorious for stalling out at exactly 1.030 gravity and going to sleep. The only way to push it to the finish line is with extreme heat.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">The Dupont Ramp:</strong> Our automated savior! Starts at 22 °C, but aggressively ramps up to a scorching 30 °C by day 7. This extreme heat prevents the stall and drives the beer down to a bone-dry finish.</li>
+        </ul>
+    `,
+
+    "wlp570": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">WLP570 (Belgian Golden Ale)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> Wyeast 1388 (Belgian Strong)
+        </p>
+        <p>Sourced from the famous Duvel brewery. Unlike Trappist strains that throw dark fruit, this yeast is famous for producing crisp notes of pear, apple, and white pepper. It attenuates incredibly well, hiding massive ABVs dangerously well.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Golden Strong:</strong> Starts safe at 20 °C to establish a clean base, then wanders all the way up to 26 °C to unlock the classic Duvel-like esters without producing harsh fusels.</li>
+        </ul>
+    `,
+
+    "wyeast-2112": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Wyeast 2112 (California Lager)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> WLP810 (San Francisco Lager)
+        </p>
+        <p>The iconic Anchor Steam yeast! During the California Gold Rush, brewers didn't have ice, so they used shallow cooling ships to ferment lager yeast at warm temperatures. This strain evolved to thrive in this hybrid environment.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Steam Beer:</strong> Ferments at 15-17 °C. Creates a very unique, slightly woody, and mildly fruity lager profile that defines the California Common style.</li>
+            <li><strong style="color: #fff;">Warm Lager:</strong> Pushed to 19 °C. Acts almost like an ale yeast, finishing fast but retaining a surprising amount of lager crispness.</li>
+        </ul>
+    `,
+
+    "wlp380": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">WLP380 (Hefeweizen IV)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> Wyeast 3333 (German Wheat)
+        </p>
+        <p>If WLP300 is the "Banana Bomb", then WLP380 is the "Clove Master". This strain produces very little isoamyl acetate (banana) and instead focuses heavily on spicy phenols and crisp citrus notes.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Clove Master:</strong> Fermented on the cooler side (17-18 °C). Completely suppresses the banana, leaving a beautifully spicy and refreshing wheat beer.</li>
+            <li><strong style="color: #fff;">Balanced:</strong> Pushed slightly warmer (19-20 °C) to allow a tiny hint of banana to peek through the spice.</li>
+        </ul>
+    `,
+
+    "wyeast-1007": `
+        <h3 style="color: var(--accent-color); margin-top: 0;">Wyeast 1007 (German Ale)</h3>
+        <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+            <strong>Format:</strong> Liquid Yeast<br>
+            <strong>Equivalents:</strong> K-97 (Dry version), WLP036
+        </p>
+        <p>A true top-cropping German ale yeast. It is incredibly robust and ferments brilliantly clean even down at 13 °C! It leaves a dry, crisp finish with mild maltiness, making it perfect for Altbier and Kölsch.</p>
+        <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+        <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+            <li><strong style="color: #fff;">Altbier Crisp:</strong> Runs at 15 °C. Supresses fruitiness and ensures a smooth, lager-like finish.</li>
+            <li><strong style="color: #fff;">Pseudo Lager:</strong> Dropped all the way down to 13 °C. Acts like a lager yeast, but finishes significantly faster. Needs a good cold crash to clear up!</li>
+        </ul>
     `
 };
 
