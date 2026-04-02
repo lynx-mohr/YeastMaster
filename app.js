@@ -1937,7 +1937,17 @@ function openYeastModal(yeast) {
             "wlp007": "Dry English", 
             "wyeast-1318": "London III",
             "wyeast-2565": "Kolsch", 
-            "wlp095": "Burlington"
+            "wlp095": "Burlington",
+            "wlp090": "San Diego Super",
+            "wyeast-1272": "American II",
+            "imperial-a24": "Dry Hop",
+            "wlp530": "Westmalle",
+            "wyeast-3711": "French Saison",
+            "wlp028": "Scottish Ale",
+            "wyeast-1469": "West Yorkshire",
+            "lutra": "Lutra Kveik",
+            "philly-sour": "Philly Sour",
+            "wlp820": "Oktoberfest"
         };
 
         const targetStrainName = hwStrainNames[yeast.id];
