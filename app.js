@@ -3436,8 +3436,31 @@ document.addEventListener('click', handleOutsideClick, true);
 // ==========================================
 
 function openPitchCalcModal() {
+    // 1. Visa själva popup-fönstret
     const modal = document.getElementById('pitch-calc-modal');
-    modal.style.display = 'flex'; // 'flex' centrerar innehållet
+    if (modal) {
+        modal.style.display = 'flex'; // (Eller 'block' beroende på din CSS för .ym-modal)
+    }
+
+    // ==========================================
+    // --- ÅTERSTÄLL ALLT TILL STARTLÄGET ---
+    // ==========================================
+    
+    // 2. Visa huvudknapparna
+    document.getElementById('main-calc-buttons').style.display = 'grid'; 
+
+    // 3. Dölj alla undervyer, rubriker och resultat
+    document.getElementById('selected-yeast-header').style.display = 'none';
+    document.getElementById('bank-sub-options').style.display = 'none';
+    document.getElementById('calc-input-section').style.display = 'none';
+    document.getElementById('calc-result-box').style.display = 'none';
+    
+    // 4. Ta bort eventuella färgmarkeringar (active) från knapparna
+    const allButtons = document.querySelectorAll('.ym-btn-outline');
+    allButtons.forEach(btn => {
+        btn.style.backgroundColor = ''; // Återställ bakgrund
+        btn.style.color = '';           // Återställ textfärg
+    });
 }
 
 function closePitchCalcModal() {
