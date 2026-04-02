@@ -1,57 +1,68 @@
 const yeastStrains = [
-    // --- TORRJÄSTER (Dry) ---
-    { id: "us-05", name: "SafAle US-05", origin: "USA", temp: "15-22°C", tags: ["Clean", "Crisp", "Dry"], desc: "Världens mest populära IPA-jäst. Neutral och pålitlig.", styles: "IPA, APA, Stout" },
-    { id: "s-04", name: "SafAle S-04", origin: "UK", temp: "15-20°C", tags: ["Fruity", "Fast", "Dry"], desc: "Klassisk brittisk ale-jäst. Snabb jäsning och bra flockning.", styles: "English Pale Ale, Porter" },
-    { id: "w-34-70", name: "Saflager W-34/70", origin: "Germany", temp: "9-15°C", tags: ["Clean", "Lager", "Dry"], desc: "Den berömda Weihenstephan-stammen för krispiga lageröl.", styles: "Pilsner, Helles, Märzen" },
-    { id: "be-256", name: "SafAle BE-256", origin: "Belgium", temp: "15-25°C", tags: ["Spicy", "High ABV", "Dry"], desc: "För starka belgiska öl. Ger estrar av torkad frukt.", styles: "Abbey, Dubbel, Tripel" },
-    { id: "wb-06", name: "SafAle WB-06", origin: "Germany", temp: "18-24°C", tags: ["Banana", "Clove", "Dry"], desc: "Specialjäst för veteöl. Framhäver fenoliska toner.", styles: "Hefeweizen, Witbier" },
-    { id: "verdant", name: "Lallemand Verdant", origin: "UK", temp: "18-23°C", tags: ["Apricot", "Hazy", "Dry"], desc: "Perfekt för NEIPA. Ger toner av aprikos och fyllig munkänsla.", styles: "NEIPA, Hazy IPA" },
-    { id: "voss", name: "Lallemand Voss Kveik", origin: "Norway", temp: "25-40°C", tags: ["High Temp", "Orange", "Dry"], desc: "Traditionell kveik. Kan jäsa extremt varmt utan bismaker.", styles: "Farmhouse, IPA, Pale Ale" },
-    { id: "nottingham", name: "Lallemand Nottingham", origin: "UK", temp: "10-22°C", tags: ["Versatile", "Dry Finish", "Dry"], desc: "Hög utjäsning och mycket neutral profil. En riktig arbetshäst.", styles: "All Ales, Cider" },
-    { id: "belle-saison", name: "Lallemand Belle Saison", origin: "Belgium", temp: "15-35°C", tags: ["Dry Finish", "Spicy", "Dry"], desc: "Skapar mycket torra och peppriga Saison-öl.", styles: "Saison, Farmhouse" },
-    { id: "t-58", name: "SafAle T-58", origin: "Belgium", temp: "15-24°C", tags: ["Peppery", "Ester", "Dry"], desc: "Känd för sina peppriga och kryddiga estrar.", styles: "Belgian Ale" },
-    { id: "s-23", name: "Saflager S-23", origin: "Germany", temp: "9-15°C", tags: ["Fruity", "Lager", "Dry"], desc: "En lagerjäst som ger lite mer fruktiga toner än 34/70.", styles: "Lager, Bock" },
-    { id: "diamond", name: "Lallemand Diamond", origin: "Germany", temp: "10-15°C", tags: ["Pilsner", "Clean", "Dry"], desc: "Klassisk tysk lagerjäst för eleganta profil.", styles: "German Pilsner" },
-    { id: "s-33", name: "SafAle S-33", origin: "UK", temp: "15-22°C", tags: ["Robust", "All-round", "Dry"], desc: "Ger en robust och stabil jäsning.", styles: "Trappist, Stout" },
-    { id: "novalager", name: "Lallemand NovaLager", origin: "Modern", temp: "10-20°C", tags: ["Hybrid", "Fast", "Dry"], desc: "En modern hybrid-lagerjäst som jäser snabbare.", styles: "Modern Lager" },
+    // ==========================================
+    // --- DRY YEASTS (Torrjäst) ---
+    // ==========================================
+    { id: "us-05", name: "SafAle US-05", origin: "USA", temp: "18-22°C", tags: ["Ale", "Crisp", "Dry"], desc: "Kungen av rena amerikanska ales. Pålitlig, krispig och låter humlen skina.", styles: "APA, IPA, West Coast" },
+    { id: "s-04", name: "SafAle S-04", origin: "UK", temp: "15-20°C", tags: ["Ale", "English", "Fruity", "Dry"], desc: "Snabb jäsning och extrem flockning. Ger klassiska brittiska frukttoner.", styles: "Bitter, Stout, Porter" },
+    { id: "nottingham", name: "Lallemand Nottingham", origin: "UK", temp: "10-22°C", tags: ["Ale", "Clean", "Versatile", "Dry"], desc: "En arbetshäst som klarar allt. Kan köras kallt för att imitera en lager.", styles: "Lager-like, Pale Ale, Stout" },
+    { id: "s-33", name: "SafAle S-33", origin: "Belgium", temp: "18-22°C", tags: ["Ale", "Belgian", "Body", "Dry"], desc: "Ger mycket kropp och lämnar restsötma. Perfekt för NEIPA och klosteröl.", styles: "Belgian Ale, NEIPA" },
+    { id: "be-256", name: "SafAle BE-256", origin: "Belgium", temp: "15-25°C", tags: ["Ale", "Belgian", "Abbey", "Dry"], desc: "Snabb och brutal belgare. Hanterar hög alkohol och ger komplex mörk frukt.", styles: "Dubbel, Tripel, Quad" },
+    { id: "wb-06", name: "SafAle WB-06", origin: "Germany", temp: "18-24°C", tags: ["Wheat", "Banana", "Clove", "Dry"], desc: "Klassisk veteölsjäst. Du styr balansen mellan banan och nejlika med temp.", styles: "Hefeweizen, Witbier" },
+    { id: "verdant", name: "Lallemand Verdant IPA", origin: "UK", temp: "18-22°C", tags: ["Ale", "NEIPA", "Juice", "Dry"], desc: "Skapad för NEIPA. Ger aprikosnoter och en fantastisk fyllighet.", styles: "NEIPA, Hazy IPA" },
+    { id: "voss", name: "Lallemand Voss Kveik", origin: "Norway", temp: "25-40°C", tags: ["Kveik", "Orange", "Fast", "Dry"], desc: "Norsk urkraft. Jäser extremt varmt och snabbt med tydliga apelsintoner.", styles: "Farmhouse Ale, IPA" },
+    { id: "t-58", name: "SafAle T-58", origin: "Belgium", temp: "15-24°C", tags: ["Ale", "Belgian", "Spicy", "Dry"], desc: "Pepprig och kryddig. Ger en unik karaktär till belgiska specialöl.", styles: "Saison, Belgian Ale" },
+    { id: "belle-saison", name: "Lallemand Belle Saison", origin: "Belgium", temp: "15-32°C", tags: ["Ale", "Saison", "Dry Finish", "Dry"], desc: "Jäser ut precis allt. Ger en snustorr finish med klassisk saison-krydda.", styles: "Saison, Farmhouse" },
+    { id: "w-34-70", name: "Saflager W-34/70", origin: "Germany", temp: "9-15°C", tags: ["Lager", "German", "Clean", "Dry"], desc: "Världens mest använda lagerjäst. Extremt ren och krispig profil.", styles: "Pilsner, Lager, Helles" },
+    { id: "s-23", name: "Saflager S-23", origin: "Germany", temp: "9-15°C", tags: ["Lager", "Bohemian", "Fruity", "Dry"], desc: "Tjeckisk profil med lite mer fruktiga estrar än W-34/70.", styles: "Czech Pilsner, Bock" },
+    { id: "diamond", name: "Lallemand Diamond", origin: "Germany", temp: "10-15°C", tags: ["Lager", "Munich", "Clean", "Dry"], desc: "Klassisk tysk lagerjäst från München. Mycket ren och polerad finish.", styles: "Helles, Oktoberfest" },
+    { id: "novalager", name: "Lallemand NovaLager", origin: "Germany", temp: "10-20°C", tags: ["Lager", "Hybrid", "Clean", "Dry"], desc: "Modernt mirakel. Jäser som en ale men smakar som en krispig lager.", styles: "Lager, Cold IPA" },
 
-    // --- FLYTANDE JÄSTER (Liquid) ---
-    { id: "wlp001", name: "WLP001 California Ale", origin: "USA", temp: "20-23°C", tags: ["Classic", "IPA", "Liquid"], desc: "White Labs flaggskepp. Mycket ren profil som låter humlen tala.", styles: "West Coast IPA" },
-    { id: "wlp300", name: "WLP300 Hefeweizen", origin: "Germany", temp: "18-21°C", tags: ["Classic", "Wheat", "Liquid"], desc: "Den ultimata veteölsjästen för banankänsla.", styles: "Weissbier" },
-    { id: "wlp002", name: "WLP002 English Ale", origin: "UK", temp: "18-20°C", tags: ["Sweet", "Malty", "Liquid"], desc: "Lämnar lite restsötma och flockar som sten.", styles: "Bitter, Stout" },
-    { id: "wlp500", name: "WLP500 Trappist", origin: "Belgium", temp: "18-22°C", tags: ["Fruity", "Abbey", "Belgian", "Liquid"], desc: "Från ett av de sex belgiska trappistbryggerierna.", styles: "Tripel, Quad" },
-    { id: "wlp066", name: "WLP066 London Fog", origin: "UK", temp: "18-22°C", tags: ["Juicy", "Creamy", "Liquid"], desc: "Standardjästen för juice-liknande NEIPA.", styles: "NEIPA" },
-    { id: "wlp800", name: "WLP800 Pilsner Lager", origin: "Czech", temp: "10-13°C", tags: ["Crisp", "Floral", "Liquid"], desc: "Traditionell tjeckisk jäst för äkta pilsner.", styles: "Bohemian Pilsner" },
-    { id: "wyeast-1968", name: "Wyeast 1968", origin: "UK", temp: "18-22°C", tags: ["ESB", "High Flocc", "Liquid"], desc: "London ESB Ale. Extrem flockulering och grym maltprofil.", styles: "ESB, English Pale Ale" },
-    { id: "wlp920", name: "WLP920", origin: "Germany", temp: "10-13°C", tags: ["Lager", "Malty", "Liquid"], desc: "Old Bavarian Lager. Perfekt för maltiga sydtyska lagers.", styles: "Oktoberfest, Bock" },
-    { id: "imperial-b45", name: "Imperial B45", origin: "Belgium", temp: "20-25.5°C", tags: ["Fruity", "Spicy", "Liquid"], desc: "Gnome! Päronestrar och klassisk belgisk värme.", styles: "Belgian Strong Ale" },
-    { id: "wyeast-1084", name: "Wyeast 1084", origin: "Ireland", temp: "17-22°C", tags: ["Malty", "Dry Finish", "Liquid"], desc: "Irish Ale. Arbetshästen från Dublin. Fantastisk till mörka öl.", styles: "Dry Stout, Red Ale" },
-    { id: "wyeast-3944", name: "Wyeast 3944", origin: "Belgium", temp: "16-24°C", tags: ["Wheat", "Citrus", "Liquid"], desc: "Belgian Witbier. Disig med toner av nejlika och apelsin.", styles: "Witbier" },
-    { id: "wlp833", name: "WLP833", origin: "Germany", temp: "9-13°C", tags: ["Lager", "Bock", "Liquid"], desc: "German Bock Lager. Kungen av maltighet från Ayinger.", styles: "Bock, Doppelbock" },
-    { id: "wlp007", name: "WLP007", origin: "UK", temp: "18-21°C", tags: ["Dry Finish", "Fast", "Liquid"], desc: "Dry English Ale. Målsökande missil som jäser ut torrt och snabbt.", styles: "IPA, Stout" },
-    { id: "wyeast-1318", name: "Wyeast 1318", origin: "UK", temp: "18-22°C", tags: ["Juicy", "Hazy", "Liquid"], desc: "London Ale III. Originalet för disiga och moderna NEIPAs.", styles: "NEIPA, Pale Ale" },
-    { id: "wyeast-2565", name: "Wyeast 2565", origin: "Germany", temp: "13-21°C", tags: ["Kölsch", "Crisp", "Liquid"], desc: "Kölsch. Hybrid-jäst som ger extremt ren och vinös profil.", styles: "Kölsch, Altbier" },
-    { id: "wlp095", name: "WLP095", origin: "USA", temp: "19-21°C", tags: ["Peach", "Juicy", "Liquid"], desc: "Burlington Ale (Conan). Maxar stenfrukt, persika och aprikos.", styles: "NEIPA, IPA" },
-    { id: "wlp090", name: "WLP090 San Diego Super", origin: "USA", temp: "18-20°C", tags: ["Crisp", "Fast", "Liquid"], desc: "En gigant för West Coast IPAs. Jäser blixtsnabbt och flockar som sten.", styles: "Double IPA, West Coast IPA" },
-    { id: "wyeast-1272", name: "Wyeast 1272 American II", origin: "USA", temp: "15-22°C", tags: ["Fruity", "Nutty", "Liquid"], desc: "Fruktigare och mer komplex än US-05. Fantastisk till maltigare amerikanska ales.", styles: "American Pale Ale, Amber" },
-    { id: "imperial-a24", name: "Imperial A24 Dry Hop", origin: "USA", temp: "18-22°C", tags: ["Citrus", "Juicy", "Liquid"], desc: "Modern blend skapad specifikt för att hantera och maxa massiva torrhumlingar.", styles: "NEIPA, Pale Ale" },
-    { id: "wlp530", name: "WLP530 Westmalle", origin: "Belgium", temp: "18-22°C", tags: ["Trappist", "Dark Fruit", "Liquid"], desc: "Originalet för mörka, starka belgare. Flytande motsvarighet till BE-256.", styles: "Dubbel, Tripel, Quad" },
-    { id: "wyeast-3711", name: "Wyeast 3711 French Saison", origin: "France", temp: "18-25°C", tags: ["Dry Finish", "Spicy", "Liquid"], desc: "Ett monster på att jäsa torrt. Vätske-originalet till Belle Saison.", styles: "Saison, Farmhouse" },
-    { id: "wlp028", name: "WLP028 Scottish Ale", origin: "UK", temp: "13-21°C", tags: ["Malty", "Clean", "Liquid"], desc: "Tål kalla temperaturer för att vara ale. Bevarar rökiga och rostade malttoner perfekt.", styles: "Wee Heavy, Scottish Ale" },
-    { id: "wyeast-1469", name: "Wyeast 1469 West Yorkshire", origin: "UK", temp: "18-22°C", tags: ["Pub Ale", "Nutty", "Liquid"], desc: "Timothy Taylor-stammen! Den absolut bästa jästen för en äkta engelsk Bitter.", styles: "ESB, English Bitter" },
-    { id: "lutra", name: "Omega Lutra Kveik", origin: "Norway", temp: "20-35°C", tags: ["Pseudo-Lager", "Fast", "Liquid"], desc: "Ett modernt Kveik-mirakel som smakar exakt som krispig lager, men på halva tiden.", styles: "Pseudo-Lager, Pilsner" },
-    { id: "philly-sour", name: "Lallemand Philly Sour", origin: "USA", temp: "20-25°C", tags: ["Sour", "Lactic", "Dry"], desc: "Unik jäst som skapar mjölksyra (syrlighet) innan den skapar alkohol. För säkra suröl.", styles: "Sour, Gose, Berliner Weisse" },
-    { id: "wlp820", name: "WLP820 Oktoberfest", origin: "Germany", temp: "11-14°C", tags: ["Malty", "Lager", "Liquid"], desc: "Skapar otroligt rik, maltig och brödig karaktär. Oumbärlig för tyska festöl.", styles: "Märzen, Oktoberfest, Bock" },
-    { id: "bry-97", name: "Lallemand BRY-97", origin: "USA", temp: "15-22°C", tags: ["Crisp", "Dry", "Hoppy"], desc: "En fantastisk West Coast torrjäst. Ofta föredragen framför US-05 för att den framhäver humlen ännu mer.", styles: "West Coast IPA, Pale Ale" },
-    { id: "k-97", name: "SafAle K-97", origin: "Germany", temp: "15-20°C", tags: ["Crisp", "Dry", "German"], desc: "En torr tysk ale-jäst känd för enorm krausen (skumkrona). Perfekt för krispiga Altbier och Kölsch-liknande öl.", styles: "Altbier, Kölsch, Blonde" },
-    { id: "windsor", name: "Lallemand Windsor", origin: "UK", temp: "15-22°C", tags: ["Fruity", "Full Body", "Dry"], desc: "Fruktig engelsk stam som inte kan jäsa maltotrios. Lämnar ölet fylligt och lite sött.", styles: "Sweet Stout, English Bitter" },
-    { id: "mexican-lager", name: "WLP040 Mexican Lager", origin: "Mexico", temp: "10-14°C", tags: ["Crisp", "Clean", "Liquid"], desc: "Den ultimata jästen för ljusa sommaröl och Cerveza med majs. Krispig och ren.", styles: "Mexican Lager, Light Lager" },
-    { id: "hornindal", name: "Omega OYL-091 Hornindal", origin: "Norway", temp: "22-37°C", tags: ["Tropical", "Fast", "Liquid"], desc: "En Kveik som skriker ananas, mango och tropisk frukt. Fantastisk till Hazy IPAs.", styles: "NEIPA, Pale Ale" },
-    { id: "wyeast-3724", name: "Wyeast 3724 Belgian Saison", origin: "Belgium", temp: "21-35°C", tags: ["Spicy", "Stubborn", "Liquid"], desc: "Den berömda Dupont-stammen. Ökänd för att stanna halvvägs om man inte ger den rejält med värme!", styles: "Saison, Farmhouse Ale" },
-    { id: "wlp570", name: "WLP570 Belgian Golden", origin: "Belgium", temp: "20-25°C", tags: ["Pear", "Apple", "Liquid"], desc: "Originalet från Duvel. Ger enorma pär- och äppeltoner och jäser extremt torrt.", styles: "Belgian Golden Strong, Tripel" },
-    { id: "wyeast-2112", name: "Wyeast 2112 California", origin: "USA", temp: "14-20°C", tags: ["Hybrid", "Woody", "Liquid"], desc: "Anchor Steam-jästen! En lagerjäst som överlevt att jäsas varmt under guldrushen i Kalifornien.", styles: "California Common, Steam Beer" },
-    { id: "wlp380", name: "WLP380 Hefeweizen IV", origin: "Germany", temp: "19-22°C", tags: ["Clove", "Spicy", "Liquid"], desc: "Vill du ha mindre banan och mer nejlika/krydda i ditt veteöl? Då är detta rätt val.", styles: "Hefeweizen, Dunkelweizen" },
-    { id: "wyeast-1007", name: "Wyeast 1007 German Ale", origin: "Germany", temp: "13-20°C", tags: ["Clean", "Crisp", "Liquid"], desc: "En otroligt krispig tysk arbetshäst. Jäser rent även vid låga temperaturer.", styles: "Altbier, American Ale" }
+    // ==========================================
+    // --- LIQUID YEASTS (Flytande Jäst) ---
+    // ==========================================
+    { id: "wlp001", name: "WLP001 California Ale", origin: "USA", temp: "18-23°C", tags: ["Ale", "Clean", "Liquid"], desc: "Originalet för West Coast IPA. Renare profil än torrjäst-motsvarigheten.", styles: "IPA, APA" },
+    { id: "wlp300", name: "WLP300 Hefeweizen", origin: "Germany", temp: "18-24°C", tags: ["Wheat", "Banana", "Clove", "Liquid"], desc: "Guldstandarden för veteöl. Ger extremt mycket banan-estrar.", styles: "Hefeweizen, Dunkelweizen" },
+    { id: "wyeast-1968", name: "Wyeast 1968 London ESB", origin: "UK", temp: "18-22°C", tags: ["Ale", "English", "Malty", "Liquid"], desc: "Legendarisk Fuller's-stam. Mycket maltig och flockar stenhårt.", styles: "ESB, Bitter" },
+    { id: "wlp500", name: "WLP500 Trappist", origin: "Belgium", temp: "18-25°C", tags: ["Ale", "Belgian", "Trappist", "Liquid"], desc: "Från Chimay. Ger fantastiska toner av bubbelgum och plommon.", styles: "Dubbel, Tripel" },
+    { id: "wlp066", name: "WLP066 London Fog", origin: "UK", temp: "18-22°C", tags: ["Ale", "NEIPA", "Juice", "Liquid"], desc: "Hjärtat i NEIPA-revolutionen. Ger sammetslen munkänsla och ananas.", styles: "NEIPA, Hazy IPA" },
+    { id: "wlp800", name: "WLP800 Pilsner Lager", origin: "Czech", temp: "10-15°C", tags: ["Lager", "Czech", "Malty", "Liquid"], desc: "Urquell-stammen. Ger den klassiska tjeckiska smörkolatonen.", styles: "Pilsner, Bohemian Lager" },
+    { id: "wlp920", name: "WLP920 Old Bavarian", origin: "Germany", temp: "9-15°C", tags: ["Lager", "Malty", "German", "Liquid"], desc: "Perfekt för mörka lagers. Bevarar maltigheten på ett fantastiskt sätt.", styles: "Dunkel, Oktoberfest" },
+    { id: "imperial-b45", name: "Imperial B45 Gnome", origin: "Belgium", temp: "18-25°C", tags: ["Ale", "Belgian", "Pear", "Liquid"], desc: "Chouffe-stammen! Ger päron-estrar och en lätt pepprighet.", styles: "Belgian Blonde, Houblon" },
+    { id: "wyeast-1084", name: "Wyeast 1084 Irish Ale", origin: "Ireland", temp: "16-22°C", tags: ["Ale", "Irish", "Dry", "Liquid"], desc: "Guinness-stammen. Torr, lätt fruktig och perfekt till stouts.", styles: "Dry Stout, Red Ale" },
+    { id: "wyeast-3944", name: "Wyeast 3944 Belgian Wit", origin: "Belgium", temp: "16-24°C", tags: ["Wheat", "Belgian", "Citrus", "Liquid"], desc: "Hoegaarden-stammen. Molnig, citrusig och underbart kryddig.", styles: "Witbier, Blanche" },
+    { id: "wlp833", name: "WLP833 German Bock", origin: "Germany", temp: "9-14°C", tags: ["Lager", "Malty", "Rich", "Liquid"], desc: "Ayinger-stammen. Kung av fyllighet och maltighet.", styles: "Bock, Doppelbock" },
+    { id: "wlp007", name: "WLP007 Dry English", origin: "UK", temp: "18-21°C", tags: ["Ale", "English", "Dry", "Liquid"], desc: "En raket! Jäser snabbt, torrt och flockar extremt bra.", styles: "IPA, Barleywine" },
+    { id: "wyeast-1318", name: "Wyeast 1318 London III", origin: "UK", temp: "18-22°C", tags: ["Ale", "NEIPA", "Juicy", "Liquid"], desc: "Boddingtons-stammen. Basen för nästan all modern NEIPA.", styles: "NEIPA, Pale Ale" },
+    { id: "wyeast-2565", name: "Wyeast 2565 Kolsch", origin: "Germany", temp: "13-21°C", tags: ["Ale", "Hybrid", "Crisp", "Liquid"], desc: "Tekniskt en ale men smakar som en lager. Kräver kallagring.", styles: "Kölsch, Blonde" },
+    { id: "wlp095", name: "WLP095 Burlington Ale", origin: "USA", temp: "19-21°C", tags: ["Ale", "NEIPA", "Peach", "Liquid"], desc: "Den legendariska Conan-stammen från Heady Topper. Ger persika.", styles: "NEIPA, Vermont Ale" },
+
+    // ==========================================
+    // --- EXPANSION: THE LEGENDS ---
+    // ==========================================
+    { id: "wlp090", name: "WLP090 San Diego Super", origin: "USA", temp: "18-20°C", tags: ["Ale", "Crisp", "Fast", "Liquid"], desc: "Giganten för West Coast IPA. Supersnabb och extremt ren.", styles: "Double IPA, West Coast" },
+    { id: "wyeast-1272", name: "Wyeast 1272 American II", origin: "USA", temp: "15-22°C", tags: ["Ale", "Fruity", "Nutty", "Liquid"], desc: "Fruktigare än US-05. Fantastisk till maltiga amerikanska ales.", styles: "Pale Ale, Amber" },
+    { id: "imperial-a24", name: "Imperial A24 Dry Hop", origin: "USA", temp: "18-22°C", tags: ["Ale", "NEIPA", "Citrus", "Liquid"], desc: "Skapad för att maxa torrhumling. Mycket tropisk frukt.", styles: "NEIPA, Hazy IPA" },
+    { id: "wlp530", name: "WLP530 Westmalle", origin: "Belgium", temp: "18-22°C", tags: ["Ale", "Belgian", "Trappist", "Liquid"], desc: "Originalet för mörka belgare. Vätske-versionen av BE-256.", styles: "Dubbel, Quad" },
+    { id: "wyeast-3711", name: "Wyeast 3711 French Saison", origin: "France", temp: "18-25°C", tags: ["Ale", "Saison", "Dry Finish", "Liquid"], desc: "Vätske-versionen av Belle Saison. Jäser ut allt.", styles: "Saison, Farmhouse" },
+    { id: "wlp028", name: "WLP028 Scottish Ale", origin: "UK", temp: "13-21°C", tags: ["Ale", "Scottish", "Malty", "Liquid"], desc: "Klarar kyla bra. Bevarar maltens rökighet och rostad karaktär.", styles: "Wee Heavy, Scottish Ale" },
+    { id: "wyeast-1469", name: "Wyeast 1469 West Yorkshire", origin: "UK", temp: "18-22°C", tags: ["Ale", "English", "Nutty", "Liquid"], desc: "Timothy Taylor-stammen. Den bästa för en riktig engelsk Bitter.", styles: "ESB, English Bitter" },
+    { id: "lutra", name: "Omega Lutra Kveik", origin: "Norway", temp: "20-35°C", tags: ["Kveik", "Pseudo-Lager", "Fast", "Liquid"], desc: "Smakar exakt som lager men jäser på 3 dagar i rumstemp.", styles: "Pilsner, Pseudo-Lager" },
+    { id: "philly-sour", name: "Lallemand Philly Sour", origin: "USA", temp: "20-25°C", tags: ["Sour", "Lactic", "Fast", "Dry"], desc: "Gör syrlig öl och alkohol i ett steg. Ingen bakterierisk.", styles: "Gose, Berliner Weisse" },
+    { id: "wlp820", name: "WLP820 Oktoberfest", origin: "Germany", temp: "11-14°C", tags: ["Lager", "German", "Malty", "Liquid"], desc: "Ger en djup, bready maltprofil. Ett måste till Märzen.", styles: "Oktoberfest, Märzen" },
+
+    // ==========================================
+    // --- EXPANSION: EVENING LEGENDS ---
+    // ==========================================
+    { id: "bry-97", name: "Lallemand BRY-97", origin: "USA", temp: "15-22°C", tags: ["Ale", "West Coast", "Clean", "Dry"], desc: "Favoriten för krispiga IPAs. Framhäver humlen mer än US-05.", styles: "West Coast IPA" },
+    { id: "k-97", name: "SafAle K-97", origin: "Germany", temp: "15-20°C", tags: ["Ale", "German", "Crisp", "Dry"], desc: "Ren tysk ale-jäst. Perfekt för Altbier och Kölsch.", styles: "Altbier, Kölsch" },
+    { id: "windsor", name: "Lallemand Windsor", origin: "UK", temp: "15-22°C", tags: ["Ale", "English", "Fruity", "Dry"], desc: "Lämnar mycket kropp och fruktighet. Klassisk brittisk.", styles: "English Bitter, Stout" },
+    { id: "mexican-lager", name: "WLP040 Mexican Lager", origin: "Mexico", temp: "10-14°C", tags: ["Lager", "Clean", "Mexican", "Liquid"], desc: "Den ultimata jästen för ljusa sommar-cervezas.", styles: "Mexican Lager, Helles" },
+    { id: "hornindal", name: "Omega OYL-091 Hornindal Kveik", origin: "Norway", temp: "22-37°C", tags: ["Kveik", "Tropical", "Fast", "Liquid"], desc: "Tropisk frukt-bomb! Ananas och mango i massor.", styles: "NEIPA, Pale Ale" },
+    { id: "wyeast-3724", name: "Wyeast 3724 Belgian Saison", origin: "Belgium", temp: "21-35°C", tags: ["Ale", "Saison", "Stubborn", "Liquid"], desc: "Dupont-stammen. Behöver hög värme för att inte stanna.", styles: "Saison, Farmhouse" },
+    { id: "wlp570", name: "WLP570 Belgian Golden", origin: "Belgium", temp: "20-25°C", tags: ["Ale", "Belgian", "Pear", "Liquid"], desc: "Duvel-stammen. Jäser torrt med toner av päron och vitt vin.", styles: "Belgian Strong Gold" },
+    { id: "wyeast-2112", name: "Wyeast 2112 California", origin: "USA", temp: "14-20°C", tags: ["Lager", "Hybrid", "Steam", "Liquid"], desc: "Anchor Steam-jästen. Lagerkaraktär jäsas i rumstemp.", styles: "California Common" },
+    { id: "wlp380", name: "WLP380 Hefeweizen IV", origin: "Germany", temp: "19-22°C", tags: ["Wheat", "Clove", "Spicy", "Liquid"], desc: "Mindre banan, mer kryddnejlika än WLP300.", styles: "Hefeweizen, Weizenbock" },
+    { id: "wyeast-1007", name: "Wyeast 1007 German Ale", origin: "Germany", temp: "13-20°C", tags: ["Ale", "German", "Clean", "Liquid"], desc: "Krispig och ren. Kan jäsas kallt för lagerprofil.", styles: "Altbier, German Ale" }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
