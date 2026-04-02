@@ -126,6 +126,48 @@ const yeastDatabase = {
     
     { "s": "German Bock", "p": "Traditional Lager", "steps": [[0, 11.0], [10, 13.0], [16, 16.0], [35, 2.0]] },
     { "s": "German Bock", "p": "Trad. Bock", "steps": [[0, 10.0], [12, 16.0], [16, 2.0], [35, 2.0]] },
-    { "s": "German Bock", "p": "Fast Bock", "steps": [[0, 12.0], [7, 17.0], [11, 3.0], [24, 3.0]] }
+    { "s": "German Bock", "p": "Fast Bock", "steps": [[0, 12.0], [7, 17.0], [11, 3.0], [24, 3.0]] },
+    
+    { "s": "San Diego Super", "p": "Standard", "steps": [[0, 19.0], [4, 20.0], [8, 21.0], [14, 2.0]] },
+    { "s": "San Diego Super", "p": "Low Ester", "steps": [[0, 18.0], [5, 19.0], [9, 21.0], [14, 2.0]] },
+    { "s": "San Diego Super", "p": "High Ester", "steps": [[0, 20.0], [3, 21.0], [7, 21.0], [14, 2.0]] },
+    { "s": "San Diego Super", "p": "Fast & Crisp", "steps": [[0, 19.5], [3, 21.0], [6, 2.0], [14, 2.0]] },
+
+    { "s": "American II", "p": "Standard", "steps": [[0, 19.0], [4, 20.0], [8, 21.0], [14, 2.0]] },
+    { "s": "American II", "p": "Low Ester", "steps": [[0, 18.0], [5, 19.0], [8, 20.0], [14, 2.0]] },
+    { "s": "American II", "p": "High Ester", "steps": [[0, 20.0], [3, 22.0], [7, 22.0], [14, 2.0]] },
+    { "s": "American II", "p": "Amber Nutty", "steps": [[0, 19.5], [4, 21.0], [9, 3.0], [14, 3.0]] },
+
+    { "s": "Dry Hop", "p": "Standard", "steps": [[0, 19.0], [4, 21.0], [8, 3.0], [14, 3.0]] },
+    { "s": "Dry Hop", "p": "Hazy Citrus", "steps": [[0, 20.0], [3, 22.5], [7, 3.0], [14, 3.0]] },
+    { "s": "Dry Hop", "p": "Dry Hop Burst", "steps": [[0, 18.5], [3, 21.0], [6, 22.0], [14, 3.0]] },
+
+    { "s": "Westmalle", "p": "Standard", "steps": [[0, 19.0], [3, 20.0], [7, 21.0], [14, 3.0]] },
+    { "s": "Westmalle", "p": "Trappist Ramp", "steps": [[0, 18.0], [4, 23.0], [8, 25.0], [14, 3.0]] },
+    { "s": "Westmalle", "p": "Dark Fruit", "steps": [[0, 20.0], [3, 24.0], [7, 24.0], [14, 3.0]] },
+
+    { "s": "French Saison", "p": "Standard", "steps": [[0, 20.0], [4, 22.0], [8, 24.0], [14, 3.0]] },
+    { "s": "French Saison", "p": "Bone Dry", "steps": [[0, 22.0], [3, 25.0], [7, 26.0], [14, 3.0]] },
+    { "s": "French Saison", "p": "Farmhouse Spice", "steps": [[0, 24.0], [4, 28.0], [8, 28.0], [14, 3.0]] },
+
+    { "s": "Scottish Ale", "p": "Standard", "steps": [[0, 18.0], [4, 20.0], [8, 20.0], [14, 2.0]] },
+    { "s": "Scottish Ale", "p": "Wee Heavy", "steps": [[0, 16.0], [7, 18.0], [14, 19.0], [21, 3.0]] },
+    { "s": "Scottish Ale", "p": "Cold & Clean", "steps": [[0, 14.5], [10, 17.0], [15, 2.0], [25, 2.0]] },
+
+    { "s": "West Yorkshire", "p": "Standard", "steps": [[0, 19.0], [3, 21.0], [7, 3.0], [14, 3.0]] },
+    { "s": "West Yorkshire", "p": "Yorkshire Bitter", "steps": [[0, 20.0], [4, 21.5], [8, 5.0], [14, 5.0]] },
+    { "s": "West Yorkshire", "p": "Pub Temp", "steps": [[0, 18.5], [5, 19.5], [10, 8.0], [14, 8.0]] },
+
+    { "s": "Lutra Kveik", "p": "Standard", "steps": [[0, 25.0], [3, 25.0], [7, 3.0], [10, 3.0]] },
+    { "s": "Lutra Kveik", "p": "Pseudo-Lager", "steps": [[0, 20.0], [4, 21.0], [8, 2.0], [14, 2.0]] },
+    { "s": "Lutra Kveik", "p": "Speed Run", "steps": [[0, 32.0], [2, 32.0], [4, 32.0], [7, 3.0]] },
+
+    { "s": "Philly Sour", "p": "Standard", "steps": [[0, 22.0], [4, 22.0], [8, 20.0], [14, 3.0]] },
+    { "s": "Philly Sour", "p": "Lactic Boost", "steps": [[0, 25.0], [4, 25.0], [6, 20.0], [14, 3.0]] },
+    { "s": "Philly Sour", "p": "Sour Fruit", "steps": [[0, 23.5], [5, 23.5], [8, 21.0], [14, 3.0]] },
+
+    { "s": "Oktoberfest", "p": "Traditional Lager", "steps": [[0, 11.0], [10, 12.0], [15, 16.0], [35, 2.0]] },
+    { "s": "Oktoberfest", "p": "Fast Festbier", "steps": [[0, 13.0], [7, 16.5], [12, 3.0], [21, 3.0]] },
+    { "s": "Oktoberfest", "p": "Malty Marzen", "steps": [[0, 10.0], [12, 11.5], [18, 15.0], [40, 2.0]] }
   ]
 };
