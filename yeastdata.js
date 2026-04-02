@@ -168,6 +168,43 @@ const yeastDatabase = {
 
     { "s": "Oktoberfest", "p": "Traditional Lager", "steps": [[0, 11.0], [10, 12.0], [15, 16.0], [35, 2.0]] },
     { "s": "Oktoberfest", "p": "Fast Festbier", "steps": [[0, 13.0], [7, 16.5], [12, 3.0], [21, 3.0]] },
-    { "s": "Oktoberfest", "p": "Malty Marzen", "steps": [[0, 10.0], [12, 11.5], [18, 15.0], [40, 2.0]] }
+    { "s": "Oktoberfest", "p": "Malty Marzen", "steps": [[0, 10.0], [12, 11.5], [18, 15.0], [40, 2.0]] },
+
+    { "s": "BRY-97", "p": "Standard", "steps": [[0, 19.0], [4, 21.0], [8, 21.0], [14, 2.0]] },
+    { "s": "BRY-97", "p": "Low Ester", "steps": [[0, 17.5], [5, 19.0], [9, 21.0], [14, 2.0]] },
+    { "s": "BRY-97", "p": "West Coast Crisp", "steps": [[0, 18.0], [4, 20.0], [7, 22.0], [14, 2.0]] },
+
+    { "s": "K-97", "p": "Standard", "steps": [[0, 18.0], [4, 20.0], [8, 20.0], [14, 2.0]] },
+    { "s": "K-97", "p": "Altbier Crisp", "steps": [[0, 15.0], [7, 17.0], [12, 18.0], [21, 2.0]] },
+    { "s": "K-97", "p": "Kölsch Style", "steps": [[0, 16.0], [5, 18.0], [10, 20.0], [18, 2.0]] },
+
+    { "s": "Windsor", "p": "Standard", "steps": [[0, 19.0], [3, 20.0], [7, 21.0], [14, 2.0]] },
+    { "s": "Windsor", "p": "Sweet Stout", "steps": [[0, 18.0], [4, 19.5], [8, 20.0], [14, 2.0]] },
+    { "s": "Windsor", "p": "Fruity Bitter", "steps": [[0, 20.0], [3, 21.5], [7, 22.0], [14, 2.0]] },
+
+    { "s": "Mexican Lager", "p": "Traditional Lager", "steps": [[0, 11.0], [9, 12.0], [14, 16.0], [28, 2.0]] },
+    { "s": "Mexican Lager", "p": "Fast Cerveza", "steps": [[0, 13.0], [6, 16.5], [11, 2.0], [21, 2.0]] },
+
+    { "s": "Hornindal Kveik", "p": "Standard", "steps": [[0, 30.0], [2, 30.0], [5, 30.0], [8, 4.0]] },
+    { "s": "Hornindal Kveik", "p": "Tropical Bomb", "steps": [[0, 35.0], [2, 36.0], [4, 36.0], [7, 4.0]] },
+    { "s": "Hornindal Kveik", "p": "Clean Pseudo", "steps": [[0, 24.0], [3, 26.0], [7, 4.0], [10, 4.0]] },
+
+    { "s": "Belgian Saison", "p": "Standard", "steps": [[0, 22.0], [3, 24.0], [7, 24.0], [14, 3.0]] },
+    { "s": "Belgian Saison", "p": "The Dupont Ramp", "steps": [[0, 22.0], [3, 26.0], [7, 30.0], [21, 3.0]] },
+
+    { "s": "Belgian Golden", "p": "Standard", "steps": [[0, 19.0], [3, 21.0], [7, 3.0], [14, 3.0]] },
+    { "s": "Belgian Golden", "p": "Golden Strong", "steps": [[0, 20.0], [4, 24.0], [8, 26.0], [14, 3.0]] },
+
+    { "s": "California Lager", "p": "Standard", "steps": [[0, 17.0], [4, 19.0], [8, 20.0], [14, 2.0]] },
+    { "s": "California Lager", "p": "Steam Beer", "steps": [[0, 15.0], [5, 17.0], [10, 20.0], [18, 2.0]] },
+    { "s": "California Lager", "p": "Warm Lager", "steps": [[0, 19.0], [4, 20.0], [8, 2.0], [14, 2.0]] },
+
+    { "s": "Hefeweizen IV", "p": "Standard", "steps": [[0, 19.0], [3, 21.0], [7, 3.0], [14, 3.0]] },
+    { "s": "Hefeweizen IV", "p": "Clove Master", "steps": [[0, 17.0], [4, 18.0], [8, 20.0], [14, 3.0]] },
+    { "s": "Hefeweizen IV", "p": "Balanced", "steps": [[0, 19.0], [4, 20.0], [8, 21.0], [14, 3.0]] },
+
+    { "s": "German Ale 1007", "p": "Standard", "steps": [[0, 17.0], [4, 19.0], [8, 2.0], [14, 2.0]] },
+    { "s": "German Ale 1007", "p": "Altbier Crisp", "steps": [[0, 15.0], [7, 18.0], [12, 2.0], [21, 2.0]] },
+    { "s": "German Ale 1007", "p": "Pseudo Lager", "steps": [[0, 13.0], [8, 16.0], [14, 2.0], [28, 2.0]] }
   ]
 };
