@@ -41,7 +41,17 @@ const yeastStrains = [
     { id: "wyeast-1469", name: "Wyeast 1469 West Yorkshire", origin: "UK", temp: "18-22°C", tags: ["Pub Ale", "Nutty", "Liquid"], desc: "Timothy Taylor-stammen! Den absolut bästa jästen för en äkta engelsk Bitter.", styles: "ESB, English Bitter" },
     { id: "lutra", name: "Omega Lutra Kveik", origin: "Norway", temp: "20-35°C", tags: ["Pseudo-Lager", "Fast", "Liquid"], desc: "Ett modernt Kveik-mirakel som smakar exakt som krispig lager, men på halva tiden.", styles: "Pseudo-Lager, Pilsner" },
     { id: "philly-sour", name: "Lallemand Philly Sour", origin: "USA", temp: "20-25°C", tags: ["Sour", "Lactic", "Dry"], desc: "Unik jäst som skapar mjölksyra (syrlighet) innan den skapar alkohol. För säkra suröl.", styles: "Sour, Gose, Berliner Weisse" },
-    { id: "wlp820", name: "WLP820 Oktoberfest", origin: "Germany", temp: "11-14°C", tags: ["Malty", "Lager", "Liquid"], desc: "Skapar otroligt rik, maltig och brödig karaktär. Oumbärlig för tyska festöl.", styles: "Märzen, Oktoberfest, Bock" }
+    { id: "wlp820", name: "WLP820 Oktoberfest", origin: "Germany", temp: "11-14°C", tags: ["Malty", "Lager", "Liquid"], desc: "Skapar otroligt rik, maltig och brödig karaktär. Oumbärlig för tyska festöl.", styles: "Märzen, Oktoberfest, Bock" },
+    { id: "bry-97", name: "Lallemand BRY-97", origin: "USA", temp: "15-22°C", tags: ["Crisp", "Dry", "Hoppy"], desc: "En fantastisk West Coast torrjäst. Ofta föredragen framför US-05 för att den framhäver humlen ännu mer.", styles: "West Coast IPA, Pale Ale" },
+    { id: "k-97", name: "SafAle K-97", origin: "Germany", temp: "15-20°C", tags: ["Crisp", "Dry", "German"], desc: "En torr tysk ale-jäst känd för enorm krausen (skumkrona). Perfekt för krispiga Altbier och Kölsch-liknande öl.", styles: "Altbier, Kölsch, Blonde" },
+    { id: "windsor", name: "Lallemand Windsor", origin: "UK", temp: "15-22°C", tags: ["Fruity", "Full Body", "Dry"], desc: "Fruktig engelsk stam som inte kan jäsa maltotrios. Lämnar ölet fylligt och lite sött.", styles: "Sweet Stout, English Bitter" },
+    { id: "mexican-lager", name: "WLP040 Mexican Lager", origin: "Mexico", temp: "10-14°C", tags: ["Crisp", "Clean", "Liquid"], desc: "Den ultimata jästen för ljusa sommaröl och Cerveza med majs. Krispig och ren.", styles: "Mexican Lager, Light Lager" },
+    { id: "hornindal", name: "Omega OYL-091 Hornindal", origin: "Norway", temp: "22-37°C", tags: ["Tropical", "Fast", "Liquid"], desc: "En Kveik som skriker ananas, mango och tropisk frukt. Fantastisk till Hazy IPAs.", styles: "NEIPA, Pale Ale" },
+    { id: "wyeast-3724", name: "Wyeast 3724 Belgian Saison", origin: "Belgium", temp: "21-35°C", tags: ["Spicy", "Stubborn", "Liquid"], desc: "Den berömda Dupont-stammen. Ökänd för att stanna halvvägs om man inte ger den rejält med värme!", styles: "Saison, Farmhouse Ale" },
+    { id: "wlp570", name: "WLP570 Belgian Golden", origin: "Belgium", temp: "20-25°C", tags: ["Pear", "Apple", "Liquid"], desc: "Originalet från Duvel. Ger enorma pär- och äppeltoner och jäser extremt torrt.", styles: "Belgian Golden Strong, Tripel" },
+    { id: "wyeast-2112", name: "Wyeast 2112 California", origin: "USA", temp: "14-20°C", tags: ["Hybrid", "Woody", "Liquid"], desc: "Anchor Steam-jästen! En lagerjäst som överlevt att jäsas varmt under guldrushen i Kalifornien.", styles: "California Common, Steam Beer" },
+    { id: "wlp380", name: "WLP380 Hefeweizen IV", origin: "Germany", temp: "19-22°C", tags: ["Clove", "Spicy", "Liquid"], desc: "Vill du ha mindre banan och mer nejlika/krydda i ditt veteöl? Då är detta rätt val.", styles: "Hefeweizen, Dunkelweizen" },
+    { id: "wyeast-1007", name: "Wyeast 1007 German Ale", origin: "Germany", temp: "13-20°C", tags: ["Clean", "Crisp", "Liquid"], desc: "En otroligt krispig tysk arbetshäst. Jäser rent även vid låga temperaturer.", styles: "Altbier, American Ale" }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -2097,7 +2107,17 @@ function openYeastModal(yeast) {
             "wyeast-1469": "West Yorkshire",
             "lutra": "Lutra Kveik",
             "philly-sour": "Philly Sour",
-            "wlp820": "Oktoberfest"
+            "wlp820": "Oktoberfest",
+            "bry-97": "BRY-97",
+            "k-97": "K-97",
+            "windsor": "Windsor",
+            "mexican-lager": "Mexican Lager",
+            "hornindal": "Hornindal Kveik",
+            "wyeast-3724": "Belgian Saison",
+            "wlp570": "Belgian Golden",
+            "wyeast-2112": "California Lager",
+            "wlp380": "Hefeweizen IV",
+            "wyeast-1007": "German Ale 1007"
         };
 
         const targetStrainName = hwStrainNames[yeast.id];
