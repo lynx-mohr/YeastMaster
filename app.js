@@ -2175,9 +2175,136 @@ const yeastDescriptions = {
     `
 };
 
+// ==========================================
+// --- AUTOMAGISK GENERATOR FÖR PROFILER ---
+// ==========================================
 
+function generateHardwareProfilesHTML(yeastName) {
+    // 1. Leta upp alla profiler i databasen som tillhör den valda jästen
+    const profiles = yeastDatabase.yeasts.filter(y => y.s === yeastName);
+    
+    // Om jästen saknar hårdvaruprofiler (eller vi klickat på en Custom Profile), visa inget
+    if (!profiles || profiles.length === 0) return '';
 
-// --- POPUP-FUNKTIONER (MODAL) ---
+    let html = `<h4 style="color: var(--accent-color); margin-top: 25px; margin-bottom: 10px;">Included Hardware Profiles:</h4>`;
+
+    // 2. Loopa igenom varje profil vi hittade
+    profiles.forEach((profile, index) => {
+        const startTemp = profile.steps[0][1]; // Hämtar tempen från det allra första steget
+        
+        // --- Bygg "dragspelsknappen" ---
+        html += `
+            <button class="hw-profile-btn" onclick="toggleHwProfile('${yeastName.replace(/\s+/g, '')}-${index}', this)">
+                <strong>${profile.p}</strong> 
+                <span style="color: #888; font-size: 0.85em;">(Starts @ ${startTemp}°C)</span>
+            </button>
+        `;
+
+        // --- Bygg den utfällbara Summary-rutan ---
+        const uniqueId = `hw-profile-summary-${yeastName.replace(/\s+/g, '')}-${index}`;
+        html += `<div class="hw-profile-summary" id="${uniqueId}">`;
+        html += `<div class="summary-header">PROFILE SUMMARY</div>`;
+        
+        // --- Översätt den kompakta datan till läsbar text (Som i Profiler) ---
+        const steps = profile.steps;
+        
+        // Steg 1: Pitch
+        html += `
+            <div class="summary-row">
+                <span class="label">Pitch</span>
+                <span class="value">Day ${steps[0][0]} @ ${steps[0][1].toFixed(1)}°C</span>
+            </div>
+        `;
+        
+        // Steg 2: Primary (Bara om det finns mer än ett steg)
+        if (steps.length > 1) {
+            html += `
+                <div class="summary-row">
+                    <span class="label">Primary</span>
+                    <span class="value">Hold until Day ${steps[1][0]}</span>
+                </div>
+            `;
+        }
+        
+        // Steg 3: Cleanup / Ramp (Om tempen höjs i steg 2)
+        if (steps.length > 2) {
+             const tempDiff = steps[2][1] - steps[1][1];
+             if (tempDiff > 0) {
+                 html += `
+                    <div class="summary-row">
+                        <span class="label">Cleanup</span>
+                        <span class="value">Reach ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}</span>
+                    </div>
+                `;
+             } else {
+                 // Om tempen inte höjs (t.ex. lager-raster)
+                 html += `
+                    <div class="summary-row">
+                        <span class="label">Secondary</span>
+                        <span class="value">Hold at ${steps[2][1].toFixed(1)}°C until Day ${steps[2][0]}</span>
+                    </div>
+                `;
+             }
+        }
+        
+        // Sista Steget: Cold Crash / Condition
+        if (steps.length > 3) {
+            const isCrash = steps[3][1] < 10; // Om sluttempen är under 10 grader antar vi Cold Crash
+            const label = isCrash ? "Cold Crash" : "Condition";
+            const action = isCrash ? "Drop to" : "Hold at";
+            
+            html += `
+                <div class="summary-row">
+                    <span class="label">${label}</span>
+                    <span class="value">${action} ${steps[3][1].toFixed(1)}°C by Day ${steps[3][0]}</span>
+                </div>
+            `;
+        }
+        
+        html += `</div>`; // Stäng summary-boxen
+    });
+
+    return html;
+}
+
+// ==========================================
+// --- AUTOMAGISK GENERATOR FÖR PROFILER ---
+// ==========================================
+window.toggleHwProfile = function(uniqueId, btnElement) {
+    const summaryBox = document.getElementById(uniqueId);
+    
+    // Stäng alla andra öppna rutor först (för snyggare UX)
+    document.querySelectorAll('.hw-profile-summary').forEach(box => {
+        if (box.id !== uniqueId) box.classList.remove('open');
+    });
+    document.querySelectorAll('.hw-profile-btn').forEach(btn => {
+        if (btn !== btnElement) btn.classList.remove('active');
+    });
+
+    // Öppna den klickade rutan
+    summaryBox.classList.toggle('open');
+    btnElement.classList.toggle('active');
+};
+
+// ==========================================
+// --- AUTOMAGISK GENERATOR FÖR PROFILER ---
+// ==========================================
+window.toggleHwProfile = function(uniqueId, btnElement) {
+    const summaryBox = document.getElementById(uniqueId);
+    
+    // Stäng alla andra öppna rutor först (för snyggare UX)
+    document.querySelectorAll('.hw-profile-summary').forEach(box => {
+        if (box.id !== uniqueId) box.classList.remove('open');
+    });
+    document.querySelectorAll('.hw-profile-btn').forEach(btn => {
+        if (btn !== btnElement) btn.classList.remove('active');
+    });
+
+    // Öppna den klickade rutan
+    summaryBox.classList.toggle('open');
+    btnElement.classList.toggle('active');
+};
+
 function openYeastModal(yeast) {
     const modal = document.getElementById('yeast-info-modal');
     const modalTitle = document.getElementById('modal-yeast-name');
@@ -2221,7 +2348,7 @@ function openYeastModal(yeast) {
             detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:20px; color: #fff;">Passar till:</h3><p>${yeast.styles}</p>`;
         }
 
-// 3. LÄGG TILL INKLUDERADE MASKINPROFILER
+        // 3. LÄGG TILL INKLUDERADE MASKINPROFILER (MAGIN ÄR HÄR!)
         const hwStrainNames = {
             "us-05": "US-05", 
             "s-04": "S-04", 
@@ -2278,18 +2405,88 @@ function openYeastModal(yeast) {
         const targetStrainName = hwStrainNames[yeast.id];
         if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
             const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
+            
             if (matchingProfiles.length > 0) {
                 let profileListHtml = `
                     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
-                        <h4 style="color: var(--accent-color); margin-bottom: 10px;">Included Hardware Profiles:</h4>
-                        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem;">
+                        <h4 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Included Hardware Profiles:</h4>
                 `;
-                matchingProfiles.forEach(prof => {
+                
+                // Bygg de klickbara dragspelsknapparna och deras innehåll
+                matchingProfiles.forEach((prof, index) => {
                     const startTemp = prof.steps[0][1];
-                    profileListHtml += `<li><strong style="color: #fff;">${prof.p}</strong> (Starts @ ${startTemp}°C)</li>`;
+                    const uniqueId = `hw-profile-summary-${yeast.id}-${index}`; // Unikt ID för varje ruta
+                    const steps = prof.steps;
+                    
+                    // --- Själva knappen ---
+                    profileListHtml += `
+                        <button class="hw-profile-btn" onclick="toggleHwProfile('${uniqueId}', this)">
+                            <strong>${prof.p}</strong> 
+                            <span style="color: #888; font-size: 0.85em;">(Starts @ ${startTemp.toFixed(1)}°C)</span>
+                        </button>
+                    `;
+                    
+                    // --- Den dolda rutan (Summary) ---
+                    profileListHtml += `<div class="hw-profile-summary" id="${uniqueId}">`;
+                    profileListHtml += `<div class="summary-header">PROFILE SUMMARY</div>`;
+                    
+                    // Steg 1: Pitch
+                    profileListHtml += `
+                        <div class="summary-row">
+                            <span class="label">Pitch</span>
+                            <span class="value">Day ${steps[0][0]} @ ${steps[0][1].toFixed(1)}°C</span>
+                        </div>
+                    `;
+                    
+                    // Steg 2: Primary (Bara om det finns mer än ett steg)
+                    if (steps.length > 1) {
+                        profileListHtml += `
+                            <div class="summary-row">
+                                <span class="label">Primary</span>
+                                <span class="value">Hold until Day ${steps[1][0]}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    // Steg 3: Cleanup / Ramp 
+                    if (steps.length > 2) {
+                         const tempDiff = steps[2][1] - steps[1][1];
+                         if (tempDiff > 0) {
+                             profileListHtml += `
+                                <div class="summary-row">
+                                    <span class="label">Cleanup</span>
+                                    <span class="value">Reach ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}</span>
+                                </div>
+                            `;
+                         } else {
+                             profileListHtml += `
+                                <div class="summary-row">
+                                    <span class="label">Secondary</span>
+                                    <span class="value">Hold at ${steps[2][1].toFixed(1)}°C until Day ${steps[2][0]}</span>
+                                </div>
+                            `;
+                         }
+                    }
+                    
+                    // Sista Steget: Cold Crash / Condition
+                    if (steps.length > 3) {
+                        const isCrash = steps[3][1] < 10; 
+                        const label = isCrash ? "Cold Crash" : "Condition";
+                        const action = isCrash ? "Drop to" : "Hold at";
+                        
+                        profileListHtml += `
+                            <div class="summary-row">
+                                <span class="label">${label}</span>
+                                <span class="value">${action} ${steps[3][1].toFixed(1)}°C by Day ${steps[3][0]}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    profileListHtml += `</div>`; // Stäng summary-boxen
                 });
-                profileListHtml += `</ul></div>`;
-                detailedText += profileListHtml;
+                
+                profileListHtml += `</div>`; // Stäng hela sektionen
+                detailedText += profileListHtml; // Lägg till den i modalen
             }
         }
     }
@@ -2299,6 +2496,7 @@ function openYeastModal(yeast) {
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden'; // Lås bakgrunden
 }
+
 
 window.closeYeastModal = function() {
     const modal = document.getElementById('yeast-info-modal');
