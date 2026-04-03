@@ -4032,117 +4032,231 @@ function calculatePitch() {
 // --- ACADEMY MODULE ENGINE ---
 // ==========================================
 
-let currentLessonStep = 1;
-const totalLessonSteps = 5;
+let currentWizardStep = 0;
+let totalWizardSteps = 0;
+let stepActiveItems = {}; // Denna lagrar vilka checklista-items som ska tändas per steg
 
-// Biblioteket över alla lektioner (du kan lägga till fler här senare!)
-const academyLessons = {
+// Biblioteket över alla lektioner
+const academyModules = {
+    
+    // --- 1. Kalkylatorn (Behålls som den var, öppnas inte via wizard-motorn) ---
+    'calc': `...`, // (Din befintliga calc-kod)
+
+    // --- 2. YEAST STARTERS 101 (Din originalmall!) ---
+    'starters': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Starters 101</h2>
+        
+        <div class="wizard-layout">
+            
+            <div class="wizard-sidebar">
+                <h4>You will need:</h4>
+                <ul class="wizard-checklist" id="wizard-checklist">
+                    <li id="item-flask">Erlenmeyer Flask</li>
+                    <li id="item-scale">Precision Scale</li>
+                    <li id="item-dme">Light DME</li>
+                    <li id="item-water">Clean Water</li>
+                    <li id="item-heat">Heat Source</li>
+                    <li id="item-yeast">Yeast Pack</li>
+                    <li id="item-stirbar">Stir Bar</li>
+                    <li id="item-stirplate">Stir Plate</li>
+                </ul>
+            </div>
+
+            <div class="wizard-container" id="module-wizard">
+                <div class="wizard-dots" id="wizard-dots">
+                    <div class="wizard-dot active"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                </div>
+
+                <div class="wizard-step active" data-step="0">
+                    <div class="wizard-icon">🧽🧪</div>
+                    <h3>1. Clean & Prepare</h3>
+                    <p>Before we start, hygiene is everything. Make sure your Erlenmeyer flask is completely clean and sanitized.</p>
+                </div>
+
+                <div class="wizard-step" data-step="1">
+                    <div class="wizard-icon">⚖️🌾</div>
+                    <h3>2. The Golden Ratio</h3>
+                    <p>Place the flask on the scale. Weigh exactly <strong>100g of DME</strong> for every <strong>1 Liter of water</strong>. This creates a perfect 1.036 specific gravity.</p>
+                </div>
+
+                <div class="wizard-step" data-step="2">
+                    <div class="wizard-icon">🔥🌡️</div>
+                    <h3>3. Boil & Sterilize</h3>
+                    <p>Move the flask to your heat source. Boil gently for 10-15 minutes to sterilize the wort. <br><br><em>Pro-tip: Add a drop of Fermcap-S to prevent boil-overs!</em></p>
+                </div>
+
+                <div class="wizard-step" data-step="3">
+                    <div class="wizard-icon">❄️🌪️</div>
+                    <h3>4. Chill, Pitch & Spin</h3>
+                    <p>Cool the flask to 20°C (68°F). Pitch your yeast, drop in the stir bar, and place it on the stir plate for 24-48 hours. Watch those cells multiply!</p>
+                </div>
+
+                <div class="wizard-controls">
+                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
+                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
+                </div>
+            </div>
+        </div>
+    `,
+
+    // --- 3. YEAST WASHING 101 (Ombyggd för Wizard-mallen!) ---
     'washing': `
-        <div class="academy-lesson-container" style="padding: 20px; color: #fff;">
-            <h2 style="color: var(--accent-color); margin-top: 0;">Yeast Washing 101</h2>
-            <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 20px;">
-                Att återanvända jäst sparar pengar och ger ofta en ännu starkare och snabbare jäsning i generation 2. Genom att "tvätta" jästkakan separerar vi den friska, levande jästen från humlerester och döda celler.
-            </p>
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Washing 101</h2>
+        
+        <div class="wizard-layout">
+            
+            <div class="wizard-sidebar">
+                <h4>You will need:</h4>
+                <ul class="wizard-checklist" id="wizard-checklist">
+                    <li id="item-jars">Mason Jars</li>
+                    <li id="item-starsan">Star San</li>
+                    <li id="item-water">Sterile Water (Cooled)</li>
+                    <li id="item-cake">Yeast Cake</li>
+                    <li id="item-fridge">Fridge Space</li>
+                </ul>
+            </div>
 
-            <h4 style="margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;">Utrustning du behöver:</h4>
-            <ul style="list-style-type: square; padding-left: 20px; color: #ccc; margin-bottom: 30px; font-size: 0.9rem; line-height: 1.6;">
-                <li>2-3 stora glasburkar med lock (t.ex. Mason Jars), desinficerade.</li>
-                <li>1-2 liter kranvatten (kokat i 15 minuter och nedkylt till rumstemp).</li>
-                <li>Desinfektionsmedel (t.ex. Star San).</li>
-                <li>Din damejeanne/jästhink med jästkakan kvar (precis efter upptappning).</li>
-            </ul>
-
-            <div class="lesson-stepper" style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 20px; position: relative;">
-                
-                <div id="step-1" class="lesson-step">
-                    <h3 style="color: #fff; margin-top: 0;">Steg 1: Förberedelse</h3>
-                    <p style="color: #aaa; font-size: 0.95rem;">Hygien är A och O. Börja med att spraya allt med Star San. Häll därefter över ditt förkokta, nedkylda (sterila) vatten rakt ner i jästhinken där din smutsiga jästkaka ligger.</p>
+            <div class="wizard-container" id="module-wizard">
+                <div class="wizard-dots" id="wizard-dots">
+                    <div class="wizard-dot active"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
                 </div>
 
-                <div id="step-2" class="lesson-step" style="display: none;">
-                    <h3 style="color: #fff; margin-top: 0;">Steg 2: Skaka liv i kakan</h3>
-                    <p style="color: #aaa; font-size: 0.95rem;">Sätt på locket på jästhinken och snurra/skaka runt ordentligt! Målet är att bryta upp jästkakan helt så att den blandas med vattnet till en jämnt grumlig sörja. Lös upp alla klumpar.</p>
+                <div class="wizard-step active" data-step="0">
+                    <div class="wizard-icon">🧽💧</div>
+                    <h3>1. Prep & Dilute</h3>
+                    <p>Sanitize everything with Star San. Pour your pre-boiled, cooled (sterile) water directly into the fermenter right on top of the dirty yeast cake.</p>
                 </div>
 
-                <div id="step-3" class="lesson-step" style="display: none;">
-                    <h3 style="color: #fff; margin-top: 0;">Steg 3: Tyngdlagen jobbar (Vila)</h3>
-                    <p style="color: #aaa; font-size: 0.95rem;">Låt hinken stå helt stilla i <strong>20-30 minuter</strong>. Nu händer magin: Det tunga, mörka skräpet (humle och trub) sjunker snabbt till botten, medan den friska, lätta jästen stannar kvar uppe i vätskan som en vit mjölk.</p>
+                <div class="wizard-step" data-step="1">
+                    <div class="wizard-icon">🌪️💦</div>
+                    <h3>2. Shake it up</h3>
+                    <p>Put the lid back on the fermenter and swirl it vigorously! Break the yeast cake apart completely until the water looks like a thick, muddy slurry.</p>
                 </div>
 
-                <div id="step-4" class="lesson-step" style="display: none;">
-                    <h3 style="color: #fff; margin-top: 0;">Steg 4: Skörda det flytande guldet</h3>
-                    <p style="color: #aaa; font-size: 0.95rem;">Häll mycket försiktigt över den grumliga "mjölkiga" vätskan till dina desinficerade glasburkar. Sluta hälla direkt när du ser att den mörka bottensatsen (trubet) börjar följa med. Skruva på locken löst.</p>
+                <div class="wizard-step" data-step="2">
+                    <div class="wizard-icon">⏳🕰️</div>
+                    <h3>3. Let Gravity Work</h3>
+                    <p>Let the fermenter sit completely still for <strong>20-30 minutes</strong>. The heavy, dark trub and hop matter will sink rapidly, leaving the healthy yeast suspended in the milky liquid above.</p>
                 </div>
 
-                <div id="step-5" class="lesson-step" style="display: none;">
-                    <h3 style="color: #fff; margin-top: 0;">Steg 5: Kylskåp och Pitch</h3>
-                    <p style="color: #aaa; font-size: 0.95rem;">Ställ burkarna i kylen. Efter några dagar kommer jästen sedimentera till ett rent, vitt lager i botten med vatten ovanpå. När det är bryggdag: Häll av vattnet, låt burken bli rumsvarm, och knappa in volymen (slurryn) i vår Pitch Calculator!</p>
+                <div class="wizard-step" data-step="3">
+                    <div class="wizard-icon">🫗✨</div>
+                    <h3>4. Harvest the Gold</h3>
+                    <p>Carefully decant the milky liquid into your sanitized mason jars. Stop pouring the second you see the dark trub from the bottom trying to follow along.</p>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; border-top: 1px dashed #444; padding-top: 15px;">
-                    <button id="btn-prev-step" onclick="changeLessonStep(-1)" style="background: transparent; border: 1px solid #555; color: #fff; padding: 8px 15px; border-radius: 6px; cursor: pointer; visibility: hidden;">← Föregående</button>
-                    <span id="step-counter" style="color: var(--accent-color); font-weight: bold; font-size: 0.8rem;">1 / 5</span>
-                    <button id="btn-next-step" onclick="changeLessonStep(1)" style="background: var(--accent-color); border: none; color: #000; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;">Nästa →</button>
+                <div class="wizard-step" data-step="4">
+                    <div class="wizard-icon">🧊🧮</div>
+                    <h3>5. Crash & Pitch</h3>
+                    <p>Put the jars in the fridge. In a few days, the yeast will compact into a clean white layer. On brew day, decant the water, let it warm up, and measure the slurry into our Pitch Calculator!</p>
+                </div>
+
+                <div class="wizard-controls">
+                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
+                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
                 </div>
             </div>
         </div>
     `
 };
 
-// Öppna en lektion
-function openAcademyModule(moduleId) {
-    const contentHTML = academyLessons[moduleId];
+// ==========================================
+// --- LOGIK FÖR WIZARDEN OCH CHECKLISTAN ---
+// ==========================================
+
+function changeWizardStep(direction) {
+    currentWizardStep += direction;
+
+    if (currentWizardStep < 0) currentWizardStep = 0;
     
-    if (!contentHTML) {
-        alert("Lektionen är under konstruktion!");
+    if (currentWizardStep >= totalWizardSteps) {
+        closeAcademyModule();
         return;
     }
 
-    // Göm gridden och visa modul-vyn
-    document.getElementById('lab-content-academy').style.display = 'none';
-    document.getElementById('academy-module-view').style.display = 'block';
-    
-    // Injicera HTML
-    document.getElementById('academy-module-content').innerHTML = contentHTML;
+    // 1. Uppdatera Wizarden (Text och Prickar)
+    document.querySelectorAll('.wizard-step').forEach(step => {
+        step.classList.remove('active');
+        if (parseInt(step.getAttribute('data-step')) === currentWizardStep) {
+            step.classList.add('active');
+        }
+    });
 
-    // Nollställ steg-räknaren varje gång man öppnar en lektion
-    currentLessonStep = 1;
+    document.querySelectorAll('.wizard-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentWizardStep);
+    });
+
+    const prevBtn = document.getElementById('wiz-prev');
+    const nextBtn = document.getElementById('wiz-next');
+
+    if (prevBtn && nextBtn) {
+        prevBtn.disabled = currentWizardStep === 0;
+        nextBtn.innerText = currentWizardStep === totalWizardSteps - 1 ? "Finish! ✓" : "Next ➔";
+    }
+
+    // 2. Den Levande Checklistan!
+    document.querySelectorAll('.wizard-checklist li').forEach(li => {
+        li.classList.remove('active-item');
+    });
+
+    const itemsToHighlight = stepActiveItems[currentWizardStep];
+    if (itemsToHighlight) {
+        itemsToHighlight.forEach(itemId => {
+            const element = document.getElementById(itemId);
+            if (element) {
+                element.classList.add('active-item');
+            }
+        });
+    }
 }
 
-// Stäng lektionen och återgå till menyn
+// Öppna moduler och ladda in rätt konfiguration
+function openAcademyModule(moduleId) {
+    const overview = document.getElementById('lab-content-academy');
+    const moduleView = document.getElementById('academy-module-view');
+    const contentArea = document.getElementById('academy-module-content');
+
+    contentArea.innerHTML = academyModules[moduleId] || '<p style="color: #ff4444;">Module not found.</p>';
+
+    overview.style.display = 'none';
+    moduleView.style.display = 'block';
+
+    // Om vi öppnar Yeast Starters
+    if (moduleId === 'starters') {
+        currentWizardStep = 0;
+        totalWizardSteps = 4;
+        stepActiveItems = {
+            0: ['item-flask'],
+            1: ['item-flask', 'item-scale', 'item-dme', 'item-water'],
+            2: ['item-flask', 'item-heat'],
+            3: ['item-flask', 'item-yeast', 'item-stirbar', 'item-stirplate']
+        };
+        setTimeout(() => changeWizardStep(0), 10);
+    }
+    
+    // Om vi öppnar Yeast Washing
+    else if (moduleId === 'washing') {
+        currentWizardStep = 0;
+        totalWizardSteps = 5; // Denna har 5 steg!
+        stepActiveItems = {
+            0: ['item-starsan', 'item-water', 'item-cake'],
+            1: ['item-cake'],
+            2: ['item-cake'],
+            3: ['item-jars'],
+            4: ['item-jars', 'item-fridge']
+        };
+        setTimeout(() => changeWizardStep(0), 10);
+    }
+}
+
 function closeAcademyModule() {
     document.getElementById('academy-module-view').style.display = 'none';
     document.getElementById('lab-content-academy').style.display = 'block';
-    
-    // Töm innehållet (bra för prestandan)
-    document.getElementById('academy-module-content').innerHTML = '';
-}
-
-// Funktion för att bläddra i lektionen
-function changeLessonStep(direction) {
-    // Göm nuvarande steg
-    const currentStepDiv = document.getElementById(`step-${currentLessonStep}`);
-    if (currentStepDiv) currentStepDiv.style.display = 'none';
-    
-    // Uppdatera räknaren
-    currentLessonStep += direction;
-    
-    // Säkerställ att vi inte går utanför gränserna
-    if (currentLessonStep < 1) currentLessonStep = 1;
-    if (currentLessonStep > totalLessonSteps) currentLessonStep = totalLessonSteps;
-    
-    // Visa nästa steg
-    const nextStepDiv = document.getElementById(`step-${currentLessonStep}`);
-    if (nextStepDiv) nextStepDiv.style.display = 'block';
-    
-    // Uppdatera texten (t.ex. "2 / 5")
-    const counterText = document.getElementById('step-counter');
-    if (counterText) counterText.innerText = `${currentLessonStep} / ${totalLessonSteps}`;
-    
-    // Hantera knapparnas synlighet
-    const prevBtn = document.getElementById('btn-prev-step');
-    const nextBtn = document.getElementById('btn-next-step');
-    
-    if (prevBtn) prevBtn.style.visibility = (currentLessonStep === 1) ? 'hidden' : 'visible';
-    if (nextBtn) nextBtn.style.visibility = (currentLessonStep === totalLessonSteps) ? 'hidden' : 'visible';
 }
