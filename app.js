@@ -2911,36 +2911,48 @@ function setTheme(mode) {
 }
 
 function setAccent(color, element) {
-    // 1. Sätt huvudfärgen
+    // 1. Sätt huvudfärgen i hela appen
     document.documentElement.style.setProperty('--accent-color', color);
     
-    // 2. Bestäm en snygg matchande "secondary" färg beroende på vilken man valt!
-    let secondaryColor = color; // Som standard, låt dem vara samma
+    // 2. Para ihop med den perfekta accentfärg 2!
+    let secondaryColor = color; // Fallback
     
-    if (color === '#8CC63F') secondaryColor = '#F2994A'; // Grön får Orange kant!
-    if (color === '#00e5ff') secondaryColor = '#b142ff'; // Cyan får Lila kant!
-    if (color === '#ff4444') secondaryColor = '#ff9800'; // Röd får Gul kant!
-    
-    // Om användaren valde den sista Orangea pricken (#ff9800), låt oss ge den en ljusgul kant
-    if (color === '#ff9800') secondaryColor = '#F4C95D'; 
+    switch(color.toLowerCase()) {
+        case '#8cc63f': // Om Huvudfärg = Grön
+            secondaryColor = '#f39c12'; // Sekundär = Klar Orange
+            break;
+        case '#00e5ff': // Om Huvudfärg = Cyan
+            secondaryColor = '#b142ff'; // Sekundär = Lila
+            break;
+        case '#b142ff': // Om Huvudfärg = Lila
+            secondaryColor = '#00e5ff'; // Sekundär = Cyan
+            break;
+        case '#ff4444': // Om Huvudfärg = Röd
+            secondaryColor = '#ffcc00'; // Sekundär = Klargul
+            break;
+        case '#ff9800': // Om Huvudfärg = Orange
+            secondaryColor = '#f4c95d'; // Sekundär = Ljusgul (Pilsner-guld)
+            break;
+    }
 
-    // Sätt den sekundära färgen i appen
+    // Applicera den sekundära färgen
     document.documentElement.style.setProperty('--accent-secondary', secondaryColor);
 
     // Spara i LocalStorage så appen minns dina val
     localStorage.setItem('accentColor', color);
     localStorage.setItem('accentSecondary', secondaryColor);
     
-    // 3. Flytta .active-klassen till den klickade pricken
+    // 3. Flytta .active-klassen till den klickade pricken i Settings
     document.querySelectorAll('.color-dot').forEach(dot => dot.classList.remove('active'));
-    element.classList.add('active');
+    if (element) {
+        element.classList.add('active');
+    }
 
-    // 4. Om du har en graf öppen, trigga en uppdatering så linjen byter färg direkt
+    // 4. Uppdatera grafen live om den är öppen
     if (typeof updateChart === "function" && typeof lastData !== 'undefined') {
         updateChart(lastData);
     }
 }
-
 // Kolla om användaren har ett sparat tema när sidan laddas
 const savedTheme = localStorage.getItem('yeastmaster-theme');
 if (savedTheme) {
