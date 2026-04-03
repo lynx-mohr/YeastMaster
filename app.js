@@ -2348,58 +2348,23 @@ function openYeastModal(yeast) {
             detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:20px; color: #fff;">Passar till:</h3><p>${yeast.styles}</p>`;
         }
 
-        // 3. LÄGG TILL INKLUDERADE MASKINPROFILER (MAGIN ÄR HÄR!)
+        // 3. LÄGG TILL INKLUDERADE MASKINPROFILER
         const hwStrainNames = {
-            "us-05": "US-05", 
-            "s-04": "S-04", 
-            "w-34-70": "W-34/70", 
-            "be-256": "BE-256",
-            "wb-06": "WB-06", 
-            "verdant": "Verdant IPA", 
-            "voss": "Voss Kveik",
-            "nottingham": "Nottingham", 
-            "wlp001": "California Ale", 
-            "wlp300": "Hefeweizen",
-            "belle-saison": "Belle Saison", 
-            "t-58": "T-58", 
-            "s-23": "S-23",
-            "wlp002": "English Ale", 
-            "wlp500": "Trappist", 
-            "diamond": "Diamond",
-            "wlp066": "London Fog", 
-            "s-33": "S-33", 
-            "wlp800": "Pilsner Lager",
-            "novalager": "NovaLager", 
-            "wyeast-1968": "London ESB", 
-            "wlp920": "Old Bavarian",
-            "imperial-b45": "Imp. Gnome", 
-            "wyeast-1084": "Irish Ale", 
-            "wyeast-3944": "Belgian Wit",
-            "wlp833": "German Bock", 
-            "wlp007": "Dry English", 
-            "wyeast-1318": "London III",
-            "wyeast-2565": "Kolsch", 
-            "wlp095": "Burlington",
-            "wlp090": "San Diego Super",
-            "wyeast-1272": "American II",
-            "imperial-a24": "Dry Hop",
-            "wlp530": "Westmalle",
-            "wyeast-3711": "French Saison",
-            "wlp028": "Scottish Ale",
-            "wyeast-1469": "West Yorkshire",
-            "lutra": "Lutra Kveik",
-            "philly-sour": "Philly Sour",
-            "wlp820": "Oktoberfest",
-            "bry-97": "BRY-97",
-            "k-97": "K-97",
-            "windsor": "Windsor",
-            "mexican-lager": "Mexican Lager",
-            "hornindal": "Hornindal Kveik",
-            "wyeast-3724": "Belgian Saison",
-            "wlp570": "Belgian Golden",
-            "wyeast-2112": "California Lager",
-            "wlp380": "Hefeweizen IV",
-            "wyeast-1007": "German Ale 1007"
+            "us-05": "US-05", "s-04": "S-04", "w-34-70": "W-34/70", "be-256": "BE-256",
+            "wb-06": "WB-06", "verdant": "Verdant IPA", "voss": "Voss Kveik", "nottingham": "Nottingham", 
+            "wlp001": "California Ale", "wlp300": "Hefeweizen", "belle-saison": "Belle Saison", 
+            "t-58": "T-58", "s-23": "S-23", "wlp002": "English Ale", "wlp500": "Trappist", 
+            "diamond": "Diamond", "wlp066": "London Fog", "s-33": "S-33", "wlp800": "Pilsner Lager",
+            "novalager": "NovaLager", "wyeast-1968": "London ESB", "wlp920": "Old Bavarian",
+            "imperial-b45": "Imp. Gnome", "wyeast-1084": "Irish Ale", "wyeast-3944": "Belgian Wit",
+            "wlp833": "German Bock", "wlp007": "Dry English", "wyeast-1318": "London III",
+            "wyeast-2565": "Kolsch", "wlp095": "Burlington", "wlp090": "San Diego Super",
+            "wyeast-1272": "American II", "imperial-a24": "Dry Hop", "wlp530": "Westmalle",
+            "wyeast-3711": "French Saison", "wlp028": "Scottish Ale", "wyeast-1469": "West Yorkshire",
+            "lutra": "Lutra Kveik", "philly-sour": "Philly Sour", "wlp820": "Oktoberfest",
+            "bry-97": "BRY-97", "k-97": "K-97", "windsor": "Windsor", "mexican-lager": "Mexican Lager",
+            "hornindal": "Hornindal Kveik", "wyeast-3724": "Belgian Saison", "wlp570": "Belgian Golden",
+            "wyeast-2112": "California Lager", "wlp380": "Hefeweizen IV", "wyeast-1007": "German Ale 1007"
         };
 
         const targetStrainName = hwStrainNames[yeast.id];
@@ -2412,13 +2377,12 @@ function openYeastModal(yeast) {
                         <h4 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Included Hardware Profiles:</h4>
                 `;
                 
-                // Bygg de klickbara dragspelsknapparna och deras innehåll
                 matchingProfiles.forEach((prof, index) => {
                     const startTemp = prof.steps[0][1];
-                    const uniqueId = `hw-profile-summary-${yeast.id}-${index}`; // Unikt ID för varje ruta
+                    const uniqueId = `hw-profile-summary-${yeast.id}-${index}`; 
                     const steps = prof.steps;
                     
-                    // --- Själva knappen ---
+                    // --- Knappen ---
                     profileListHtml += `
                         <button class="hw-profile-btn" onclick="toggleHwProfile('${uniqueId}', this)">
                             <strong>${prof.p}</strong> 
@@ -2426,11 +2390,11 @@ function openYeastModal(yeast) {
                         </button>
                     `;
                     
-                    // --- Den dolda rutan (Summary) ---
+                    // --- Dragspels-rutan ---
                     profileListHtml += `<div class="hw-profile-summary" id="${uniqueId}">`;
                     profileListHtml += `<div class="summary-header">PROFILE SUMMARY</div>`;
                     
-                    // Steg 1: Pitch
+                    // 1. Pitch
                     profileListHtml += `
                         <div class="summary-row">
                             <span class="label">Pitch</span>
@@ -2438,7 +2402,7 @@ function openYeastModal(yeast) {
                         </div>
                     `;
                     
-                    // Steg 2: Primary (Bara om det finns mer än ett steg)
+                    // 2. Primary
                     if (steps.length > 1) {
                         profileListHtml += `
                             <div class="summary-row">
@@ -2448,7 +2412,7 @@ function openYeastModal(yeast) {
                         `;
                     }
                     
-                    // Steg 3: Cleanup / Ramp 
+                    // 3. Cleanup / Secondary
                     if (steps.length > 2) {
                          const tempDiff = steps[2][1] - steps[1][1];
                          if (tempDiff > 0) {
@@ -2468,33 +2432,47 @@ function openYeastModal(yeast) {
                          }
                     }
                     
-                    // Sista Steget: Cold Crash / Condition
+                    // 4 & 5. Cold Crash OCH Condition (Vi drar ut 2 rader från 1 punkt!)
                     if (steps.length > 3) {
-                        const isCrash = steps[3][1] < 10; 
-                        const label = isCrash ? "Cold Crash" : "Condition";
-                        const action = isCrash ? "Drop to" : "Hold at";
+                        const endTemp = steps[3][1];
+                        const endDay = steps[3][0];
                         
-                        profileListHtml += `
-                            <div class="summary-row">
-                                <span class="label">${label}</span>
-                                <span class="value">${action} ${steps[3][1].toFixed(1)}°C by Day ${steps[3][0]}</span>
-                            </div>
-                        `;
+                        if (endTemp < 10) {
+                            // Koden antar att Cold Crash sker över 1 dygn efter Cleanup
+                            const crashDay = steps[2][0] + 1; 
+                            profileListHtml += `
+                                <div class="summary-row">
+                                    <span class="label">Cold Crash</span>
+                                    <span class="value">Drop to ${endTemp.toFixed(1)}°C by Day ${crashDay}</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="label">Condition</span>
+                                    <span class="value">Hold until Day ${endDay}</span>
+                                </div>
+                            `;
+                        } else {
+                            // Om det inte är en Cold Crash (t.ex. Kveik som stannar varmt)
+                            profileListHtml += `
+                                <div class="summary-row">
+                                    <span class="label">Condition</span>
+                                    <span class="value">Hold at ${endTemp.toFixed(1)}°C until Day ${endDay}</span>
+                                </div>
+                            `;
+                        }
                     }
                     
-                    profileListHtml += `</div>`; // Stäng summary-boxen
+                    profileListHtml += `</div>`; 
                 });
                 
-                profileListHtml += `</div>`; // Stäng hela sektionen
-                detailedText += profileListHtml; // Lägg till den i modalen
+                profileListHtml += `</div>`; 
+                detailedText += profileListHtml; 
             }
         }
     }
 
-    // Slutlig formatering och visning
     modalDesc.innerHTML = formatTempText(detailedText);
     modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // Lås bakgrunden
+    document.body.style.overflow = 'hidden'; 
 }
 
 
