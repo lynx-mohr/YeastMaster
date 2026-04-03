@@ -2476,9 +2476,20 @@ window.addEventListener('DOMContentLoaded', () => {
         if (typeof calculatePitch === "function") calculatePitch();
     }
 
-    // 5. Tema och Färg (Ladda sparade val)
+   // 5. Tema och Färg (Ladda sparade val)
     const savedAccent = localStorage.getItem('accentColor');
-    if (savedAccent && typeof setAccent === "function") setAccent(savedAccent);
+    if (savedAccent && typeof setAccent === "function") {
+        // Vi måste låtsas "klicka" på rätt knapp för att färgerna ska bli rätt!
+        const matchingDot = document.querySelector(`.color-dot[style*="${savedAccent}"]`);
+        if (matchingDot) {
+            setAccent(savedAccent, matchingDot);
+        } else {
+             // Fallback om pricken inte hittas
+             document.documentElement.style.setProperty('--accent-color', savedAccent);
+             const savedSec = localStorage.getItem('accentSecondary');
+             if(savedSec) document.documentElement.style.setProperty('--accent-secondary', savedSec);
+        }
+    }
     
 if (localStorage.getItem('theme') === 'light') {
         document.body.classList.add('light-mode');
@@ -2900,15 +2911,32 @@ function setTheme(mode) {
 }
 
 function setAccent(color, element) {
-    // 1. Uppdatera själva CSS-variabeln i hela appen
+    // 1. Sätt huvudfärgen
     document.documentElement.style.setProperty('--accent-color', color);
+    
+    // 2. Bestäm en snygg matchande "secondary" färg beroende på vilken man valt!
+    let secondaryColor = color; // Som standard, låt dem vara samma
+    
+    if (color === '#8CC63F') secondaryColor = '#F2994A'; // Grön får Orange kant!
+    if (color === '#00e5ff') secondaryColor = '#b142ff'; // Cyan får Lila kant!
+    if (color === '#ff4444') secondaryColor = '#ff9800'; // Röd får Gul kant!
+    
+    // Om användaren valde den sista Orangea pricken (#ff9800), låt oss ge den en ljusgul kant
+    if (color === '#ff9800') secondaryColor = '#F4C95D'; 
 
-    // 2. Flytta .active-klassen till den klickade pricken
+    // Sätt den sekundära färgen i appen
+    document.documentElement.style.setProperty('--accent-secondary', secondaryColor);
+
+    // Spara i LocalStorage så appen minns dina val
+    localStorage.setItem('accentColor', color);
+    localStorage.setItem('accentSecondary', secondaryColor);
+    
+    // 3. Flytta .active-klassen till den klickade pricken
     document.querySelectorAll('.color-dot').forEach(dot => dot.classList.remove('active'));
     element.classList.add('active');
 
-    // 3. Om du har en graf öppen, trigga en uppdatering så linjen byter färg direkt
-    if (typeof updateChart === "function" && lastData) {
+    // 4. Om du har en graf öppen, trigga en uppdatering så linjen byter färg direkt
+    if (typeof updateChart === "function" && typeof lastData !== 'undefined') {
         updateChart(lastData);
     }
 }
