@@ -2382,7 +2382,6 @@ function openYeastModal(yeast) {
                     const uniqueId = `hw-profile-summary-${yeast.id}-${index}`; 
                     const steps = prof.steps;
                     
-                    // --- Knappen ---
                     profileListHtml += `
                         <button class="hw-profile-btn" onclick="toggleHwProfile('${uniqueId}', this)">
                             <strong>${prof.p}</strong> 
@@ -2390,75 +2389,34 @@ function openYeastModal(yeast) {
                         </button>
                     `;
                     
-                    // --- Dragspels-rutan ---
                     profileListHtml += `<div class="hw-profile-summary" id="${uniqueId}">`;
                     profileListHtml += `<div class="summary-header">PROFILE SUMMARY</div>`;
                     
+                    // --- NY, SMART LOGIK ---
+                    
                     // 1. Pitch
-                    profileListHtml += `
-                        <div class="summary-row">
-                            <span class="label">Pitch</span>
-                            <span class="value">Day ${steps[0][0]} @ ${steps[0][1].toFixed(1)}°C</span>
-                        </div>
-                    `;
-                    
+                    profileListHtml += `<div class="summary-row"><span class="label">Pitch</span><span class="value">Day ${steps[0][0]} @ ${steps[0][1].toFixed(1)}°C</span></div>`;
+
                     // 2. Primary
-                    if (steps.length > 1) {
-                        profileListHtml += `
-                            <div class="summary-row">
-                                <span class="label">Primary</span>
-                                <span class="value">Hold until Day ${steps[1][0]}</span>
-                            </div>
-                        `;
+                    if (steps[1][1] === steps[0][1]) {
+                        profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Hold until Day ${steps[1][0]}</span></div>`;
+                    } else {
+                        profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Reach ${steps[1][1].toFixed(1)}°C by Day ${steps[1][0]}</span></div>`;
                     }
-                    
-                    // 3. Cleanup / Secondary
-                    if (steps.length > 2) {
-                         const tempDiff = steps[2][1] - steps[1][1];
-                         if (tempDiff > 0) {
-                             profileListHtml += `
-                                <div class="summary-row">
-                                    <span class="label">Cleanup</span>
-                                    <span class="value">Reach ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}</span>
-                                </div>
-                            `;
-                         } else {
-                             profileListHtml += `
-                                <div class="summary-row">
-                                    <span class="label">Secondary</span>
-                                    <span class="value">Hold at ${steps[2][1].toFixed(1)}°C until Day ${steps[2][0]}</span>
-                                </div>
-                            `;
-                         }
+
+                    // 3. Cleanup eller Cold Crash
+                    if (steps[2][1] >= steps[1][1]) {
+                        let text = steps[2][1] > steps[1][1] ? `Rise to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}` : `Hold until Day ${steps[2][0]}`;
+                        profileListHtml += `<div class="summary-row"><span class="label">Cleanup</span><span class="value">${text}</span></div>`;
+                    } else {
+                        profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}</span></div>`;
                     }
-                    
-                    // 4 & 5. Cold Crash OCH Condition (Vi drar ut 2 rader från 1 punkt!)
-                    if (steps.length > 3) {
-                        const endTemp = steps[3][1];
-                        const endDay = steps[3][0];
-                        
-                        if (endTemp < 10) {
-                            // Koden antar att Cold Crash sker över 1 dygn efter Cleanup
-                            const crashDay = steps[2][0] + 1; 
-                            profileListHtml += `
-                                <div class="summary-row">
-                                    <span class="label">Cold Crash</span>
-                                    <span class="value">Drop to ${endTemp.toFixed(1)}°C by Day ${crashDay}</span>
-                                </div>
-                                <div class="summary-row">
-                                    <span class="label">Condition</span>
-                                    <span class="value">Hold until Day ${endDay}</span>
-                                </div>
-                            `;
-                        } else {
-                            // Om det inte är en Cold Crash (t.ex. Kveik som stannar varmt)
-                            profileListHtml += `
-                                <div class="summary-row">
-                                    <span class="label">Condition</span>
-                                    <span class="value">Hold at ${endTemp.toFixed(1)}°C until Day ${endDay}</span>
-                                </div>
-                            `;
-                        }
+
+                    // 4. Condition eller Cold Crash
+                    if (steps[3][1] < steps[2][1]) {
+                        profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[3][1].toFixed(1)}°C by Day ${steps[3][0]}</span></div>`;
+                    } else {
+                        profileListHtml += `<div class="summary-row"><span class="label">Condition</span><span class="value">Hold until Day ${steps[3][0]}</span></div>`;
                     }
                     
                     profileListHtml += `</div>`; 
