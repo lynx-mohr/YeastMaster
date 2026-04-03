@@ -3134,359 +3134,431 @@ if (user) {
 
 // Innehållet för de olika modulerna
 const academyModules = {
-    // --- 1. Kalkylatorn (Behålls som den var) ---
-    'calc': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Pitch Calculator</h2>
-        <div class="calc-container" style="margin: 0; padding: 0; background: transparent; border: none;">
-            <div class="calc-inputs">
-                <div class="input-group">
-                    <label>Batch Volume (L)</label>
-                    <input type="number" id="pitch-vol" value="20" oninput="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
-                </div>
-                <div class="input-group">
-                    <label>Gravity (OG)</label>
-                    <input type="number" id="pitch-og" value="1.050" step="0.001" oninput="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
-                </div>
-                <div class="input-group">
-                    <label>Pitch Rate (M/ml/°P)</label>
-                    <select id="pitch-rate" onchange="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
-                        <option value="0.75">0.75 (Standard Ale)</option>
-                        <option value="1.0">1.0 (High Gravity Ale)</option>
-                        <option value="1.5">1.5 (Standard Lager)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Harvest Date</label>
-                    <input type="date" id="pitch-date" onchange="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
-                </div>
-            </div>
+    // --- 1. Kalkylatorn ---
+    'calc': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Pitch Calculator</h2>
+        <div class="calc-container" style="margin: 0; padding: 0; background: transparent; border: none;">
+            <div class="calc-inputs">
+                <div class="input-group">
+                    <label>Batch Volume (L)</label>
+                    <input type="number" id="pitch-vol" value="20" oninput="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                </div>
+                <div class="input-group">
+                    <label>Gravity (OG)</label>
+                    <input type="number" id="pitch-og" value="1.050" step="0.001" oninput="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                </div>
+                <div class="input-group">
+                    <label>Pitch Rate (M/ml/°P)</label>
+                    <select id="pitch-rate" onchange="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                        <option value="0.75">0.75 (Standard Ale)</option>
+                        <option value="1.0">1.0 (High Gravity Ale)</option>
+                        <option value="1.5">1.5 (Standard Lager)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Harvest Date</label>
+                    <input type="date" id="pitch-date" onchange="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                </div>
+            </div>
 
-            <div class="calc-results" style="display: flex; gap: 15px; margin-top: 20px;">
-                <div class="res-card" style="flex: 1; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #333;">
-                    <span class="res-label" style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">CELLS NEEDED</span>
-                    <span class="res-val" id="res-needed" style="display: block; font-size: 2rem; font-weight: 800; color: #fff;">--</span>
-                    <span class="res-unit" style="font-size: 0.8rem; color: #666;">Billion cells</span>
-                </div>
-                <div class="res-card accent" style="flex: 1; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #333; border-left: 4px solid var(--accent-color);">
-                    <span class="res-label" style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">EST. VIABILITY</span>
-                    <span class="res-val" id="res-viability" style="display: block; font-size: 2rem; font-weight: 800; color: #fff;">--</span>
-                    <span class="res-unit" id="res-days-old" style="font-size: 0.8rem; color: #666;">New</span>
-                </div>
-            </div>
-            <div id="pitch-warning" class="warning-box" style="display:none; margin-top: 20px; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 15px; border-radius: 8px; font-size: 0.9rem; text-align: center; font-weight: 600;">
-                ⚠️ Warning: Underpitching detected. Consider building a starter!
-            </div>
-        </div>
-    `,
+            <div class="calc-results" style="display: flex; gap: 15px; margin-top: 20px;">
+                <div class="res-card" style="flex: 1; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #333;">
+                    <span class="res-label" style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">CELLS NEEDED</span>
+                    <span class="res-val" id="res-needed" style="display: block; font-size: 2rem; font-weight: 800; color: #fff;">--</span>
+                    <span class="res-unit" style="font-size: 0.8rem; color: #666;">Billion cells</span>
+                </div>
+                <div class="res-card accent" style="flex: 1; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #333; border-left: 4px solid var(--accent-color);">
+                    <span class="res-label" style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">EST. VIABILITY</span>
+                    <span class="res-val" id="res-viability" style="display: block; font-size: 2rem; font-weight: 800; color: #fff;">--</span>
+                    <span class="res-unit" id="res-days-old" style="font-size: 0.8rem; color: #666;">New</span>
+                </div>
+            </div>
+            <div id="pitch-warning" class="warning-box" style="display:none; margin-top: 20px; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 15px; border-radius: 8px; font-size: 0.9rem; text-align: center; font-weight: 600;">
+                ⚠️ Warning: Underpitching detected. Consider building a starter!
+            </div>
+        </div>
+    `,
 
-   // --- 2. YEAST STARTERS 101 (Med interaktiv checklista!) ---
-    'starters': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Starters 101</h2>
-        
-        <div class="wizard-layout">
-            
-            <div class="wizard-sidebar">
-                <h4>You will need:</h4>
-                <ul class="wizard-checklist" id="starter-checklist">
-                    <li id="item-flask">Erlenmeyer Flask</li>
-                    <li id="item-scale">Precision Scale</li>
-                    <li id="item-dme">Light DME</li>
-                    <li id="item-water">Clean Water</li>
-                    <li id="item-heat">Heat Source</li>
-                    <li id="item-yeast">Yeast Pack</li>
-                    <li id="item-stirbar">Stir Bar</li>
-                    <li id="item-stirplate">Stir Plate</li>
-                </ul>
-            </div>
+   // --- 2. YEAST STARTERS 101 ---
+    'starters': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Starters 101</h2>
+        
+        <div class="wizard-layout">
+            
+            <div class="wizard-sidebar">
+                <h4>You will need:</h4>
+                <ul class="wizard-checklist" id="wizard-checklist">
+                    <li id="item-flask">Erlenmeyer Flask</li>
+                    <li id="item-scale">Precision Scale</li>
+                    <li id="item-dme">Light DME</li>
+                    <li id="item-water">Clean Water</li>
+                    <li id="item-heat">Heat Source</li>
+                    <li id="item-yeast">Yeast Pack</li>
+                    <li id="item-stirbar">Stir Bar</li>
+                    <li id="item-stirplate">Stir Plate</li>
+                </ul>
+            </div>
 
-            <div class="wizard-container" id="starter-wizard">
-                <div class="wizard-dots" id="wizard-dots">
-                    <div class="wizard-dot active"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                </div>
+            <div class="wizard-container" id="module-wizard">
+                <div class="wizard-dots" id="wizard-dots">
+                    <div class="wizard-dot active"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                </div>
 
-                <div class="wizard-step active" data-step="0">
-                    <div class="wizard-icon">🧽🧪</div>
-                    <h3>1. Clean & Prepare</h3>
-                    <p>Before we start, hygiene is everything. Make sure your Erlenmeyer flask is completely clean and sanitized.</p>
-                </div>
+                <div class="wizard-step active" data-step="0">
+                    <div class="wizard-icon">🧽🧪</div>
+                    <h3>1. Clean & Prepare</h3>
+                    <p>Before we start, hygiene is everything. Make sure your Erlenmeyer flask is completely clean and sanitized.</p>
+                </div>
 
-                <div class="wizard-step" data-step="1">
-                    <div class="wizard-icon">⚖️🌾</div>
-                    <h3>2. The Golden Ratio</h3>
-                    <p>Place the flask on the scale. Weigh exactly <strong>100g of DME</strong> for every <strong>1 Liter of water</strong>. This creates a perfect 1.036 specific gravity.</p>
-                </div>
+                <div class="wizard-step" data-step="1">
+                    <div class="wizard-icon">⚖️🌾</div>
+                    <h3>2. The Golden Ratio</h3>
+                    <p>Place the flask on the scale. Weigh exactly <strong>100g of DME</strong> for every <strong>1 Liter of water</strong>. This creates a perfect 1.036 specific gravity.</p>
+                </div>
 
-                <div class="wizard-step" data-step="2">
-                    <div class="wizard-icon">🔥🌡️</div>
-                    <h3>3. Boil & Sterilize</h3>
-                    <p>Move the flask to your heat source. Boil gently for 10-15 minutes to sterilize the wort. <br><br><em>Pro-tip: Add a drop of Fermcap-S to prevent boil-overs!</em></p>
-                </div>
+                <div class="wizard-step" data-step="2">
+                    <div class="wizard-icon">🔥🌡️</div>
+                    <h3>3. Boil & Sterilize</h3>
+                    <p>Move the flask to your heat source. Boil gently for 10-15 minutes to sterilize the wort. <br><br><em>Pro-tip: Add a drop of Fermcap-S to prevent boil-overs!</em></p>
+                </div>
 
-                <div class="wizard-step" data-step="3">
-                    <div class="wizard-icon">❄️🌪️</div>
-                    <h3>4. Chill, Pitch & Spin</h3>
-                    <p>Cool the flask to 20°C (68°F). Pitch your yeast, drop in the stir bar, and place it on the stir plate for 24-48 hours. Watch those cells multiply!</p>
-                </div>
+                <div class="wizard-step" data-step="3">
+                    <div class="wizard-icon">❄️🌪️</div>
+                    <h3>4. Chill, Pitch & Spin</h3>
+                    <p>Cool the flask to 20°C (68°F). Pitch your yeast, drop in the stir bar, and place it on the stir plate for 24-48 hours. Watch those cells multiply!</p>
+                </div>
 
-                <div class="wizard-controls">
-                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
-                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
-                </div>
-            </div>
-        </div>
-    `,
+                <div class="wizard-controls">
+                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
+                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
+                </div>
+            </div>
+        </div>
+    `,
 
-    // --- 3. Agar (Behålls som den var) ---
-    'agar': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 5px; font-weight: 900; letter-spacing: -1px;">Mastering Agar Plates</h2>
-        <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">Learn to pour, streak, and isolate pure strains like a pro.</p>
-        <div class="module-ingredients" style="margin-bottom: 30px;">
-            <h3 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1.1rem; font-weight: 800;">🧪 Ingredients & Gear</h3>
-            <ul style="color: #ddd; line-height: 1.6; padding-left: 20px;">
-                <li><strong>10g</strong> Light DME (Dry Malt Extract)</li>
-                <li><strong>10g</strong> Agar-Agar powder</li>
-                <li><strong>500ml</strong> Water (Distilled or RO)</li>
-                <li>Borosilicate Flask (Erlenmeyer)</li>
-                <li>Petri Dishes (Sterile) & Parafilm</li>
-                <li>Pressure Cooker or Instant Pot</li>
-            </ul>
-        </div>
-    `,
-    'wild': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 5px; font-weight: 900; letter-spacing: -1px;">Capturing Wild Yeast</h2>
-        <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">Hunt for local microbes and brew something truly unique.</p>
-        <p style="color: #888;"><em>Lesson content coming soon...</em></p>
-    `
+    // --- 3. YEAST WASHING 101 ---
+    'washing': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Washing 101</h2>
+        
+        <div class="wizard-layout">
+            
+            <div class="wizard-sidebar">
+                <h4>You will need:</h4>
+                <ul class="wizard-checklist" id="wizard-checklist">
+                    <li id="item-jars">Mason Jars</li>
+                    <li id="item-starsan">Star San</li>
+                    <li id="item-water">Sterile Water (Cooled)</li>
+                    <li id="item-cake">Yeast Cake</li>
+                    <li id="item-fridge">Fridge Space</li>
+                </ul>
+            </div>
+
+            <div class="wizard-container" id="module-wizard">
+                <div class="wizard-dots" id="wizard-dots">
+                    <div class="wizard-dot active"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                </div>
+
+                <div class="wizard-step active" data-step="0">
+                    <div class="wizard-icon">🧽💧</div>
+                    <h3>1. Prep & Dilute</h3>
+                    <p>Sanitize everything with Star San. Pour your pre-boiled, cooled (sterile) water directly into the fermenter right on top of the dirty yeast cake.</p>
+                </div>
+
+                <div class="wizard-step" data-step="1">
+                    <div class="wizard-icon">🌪️💦</div>
+                    <h3>2. Shake it up</h3>
+                    <p>Put the lid back on the fermenter and swirl it vigorously! Break the yeast cake apart completely until the water looks like a thick, muddy slurry.</p>
+                </div>
+
+                <div class="wizard-step" data-step="2">
+                    <div class="wizard-icon">⏳🕰️</div>
+                    <h3>3. Let Gravity Work</h3>
+                    <p>Let the fermenter sit completely still for <strong>20-30 minutes</strong>. The heavy, dark trub and hop matter will sink rapidly, leaving the healthy yeast suspended in the milky liquid above.</p>
+                </div>
+
+                <div class="wizard-step" data-step="3">
+                    <div class="wizard-icon">🫗✨</div>
+                    <h3>4. Harvest the Gold</h3>
+                    <p>Carefully decant the milky liquid into your sanitized mason jars. Stop pouring the second you see the dark trub from the bottom trying to follow along.</p>
+                </div>
+
+                <div class="wizard-step" data-step="4">
+                    <div class="wizard-icon">🧊🧮</div>
+                    <h3>5. Crash & Pitch</h3>
+                    <p>Put the jars in the fridge. In a few days, the yeast will compact into a clean white layer. On brew day, decant the water, let it warm up, and measure the slurry into our Pitch Calculator!</p>
+                </div>
+
+                <div class="wizard-controls">
+                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
+                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
+                </div>
+            </div>
+        </div>
+    `,
+
+    // --- 4. Agar ---
+    'agar': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 5px; font-weight: 900; letter-spacing: -1px;">Mastering Agar Plates</h2>
+        <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">Learn to pour, streak, and isolate pure strains like a pro.</p>
+        <div class="module-ingredients" style="margin-bottom: 30px;">
+            <h3 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1.1rem; font-weight: 800;">🧪 Ingredients & Gear</h3>
+            <ul style="color: #ddd; line-height: 1.6; padding-left: 20px;">
+                <li><strong>10g</strong> Light DME (Dry Malt Extract)</li>
+                <li><strong>10g</strong> Agar-Agar powder</li>
+                <li><strong>500ml</strong> Water (Distilled or RO)</li>
+                <li>Borosilicate Flask (Erlenmeyer)</li>
+                <li>Petri Dishes (Sterile) & Parafilm</li>
+                <li>Pressure Cooker or Instant Pot</li>
+            </ul>
+        </div>
+    `,
+
+    // --- 5. Capturing Wild Yeast ---
+    'wild': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 5px; font-weight: 900; letter-spacing: -1px;">Capturing Wild Yeast</h2>
+        <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">Hunt for local microbes and brew something truly unique.</p>
+        <p style="color: #888;"><em>Lesson content coming soon...</em></p>
+    `
 };
 
 // ==========================================
-// --- LOGIK FÖR WIZARDEN ---
+// --- LOGIK FÖR WIZARDEN OCH CHECKLISTAN ---
 // ==========================================
 let currentWizardStep = 0;
-const totalWizardSteps = 4; // Hur många steg vi har i starters-modulen
+let totalWizardSteps = 0;
+let stepActiveItems = {}; 
 
 // Körs när man trycker Next eller Back
 function changeWizardStep(direction) {
-    currentWizardStep += direction;
+    currentWizardStep += direction;
 
-    if (currentWizardStep < 0) currentWizardStep = 0;
-    
-    if (currentWizardStep >= totalWizardSteps) {
-        closeAcademyModule();
-        return;
-    }
+    if (currentWizardStep < 0) currentWizardStep = 0;
+    
+    if (currentWizardStep >= totalWizardSteps) {
+        closeAcademyModule();
+        return;
+    }
 
-    // 1. Uppdatera Wizarden (Text och Prickar)
-    document.querySelectorAll('.wizard-step').forEach(step => {
-        step.classList.remove('active');
-        if (parseInt(step.getAttribute('data-step')) === currentWizardStep) {
-            step.classList.add('active');
-        }
-    });
+    // 1. Uppdatera Wizarden (Text och Prickar)
+    document.querySelectorAll('.wizard-step').forEach(step => {
+        step.classList.remove('active');
+        if (parseInt(step.getAttribute('data-step')) === currentWizardStep) {
+            step.classList.add('active');
+        }
+    });
 
-    document.querySelectorAll('.wizard-dot').forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentWizardStep);
-    });
+    document.querySelectorAll('.wizard-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentWizardStep);
+    });
 
-    const prevBtn = document.getElementById('wiz-prev');
-    const nextBtn = document.getElementById('wiz-next');
+    const prevBtn = document.getElementById('wiz-prev');
+    const nextBtn = document.getElementById('wiz-next');
 
-    if (prevBtn && nextBtn) {
-        prevBtn.disabled = currentWizardStep === 0;
-        nextBtn.innerText = currentWizardStep === totalWizardSteps - 1 ? "Finish! ✓" : "Next ➔";
-    }
+    if (prevBtn && nextBtn) {
+        prevBtn.disabled = currentWizardStep === 0;
+        nextBtn.innerText = currentWizardStep === totalWizardSteps - 1 ? "Finish! ✓" : "Next ➔";
+    }
 
-    // ==========================================
-    // --- NYTT: DEN LEVANDE CHECKLISTAN! ---
-    // ==========================================
-    
-    // Denna karta mappar steg-nummer (0-3) till ID:n på <li> i din HTML
-    const stepActiveItems = {
-        0: ['item-flask'], // Steg 1: Rengöring
-        1: ['item-flask', 'item-scale', 'item-dme', 'item-water'], // Steg 2: Vägning
-        2: ['item-flask', 'item-heat'], // Steg 3: Kokning
-        3: ['item-flask', 'item-yeast', 'item-stirbar', 'item-stirplate'] // Steg 4: Pitching
-    };
+    // 2. Den Levande Checklistan!
+    document.querySelectorAll('.wizard-checklist li').forEach(li => {
+        li.classList.remove('active-item');
+    });
 
-    // Släck alla objekt i listan först
-    document.querySelectorAll('.wizard-checklist li').forEach(li => {
-        li.classList.remove('active-item');
-    });
-
-    // Tänd upp de som används i just det här steget
-    const itemsToHighlight = stepActiveItems[currentWizardStep];
-    if (itemsToHighlight) {
-        itemsToHighlight.forEach(itemId => {
-            const element = document.getElementById(itemId);
-            if (element) {
-                element.classList.add('active-item');
-            }
-        });
-    }
+    const itemsToHighlight = stepActiveItems[currentWizardStep];
+    if (itemsToHighlight) {
+        itemsToHighlight.forEach(itemId => {
+            const element = document.getElementById(itemId);
+            if (element) {
+                element.classList.add('active-item');
+            }
+        });
+    }
 }
 
 // ==========================================
 // --- ÖPPNA/STÄNG MODULER ---
 // ==========================================
 function openAcademyModule(moduleId) {
-    const overview = document.getElementById('lab-content-academy');
-    const moduleView = document.getElementById('academy-module-view');
-    const contentArea = document.getElementById('academy-module-content');
+    const overview = document.getElementById('lab-content-academy');
+    const moduleView = document.getElementById('academy-module-view');
+    const contentArea = document.getElementById('academy-module-content');
 
-    contentArea.innerHTML = academyModules[moduleId] || '<p style="color: #ff4444;">Module not found.</p>';
+    contentArea.innerHTML = academyModules[moduleId] || '<p style="color: #ff4444;">Module not found.</p>';
 
-    overview.style.display = 'none';
-    moduleView.style.display = 'block';
+    overview.style.display = 'none';
+    moduleView.style.display = 'block';
 
-    // Om kalkylatorn öppnas: Tvinga den att räkna direkt
-    if (moduleId === 'calc') {
-        const dateInput = document.getElementById('pitch-date');
-        if (dateInput && !dateInput.value) dateInput.valueAsDate = new Date();
-        if (typeof calculatePitch === 'function') calculatePitch();
-    }
-    
-    // Nollställ Wizard-räknaren om vi öppnar Yeast Starters!
-    if (moduleId === 'starters') {
-        currentWizardStep = 0;
-        setTimeout(() => changeWizardStep(0), 10); // Uppdatera UI direkt
-    }
+    // Om kalkylatorn öppnas: Tvinga den att räkna direkt
+    if (moduleId === 'calc') {
+        const dateInput = document.getElementById('pitch-date');
+        if (dateInput && !dateInput.value) dateInput.valueAsDate = new Date();
+        if (typeof calculatePitch === 'function') calculatePitch();
+    } 
+    // Om vi öppnar Yeast Starters
+    else if (moduleId === 'starters') {
+        currentWizardStep = 0;
+        totalWizardSteps = 4;
+        stepActiveItems = {
+            0: ['item-flask'],
+            1: ['item-flask', 'item-scale', 'item-dme', 'item-water'],
+            2: ['item-flask', 'item-heat'],
+            3: ['item-flask', 'item-yeast', 'item-stirbar', 'item-stirplate']
+        };
+        setTimeout(() => changeWizardStep(0), 10);
+    }
+    // Om vi öppnar Yeast Washing
+    else if (moduleId === 'washing') {
+        currentWizardStep = 0;
+        totalWizardSteps = 5; 
+        stepActiveItems = {
+            0: ['item-starsan', 'item-water', 'item-cake'],
+            1: ['item-cake'],
+            2: ['item-cake'],
+            3: ['item-jars'],
+            4: ['item-jars', 'item-fridge']
+        };
+        setTimeout(() => changeWizardStep(0), 10);
+    }
 }
 
 function closeAcademyModule() {
-    document.getElementById('academy-module-view').style.display = 'none';
-    document.getElementById('lab-content-academy').style.display = 'block';
+    document.getElementById('academy-module-view').style.display = 'none';
+    document.getElementById('lab-content-academy').style.display = 'block';
 }
 
 // =========================================================
 // ================= INTERAKTIVT ÖLGLAS (HOME) =============
 // =========================================================
 function initInteractiveGlass() {
-    const glass = document.getElementById('interactive-beer-glass');
-    if (!glass) return;
+    const glass = document.getElementById('interactive-beer-glass');
+    if (!glass) return;
 
-    const beerStyles = ['pilsner', 'amber', 'ipa', 'red', 'stout'];
-    let currentStyleIndex = 0;
-    
-    let pressTimer;
-    let isPressing = false;
-    let isAnimating = false;
-    const PRESS_DURATION = 600; // 600ms = perfekt tid för ett mobil-långtryck
+    const beerStyles = ['pilsner', 'amber', 'ipa', 'red', 'stout'];
+    let currentStyleIndex = 0;
+    
+    let pressTimer;
+    let isPressing = false;
+    let isAnimating = false;
+    const PRESS_DURATION = 600; // 600ms = perfekt tid för ett mobil-långtryck
 
-    // 1. Byt Färg (Klick)
-    function cycleColor() {
-        if (isAnimating) return;
-        currentStyleIndex = (currentStyleIndex + 1) % beerStyles.length;
-        beerStyles.forEach(style => glass.classList.remove('color-' + style));
-        glass.classList.add('color-' + beerStyles[currentStyleIndex]);
-    }
+    // 1. Byt Färg (Klick)
+    function cycleColor() {
+        if (isAnimating) return;
+        currentStyleIndex = (currentStyleIndex + 1) % beerStyles.length;
+        beerStyles.forEach(style => glass.classList.remove('color-' + style));
+        glass.classList.add('color-' + beerStyles[currentStyleIndex]);
+    }
 
-// 2. Drick & Fyll på (Med slumpad väntetid OCH slumpad ölsort!)
-    function startDrain() {
-        if (isAnimating) return;
-        isAnimating = true;
-        
-        glass.classList.remove('anim-fill');
-        
-        // Tvingar webbläsaren att rita om (reflow) innan den tömmer
-        void glass.offsetWidth; 
-        
-        glass.classList.add('anim-drain');
+    // 2. Drick & Fyll på (Med slumpad väntetid OCH slumpad ölsort!)
+    function startDrain() {
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        glass.classList.remove('anim-fill');
+        
+        // Tvingar webbläsaren att rita om (reflow) innan den tömmer
+        void glass.offsetWidth; 
+        
+        glass.classList.add('anim-drain');
 
-        const drainDuration = 2000; 
-// Slumpar ett värde mellan 0 och 4750, och plussar sedan alltid på 250.
-// Resultat: Alltid minst 250ms, och som mest 5000ms!
-const randomEmptyWait = Math.floor(Math.random() * 4750) + 250;
-        const totalWaitBeforeRefill = drainDuration + randomEmptyWait;
-        const refillAnimationDuration = 2000; 
+        const drainDuration = 2000; 
+        // Slumpar ett värde mellan 0 och 4750, och plussar sedan alltid på 250.
+        // Resultat: Alltid minst 250ms, och som mest 5000ms!
+        const randomEmptyWait = Math.floor(Math.random() * 4750) + 250;
+        const totalWaitBeforeRefill = drainDuration + randomEmptyWait;
+        const refillAnimationDuration = 2000; 
 
-        // 1. Vänta tills glaset är tomt OCH den slumpmässiga pausen är över
-        setTimeout(() => {
-            glass.classList.remove('anim-drain');
-            
-            // ==========================================
-            // --- MAGI: SLUMPA FRAM EN NY ÖLSORT! ---
-            // ==========================================
-            // Lista med alla dina förberedda färger från CSS:en
-            const beerColors = ['color-pilsner', 'color-amber', 'color-ipa', 'color-red', 'color-stout'];
-            
-            // Ta bort ALLA eventuella gamla färgklasser från glaset först
-            glass.classList.remove(...beerColors);
-            
-            // Dra en vinnare ur hatten (slumpa fram ett index mellan 0 och 4)
-            const randomColor = beerColors[Math.floor(Math.random() * beerColors.length)];
-            
-            // Lägg på den vinnande färgen på glaset
-            glass.classList.add(randomColor);
-            // ==========================================
+        // 1. Vänta tills glaset är tomt OCH den slumpmässiga pausen är över
+        setTimeout(() => {
+            glass.classList.remove('anim-drain');
+            
+            // ==========================================
+            // --- MAGI: SLUMPA FRAM EN NY ÖLSORT! ---
+            // ==========================================
+            const beerColors = ['color-pilsner', 'color-amber', 'color-ipa', 'color-red', 'color-stout'];
+            
+            // Ta bort ALLA eventuella gamla färgklasser från glaset först
+            glass.classList.remove(...beerColors);
+            
+            // Dra en vinnare ur hatten (slumpa fram ett index mellan 0 och 4)
+            const randomColor = beerColors[Math.floor(Math.random() * beerColors.length)];
+            
+            // Lägg på den vinnande färgen på glaset
+            glass.classList.add(randomColor);
+            // ==========================================
 
-            // Nu när glaset har fått sin nya färg (medan det är tomt), börjar vi hälla!
-            glass.classList.add('anim-fill');
-            
-            // 2. Lås upp animationen när glaset är fyllt igen
-            setTimeout(() => {
-                isAnimating = false;
-            }, refillAnimationDuration); 
+            // Nu när glaset har fått sin nya färg (medan det är tomt), börjar vi hälla!
+            glass.classList.add('anim-fill');
+            
+            // 2. Lås upp animationen när glaset är fyllt igen
+            setTimeout(() => {
+                isAnimating = false;
+            }, refillAnimationDuration); 
 
-        }, totalWaitBeforeRefill);
-    }
+        }, totalWaitBeforeRefill);
+    }
 
-    // --- LYSSNARE FÖR DATOR (MUS) ---
-    glass.addEventListener('mousedown', () => {
-        isPressing = true;
-        pressTimer = setTimeout(() => {
-            if (isPressing) {
-                isPressing = false;
-                startDrain();
-            }
-        }, PRESS_DURATION);
-    });
+    // --- LYSSNARE FÖR DATOR (MUS) ---
+    glass.addEventListener('mousedown', () => {
+        isPressing = true;
+        pressTimer = setTimeout(() => {
+            if (isPressing) {
+                isPressing = false;
+                startDrain();
+            }
+        }, PRESS_DURATION);
+    });
 
-    glass.addEventListener('mouseup', () => {
-        if (isPressing) {
-            clearTimeout(pressTimer);
-            isPressing = false;
-            cycleColor(); // Det var ett kort klick -> Byt färg
-        }
-    });
+    glass.addEventListener('mouseup', () => {
+        if (isPressing) {
+            clearTimeout(pressTimer);
+            isPressing = false;
+            cycleColor(); // Det var ett kort klick -> Byt färg
+        }
+    });
 
-    glass.addEventListener('mouseleave', () => {
-        if (isPressing) {
-            clearTimeout(pressTimer);
-            isPressing = false;
-        }
-    });
+    glass.addEventListener('mouseleave', () => {
+        if (isPressing) {
+            clearTimeout(pressTimer);
+            isPressing = false;
+        }
+    });
 
-    // --- LYSSNARE FÖR MOBIL (TOUCH) ---
-    glass.addEventListener('touchstart', () => {
-        isPressing = true;
-        pressTimer = setTimeout(() => {
-            if (isPressing) {
-                isPressing = false;
-                startDrain();
-            }
-        }, PRESS_DURATION);
-    }, {passive: true});
+    // --- LYSSNARE FÖR MOBIL (TOUCH) ---
+    glass.addEventListener('touchstart', () => {
+        isPressing = true;
+        pressTimer = setTimeout(() => {
+            if (isPressing) {
+                isPressing = false;
+                startDrain();
+            }
+        }, PRESS_DURATION);
+    }, {passive: true});
 
-    glass.addEventListener('touchend', () => {
-        if (isPressing) {
-            clearTimeout(pressTimer);
-            isPressing = false;
-            cycleColor();
-        }
-    });
-    
-    glass.addEventListener('touchcancel', () => {
-        clearTimeout(pressTimer);
-        isPressing = false;
-    });
+    glass.addEventListener('touchend', () => {
+        if (isPressing) {
+            clearTimeout(pressTimer);
+            isPressing = false;
+            cycleColor();
+        }
+    });
+    
+    glass.addEventListener('touchcancel', () => {
+        clearTimeout(pressTimer);
+        isPressing = false;
+    });
 }
 
 // Starta magin när sidan laddar
 window.addEventListener('DOMContentLoaded', () => {
-    initInteractiveGlass();
+    initInteractiveGlass();
 });
 
 // =========================================
@@ -3496,284 +3568,244 @@ window.addEventListener('DOMContentLoaded', () => {
 let currentDemoStep = -1;
 
 const demoSteps = [
-    // --- 1. TEMPERATURERNA ---
-    // 1. Temp inside vessel
-    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -35, mobileOffsetY: -60 },
-    
-    // 2. Ambient temp 
-    { selector: '.air-floating', text: 'Ambient temp', offsetY: -5, mobileOffsetY: 5 },
-    
-    // --- 2. JÄST & PROFIL (Uppe till höger) ---
-    // 3. Yeast Strain
-    { selector: '#strain-val', text: 'Yeast Strain', offsetY: 0, mobileOffsetY: 0 },
-    
-    // 4. Fermentation profile
-{ selector: '#profile-val', text: 'Fermentation profile', offsetY: -5, mobileOffsetY: 0, mobileOffsetX: 0 },
-    
-    // 5. Action Status
-    { selector: '.action-status', text: 'HEATING / COOLING', offsetY: -10, mobileOffsetY: -10 },
-    
-    // --- 3. STATUS & HISTORIK (Nedre halvan) ---
-    // 6. Progress bar 
-    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -155, mobileOffsetY: -150 },
-    
-    // 7. Phase info
-    { selector: '.phase-info', text: 'Current phase details', offsetY: -5, mobileOffsetY: 0 },
-    
-    // 8. Temp History
-    { selector: '#beer-chart', text: 'Temp change over time', offsetY: 0, mobileOffsetY: 15 }
+    // --- 1. TEMPERATURERNA ---
+    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -35, mobileOffsetY: -60 },
+    { selector: '.air-floating', text: 'Ambient temp', offsetY: -5, mobileOffsetY: 5 },
+    
+    // --- 2. JÄST & PROFIL (Uppe till höger) ---
+    { selector: '#strain-val', text: 'Yeast Strain', offsetY: 0, mobileOffsetY: 0 },
+    { selector: '#profile-val', text: 'Fermentation profile', offsetY: -5, mobileOffsetY: 0, mobileOffsetX: 0 },
+    { selector: '.action-status', text: 'HEATING / COOLING', offsetY: -10, mobileOffsetY: -10 },
+    
+    // --- 3. STATUS & HISTORIK (Nedre halvan) ---
+    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -155, mobileOffsetY: -150 },
+    { selector: '.phase-info', text: 'Current phase details', offsetY: -5, mobileOffsetY: 0 },
+    { selector: '#beer-chart', text: 'Temp change over time', offsetY: 0, mobileOffsetY: 15 }
 ];
 
 function startDemoTour() {
-    const overlay = document.getElementById('demo-overlay');
-    if (overlay) {
-        overlay.style.display = 'block';
-        overlay.style.backgroundColor = 'transparent'; // Helt osynlig klick-fångare
-    }
-    
-    currentDemoStep = -1;
-    nextDemoStep();
+    const overlay = document.getElementById('demo-overlay');
+    if (overlay) {
+        overlay.style.display = 'block';
+        overlay.style.backgroundColor = 'transparent'; // Helt osynlig klick-fångare
+    }
+    
+    currentDemoStep = -1;
+    nextDemoStep();
 }
 
 function nextDemoStep() {
-    currentDemoStep++;
+    currentDemoStep++;
 
-    const tooltip = document.getElementById('demo-tour-tooltip');
-    const overlay = document.getElementById('demo-overlay');
-    const highlight = document.getElementById('demo-highlight'); // Kan behövas ta bort om du skippar ram
+    const tooltip = document.getElementById('demo-tour-tooltip');
+    const overlay = document.getElementById('demo-overlay');
 
-    // 1. KONTROLL: Är touren slut?
-    if (currentDemoStep >= demoSteps.length) {
-        if (tooltip) tooltip.style.display = 'none';
-        if (overlay) overlay.style.display = 'none'; 
-        
-        setTimeout(() => {
-            if (!activeDeviceId) {
-                alert("Connect your own YeastMaster unit to monitor real data!");
-            }
-        }, 300);
-        return;
-    }
+    // 1. KONTROLL: Är touren slut?
+    if (currentDemoStep >= demoSteps.length) {
+        if (tooltip) tooltip.style.display = 'none';
+        if (overlay) overlay.style.display = 'none'; 
+        
+        setTimeout(() => {
+            if (!activeDeviceId) {
+                alert("Connect your own YeastMaster unit to monitor real data!");
+            }
+        }, 300);
+        return;
+    }
 
-    // 2. Hitta nästa element i din HTML
-    const targetEl = document.querySelector(demoSteps[currentDemoStep].selector);
-    
-    if (!targetEl) {
-        console.warn("Tour: Hittade inte " + demoSteps[currentDemoStep].selector);
-        nextDemoStep(); 
-        return;
-    }
+    // 2. Hitta nästa element i din HTML
+    const targetEl = document.querySelector(demoSteps[currentDemoStep].selector);
+    
+    if (!targetEl) {
+        console.warn("Tour: Hittade inte " + demoSteps[currentDemoStep].selector);
+        nextDemoStep(); 
+        return;
+    }
 
-    // --- Göm skylten DIREKT så den inte hänger kvar med gammal text! ---
-    if (tooltip) tooltip.style.display = 'none';
+    // --- Göm skylten DIREKT så den inte hänger kvar med gammal text! ---
+    if (tooltip) tooltip.style.display = 'none';
 
-    // 3. Scrolla mjukt så elementet alltid syns
-    targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // 3. Scrolla mjukt så elementet alltid syns
+    targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-// 4. Beräkna positionen (Vänta 300ms så scrollen hinner klart först)
-    setTimeout(() => {
-        const tourTextEl = document.getElementById('demo-tour-text');
-        if (tourTextEl) tourTextEl.innerText = demoSteps[currentDemoStep].text;
+    // 4. Beräkna positionen (Vänta 300ms så scrollen hinner klart först)
+    setTimeout(() => {
+        const tourTextEl = document.getElementById('demo-tour-text');
+        if (tourTextEl) tourTextEl.innerText = demoSteps[currentDemoStep].text;
 
-        if (tooltip) {
-            tooltip.style.display = 'block';
+        if (tooltip) {
+            tooltip.style.display = 'block';
 
-            const rect = targetEl.getBoundingClientRect();
-            const isMobile = window.innerWidth <= 768;
-            
-            // --- HÖJD (Y-axel) ---
-            let stepOffsetY = 0;
-            if (isMobile && demoSteps[currentDemoStep].mobileOffsetY !== undefined) {
-                stepOffsetY = demoSteps[currentDemoStep].mobileOffsetY;
-            } else {
-                stepOffsetY = demoSteps[currentDemoStep].offsetY || 0;
-            }
-            const topPos = rect.bottom + window.scrollY + 15 + stepOffsetY; 
-            
-            // --- SIDLED (X-axel) ---
-            let stepOffsetX = 0;
-            if (isMobile && demoSteps[currentDemoStep].mobileOffsetX !== undefined) {
-                // Använd sidoförflyttning om vi är på mobil och ett värde finns
-                stepOffsetX = demoSteps[currentDemoStep].mobileOffsetX;
-            }
-            
-            // --- TILLBAKA TILL DITT ORIGINAL SOM FUNKADE PERFEKT! ---
-            // Din CSS centrerar redan, så vi lägger bara till eventuell manuell knuff (stepOffsetX)
-            let leftPos = rect.left + window.scrollX + (rect.width / 2) + stepOffsetX;
+            const rect = targetEl.getBoundingClientRect();
+            const isMobile = window.innerWidth <= 768;
+            
+            // --- HÖJD (Y-axel) ---
+            let stepOffsetY = 0;
+            if (isMobile && demoSteps[currentDemoStep].mobileOffsetY !== undefined) {
+                stepOffsetY = demoSteps[currentDemoStep].mobileOffsetY;
+            } else {
+                stepOffsetY = demoSteps[currentDemoStep].offsetY || 0;
+            }
+            const topPos = rect.bottom + window.scrollY + 15 + stepOffsetY; 
+            
+            // --- SIDLED (X-axel) ---
+            let stepOffsetX = 0;
+            if (isMobile && demoSteps[currentDemoStep].mobileOffsetX !== undefined) {
+                stepOffsetX = demoSteps[currentDemoStep].mobileOffsetX;
+            }
+            
+            let leftPos = rect.left + window.scrollX + (rect.width / 2) + stepOffsetX;
 
-            // --- SÄTT POSITIONERNA ---
-            tooltip.style.top = topPos + 'px';
-            tooltip.style.left = leftPos + 'px';
-            
-            // Tvinga webbläsaren att spela inhopp-animationen
-            tooltip.style.animation = 'none';
-            void tooltip.offsetWidth; 
-            tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-        }
-    }, 300);
+            // --- SÄTT POSITIONERNA ---
+            tooltip.style.top = topPos + 'px';
+            tooltip.style.left = leftPos + 'px';
+            
+            // Tvinga webbläsaren att spela inhopp-animationen
+            tooltip.style.animation = 'none';
+            void tooltip.offsetWidth; 
+            tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+        }
+    }, 300);
 
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Klicka var som helst på mörkret för att gå till nästa pil i touren
-    const overlay = document.getElementById('demo-overlay');
-    if(overlay) overlay.addEventListener('click', nextDemoStep);
-    
-// --- INTRO-RUTAN (PROFILER-STIL) ---
-    const startBtn = document.getElementById('start-demo-btn');
-    const infoBox = document.getElementById('live-info-box');
-    
-    if(startBtn) {
-        // Toggla rutan när man klickar på [i]
-        startBtn.addEventListener('click', () => {
-            if(infoBox) {
-                if (infoBox.style.display === 'none') {
-                    infoBox.style.display = 'block';
-                } else {
-                    infoBox.style.display = 'none';
-                }
-            }
-        });
-    }
+    // 1. Klicka var som helst på mörkret för att gå till nästa pil i touren
+    const overlay = document.getElementById('demo-overlay');
+    if(overlay) overlay.addEventListener('click', nextDemoStep);
+    
+    // --- INTRO-RUTAN (PROFILER-STIL) ---
+    const startBtn = document.getElementById('start-demo-btn');
+    const infoBox = document.getElementById('live-info-box');
+    
+    if(startBtn) {
+        startBtn.addEventListener('click', () => {
+            if(infoBox) {
+                if (infoBox.style.display === 'none') {
+                    infoBox.style.display = 'block';
+                } else {
+                    infoBox.style.display = 'none';
+                }
+            }
+        });
+    }
 
-    // --- KNAPPARNA INUTI RUTAN ---
-    const exitBtn = document.getElementById('btn-exit-intro');
-    const startTourBtn = document.getElementById('btn-start-tour');
+    // --- KNAPPARNA INUTI RUTAN ---
+    const exitBtn = document.getElementById('btn-exit-intro');
+    const startTourBtn = document.getElementById('btn-start-tour');
 
-    // EXIT: Göm rutan
-    if(exitBtn) {
-        exitBtn.addEventListener('click', () => {
-            if(infoBox) infoBox.style.display = 'none';
-        });
-    }
+    if(exitBtn) {
+        exitBtn.addEventListener('click', () => {
+            if(infoBox) infoBox.style.display = 'none';
+        });
+    }
 
-    // CONTINUE: Göm rutan OCH starta demon!
-    if(startTourBtn) {
-        startTourBtn.addEventListener('click', () => {
-            if(infoBox) infoBox.style.display = 'none';
-            
-            // Starta Hollywood-läget om det finns, annars direkt till pilarna
-            if (typeof startDemoMode === "function") {
-                startDemoMode(); 
-            } else {
-                startDemoTour(); 
-            }
-        });
-    }
-
+    if(startTourBtn) {
+        startTourBtn.addEventListener('click', () => {
+            if(infoBox) infoBox.style.display = 'none';
+            
+            if (typeof startDemoMode === "function") {
+                startDemoMode(); 
+            } else {
+                startDemoTour(); 
+            }
+        });
+    }
 });
 
 function renderDemoDashboard() {
-    // 1. Fyll in all text med det nya "Ramping Uppåt"-scenariot
-    const displayElement = document.querySelector('.device-name-display');
-    if (displayElement) displayElement.innerHTML = "<span style='color:#ff4444;'>DEMO MODE</span>";
+    const displayElement = document.querySelector('.device-name-display');
+    if (displayElement) displayElement.innerHTML = "<span style='color:#ff4444;'>DEMO MODE</span>";
 
-    document.getElementById('strain-val').innerText = "OLD BAVARIAN";
-    document.getElementById('profile-val').innerText = "Brulosophy";
-    
-    // Eftersom vi ska UPP i temp, sätter vi action till HEATING
-    document.getElementById('action-val').innerText = "HEATING";
+    document.getElementById('strain-val').innerText = "OLD BAVARIAN";
+    document.getElementById('profile-val').innerText = "Brulosophy";
+    
+    document.getElementById('action-val').innerText = "HEATING";
 
-    // Nuvarande temp är 20.1°C
-    const displayTemp = currentTempUnit === 'F' ? "68.2°F" : "20.1°C";
-    document.getElementById('temp-beer-val').innerText = displayTemp;
-    
-    const beerTempEl = document.querySelector('.beer-temp');
-    if (beerTempEl) beerTempEl.setAttribute('data-text', displayTemp);
-    
-    // Ambient temp är lite varmare, vilket hjälper uppvärmningen
-    document.getElementById('air-temp-val').innerText = currentTempUnit === 'F' ? "73.4°F" : "23.0°C";
-    
-    // --- NY FAS-TEXT: RAMPING ---
-    document.getElementById('status-text').innerText = "RAMPING";
-    
-    document.getElementById('day-val').innerText = "4 d and 2 h";
-    document.getElementById('phase-day-val').innerText = "0 d and 1 h";
-    
-    // Målet är 21.0 grader
-    document.getElementById('target-temp-val').innerText = currentTempUnit === 'F' ? "69.8°F" : "21.0°C";
+    const displayTemp = currentTempUnit === 'F' ? "68.2°F" : "20.1°C";
+    document.getElementById('temp-beer-val').innerText = displayTemp;
+    
+    const beerTempEl = document.querySelector('.beer-temp');
+    if (beerTempEl) beerTempEl.setAttribute('data-text', displayTemp);
+    
+    document.getElementById('air-temp-val').innerText = currentTempUnit === 'F' ? "73.4°F" : "23.0°C";
+    
+    document.getElementById('status-text').innerText = "RAMPING";
+    document.getElementById('day-val').innerText = "4 d and 2 h";
+    document.getElementById('phase-day-val').innerText = "0 d and 1 h";
+    
+    document.getElementById('target-temp-val').innerText = currentTempUnit === 'F' ? "69.8°F" : "21.0°C";
 
-    // 2. Sätt progress-baren till 29%
-    document.getElementById('progress-percent').innerText = "29%";
-    document.getElementById('progress-fill').style.width = "29%";
+    document.getElementById('progress-percent').innerText = "29%";
+    document.getElementById('progress-fill').style.width = "29%";
 
-    // 3. Ställ in pilen så den pekar UPPÅT och är RÖD (för heating)
-    const arrow = document.getElementById('status-arrow');
-    if(arrow) {
-        arrow.innerText = "▲";
-        arrow.style.color = "#ff4444"; // Röd färg
-        arrow.style.visibility = "visible";
-        arrow.classList.add('blink-active');
-    }
+    const arrow = document.getElementById('status-arrow');
+    if(arrow) {
+        arrow.innerText = "▲";
+        arrow.style.color = "#ff4444"; 
+        arrow.style.visibility = "visible";
+        arrow.classList.add('blink-active');
+    }
 
-    // 4. --- GRAFEN GÅR NU UPPÅT! ---
-    // Vi säger att den låg på 19.0°C, och har nu börjat klättra mot 21.0°C.
-    // Just nu slutar linjen exakt på dina 20.1°C!
-    const now = Date.now();
-    const fakeChartData = [
-        { time: new Date(now - 4000000).toISOString(), temp: 19.0 },
-        { time: new Date(now - 3000000).toISOString(), temp: 19.0 },
-        { time: new Date(now - 2000000).toISOString(), temp: 19.0 },
-        { time: new Date(now - 1000000).toISOString(), temp: 19.4 }, // Börjar klättra...
-        { time: new Date(now).toISOString(), temp: 20.1 }            // ...och landar på 20.1!
-    ];
-    
-    // Ritar ut den fejkade datan i grafen, (koden konverterar C till F automatiskt om det behövs)
-    if (typeof updateChart === 'function') {
-        updateChart(fakeChartData); 
-    }
+    const now = Date.now();
+    const fakeChartData = [
+        { time: new Date(now - 4000000).toISOString(), temp: 19.0 },
+        { time: new Date(now - 3000000).toISOString(), temp: 19.0 },
+        { time: new Date(now - 2000000).toISOString(), temp: 19.0 },
+        { time: new Date(now - 1000000).toISOString(), temp: 19.4 }, 
+        { time: new Date(now).toISOString(), temp: 20.1 }            
+    ];
+    
+    if (typeof updateChart === 'function') {
+        updateChart(fakeChartData); 
+    }
 }
 
 // ==========================================
 // --- STÄNG INFO-RUTOR VID KLICK UTANFÖR ---
 // ==========================================
-let lastBoxCloseTime = 0; // Håller koll på exakt när vi stängde en ruta senast
+let lastBoxCloseTime = 0; 
 
 function handleOutsideClick(event) {
-    // 1. SPÖK-SKÖLDEN: Om vi PRECIS stängde en ruta (inom 400ms), ät upp klicket direkt!
-    if (Date.now() - lastBoxCloseTime < 400) {
-        event.stopPropagation();
-        event.preventDefault();
-        return;
-    }
+    if (Date.now() - lastBoxCloseTime < 400) {
+        event.stopPropagation();
+        event.preventDefault();
+        return;
+    }
 
-    // 2. Spärr för "i"-knapparna
-    if (event.target.closest('svg') || event.target.closest('.info-icon') || event.target.closest('[onclick*="toggle"]')) {
-        return; 
-    }
+    if (event.target.closest('svg') || event.target.closest('.info-icon') || event.target.closest('[onclick*="toggle"]')) {
+        return; 
+    }
 
-    const infoBoxes = ['library-info-box', 'profiler-info-box', 'academy-info-box'];
-    let boxWasClosed = false;
+    const infoBoxes = ['library-info-box', 'profiler-info-box', 'academy-info-box'];
+    let boxWasClosed = false;
 
-    infoBoxes.forEach(boxId => {
-        const box = document.getElementById(boxId);
-        
-        if (box && (box.style.display === 'block' || box.style.display === 'flex')) {
-            if (!box.contains(event.target)) {
-                
-                box.style.display = 'none'; 
-                boxWasClosed = true; 
-                
-                document.querySelectorAll('[onclick*="toggle"]').forEach(btn => {
-                    if (btn.style && btn.style.backgroundColor === 'rgb(140, 198, 63)') {
-                        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)';
-                        btn.style.color = '#8CC63F';
-                    }
-                });
-            }
-        }
-    });
+    infoBoxes.forEach(boxId => {
+        const box = document.getElementById(boxId);
+        
+        if (box && (box.style.display === 'block' || box.style.display === 'flex')) {
+            if (!box.contains(event.target)) {
+                
+                box.style.display = 'none'; 
+                boxWasClosed = true; 
+                
+                document.querySelectorAll('[onclick*="toggle"]').forEach(btn => {
+                    if (btn.style && btn.style.backgroundColor === 'rgb(140, 198, 63)') {
+                        btn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)';
+                        btn.style.color = '#8CC63F';
+                    }
+                });
+            }
+        }
+    });
 
-    // 3. Om vi stängde rutan: Starta timer-skölden och ät upp originalklicket
-    if (boxWasClosed) {
-        lastBoxCloseTime = Date.now(); // Uppdatera tiden för stängningen
-        event.stopPropagation(); 
-        event.preventDefault();  
-    }
+    if (boxWasClosed) {
+        lastBoxCloseTime = Date.now(); 
+        event.stopPropagation(); 
+        event.preventDefault();  
+    }
 }
 
-// Vi behöver bara lyssna på 'click' nu, mobilen skickar ändå ett klick efter touchen.
-// (Jag tog bort touchend-lyssnaren för att göra det ännu stabilare på iOS/Android)
 document.addEventListener('click', handleOutsideClick, true);
 
 // ==========================================
@@ -3781,44 +3813,35 @@ document.addEventListener('click', handleOutsideClick, true);
 // ==========================================
 
 function openPitchCalcModal() {
-    // 1. Visa själva popup-fönstret
-    const modal = document.getElementById('pitch-calc-modal');
-    if (modal) {
-        modal.style.display = 'flex'; // (Eller 'block' beroende på din CSS för .ym-modal)
-    }
+    const modal = document.getElementById('pitch-calc-modal');
+    if (modal) {
+        modal.style.display = 'flex'; 
+    }
+    
+    document.getElementById('main-calc-buttons').style.display = 'grid'; 
 
-    // ==========================================
-    // --- ÅTERSTÄLL ALLT TILL STARTLÄGET ---
-    // ==========================================
-    
-    // 2. Visa huvudknapparna
-    document.getElementById('main-calc-buttons').style.display = 'grid'; 
-
-    // 3. Dölj alla undervyer, rubriker och resultat
-    document.getElementById('selected-yeast-header').style.display = 'none';
-    document.getElementById('bank-sub-options').style.display = 'none';
-    document.getElementById('calc-input-section').style.display = 'none';
-    document.getElementById('calc-result-box').style.display = 'none';
-    
-    // 4. Ta bort eventuella färgmarkeringar (active) från knapparna
-    const allButtons = document.querySelectorAll('.ym-btn-outline');
-    allButtons.forEach(btn => {
-        btn.style.backgroundColor = ''; // Återställ bakgrund
-        btn.style.color = '';           // Återställ textfärg
-    });
+    document.getElementById('selected-yeast-header').style.display = 'none';
+    document.getElementById('bank-sub-options').style.display = 'none';
+    document.getElementById('calc-input-section').style.display = 'none';
+    document.getElementById('calc-result-box').style.display = 'none';
+    
+    const allButtons = document.querySelectorAll('.ym-btn-outline');
+    allButtons.forEach(btn => {
+        btn.style.backgroundColor = ''; 
+        btn.style.color = '';           
+    });
 }
 
 function closePitchCalcModal() {
-    const modal = document.getElementById('pitch-calc-modal');
-    modal.style.display = 'none';
+    const modal = document.getElementById('pitch-calc-modal');
+    modal.style.display = 'none';
 }
 
-// Stäng rutan om man klickar utanför den (på den mörka bakgrunden)
 window.addEventListener('click', function(event) {
-    const modal = document.getElementById('pitch-calc-modal');
-    if (event.target === modal) {
-        closePitchCalcModal();
-    }
+    const modal = document.getElementById('pitch-calc-modal');
+    if (event.target === modal) {
+        closePitchCalcModal();
+    }
 });
 
 // ==========================================
@@ -3828,435 +3851,183 @@ window.addEventListener('click', function(event) {
 let currentCalcType = '';
 
 function selectCalc(type, clickedBtn) {
-    currentCalcType = type;
-    document.getElementById('main-calc-buttons').style.display = 'none';
-    const header = document.getElementById('selected-yeast-header');
-    document.getElementById('selected-yeast-text').innerText = clickedBtn.innerText;
-    header.style.display = 'flex';
+    currentCalcType = type;
+    document.getElementById('main-calc-buttons').style.display = 'none';
+    const header = document.getElementById('selected-yeast-header');
+    document.getElementById('selected-yeast-text').innerText = clickedBtn.innerText;
+    header.style.display = 'flex';
 
-    const subOptions = document.getElementById('bank-sub-options');
-    if (type === 'bank') {
-        subOptions.style.display = 'block';
-    } else {
-        subOptions.style.display = 'none';
-    }
+    const subOptions = document.getElementById('bank-sub-options');
+    if (type === 'bank') {
+        subOptions.style.display = 'block';
+    } else {
+        subOptions.style.display = 'none';
+    }
 
-    document.getElementById('calc-input-section').style.display = 'block';
-    document.getElementById('calc-result-box').style.display = 'none';
+    document.getElementById('calc-input-section').style.display = 'block';
+    document.getElementById('calc-result-box').style.display = 'none';
 
-    const dynamicSection = document.getElementById('dynamic-extra-fields');
-    dynamicSection.innerHTML = ''; 
+    const dynamicSection = document.getElementById('dynamic-extra-fields');
+    dynamicSection.innerHTML = ''; 
 
-    if (type === 'dry') {
-        dynamicSection.innerHTML = `
-            <div class="ym-input-group" style="margin-bottom: 20px;">
-                <label>Cells per gram (Billions)</label>
-                <input type="number" id="calc-dry-density" value="10" step="1">
-            </div>
-        `;
-    } 
-    else if (type === 'liquid') {
-        const today = new Date().toISOString().split('T')[0];
-        dynamicSection.innerHTML = `
-            <div id="liquid-packs-container">
-                <div class="liquid-pack-row" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 10px; background: #222; padding: 12px; border-radius: 6px; border-left: 3px solid #8CC63F; align-items: end;">
-                    <div class="ym-input-group">
-                        <label>Cells in pack</label>
-                        <input type="number" class="calc-liquid-pack" value="100" step="10">
-                    </div>
-                    <div class="ym-input-group">
-                        <label>Mfg Date</label>
-                        <input type="date" class="calc-liquid-date" value="${today}">
-                    </div>
-                    <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
-                </div>
-            </div>
-            <button onclick="addLiquidPack()" style="background: none; border: 1px dashed #8CC63F; color: #8CC63F; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; margin-bottom: 20px; font-size: 0.9em;">
-                + Add another package
-            </button>
-        `;
-    }
+    if (type === 'dry') {
+        dynamicSection.innerHTML = `
+            <div class="ym-input-group" style="margin-bottom: 20px;">
+                <label>Cells per gram (Billions)</label>
+                <input type="number" id="calc-dry-density" value="10" step="1">
+            </div>
+        `;
+    } 
+    else if (type === 'liquid') {
+        const today = new Date().toISOString().split('T')[0];
+        dynamicSection.innerHTML = `
+            <div id="liquid-packs-container">
+                <div class="liquid-pack-row" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 10px; background: #222; padding: 12px; border-radius: 6px; border-left: 3px solid #8CC63F; align-items: end;">
+                    <div class="ym-input-group">
+                        <label>Cells in pack</label>
+                        <input type="number" class="calc-liquid-pack" value="100" step="10">
+                    </div>
+                    <div class="ym-input-group">
+                        <label>Mfg Date</label>
+                        <input type="date" class="calc-liquid-date" value="${today}">
+                    </div>
+                    <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
+                </div>
+            </div>
+            <button onclick="addLiquidPack()" style="background: none; border: 1px dashed #8CC63F; color: #8CC63F; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; margin-bottom: 20px; font-size: 0.9em;">
+                + Add another package
+            </button>
+        `;
+    }
 }
 
-// ==========================================
-// --- ÅTERSTÄLL KALKYLATORN ("Change") ---
-// ==========================================
 function resetCalcSelection() {
-    currentCalcType = '';
-    
-    // Visa de 4 huvudknapparna igen
-    document.getElementById('main-calc-buttons').style.display = 'grid';
-    
-    // Dölj "Selected"-raden, undermenyer, inmatningsfält och resultat
-    document.getElementById('selected-yeast-header').style.display = 'none';
-    document.getElementById('bank-sub-options').style.display = 'none';
-    document.getElementById('calc-input-section').style.display = 'none';
-    document.getElementById('calc-result-box').style.display = 'none';
+    currentCalcType = '';
+    
+    document.getElementById('main-calc-buttons').style.display = 'grid';
+    
+    document.getElementById('selected-yeast-header').style.display = 'none';
+    document.getElementById('bank-sub-options').style.display = 'none';
+    document.getElementById('calc-input-section').style.display = 'none';
+    document.getElementById('calc-result-box').style.display = 'none';
 
-    // Avmarkera alla knappar så de ser nollställda ut
-    const mainButtons = document.querySelectorAll('#main-calc-buttons .ym-btn-outline');
-    mainButtons.forEach(btn => btn.classList.remove('active'));
+    const mainButtons = document.querySelectorAll('#main-calc-buttons .ym-btn-outline');
+    mainButtons.forEach(btn => btn.classList.remove('active'));
 }
 
 function addLiquidPack() {
-    const container = document.getElementById('liquid-packs-container');
-    const today = new Date().toISOString().split('T')[0];
-    
-    const newPack = document.createElement('div');
-    newPack.className = 'liquid-pack-row';
-    // Notera grid-template-columns: 1fr 1fr auto; för att få plats med krysset
-    newPack.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 10px; background: #222; padding: 12px; border-radius: 6px; border-left: 3px solid #555; animation: fadeIn 0.3s; align-items: end;';
-    
-    newPack.innerHTML = `
-        <div class="ym-input-group">
-            <label>Cells in pack</label>
-            <input type="number" class="calc-liquid-pack" value="100" step="10">
-        </div>
-        <div class="ym-input-group">
-            <label>Mfg Date</label>
-            <input type="date" class="calc-liquid-date" value="${today}">
-        </div>
-        <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
-    `;
-    
-    container.appendChild(newPack);
+    const container = document.getElementById('liquid-packs-container');
+    const today = new Date().toISOString().split('T')[0];
+    
+    const newPack = document.createElement('div');
+    newPack.className = 'liquid-pack-row';
+    newPack.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 10px; background: #222; padding: 12px; border-radius: 6px; border-left: 3px solid #555; animation: fadeIn 0.3s; align-items: end;';
+    
+    newPack.innerHTML = `
+        <div class="ym-input-group">
+            <label>Cells in pack</label>
+            <input type="number" class="calc-liquid-pack" value="100" step="10">
+        </div>
+        <div class="ym-input-group">
+            <label>Mfg Date</label>
+            <input type="date" class="calc-liquid-date" value="${today}">
+        </div>
+        <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
+    `;
+    
+    container.appendChild(newPack);
 }
 
-// NY FUNKTION: För att ta bort en rad
 function removeLiquidPack(btn) {
-    // Hittar den närmaste föräldern med klassen .liquid-pack-row och raderar den
-    const row = btn.closest('.liquid-pack-row');
-    row.remove();
+    const row = btn.closest('.liquid-pack-row');
+    row.remove();
 }
-
-
-// ==========================================
-// --- THE MASTER CALCULATION ---
-// ==========================================
 
 function calculatePitch() {
-    const volLiters = parseFloat(document.getElementById('calc-vol').value);
-    const ogSG = parseFloat(document.getElementById('calc-og').value);
-    const pitchRate = parseFloat(document.getElementById('calc-rate').value);
+    const volLiters = parseFloat(document.getElementById('calc-vol').value);
+    const ogSG = parseFloat(document.getElementById('calc-og').value);
+    const pitchRate = parseFloat(document.getElementById('calc-rate').value);
 
-    const plato = 259 - (259 / ogSG);
-    const totalCellsMillion = pitchRate * (volLiters * 1000) * plato;
-    const totalCellsBillion = totalCellsMillion / 1000;
+    const plato = 259 - (259 / ogSG);
+    const totalCellsMillion = pitchRate * (volLiters * 1000) * plato;
+    const totalCellsBillion = totalCellsMillion / 1000;
 
-    let resultHTML = `<strong style="color: #fff;">Target:</strong> ${totalCellsBillion.toFixed(1)} Billion cells<br><br>`;
+    let resultHTML = `<strong style="color: #fff;">Target:</strong> ${totalCellsBillion.toFixed(1)} Billion cells<br><br>`;
 
-    // --- TORRJÄST ---
-    if (currentCalcType === 'dry') {
-        const cellsPerGram = parseFloat(document.getElementById('calc-dry-density').value);
-        const gramsNeeded = totalCellsBillion / cellsPerGram;
-        const packetsNeeded = Math.ceil(gramsNeeded / 11); 
+    if (currentCalcType === 'dry') {
+        const cellsPerGram = parseFloat(document.getElementById('calc-dry-density').value);
+        const gramsNeeded = totalCellsBillion / cellsPerGram;
+        const packetsNeeded = Math.ceil(gramsNeeded / 11); 
 
-        resultHTML += `
-            <span style="font-size: 1.2em; color: #fff;">
-                ⚖️ Pitch <strong>${gramsNeeded.toFixed(1)} grams</strong> of dry yeast.
-            </span><br>
-            <span style="color: #aaa; font-size: 0.9em;">(Approx. ${packetsNeeded} standard 11g packets)</span>
-        `;
-    }
-    
-    // --- FLYTANDE JÄST (Multipel-paket & Starter) ---
-    else if (currentCalcType === 'liquid') {
-        const packInputs = document.querySelectorAll('.calc-liquid-pack');
-        const dateInputs = document.querySelectorAll('.calc-liquid-date');
-        
-        let totalViableCells = 0;
-        let packDetailsHTML = '';
-        const todayDate = new Date();
+        resultHTML += `
+            <span style="font-size: 1.2em; color: #fff;">
+                ⚖️ Pitch <strong>${gramsNeeded.toFixed(1)} grams</strong> of dry yeast.
+            </span><br>
+            <span style="color: #aaa; font-size: 0.9em;">(Approx. ${packetsNeeded} standard 11g packets)</span>
+        `;
+    }
+    
+    else if (currentCalcType === 'liquid') {
+        const packInputs = document.querySelectorAll('.calc-liquid-pack');
+        const dateInputs = document.querySelectorAll('.calc-liquid-date');
+        
+        let totalViableCells = 0;
+        let packDetailsHTML = '';
+        const todayDate = new Date();
 
-        // Loopa igenom alla paket användaren har lagt till
-        for(let i = 0; i < packInputs.length; i++) {
-            const cells = parseFloat(packInputs[i].value);
-            const mfgDateInput = dateInputs[i].value;
-            
-            if (!mfgDateInput) continue; // Hoppa över om datum saknas
-            
-            const mfgDate = new Date(mfgDateInput);
-            const timeDiff = todayDate.getTime() - mfgDate.getTime();
-            let daysOld = Math.floor(timeDiff / (1000 * 3600 * 24));
-            if (daysOld < 0) daysOld = 0;
-            
-            let viability = 100 - (daysOld * 0.7);
-            if (viability < 10) viability = 10; // Jäst dör sällan helt
-            
-            const viable = cells * (viability / 100);
-            totalViableCells += viable;
-            
-            packDetailsHTML += `<div style="font-size: 0.85em; color: #aaa; margin-bottom: 4px;">Pack ${i+1} (${daysOld} days old): ${viability.toFixed(0)}% viability = <strong>${viable.toFixed(1)}B cells</strong></div>`;
-        }
+        for(let i = 0; i < packInputs.length; i++) {
+            const cells = parseFloat(packInputs[i].value);
+            const mfgDateInput = dateInputs[i].value;
+            
+            if (!mfgDateInput) continue; 
+            
+            const mfgDate = new Date(mfgDateInput);
+            const timeDiff = todayDate.getTime() - mfgDate.getTime();
+            let daysOld = Math.floor(timeDiff / (1000 * 3600 * 24));
+            if (daysOld < 0) daysOld = 0;
+            
+            let viability = 100 - (daysOld * 0.7);
+            if (viability < 10) viability = 10; 
+            
+            const viable = cells * (viability / 100);
+            totalViableCells += viable;
+            
+            packDetailsHTML += `<div style="font-size: 0.85em; color: #aaa; margin-bottom: 4px;">Pack ${i+1} (${daysOld} days old): ${viability.toFixed(0)}% viability = <strong>${viable.toFixed(1)}B cells</strong></div>`;
+        }
 
-        const shortfall = totalCellsBillion - totalViableCells;
+        const shortfall = totalCellsBillion - totalViableCells;
 
-        resultHTML += `
-            <div style="background: rgba(0,0,0,0.25); padding: 12px; border-radius: 6px; border: 1px solid #444; margin-bottom: 15px;">
-                <strong style="color: #8CC63F; font-size: 1.1em;">Combined Viable Cells: ${totalViableCells.toFixed(1)} Billion</strong><br>
-                <div style="margin-top: 8px; border-top: 1px dashed #444; padding-top: 8px;">
-                    ${packDetailsHTML}
-                </div>
-            </div>
-        `;
+        resultHTML += `
+            <div style="background: rgba(0,0,0,0.25); padding: 12px; border-radius: 6px; border: 1px solid #444; margin-bottom: 15px;">
+                <strong style="color: #8CC63F; font-size: 1.1em;">Combined Viable Cells: ${totalViableCells.toFixed(1)} Billion</strong><br>
+                <div style="margin-top: 8px; border-top: 1px dashed #444; padding-top: 8px;">
+                    ${packDetailsHTML}
+                </div>
+            </div>
+        `;
 
-    if (totalViableCells >= totalCellsBillion) {
-            resultHTML += `<span style="color: #8CC63F; font-size: 1.1em;">✅ <strong>Pitch is perfect!</strong> You have enough healthy cells.</span>`;
-        } else {
-            // Beräkna Starter (ca 100 miljarder celler tillväxt per liter på magnetomrörare)
-            const starterLiters = shortfall / 100;
-            
-            resultHTML += `
-                <span style="color: #ffcc00; font-size: 1.1em;">⚠️ <strong>Warning:</strong> You are short ${shortfall.toFixed(1)}B cells.</span><br><br>
-                <strong style="color: var(--text-main);">Recommendation:</strong><br>
-                <div style="margin-top: 8px; border-left: 2px solid #8CC63F; padding-left: 10px; line-height: 1.5; margin-bottom: 20px;">
-                    <span style="color: var(--text-dim);">Option A:</span> <span style="color: var(--text-main);">Add another pack to your inventory above to cover the gap.</span><br>
-                    <span style="color: var(--text-dim);">Option B:</span> <span style="color: var(--text-main);">Make a <strong>${starterLiters.toFixed(2)} Liter starter</strong> (at SG 1.036 - 1.040) on a stir plate to grow the missing cells.</span>
-                </div>
-                
-                <button onclick="closePitchCalcModal(); openAcademyModule('starters');" class="ym-btn-outline" style="width: 100%;">
-                    📖 Read: How to make a Yeast Starter
-                </button>
-            `;
-        }
-    }
+        if (totalViableCells >= totalCellsBillion) {
+            resultHTML += `<span style="color: #8CC63F; font-size: 1.1em;">✅ <strong>Pitch is perfect!</strong> You have enough healthy cells.</span>`;
+        } else {
+            const starterLiters = shortfall / 100;
+            
+            resultHTML += `
+                <span style="color: #ffcc00; font-size: 1.1em;">⚠️ <strong>Warning:</strong> You are short ${shortfall.toFixed(1)}B cells.</span><br><br>
+                <strong style="color: var(--text-main);">Recommendation:</strong><br>
+                <div style="margin-top: 8px; border-left: 2px solid #8CC63F; padding-left: 10px; line-height: 1.5; margin-bottom: 20px;">
+                    <span style="color: var(--text-dim);">Option A:</span> <span style="color: var(--text-main);">Add another pack to your inventory above to cover the gap.</span><br>
+                    <span style="color: var(--text-dim);">Option B:</span> <span style="color: var(--text-main);">Make a <strong>${starterLiters.toFixed(2)} Liter starter</strong> (at SG 1.036 - 1.040) on a stir plate to grow the missing cells.</span>
+                </div>
+                
+                <button onclick="closePitchCalcModal(); openAcademyModule('starters');" class="ym-btn-outline" style="width: 100%;">
+                    📖 Read: How to make a Yeast Starter
+                </button>
+            `;
+        }
+    }
 
-    // Skriv ut resultatet
-    const resultBox = document.getElementById('calc-result-box');
-    const resultText = document.getElementById('calc-result-text');
-    resultText.innerHTML = resultHTML;
-    resultBox.style.display = 'block';
-}
-
-// ==========================================
-// --- ACADEMY MODULE ENGINE ---
-// ==========================================
-
-let currentWizardStep = 0;
-let totalWizardSteps = 0;
-let stepActiveItems = {}; // Denna lagrar vilka checklista-items som ska tändas per steg
-
-// Biblioteket över alla lektioner
-const academyModules = {
-    
-    // --- 1. Kalkylatorn (Behålls som den var, öppnas inte via wizard-motorn) ---
-    'calc': `...`, // (Din befintliga calc-kod)
-
-    // --- 2. YEAST STARTERS 101 (Din originalmall!) ---
-    'starters': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Starters 101</h2>
-        
-        <div class="wizard-layout">
-            
-            <div class="wizard-sidebar">
-                <h4>You will need:</h4>
-                <ul class="wizard-checklist" id="wizard-checklist">
-                    <li id="item-flask">Erlenmeyer Flask</li>
-                    <li id="item-scale">Precision Scale</li>
-                    <li id="item-dme">Light DME</li>
-                    <li id="item-water">Clean Water</li>
-                    <li id="item-heat">Heat Source</li>
-                    <li id="item-yeast">Yeast Pack</li>
-                    <li id="item-stirbar">Stir Bar</li>
-                    <li id="item-stirplate">Stir Plate</li>
-                </ul>
-            </div>
-
-            <div class="wizard-container" id="module-wizard">
-                <div class="wizard-dots" id="wizard-dots">
-                    <div class="wizard-dot active"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                </div>
-
-                <div class="wizard-step active" data-step="0">
-                    <div class="wizard-icon">🧽🧪</div>
-                    <h3>1. Clean & Prepare</h3>
-                    <p>Before we start, hygiene is everything. Make sure your Erlenmeyer flask is completely clean and sanitized.</p>
-                </div>
-
-                <div class="wizard-step" data-step="1">
-                    <div class="wizard-icon">⚖️🌾</div>
-                    <h3>2. The Golden Ratio</h3>
-                    <p>Place the flask on the scale. Weigh exactly <strong>100g of DME</strong> for every <strong>1 Liter of water</strong>. This creates a perfect 1.036 specific gravity.</p>
-                </div>
-
-                <div class="wizard-step" data-step="2">
-                    <div class="wizard-icon">🔥🌡️</div>
-                    <h3>3. Boil & Sterilize</h3>
-                    <p>Move the flask to your heat source. Boil gently for 10-15 minutes to sterilize the wort. <br><br><em>Pro-tip: Add a drop of Fermcap-S to prevent boil-overs!</em></p>
-                </div>
-
-                <div class="wizard-step" data-step="3">
-                    <div class="wizard-icon">❄️🌪️</div>
-                    <h3>4. Chill, Pitch & Spin</h3>
-                    <p>Cool the flask to 20°C (68°F). Pitch your yeast, drop in the stir bar, and place it on the stir plate for 24-48 hours. Watch those cells multiply!</p>
-                </div>
-
-                <div class="wizard-controls">
-                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
-                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
-                </div>
-            </div>
-        </div>
-    `,
-
-    // --- 3. YEAST WASHING 101 (Ombyggd för Wizard-mallen!) ---
-    'washing': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Washing 101</h2>
-        
-        <div class="wizard-layout">
-            
-            <div class="wizard-sidebar">
-                <h4>You will need:</h4>
-                <ul class="wizard-checklist" id="wizard-checklist">
-                    <li id="item-jars">Mason Jars</li>
-                    <li id="item-starsan">Star San</li>
-                    <li id="item-water">Sterile Water (Cooled)</li>
-                    <li id="item-cake">Yeast Cake</li>
-                    <li id="item-fridge">Fridge Space</li>
-                </ul>
-            </div>
-
-            <div class="wizard-container" id="module-wizard">
-                <div class="wizard-dots" id="wizard-dots">
-                    <div class="wizard-dot active"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                </div>
-
-                <div class="wizard-step active" data-step="0">
-                    <div class="wizard-icon">🧽💧</div>
-                    <h3>1. Prep & Dilute</h3>
-                    <p>Sanitize everything with Star San. Pour your pre-boiled, cooled (sterile) water directly into the fermenter right on top of the dirty yeast cake.</p>
-                </div>
-
-                <div class="wizard-step" data-step="1">
-                    <div class="wizard-icon">🌪️💦</div>
-                    <h3>2. Shake it up</h3>
-                    <p>Put the lid back on the fermenter and swirl it vigorously! Break the yeast cake apart completely until the water looks like a thick, muddy slurry.</p>
-                </div>
-
-                <div class="wizard-step" data-step="2">
-                    <div class="wizard-icon">⏳🕰️</div>
-                    <h3>3. Let Gravity Work</h3>
-                    <p>Let the fermenter sit completely still for <strong>20-30 minutes</strong>. The heavy, dark trub and hop matter will sink rapidly, leaving the healthy yeast suspended in the milky liquid above.</p>
-                </div>
-
-                <div class="wizard-step" data-step="3">
-                    <div class="wizard-icon">🫗✨</div>
-                    <h3>4. Harvest the Gold</h3>
-                    <p>Carefully decant the milky liquid into your sanitized mason jars. Stop pouring the second you see the dark trub from the bottom trying to follow along.</p>
-                </div>
-
-                <div class="wizard-step" data-step="4">
-                    <div class="wizard-icon">🧊🧮</div>
-                    <h3>5. Crash & Pitch</h3>
-                    <p>Put the jars in the fridge. In a few days, the yeast will compact into a clean white layer. On brew day, decant the water, let it warm up, and measure the slurry into our Pitch Calculator!</p>
-                </div>
-
-                <div class="wizard-controls">
-                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
-                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
-                </div>
-            </div>
-        </div>
-    `
-};
-
-// ==========================================
-// --- LOGIK FÖR WIZARDEN OCH CHECKLISTAN ---
-// ==========================================
-
-function changeWizardStep(direction) {
-    currentWizardStep += direction;
-
-    if (currentWizardStep < 0) currentWizardStep = 0;
-    
-    if (currentWizardStep >= totalWizardSteps) {
-        closeAcademyModule();
-        return;
-    }
-
-    // 1. Uppdatera Wizarden (Text och Prickar)
-    document.querySelectorAll('.wizard-step').forEach(step => {
-        step.classList.remove('active');
-        if (parseInt(step.getAttribute('data-step')) === currentWizardStep) {
-            step.classList.add('active');
-        }
-    });
-
-    document.querySelectorAll('.wizard-dot').forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentWizardStep);
-    });
-
-    const prevBtn = document.getElementById('wiz-prev');
-    const nextBtn = document.getElementById('wiz-next');
-
-    if (prevBtn && nextBtn) {
-        prevBtn.disabled = currentWizardStep === 0;
-        nextBtn.innerText = currentWizardStep === totalWizardSteps - 1 ? "Finish! ✓" : "Next ➔";
-    }
-
-    // 2. Den Levande Checklistan!
-    document.querySelectorAll('.wizard-checklist li').forEach(li => {
-        li.classList.remove('active-item');
-    });
-
-    const itemsToHighlight = stepActiveItems[currentWizardStep];
-    if (itemsToHighlight) {
-        itemsToHighlight.forEach(itemId => {
-            const element = document.getElementById(itemId);
-            if (element) {
-                element.classList.add('active-item');
-            }
-        });
-    }
-}
-
-// Öppna moduler och ladda in rätt konfiguration
-function openAcademyModule(moduleId) {
-    const overview = document.getElementById('lab-content-academy');
-    const moduleView = document.getElementById('academy-module-view');
-    const contentArea = document.getElementById('academy-module-content');
-
-    contentArea.innerHTML = academyModules[moduleId] || '<p style="color: #ff4444;">Module not found.</p>';
-
-    overview.style.display = 'none';
-    moduleView.style.display = 'block';
-
-    // Om vi öppnar Yeast Starters
-    if (moduleId === 'starters') {
-        currentWizardStep = 0;
-        totalWizardSteps = 4;
-        stepActiveItems = {
-            0: ['item-flask'],
-            1: ['item-flask', 'item-scale', 'item-dme', 'item-water'],
-            2: ['item-flask', 'item-heat'],
-            3: ['item-flask', 'item-yeast', 'item-stirbar', 'item-stirplate']
-        };
-        setTimeout(() => changeWizardStep(0), 10);
-    }
-    
-    // Om vi öppnar Yeast Washing
-    else if (moduleId === 'washing') {
-        currentWizardStep = 0;
-        totalWizardSteps = 5; // Denna har 5 steg!
-        stepActiveItems = {
-            0: ['item-starsan', 'item-water', 'item-cake'],
-            1: ['item-cake'],
-            2: ['item-cake'],
-            3: ['item-jars'],
-            4: ['item-jars', 'item-fridge']
-        };
-        setTimeout(() => changeWizardStep(0), 10);
-    }
-}
-
-function closeAcademyModule() {
-    document.getElementById('academy-module-view').style.display = 'none';
-    document.getElementById('lab-content-academy').style.display = 'block';
+    const resultBox = document.getElementById('calc-result-box');
+    const resultText = document.getElementById('calc-result-text');
+    resultText.innerHTML = resultHTML;
+    resultBox.style.display = 'block';
 }
