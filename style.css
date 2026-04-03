@@ -3128,3 +3128,48 @@ body.light-mode #pitch-result div[style] {
     background-color: #e8e8e8 !important;
     border: 1px solid #ccc !important;
 }
+
+/* ========================================== */
+/* --- TVINGAD FIX FÖR WIZARD-LAYOUTEN --- */
+/* ========================================== */
+
+/* Genom att lägga "#academy-module-view" framför, tvingar vi webbläsaren 
+   att prioritera dessa regler över ALLT annat i hela ditt dokument! */
+
+#academy-module-view .wizard-layout {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important; /* Tar bort avgrunden i mitten */
+    align-items: flex-start !important;
+    gap: 30px !important; /* Perfekt avstånd mellan boxarna */
+    width: 100% !important;
+}
+
+#academy-module-view .wizard-sidebar {
+    flex: 0 0 240px !important; /* Låser listan till 240px bredd */
+    width: 240px !important;
+    max-width: 240px !important;
+    margin: 0 !important;
+}
+
+#academy-module-view .wizard-container {
+    flex: 1 1 100% !important; /* Tvingar rutan att sträcka ut sig! */
+    max-width: 100% !important; /* Slår ihjäl den gamla smala spärren */
+    margin: 0 !important; /* Förhindrar rutan från att "putta" sig själv till höger */
+    width: auto !important;
+}
+
+/* Tvinga fram mobil-layouten när skärmen blir liten */
+@media (max-width: 768px) {
+    #academy-module-view .wizard-layout {
+        flex-direction: column !important; 
+        gap: 20px !important;
+    }
+    #academy-module-view .wizard-sidebar,
+    #academy-module-view .wizard-container {
+        flex: 1 1 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+}
