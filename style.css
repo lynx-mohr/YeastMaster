@@ -2754,9 +2754,8 @@ body.light-mode .wizard-dot.active { background: var(--accent-color); }
 /* ========================================== */
 /* --- WIZARD LAYOUT & CHECKLISTA --- */
 /* ========================================== */
-/* ========================================== */
-/* --- WIZARD LAYOUT & CHECKLISTA --- */
-/* ========================================== */
+
+/* 1. Själva rutnätet */
 .wizard-layout {
     display: flex;
     gap: 30px;
@@ -2764,18 +2763,73 @@ body.light-mode .wizard-dot.active { background: var(--accent-color); }
     align-items: flex-start;
 }
 
-/* Vänster kolumn (Listan) */
+/* 2. Vänster kolumn (Sidomenyn) */
 .wizard-sidebar {
-    flex: 0 0 220px; /* Fast bredd på PC */
+    flex: 0 0 220px;
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid #333;
     border-radius: 12px;
     padding: 20px;
 }
 
-/* Höger kolumn (Själva wizarden) */
+.wizard-sidebar h4 {
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 3. Den försvunna checklistan! (Fixar prickarna) */
+.wizard-checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.wizard-checklist li {
+    color: #555; 
+    padding: 8px 0;
+    border-bottom: 1px dashed #222;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.wizard-checklist li:last-child { 
+    border-bottom: none; 
+}
+
+.wizard-checklist li::before {
+    content: '○'; 
+    margin-right: 10px;
+    font-size: 1.2rem;
+    opacity: 0.5;
+}
+
+.wizard-checklist li.active-item {
+    color: #fff;
+    transform: translateX(5px);
+}
+
+.wizard-checklist li.active-item::before {
+    content: '●'; 
+    color: var(--accent-color);
+    opacity: 1;
+    text-shadow: 0 0 8px var(--accent-color);
+}
+
+/* 4. Höger kolumn (Fixar smalheten!) */
 .wizard-container {
-    flex: 1; /* MAGIN! Tar upp resten av platsen */
+    flex: 1; /* Säger åt rutan att breda ut sig */
+    
+    /* DESSA TVÅ ÄR MAGIN SOM LÖSER PELAR-PROBLEMET: */
+    max-width: none !important; 
+    margin: 0 !important;       
+    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2786,119 +2840,26 @@ body.light-mode .wizard-dot.active { background: var(--accent-color); }
     padding: 30px 20px;
     min-height: 380px;
     position: relative;
-    min-width: 0; /* Förhindrar att flexbox kraschar utanför skärmen */
+    min-width: 0; 
 }
 
-/* Mobilanpassning av layouten */
+/* 5. Mobilanpassning */
 @media (max-width: 768px) {
     .wizard-layout {
-        flex-direction: column; /* Staplar dem på mobil */
+        flex-direction: column; 
         gap: 15px !important;
     }
     
     .wizard-sidebar {
         flex: auto;
         width: 100% !important;
-        padding: 10px !important;
+        padding: 15px !important;
     }
     
     .wizard-container {
         width: 100% !important;
         padding: 15px 10px !important;
         min-height: auto !important;
-    }
-}
-
-@media (max-width: 768px) {
-    /* 1. Krymp hela material-boxen */
-
-    #academy-module-view h2 {
-        font-size: 1.4rem !important;
-        margin-bottom: 10px !important;
-        margin-top: -10px !important;
-    }
-
- /* === 3. SÄKERSTÄLL ATT INGEN ANNAN RUTTA TAR PLATS === */
-    .wizard-layout {
-        /* Tvinga innehållet att packa sig tätt */
-        gap: 0px !important; 
-    }
-
-    /* 2. Gör materialboxen superkompakt */
-    .wizard-sidebar {
-        width: 100% !important;
-        padding: 6px 10px !important;
-        margin: 0 !important;
-        background: rgba(255, 255, 255, 0.03) !important;
-        border-radius: 8px !important;
-        border: 1px solid #222 !important;
-    }
-
-.wizard-sidebar h4 {
-        font-size: 0.6rem !important;
-        margin-bottom: 4px !important;
-        text-align: center;
-    }
-
-/* 3. Tvinga taggarna att ligga på rad utan prickar/cirklar */
-    .wizard-checklist {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        gap: 4px !important;
-    }
-
-  .wizard-checklist li {
-        /* Ta bort de tidigare minimala värdena */
-        padding: 5px 12px !important; /* Återställ padding så taggarna ser bra ut */
-        font-size: 0.8rem !important; /* Betydligt större och mer läsbar text */
-        
-        /* Behåll dessa för att de ska ligga på rad */
-        border: 1px solid #333 !important;
-        border-radius: 4px !important;
-        color: #666 !important;
-        background: transparent !important;
-        margin: 0 !important;
-        display: block !important;
-    }
-
-  .wizard-container {
-        /* Ta bort den tvingade min-height som skapade tomrummet */
-        min-height: auto !important; /* Detta är den viktigaste ändringen! */
-        
-        /* Behåll dessa för att rutan ska se bra ut i övrigt */
-        padding: 15px 10px !important;
-        background: rgba(255, 255, 255, 0.02) !important;
-        border: 1px solid #222 !important;
-        border-radius: 12px !important;
-        text-align: center;
-        width: 100%;
-        margin: 0;
-    }
-
-    .wizard-icon {
-        font-size: 2.2rem !important;
-        margin-bottom: 5px !important;
-    }
-
- .wizard-step h3 {
-        font-size: 0.95rem !important;
-        margin-bottom: 5px !important;
-    }
-
-   .wizard-step p {
-        font-size: 0.75rem !important;
-        line-height: 1.3 !important;
-        margin-bottom: 12px !important;
-    }
-    
-  .wizard-dots {
-        margin-bottom: 8px !important;
-    }
-    /* 5. Gör knapparna lite mindre för att de ska få plats */
-    .wizard-btn {
-        padding: 8px 16px !important;
-        font-size: 0.8rem !important;
     }
 }
 
