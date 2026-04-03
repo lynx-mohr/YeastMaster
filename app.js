@@ -4027,3 +4027,122 @@ function calculatePitch() {
     resultText.innerHTML = resultHTML;
     resultBox.style.display = 'block';
 }
+
+// ==========================================
+// --- ACADEMY MODULE ENGINE ---
+// ==========================================
+
+let currentLessonStep = 1;
+const totalLessonSteps = 5;
+
+// Biblioteket över alla lektioner (du kan lägga till fler här senare!)
+const academyLessons = {
+    'washing': `
+        <div class="academy-lesson-container" style="padding: 20px; color: #fff;">
+            <h2 style="color: var(--accent-color); margin-top: 0;">Yeast Washing 101</h2>
+            <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 20px;">
+                Att återanvända jäst sparar pengar och ger ofta en ännu starkare och snabbare jäsning i generation 2. Genom att "tvätta" jästkakan separerar vi den friska, levande jästen från humlerester och döda celler.
+            </p>
+
+            <h4 style="margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;">Utrustning du behöver:</h4>
+            <ul style="list-style-type: square; padding-left: 20px; color: #ccc; margin-bottom: 30px; font-size: 0.9rem; line-height: 1.6;">
+                <li>2-3 stora glasburkar med lock (t.ex. Mason Jars), desinficerade.</li>
+                <li>1-2 liter kranvatten (kokat i 15 minuter och nedkylt till rumstemp).</li>
+                <li>Desinfektionsmedel (t.ex. Star San).</li>
+                <li>Din damejeanne/jästhink med jästkakan kvar (precis efter upptappning).</li>
+            </ul>
+
+            <div class="lesson-stepper" style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 20px; position: relative;">
+                
+                <div id="step-1" class="lesson-step">
+                    <h3 style="color: #fff; margin-top: 0;">Steg 1: Förberedelse</h3>
+                    <p style="color: #aaa; font-size: 0.95rem;">Hygien är A och O. Börja med att spraya allt med Star San. Häll därefter över ditt förkokta, nedkylda (sterila) vatten rakt ner i jästhinken där din smutsiga jästkaka ligger.</p>
+                </div>
+
+                <div id="step-2" class="lesson-step" style="display: none;">
+                    <h3 style="color: #fff; margin-top: 0;">Steg 2: Skaka liv i kakan</h3>
+                    <p style="color: #aaa; font-size: 0.95rem;">Sätt på locket på jästhinken och snurra/skaka runt ordentligt! Målet är att bryta upp jästkakan helt så att den blandas med vattnet till en jämnt grumlig sörja. Lös upp alla klumpar.</p>
+                </div>
+
+                <div id="step-3" class="lesson-step" style="display: none;">
+                    <h3 style="color: #fff; margin-top: 0;">Steg 3: Tyngdlagen jobbar (Vila)</h3>
+                    <p style="color: #aaa; font-size: 0.95rem;">Låt hinken stå helt stilla i <strong>20-30 minuter</strong>. Nu händer magin: Det tunga, mörka skräpet (humle och trub) sjunker snabbt till botten, medan den friska, lätta jästen stannar kvar uppe i vätskan som en vit mjölk.</p>
+                </div>
+
+                <div id="step-4" class="lesson-step" style="display: none;">
+                    <h3 style="color: #fff; margin-top: 0;">Steg 4: Skörda det flytande guldet</h3>
+                    <p style="color: #aaa; font-size: 0.95rem;">Häll mycket försiktigt över den grumliga "mjölkiga" vätskan till dina desinficerade glasburkar. Sluta hälla direkt när du ser att den mörka bottensatsen (trubet) börjar följa med. Skruva på locken löst.</p>
+                </div>
+
+                <div id="step-5" class="lesson-step" style="display: none;">
+                    <h3 style="color: #fff; margin-top: 0;">Steg 5: Kylskåp och Pitch</h3>
+                    <p style="color: #aaa; font-size: 0.95rem;">Ställ burkarna i kylen. Efter några dagar kommer jästen sedimentera till ett rent, vitt lager i botten med vatten ovanpå. När det är bryggdag: Häll av vattnet, låt burken bli rumsvarm, och knappa in volymen (slurryn) i vår Pitch Calculator!</p>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; border-top: 1px dashed #444; padding-top: 15px;">
+                    <button id="btn-prev-step" onclick="changeLessonStep(-1)" style="background: transparent; border: 1px solid #555; color: #fff; padding: 8px 15px; border-radius: 6px; cursor: pointer; visibility: hidden;">← Föregående</button>
+                    <span id="step-counter" style="color: var(--accent-color); font-weight: bold; font-size: 0.8rem;">1 / 5</span>
+                    <button id="btn-next-step" onclick="changeLessonStep(1)" style="background: var(--accent-color); border: none; color: #000; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;">Nästa →</button>
+                </div>
+            </div>
+        </div>
+    `
+};
+
+// Öppna en lektion
+function openAcademyModule(moduleId) {
+    const contentHTML = academyLessons[moduleId];
+    
+    if (!contentHTML) {
+        alert("Lektionen är under konstruktion!");
+        return;
+    }
+
+    // Göm gridden och visa modul-vyn
+    document.getElementById('lab-content-academy').style.display = 'none';
+    document.getElementById('academy-module-view').style.display = 'block';
+    
+    // Injicera HTML
+    document.getElementById('academy-module-content').innerHTML = contentHTML;
+
+    // Nollställ steg-räknaren varje gång man öppnar en lektion
+    currentLessonStep = 1;
+}
+
+// Stäng lektionen och återgå till menyn
+function closeAcademyModule() {
+    document.getElementById('academy-module-view').style.display = 'none';
+    document.getElementById('lab-content-academy').style.display = 'block';
+    
+    // Töm innehållet (bra för prestandan)
+    document.getElementById('academy-module-content').innerHTML = '';
+}
+
+// Funktion för att bläddra i lektionen
+function changeLessonStep(direction) {
+    // Göm nuvarande steg
+    const currentStepDiv = document.getElementById(`step-${currentLessonStep}`);
+    if (currentStepDiv) currentStepDiv.style.display = 'none';
+    
+    // Uppdatera räknaren
+    currentLessonStep += direction;
+    
+    // Säkerställ att vi inte går utanför gränserna
+    if (currentLessonStep < 1) currentLessonStep = 1;
+    if (currentLessonStep > totalLessonSteps) currentLessonStep = totalLessonSteps;
+    
+    // Visa nästa steg
+    const nextStepDiv = document.getElementById(`step-${currentLessonStep}`);
+    if (nextStepDiv) nextStepDiv.style.display = 'block';
+    
+    // Uppdatera texten (t.ex. "2 / 5")
+    const counterText = document.getElementById('step-counter');
+    if (counterText) counterText.innerText = `${currentLessonStep} / ${totalLessonSteps}`;
+    
+    // Hantera knapparnas synlighet
+    const prevBtn = document.getElementById('btn-prev-step');
+    const nextBtn = document.getElementById('btn-next-step');
+    
+    if (prevBtn) prevBtn.style.visibility = (currentLessonStep === 1) ? 'hidden' : 'visible';
+    if (nextBtn) nextBtn.style.visibility = (currentLessonStep === totalLessonSteps) ? 'hidden' : 'visible';
+}

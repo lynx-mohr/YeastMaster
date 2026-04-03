@@ -422,6 +422,15 @@
                 <div class="academy-card-arrow">→</div>
             </div>
 
+            <div class="academy-card" onclick="openAcademyModule('washing')">
+                <div class="academy-card-icon">🧽</div>
+                <div class="academy-card-content">
+                    <h4>Yeast Washing 101</h4>
+                    <p>Tvätta jästkakan och skörda "flytande guld" (slurry).</p>
+                </div>
+                <div class="academy-card-arrow">→</div>
+            </div>
+
             <div class="academy-card" onclick="openAcademyModule('starters')">
                 <div class="academy-card-icon">🧪</div>
                 <div class="academy-card-content">
@@ -453,8 +462,9 @@
     </div>
 
     <div id="academy-module-view" style="display: none; padding: 0;">
-        <button onclick="closeAcademyModule()" class="back-btn-academy">← BACK TO ACADEMY</button>
-        <div id="academy-module-content"></div>
+        <button onclick="closeAcademyModule()" class="back-btn-academy" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;">← BACK TO ACADEMY</button>
+        
+        <div id="academy-module-content"></div> 
     </div>
 </section>
 
