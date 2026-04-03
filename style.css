@@ -3283,3 +3283,35 @@ body.light-mode .hw-profile-btn:hover strong,
 body.light-mode .hw-profile-btn.active strong { color: var(--accent-color); }
 body.light-mode .hw-profile-summary { background: #f9f9f9; border-color: #ccc; }
 body.light-mode .hw-profile-summary .summary-row { border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
+
+/* ========================================== */
+/* --- MOBILFIX FÖR HARDWARE PROFILES     --- */
+/* ========================================== */
+@media (max-width: 600px) {
+    /* 1. Minska luften inuti hela modal-rutan för att ge innehållet max bredd */
+    .ym-modal-content {
+        padding: 18px 15px !important;
+    }
+
+    /* 2. Minska luften inuti dragspelsmenyn (summary-boxen) */
+    .hw-profile-summary {
+        padding: 12px 10px !important;
+        border-left-width: 3px !important; /* Lite smalare accent-linje */
+    }
+
+    /* 3. Krymp texten lite grann så den slipper fula radbrytningar */
+    .hw-profile-summary .summary-row .label,
+    .hw-profile-summary .summary-row .value {
+        font-size: 0.75rem !important; /* Krymper från 0.85rem */
+    }
+
+    /* 4. Anpassa storleken på själva klick-texten ("Traditional Lager (Starts @ 11.0°C)") */
+    .hw-profile-btn {
+        font-size: 0.85rem !important;
+        padding: 8px 0 !important; /* Lite mer tryckzon på mobilen för fingret */
+    }
+    
+    .hw-profile-btn span {
+        font-size: 0.75rem !important;
+    }
+}
