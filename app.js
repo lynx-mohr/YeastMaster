@@ -2270,6 +2270,7 @@ function generateHardwareProfilesHTML(yeastName) {
 // ==========================================
 // --- AUTOMAGISK GENERATOR FÖR PROFILER ---
 // ==========================================
+
 window.toggleHwProfile = function(uniqueId, btnElement) {
     const summaryBox = document.getElementById(uniqueId);
     
@@ -2281,9 +2282,18 @@ window.toggleHwProfile = function(uniqueId, btnElement) {
         if (btn !== btnElement) btn.classList.remove('active');
     });
 
-    // Öppna den klickade rutan
-    summaryBox.classList.toggle('open');
+    // Öppna/stäng den klickade rutan och spara resultatet i en variabel
+    const isNowOpen = summaryBox.classList.toggle('open');
     btnElement.classList.toggle('active');
+
+    // --- NYTT: Autoscroll! ---
+    if (isNowOpen) {
+        // Vänta 200ms (medan CSS-animationen fäller ut rutan)
+        setTimeout(() => {
+            // Säg åt rutan att mjukt glida in i synfältet så att hela får plats
+            summaryBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 200);
+    }
 };
 
 // ==========================================
