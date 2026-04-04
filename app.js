@@ -2310,9 +2310,19 @@ window.toggleHwProfile = function(uniqueId, btnElement) {
         if (btn !== btnElement) btn.classList.remove('active');
     });
 
-    // Öppna den klickade rutan
-    summaryBox.classList.toggle('open');
+    // Öppna/stäng den klickade rutan
+    const isNowOpen = summaryBox.classList.toggle('open');
     btnElement.classList.toggle('active');
+
+    // --- NYTT: Mer aggressiv Autoscroll! ---
+    if (isNowOpen) {
+        // Vi ökar marginalen till 250ms för att garantera att animationen är 100% klar
+        setTimeout(() => {
+            // Genom att använda 'center' tvingar vi webbläsaren att flytta rutan, 
+            // oavsett om toppen redan är synlig eller inte.
+            summaryBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 250);
+    }
 };
 
 function openYeastModal(yeast) {
