@@ -4045,53 +4045,55 @@ window.addEventListener('click', function(event) {
 let currentCalcType = '';
 
 function selectCalc(type, clickedBtn) {
-    currentCalcType = type;
-    document.getElementById('main-calc-buttons').style.display = 'none';
-    const header = document.getElementById('selected-yeast-header');
-    document.getElementById('selected-yeast-text').innerText = clickedBtn.innerText;
-    header.style.display = 'flex';
+    currentCalcType = type;
+    document.getElementById('main-calc-buttons').style.display = 'none';
+    const header = document.getElementById('selected-yeast-header');
+    document.getElementById('selected-yeast-text').innerText = clickedBtn.innerText;
+    header.style.display = 'flex';
 
-    const subOptions = document.getElementById('bank-sub-options');
-    if (type === 'bank') {
-        subOptions.style.display = 'block';
-    } else {
-        subOptions.style.display = 'none';
-    }
+    const subOptions = document.getElementById('bank-sub-options');
+    if (type === 'bank') {
+        subOptions.style.display = 'block';
+    } else {
+        subOptions.style.display = 'none';
+    }
 
-    document.getElementById('calc-input-section').style.display = 'block';
-    document.getElementById('calc-result-box').style.display = 'none';
+    document.getElementById('calc-input-section').style.display = 'block';
+    document.getElementById('calc-result-box').style.display = 'none';
 
-    const dynamicSection = document.getElementById('dynamic-extra-fields');
-    dynamicSection.innerHTML = ''; 
+    const dynamicSection = document.getElementById('dynamic-extra-fields');
+    dynamicSection.innerHTML = ''; 
 
-    if (type === 'dry') {
-        dynamicSection.innerHTML = `
-            <div class="ym-input-group" style="margin-bottom: 20px;">
-                <label>Cells per gram (Billions)</label>
-                <input type="number" id="calc-dry-density" value="10" step="1">
-            </div>
-        `;
-    } 
-    else if (type === 'liquid') {
-        const today = new Date().toISOString().split('T')[0];
-        dynamicSection.innerHTML = `
-            <div id="liquid-packs-container">
-                <div class="liquid-pack-row yeast-package-box">
-                        <label>Cells in pack</label>
-                        <input type="number" class="calc-liquid-pack" value="100" step="10">
-                    </div>
-                    <div class="ym-input-group">
-                        <label>Mfg Date</label>
-                        <input type="date" class="calc-liquid-date" value="${today}">
-                    </div>
-                    <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
-                </div>
-            </div>
-            <button onclick="addLiquidPack()" style="background: none; border: 1px dashed #8CC63F; color: #8CC63F; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; margin-bottom: 20px; font-size: 0.9em;">
-                + Add another package
-            </button>
-        `;
-    }
+    if (type === 'dry') {
+        dynamicSection.innerHTML = `
+            <div class="ym-input-group" style="margin-bottom: 20px;">
+                <label>Cells per gram (Billions)</label>
+                <input type="number" id="calc-dry-density" value="10" step="1">
+            </div>
+        `;
+    } 
+    else if (type === 'liquid') {
+        const today = new Date().toISOString().split('T')[0];
+        // HÄR ÄR DEN RENA, PERFEKTA HTML-KODEN FÖR FÖRSTA PAKETET
+        dynamicSection.innerHTML = `
+            <div id="liquid-packs-container">
+                <div class="liquid-pack-row yeast-package-box">
+                    <div class="ym-input-group">
+                        <label>Cells in pack</label>
+                        <input type="number" class="calc-liquid-pack" value="100" step="10">
+                    </div>
+                    <div class="ym-input-group">
+                        <label>Mfg Date</label>
+                        <input type="date" class="calc-liquid-date" value="${today}">
+                    </div>
+                    <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
+                </div>
+            </div>
+            <button onclick="addLiquidPack()" style="background: none; border: 1px dashed #8CC63F; color: #8CC63F; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; margin-bottom: 20px; font-size: 0.9em; font-weight: bold;">
+                + Add another package
+            </button>
+        `;
+    }
 }
 
 function resetCalcSelection() {
@@ -4109,25 +4111,27 @@ function resetCalcSelection() {
 }
 
 function addLiquidPack() {
-    const container = document.getElementById('liquid-packs-container');
-    const today = new Date().toISOString().split('T')[0];
-    
-    const newPack = document.createElement('div');
-    newPack.className = 'liquid-pack-row';
-   newPack.className = 'liquid-pack-row yeast-package-box';
-    newPack.innerHTML = `
-        <div class="ym-input-group">
-            <label>Cells in pack</label>
-            <input type="number" class="calc-liquid-pack" value="100" step="10">
-        </div>
-        <div class="ym-input-group">
-            <label>Mfg Date</label>
-            <input type="date" class="calc-liquid-date" value="${today}">
-        </div>
-        <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
-    `;
-    
-    container.appendChild(newPack);
+    const container = document.getElementById('liquid-packs-container');
+    const today = new Date().toISOString().split('T')[0];
+    
+    const newPack = document.createElement('div');
+    // RÄTT KLASSER KOPPLAS PÅ DIREKT
+    newPack.className = 'liquid-pack-row yeast-package-box';
+    
+    // RENT INNEHÅLL TILL DET NYA PAKETET
+    newPack.innerHTML = `
+        <div class="ym-input-group">
+            <label>Cells in pack</label>
+            <input type="number" class="calc-liquid-pack" value="100" step="10">
+        </div>
+        <div class="ym-input-group">
+            <label>Mfg Date</label>
+            <input type="date" class="calc-liquid-date" value="${today}">
+        </div>
+        <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
+    `;
+    
+    container.appendChild(newPack);
 }
 
 function removeLiquidPack(btn) {
