@@ -3322,3 +3322,78 @@ body.light-mode .hw-profile-summary .summary-row { border-bottom: 1px solid rgba
         font-size: 0.75rem !important;
     }
 }
+
+/* ======================================================= */
+/* --- RESCUE MISSION: FIX FÖR JÄSTPAKET I KALKYLATORN --- */
+/* ======================================================= */
+
+/* 1. Själva containern för jästpaketet (den med grön kant) */
+.yeast-package-box {
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    border-left: 4px solid #8CC63F; /* Den magiska kanten! */
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    
+    /* MOBIL FIRST: Stapla elementen snyggt i en kolumn */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    align-items: end; /* Tvingar allt (inklusive knappen) att linjera i botten */
+}
+
+/* 2. DATOR VY (När skärmen är bredare än 600px) */
+@media (min-width: 600px) {
+    .yeast-package-box {
+        /* Skapar 3 kolumner: Fält 1 och 2 delar på utrymmet (1fr), krysset tar det lilla som behövs (auto) */
+        grid-template-columns: 1fr 1fr auto; 
+    }
+}
+
+/* 3. Tvinga input-grupperna inuti att ta upp exakt sin ruta */
+.yeast-package-box .ym-input-group {
+    width: 100% !important;
+    margin: 0 !important; 
+    display: flex;
+    flex-direction: column;
+}
+
+/* 4. Fixa den trasiga Kryss-knappen! */
+.yeast-package-box button {
+    height: 40px; /* Matchar standardhöjden på dina input-fält */
+    min-width: 45px;
+    padding: 0 15px;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+    margin: 0 !important; /* Förhindrar att den svävar iväg */
+}
+
+.yeast-package-box button:hover {
+    background-color: #ff4444; /* Blir snyggt röd när man hovrar */
+    border-color: #ff4444;
+}
+
+/* 5. Light Mode Support för paketen */
+body.light-mode .yeast-package-box {
+    background-color: #f9f9f9;
+    border-color: #ddd;
+}
+body.light-mode .yeast-package-box button {
+    background-color: #eee;
+    color: #555;
+    border-color: #ccc;
+}
+body.light-mode .yeast-package-box button:hover {
+    background-color: #ff4444;
+    color: #fff;
+}

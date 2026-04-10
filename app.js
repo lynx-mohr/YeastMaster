@@ -4044,8 +4044,7 @@ function selectCalc(type, clickedBtn) {
         const today = new Date().toISOString().split('T')[0];
         dynamicSection.innerHTML = `
             <div id="liquid-packs-container">
-                <div class="liquid-pack-row" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 10px; background: #222; padding: 12px; border-radius: 6px; border-left: 3px solid #8CC63F; align-items: end;">
-                    <div class="ym-input-group">
+                <div class="liquid-pack-row yeast-package-box">
                         <label>Cells in pack</label>
                         <input type="number" class="calc-liquid-pack" value="100" step="10">
                     </div>
@@ -4083,8 +4082,7 @@ function addLiquidPack() {
     
     const newPack = document.createElement('div');
     newPack.className = 'liquid-pack-row';
-    newPack.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 10px; background: #222; padding: 12px; border-radius: 6px; border-left: 3px solid #555; animation: fadeIn 0.3s; align-items: end;';
-    
+   newPack.className = 'liquid-pack-row yeast-package-box';
     newPack.innerHTML = `
         <div class="ym-input-group">
             <label>Cells in pack</label>
