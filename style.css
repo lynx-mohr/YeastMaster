@@ -3131,29 +3131,30 @@ body.light-mode #pitch-result div[style] {
 }
 
 /* ======================================================= */
-/* --- THE ARCANE LAB: WIZARD LAYOUT FIX 2.0 --- */
+/* --- THE ARCANE LAB: WIZARD LAYOUT THE GRID WAY --- */
 /* ======================================================= */
 
-/* 1. Själva rutnätet som håller båda lådorna */
+/* 1. Själva rutnätet (Nuclear Option) */
 #academy-module-view .wizard-layout {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: stretch !important; /* Lika höga rutor */
+    display: grid !important;
+    /* MAGIN: Exakt 250px till vänstermenyn, "1fr" (resten av utrymmet) till högermenyn! */
+    grid-template-columns: 250px 1fr !important; 
+    align-items: stretch !important; /* Behåller dem lika höga */
     gap: 30px !important;
     width: 100% !important;
 }
 
-/* 2. Vänstermenyn (Checklistan) */
+/* 2. Vänstermenyn (Slipper flexa, den fyller bara sin 250px kolumn) */
 #academy-module-view .wizard-sidebar {
-    flex: 0 0 240px !important; /* Lås stenhårt till 240px */
-    width: 240px !important;
+    width: 100% !important;
+    max-width: none !important;
     margin: 0 !important;
 }
 
-/* 3. Högerrutan (Innehållet) */
+/* 3. Högerrutan (Fyller automatiskt sin "1fr" kolumn) */
 #academy-module-view .wizard-container {
-    flex: 1 1 auto !important; 
-    width: 100% !important; /* MAGIN: Tvingar rutan att pressa sig ut till högerkanten! */
+    width: 100% !important; 
+    max-width: none !important; 
     margin: 0 !important;
     display: flex !important;
     flex-direction: column !important;
@@ -3164,21 +3165,13 @@ body.light-mode #pitch-result div[style] {
 #academy-module-view .wizard-controls {
     width: 100% !important;
     display: flex !important;
-    justify-content: space-between !important; /* Trycker isär knapparna */
+    justify-content: space-between !important; 
     margin-top: auto !important;
     padding-top: 20px !important;
-    border-top: 1px solid rgba(255,255,255,0.05); /* Subtil linje ovanför knapparna */
+    border-top: 1px solid rgba(255,255,255,0.05); 
 }
     
-/* 5. Ge prickarna i toppen rätt avstånd */
-#academy-module-view .wizard-dots {
-    width: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    gap: 15px !important;
-}
-
-/* 6. Centrera texten och ikonen perfekt i mitten av rutan */
+/* 5. Centrera texten och ikonen perfekt i mitten av rutan */
 #academy-module-view .wizard-step {
     flex: 1 !important;
     width: 100% !important;
@@ -3192,15 +3185,15 @@ body.light-mode #pitch-result div[style] {
     display: flex !important;
 }
 
-/* --- MOBIL-VY --- */
+/* --- MOBIL-VY (Går tillbaka till staplad flexbox) --- */
 @media (max-width: 768px) {
     #academy-module-view .wizard-layout {
+        display: flex !important;
         flex-direction: column !important; 
         gap: 20px !important;
     }
     #academy-module-view .wizard-sidebar,
     #academy-module-view .wizard-container {
-        flex: auto !important;
         width: 100% !important;
         max-width: 100% !important;
     }
