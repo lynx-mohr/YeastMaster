@@ -3131,37 +3131,34 @@ body.light-mode #pitch-result div[style] {
 }
 
 /* ======================================================= */
-/* --- THE ARCANE LAB: WIZARD LAYOUT THE GRID WAY --- */
+/* --- THE ARCANE LAB: WIZARD LAYOUT (THE FINAL FIX) --- */
 /* ======================================================= */
 
-/* 1. Själva rutnätet (Nuclear Option) */
+/* 1. PC VY (Över 600px) - Använder Grid för tvingad sida-vid-sida */
 #academy-module-view .wizard-layout {
     display: grid !important;
-    /* MAGIN: Exakt 250px till vänstermenyn, "1fr" (resten av utrymmet) till högermenyn! */
-    grid-template-columns: 250px 1fr !important; 
-    align-items: stretch !important; /* Behåller dem lika höga */
+    grid-template-columns: 240px 1fr !important; 
+    align-items: stretch !important; 
     gap: 30px !important;
     width: 100% !important;
 }
 
-/* 2. Vänstermenyn (Slipper flexa, den fyller bara sin 250px kolumn) */
 #academy-module-view .wizard-sidebar {
     width: 100% !important;
     max-width: none !important;
     margin: 0 !important;
 }
 
-/* 3. Högerrutan (Fyller automatiskt sin "1fr" kolumn) */
 #academy-module-view .wizard-container {
     width: 100% !important; 
     max-width: none !important; 
+    min-width: 0 !important; /* Säkerhetsspärr: Hindrar rutan från att spränga skärmen */
     margin: 0 !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
 }
 
-/* 4. Tvinga kontrollraden i botten att krama sidorna */
 #academy-module-view .wizard-controls {
     width: 100% !important;
     display: flex !important;
@@ -3171,7 +3168,14 @@ body.light-mode #pitch-result div[style] {
     border-top: 1px solid rgba(255,255,255,0.05); 
 }
     
-/* 5. Centrera texten och ikonen perfekt i mitten av rutan */
+#academy-module-view .wizard-dots {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 15px !important;
+    margin-bottom: 30px !important;
+}
+
 #academy-module-view .wizard-step {
     flex: 1 !important;
     width: 100% !important;
@@ -3185,8 +3189,8 @@ body.light-mode #pitch-result div[style] {
     display: flex !important;
 }
 
-/* --- MOBIL-VY (Går tillbaka till staplad flexbox) --- */
-@media (max-width: 768px) {
+/* 2. MOBIL VY - Matchar nu EXAKT din apps egna 600px-gräns! */
+@media (max-width: 600px) {
     #academy-module-view .wizard-layout {
         display: flex !important;
         flex-direction: column !important; 
