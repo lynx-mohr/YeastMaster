@@ -3134,30 +3134,29 @@ body.light-mode #pitch-result div[style] {
 /* --- TVINGAD FIX FÖR WIZARD-LAYOUTEN --- */
 /* ========================================== */
 
-/* Genom att lägga "#academy-module-view" framför, tvingar vi webbläsaren 
-   att prioritera dessa regler över ALLT annat i hela ditt dokument! */
-
 #academy-module-view .wizard-layout {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: flex-start !important; /* Tar bort avgrunden i mitten */
+    justify-content: flex-start !important; 
     align-items: flex-start !important;
-    gap: 30px !important; /* Perfekt avstånd mellan boxarna */
+    gap: 30px !important; 
     width: 100% !important;
+    margin-left: 0 !important; /* Spärr mot osynlig marginal */
 }
 
 #academy-module-view .wizard-sidebar {
-    flex: 0 0 240px !important; /* Låser listan till 240px bredd */
+    flex: 0 0 240px !important; 
     width: 240px !important;
     max-width: 240px !important;
     margin: 0 !important;
 }
 
 #academy-module-view .wizard-container {
-    flex: 1 1 100% !important; /* Tvingar rutan att sträcka ut sig! */
-    max-width: 100% !important; /* Slår ihjäl den gamla smala spärren */
-    margin: 0 !important; /* Förhindrar rutan från att "putta" sig själv till höger */
-    width: auto !important;
+    /* MAGIN: Börja på 0 i bredd, och ät sedan upp all överbliven plats! */
+    flex: 1 1 0% !important; 
+    width: 100% !important; 
+    max-width: none !important; 
+    margin: 0 !important; 
 }
 
 /* Tvinga fram mobil-layouten när skärmen blir liten */
