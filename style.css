@@ -3130,36 +3130,56 @@ body.light-mode #pitch-result div[style] {
     border: 1px solid #ccc !important;
 }
 
-/* ========================================== */
-/* --- TVINGAD FIX FÖR WIZARD-LAYOUTEN --- */
-/* ========================================== */
+/* ======================================================= */
+/* --- THE ARCANE LAB: WIZARD LAYOUT FIX --- */
+/* ======================================================= */
 
 #academy-module-view .wizard-layout {
     display: flex !important;
     flex-direction: row !important;
     justify-content: flex-start !important; 
-    align-items: flex-start !important;
+    align-items: stretch !important; /* MAGI 1: Tvingar båda rutorna att alltid bli exakt lika höga! */
     gap: 30px !important; 
     width: 100% !important;
-    margin-left: 0 !important; /* Spärr mot osynlig marginal */
 }
 
 #academy-module-view .wizard-sidebar {
-    flex: 0 0 240px !important; 
-    width: 240px !important;
-    max-width: 240px !important;
+    flex: 0 0 250px !important; /* Låser vänstermenyn stenhårt till 250px */
+    width: 250px !important;
+    max-width: 250px !important;
     margin: 0 !important;
 }
 
 #academy-module-view .wizard-container {
-    /* MAGIN: Börja på 0 i bredd, och ät sedan upp all överbliven plats! */
-    flex: 1 1 0% !important; 
-    width: 100% !important; 
+    flex: 1 !important; /* MAGI 2: Äter upp exakt all 100% av utrymmet som blir över */
+    width: auto !important; 
     max-width: none !important; 
     margin: 0 !important; 
+    height: auto !important; 
+    
+    /* Flexbox inuti rutan för att hålla knapparna på plats */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important; /* Trycker isär texten (upp) och knapparna (ner) */
 }
 
-/* Tvinga fram mobil-layouten när skärmen blir liten */
+/* Tillåter steget i mitten att ta all plats, så texten och ikonen hamnar i centrum */
+#academy-module-view .wizard-step.active {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+}
+
+/* Låser fast knappraden längst ner så den aldrig åker utanför */
+#academy-module-view .wizard-controls {
+    margin-top: 0 !important; 
+    padding-top: 20px !important;
+    border-top: 1px solid rgba(255,255,255,0.05); /* Snygg, subtil linje ovanför knapparna */
+    flex-shrink: 0; /* Förhindrar att knappraden krymps */
+}
+
+/* MOBIL-VY: Stapla dem snyggt när skärmen är liten */
 @media (max-width: 768px) {
     #academy-module-view .wizard-layout {
         flex-direction: column !important; 
@@ -3167,10 +3187,9 @@ body.light-mode #pitch-result div[style] {
     }
     #academy-module-view .wizard-sidebar,
     #academy-module-view .wizard-container {
-        flex: 1 1 auto !important;
+        flex: auto !important;
         width: 100% !important;
         max-width: 100% !important;
-        margin: 0 !important;
     }
 }
 
