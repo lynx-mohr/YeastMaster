@@ -3370,3 +3370,160 @@ body.light-mode .yeast-package-box button:hover {
     background-color: #ff4444;
     color: #fff;
 }
+
+/* ======================================================= */
+/* --- THE ARCANE LAB: ULTIMATE WIZARD FIX --- */
+/* ======================================================= */
+
+/* 1. Själva layout-containern (Tvingad Grid på PC) */
+.wizard-layout {
+    display: grid !important;
+    grid-template-columns: 260px 1fr !important;
+    align-items: stretch !important;
+    gap: 30px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* 2. Vänstermenyn (Checklistan) */
+.wizard-sidebar {
+    width: 100% !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid #333 !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+}
+
+/* 3. Högerrutan (Innehållet och knapparna) */
+.wizard-container {
+    width: 100% !important;
+    min-width: 0 !important; /* Förhindrar Grid-blowout */
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid #333 !important;
+    border-radius: 12px !important;
+    padding: 30px 20px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    position: relative !important;
+}
+
+/* 4. Steg-innehållet i mitten */
+.wizard-step {
+    flex: 1 !important;
+    width: 100% !important;
+    display: none !important; /* Döljs som standard */
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+}
+
+.wizard-step.active {
+    display: flex !important; /* Visas när steget är aktivt */
+}
+
+/* 5. Knappraden i botten */
+.wizard-controls {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-top: 20px !important;
+    padding-top: 20px !important;
+    border-top: 1px solid rgba(255,255,255,0.05) !important;
+}
+
+/* 6. Prickarna i toppen */
+.wizard-dots {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 15px !important;
+    margin-bottom: 30px !important;
+}
+
+/* 7. Checklist-styling (Som försvann i städningen) */
+.wizard-checklist {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.wizard-checklist li {
+    color: #555 !important; 
+    padding: 8px 0 !important;
+    border-bottom: 1px dashed #222 !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+}
+.wizard-checklist li:last-child { 
+    border-bottom: none !important; 
+}
+.wizard-checklist li::before {
+    content: '○' !important; 
+    margin-right: 10px !important;
+    font-size: 1.2rem !important;
+    opacity: 0.5 !important;
+}
+.wizard-checklist li.active-item {
+    color: #fff !important;
+    transform: translateX(5px) !important;
+}
+.wizard-checklist li.active-item::before {
+    content: '●' !important; 
+    color: var(--accent-color) !important;
+    opacity: 1 !important;
+    text-shadow: 0 0 8px var(--accent-color) !important;
+}
+
+/* 8. Knapp-styling (Back / Next) */
+.wizard-btn {
+    background: #222 !important;
+    color: #fff !important;
+    border: 1px solid #444 !important;
+    padding: 12px 24px !important;
+    border-radius: 8px !important;
+    font-family: 'Lexend', sans-serif !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.wizard-btn:hover:not(:disabled) {
+    background: #333 !important;
+    border-color: #666 !important;
+}
+.wizard-btn.primary {
+    background: var(--accent-color) !important;
+    color: #000 !important;
+    border-color: var(--accent-color) !important;
+}
+.wizard-btn.primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(140, 198, 63, 0.4) !important;
+}
+.wizard-btn:disabled {
+    opacity: 0.3 !important;
+    cursor: not-allowed !important;
+}
+
+/* 9. Mobilanpassning */
+@media (max-width: 768px) {
+    .wizard-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+    .wizard-sidebar,
+    .wizard-container {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
