@@ -3374,128 +3374,128 @@ const academyModules = {
     `,
 
    // --- 2. YEAST STARTERS 101 ---
-    'starters': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Starters 101</h2>
-        
-        <div class="wizard-layout">
-            
-            <div class="wizard-sidebar">
-                <h4>You will need:</h4>
-                <ul class="wizard-checklist" id="wizard-checklist">
-                    <li id="item-flask">Erlenmeyer Flask</li>
-                    <li id="item-scale">Precision Scale</li>
-                    <li id="item-dme">Light DME</li>
-                    <li id="item-water">Clean Water</li>
-                    <li id="item-heat">Heat Source</li>
-                    <li id="item-yeast">Yeast Pack</li>
-                    <li id="item-stirbar">Stir Bar</li>
-                    <li id="item-stirplate">Stir Plate</li>
-                </ul>
-            </div>
+    'starters': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Starters 101</h2>
+        
+        <div class="ym-academy-layout">
+            
+            <div class="ym-academy-sidebar">
+                <h4>You will need:</h4>
+                <ul class="wizard-checklist" id="wizard-checklist">
+                    <li id="item-flask">Erlenmeyer Flask</li>
+                    <li id="item-scale">Precision Scale</li>
+                    <li id="item-dme">Light DME</li>
+                    <li id="item-water">Clean Water</li>
+                    <li id="item-heat">Heat Source</li>
+                    <li id="item-yeast">Yeast Pack</li>
+                    <li id="item-stirbar">Stir Bar</li>
+                    <li id="item-stirplate">Stir Plate</li>
+                </ul>
+            </div>
 
-            <div class="wizard-container" id="module-wizard">
-                <div class="wizard-dots" id="wizard-dots">
-                    <div class="wizard-dot active"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                </div>
+            <div class="ym-academy-content" id="module-wizard">
+                <div class="wizard-dots" id="wizard-dots">
+                    <div class="wizard-dot active"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                </div>
 
-                <div class="wizard-step active" data-step="0">
-                    <div class="wizard-icon">🧽🧪</div>
-                    <h3>1. Clean & Prepare</h3>
-                    <p>Before we start, hygiene is everything. Make sure your Erlenmeyer flask is completely clean and sanitized.</p>
-                </div>
+                <div class="wizard-step active" data-step="0">
+                    <div class="wizard-icon">🧽🧪</div>
+                    <h3>1. Clean & Prepare</h3>
+                    <p>Before we start, hygiene is everything. Make sure your Erlenmeyer flask is completely clean and sanitized.</p>
+                </div>
 
-                <div class="wizard-step" data-step="1">
-                    <div class="wizard-icon">⚖️🌾</div>
-                    <h3>2. The Golden Ratio</h3>
-                    <p>Place the flask on the scale. Weigh exactly <strong>100g of DME</strong> for every <strong>1 Liter of water</strong>. This creates a perfect 1.036 specific gravity.</p>
-                </div>
+                <div class="wizard-step" data-step="1">
+                    <div class="wizard-icon">⚖️🌾</div>
+                    <h3>2. The Golden Ratio</h3>
+                    <p>Place the flask on the scale. Weigh exactly <strong>100g of DME</strong> for every <strong>1 Liter of water</strong>. This creates a perfect 1.036 specific gravity.</p>
+                </div>
 
-                <div class="wizard-step" data-step="2">
-                    <div class="wizard-icon">🔥🌡️</div>
-                    <h3>3. Boil & Sterilize</h3>
-                    <p>Move the flask to your heat source. Boil gently for 10-15 minutes to sterilize the wort. <br><br><em>Pro-tip: Add a drop of Fermcap-S to prevent boil-overs!</em></p>
-                </div>
+                <div class="wizard-step" data-step="2">
+                    <div class="wizard-icon">🔥🌡️</div>
+                    <h3>3. Boil & Sterilize</h3>
+                    <p>Move the flask to your heat source. Boil gently for 10-15 minutes to sterilize the wort. <br><br><em>Pro-tip: Add a drop of Fermcap-S to prevent boil-overs!</em></p>
+                </div>
 
-                <div class="wizard-step" data-step="3">
-                    <div class="wizard-icon">❄️🌪️</div>
-                    <h3>4. Chill, Pitch & Spin</h3>
-                    <p>Cool the flask to 20°C (68°F). Pitch your yeast, drop in the stir bar, and place it on the stir plate for 24-48 hours. Watch those cells multiply!</p>
-                </div>
+                <div class="wizard-step" data-step="3">
+                    <div class="wizard-icon">❄️🌪️</div>
+                    <h3>4. Chill, Pitch & Spin</h3>
+                    <p>Cool the flask to 20°C (68°F). Pitch your yeast, drop in the stir bar, and place it on the stir plate for 24-48 hours. Watch those cells multiply!</p>
+                </div>
 
-                <div class="wizard-controls">
-                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
-                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
-                </div>
-            </div>
-        </div>
-    `,
+                <div class="wizard-controls">
+                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
+                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
+                </div>
+            </div>
+        </div>
+    `,
 
-    // --- 3. YEAST WASHING 101 ---
-    'washing': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Washing 101</h2>
-        
-        <div class="wizard-layout">
-            
-            <div class="wizard-sidebar">
-                <h4>You will need:</h4>
-                <ul class="wizard-checklist" id="wizard-checklist">
-                    <li id="item-jars">Mason Jars</li>
-                    <li id="item-starsan">Star San</li>
-                    <li id="item-water">Sterile Water (Cooled)</li>
-                    <li id="item-cake">Yeast Cake</li>
-                    <li id="item-fridge">Fridge Space</li>
-                </ul>
-            </div>
+    // --- 3. YEAST WASHING 101 ---
+    'washing': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Washing 101</h2>
+        
+        <div class="ym-academy-layout">
+            
+            <div class="ym-academy-sidebar">
+                <h4>You will need:</h4>
+                <ul class="wizard-checklist" id="wizard-checklist">
+                    <li id="item-jars">Mason Jars</li>
+                    <li id="item-starsan">Star San</li>
+                    <li id="item-water">Sterile Water (Cooled)</li>
+                    <li id="item-cake">Yeast Cake</li>
+                    <li id="item-fridge">Fridge Space</li>
+                </ul>
+            </div>
 
-            <div class="wizard-container" id="module-wizard">
-                <div class="wizard-dots" id="wizard-dots">
-                    <div class="wizard-dot active"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                </div>
+            <div class="ym-academy-content" id="module-wizard">
+                <div class="wizard-dots" id="wizard-dots">
+                    <div class="wizard-dot active"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                </div>
 
-                <div class="wizard-step active" data-step="0">
-                    <div class="wizard-icon">🧽💧</div>
-                    <h3>1. Prep & Dilute</h3>
-                    <p>Sanitize everything with Star San. Pour your pre-boiled, cooled (sterile) water directly into the fermenter right on top of the dirty yeast cake.</p>
-                </div>
+                <div class="wizard-step active" data-step="0">
+                    <div class="wizard-icon">🧽💧</div>
+                    <h3>1. Prep & Dilute</h3>
+                    <p>Sanitize everything with Star San. Pour your pre-boiled, cooled (sterile) water directly into the fermenter right on top of the dirty yeast cake.</p>
+                </div>
 
-                <div class="wizard-step" data-step="1">
-                    <div class="wizard-icon">🌪️💦</div>
-                    <h3>2. Shake it up</h3>
-                    <p>Put the lid back on the fermenter and swirl it vigorously! Break the yeast cake apart completely until the water looks like a thick, muddy slurry.</p>
-                </div>
+                <div class="wizard-step" data-step="1">
+                    <div class="wizard-icon">🌪️💦</div>
+                    <h3>2. Shake it up</h3>
+                    <p>Put the lid back on the fermenter and swirl it vigorously! Break the yeast cake apart completely until the water looks like a thick, muddy slurry.</p>
+                </div>
 
-                <div class="wizard-step" data-step="2">
-                    <div class="wizard-icon">⏳🕰️</div>
-                    <h3>3. Let Gravity Work</h3>
-                    <p>Let the fermenter sit completely still for <strong>20-30 minutes</strong>. The heavy, dark trub and hop matter will sink rapidly, leaving the healthy yeast suspended in the milky liquid above.</p>
-                </div>
+                <div class="wizard-step" data-step="2">
+                    <div class="wizard-icon">⏳🕰️</div>
+                    <h3>3. Let Gravity Work</h3>
+                    <p>Let the fermenter sit completely still for <strong>20-30 minutes</strong>. The heavy, dark trub and hop matter will sink rapidly, leaving the healthy yeast suspended in the milky liquid above.</p>
+                </div>
 
-                <div class="wizard-step" data-step="3">
-                    <div class="wizard-icon">🫗✨</div>
-                    <h3>4. Harvest the Gold</h3>
-                    <p>Carefully decant the milky liquid into your sanitized mason jars. Stop pouring the second you see the dark trub from the bottom trying to follow along.</p>
-                </div>
+                <div class="wizard-step" data-step="3">
+                    <div class="wizard-icon">🫗✨</div>
+                    <h3>4. Harvest the Gold</h3>
+                    <p>Carefully decant the milky liquid into your sanitized mason jars. Stop pouring the second you see the dark trub from the bottom trying to follow along.</p>
+                </div>
 
-                <div class="wizard-step" data-step="4">
-                    <div class="wizard-icon">🧊🧮</div>
-                    <h3>5. Crash & Pitch</h3>
-                    <p>Put the jars in the fridge. In a few days, the yeast will compact into a clean white layer. On brew day, decant the water, let it warm up, and measure the slurry into our Pitch Calculator!</p>
-                </div>
+                <div class="wizard-step" data-step="4">
+                    <div class="wizard-icon">🧊🧮</div>
+                    <h3>5. Crash & Pitch</h3>
+                    <p>Put the jars in the fridge. In a few days, the yeast will compact into a clean white layer. On brew day, decant the water, let it warm up, and measure the slurry into our Pitch Calculator!</p>
+                </div>
 
-                <div class="wizard-controls">
-                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
-                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
-                </div>
-            </div>
-        </div>
-    `,
+                <div class="wizard-controls">
+                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
+                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
+                </div>
+            </div>
+        </div>
+    `,
 
     // --- 4. Agar ---
     'agar': `
