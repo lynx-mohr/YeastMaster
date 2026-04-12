@@ -4111,11 +4111,9 @@ function selectCalc(type, clickedBtn) {
     document.getElementById('selected-yeast-text').innerText = clickedBtn.innerText;
     header.style.display = 'flex';
 
-    const subOptions = document.getElementById('bank-sub-options');
-    if (type === 'bank') {
-        subOptions.style.display = 'block';
-    } else {
-        subOptions.style.display = 'none';
+const subOptions = document.getElementById('bank-sub-options');
+    if (subOptions) {
+        subOptions.style.display = 'none'; // Gömmer det gamla spöket för alltid!
     }
 
     document.getElementById('calc-input-section').style.display = 'block';
