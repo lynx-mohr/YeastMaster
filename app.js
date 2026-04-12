@@ -4085,6 +4085,25 @@ window.addEventListener('click', function(event) {
 
 let currentCalcType = '';
 
+let currentBankMethod = 'loop'; // Standardvalet
+
+window.setBankMethod = function(method, btnElement) {
+    currentBankMethod = method;
+    
+    // Återställ färgerna på båda knapparna
+    document.querySelectorAll('.bank-method-btn').forEach(b => {
+        b.style.backgroundColor = 'transparent';
+        b.style.color = 'var(--accent-color)';
+    });
+    
+    // Gör den klickade knappen aktiv (ifyllt grön)
+    btnElement.style.backgroundColor = 'var(--accent-color)';
+    btnElement.style.color = '#000';
+    
+    // Räkna om direkt!
+    calculatePitch();
+};
+
 function selectCalc(type, clickedBtn) {
     currentCalcType = type;
     document.getElementById('main-calc-buttons').style.display = 'none';
@@ -4161,6 +4180,24 @@ else if (type === 'slurry') {
             <div class="ym-input-group" style="margin-bottom: 20px;">
                 <label>Harvest Date</label>
                 <input type="date" id="calc-slurry-date" value="${today}" style="width: 100%; background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 6px; font-family: 'Lexend'; font-size: 1em; outline: none;">
+            </div>
+        `;
+    }
+
+    else if (type === 'bank') {
+        currentBankMethod = 'loop'; // Nollställ till Loop varje gång vi öppnar
+        
+        dynamicSection.innerHTML = `
+            <div class="ym-input-group" style="margin-bottom: 20px;">
+                <label style="margin-bottom: 10px; display: block; color: var(--accent-color); font-weight: 800; letter-spacing: 1px; font-size: 0.8rem; text-transform: uppercase;">Inoculation Method</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button onclick="setBankMethod('loop', this)" class="bank-method-btn" style="background: var(--accent-color); color: #000; border: 1px solid var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; cursor: pointer; transition: all 0.2s;">
+                        Single Loop
+                    </button>
+                    <button onclick="setBankMethod('slant', this)" class="bank-method-btn" style="background: transparent; color: var(--accent-color); border: 1px solid var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; cursor: pointer; transition: all 0.2s;">
+                        Whole Slant Wash
+                    </button>
+                </div>
             </div>
         `;
     }
@@ -4337,6 +4374,58 @@ else if (currentCalcType === 'slurry') {
                 </div>
             `;
         }
+    }
+
+    else if (currentCalcType === 'bank') {
+        // En magnetomrörare ger ungefär 150 miljarder celler per Liter starter.
+        // Vi räknar ut hur stor den ABSOLUT SISTA startern måste vara:
+        let finalStepVolLiters = totalCellsBillion / 150;
+        if (finalStepVolLiters < 0.5) finalStepVolLiters = 0.5; // Vi gör aldrig mindre än 0.5L som sista steg
+        
+        let scheduleHTML = '';
+        
+        if (currentBankMethod === 'loop') {
+            scheduleHTML += `
+                <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed #444;">
+                    <span style="color: #aaa; font-size: 0.85em; font-weight: bold;">Step 1 (Test Tube):</span><br>
+                    <strong style="color: #fff;">15 mL</strong> sterile wort (1.036 SG)<br>
+                    <span style="font-size: 0.85em; color: #888;">Inoculate loop. Incubate 24-48h until cloudy.</span>
+                </div>
+                <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed #444;">
+                    <span style="color: #aaa; font-size: 0.85em; font-weight: bold;">Step 2 (Small Flask):</span><br>
+                    <strong style="color: #fff;">150 mL</strong> sterile wort (1.036 SG)<br>
+                    <span style="font-size: 0.85em; color: #888;">Pitch Step 1. Stir plate for 24-48h.</span>
+                </div>
+            `;
+        } else {
+            // Slant Wash hoppar över det första extremt lilla steget
+            scheduleHTML += `
+                <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed #444;">
+                    <span style="color: #aaa; font-size: 0.85em; font-weight: bold;">Step 1 (Small Flask):</span><br>
+                    <strong style="color: #fff;">150 mL</strong> sterile wort (1.036 SG)<br>
+                    <span style="font-size: 0.85em; color: #888;">Wash slant and pitch. Stir plate for 24-48h.</span>
+                </div>
+            `;
+        }
+        
+        // Final step (Räknas ut dynamiskt baserat på target pitch!)
+        scheduleHTML += `
+            <div>
+                <span style="color: #aaa; font-size: 0.85em; font-weight: bold;">Final Step (Large Flask):</span><br>
+                <strong style="color: var(--accent-color); font-size: 1.4em;">${finalStepVolLiters.toFixed(2)} Liters</strong> <span style="color: #fff;">wort (1.036 SG)</span><br>
+                <span style="font-size: 0.9em; color: #8CC63F; font-weight: bold;">Pitch previous step. Stir plate 24-48h. Ready!</span>
+            </div>
+        `;
+
+        resultHTML += `
+            <div style="background: rgba(0,0,0,0.25); padding: 15px; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px;">
+                <strong style="color: var(--accent-color); font-size: 1.1em; display: block; margin-bottom: 15px; text-transform: uppercase;">Step-Up Schedule:</strong>
+                ${scheduleHTML}
+            </div>
+            <div style="font-size: 0.8em; color: #666; text-align: center;">
+                <em>Assuming 10x volume step-ups and the use of a magnetic stir plate.</em>
+            </div>
+        `;
     }
 
     const resultBox = document.getElementById('calc-result-box');
