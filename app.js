@@ -347,14 +347,29 @@ function updateChart(data) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     
-    // --- MAGISKA FIXEN: Om en graf redan finns (demo eller gammal live), DÖDA DEN! ---
+    // Om en graf redan finns, döda den!
     if (window.beerChart && typeof window.beerChart.destroy === 'function') {
         window.beerChart.destroy();
     }
 
-    // Sortera datan för säkerhets skull
+    // Sortera datan i tidsordning först
     data.sort((a, b) => new Date(a.time) - new Date(b.time));
     
+    // ========================================================
+    // --- NY MAGI: BEHÅLL BARA DET SENASTE DYGNET (24h) ---
+    // ========================================================
+    if (data.length > 0) {
+        // Ta reda på tiden för den absolut sista (nyaste) mätningen
+        const newestTime = new Date(data[data.length - 1].time).getTime();
+        
+        // Räkna ut vad klockan var 24 timmar tidigare (24h * 60m * 60s * 1000ms)
+        const cutoffTime = newestTime - (24 * 60 * 60 * 1000);
+        
+        // Skapa en ny lista som BARA innehåller data som är nyare än cutoff-tiden
+        data = data.filter(d => new Date(d.time).getTime() >= cutoffTime);
+    }
+    // ========================================================
+
     let themeAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
     if (!themeAccent) themeAccent = '#f39c12'; 
 
@@ -362,10 +377,11 @@ function updateChart(data) {
     gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)'); 
     gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');   
 
+    // Skapa etiketterna för X-axeln (Vi kör på bara klockslag nu när vi vet att det är max 24h)
     const labels = data.map(d => new Date(d.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
     const temps = data.map(d => convertTemp(Number(d.temp) || 0));
 
-    // Skapa ALLTID en helt ny graf-instans
+    // Skapa den nya grafen
     window.beerChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -384,7 +400,7 @@ function updateChart(data) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            animation: { duration: 400 }, // Lite mjukare övergång
+            animation: { duration: 400 },
             scales: {
                 x: { 
                     ticks: { color: '#666', maxTicksLimit: 5, font: { family: 'Lexend', size: 10 } },
