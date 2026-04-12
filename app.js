@@ -3835,6 +3835,17 @@ function openAcademyModule(moduleId) {
         if (dateInput && !dateInput.value) dateInput.valueAsDate = new Date();
         if (typeof calculatePitch === 'function') calculatePitch();
     } 
+else if (moduleId === 'intro') {
+        currentWizardStep = 0;
+        totalWizardSteps = 4;
+        stepActiveItems = {
+            0: ['intro-mindset'],
+            1: ['intro-gear'],
+            2: ['intro-rewards'],
+            3: ['intro-roadmap']
+        };
+        setTimeout(() => changeWizardStep(0), 10);
+    }
     // Om vi öppnar Yeast Starters
     else if (moduleId === 'starters') {
         currentWizardStep = 0;
