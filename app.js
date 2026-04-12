@@ -3061,6 +3061,25 @@ function toggleAcademyInfo(btn) {
 }
 
 // ==========================================
+// --- TOGGLE FÖR SLURRY INFO (PITCH CALC) ---
+// ==========================================
+window.toggleSlurryInfo = function(btn) {
+    const infoBox = document.getElementById('slurry-info-box'); 
+    
+    if (infoBox.style.display === 'none' || infoBox.style.display === '') {
+        // ÖPPEN
+        infoBox.style.display = 'block';
+        btn.style.backgroundColor = 'var(--accent-color)';
+        btn.style.color = '#000'; 
+    } else {
+        // STÄNGD
+        infoBox.style.display = 'none';
+        btn.style.backgroundColor = 'transparent'; 
+        btn.style.color = 'var(--accent-color)'; 
+    }
+};
+
+// ==========================================
 // --- TEMPERATURE UNIT MANAGER ---
 // ==========================================
 let currentTempUnit = 'C'; // Starta alltid som Celsius internt 
@@ -4116,20 +4135,32 @@ function selectCalc(type, clickedBtn) {
             </button>
         `;
     }
-    else if (type === 'slurry') {
+else if (type === 'slurry') {
         const today = new Date().toISOString().split('T')[0];
         dynamicSection.innerHTML = `
             <div class="ym-input-group" style="margin-bottom: 15px;">
-                <label>Slurry Density (Thickness)</label>
-                <select id="calc-slurry-density" style="width: 100%; background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 6px; font-family: 'Lexend'; font-size: 1em;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                    <label style="margin: 0;">Slurry Density (Thickness)</label>
+                    <button onclick="toggleSlurryInfo(this)" style="background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: bold; line-height: 1; cursor: pointer; display: flex; justify-content: center; align-items: center; padding: 0; transition: all 0.2s;">?</button>
+                </div>
+                
+                <select id="calc-slurry-density" style="width: 100%; background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 6px; font-family: 'Lexend'; font-size: 1em; outline: none;">
                     <option value="1.0">Thin (~1.0 B cells/mL)</option>
                     <option value="2.0" selected>Medium (~2.0 B cells/mL)</option>
                     <option value="3.0">Thick (~3.0 B cells/mL)</option>
                 </select>
+
+                <div id="slurry-info-box" style="display: none; margin-top: 12px; background: #111; border: 1px dashed #444; padding: 15px; border-radius: 8px; font-size: 0.85rem; line-height: 1.5; color: #aaa;">
+                    <strong style="color: var(--accent-color);">💧 Thin (Watery):</strong><br>Looks like dirty dishwater. Sloshes easily. Happens when not settled enough.<br><br>
+                    <strong style="color: var(--accent-color);">🥞 Medium (Pancake Batter):</strong><br>Opaque, creamy, pours slowly. The standard after washing and cold crashing.<br><br>
+                    <strong style="color: var(--accent-color);">🧱 Thick (Clay/Putty):</strong><br>Hard to pour, needs a spoon. Very compacted yeast from the bottom of a conical tank.<br><br>
+                    <span style="color: #ffcc00; font-size: 0.9em;"><em>Pro-tip: If unsure, choose "Thin". Pitching slightly more slurry is safer than underpitching!</em></span>
+                </div>
             </div>
+
             <div class="ym-input-group" style="margin-bottom: 20px;">
                 <label>Harvest Date</label>
-                <input type="date" id="calc-slurry-date" value="${today}" style="width: 100%; background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 6px; font-family: 'Lexend'; font-size: 1em;">
+                <input type="date" id="calc-slurry-date" value="${today}" style="width: 100%; background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 6px; font-family: 'Lexend'; font-size: 1em; outline: none;">
             </div>
         `;
     }
