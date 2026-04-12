@@ -4116,6 +4116,23 @@ function selectCalc(type, clickedBtn) {
             </button>
         `;
     }
+    else if (type === 'slurry') {
+        const today = new Date().toISOString().split('T')[0];
+        dynamicSection.innerHTML = `
+            <div class="ym-input-group" style="margin-bottom: 15px;">
+                <label>Slurry Density (Thickness)</label>
+                <select id="calc-slurry-density" style="width: 100%; background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 6px; font-family: 'Lexend'; font-size: 1em;">
+                    <option value="1.0">Thin (~1.0 B cells/mL)</option>
+                    <option value="2.0" selected>Medium (~2.0 B cells/mL)</option>
+                    <option value="3.0">Thick (~3.0 B cells/mL)</option>
+                </select>
+            </div>
+            <div class="ym-input-group" style="margin-bottom: 20px;">
+                <label>Harvest Date</label>
+                <input type="date" id="calc-slurry-date" value="${today}" style="width: 100%; background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 6px; font-family: 'Lexend'; font-size: 1em;">
+            </div>
+        `;
+    }
 }
 
 function resetCalcSelection() {
@@ -4243,6 +4260,53 @@ function calculatePitch() {
             `;
         }
     }
+
+else if (currentCalcType === 'slurry') {
+        // Hämta värdena från Slurry-fälten vi just skapade
+        const density = parseFloat(document.getElementById('calc-slurry-density').value) || 2.0;
+        const harvestDateInput = document.getElementById('calc-slurry-date').value;
+
+        let viability = 100;
+        let daysOld = 0;
+
+        // Räkna ut ålder och hur många som överlevt
+        if (harvestDateInput) {
+            const harvestDate = new Date(harvestDateInput);
+            const todayDate = new Date();
+            const timeDiff = todayDate.getTime() - harvestDate.getTime();
+            daysOld = Math.floor(timeDiff / (1000 * 3600 * 24));
+            if (daysOld < 0) daysOld = 0;
+
+            // Slurry tappar livskraft i kylen (räknar på 0.7% per dag)
+            viability = 100 - (daysOld * 0.7);
+            if (viability < 10) viability = 10; // Vi låter den aldrig gå under 10%
+        }
+
+        // Kärn-matten: Hur många levande celler finns det per milliliter?
+        const viableCellsPerMl = density * (viability / 100);
+        
+        // Volym (mL) = Totalt antal celler som behövs / Levande celler per mL
+        const mlNeeded = totalCellsBillion / viableCellsPerMl;
+
+        resultHTML += `
+            <div style="background: rgba(0,0,0,0.25); padding: 12px; border-radius: 6px; border: 1px solid #444; margin-bottom: 15px;">
+                <span style="color: #aaa; font-size: 0.85em;">Slurry Age: ${daysOld} days (${viability.toFixed(0)}% viability)</span><br>
+                <span style="color: #aaa; font-size: 0.85em;">Viable Cells: ${viableCellsPerMl.toFixed(1)} Billion / mL</span><br>
+                <hr style="border: 0; border-top: 1px dashed #444; margin: 10px 0;">
+                <span style="color: #fff; font-size: 1em;">🧪 Measure and pitch:</span><br>
+                <strong style="color: var(--accent-color); font-size: 1.4em;">${mlNeeded.toFixed(0)} mL slurry</strong>
+            </div>
+        `;
+        
+        // Varning om man behöver orimligt mycket slurry (över 1.5 liter)
+        if (mlNeeded > 1500) {
+            resultHTML += `
+                <div style="margin-top: 10px; border-left: 2px solid #ffcc00; padding-left: 10px; font-size: 0.85em; color: #ccc;">
+                    <span style="color: #ffcc00;">⚠️ High Volume:</span> You need a massive amount of slurry because it's either very old or very thin. Consider making a starter instead!
+                </div>
+            `;
+        }
+    }
 
     const resultBox = document.getElementById('calc-result-box');
     const resultText = document.getElementById('calc-result-text');
