@@ -3249,6 +3249,12 @@ if (deviceSelect) {
         if (nickInput) nickInput.value = currentNick !== "MIN YEASTMASTER" ? currentNick : "";
         updateDashboardNickname(currentNick);
         
+        // --- NYTT: Uppdatera MAC-adressen på skärmen! ---
+        const macDisplay = document.getElementById('setting-mac-display');
+        if (macDisplay) {
+            macDisplay.textContent = activeDeviceId ? activeDeviceId : "--";
+        }
+        
         // Uppdatera Dashboarden
         if (typeof updateDashboard === 'function') updateDashboard();
     });
