@@ -3560,7 +3560,95 @@ const academyModules = {
         <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 5px; font-weight: 900; letter-spacing: -1px;">Capturing Wild Yeast</h2>
         <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">Hunt for local microbes and brew something truly unique.</p>
         <p style="color: #888;"><em>Lesson content coming soon...</em></p>
-    `
+    `,
+
+// --- 6. STIR PLATES 101 ---
+    'stirplate': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">The Magic of Stir Plates</h2>
+        
+        <div class="ym-academy-layout">
+            <div class="ym-academy-sidebar">
+                <h4>Why use one?</h4>
+                <ul class="wizard-checklist">
+                    <li class="active-item" style="border-bottom: 1px dashed #333;">Constant Oxygenation</li>
+                    <li class="active-item" style="border-bottom: 1px dashed #333;">Drives off toxic CO2</li>
+                    <li class="active-item" style="border-bottom: 1px dashed #333;">Keeps yeast suspended</li>
+                    <li class="active-item" style="color: var(--accent-color) !important;">10x Cell Growth!</li>
+                </ul>
+            </div>
+
+            <div class="ym-academy-content" style="display: block !important;">
+                <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 20px;">
+                    <div style="font-size: 3rem; line-height: 1;">🌪️</div>
+                    <div>
+                        <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px;">The Vortex</h3>
+                        <p style="color: #ccc; line-height: 1.6; font-size: 0.95rem;">A magnetic stir plate creates a continuous vortex in your Erlenmeyer flask. This constant motion drastically increases the surface area of the liquid exposed to the air, pulling in oxygen which is crucial for yeast reproduction.</p>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 20px; align-items: flex-start;">
+                    <div style="font-size: 3rem; line-height: 1;">🧲</div>
+                    <div>
+                        <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px;">How it works</h3>
+                        <p style="color: #ccc; line-height: 1.6; font-size: 0.95rem;">Inside the box is a spinning motor with a magnet attached to it. You drop a Teflon-coated "stir bar" (which is also a magnet) into your flask. As the motor spins, the stir bar locks onto the magnetic field and spins with it.</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; border-left: 4px solid #f39c12;">
+                    <strong style="color: #f39c12;">Pro-Tip:</strong> You don't need a massive tornado! A small dimple on the surface of the liquid is enough to keep the yeast in suspension and exchange gases perfectly.
+                </div>
+            </div>
+        </div>
+    `,
+
+    // --- 7. CELL COUNTING (HEMOCYTOMETER) ---
+    'counting': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Pro Cell Counting</h2>
+        
+        <div class="ym-academy-layout">
+            <div class="ym-academy-sidebar">
+                <h4>The Pro Gear:</h4>
+                <ul class="wizard-checklist">
+                    <li class="active-item" style="border-bottom: 1px dashed #333;">Microscope (400x)</li>
+                    <li class="active-item" style="border-bottom: 1px dashed #333;">Hemocytometer</li>
+                    <li class="active-item" style="border-bottom: 1px dashed #333;">Methylene Blue</li>
+                    <li class="active-item" style="border-bottom: 1px dashed #333;">Tally Counter</li>
+                </ul>
+            </div>
+
+            <div class="ym-academy-content" id="module-wizard">
+                <div class="wizard-dots" id="wizard-dots">
+                    <div class="wizard-dot active"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                </div>
+
+                <div class="wizard-step active" data-step="0">
+                    <div class="wizard-icon">🔵🔬</div>
+                    <h3>1. Stain & Dilute</h3>
+                    <p>Yeast slurry is too thick to count. We dilute it (usually 1:100) with distilled water and add a drop of <strong>Methylene Blue</strong>. Living cells push the dye out and stay clear; dead cells turn blue.</p>
+                </div>
+
+                <div class="wizard-step" data-step="1">
+                    <div class="wizard-icon">🧮👀</div>
+                    <h3>2. The Grid</h3>
+                    <p>A Hemocytometer (Bürker chamber) has a microscopic laser-etched grid. We place a drop of our diluted yeast under the coverslip and count the clear (alive) vs blue (dead) cells inside 5 specific squares.</p>
+                </div>
+
+                <div class="wizard-step" data-step="2">
+                    <div class="wizard-icon">✖️🟰</div>
+                    <h3>3. The Math</h3>
+                    <p>Because the volume of the grid is exactly known (usually 0.1 mm³), we can multiply our counted cells by our dilution factor to get the exact Billion Cells / mL of our slurry!</p>
+                </div>
+
+                <div class="wizard-controls">
+                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
+                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
+                </div>
+            </div>
+        </div>
+    `
+
 };
 
 // ==========================================
@@ -3661,6 +3749,16 @@ function openAcademyModule(moduleId) {
         };
         setTimeout(() => changeWizardStep(0), 10);
     }
+else if (moduleId === 'counting') {
+        currentWizardStep = 0;
+        totalWizardSteps = 3;
+        stepActiveItems = {
+            0: [], // Inga specifika list-items att tända här
+            1: [],
+            2: []
+        };
+        setTimeout(() => changeWizardStep(0), 10);
+    }
 }
 
 function closeAcademyModule() {
