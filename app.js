@@ -4243,3 +4243,70 @@ function calculatePitch() {
     resultText.innerHTML = resultHTML;
     resultBox.style.display = 'block';
 }
+
+// ==========================================
+// --- DEVICE MANAGEMENT: AUTO-SAVE & DELETE ---
+// ==========================================
+
+// 1. Lyssna på när användaren skriver i Nickname-fältet och klickar utanför (change)
+document.addEventListener('change', (e) => {
+    if (e.target && e.target.id === 'setting-nickname') {
+        const newName = e.target.value.trim();
+        const activeSelect = document.getElementById('setting-active-device');
+        
+        if (activeSelect && activeSelect.value) {
+            const macAddress = activeSelect.value;
+            
+            // Spara det nya namnet lokalt i webbläsaren
+            localStorage.setItem(`nickname_${macAddress}`, newName);
+            
+            // Valfritt: Om du har en saveNickname-funktion som skickar till servern, anropa den här:
+            // if (typeof saveNickname === 'function') saveNickname(macAddress, newName);
+            
+            // Ge användaren visuell feedback att det sparats (blinkar vitt till accentfärg)
+            e.target.style.color = '#fff';
+            setTimeout(() => e.target.style.color = 'var(--accent-color)', 300);
+        }
+    }
+});
+
+// 2. Ta bort enheten när man klickar på papperskorgen
+async function removeActiveDevice() {
+    const activeSelect = document.getElementById('setting-active-device');
+    if (!activeSelect || !activeSelect.value) return;
+
+    const macAddress = activeSelect.value;
+    const deviceName = document.getElementById('setting-nickname').value || macAddress;
+
+    // Säkerhetsfråga
+    if (!confirm(`Are you absolutely sure you want to remove '${deviceName}' (${macAddress})?`)) {
+        return;
+    }
+
+    // 1. Ta bort från de lokala "låtsas-enheterna" om vi lagt in några under utveckling
+    let mockDevices = JSON.parse(localStorage.getItem('mock-devices') || '[]');
+    mockDevices = mockDevices.filter(d => d.device_id !== macAddress);
+    localStorage.setItem('mock-devices', JSON.stringify(mockDevices));
+
+    // 2. Radera smeknamnet från localstorage
+    localStorage.removeItem(`nickname_${macAddress}`);
+
+    // 3. (För riktiga enheter) Skicka anrop till servern för att koppla bort den
+    if (typeof auth !== 'undefined' && auth.currentUser) {
+        try {
+            await fetch(`${API_BASE}/remove-device`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    uid: auth.currentUser.uid,
+                    device_id: macAddress
+                })
+            });
+        } catch (err) {
+            console.warn("Could not reach server to remove device, but removed locally.", err);
+        }
+    }
+
+    alert("Device removed.");
+    location.reload(); // Ladda om appen så listorna uppdateras!
+}
