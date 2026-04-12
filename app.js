@@ -3601,7 +3601,7 @@ const academyModules = {
         </div>
     `,
 
-    // --- 7. CELL COUNTING (HEMOCYTOMETER) ---
+  // --- 7. CELL COUNTING (HEMOCYTOMETER) ---
     'counting': `
         <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Pro Cell Counting</h2>
         
@@ -3609,10 +3609,11 @@ const academyModules = {
             <div class="ym-academy-sidebar">
                 <h4>The Pro Gear:</h4>
                 <ul class="wizard-checklist">
-                    <li class="active-item" style="border-bottom: 1px dashed #333;">Microscope (400x)</li>
-                    <li class="active-item" style="border-bottom: 1px dashed #333;">Hemocytometer</li>
-                    <li class="active-item" style="border-bottom: 1px dashed #333;">Methylene Blue</li>
-                    <li class="active-item" style="border-bottom: 1px dashed #333;">Tally Counter</li>
+                    <li id="item-hemo">Hemocytometer</li>
+                    <li id="item-microscope">Microscope (400x)</li>
+                    <li id="item-blue">Methylene Blue</li>
+                    <li id="item-pipette">Precision Pipettes</li>
+                    <li id="item-counter">Tally Counter</li>
                 </ul>
             </div>
 
@@ -3621,24 +3622,59 @@ const academyModules = {
                     <div class="wizard-dot active"></div>
                     <div class="wizard-dot"></div>
                     <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
                 </div>
 
                 <div class="wizard-step active" data-step="0">
-                    <div class="wizard-icon">🔵🔬</div>
-                    <h3>1. Stain & Dilute</h3>
-                    <p>Yeast slurry is too thick to count. We dilute it (usually 1:100) with distilled water and add a drop of <strong>Methylene Blue</strong>. Living cells push the dye out and stay clear; dead cells turn blue.</p>
+                    <div class="wizard-icon">🧪💧</div>
+                    <h3>1. Dilute & Stain</h3>
+                    <p>Yeast slurry is way too crowded to count. We must dilute it accurately! Mix 1 part slurry with 99 parts distilled water (a <strong>1:100 dilution</strong>).</p>
+                    <p style="font-size: 0.9em; color: #aaa;">Add a drop of <strong>Methylene Blue</strong> to the sample. Wait 1-2 minutes. Living cells will push the dye out and look clear. Dead cells will be stained blue!</p>
                 </div>
 
                 <div class="wizard-step" data-step="1">
-                    <div class="wizard-icon">🧮👀</div>
-                    <h3>2. The Grid</h3>
-                    <p>A Hemocytometer (Bürker chamber) has a microscopic laser-etched grid. We place a drop of our diluted yeast under the coverslip and count the clear (alive) vs blue (dead) cells inside 5 specific squares.</p>
+                    <div class="wizard-icon">🔬🩸</div>
+                    <h3>2. Load the Chamber</h3>
+                    <p>A Hemocytometer is a thick glass slide with a microscopic, laser-etched grid. Place the special coverslip over the grid.</p>
+                    <p style="font-size: 0.9em; color: #aaa;">Touch your pipette to the edge of the coverslip. <em>Capillary action</em> will suck the liquid right in. Let it sit for 3 minutes so the cells settle on the glass.</p>
                 </div>
 
                 <div class="wizard-step" data-step="2">
-                    <div class="wizard-icon">✖️🟰</div>
-                    <h3>3. The Math</h3>
-                    <p>Because the volume of the grid is exactly known (usually 0.1 mm³), we can multiply our counted cells by our dilution factor to get the exact Billion Cells / mL of our slurry!</p>
+                    <h3 style="margin-bottom: 10px;">3. The 5 Squares</h3>
+                    <p style="font-size: 0.9em; margin-bottom: 15px;">Locate the central grid at 400x magnification. It has 25 medium squares. To save time, we only count the <strong>4 corners</strong> and the <strong>center</strong> square (highlighted below).</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; background: #444; width: 140px; height: 140px; margin: 0 auto 15px; border: 2px solid #666; padding: 2px;">
+                        <div style="background: var(--accent-color);"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: var(--accent-color);"></div>
+                        <div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div>
+                        <div style="background: #111;"></div><div style="background: #111;"></div><div style="background: var(--accent-color);"></div><div style="background: #111;"></div><div style="background: #111;"></div>
+                        <div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div>
+                        <div style="background: var(--accent-color);"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: var(--accent-color);"></div>
+                    </div>
+                </div>
+
+                <div class="wizard-step" data-step="3">
+                    <div class="wizard-icon">📐🛑</div>
+                    <h3>4. The L-Rule</h3>
+                    <p>Some cells will sit exactly on the boundary lines. If you count them in one square, you might accidentally count them again in the next!</p>
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-color); margin-top: 15px; text-align: left;">
+                        <strong style="color: #fff;">The Universal Rule:</strong><br>
+                        Count cells that touch the <strong>Top</strong> and <strong>Right</strong> lines.<br>
+                        <em>Ignore</em> cells touching the <strong>Bottom</strong> and <strong>Left</strong> lines.
+                    </div>
+                </div>
+
+                <div class="wizard-step" data-step="4">
+                    <div class="wizard-icon">🧮✖️</div>
+                    <h3>5. The Magic Formula</h3>
+                    <p>Add up all the living (clear) cells you found in those 5 squares. Now plug it into the formula to find out how many cells are in one milliliter of your slurry!</p>
+                    <div style="background: #111; padding: 15px; border-radius: 8px; border: 1px dashed #444; margin-top: 15px; font-family: monospace; font-size: 0.95rem; color: var(--accent-color);">
+                        (Cells Counted / 5) <br>
+                        × 25 <br>
+                        × Dilution Factor (100) <br>
+                        × 10,000 <br>
+                        = Cells per mL
+                    </div>
                 </div>
 
                 <div class="wizard-controls">
@@ -3647,7 +3683,7 @@ const academyModules = {
                 </div>
             </div>
         </div>
-    `
+    `,
 
 };
 
