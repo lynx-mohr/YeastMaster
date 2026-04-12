@@ -3369,7 +3369,82 @@ if (user) {
 
 // Innehållet för de olika modulerna
 const academyModules = {
-    // --- 1. Kalkylatorn ---
+  
+    // --- 0. INTRO: WELCOME TO THE LAB ---
+    'intro': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Welcome to the Lab</h2>
+
+        <div class="ym-academy-layout">
+            <div class="ym-academy-sidebar">
+                <h4>Your Path to Mastery:</h4>
+                <ul class="wizard-checklist">
+                    <li id="intro-mindset">1. The Mindset</li>
+                    <li id="intro-gear">2. The Kitchen Lab</li>
+                    <li id="intro-rewards">3. The Rewards</li>
+                    <li id="intro-roadmap">4. The Roadmap</li>
+                </ul>
+            </div>
+
+            <div class="ym-academy-content" id="module-wizard">
+                <div class="wizard-dots" id="wizard-dots">
+                    <div class="wizard-dot active"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                </div>
+
+                <div class="wizard-step active" data-step="0">
+                    <div class="wizard-icon">🧠✨</div>
+                    <h3>1. The Microbiologist Mindset</h3>
+                    <p>Yeast management sounds intimidating. People talk about sterile labs, laminar flow hoods, and expensive microscopes.</p>
+                    <p style="color: var(--accent-color); font-weight: bold; margin: 15px 0;">Forget all that for now.</p>
+                    <p>If you can brew a batch of beer without infecting it, you already have the hygiene skills needed to harvest and reuse yeast. Good sanitation is 95% of the work!</p>
+                </div>
+
+                <div class="wizard-step" data-step="1">
+                    <div class="wizard-icon">🫙🧽</div>
+                    <h3>2. The Kitchen Lab</h3>
+                    <p>You don't need a laboratory to start. Your kitchen counter is perfect. The core tools for your very first yeast harvest are incredibly simple:</p>
+                    <ul style="color: #aaa; margin-top: 15px; line-height: 1.6; padding-left: 20px;">
+                        <li>A spray bottle of <strong>Star San</strong> (or similar sanitizer).</li>
+                        <li>A few clean <strong>Mason Jars</strong> with lids.</li>
+                        <li>Some <strong>Dry Malt Extract (DME)</strong> to feed the yeast.</li>
+                        <li>A regular cooking pot to boil sterile water.</li>
+                    </ul>
+                </div>
+
+                <div class="wizard-step" data-step="2">
+                    <div class="wizard-icon">💰🍺</div>
+                    <h3>3. The Rewards</h3>
+                    <p>Why go through the trouble of saving and washing your own yeast?</p>
+                    <ul style="color: #aaa; margin-top: 15px; line-height: 1.6; padding-left: 20px;">
+                        <li><strong style="color: #fff;">Save Money:</strong> Liquid yeast is expensive. Buy a premium pack once, wash it, and use it for your next 5-10 batches!</li>
+                        <li><strong style="color: #fff;">Better Beer:</strong> Pitching a massive, healthy slurry of your own yeast leads to faster, cleaner fermentations without lag time.</li>
+                        <li><strong style="color: #fff;">Independence:</strong> Wake up on a Saturday and brew spontaneously, knowing you have world-class yeast ready in the fridge.</li>
+                    </ul>
+                </div>
+
+                <div class="wizard-step" data-step="3">
+                    <div class="wizard-icon">🗺️🚀</div>
+                    <h3>4. The Roadmap</h3>
+                    <p>Don't try to learn everything at once. Follow this path at your own pace:</p>
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-color); margin-top: 15px; font-size: 0.9rem; line-height: 1.6;">
+                        <strong style="color: #fff;">Level 1:</strong> Master <em>Yeast Washing</em> from a finished beer.<br>
+                        <strong style="color: #fff;">Level 2:</strong> Buy an Erlenmeyer flask and learn <em>Yeast Starters</em>.<br>
+                        <strong style="color: #fff;">Level 3:</strong> Build or buy a <em>Stir Plate</em> for massive cell growth.<br>
+                        <strong style="color: #fff;">Level 4:</strong> The final boss. <em>Agar Plates</em> and <em>Cell Counting</em>.
+                    </div>
+                </div>
+
+                <div class="wizard-controls">
+                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
+                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
+                </div>
+            </div>
+        </div>
+    `,    
+    
+      // --- 1. Kalkylatorn ---
     'calc': `
         <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Pitch Calculator</h2>
         <div class="calc-container" style="margin: 0; padding: 0; background: transparent; border: none;">
