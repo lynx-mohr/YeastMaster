@@ -3787,11 +3787,13 @@ function openAcademyModule(moduleId) {
     }
 else if (moduleId === 'counting') {
         currentWizardStep = 0;
-        totalWizardSteps = 3;
+        totalWizardSteps = 5; // Nu har vi 5 djupgående steg!
         stepActiveItems = {
-            0: [], // Inga specifika list-items att tända här
-            1: [],
-            2: []
+            0: ['item-blue', 'item-pipette'], // Steg 1 handlar om spädning och färg
+            1: ['item-hemo'],                 // Steg 2 är själva glaset
+            2: ['item-microscope'],           // Steg 3 är titta i mikroskopet
+            3: ['item-microscope'],           // Steg 4 (L-rule) är fortfarande mikroskopet
+            4: ['item-counter']               // Steg 5 är matematiken
         };
         setTimeout(() => changeWizardStep(0), 10);
     }
