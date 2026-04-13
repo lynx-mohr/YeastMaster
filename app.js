@@ -302,25 +302,42 @@ if (!user && !activeDeviceId) {
 // 4. Status & Tidsberäkningar (Since Start & Time in Phase)
             document.getElementById('status-text').innerText = latest.status.toUpperCase();
             
-            // A) Hitta när hela jäsningen startade (första datapunkten i sortedData)
-            const absoluteStartTime = new Date(sortedData[0].time).getTime();
+            // A) Hitta när NUVARANDE jäsning startade (Smart detektering!)
             const latestTime = new Date(latest.time).getTime();
+            let absoluteStartTime = new Date(sortedData[0].time).getTime(); // Fallback
+
+            // Vi loopar baklänges och letar efter när din "Fresh Start" gjordes
+            for (let i = sortedData.length - 1; i > 0; i--) {
+                const curr = sortedData[i];
+                const prev = sortedData[i - 1];
+                
+                const currTime = new Date(curr.time).getTime();
+                const prevTime = new Date(prev.time).getTime();
+                
+                // En nystart har skett OM:
+                // 1. Du bytte Jäststam eller Profil
+                // 2. Eller maskinen var offline/avstängd i mer än 12 timmar
+                // 3. Eller statusen gick från IDLE/FINISHED till en aktiv fas
+                if (curr.strain !== prev.strain || 
+                    curr.profile !== prev.profile || 
+                    (currTime - prevTime) > (12 * 60 * 60 * 1000) ||
+                    (curr.status !== prev.status && (prev.status === 'FINISHED' || prev.status === 'IDLE'))) {
+                    
+                    absoluteStartTime = currTime;
+                    break; // Vi hittade starten! Avbryt sökningen.
+                }
+            }
             
-            // Räkna ut exakt hur många millisekunder som gått sedan start
             const msSinceStart = latestTime - absoluteStartTime;
             
             // B) Hitta när den NUVARANDE fasen startade
             let phaseStartTime = latestTime; 
             for (let i = sortedData.length - 1; i >= 0; i--) {
                 if (sortedData[i].status !== latest.status) {
-                    // Vi hittade datapunkten precis innan fasen byttes
-                    // Fasen startade på nästa datapunkt (i + 1)
                     phaseStartTime = new Date(sortedData[i + 1].time).getTime();
                     break;
                 }
                 if (i === 0) {
-                    // Om vi gick igenom hela listan och statusen aldrig ändrats, 
-                    // då startade fasen exakt samtidigt som jäsningen!
                     phaseStartTime = absoluteStartTime;
                 }
             }
@@ -341,7 +358,6 @@ if (!user && !activeDeviceId) {
             const dayValEl = document.getElementById('day-val');
             const phaseDayValEl = document.getElementById('phase-day-val');
 
-            // Fallback: Om det på något magiskt sätt blir negativ tid, visa 0.
             if (dayValEl) dayValEl.innerText = formatDaysToHuman(Math.max(0, currentDay));
             if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(Math.max(0, phaseDay));
             
