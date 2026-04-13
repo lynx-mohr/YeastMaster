@@ -2651,6 +2651,28 @@ async function populateSyncDevices(uid) {
     }
 }
 
+// Funktion som tvättar namnen så de får plats på OLED-skärmen
+function formatOledName(fullName) {
+    if (!fullName) return "";
+    let shortName = fullName;
+    
+    // Regler för vad som ska klippas bort (t.ex. "Wyeast 1084 ")
+    const prefixesToRemove = [
+        /Wyeast\s\d+\s/i,       // Tar bort "Wyeast 1084 "
+        /WLP\d+\s/i,            // Tar bort "WLP001 "
+        /SafAle\s/i,            // Tar bort "SafAle "
+        /SafLager\s/i,          // Tar bort "SafLager "
+        /Lallemand\s/i,         // Tar bort "Lallemand "
+        /Imperial\s[A-Z0-9]+\s/i // Tar bort "Imperial B45 "
+    ];
+    
+    prefixesToRemove.forEach(regex => {
+        shortName = shortName.replace(regex, "");
+    });
+    
+    return shortName.trim(); // Returnerar t.ex. bara "Irish Ale"
+}
+
 // ==========================================
 // --- CLOUD SYNC MOTOR ---
 // ==========================================
@@ -2704,22 +2726,45 @@ async function syncToSelectedDevice() {
             "wyeast-1007": "German Ale 1007"
         };
 
-        selectedStrains.forEach(id => {
+selectedStrains.forEach(id => {
             const strainObj = yeastStrains.find(y => y.id === id);
-            let targetStrainName = "";
             
             if (strainObj && strainObj.isCustom) {
-                targetStrainName = strainObj.name;
+                // --- CUSTOM PROFILER ("Pelle") ---
+                const targetStrainName = strainObj.name; 
+                
+                if (typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
+                    const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
+                    
+                    matchingProfiles.forEach(profile => {
+                        // Klona profilen så vi inte råkar döpa om den i webbläsaren!
+                        let deviceProfile = JSON.parse(JSON.stringify(profile));
+                        
+                        // Kasta om variablerna för OLED-skärmen
+                        let customName = deviceProfile.s; // "Pelle"
+                        let baseStrainFull = deviceProfile.p; // "Wyeast 1084 Irish Ale"
+                        
+                        // Den vita rutan (s) ska ha den tvättade bas-jästen
+                        deviceProfile.s = formatOledName(baseStrainFull); 
+                        // Texten under (p) får heta ditt egna namn
+                        deviceProfile.p = customName; 
+                        
+                        profilesToSend.push(deviceProfile);
+                    });
+                }
             } else {
-                targetStrainName = hwStrainNames[id];
-            }
-
-            if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
-                const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
-                if (matchingProfiles.length > 0) {
-                    profilesToSend.push(...matchingProfiles); 
-                } else {
-                    console.warn("Missing profiles for:", targetStrainName);
+                // --- STANDARD PROFILER ---
+                const targetStrainName = hwStrainNames[id];
+                if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
+                    const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
+                    
+                    matchingProfiles.forEach(profile => {
+                        // Klona även här
+                        let deviceProfile = JSON.parse(JSON.stringify(profile));
+                        // Tvätta namnet för säkerhets skull
+                        deviceProfile.s = formatOledName(deviceProfile.s);
+                        profilesToSend.push(deviceProfile);
+                    });
                 }
             }
         });
