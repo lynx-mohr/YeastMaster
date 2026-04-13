@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 // --- KONFIGURATION ---
 let activeDeviceId = null;
+let isAuthResolved = false; // Håller koll på om Firebase har vaknat än
 const API_BASE = "https://soulofbeer-live.onrender.com/api";
 const firebaseConfig = {
   apiKey: "AIzaSyBjxNijHivEY4u4bBIiXCR1hbUBdMxrq0Q",
@@ -235,12 +236,17 @@ auth.getRedirectResult().catch((error) => {
 
 async function updateDashboard() {
     const demoBtn = document.getElementById('start-demo-btn');
+
+    // Om Firebase fortfarande funderar, avbryt och rita ingenting!
+    if (!isAuthResolved) return;
+
 const user = auth.currentUser;
 
+if (!user && !activeDeviceId) {
+        renderDemoDashboard();
+        return; 
+    }
 
-// --- NY LOGIK: VÄNTA PÅ AUTH ---
-    // Om Firebase inte har bestämt sig än om användaren är inloggad, gör ingenting.
-    // Det förhindrar att Demon ritas upp i onödan.
     if (user === undefined) return; 
 
     // Om vi INTE är inloggade alls, DÅ kör vi demo direkt
@@ -3281,6 +3287,11 @@ if (deviceSelect) {
 
 // Huvudmotorn: Inloggningsvakten
 auth.onAuthStateChanged(async (user) => {
+
+    // Huvudmotorn: Inloggningsvakten
+auth.onAuthStateChanged(async (user) => {
+    isAuthResolved = true; // <-- LÄGG TILL DENNA RAD HÄR! Nu vet appen att Firebase är redo.
+
     const soulLoginPrompt = document.getElementById('soul-login-prompt');
     const logoutBtn = document.getElementById('btn-logout'); // <-- 1. Hämta knappen
 
