@@ -299,65 +299,13 @@ if (!user && !activeDeviceId) {
                 arrow.classList.remove('blink-active');
             }
 
-// 4. Status & Tidsberäkningar (Since Start & Time in Phase)
+
+         // 4. Status (Hämta direkt från C++)
             document.getElementById('status-text').innerText = latest.status.toUpperCase();
             
-            // A) Hitta när NUVARANDE jäsning startade (Smart detektering!)
-            const latestTime = new Date(latest.time).getTime();
-            let absoluteStartTime = new Date(sortedData[0].time).getTime(); // Fallback
-
-            // Vi loopar baklänges och letar efter när din "Fresh Start" gjordes
-            for (let i = sortedData.length - 1; i > 0; i--) {
-                const curr = sortedData[i];
-                const prev = sortedData[i - 1];
-                
-                const currTime = new Date(curr.time).getTime();
-                const prevTime = new Date(prev.time).getTime();
-                
-                // En nystart har skett OM:
-                // 1. Du bytte Jäststam eller Profil
-                // 2. Eller maskinen var offline/avstängd i mer än 12 timmar
-                // 3. Eller statusen gick från IDLE/FINISHED till en aktiv fas
-                if (curr.strain !== prev.strain || 
-                    curr.profile !== prev.profile || 
-                    (currTime - prevTime) > (12 * 60 * 60 * 1000) ||
-                    (curr.status !== prev.status && (prev.status === 'FINISHED' || prev.status === 'IDLE'))) {
-                    
-                    absoluteStartTime = currTime;
-                    break; // Vi hittade starten! Avbryt sökningen.
-                }
-            }
-            
-            const msSinceStart = latestTime - absoluteStartTime;
-            
-        // B) Hitta när den NUVARANDE fasen startade
-            let phaseStartTime = latestTime; 
-            for (let i = sortedData.length - 1; i >= 0; i--) {
-                const pointTime = new Date(sortedData[i].time).getTime();
-                
-                // SPÄRR: Leta ALDRIG längre bak i tiden än när själva batchen startade!
-                if (pointTime <= absoluteStartTime) {
-                    phaseStartTime = absoluteStartTime;
-                    break;
-                }
-                
-                // Hittade vi ett fas-byte i den nuvarande batchen?
-                if (sortedData[i].status !== latest.status) {
-                    phaseStartTime = new Date(sortedData[i + 1].time).getTime();
-                    break;
-                }
-            }
-            
-            // Extra krockkudde: Tiden i fas kan matematiskt ALDRIG överstiga "Since start"
-            phaseStartTime = Math.max(phaseStartTime, absoluteStartTime);
-            
-            // Räkna ut exakt hur många millisekunder vi varit i denna fas
-            const msInPhase = latestTime - phaseStartTime;
-            
-            // 5. Konvertera millisekunder till decimal-dagar för vår formaterare
-            const msInADay = 1000 * 60 * 60 * 24;
-            const currentDay = msSinceStart / msInADay;
-            const phaseDay = msInPhase / msInADay;
+            // 5. Dagar (Hämta direkt från C++)
+            const currentDay = latest.day || 0;
+            const phaseDay = latest.phase_day || 0;
 
             // 6. Progress (Grafisk bar)
             const targetDays = 14; 
@@ -367,12 +315,11 @@ if (!user && !activeDeviceId) {
             const dayValEl = document.getElementById('day-val');
             const phaseDayValEl = document.getElementById('phase-day-val');
 
-            if (dayValEl) dayValEl.innerText = formatDaysToHuman(Math.max(0, currentDay));
-            if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(Math.max(0, phaseDay));
+            if (dayValEl) dayValEl.innerText = formatDaysToHuman(currentDay);
+            if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(phaseDay);
             
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
-
             const targetTemp = latest.target_temp || 0; 
             const targetTempElement = document.getElementById('target-temp-val');
             if (targetTempElement) {
