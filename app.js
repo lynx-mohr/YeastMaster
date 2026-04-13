@@ -2656,36 +2656,23 @@ async function syncToSelectedDevice() {
 
         // DEN KOMPLETTA ORDBOKEN FÖR SYNK-MOTORN
         const hwStrainNames = {
-            "us-05": "US-05", 
-            "s-04": "S-04", 
-            "w-34-70": "W-34/70", 
-            "be-256": "BE-256",
-            "wb-06": "WB-06", 
-            "verdant": "Verdant IPA", 
-            "voss": "Voss Kveik",
-            "nottingham": "Nottingham", 
-            "wlp001": "California Ale", 
-            "wlp300": "Hefeweizen",
-            "belle-saison": "Belle Saison", 
-            "t-58": "T-58", 
-            "s-23": "S-23",
-            "wlp002": "English Ale", 
-            "wlp500": "Trappist", 
-            "diamond": "Diamond",
-            "wlp066": "London Fog", 
-            "s-33": "S-33", 
-            "wlp800": "Pilsner Lager",
-            "novalager": "NovaLager", 
-            "wyeast-1968": "London ESB", 
-            "wlp920": "Old Bavarian",
-            "imperial-b45": "Imp. Gnome", 
-            "wyeast-1084": "Irish Ale", 
-            "wyeast-3944": "Belgian Wit",
-            "wlp833": "German Bock", 
-            "wlp007": "Dry English", 
-            "wyeast-1318": "London III",
-            "wyeast-2565": "Kolsch", 
-            "wlp095": "Burlington"
+            "us-05": "US-05", "s-04": "S-04", "w-34-70": "W-34/70", "be-256": "BE-256",
+            "wb-06": "WB-06", "verdant": "Verdant IPA", "voss": "Voss Kveik", "nottingham": "Nottingham", 
+            "wlp001": "California Ale", "wlp300": "Hefeweizen", "belle-saison": "Belle Saison", 
+            "t-58": "T-58", "s-23": "S-23", "wlp002": "English Ale", "wlp500": "Trappist", 
+            "diamond": "Diamond", "wlp066": "London Fog", "s-33": "S-33", "wlp800": "Pilsner Lager",
+            "novalager": "NovaLager", "wyeast-1968": "London ESB", "wlp920": "Old Bavarian",
+            "imperial-b45": "Imp. Gnome", "wyeast-1084": "Irish Ale", "wyeast-3944": "Belgian Wit",
+            "wlp833": "German Bock", "wlp007": "Dry English", "wyeast-1318": "London III",
+            "wyeast-2565": "Kolsch", "wlp095": "Burlington",
+            // --- HÄR ÄR DE NYA SOM SAKNADES ---
+            "wlp090": "San Diego Super", "wyeast-1272": "American II", "imperial-a24": "Dry Hop",
+            "wlp530": "Westmalle", "wyeast-3711": "French Saison", "wlp028": "Scottish Ale",
+            "wyeast-1469": "West Yorkshire", "lutra": "Lutra Kveik", "philly-sour": "Philly Sour",
+            "wlp820": "Oktoberfest", "bry-97": "BRY-97", "k-97": "K-97", "windsor": "Windsor",
+            "mexican-lager": "Mexican Lager", "hornindal": "Hornindal Kveik", "wyeast-3724": "Belgian Saison",
+            "wlp570": "Belgian Golden", "wyeast-2112": "California Lager", "wlp380": "Hefeweizen IV",
+            "wyeast-1007": "German Ale 1007"
         };
 
         selectedStrains.forEach(id => {
