@@ -1325,6 +1325,35 @@ function loadCustomProfiles() {
     }
 }
 
+// ==========================================
+// --- TÖM YEAST LIBRARY (KUNDVAGNEN) ---
+// ==========================================
+window.clearLibrarySelection = function() {
+    // 1. Töm listan i bakgrunden (byt ut 'selectedStrains' om din variabel heter något annat)
+    if (typeof selectedStrains !== 'undefined') {
+        selectedStrains = []; 
+    }
+
+    // 2. Leta upp alla markerade knappar och återställ dem
+    // Byt ut '.selected' mot den klass du använder för markerade kort. 
+    // Om du använder inline-styles (typ style="border-color: green"), nollställ dem här:
+    const activeCards = document.querySelectorAll('.yeast-card.selected'); // <-- Justera klassnamnet!
+    activeCards.forEach(card => {
+        card.classList.remove('selected');
+        
+        // Exempel på att nollställa inline-styles om du använde det:
+        card.style.borderColor = '#333'; 
+        card.style.color = '#ccc';
+    });
+
+    // 3. Nollställ "Selected: X/10"-texten
+    // Byt ut ID:t mot det du har på din räknare i HTML:en
+    const counterText = document.getElementById('library-counter'); 
+    if (counterText) {
+        counterText.innerText = 'Selected: 0/10';
+    }
+};
+
 
 
 // ==========================================
@@ -2726,6 +2755,12 @@ async function syncToSelectedDevice() {
             syncBtn.style.color = "#8CC63F";
             
             setTimeout(() => {
+                // --- NYTT: STÄDA BIBLIOTEKET NÄR SYNK ÄR KLAR ---
+                if (typeof clearLibrarySelection === 'function') {
+                    clearLibrarySelection(); 
+                }
+                
+                // Återställ knappen
                 syncBtn.innerText = originalText;
                 syncBtn.style.backgroundColor = "";
                 syncBtn.style.borderColor = "";
@@ -2743,6 +2778,7 @@ async function syncToSelectedDevice() {
         syncBtn.style.borderColor = "#ff4444";
         syncBtn.style.color = "#ff4444";
         
+        // Vid fel rensar vi INTE biblioteket, så användaren slipper välja allt igen!
         setTimeout(() => {
             syncBtn.innerText = originalText;
             syncBtn.style.backgroundColor = "";
