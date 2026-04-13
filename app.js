@@ -330,17 +330,26 @@ if (!user && !activeDeviceId) {
             
             const msSinceStart = latestTime - absoluteStartTime;
             
-            // B) Hitta när den NUVARANDE fasen startade
+        // B) Hitta när den NUVARANDE fasen startade
             let phaseStartTime = latestTime; 
             for (let i = sortedData.length - 1; i >= 0; i--) {
+                const pointTime = new Date(sortedData[i].time).getTime();
+                
+                // SPÄRR: Leta ALDRIG längre bak i tiden än när själva batchen startade!
+                if (pointTime <= absoluteStartTime) {
+                    phaseStartTime = absoluteStartTime;
+                    break;
+                }
+                
+                // Hittade vi ett fas-byte i den nuvarande batchen?
                 if (sortedData[i].status !== latest.status) {
                     phaseStartTime = new Date(sortedData[i + 1].time).getTime();
                     break;
                 }
-                if (i === 0) {
-                    phaseStartTime = absoluteStartTime;
-                }
             }
+            
+            // Extra krockkudde: Tiden i fas kan matematiskt ALDRIG överstiga "Since start"
+            phaseStartTime = Math.max(phaseStartTime, absoluteStartTime);
             
             // Räkna ut exakt hur många millisekunder vi varit i denna fas
             const msInPhase = latestTime - phaseStartTime;
