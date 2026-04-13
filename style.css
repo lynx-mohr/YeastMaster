@@ -3444,3 +3444,8 @@ body.light-mode .yeast-package-box button:hover {
         max-width: 100% !important;
     }
 }
+
+.add-new-device-btn:hover {
+    border-color: var(--accent-color) !important;
+    background-color: rgba(140, 198, 63, 0.05) !important; /* Valfritt: ger en supersvag grön bakgrundsglöd */
+}
