@@ -3285,9 +3285,6 @@ if (deviceSelect) {
     });
 }
 
-// Huvudmotorn: Inloggningsvakten
-auth.onAuthStateChanged(async (user) => {
-
     // Huvudmotorn: Inloggningsvakten
 auth.onAuthStateChanged(async (user) => {
     isAuthResolved = true; // <-- LÄGG TILL DENNA RAD HÄR! Nu vet appen att Firebase är redo.
