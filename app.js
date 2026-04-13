@@ -299,35 +299,52 @@ if (!user && !activeDeviceId) {
                 arrow.classList.remove('blink-active');
             }
 
-            // 4. Status & Fas-dagar
+// 4. Status & Tidsberäkningar (Since Start & Time in Phase)
             document.getElementById('status-text').innerText = latest.status.toUpperCase();
             
-            let phaseDay = 0;
-            if (latest.phase_day !== undefined) {
-                phaseDay = latest.phase_day;
-            } else {
-                let phaseStartTime = latest.time; 
-                for (let i = sortedData.length - 1; i >= 0; i--) {
-                    if (sortedData[i].status !== latest.status) {
-                        phaseStartTime = sortedData[i + 1].time;
-                        break;
-                    }
-                    if (i === 0) phaseStartTime = sortedData[0].time;
+            // A) Hitta när hela jäsningen startade (första datapunkten i sortedData)
+            const absoluteStartTime = new Date(sortedData[0].time).getTime();
+            const latestTime = new Date(latest.time).getTime();
+            
+            // Räkna ut exakt hur många millisekunder som gått sedan start
+            const msSinceStart = latestTime - absoluteStartTime;
+            
+            // B) Hitta när den NUVARANDE fasen startade
+            let phaseStartTime = latestTime; 
+            for (let i = sortedData.length - 1; i >= 0; i--) {
+                if (sortedData[i].status !== latest.status) {
+                    // Vi hittade datapunkten precis innan fasen byttes
+                    // Fasen startade på nästa datapunkt (i + 1)
+                    phaseStartTime = new Date(sortedData[i + 1].time).getTime();
+                    break;
                 }
-                const msInADay = 1000 * 60 * 60 * 24;
-                phaseDay = (latest.time && phaseStartTime) ? (new Date(latest.time) - new Date(phaseStartTime)) / msInADay : 0;
+                if (i === 0) {
+                    // Om vi gick igenom hela listan och statusen aldrig ändrats, 
+                    // då startade fasen exakt samtidigt som jäsningen!
+                    phaseStartTime = absoluteStartTime;
+                }
             }
+            
+            // Räkna ut exakt hur många millisekunder vi varit i denna fas
+            const msInPhase = latestTime - phaseStartTime;
+            
+            // 5. Konvertera millisekunder till decimal-dagar för vår formaterare
+            const msInADay = 1000 * 60 * 60 * 24;
+            const currentDay = msSinceStart / msInADay;
+            const phaseDay = msInPhase / msInADay;
 
-            // 5. Progress
-            const currentDay = latest.day || 0;
+            // 6. Progress (Grafisk bar)
             const targetDays = 14; 
             const percent = Math.min((currentDay / targetDays) * 100, 100).toFixed(0);
 
+            // 7. Skriv ut till skärmen!
             const dayValEl = document.getElementById('day-val');
             const phaseDayValEl = document.getElementById('phase-day-val');
 
-            if (dayValEl) dayValEl.innerText = formatDaysToHuman(currentDay);
-            if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(phaseDay);
+            // Fallback: Om det på något magiskt sätt blir negativ tid, visa 0.
+            if (dayValEl) dayValEl.innerText = formatDaysToHuman(Math.max(0, currentDay));
+            if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(Math.max(0, phaseDay));
+            
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
 
