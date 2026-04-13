@@ -3624,29 +3624,117 @@ const academyModules = {
         </div>
     `,
 
-    // --- 4. Agar ---
-    'agar': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 5px; font-weight: 900; letter-spacing: -1px;">Mastering Agar Plates</h2>
-        <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">Learn to pour, streak, and isolate pure strains like a pro.</p>
-        <div class="module-ingredients" style="margin-bottom: 30px;">
-            <h3 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1.1rem; font-weight: 800;">🧪 Ingredients & Gear</h3>
-            <ul style="color: #ddd; line-height: 1.6; padding-left: 20px;">
-                <li><strong>10g</strong> Light DME (Dry Malt Extract)</li>
-                <li><strong>10g</strong> Agar-Agar powder</li>
-                <li><strong>500ml</strong> Water (Distilled or RO)</li>
-                <li>Borosilicate Flask (Erlenmeyer)</li>
-                <li>Petri Dishes (Sterile) & Parafilm</li>
-                <li>Pressure Cooker or Instant Pot</li>
-            </ul>
-        </div>
-    `,
+    // --- 4. AGAR PLATES ---
+    'agar': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Mastering Agar Plates</h2>
+        
+        <div class="ym-academy-layout">
+            <div class="ym-academy-sidebar">
+                <h4>The Lab Kit:</h4>
+                <ul class="wizard-checklist">
+                    <li id="agar-powder">Agar-Agar Powder</li>
+                    <li id="agar-dme">Light DME</li>
+                    <li id="agar-dishes">Petri Dishes</li>
+                    <li id="agar-loop">Inoculation Loop</li>
+                    <li id="agar-flame">Flame (Bunsen/Torch)</li>
+                </ul>
+            </div>
 
-    // --- 5. Capturing Wild Yeast ---
-    'wild': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 5px; font-weight: 900; letter-spacing: -1px;">Capturing Wild Yeast</h2>
-        <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">Hunt for local microbes and brew something truly unique.</p>
-        <p style="color: #888;"><em>Lesson content coming soon...</em></p>
-    `,
+            <div class="ym-academy-content" id="module-wizard">
+                <div class="wizard-dots" id="wizard-dots">
+                    <div class="wizard-dot active"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                </div>
+
+                <div class="wizard-step active" data-step="0">
+                    <div class="wizard-icon">🥣🔥</div>
+                    <h3>1. The Magic Gel</h3>
+                    <p>Agar is just a gelatin-like substance made from algae. By mixing it with standard yeast starter wort (DME and water) and boiling it, we create a solid, sterile food surface for yeast to grow on.</p>
+                </div>
+
+                <div class="wizard-step" data-step="1">
+                    <div class="wizard-icon">🧫✨</div>
+                    <h3>2. Pouring Plates</h3>
+                    <p>In a draft-free room (next to an open flame to create a sterile updraft that pushes dust away), carefully pour the hot liquid into sterile Petri dishes. Let them cool and solidify.</p>
+                </div>
+
+                <div class="wizard-step" data-step="2">
+                    <div class="wizard-icon">〰️🦠</div>
+                    <h3>3. Streaking for Isolation</h3>
+                    <p>Dip your sterilized loop into a yeast sample. Gently drag it across the agar surface in a zig-zag pattern. Sterilize the loop, drag it through your first lines, and make new zig-zags. This spreads the cells thinner and thinner.</p>
+                </div>
+
+                <div class="wizard-step" data-step="3">
+                    <div class="wizard-icon">⚪🔍</div>
+                    <h3>4. Harvesting a Colony</h3>
+                    <p>Incubate the plates in the dark at room temp. After a few days, you'll see individual white dots. Each dot is a pure colony grown from a <strong>single yeast cell</strong>! Scoop one up and pitch it into a tiny test-tube starter.</p>
+                </div>
+
+                <div class="wizard-controls">
+                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
+                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
+                </div>
+            </div>
+        </div>
+    `,
+
+    // --- 5. WILD YEAST ---
+    'wild': `
+        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Capturing Wild Yeast</h2>
+        
+        <div class="ym-academy-layout">
+            <div class="ym-academy-sidebar">
+                <h4>The Hunter's Kit:</h4>
+                <ul class="wizard-checklist">
+                    <li id="wild-jars">Mason Jars</li>
+                    <li id="wild-wort">Low-Gravity Wort</li>
+                    <li id="wild-hops">A few Hop Pellets</li>
+                    <li id="wild-cloth">Cheesecloth</li>
+                    <li id="wild-fruit">Fruit / Flowers</li>
+                </ul>
+            </div>
+
+            <div class="ym-academy-content" id="module-wizard">
+                <div class="wizard-dots" id="wizard-dots">
+                    <div class="wizard-dot active"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                    <div class="wizard-dot"></div>
+                </div>
+
+                <div class="wizard-step active" data-step="0">
+                    <div class="wizard-icon">🍯🛡️</div>
+                    <h3>1. The Bait</h3>
+                    <p>Create a weak wort (1.020 SG) and boil it with a few hop pellets. Hops are crucial here—they act as a shield against unwanted bacteria (like Lactobacillus), giving wild yeast a head start to take over the jar.</p>
+                </div>
+
+                <div class="wizard-step" data-step="1">
+                    <div class="wizard-icon">🍎🌿</div>
+                    <h3>2. The Capture</h3>
+                    <p>Drop unwashed, organic fruit (apples, grapes, berries) or local flowers into your jar of cooled wort. Alternatively, cover the jar with cheesecloth and leave it under a fruit tree overnight to catch yeast riding the breeze.</p>
+                </div>
+
+                <div class="wizard-step" data-step="2">
+                    <div class="wizard-icon">👃⚠️</div>
+                    <h3>3. The Sniff Test</h3>
+                    <p>Cover with foil and wait 3-5 days. If it ferments and smells like vomit, feet, or cheese—dump it (bacteria won). If it smells bready, fruity, or like Belgian spice—congratulations, you caught wild yeast!</p>
+                </div>
+
+                <div class="wizard-step" data-step="3">
+                    <div class="wizard-icon">🧫👑</div>
+                    <h3>4. Taming the Beast</h3>
+                    <p>Wild captures are always a mix of different yeast strains and maybe some wild mold. To make a reliable brewing yeast from this, use the <em>Agar Plate streaking method</em> to isolate a single, pure, great-smelling colony!</p>
+                </div>
+
+                <div class="wizard-controls">
+                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
+                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
+                </div>
+            </div>
+        </div>
+    `,
 
 // --- 6. STIR PLATES 101 ---
     'stirplate': `
@@ -3891,6 +3979,29 @@ else if (moduleId === 'counting') {
             2: ['item-microscope'],           // Steg 3 är titta i mikroskopet
             3: ['item-microscope'],           // Steg 4 (L-rule) är fortfarande mikroskopet
             4: ['item-counter']               // Steg 5 är matematiken
+        };
+        setTimeout(() => changeWizardStep(0), 10);
+    }
+
+    else if (moduleId === 'agar') {
+        currentWizardStep = 0;
+        totalWizardSteps = 4;
+        stepActiveItems = {
+            0: ['agar-powder', 'agar-dme'],
+            1: ['agar-dishes', 'agar-flame'],
+            2: ['agar-loop', 'agar-flame'],
+            3: []
+        };
+        setTimeout(() => changeWizardStep(0), 10);
+    }
+    else if (moduleId === 'wild') {
+        currentWizardStep = 0;
+        totalWizardSteps = 4;
+        stepActiveItems = {
+            0: ['wild-jars', 'wild-wort', 'wild-hops'],
+            1: ['wild-cloth', 'wild-fruit'],
+            2: [],
+            3: []
         };
         setTimeout(() => changeWizardStep(0), 10);
     }
