@@ -130,54 +130,83 @@ app.get('/api/my-devices', async (req, res) => {
 // --- 6. SYNK-MOTOR FÖR JÄSTPROFILER ---
 // ==========================================
 
-// A. Appen skickar en skräddarsydd lista till en specifik enhet
-app.post('/api/sync-profiles', async (req, res) => {
-    const { uid, device_id, yeastData } = req.body;
+// ==========================================
+// --- 6. GLOBALT BIBLIOTEK FÖR WEBBAPPEN ---
+// ==========================================
 
-    if (!uid || !device_id || !yeastData) {
-        return res.status(400).send({ error: "Saknar data för synkning" });
+// A1. Spara hela biblioteket till molnet (Kopplat till ditt konto)
+app.post('/api/my-library', async (req, res) => {
+    const { uid, libraryData } = req.body;
+
+    if (!uid || !libraryData) {
+        return res.status(400).send({ error: "Saknar data" });
     }
 
     try {
-        // Vi sparar hela den anpassade JSON-filen direkt på enhets-dokumentet
-        await userDevicesCollection.updateOne(
-            { uid: uid, device_id: device_id },
-            { $set: { syncedProfiles: yeastData } }
+        // Upsert: Skapa ett bibliotek för användaren om det saknas, annars uppdatera det
+        await userLibrariesCollection.updateOne(
+            { uid: uid },
+            { $set: { library: libraryData, last_updated: new Date() } },
+            { upsert: true }
         );
-        res.status(200).send({ message: "Profilerna är nu sparade i molnet för denna enhet!" });
+        res.status(200).send({ message: "Biblioteket är nu sparat i molnet!" });
     } catch (e) {
-        console.error("Kunde inte synka profiler:", e);
-        res.status(500).send({ error: "Databasfel vid synkning" });
+        res.status(500).send({ error: "Kunde inte spara biblioteket" });
     }
 });
 
-// B. ESP32 ropar på denna URL för att hämta SIN specifika lista!
+// A2. Appen hämtar biblioteket när du loggar in (Mobil eller PC)
+app.get('/api/my-library', async (req, res) => {
+    const { uid } = req.query;
+
+    if (!uid) return res.status(400).send({ error: "Saknar uid" });
+
+    try {
+        const userLib = await userLibrariesCollection.findOne({ uid: uid });
+        if (userLib && userLib.library) {
+            res.status(200).json(userLib.library);
+        } else {
+            res.status(200).json(null); // Om man är helt ny och saknar bibliotek
+        }
+    } catch (e) {
+        res.status(500).send({ error: "Kunde inte hämta biblioteket" });
+    }
+});
+
+// B. ESP32 ropar på denna URL för att hämta SIN ägares bibliotek!
 app.get('/api/device-sync/:mac', async (req, res) => {
     const mac = req.params.mac;
 
     try {
+        // 1. Vem äger denna enhet?
         const device = await userDevicesCollection.findOne({ device_id: mac });
         
-        // Om kylen har en sparad lista i databasen, skicka den!
-        if (device && device.syncedProfiles) {
-            res.json(device.syncedProfiles);
+        if (!device || !device.uid) {
+            // Om enheten inte är kopplad till ett konto än
+            return res.json({
+                "yeasts": [
+                    { "n": "UNCLAIMED", "s": "Not linked", "p": "Link in App", "steps": [[0, 20.0], [1, 20.0]] }
+                ]
+            });
+        }
+
+        // 2. Hämta ägarens globala bibliotek!
+        const userLib = await userLibrariesCollection.findOne({ uid: device.uid });
+        
+        if (userLib && userLib.library) {
+            // Skicka hela biblioteket till maskinen
+            res.json(userLib.library);
         } else {
-            // Fallback: Om användaren inte har synkat något än, skicka ett tomt/standard format
-            // så att ESP32:an inte kraschar när den försöker läsa filen.
+            // Fallback om användaren inte har sparat något i appen än
             res.json({
                 "yeasts": [
-                    {
-                        "n": "AWAITING SYNC",
-                        "s": "No Data",
-                        "p": "Please sync from app",
-                        "steps": [[0, 20.0], [14, 20.0]]
-                    }
+                    { "n": "EMPTY LIBRARY", "s": "No Data", "p": "Save in App", "steps": [[0, 20.0], [1, 20.0]] }
                 ]
             });
         }
     } catch (e) {
         console.error("Fel vid hämtning av enhetens profiler:", e);
-        res.status(500).send({ error: "Databasfel" });
+        res.status(500).send({ error: "Databasfel vid ESP32-synk" });
     }
 });
 
