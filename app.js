@@ -608,12 +608,11 @@ let selectedStrains = []; // Här sparar vi ID:n på de 10 utvalda
 function renderYeastLibrary(filter = "") {
     const grid = document.getElementById('yeast-grid');
     const tooltip = document.getElementById('yeast-tooltip');
-    if (!grid) return; // Felsäkring
+    if (!grid) return; 
     
     grid.innerHTML = "";
     const searchTerm = filter.toLowerCase();
 
-    // Vi kollar namn, tags OCH styles!
     const filtered = yeastStrains.filter(s => {
         const nameMatch = s.name.toLowerCase().includes(searchTerm);
         const tagMatch = s.tags && s.tags.some(tag => tag.toLowerCase().includes(searchTerm));
@@ -625,37 +624,22 @@ function renderYeastLibrary(filter = "") {
     filtered.forEach(yeast => {
         const isSelected = selectedStrains.includes(yeast.id);
         const isCustom = yeast.isCustom ? 'custom-profile' : ''; 
-        
-        // --- NYTT 1: Kolla om det är en hemmagjord jäst ---
         const isHouse = yeast.isHouseStrain ? 'house-strain' : ''; 
         
         const card = document.createElement('div');
-        // --- NYTT 2: Lägg till "isHouse" i class-listan ---
         card.className = `yeast-card ${isCustom} ${isHouse} ${isSelected ? 'selected' : ''}`;
         
-        // --- NYTT 3: Hantera delete-knappen för BÅDA typerna av egna jäster ---
-        let deleteBtn = '';
-        if (yeast.isCustom) {
-            deleteBtn = `<div class="delete-custom-btn" onclick="event.stopPropagation(); deleteCustomProfile('${yeast.name}')">×</div>`;
-        } else if (yeast.isHouseStrain) {
-            deleteBtn = `<div class="delete-custom-btn" onclick="event.stopPropagation(); deleteHouseStrain('${yeast.id}')">×</div>`;
-        }
-
-        // --- NYTT 4: Lägg till bakterie-ikonen om det är din egen jäst ---
         const icon = yeast.isHouseStrain ? ' 🦠' : '';
 
-        // Uppdaterad HTML inuti kortet
+        // HELT REN HTML NU: Bara rubriken och eventuell ikon!
         card.innerHTML = `
-            ${deleteBtn}
             <h3>${yeast.name}${icon}</h3>
         `;
 
-        // --- TIMERS OCH LOGIK (Behållt exakt som du hade det) ---
         let clickTimer = null;
         let touchTimer = null;
         let isLongPress = false;
 
-        // 1. HOVER (PC - Tooltip)
         card.onmousemove = (e) => {
             if (tooltip) {
                 tooltip.style.display = "block";
@@ -666,41 +650,34 @@ function renderYeastLibrary(filter = "") {
         };
         card.onmouseleave = () => { if(tooltip) tooltip.style.display = "none"; };
 
-        // 2. ENKELKLICK (Välj / Avvälj)
         card.onclick = () => {
-            if (isLongPress) return; // Ignorera om vi just gjorde ett långtryck
-            
+            if (isLongPress) return; 
             if (clickTimer) clearTimeout(clickTimer);
             clickTimer = setTimeout(() => {
-                // Denna funktion väljer/avväljer jästen nu!
                 toggleFavorite(yeast.id);
             }, 250); 
         };
 
-        // 3. DUBBELKLICK (PC - Läs mer i Modal)
         card.ondblclick = () => {
-            clearTimeout(clickTimer); // Avbryt enkelklicket
+            clearTimeout(clickTimer); 
             openYeastModal(yeast);
         };
 
-        // 4. LÅNGKLICK (Mobil - Läs mer i Modal)
         card.addEventListener('touchstart', () => {
             isLongPress = false;
             touchTimer = setTimeout(() => {
-                isLongPress = true; // Flaggas som långtryck
+                isLongPress = true; 
                 openYeastModal(yeast);
-            }, 500); // 500ms känns oftast lite snärtigare på mobil
+            }, 500); 
         }, {passive: true});
 
         card.addEventListener('touchend', () => clearTimeout(touchTimer));
         
-        // Avbryt långtrycket (och förhindra felklick) om man börjar scrolla
         card.addEventListener('touchmove', () => {
             clearTimeout(touchTimer);
             isLongPress = true; 
         }, {passive: true});
 
-        // Lägg till kortet i gridet
         grid.appendChild(card);
     }); 
 }
@@ -2325,7 +2302,7 @@ function openYeastModal(yeast) {
             detailedText = `<p>Custom profile data not found.</p>`;
         }
     } else {
-        // 2. VANLIG JÄST FRÅN BESKRIVNINGARNA
+        // 2. VANLIG JÄST FRÅN BESKRIVNINGARNA (Eller House Strains!)
         detailedText = yeastDescriptions[yeast.id] || yeastDescriptions[yeast.name];
         if (!detailedText) {
             detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:20px; color: #fff;">Passar till:</h3><p>${yeast.styles}</p>`;
@@ -2375,8 +2352,6 @@ function openYeastModal(yeast) {
                     profileListHtml += `<div class="hw-profile-summary" id="${uniqueId}">`;
                     profileListHtml += `<div class="summary-header">PROFILE SUMMARY</div>`;
                     
-                    // --- NY, SMART LOGIK ---
-                    
                     // 1. Pitch
                     profileListHtml += `<div class="summary-row"><span class="label">Pitch</span><span class="value">Day ${steps[0][0]} @ ${steps[0][1].toFixed(1)}°C</span></div>`;
 
@@ -2412,6 +2387,37 @@ function openYeastModal(yeast) {
     }
 
     modalDesc.innerHTML = formatTempText(detailedText);
+
+    // ==========================================================
+    // --- NYTT: HANTERA EDIT & DELETE-KNAPPARNA HÄR I BOTTEN ---
+    // ==========================================================
+    const editBtn = document.getElementById('modal-edit-btn');
+    const deleteBtn = document.getElementById('modal-delete-btn');
+    
+    if (yeast.isHouseStrain) {
+        // Husjäst: Visa Både Edit och Delete
+        if(editBtn) {
+            editBtn.style.display = 'block';
+            editBtn.onclick = () => { openAddStrainModal(yeast); };
+        }
+        if(deleteBtn) {
+            deleteBtn.style.display = 'block';
+            deleteBtn.onclick = () => { deleteHouseStrain(yeast.id); closeYeastModal(); };
+        }
+    } else if (yeast.isCustom) {
+        // Custom Profile: Visa Endast Delete
+        if(editBtn) editBtn.style.display = 'none';
+        if(deleteBtn) {
+            deleteBtn.style.display = 'block';
+            deleteBtn.onclick = () => { deleteCustomProfile(yeast.name); closeYeastModal(); };
+        }
+    } else {
+        // Standardjäst: Göm båda knapparna
+        if(editBtn) editBtn.style.display = 'none';
+        if(deleteBtn) deleteBtn.style.display = 'none';
+    }
+
+    // Visa själva modalen
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden'; 
 }
