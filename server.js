@@ -15,8 +15,11 @@ async function connectDB() {
         await client.connect();
         db = client.db('yeastMasterDB');
         logsCollection = db.collection('fermentationLogs');
-        // NYTT: Samlingen som håller koll på vem som äger vilken enhet
         userDevicesCollection = db.collection('userDevices'); 
+        
+        // --- NYTT: Samlingen för det globala profil-biblioteket ---
+        userLibrariesCollection = db.collection('userLibraries'); 
+        
         console.log("Ansluten till MongoDB!");
     } catch (e) {
         console.error("Kunde inte ansluta till MongoDB:", e);
