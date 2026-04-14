@@ -3047,53 +3047,37 @@ function toggleLibraryInfo(btn) {
 // --- HOUSE BANK (WILD YEAST) LOGIC ---
 // ==========================================
 
-let editingStrainId = null;
-
 function openAddStrainModal(existingStrain = null) {
-    // --- SPÖKFÄLLAN ---
-    // Om appen råkar skicka in ett musklick (PointerEvent/Event) istället för jäst-data, 
-    // så nollställer vi det så att formuläret inte blir förvirrat.
-    if (existingStrain instanceof Event) {
-        existingStrain = null;
-    }
+    // Spökfällan: Om appen råkar skicka ett musklick istället för jäst
+    if (existingStrain instanceof Event) existingStrain = null;
 
     const modal = document.getElementById('add-strain-modal');
     const title = modal.querySelector('h3');
     const nameInput = document.getElementById('hs-name');
 
-    // Nu kollar vi om vi faktiskt har fått in en RIKTIG jäst!
     if (existingStrain && existingStrain.id) {
-        // =====================================
-        // --- EDIT MODE (Fyll i gamla data) ---
-        // =====================================
-        editingStrainId = existingStrain.id;
+        // --- EDIT MODE ---
         title.innerText = "Edit House Strain";
-        
-        // Här matar vi in allt du skrev förra gången!
         nameInput.value = existingStrain.name || '';
         document.getElementById('hs-origin').value = existingStrain.origin || '';
         document.getElementById('hs-temp').value = existingStrain.temp || '';
         document.getElementById('hs-tags').value = (existingStrain.tags || []).join(', ');
         document.getElementById('hs-desc').value = existingStrain.desc || '';
 
-        // Lås namnet så vi inte byter ID och skapar en dubblett
+        // Det är låsningen av detta fält som nu styr hela sparningen!
         nameInput.disabled = true;
         nameInput.style.opacity = "0.5";
     } else {
-        // =====================================
-        // --- CREATE MODE (Helt ny jäst) ---
-        // =====================================
-        editingStrainId = null;
+        // --- CREATE MODE ---
         title.innerText = "House Bank";
-        
-        // Rensa alla fält
         nameInput.value = '';
-        nameInput.disabled = false;
-        nameInput.style.opacity = "1";
         document.getElementById('hs-origin').value = '';
         document.getElementById('hs-temp').value = '';
         document.getElementById('hs-tags').value = '';
         document.getElementById('hs-desc').value = '';
+
+        nameInput.disabled = false;
+        nameInput.style.opacity = "1";
     }
 
     modal.style.display = 'flex';
@@ -3104,62 +3088,78 @@ function closeAddStrainModal() {
 }
 
 function saveHouseStrain() {
-    const name = document.getElementById('hs-name').value.trim();
-    const origin = document.getElementById('hs-origin').value.trim() || "House Bank";
-    const temp = document.getElementById('hs-temp').value.trim() || "Unknown";
-    const tagsInput = document.getElementById('hs-tags').value.trim();
-    const desc = document.getElementById('hs-desc').value.trim() || "A local or wild captured yeast strain.";
+    try {
+        const nameInput = document.getElementById('hs-name');
+        const name = nameInput.value.trim();
+        const origin = document.getElementById('hs-origin').value.trim() || "House Bank";
+        const temp = document.getElementById('hs-temp').value.trim() || "Unknown";
+        const tagsInput = document.getElementById('hs-tags').value.trim();
+        const desc = document.getElementById('hs-desc').value.trim() || "A local or wild captured yeast strain.";
 
-    if (!name) {
-        alert("You must name your yeast!");
-        return;
+        if (!name) { alert("You must name your yeast!"); return; }
+
+        const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()) : ["Wild/Custom"];
+        if (!tags.includes("House Strain")) tags.push("House Strain");
+
+        let savedStrains = JSON.parse(localStorage.getItem('houseStrains') || '[]');
+        
+        // Vi skapar ID:t baserat på namnet, så vi vet alltid vad vi letar efter
+        const newId = "house-" + name.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const existingIndex = savedStrains.findIndex(s => s.id === newId);
+
+        // HÄR ÄR MAGIN: Är fältet låst? Då MÅSTE det vara en uppdatering.
+        const isEditMode = nameInput.disabled;
+
+        if (isEditMode) {
+            // --- SKRIV ÖVER GAMMAL INFO ---
+            if (existingIndex > -1) {
+                savedStrains[existingIndex].origin = origin;
+                savedStrains[existingIndex].temp = temp;
+                savedStrains[existingIndex].tags = tags;
+                savedStrains[existingIndex].desc = desc;
+            }
+        } else {
+            // --- SKAPA HELT NY JÄST ---
+            if (existingIndex > -1) {
+                alert("A strain with this name already exists!"); 
+                return;
+            }
+            savedStrains.push({
+                id: newId, name: name, origin: origin, temp: temp,
+                tags: tags, desc: desc, styles: "Any", isHouseStrain: true
+            });
+        }
+
+        // Spara till minnet
+        localStorage.setItem('houseStrains', JSON.stringify(savedStrains));
+
+        // Synka direkt till molnet
+        if (typeof pushLibraryToCloud === "function") pushLibraryToCloud();
+
+        // Stäng båda rutorna
+        closeAddStrainModal();
+        if (typeof closeYeastModal === "function") closeYeastModal();
+
+        // Ladda och rita om biblioteket live
+        loadHouseStrains();
+        const searchBox = document.getElementById('yeast-search');
+        if (typeof renderYeastLibrary === "function") renderYeastLibrary(searchBox ? searchBox.value : "");
+        if (typeof populateBaseYeastDropdown === "function") populateBaseYeastDropdown();
+
+    } catch (error) {
+        console.error("Crash under sparning:", error);
     }
-
-    const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()) : ["Wild/Custom"];
-    if (!tags.includes("House Strain")) tags.push("House Strain");
-
-    const newStrain = {
-        id: "house-" + name.toLowerCase().replace(/[^a-z0-9]/g, ''),
-        name: name,
-        origin: origin,
-        temp: temp,
-        tags: tags,
-        desc: desc,
-        styles: "Any",
-        isHouseStrain: true // Unik flagga för hemmagjorda basjäster
-    };
-
-    let savedStrains = JSON.parse(localStorage.getItem('houseStrains') || '[]');
-    if (savedStrains.some(s => s.id === newStrain.id)) {
-        alert("A strain with this name already exists!");
-        return;
-    }
-
-    savedStrains.push(newStrain);
-    localStorage.setItem('houseStrains', JSON.stringify(savedStrains));
-
-    pushLibraryToCloud();
-    closeAddStrainModal();
-
-    // Rensa fälten
-    document.getElementById('hs-name').value = '';
-    document.getElementById('hs-origin').value = '';
-    document.getElementById('hs-temp').value = '';
-    document.getElementById('hs-tags').value = '';
-    document.getElementById('hs-desc').value = '';
-
-    // Ladda in direkt i UI:t!
-    loadHouseStrains();
-    const searchBox = document.getElementById('yeast-search');
-    renderYeastLibrary(searchBox ? searchBox.value : "");
-    populateBaseYeastDropdown(); // Uppdaterar rullistan i The Profiler!
 }
 
 function loadHouseStrains() {
     let savedStrains = JSON.parse(localStorage.getItem('houseStrains') || '[]');
     savedStrains.forEach(strain => {
-        if (!yeastStrains.some(y => y.id === strain.id)) {
-            yeastStrains.unshift(strain); // Lägger dem högst upp i biblioteket!
+        // Kolla om den redan är inladdad. Om ja, skriv över (uppdatera). Om nej, lägg till högst upp!
+        const existingIndex = yeastStrains.findIndex(y => y.id === strain.id);
+        if (existingIndex > -1) {
+            yeastStrains[existingIndex] = strain;
+        } else {
+            yeastStrains.unshift(strain);
         }
     });
 }
@@ -3181,13 +3181,12 @@ window.deleteHouseStrain = function(id) {
         if (favCount) favCount.innerText = selectedStrains.length;
     }
 
-   pushLibraryToCloud();
+    if (typeof pushLibraryToCloud === "function") pushLibraryToCloud();
     
-    // Stäng modalen och rita om
     closeYeastModal();
     const searchBox = document.getElementById('yeast-search');
-    renderYeastLibrary(searchBox ? searchBox.value : "");
-    populateBaseYeastDropdown();
+    if (typeof renderYeastLibrary === "function") renderYeastLibrary(searchBox ? searchBox.value : "");
+    if (typeof populateBaseYeastDropdown === "function") populateBaseYeastDropdown();
 };
 
 // ==========================================
