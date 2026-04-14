@@ -5051,43 +5051,62 @@ document.addEventListener('change', (e) => {
     }
 });
 
-// 2. Ta bort enheten när man klickar på papperskorgen
-async function removeActiveDevice() {
+// ==========================================
+// --- DEVICE MANAGEMENT: REMOVE DEVICE ---
+// ==========================================
+window.removeActiveDevice = async function() {
     const activeSelect = document.getElementById('setting-active-device');
-    if (!activeSelect || !activeSelect.value) return;
+    if (!activeSelect || !activeSelect.value) {
+        alert("Ingen enhet är vald!");
+        return;
+    }
 
     const macAddress = activeSelect.value;
     const deviceName = document.getElementById('setting-nickname').value || macAddress;
 
-    // Säkerhetsfråga
-    if (!confirm(`Are you absolutely sure you want to remove '${deviceName}' (${macAddress})?`)) {
+    // 1. Säkerhetsfråga
+    if (!confirm(`Är du helt säker på att du vill ta bort '${deviceName}' (${macAddress})?`)) {
         return;
     }
 
-    // 1. Ta bort från de lokala "låtsas-enheterna" om vi lagt in några under utveckling
-    let mockDevices = JSON.parse(localStorage.getItem('mock-devices') || '[]');
-    mockDevices = mockDevices.filter(d => d.device_id !== macAddress);
-    localStorage.setItem('mock-devices', JSON.stringify(mockDevices));
-
-    // 2. Radera smeknamnet från localstorage
-    localStorage.removeItem(`nickname_${macAddress}`);
-
-    // 3. (För riktiga enheter) Skicka anrop till servern för att koppla bort den
-    if (typeof auth !== 'undefined' && auth.currentUser) {
-        try {
-            await fetch(`${API_BASE}/remove-device`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    uid: auth.currentUser.uid,
-                    device_id: macAddress
-                })
-            });
-        } catch (err) {
-            console.warn("Could not reach server to remove device, but removed locally.", err);
-        }
+    // 2. Kolla så vi faktiskt är inloggade
+    if (typeof auth === 'undefined' || !auth.currentUser) {
+        alert("Du måste vara inloggad för att kunna ta bort en enhet från molnet!");
+        return;
     }
 
-    alert("Device removed.");
-    location.reload(); // Ladda om appen så listorna uppdateras!
-}
+    try {
+        console.log("Skickar begäran om borttagning till molnet...");
+
+        // 3. Ropa på databasen och invänta svar
+        const response = await fetch(`${API_BASE}/remove-device`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                uid: auth.currentUser.uid,
+                device_id: macAddress
+            })
+        });
+
+        // 4. Utvärdera svaret från servern
+        if (response.ok) {
+            console.log("Servern bekräftade borttagningen!");
+            
+            // Städa bort lokalt skräp i webbläsaren
+            localStorage.removeItem(`nickname_${macAddress}`);
+            let mockDevices = JSON.parse(localStorage.getItem('mock-devices') || '[]');
+            mockDevices = mockDevices.filter(d => d.device_id !== macAddress);
+            localStorage.setItem('mock-devices', JSON.stringify(mockDevices));
+
+            alert("Enheten är nu borttagen!");
+            location.reload(); // NU är det säkert att ladda om sidan
+        } else {
+            // Om API:et inte finns eller strular
+            alert(`Kunde inte ta bort enheten från molnet. (Felkod: ${response.status})`);
+        }
+
+    } catch (err) {
+        console.error("Nätverksfel vid borttagning:", err);
+        alert("Nätverksfel! Kunde inte nå servern för att ta bort enheten.");
+    }
+};
