@@ -613,7 +613,7 @@ function renderYeastLibrary(filter = "") {
     grid.innerHTML = "";
     const searchTerm = filter.toLowerCase();
 
-    // Här är den lagade fixen: Vi kollar namn, tags OCH styles!
+    // Vi kollar namn, tags OCH styles!
     const filtered = yeastStrains.filter(s => {
         const nameMatch = s.name.toLowerCase().includes(searchTerm);
         const tagMatch = s.tags && s.tags.some(tag => tag.toLowerCase().includes(searchTerm));
@@ -626,21 +626,31 @@ function renderYeastLibrary(filter = "") {
         const isSelected = selectedStrains.includes(yeast.id);
         const isCustom = yeast.isCustom ? 'custom-profile' : ''; 
         
-        const card = document.createElement('div');
-        // Lägger till "selected" om den är vald, så CSS kan rita den tjocka ramen
-        card.className = `yeast-card ${isCustom} ${isSelected ? 'selected' : ''}`;
+        // --- NYTT 1: Kolla om det är en hemmagjord jäst ---
+        const isHouse = yeast.isHouseStrain ? 'house-strain' : ''; 
         
-        const deleteBtn = yeast.isCustom ? 
-            `<div class="delete-custom-btn" onclick="event.stopPropagation(); deleteCustomProfile('${yeast.name}')">×</div>` 
-            : '';
+        const card = document.createElement('div');
+        // --- NYTT 2: Lägg till "isHouse" i class-listan ---
+        card.className = `yeast-card ${isCustom} ${isHouse} ${isSelected ? 'selected' : ''}`;
+        
+        // --- NYTT 3: Hantera delete-knappen för BÅDA typerna av egna jäster ---
+        let deleteBtn = '';
+        if (yeast.isCustom) {
+            deleteBtn = `<div class="delete-custom-btn" onclick="event.stopPropagation(); deleteCustomProfile('${yeast.name}')">×</div>`;
+        } else if (yeast.isHouseStrain) {
+            deleteBtn = `<div class="delete-custom-btn" onclick="event.stopPropagation(); deleteHouseStrain('${yeast.id}')">×</div>`;
+        }
 
-        // HELT REN HTML: Ingen stjärna, bara krysset (om custom) och rubriken!
+        // --- NYTT 4: Lägg till bakterie-ikonen om det är din egen jäst ---
+        const icon = yeast.isHouseStrain ? ' 🦠' : '';
+
+        // Uppdaterad HTML inuti kortet
         card.innerHTML = `
             ${deleteBtn}
-            <h3>${yeast.name}</h3>
+            <h3>${yeast.name}${icon}</h3>
         `;
 
-        // --- TIMERS OCH LOGIK ---
+        // --- TIMERS OCH LOGIK (Behållt exakt som du hade det) ---
         let clickTimer = null;
         let touchTimer = null;
         let isLongPress = false;
@@ -2427,7 +2437,13 @@ document.getElementById('yeast-info-modal').addEventListener('click', function(e
 // MASTER STARTUP (Körs när sidan är helt redo)
 // ==========================================
 window.addEventListener('DOMContentLoaded', () => {
-    // 1. Ladda in dina egna sparade profiler
+
+    // --- NYTT: Ladda husjäster först! ---
+    if (typeof loadHouseStrains === "function") {
+        loadHouseStrains();
+    }
+
+    // Ladda in dina egna sparade profiler
     if (typeof loadCustomProfiles === "function") {
         loadCustomProfiles();
     }
@@ -3014,6 +3030,102 @@ function toggleLibraryInfo(btn) {
         btn.style.color = '#8CC63F'; // Grönt 'i'
     }
 }
+
+// ==========================================
+// --- HOUSE BANK (WILD YEAST) LOGIC ---
+// ==========================================
+
+function openAddStrainModal() {
+    document.getElementById('add-strain-modal').style.display = 'flex';
+}
+
+function closeAddStrainModal() {
+    document.getElementById('add-strain-modal').style.display = 'none';
+}
+
+function saveHouseStrain() {
+    const name = document.getElementById('hs-name').value.trim();
+    const origin = document.getElementById('hs-origin').value.trim() || "House Bank";
+    const temp = document.getElementById('hs-temp').value.trim() || "Unknown";
+    const tagsInput = document.getElementById('hs-tags').value.trim();
+    const desc = document.getElementById('hs-desc').value.trim() || "A local or wild captured yeast strain.";
+
+    if (!name) {
+        alert("You must name your yeast!");
+        return;
+    }
+
+    const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()) : ["Wild/Custom"];
+    if (!tags.includes("House Strain")) tags.push("House Strain");
+
+    const newStrain = {
+        id: "house-" + name.toLowerCase().replace(/[^a-z0-9]/g, ''),
+        name: name,
+        origin: origin,
+        temp: temp,
+        tags: tags,
+        desc: desc,
+        styles: "Any",
+        isHouseStrain: true // Unik flagga för hemmagjorda basjäster
+    };
+
+    let savedStrains = JSON.parse(localStorage.getItem('houseStrains') || '[]');
+    if (savedStrains.some(s => s.id === newStrain.id)) {
+        alert("A strain with this name already exists!");
+        return;
+    }
+
+    savedStrains.push(newStrain);
+    localStorage.setItem('houseStrains', JSON.stringify(savedStrains));
+
+    closeAddStrainModal();
+
+    // Rensa fälten
+    document.getElementById('hs-name').value = '';
+    document.getElementById('hs-origin').value = '';
+    document.getElementById('hs-temp').value = '';
+    document.getElementById('hs-tags').value = '';
+    document.getElementById('hs-desc').value = '';
+
+    // Ladda in direkt i UI:t!
+    loadHouseStrains();
+    const searchBox = document.getElementById('yeast-search');
+    renderYeastLibrary(searchBox ? searchBox.value : "");
+    populateBaseYeastDropdown(); // Uppdaterar rullistan i The Profiler!
+}
+
+function loadHouseStrains() {
+    let savedStrains = JSON.parse(localStorage.getItem('houseStrains') || '[]');
+    savedStrains.forEach(strain => {
+        if (!yeastStrains.some(y => y.id === strain.id)) {
+            yeastStrains.unshift(strain); // Lägger dem högst upp i biblioteket!
+        }
+    });
+}
+
+window.deleteHouseStrain = function(id) {
+    if (!confirm("Are you sure you want to delete this House Strain?")) return;
+    
+    let savedStrains = JSON.parse(localStorage.getItem('houseStrains') || '[]');
+    savedStrains = savedStrains.filter(s => s.id !== id);
+    localStorage.setItem('houseStrains', JSON.stringify(savedStrains));
+
+    const strainIndex = yeastStrains.findIndex(y => y.id === id);
+    if (strainIndex > -1) yeastStrains.splice(strainIndex, 1);
+
+    const selectedIndex = selectedStrains.indexOf(id);
+    if (selectedIndex > -1) {
+        selectedStrains.splice(selectedIndex, 1);
+        const favCount = document.getElementById('fav-count');
+        if (favCount) favCount.innerText = selectedStrains.length;
+    }
+
+    // Stäng modalen och rita om
+    closeYeastModal();
+    const searchBox = document.getElementById('yeast-search');
+    renderYeastLibrary(searchBox ? searchBox.value : "");
+    populateBaseYeastDropdown();
+};
 
 // ==========================================
 // --- TOGGLE FÖR IN THE LAB (ACADEMY) INFO ---

@@ -3449,3 +3449,8 @@ body.light-mode .yeast-package-box button:hover {
     border-color: var(--accent-color) !important;
     background-color: rgba(140, 198, 63, 0.05) !important; /* Valfritt: ger en supersvag grön bakgrundsglöd */
 }
+
+.yeast-card.house-strain {
+    border: 1px solid #ffcc00; /* Kanske en guldgul kant för dina House Strains? */
+    background-color: #221c00;
+}

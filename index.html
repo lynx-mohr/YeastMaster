@@ -137,6 +137,10 @@
             <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
         </div>
         
+<button onclick="openAddStrainModal()" class="btn-secondary" style="width: 100%; margin-top: 10px; padding: 10px; font-size: 0.8rem; border-color: var(--accent-color); color: var(--accent-color);">
+                + ADD HOUSE STRAIN / WILD CAPTURE
+            </button>
+
         <div class="yeast-grid" id="yeast-grid">
         </div>
             
@@ -634,5 +638,43 @@
         
     </div>
 </div>
+
+<div id="add-strain-modal" class="ym-modal" style="display: none;">
+    <div class="ym-modal-content">
+        <span class="ym-close-btn" onclick="closeAddStrainModal()">&times;</span>
+        
+        <h3 style="color: var(--accent-color); margin-bottom: 5px;">House Bank</h3>
+        <p class="lab-description" style="margin-bottom: 20px;">Catalog your wild captures, house blends, or local yeast strains.</p>
+
+        <div class="ym-input-group" style="margin-bottom: 15px;">
+            <label>Strain Name</label>
+            <input type="text" id="hs-name" placeholder="e.g. Backyard Apple Wild" maxlength="22" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+            <div class="ym-input-group">
+                <label>Origin</label>
+                <input type="text" id="hs-origin" placeholder="e.g. My Garden" maxlength="15" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+            </div>
+            <div class="ym-input-group">
+                <label>Temp Range</label>
+                <input type="text" id="hs-temp" placeholder="e.g. 18-25°C" maxlength="15" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+            </div>
+        </div>
+
+        <div class="ym-input-group" style="margin-bottom: 15px;">
+            <label>Tags (comma separated)</label>
+            <input type="text" id="hs-tags" placeholder="e.g. Sour, Funky, Farmhouse" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+        </div>
+
+        <div class="ym-input-group" style="margin-bottom: 20px;">
+            <label>Description / Notes</label>
+            <textarea id="hs-desc" rows="3" placeholder="Notes on flavor, attenuation, history..." style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 400; resize: vertical;"></textarea>
+        </div>
+
+        <button class="ym-btn-primary" onclick="saveHouseStrain()" style="width: 100%;">Save to Library</button>
+    </div>
+</div>
+
 </body>
 </html>
