@@ -2301,14 +2301,28 @@ function openYeastModal(yeast) {
             detailedText = `<p>Custom profile data not found.</p>`;
         }
     } 
-    // ====================================================================
-    // 2. NYTT: KOLLA OM DET ÄR DIN EGEN HUSJÄST (House Bank)
+// ====================================================================
+    // 2. KOLLA OM DET ÄR DIN EGEN HUSJÄST (House Bank)
     // ====================================================================
     else if (yeast.isHouseStrain) {
+        
+        // --- NYTT: Formatera datumet så det ser snyggt ut (t.ex. "14 Apr 2026") ---
+        let displayDate = "Unknown";
+        if (yeast.captureDate) {
+            const dateObj = new Date(yeast.captureDate);
+            displayDate = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
         detailedText = `
             <div style="line-height: 1.6;">
                 <h4 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">House Bank Strain 🦠</h4>
                 <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid #333; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Captured</span>
+                        <span style="color: #fff; font-weight: bold;">${displayDate}</span>
+                    </div>
+
                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                         <span style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Origin / Source</span>
                         <span style="color: #fff; font-weight: bold;">${yeast.origin}</span>
@@ -2326,7 +2340,7 @@ function openYeastModal(yeast) {
                 <p style="color: #ccc; font-size: 0.95rem; background: #000; padding: 15px; border-radius: 8px; border: 1px solid #222;">${yeast.desc}</p>
             </div>
         `;
-    } 
+    }
     // ====================================================================
     // 3. VANLIG KOMMERSIELL JÄST FRÅN DATABASEN
     // ====================================================================
