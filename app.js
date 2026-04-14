@@ -3084,7 +3084,7 @@ function saveHouseStrain() {
     savedStrains.push(newStrain);
     localStorage.setItem('houseStrains', JSON.stringify(savedStrains));
 
-    saveLibraryToCloud();
+    pushLibraryToCloud();
     closeAddStrainModal();
 
     // Rensa fälten
@@ -3127,7 +3127,7 @@ window.deleteHouseStrain = function(id) {
         if (favCount) favCount.innerText = selectedStrains.length;
     }
 
-    saveLibraryToCloud();
+   pushLibraryToCloud();
     
     // Stäng modalen och rita om
     closeYeastModal();
@@ -3335,28 +3335,33 @@ function formatDaysToHuman(decimalDays) {
 // 1. Skickar ditt lokala bibliotek TILL molnet
 async function pushLibraryToCloud() {
     const user = auth.currentUser;
-    if (!user) return; // Gör inget om du kör som gäst
+    if (!user) return;
 
-    const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
+    // 1. Hämta båda listorna från det lokala minnet med RÄTT nycklar
+    const customProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
     const houseStrains = JSON.parse(localStorage.getItem('houseStrains') || '[]');
 
+    // 2. Paketera dem i ett gemensamt objekt för molnet
     const libraryData = {
         customProfiles: customProfiles,
         houseStrains: houseStrains
     };
-    
+
     try {
-        await fetch(`${API_BASE}/my-library`, {
+        const response = await fetch(`${API_BASE}/my-library`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 uid: user.uid,
-                libraryData: savedProfiles
+                libraryData: libraryData
             })
         });
-       console.log("Hela biblioteket (stams & profiler) synkat till molnet!");
+        
+        if (response.ok) {
+            console.log("☁️ Hela biblioteket (Strains & Profiles) pushades till molnet!");
+        }
     } catch (err) {
-        console.error("Failed to sync library to cloud:", err);
+        console.error("Kunde inte synka till molnet:", err);
     }
 }
 
