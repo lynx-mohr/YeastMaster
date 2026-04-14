@@ -2397,7 +2397,8 @@ function openYeastModal(yeast) {
     if (yeast.isHouseStrain) {
         if(editBtn) { 
             editBtn.style.display = 'block'; 
-            editBtn.onclick = () => { 
+            editBtn.onclick = (e) => { 
+                e.preventDefault();
                 closeYeastModal(); // <-- HÄR ÄR FIXEN! Stäng info-rutan först!
                 openAddStrainModal(yeast); 
             }; 
@@ -3046,8 +3047,56 @@ function toggleLibraryInfo(btn) {
 // --- HOUSE BANK (WILD YEAST) LOGIC ---
 // ==========================================
 
-function openAddStrainModal() {
-    document.getElementById('add-strain-modal').style.display = 'flex';
+let editingStrainId = null;
+
+function openAddStrainModal(existingStrain = null) {
+    // --- SPÖKFÄLLAN ---
+    // Om appen råkar skicka in ett musklick (PointerEvent/Event) istället för jäst-data, 
+    // så nollställer vi det så att formuläret inte blir förvirrat.
+    if (existingStrain instanceof Event) {
+        existingStrain = null;
+    }
+
+    const modal = document.getElementById('add-strain-modal');
+    const title = modal.querySelector('h3');
+    const nameInput = document.getElementById('hs-name');
+
+    // Nu kollar vi om vi faktiskt har fått in en RIKTIG jäst!
+    if (existingStrain && existingStrain.id) {
+        // =====================================
+        // --- EDIT MODE (Fyll i gamla data) ---
+        // =====================================
+        editingStrainId = existingStrain.id;
+        title.innerText = "Edit House Strain";
+        
+        // Här matar vi in allt du skrev förra gången!
+        nameInput.value = existingStrain.name || '';
+        document.getElementById('hs-origin').value = existingStrain.origin || '';
+        document.getElementById('hs-temp').value = existingStrain.temp || '';
+        document.getElementById('hs-tags').value = (existingStrain.tags || []).join(', ');
+        document.getElementById('hs-desc').value = existingStrain.desc || '';
+
+        // Lås namnet så vi inte byter ID och skapar en dubblett
+        nameInput.disabled = true;
+        nameInput.style.opacity = "0.5";
+    } else {
+        // =====================================
+        // --- CREATE MODE (Helt ny jäst) ---
+        // =====================================
+        editingStrainId = null;
+        title.innerText = "House Bank";
+        
+        // Rensa alla fält
+        nameInput.value = '';
+        nameInput.disabled = false;
+        nameInput.style.opacity = "1";
+        document.getElementById('hs-origin').value = '';
+        document.getElementById('hs-temp').value = '';
+        document.getElementById('hs-tags').value = '';
+        document.getElementById('hs-desc').value = '';
+    }
+
+    modal.style.display = 'flex';
 }
 
 function closeAddStrainModal() {
