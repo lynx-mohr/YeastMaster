@@ -2391,18 +2391,23 @@ function openYeastModal(yeast) {
     // ==========================================================
     // --- NYTT: HANTERA EDIT & DELETE-KNAPPARNA HÄR I BOTTEN ---
     // ==========================================================
-    const editBtn = document.getElementById('modal-edit-btn');
+   const editBtn = document.getElementById('modal-edit-btn');
     const deleteBtn = document.getElementById('modal-delete-btn');
     
     if (yeast.isHouseStrain) {
-        // Husjäst: Visa Både Edit och Delete
-        if(editBtn) {
-            editBtn.style.display = 'block';
-            editBtn.onclick = () => { openAddStrainModal(yeast); };
+        if(editBtn) { 
+            editBtn.style.display = 'block'; 
+            editBtn.onclick = () => { 
+                closeYeastModal(); // <-- HÄR ÄR FIXEN! Stäng info-rutan först!
+                openAddStrainModal(yeast); 
+            }; 
         }
-        if(deleteBtn) {
-            deleteBtn.style.display = 'block';
-            deleteBtn.onclick = () => { deleteHouseStrain(yeast.id); closeYeastModal(); };
+        if(deleteBtn) { 
+            deleteBtn.style.display = 'block'; 
+            deleteBtn.onclick = () => { 
+                deleteHouseStrain(yeast.id); 
+                closeYeastModal(); 
+            }; 
         }
     } else if (yeast.isCustom) {
         // Custom Profile: Visa Endast Delete
