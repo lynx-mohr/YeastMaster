@@ -2443,7 +2443,7 @@ window.addEventListener('DOMContentLoaded', () => {
         loadHouseStrains();
     }
 
-    // Ladda in dina egna sparade profiler
+    //  Ladda in dina egna sparade profiler
     if (typeof loadCustomProfiles === "function") {
         loadCustomProfiles();
     }
@@ -3078,6 +3078,7 @@ function saveHouseStrain() {
     savedStrains.push(newStrain);
     localStorage.setItem('houseStrains', JSON.stringify(savedStrains));
 
+    saveLibraryToCloud();
     closeAddStrainModal();
 
     // Rensa fälten
@@ -3120,6 +3121,8 @@ window.deleteHouseStrain = function(id) {
         if (favCount) favCount.innerText = selectedStrains.length;
     }
 
+    saveLibraryToCloud();
+    
     // Stäng modalen och rita om
     closeYeastModal();
     const searchBox = document.getElementById('yeast-search');
@@ -3329,6 +3332,12 @@ async function pushLibraryToCloud() {
     if (!user) return; // Gör inget om du kör som gäst
 
     const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
+    const houseStrains = JSON.parse(localStorage.getItem('houseStrains') || '[]');
+
+    const libraryData = {
+        customProfiles: customProfiles,
+        houseStrains: houseStrains
+    };
     
     try {
         await fetch(`${API_BASE}/my-library`, {
@@ -3339,7 +3348,7 @@ async function pushLibraryToCloud() {
                 libraryData: savedProfiles
             })
         });
-        console.log("☁️ Global library synced to cloud!");
+       console.log("Hela biblioteket (stams & profiler) synkat till molnet!");
     } catch (err) {
         console.error("Failed to sync library to cloud:", err);
     }
@@ -3350,15 +3359,39 @@ async function fetchLibraryFromCloud(uid) {
     try {
         const res = await fetch(`${API_BASE}/my-library?uid=${uid}`);
         if (res.ok) {
-            const cloudLibrary = await res.json();
+            const data = await res.json();
             
-            // Om molnet har data, skriv över det lokala minnet med sanningen från molnet!
-            if (cloudLibrary && Array.isArray(cloudLibrary)) {
-                localStorage.setItem('customYeastProfiles', JSON.stringify(cloudLibrary));
+            // Vi kollar om vi fick något svar överhuvudtaget
+            if (data) {
+                // 1. Hantera Custom Profiles (dina Arcane Lab-recept)
+                // Vi kollar om objektet innehåller profiler
+                if (data.customProfiles && Array.isArray(data.customProfiles)) {
+                    localStorage.setItem('customYeastProfiles', JSON.stringify(data.customProfiles));
+                    
+                    // Kör din befintliga laddningsfunktion för profiler
+                    if (typeof loadCustomProfiles === "function") {
+                        loadCustomProfiles(); 
+                    }
+                }
                 
-                // Ladda om korten i UI:t så de dyker upp på skärmen
-                loadCustomProfiles(); 
-                console.log("☁️ Global library downloaded from cloud!");
+                // 2. Hantera House Strains (dina vildfångade jäststammar)
+                // Vi kollar om objektet innehåller din House Bank
+                if (data.houseStrains && Array.isArray(data.houseStrains)) {
+                    localStorage.setItem('houseStrains', JSON.stringify(data.houseStrains));
+                    
+                    // Kör din nya laddningsfunktion för husjäster
+                    if (typeof loadHouseStrains === "function") {
+                        loadHouseStrains(); 
+                    }
+                }
+
+                // 3. Uppdatera UI:t
+                // Nu när båda typerna är sparade lokalt, ritar vi om biblioteket
+                if (typeof renderYeastLibrary === "function") {
+                    renderYeastLibrary();
+                }
+
+                console.log("☁️ Global library (Profiles & House Bank) downloaded and synced!");
             }
         }
     } catch (err) {
