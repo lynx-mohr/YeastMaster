@@ -173,43 +173,6 @@ app.get('/api/my-library', async (req, res) => {
     }
 });
 
-// B. ESP32 ropar på denna URL för att hämta SIN ägares bibliotek!
-app.get('/api/device-sync/:mac', async (req, res) => {
-    const mac = req.params.mac;
-
-    try {
-        // 1. Vem äger denna enhet?
-        const device = await userDevicesCollection.findOne({ device_id: mac });
-        
-        if (!device || !device.uid) {
-            // Om enheten inte är kopplad till ett konto än
-            return res.json({
-                "yeasts": [
-                    { "n": "UNCLAIMED", "s": "Not linked", "p": "Link in App", "steps": [[0, 20.0], [1, 20.0]] }
-                ]
-            });
-        }
-
-        // 2. Hämta ägarens globala bibliotek!
-        const userLib = await userLibrariesCollection.findOne({ uid: device.uid });
-        
-        if (userLib && userLib.library) {
-            // Skicka hela biblioteket till maskinen
-            res.json(userLib.library);
-        } else {
-            // Fallback om användaren inte har sparat något i appen än
-            res.json({
-                "yeasts": [
-                    { "n": "EMPTY LIBRARY", "s": "No Data", "p": "Save in App", "steps": [[0, 20.0], [1, 20.0]] }
-                ]
-            });
-        }
-    } catch (e) {
-        console.error("Fel vid hämtning av enhetens profiler:", e);
-        res.status(500).send({ error: "Databasfel vid ESP32-synk" });
-    }
-});
-
 // ==========================================
 // --- SYNK-MOTOR FÖR ESP32 (Max 10 profiler) ---
 // ==========================================
@@ -243,7 +206,7 @@ app.get('/api/device-sync/:mac', async (req, res) => {
         const device = await userDevicesCollection.findOne({ device_id: mac });
         
         // Om kylen har en sparad 10-lista i databasen, skicka den!
-        if (device && device.syncedProfiles) {
+        if (device && device.syncedProfiles && device.syncedProfiles.yeasts) {
             res.json(device.syncedProfiles);
         } else {
             // Fallback om man inte synkat något än
@@ -264,6 +227,29 @@ app.get('/api/device-sync/:mac', async (req, res) => {
     }
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server körs på port ${PORT}`);
+// ==========================================
+// --- SYNK-MOTOR FÖR ESP32 (Max 10 profiler) ---
+// ==========================================
+
+// A. Appen skickar de 10 valda profilerna till en specifik maskin
+app.post('/api/sync-profiles', async (req, res) => {
+    const { uid, device_id, yeastData } = req.body;
+
+    if (!uid || !device_id || !yeastData) {
+        return res.status(400).send({ error: "Saknar data för synkning" });
+    }
+
+    try {
+        // Sparar den valda 10-listan på just denna enhet
+        await userDevicesCollection.updateOne(
+            { uid: uid, device_id: device_id },
+            { $set: { syncedProfiles: yeastData } }
+        );
+        res.status(200).send({ message: "Profilerna är nu sparade i molnet för denna enhet!" });
+    } catch (e) {
+        console.error("Kunde inte synka profiler:", e);
+        res.status(500).send({ error: "Databasfel vid synkning" });
+    }
 });
+
+
