@@ -3036,30 +3036,35 @@ function toggleLibraryInfo(btn) {
 // ==========================================
 
 function openAddStrainModal(existingStrain = null) {
-    // Spökfällan: Om appen råkar skicka ett musklick istället för jäst
     if (existingStrain instanceof Event) existingStrain = null;
 
     const modal = document.getElementById('add-strain-modal');
     const title = modal.querySelector('h3');
     const nameInput = document.getElementById('hs-name');
+    const dateInput = document.getElementById('hs-date');
 
     if (existingStrain && existingStrain.id) {
-        // --- EDIT MODE ---
         title.innerText = "Edit House Strain";
         nameInput.value = existingStrain.name || '';
         document.getElementById('hs-origin').value = existingStrain.origin || '';
+        if(dateInput) dateInput.value = existingStrain.captureDate || ''; // Fyll i datumet
         document.getElementById('hs-temp').value = existingStrain.temp || '';
         document.getElementById('hs-tags').value = (existingStrain.tags || []).join(', ');
         document.getElementById('hs-desc').value = existingStrain.desc || '';
 
-        // Det är låsningen av detta fält som nu styr hela sparningen!
         nameInput.disabled = true;
         nameInput.style.opacity = "0.5";
     } else {
-        // --- CREATE MODE ---
         title.innerText = "House Bank";
         nameInput.value = '';
         document.getElementById('hs-origin').value = '';
+        
+        // Sätt dagens datum automatiskt
+        if(dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+        }
+
         document.getElementById('hs-temp').value = '';
         document.getElementById('hs-tags').value = '';
         document.getElementById('hs-desc').value = '';
@@ -3080,6 +3085,11 @@ function saveHouseStrain() {
         const nameInput = document.getElementById('hs-name');
         const name = nameInput.value.trim();
         const origin = document.getElementById('hs-origin').value.trim() || "House Bank";
+        
+        // Hämta datumet!
+        const dateInput = document.getElementById('hs-date');
+        const captureDate = dateInput ? dateInput.value : '';
+
         const temp = document.getElementById('hs-temp').value.trim() || "Unknown";
         const tagsInput = document.getElementById('hs-tags').value.trim();
         const desc = document.getElementById('hs-desc').value.trim() || "A local or wild captured yeast strain.";
@@ -3091,44 +3101,44 @@ function saveHouseStrain() {
 
         let savedStrains = JSON.parse(localStorage.getItem('houseStrains') || '[]');
         
-        // Vi skapar ID:t baserat på namnet, så vi vet alltid vad vi letar efter
         const newId = "house-" + name.toLowerCase().replace(/[^a-z0-9]/g, '');
         const existingIndex = savedStrains.findIndex(s => s.id === newId);
 
-        // HÄR ÄR MAGIN: Är fältet låst? Då MÅSTE det vara en uppdatering.
         const isEditMode = nameInput.disabled;
 
         if (isEditMode) {
-            // --- SKRIV ÖVER GAMMAL INFO ---
             if (existingIndex > -1) {
                 savedStrains[existingIndex].origin = origin;
+                savedStrains[existingIndex].captureDate = captureDate; // Spara uppdaterat datum
                 savedStrains[existingIndex].temp = temp;
                 savedStrains[existingIndex].tags = tags;
                 savedStrains[existingIndex].desc = desc;
             }
         } else {
-            // --- SKAPA HELT NY JÄST ---
             if (existingIndex > -1) {
                 alert("A strain with this name already exists!"); 
                 return;
             }
             savedStrains.push({
-                id: newId, name: name, origin: origin, temp: temp,
-                tags: tags, desc: desc, styles: "Any", isHouseStrain: true
+                id: newId, 
+                name: name, 
+                origin: origin, 
+                captureDate: captureDate, // Spara nytt datum
+                temp: temp,
+                tags: tags, 
+                desc: desc, 
+                styles: "Any", 
+                isHouseStrain: true
             });
         }
 
-        // Spara till minnet
         localStorage.setItem('houseStrains', JSON.stringify(savedStrains));
 
-        // Synka direkt till molnet
         if (typeof pushLibraryToCloud === "function") pushLibraryToCloud();
 
-        // Stäng båda rutorna
         closeAddStrainModal();
         if (typeof closeYeastModal === "function") closeYeastModal();
 
-        // Ladda och rita om biblioteket live
         loadHouseStrains();
         const searchBox = document.getElementById('yeast-search');
         if (typeof renderYeastLibrary === "function") renderYeastLibrary(searchBox ? searchBox.value : "");
@@ -3142,7 +3152,6 @@ function saveHouseStrain() {
 function loadHouseStrains() {
     let savedStrains = JSON.parse(localStorage.getItem('houseStrains') || '[]');
     savedStrains.forEach(strain => {
-        // Kolla om den redan är inladdad. Om ja, skriv över (uppdatera). Om nej, lägg till högst upp!
         const existingIndex = yeastStrains.findIndex(y => y.id === strain.id);
         if (existingIndex > -1) {
             yeastStrains[existingIndex] = strain;
