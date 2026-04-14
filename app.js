@@ -1231,64 +1231,6 @@ function populateBaseYeastDropdown() {
     });
 }
 
-// --- 2. SPARA TILL BIBLIOTEK (Städad version utan JSON-export) ---
-function saveProfileToLibrary() {
-    let rawName = document.getElementById('custom-profile-name').value.trim().toUpperCase();
-    const profileName = rawName !== "" ? rawName : "CUSTOM_1";
-    
-    let baseYeast = document.getElementById('custom-base-yeast').value;
-    if(baseYeast === "") baseYeast = "Unknown Base";
-
-    // Skapa maskin-objektet
-    const profileData = {
-        s: profileName,             
-        p: `Custom (${baseYeast})`, 
-        dryHopDay: dryHopData.enabled ? dryHopData.day : null, 
-      steps: [
-            [profilePoints[0].x, profilePoints[0].y],
-            [profilePoints[1].x, profilePoints[1].y],
-            [profilePoints[2].x, profilePoints[2].y],
-            [profilePoints[3].x, profilePoints[3].y],
-            [profilePoints[4].x, profilePoints[4].y]
-        ]
-    };
-
-    // Spara ner det i enhetens minne (localStorage)
-    let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
-    savedProfiles.push(profileData);
-    localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
-
-    // Magisk Knapp-animation
-    const btn = document.getElementById('btn-save-profile');
-    const originalText = btn.innerText;
-    btn.innerText = "SAVED TO LIBRARY! ✓";
-    btn.style.backgroundColor = "#b142ff"; // Lila succéfärg
-    btn.style.borderColor = "#b142ff";
-    btn.style.color = "#fff";
-
-    // Ladda om sidan efter 1.2 sekunder så att allt synkas in i biblioteket
-// --- NYTT: Byt vy snyggt utan omladdning ---
-    setTimeout(() => {
-        // 1. Ladda in den nya profilen i dina listor direkt
-        loadCustomProfiles();
-        
-        // 2. Byt skärm till Yeast Library
-        showView('library');
-        
-        // 3. Uppdatera ikonen i bottenmenyn så att Library lyser (istället för Lab)
-        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-        const libIcon = document.querySelector('.nav-item[onclick*="library"]');
-        if (libIcon) libIcon.classList.add('active');
-        
-        // 4. Återställ knappen och töm textfältet utifall man går tillbaka till labbet
-        btn.innerText = originalText;
-        btn.style.backgroundColor = ""; 
-        btn.style.borderColor = "";
-        btn.style.color = "";
-        document.getElementById('custom-profile-name').value = '';
-        
-    }, 1200);
-}
 
 // --- 3. LADDA IN DINA EGNA JÄSTER I BÅDA DATABASERNA ---
 function loadCustomProfiles() {
@@ -2310,35 +2252,6 @@ function generateHardwareProfilesHTML(yeastName) {
 // ==========================================
 // --- AUTOMAGISK GENERATOR FÖR PROFILER ---
 // ==========================================
-
-window.toggleHwProfile = function(uniqueId, btnElement) {
-    const summaryBox = document.getElementById(uniqueId);
-    
-    // Stäng alla andra öppna rutor först (för snyggare UX)
-    document.querySelectorAll('.hw-profile-summary').forEach(box => {
-        if (box.id !== uniqueId) box.classList.remove('open');
-    });
-    document.querySelectorAll('.hw-profile-btn').forEach(btn => {
-        if (btn !== btnElement) btn.classList.remove('active');
-    });
-
-    // Öppna/stäng den klickade rutan och spara resultatet i en variabel
-    const isNowOpen = summaryBox.classList.toggle('open');
-    btnElement.classList.toggle('active');
-
-    // --- NYTT: Autoscroll! ---
-    if (isNowOpen) {
-        // Vänta 200ms (medan CSS-animationen fäller ut rutan)
-        setTimeout(() => {
-            // Säg åt rutan att mjukt glida in i synfältet så att hela får plats
-            summaryBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 200);
-    }
-};
-
-// ==========================================
-// --- AUTOMAGISK GENERATOR FÖR PROFILER ---
-// ==========================================
 window.toggleHwProfile = function(uniqueId, btnElement) {
     const summaryBox = document.getElementById(uniqueId);
     
@@ -2563,11 +2476,15 @@ function deleteCustomProfile(profileName) {
     // 1. Hämta de sparade profilerna från enhetens minne
     let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
     
-    // 2. Filtrera bort den profil vi vill radera (behåll alla som INTE heter samma sak)
+    // 2. Filtrera bort den profil vi vill radera
     savedProfiles = savedProfiles.filter(p => p.s !== profileName);
     
     // Spara tillbaka den uppdaterade listan till minnet
     localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
+
+    // --- NYTT: Berätta för molnet att profilen är raderad! ---
+    pushLibraryToCloud();
+    // ---------------------------------------------------------
 
     // 3. Ta bort den från den visuella biblioteks-listan (yeastStrains)
     // Vi återskapar ID:t exakt så som det genererades när profilen sparades
@@ -3193,7 +3110,9 @@ function formatTempText(text) {
     });
 }
 
-// --- UPPDATERAD SPARFUNKTION (Spara alltid som Celsius) ---
+// ==============================================================
+// --- DEN ENDA SANNA SPARFUNKTIONEN (Med Moln & Celsius-koll) ---
+// ==============================================================
 function saveProfileToLibrary() {
     let rawName = document.getElementById('custom-profile-name').value.trim().toUpperCase();
     const profileName = rawName !== "" ? rawName : "CUSTOM_1";
@@ -3201,7 +3120,7 @@ function saveProfileToLibrary() {
     let baseYeast = document.getElementById('custom-base-yeast').value;
     if(baseYeast === "") baseYeast = "Unknown Base";
 
-    // Intern hjälpfunktion för att tvinga ner värdet till Celsius innan lagring
+    // Intern hjälpfunktion för att tvinga ner värdet till Celsius innan lagring i databasen
     function toCelsius(val) {
         return currentTempUnit === 'F' ? (val - 32) * 5/9 : val;
     }
@@ -3219,20 +3138,29 @@ function saveProfileToLibrary() {
         ]
     };
 
+    // 1. Spara ner det i enhetens lokala minne (localStorage)
     let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
     savedProfiles.push(profileData);
     localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
 
+    // 2. --- NYTT: SKICKA TILL MOLNET DIREKT! ---
+    if (typeof pushLibraryToCloud === 'function') {
+        pushLibraryToCloud();
+    }
+
+    // 3. Magisk Knapp-animation
     const btn = document.getElementById('btn-save-profile');
     const originalText = btn.innerText;
     btn.innerText = "SAVED TO LIBRARY! ✓";
-    btn.style.backgroundColor = "#b142ff"; 
+    btn.style.backgroundColor = "#b142ff"; // Lila succéfärg
     btn.style.borderColor = "#b142ff";
     btn.style.color = "#fff";
 
+    // 4. Byt vy snyggt utan omladdning
     setTimeout(() => {
         loadCustomProfiles();
         showView('library');
+        
         document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
         const libIcon = document.querySelector('.nav-item[onclick*="library"]');
         if (libIcon) libIcon.classList.add('active');
@@ -3279,6 +3207,53 @@ function formatDaysToHuman(decimalDays) {
     if (h === 0) return d + " d"; // Om det är exakta dygn, visa bara dagar
     
     return `${d} d and ${h} h`;
+}
+
+// ==========================================
+// --- GLOBAL CLOUD LIBRARY SYNC ---
+// ==========================================
+
+// 1. Skickar ditt lokala bibliotek TILL molnet
+async function pushLibraryToCloud() {
+    const user = auth.currentUser;
+    if (!user) return; // Gör inget om du kör som gäst
+
+    const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
+    
+    try {
+        await fetch(`${API_BASE}/my-library`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                uid: user.uid,
+                libraryData: savedProfiles
+            })
+        });
+        console.log("☁️ Global library synced to cloud!");
+    } catch (err) {
+        console.error("Failed to sync library to cloud:", err);
+    }
+}
+
+// 2. Hämtar ditt bibliotek FRÅN molnet (Körs vid inloggning)
+async function fetchLibraryFromCloud(uid) {
+    try {
+        const res = await fetch(`${API_BASE}/my-library?uid=${uid}`);
+        if (res.ok) {
+            const cloudLibrary = await res.json();
+            
+            // Om molnet har data, skriv över det lokala minnet med sanningen från molnet!
+            if (cloudLibrary && Array.isArray(cloudLibrary)) {
+                localStorage.setItem('customYeastProfiles', JSON.stringify(cloudLibrary));
+                
+                // Ladda om korten i UI:t så de dyker upp på skärmen
+                loadCustomProfiles(); 
+                console.log("☁️ Global library downloaded from cloud!");
+            }
+        }
+    } catch (err) {
+        console.error("Failed to fetch library from cloud:", err);
+    }
 }
 
 // ==========================================
@@ -3353,6 +3328,8 @@ if (user) {
         // --- ANVÄNDAREN ÄR INLOGGAD ---
         if (soulLoginPrompt) soulLoginPrompt.style.display = 'none';
         if (logoutBtn) logoutBtn.style.display = 'block'; // <-- 2. Visa knappen!
+
+        await fetchLibraryFromCloud(user.uid);
 
         try {
             // EN HÄMTNING FRÅN SERVER
