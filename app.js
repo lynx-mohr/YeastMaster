@@ -2275,7 +2275,7 @@ function openYeastModal(yeast) {
     modalTitle.innerText = yeast.name;
     let detailedText = "";
 
-    // 1. KOLLA OM DET ÄR EN EGEN PROFIL
+    // 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN ARCANE LAB
     if (yeast.isCustom) {
         const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
         const profileData = savedProfiles.find(p => p.s === yeast.name);
@@ -2283,7 +2283,6 @@ function openYeastModal(yeast) {
         if (profileData) {
             const s = profileData.steps;
             const baseYeast = profileData.p.replace('Custom (', '').replace(')', '');
-
             detailedText = `
                 <div style="line-height: 1.6;">
                     <p style="color: var(--accent-color); font-weight: 800; margin-bottom: 15px;">Created by you!</p>
@@ -2301,15 +2300,46 @@ function openYeastModal(yeast) {
         } else {
             detailedText = `<p>Custom profile data not found.</p>`;
         }
-    } else {
-        // 2. VANLIG JÄST FRÅN BESKRIVNINGARNA (Eller House Strains!)
+    } 
+    // ====================================================================
+    // 2. NYTT: KOLLA OM DET ÄR DIN EGEN HUSJÄST (House Bank)
+    // ====================================================================
+    else if (yeast.isHouseStrain) {
+        detailedText = `
+            <div style="line-height: 1.6;">
+                <h4 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">House Bank Strain 🦠</h4>
+                <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid #333; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Origin / Source</span>
+                        <span style="color: #fff; font-weight: bold;">${yeast.origin}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Temp Range</span>
+                        <span style="color: #fff; font-weight: bold;">${yeast.temp}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Tags</span>
+                        <span style="color: var(--accent-color); font-weight: bold; text-align: right;">${yeast.tags.join(', ')}</span>
+                    </div>
+                </div>
+                <h4 style="color: #888; margin-bottom: 5px; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Lab Notes</h4>
+                <p style="color: #ccc; font-size: 0.95rem; background: #000; padding: 15px; border-radius: 8px; border: 1px solid #222;">${yeast.desc}</p>
+            </div>
+        `;
+    } 
+    // ====================================================================
+    // 3. VANLIG KOMMERSIELL JÄST FRÅN DATABASEN
+    // ====================================================================
+    else {
         detailedText = yeastDescriptions[yeast.id] || yeastDescriptions[yeast.name];
+        
+        // Fallback OM vi skulle sakna en kommersiell text
         if (!detailedText) {
             detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:20px; color: #fff;">Passar till:</h3><p>${yeast.styles}</p>`;
         }
 
-        // 3. LÄGG TILL INKLUDERADE MASKINPROFILER
-      const hwStrainNames = {
+        // LÄGG TILL INKLUDERADE MASKINPROFILER
+        const hwStrainNames = {
             "us-05": "US-05", "s-04": "S-04", "w-34-70": "W-34/70", "be-256": "BE-256",
             "wb-06": "WB-06", "verdant": "Verdant IPA", "voss": "Voss Kveik", "nottingham": "Nottingham", 
             "wlp001": "Cali Ale", "wlp300": "Hefeweizen", "belle-saison": "Belle Saison", 
@@ -2330,68 +2360,29 @@ function openYeastModal(yeast) {
         const targetStrainName = hwStrainNames[yeast.id];
         if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
             const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
-            
             if (matchingProfiles.length > 0) {
-                let profileListHtml = `
-                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
-                        <h4 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Included Hardware Profiles:</h4>
-                `;
-                
+                let profileListHtml = `<div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;"><h4 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Included Hardware Profiles:</h4>`;
                 matchingProfiles.forEach((prof, index) => {
                     const startTemp = prof.steps[0][1];
                     const uniqueId = `hw-profile-summary-${yeast.id}-${index}`; 
                     const steps = prof.steps;
-                    
-                    profileListHtml += `
-                        <button class="hw-profile-btn" onclick="toggleHwProfile('${uniqueId}', this)">
-                            <strong>${prof.p}</strong> 
-                            <span style="color: #888; font-size: 0.85em;">(Starts @ ${startTemp.toFixed(1)}°C)</span>
-                        </button>
-                    `;
-                    
-                    profileListHtml += `<div class="hw-profile-summary" id="${uniqueId}">`;
-                    profileListHtml += `<div class="summary-header">PROFILE SUMMARY</div>`;
-                    
-                    // 1. Pitch
+                    profileListHtml += `<button class="hw-profile-btn" onclick="toggleHwProfile('${uniqueId}', this)"><strong>${prof.p}</strong><span style="color: #888; font-size: 0.85em;">(Starts @ ${startTemp.toFixed(1)}°C)</span></button>`;
+                    profileListHtml += `<div class="hw-profile-summary" id="${uniqueId}"><div class="summary-header">PROFILE SUMMARY</div>`;
                     profileListHtml += `<div class="summary-row"><span class="label">Pitch</span><span class="value">Day ${steps[0][0]} @ ${steps[0][1].toFixed(1)}°C</span></div>`;
-
-                    // 2. Primary
-                    if (steps[1][1] === steps[0][1]) {
-                        profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Hold until Day ${steps[1][0]}</span></div>`;
-                    } else {
-                        profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Reach ${steps[1][1].toFixed(1)}°C by Day ${steps[1][0]}</span></div>`;
-                    }
-
-                    // 3. Cleanup eller Cold Crash
-                    if (steps[2][1] >= steps[1][1]) {
-                        let text = steps[2][1] > steps[1][1] ? `Rise to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}` : `Hold until Day ${steps[2][0]}`;
-                        profileListHtml += `<div class="summary-row"><span class="label">Cleanup</span><span class="value">${text}</span></div>`;
-                    } else {
-                        profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}</span></div>`;
-                    }
-
-                    // 4. Condition eller Cold Crash
-                    if (steps[3][1] < steps[2][1]) {
-                        profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[3][1].toFixed(1)}°C by Day ${steps[3][0]}</span></div>`;
-                    } else {
-                        profileListHtml += `<div class="summary-row"><span class="label">Condition</span><span class="value">Hold until Day ${steps[3][0]}</span></div>`;
-                    }
-                    
+                    if (steps[1][1] === steps[0][1]) { profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Hold until Day ${steps[1][0]}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Reach ${steps[1][1].toFixed(1)}°C by Day ${steps[1][0]}</span></div>`; }
+                    if (steps[2][1] >= steps[1][1]) { let text = steps[2][1] > steps[1][1] ? `Rise to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}` : `Hold until Day ${steps[2][0]}`; profileListHtml += `<div class="summary-row"><span class="label">Cleanup</span><span class="value">${text}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}</span></div>`; }
+                    if (steps[3][1] < steps[2][1]) { profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[3][1].toFixed(1)}°C by Day ${steps[3][0]}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Condition</span><span class="value">Hold until Day ${steps[3][0]}</span></div>`; }
                     profileListHtml += `</div>`; 
                 });
-                
-                profileListHtml += `</div>`; 
-                detailedText += profileListHtml; 
+                profileListHtml += `</div>`; detailedText += profileListHtml; 
             }
         }
     }
 
     modalDesc.innerHTML = formatTempText(detailedText);
 
-    // ==========================================================
-    // --- NYTT: HANTERA EDIT & DELETE-KNAPPARNA HÄR I BOTTEN ---
-    // ==========================================================
-   const editBtn = document.getElementById('modal-edit-btn');
+    // --- STYR KNAPPARNA FÖR EDIT OCH DELETE ---
+    const editBtn = document.getElementById('modal-edit-btn');
     const deleteBtn = document.getElementById('modal-delete-btn');
     
     if (yeast.isHouseStrain) {
@@ -2399,7 +2390,7 @@ function openYeastModal(yeast) {
             editBtn.style.display = 'block'; 
             editBtn.onclick = (e) => { 
                 e.preventDefault();
-                closeYeastModal(); // <-- HÄR ÄR FIXEN! Stäng info-rutan först!
+                closeYeastModal(); 
                 openAddStrainModal(yeast); 
             }; 
         }
@@ -2411,19 +2402,16 @@ function openYeastModal(yeast) {
             }; 
         }
     } else if (yeast.isCustom) {
-        // Custom Profile: Visa Endast Delete
         if(editBtn) editBtn.style.display = 'none';
-        if(deleteBtn) {
-            deleteBtn.style.display = 'block';
-            deleteBtn.onclick = () => { deleteCustomProfile(yeast.name); closeYeastModal(); };
+        if(deleteBtn) { 
+            deleteBtn.style.display = 'block'; 
+            deleteBtn.onclick = () => { deleteCustomProfile(yeast.name); closeYeastModal(); }; 
         }
     } else {
-        // Standardjäst: Göm båda knapparna
         if(editBtn) editBtn.style.display = 'none';
         if(deleteBtn) deleteBtn.style.display = 'none';
     }
 
-    // Visa själva modalen
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden'; 
 }
