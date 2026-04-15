@@ -227,6 +227,35 @@ app.get('/api/device-sync/:mac', async (req, res) => {
     }
 });
 
+// ==========================================
+// --- 7. TA BORT ENHET FRÅN MOLNET ---
+// ==========================================
+app.post('/api/remove-device', async (req, res) => {
+    const { uid, device_id } = req.body;
+
+    if (!uid || !device_id) {
+        return res.status(400).send({ error: "Saknar uid eller device_id" });
+    }
+
+    try {
+        console.log(`Försöker ta bort enhet ${device_id} för användare ${uid}...`);
+
+        // Leta upp dokumentet i MongoDB och radera det
+        const result = await userDevicesCollection.deleteOne({ uid: uid, device_id: device_id });
+
+        if (result.deletedCount === 1) {
+            console.log("Enhet borttagen från databasen!");
+            res.status(200).send({ message: "Enheten är borttagen" });
+        } else {
+            console.log("Enheten hittades inte, eller tillhörde inte denna användare.");
+            res.status(404).send({ error: "Enheten hittades inte i databasen" });
+        }
+    } catch (e) {
+        console.error("Fel vid borttagning av enhet i databasen:", e);
+        res.status(500).send({ error: "Kunde inte radera enheten från molnet." });
+    }
+});
+
 // --- DENNA MÅSTE ALLTID LIGGA SIST ---
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server körs på port ${PORT}`);
