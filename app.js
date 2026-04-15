@@ -1234,7 +1234,7 @@ function loadCustomProfiles() {
         // B) Smuggla in i UI-databasen (yeastStrains) så den ritas som ett kort!
         const customId = "custom-" + profile.s.toLowerCase().replace(/[^a-z0-9]/g, '');
         if (!yeastStrains.some(y => y.id === customId)) {
-            yeastStrains.unshift({
+            yeastStrains.push({
                 id: customId,
                 name: profile.s,
                 origin: "Custom",
@@ -3161,6 +3161,10 @@ function saveHouseStrain() {
     } catch (error) {
         console.error("Crash under sparning:", error);
     }
+    // NYTT: Scrolla ner till botten av biblioteket!
+        setTimeout(() => {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }, 200);
 }
 
 function loadHouseStrains() {
@@ -3170,7 +3174,7 @@ function loadHouseStrains() {
         if (existingIndex > -1) {
             yeastStrains[existingIndex] = strain;
         } else {
-            yeastStrains.unshift(strain);
+            yeastStrains.push(strain);
         }
     });
 }
@@ -3353,6 +3357,12 @@ function saveProfileToLibrary() {
         btn.style.borderColor = "";
         btn.style.color = "";
         document.getElementById('custom-profile-name').value = '';
+
+        // NYTT: Scrolla ner till botten när vi landar i biblioteket!
+        setTimeout(() => {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }, 100);
+        
     }, 1200);
 }
 
