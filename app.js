@@ -3362,7 +3362,7 @@ function saveProfileToLibrary() {
         setTimeout(() => {
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }, 100);
-        
+
     }, 1200);
 }
 
@@ -3699,9 +3699,9 @@ const academyModules = {
                     <h3>4. The Roadmap</h3>
                     <p>Don't try to learn everything at once. Follow this path at your own pace:</p>
                     <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-color); margin-top: 15px; font-size: 0.9rem; line-height: 1.6;">
-                        <strong style="color: #fff;">Level 1:</strong> Master <em>Yeast Washing</em> from a finished beer.<br>
-                        <strong style="color: #fff;">Level 2:</strong> Buy an Erlenmeyer flask and learn <em>Yeast Starters</em>.<br>
-                        <strong style="color: #fff;">Level 3:</strong> Build or buy a <em>Stir Plate</em> for massive cell growth.<br>
+                    <strong style="color: #fff;">Level 1:</strong> Buy an Erlenmeyer flask and learn <em>Yeast Starters</em>.<br>
+                    <strong style="color: #fff;">Level 2:</strong> Master <em>Yeast Washing</em> from a finished beer.<br>
+                           <strong style="color: #fff;">Level 3:</strong> Build or buy a <em>Stir Plate</em> for massive cell growth.<br>
                         <strong style="color: #fff;">Level 4:</strong> The final boss. <em>Agar Plates</em> and <em>Cell Counting</em>.
                     </div>
                 </div>
