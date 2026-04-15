@@ -395,10 +395,15 @@
                 YeastMaster is a complete ecosystem for the modern homebrewer. It bridges the gap between biological art and precise data control.
             </p>
 
-            <h3 style="color: var(--text-main); margin-top: 30px; margin-bottom: 10px; font-size: 1.1rem;">📟 The Hardware Unit</h3>
-            <p style="margin-bottom: 20px;">
-                A dedicated physical controller with a crisp OLED display that connects directly to your fermentation fridge and heating element. It runs your profiles offline and locally, ensuring your beer is safe even if the internet goes down.
-            </p>
+            <div onclick="showView('hardware')" class="about-card-btn" style="background: rgba(0, 229, 255, 0.05); border: 1px solid var(--accent-color); border-radius: 12px; padding: 20px; margin-top: 30px; margin-bottom: 30px; cursor: pointer; transition: all 0.3s ease; text-align: left; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h3 style="color: var(--accent-color); margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 800;">📟 The Hardware Unit</h3>
+                    <p style="margin: 0; color: var(--text-dim); font-size: 0.95rem; line-height: 1.5;">
+                        A dedicated physical controller with a crisp OLED display. Click to explore how it controls your fridge and heating element.
+                    </p>
+                </div>
+                <div style="color: var(--accent-color); font-size: 1.5rem; font-weight: bold; margin-left: 15px;">→</div>
+            </div>
 
             <h3 style="color: var(--text-main); margin-top: 20px; margin-bottom: 10px; font-size: 1.1rem;">☁️ The Cloud App</h3>
             <p style="margin-bottom: 20px;">
@@ -411,6 +416,51 @@
             </p>
         </div>
     </section>
+
+    <section id="view-hardware" style="display: none; padding: 30px 20px;">
+        <button onclick="showView('about')" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;">
+            ← BACK
+        </button>
+
+        <h2 style="margin-bottom: 10px; font-weight: 900; letter-spacing: -1px; font-size: 2rem; color: var(--text-main);">
+            THE HARDWARE
+        </h2>
+        <p style="color: var(--text-dim); line-height: 1.6; margin-bottom: 30px;">
+            YeastMaster is built around a custom ESP32 brain, designed to sit seamlessly on your fermentation chamber. It operates 100% locally, meaning your beer is safe even if the WiFi drops.
+        </p>
+
+        <div style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+            <h3 style="color: var(--accent-color); margin-top: 0;">📺 Retro OLED Interface</h3>
+            <p style="color: #aaa; font-size: 0.9rem; line-height: 1.5;">
+                A high-contrast OLED screen paired with a tactile rotary encoder gives you a classic, laboratory-grade interface. Adjust offsets, change yeast profiles, or trigger a cold crash right at the fridge.
+            </p>
+            <div style="width: 100%; height: 150px; background: #222; border-radius: 8px; margin-top: 15px; display: flex; align-items: center; justify-content: center; border: 1px dashed #444; color: #555;">
+                [ Image of the OLED Screen ]
+            </div>
+        </div>
+
+        <div style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+            <h3 style="color: var(--accent-color); margin-top: 0;">🌡️ Dual Temp Probes</h3>
+            <p style="color: #aaa; font-size: 0.9rem; line-height: 1.5;">
+                Precision requires data. YeastMaster uses two detachable, waterproof sensors. One measures the ambient air in the fridge, while the other sits directly in the beer (or taped to the fermenter), allowing the PID logic to prevent massive temperature swings.
+            </p>
+            <div style="width: 100%; height: 150px; background: #222; border-radius: 8px; margin-top: 15px; display: flex; align-items: center; justify-content: center; border: 1px dashed #444; color: #555;">
+                [ Image of the Temperature Probes ]
+            </div>
+        </div>
+
+        <div style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+            <h3 style="color: var(--accent-color); margin-top: 0;">⚡ Wireless Relays</h3>
+            <p style="color: #aaa; font-size: 0.9rem; line-height: 1.5;">
+                No dangerous high-voltage wiring. YeastMaster sends 433MHz radio signals directly to wireless smart plugs. One for your fridge (cooling), and one for a heat mat (heating). Total control, zero electrical hazards.
+            </p>
+            <div style="width: 100%; height: 150px; background: #222; border-radius: 8px; margin-top: 15px; display: flex; align-items: center; justify-content: center; border: 1px dashed #444; color: #555; position: relative; overflow: hidden;">
+                [ Image or CSS Animation of Plugs ]
+            </div>
+        </div>
+
+    </section>
+
 
 <section id="view-librarian" style="display: none;">
     <div class="library-header" style="margin-bottom: 20px;">
