@@ -270,11 +270,13 @@ if (!user && !activeDeviceId) {
             const latest = sortedData[sortedData.length - 1];
             console.log("Senaste sorterade datan:", latest);
 
-            // 1. Temperaturer
-            const displayTemp = convertTemp(latest.temp).toFixed(1) + '°' + currentTempUnit;
-            document.getElementById('temp-beer-val').innerText = displayTemp;
-            document.querySelector('.beer-temp').setAttribute('data-text', displayTemp);
-            document.getElementById('air-temp-val').innerText = convertTemp(latest.air_temp).toFixed(1) + '°' + currentTempUnit;
+            // 1. Temperaturer (Med inbyggd spärr för urkopplade sensorer)
+            const safeBeerTemp = latest.temp <= -100 ? "--" : (convertTemp(latest.temp).toFixed(1) + '°' + currentTempUnit);
+            const safeAirTemp = latest.air_temp <= -100 ? "--" : (convertTemp(latest.air_temp).toFixed(1) + '°' + currentTempUnit);
+
+            document.getElementById('temp-beer-val').innerText = safeBeerTemp;
+            document.querySelector('.beer-temp').setAttribute('data-text', safeBeerTemp);
+            document.getElementById('air-temp-val').innerText = safeAirTemp;
 
             // 2. Info
             document.getElementById('strain-val').innerText = (latest.strain || "IRISH ALE").toUpperCase();
@@ -321,10 +323,10 @@ if (!user && !activeDeviceId) {
             
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
-            const targetTemp = latest.target_temp || 0; 
+           const targetTemp = latest.target_temp || 0; 
             const targetTempElement = document.getElementById('target-temp-val');
             if (targetTempElement) {
-                targetTempElement.innerText = convertTemp(targetTemp).toFixed(1) + '°' + currentTempUnit;
+                targetTempElement.innerText = targetTemp <= -100 ? "--" : (convertTemp(targetTemp).toFixed(1) + '°' + currentTempUnit);
             }
             
             // Skicka den sorterade datan till grafen
@@ -369,10 +371,16 @@ function updateChart(data) {
     let themeAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
     if (!themeAccent) themeAccent = '#f39c12'; 
 
-    const gradient = ctx.createLinearGradient(0, 0, 0, 120);
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)'); 
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');   
-
+    // Kolla om vi är i Light Mode just nu
+    const isLightMode = document.body.classList.contains('light-mode');
+    
+    // Gör toningen lite djupare (150px)
+    const gradient = ctx.createLinearGradient(0, 0, 0, 150);
+    
+    // MAGIN: Använd accentfärgen och lägg till en "Hex Alpha"-kod för genomskinlighet i slutet.
+    // '15' = extremt svag (perfekt för vit bakgrund), '35' = lite starkare (för mörk bakgrund), '00' = helt osynlig
+    gradient.addColorStop(0, isLightMode ? themeAccent + '15' : themeAccent + '35'); 
+    gradient.addColorStop(1, themeAccent + '00');
     // Skapa etiketterna för X-axeln (Vi kör på bara klockslag nu när vi vet att det är max 24h)
     const labels = data.map(d => new Date(d.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
     const temps = data.map(d => convertTemp(Number(d.temp) || 0));
@@ -2989,7 +2997,15 @@ function setAccent(color, element) {
     // A) Live Dashboard-grafen (beerChart)
     if (window.beerChart) {
         window.beerChart.data.datasets[0].borderColor = color;
-        // 'none' gör att färgbytet sker omedelbart utan att linjen behöver animeras in från noll
+        
+        // Bygg en ny toning i samma sekund som vi byter färg
+        const isLightNow = document.body.classList.contains('light-mode');
+        let ctx = window.beerChart.ctx;
+        let newGradient = ctx.createLinearGradient(0, 0, 0, 150);
+        newGradient.addColorStop(0, isLightNow ? color + '15' : color + '35');
+        newGradient.addColorStop(1, color + '00');
+        
+        window.beerChart.data.datasets[0].backgroundColor = newGradient;
         window.beerChart.update('none'); 
     }
 
