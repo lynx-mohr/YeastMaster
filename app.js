@@ -775,17 +775,6 @@ function toggleTheme() {
     }
 }
 
-function setAccent(color) {
-    document.documentElement.style.setProperty('--accent-color', color);
-    localStorage.setItem('accentColor', color);
-    
-    // VIKTIGT: Uppdatera grafen direkt så linjen byter färg
-    if (beerChart) {
-        beerChart.data.datasets[0].borderColor = color;
-        beerChart.update();
-    }
-}
-
 function setActive(clickedElement) {
     // Ta bort 'active' klassen från alla nav-items
     document.querySelectorAll('.nav-item').forEach(item => {
@@ -2993,11 +2982,25 @@ function setAccent(color, element) {
         element.classList.add('active');
     }
 
-    // 4. Uppdatera grafen live om den är öppen
-    if (typeof updateChart === "function" && typeof lastData !== 'undefined') {
-        updateChart(lastData);
+    // ==================================================
+    // 4. MAGIN: UPPDATERA GRAFERNA BLIXTSNABBT!
+    // ==================================================
+    
+    // A) Live Dashboard-grafen (beerChart)
+    if (window.beerChart) {
+        window.beerChart.data.datasets[0].borderColor = color;
+        // 'none' gör att färgbytet sker omedelbart utan att linjen behöver animeras in från noll
+        window.beerChart.update('none'); 
+    }
+
+    // B) The Profiler-grafen i labbet (labChart)
+    if (typeof labChart !== 'undefined' && labChart !== null) {
+        labChart.data.datasets[0].borderColor = color;
+        labChart.data.datasets[0].pointBorderColor = color;
+        labChart.update('none');
     }
 }
+
 // Kolla om användaren har ett sparat tema när sidan laddas
 const savedTheme = localStorage.getItem('yeastmaster-theme');
 if (savedTheme) {

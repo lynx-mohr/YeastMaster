@@ -3454,3 +3454,37 @@ body.light-mode .yeast-package-box button:hover {
     border: 1px solid #ffcc00; /* Kanske en guldgul kant för dina House Strains? */
     background-color: #221c00;
 }
+
+/* =========================================
+   LIGHT MODE FIX: KNAPPAR & HOVER (PROFILER)
+   ========================================= */
+
+/* 1. Gör knappen marginellt mörkare på PC när man drar musen över (istället för att bli vit) */
+body.light-mode button:hover,
+body.light-mode .btn-primary:hover,
+body.light-mode .btn-secondary:hover {
+    filter: brightness(0.9);
+}
+
+/* 2. Gör knappen ytterligare lite mörkare precis när man klickar på den */
+body.light-mode button:active,
+body.light-mode .btn-primary:active,
+body.light-mode .btn-secondary:active {
+    filter: brightness(0.8);
+}
+
+/* 3. MOBIL-FIXEN: Stäng av "hover" helt på skärmar med touch, så de inte fastnar i vitt/grått */
+@media (hover: none) {
+    body.light-mode button:hover,
+    body.light-mode .btn-primary:hover,
+    body.light-mode .btn-secondary:hover {
+        filter: none; 
+    }
+    
+    /* Behåll bara "klick"-effekten för touchskärmar */
+    body.light-mode button:active,
+    body.light-mode .btn-primary:active,
+    body.light-mode .btn-secondary:active {
+        filter: brightness(0.8);
+    }
+}
