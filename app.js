@@ -93,7 +93,7 @@ const auth = firebase.auth(); // Se till att Firebase är länkat i index.html!
 
 // --- KONFIGURATION FÖR VYER & ANIMATIONER ---
 // Flyttad upp hit så att appen har stenkoll på ordningen från start!
-const viewOrder = ['soul', 'about', 'hardware', 'library', 'librarian', 'lab', 'dashboard', 'settings'];
+const viewOrder = ['soul', 'library', 'librarian', 'lab', 'dashboard', 'settings'];
 
 // Tvinga webbläsaren att sluta lägga sig i scrollningen vid bakåt-klick!
 if ('scrollRestoration' in history) {
