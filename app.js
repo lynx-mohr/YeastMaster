@@ -2378,7 +2378,7 @@ function openYeastModal(yeast) {
     modalTitle.innerText = yeast.name;
     let detailedText = "";
 
-    // 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN ARCANE LAB
+// 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN ARCANE LAB
     if (yeast.isCustom) {
         const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
         const profileData = savedProfiles.find(p => p.s === yeast.name);
@@ -2397,13 +2397,17 @@ function openYeastModal(yeast) {
                         <li><strong style="color: #fff;">Cold Crash:</strong> Drop to ${s[3][1]}°C on Day ${s[3][0]}.</li>
                         <li><strong style="color: #fff;">Condition:</strong> Hold at ${s[4][1]}°C until Day ${s[4][0]}.</li>
                     </ul>
-                    ${profileData.dryHopDay ? `<p style="margin-top: 15px; color: #8CC63F;"><strong>Dry Hop:</strong> Scheduled for Day ${profileData.dryHopDay}</p>` : ''}
+                    
+                    <div style="margin-top: 15px;">
+                        ${profileData.dryHopDay ? `<p style="margin: 0 0 5px 0; color: #8CC63F;"><strong>Dry Hop:</strong> Scheduled for Day ${profileData.dryHopDay}</p>` : ''}
+                        ${profileData.rackDumpDay ? `<p style="margin: 0; color: #F2994A;"><strong>Rack / Dump:</strong> Scheduled for Day ${profileData.rackDumpDay}</p>` : ''}
+                    </div>
                 </div>
             `;
         } else {
             detailedText = `<p>Custom profile data not found.</p>`;
         }
-    } 
+    }
 // ====================================================================
     // 2. KOLLA OM DET ÄR DIN EGEN HUSJÄST (House Bank)
     // ====================================================================
