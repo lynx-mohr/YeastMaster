@@ -2379,6 +2379,7 @@ function openYeastModal(yeast) {
     let detailedText = "";
 
 // 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN ARCANE LAB
+  // 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN ARCANE LAB
     if (yeast.isCustom) {
         const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
         const profileData = savedProfiles.find(p => p.s === yeast.name);
@@ -2386,6 +2387,8 @@ function openYeastModal(yeast) {
         if (profileData) {
             const s = profileData.steps;
             const baseYeast = profileData.p.replace('Custom (', '').replace(')', '');
+            
+            // Formaterar texten snyggare och kollar om Action Markers finns
             detailedText = `
                 <div style="line-height: 1.6;">
                     <p style="color: var(--accent-color); font-weight: 800; margin-bottom: 15px;">Created by you!</p>
@@ -2393,14 +2396,14 @@ function openYeastModal(yeast) {
                     <ul style="list-style: none; padding: 0; margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
                         <li><strong style="color: #fff;">Pitch:</strong> Start at ${s[0][1]}°C.</li>
                         <li><strong style="color: #fff;">Primary:</strong> Hold until Day ${s[1][0]}.</li>
-                        <li><strong style="color: #fff;">Cleanup:</strong> Rise to ${s[2][1]}°C on Day ${s[2][0]}.</li>
-                        <li><strong style="color: #fff;">Cold Crash:</strong> Drop to ${s[3][1]}°C on Day ${s[3][0]}.</li>
-                        <li><strong style="color: #fff;">Condition:</strong> Hold at ${s[4][1]}°C until Day ${s[4][0]}.</li>
+                        <li><strong style="color: #fff;">Cleanup:</strong> Reach ${s[2][1]}°C by Day ${s[2][0]}.</li>
+                        <li><strong style="color: #fff;">Hold Warm:</strong> Hold until Day ${s[3][0]}.</li>
+                        <li><strong style="color: #fff;">Cold Crash:</strong> Drop to ${s[4][1]}°C by Day ${s[4][0]}.</li>
                     </ul>
                     
-                    <div style="margin-top: 15px;">
-                        ${profileData.dryHopDay ? `<p style="margin: 0 0 5px 0; color: #8CC63F;"><strong>Dry Hop:</strong> Scheduled for Day ${profileData.dryHopDay}</p>` : ''}
-                        ${profileData.rackDumpDay ? `<p style="margin: 0; color: #F2994A;"><strong>Rack / Dump:</strong> Scheduled for Day ${profileData.rackDumpDay}</p>` : ''}
+                    <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #333;">
+                        ${profileData.dryHopDay ? `<p style="margin: 0 0 8px 0; color: #8CC63F; font-size: 1.05em;"><strong>Dry Hop:</strong> Scheduled for Day ${profileData.dryHopDay}</p>` : ''}
+                        ${profileData.rackDumpDay ? `<p style="margin: 0; color: #F2994A; font-size: 1.05em;"><strong>Rack / Dump:</strong> Scheduled for Day ${profileData.rackDumpDay}</p>` : ''}
                     </div>
                 </div>
             `;
