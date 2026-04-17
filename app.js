@@ -311,7 +311,15 @@ if (!user && !activeDeviceId) {
             // 5. Dagar (Hämta direkt från C++)
             const currentDay = latest.day || 0;
             const phaseDay = latest.phase_day || 0;
+const profileDay = latest.profile_day || currentDay;
 
+// --- VÄCK LARM-DETEKTIVEN ---
+            const currentStrain = latest.strain || "Unknown";
+            const currentProfileName = latest.profile || "Unknown";
+            
+            // SKICKA IN PROFILE-DAY ISTÄLLET FÖR CURRENT-DAY!
+            checkActionAlerts(profileDay, currentStrain, currentProfileName);
+            
             // 6. Progress (Grafisk bar)
             const targetDays = 14; 
             const percent = Math.min((currentDay / targetDays) * 100, 100).toFixed(0);
