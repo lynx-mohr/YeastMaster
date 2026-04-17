@@ -862,6 +862,78 @@ const dryHopPlugin = {
     }
 };
 
+// --- DATA-TILLSTÅND FÖR RACK/DUMP ---
+let rackDumpData = {
+    enabled: false,
+    day: 8.0, 
+    isDragging: false,
+    color: '#F2994A' // Sekundär färg (Orange/Guld)
+};
+
+// --- CHART.JS PLUGIN: Rack/Dump-linjen ---
+const rackDumpPlugin = {
+    id: 'rackDumpLine',
+    afterDraw: (chart) => {
+        if (chart.canvas.closest('#view-dashboard')) return; 
+        if (!rackDumpData.enabled) return;
+
+        const {ctx, chartArea: {top, bottom, left, right}, scales: {x}} = chart;
+        const xPix = x.getPixelForValue(rackDumpData.day);
+
+        if (xPix < left || xPix > right) return;
+
+        ctx.save();
+        ctx.strokeStyle = rackDumpData.color;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 4]); // Tätare streck än torrhumling
+        ctx.beginPath();
+        ctx.moveTo(xPix, top);
+        ctx.lineTo(xPix, bottom);
+        ctx.stroke();
+        
+        ctx.setLineDash([]);
+        ctx.fillStyle = rackDumpData.color;
+        ctx.font = 'bold 10px Lexend';
+        ctx.textAlign = 'center';
+        ctx.fillText('RACK/DUMP', xPix, top - 5);
+
+        ctx.beginPath();
+        ctx.arc(xPix, ((top + bottom) / 2) - 30, 6, 0, 2 * Math.PI); // Förskjuten Y-axel
+        ctx.fill();
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.restore();
+    }
+};
+
+Chart.register(rackDumpPlugin);
+
+function toggleRackDumpLine() {
+    rackDumpData.enabled = !rackDumpData.enabled;
+    const btn = document.getElementById('btn-add-dump');
+    const textInfo = document.getElementById('dump-schedule-text');
+    
+    if (rackDumpData.enabled) {
+        btn.innerText = "- REMOVE ACTION";
+        btn.classList.add('active');
+        btn.style.color = rackDumpData.color;
+        btn.style.borderColor = rackDumpData.color;
+        btn.style.backgroundColor = 'rgba(242, 153, 74, 0.1)';
+        if(textInfo) textInfo.style.display = 'block';
+    } else {
+        btn.innerText = "+ RACK / DUMP";
+        btn.classList.remove('active');
+        btn.style.color = '';
+        btn.style.borderColor = '';
+        btn.style.backgroundColor = 'transparent';
+        if(textInfo) textInfo.style.display = 'none';
+        if(labChart) labChart.canvas.style.cursor = 'default';
+    }
+    if (typeof updateSummaryText === 'function') updateSummaryText();
+    if (labChart) labChart.update('none');
+}
+
 Chart.register(dryHopPlugin);
 
 function toggleDryHopLine() {
@@ -948,14 +1020,14 @@ function initLabChart() {
     const hoverSize = isMobile ? 12 : 8;      
     const touchMagnet = isMobile ? 25 : 10;   
 
-    // GRADIENT (Måste definieras här inne, annars finns den inte!)
+    // GRADIENT
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, isLightMode ? 'rgba(244, 201, 93, 0.15)' : 'rgba(244, 201, 93, 0.4)'); 
     gradient.addColorStop(1, 'rgba(244, 201, 93, 0.0)');
 
     // AXEL-FÄRGER
     const gridColor = isLightMode ? '#ebebeb' : '#222222';
-    const gridBorderColor = isLightMode ? '#cccccc' : '#444444'; // För den yttre ramen
+    const gridBorderColor = isLightMode ? '#cccccc' : '#444444'; 
     const textColor = isLightMode ? '#666666' : '#888888';
 
     // RITA GRAFEN
@@ -993,34 +1065,30 @@ function initLabChart() {
             layout: {
                 padding: { top: 30, right: 30, bottom: 10, left: 10 }
             },
-  scales: {
-                // --- NYHET: En svagare och elegantare Y-axel ---
+            scales: {
                 y: {
                     type: 'linear',
                     min: currentTempUnit === 'F' ? 28 : -2,
                     max: currentTempUnit === 'F' ? 104 : 40,
                     grid: { 
-                        // BYT UT FÄRGEN: rgba(255, 255, 255, 0.08) är en extremt svag vit dimma
-                        color: 'rgba(255, 255, 255, 0.08)', // 92% genomskinligt grid!
+                        color: 'rgba(255, 255, 255, 0.08)',
                         borderColor: gridBorderColor,
                         tickLength: 8 
                     },
                     ticks: { 
-                        color: '#888888', // Gör siffrorna gråa istället för kritvita
+                        color: '#888888',
                         font: { family: 'Lexend', weight: '600' },
                         padding: 6 
                     },
                     title: { display: true, text: `Temp (°${currentTempUnit})`, color: textColor, font: { family: 'Lexend', weight: '800' } }
                 },
-                // --- NYHET: Samma svaga grid även på X-axeln ---
                 x: {
                     type: 'linear',
-                    // ... (behåll min/max för x som förut) ...
                     grid: { 
-                        color: 'rgba(255, 255, 255, 0.08)' // Samma dimmiga färg
+                        color: 'rgba(255, 255, 255, 0.08)'
                     },
                     ticks: { 
-                        color: '#888888', // Gråa siffror här med
+                        color: '#888888',
                         font: { family: 'Lexend', weight: '600' }
                     },
                     title: { display: true, text: 'Days', color: textColor, font: { family: 'Lexend', weight: '800' } }
@@ -1073,22 +1141,34 @@ function initLabChart() {
     let isDragging = false;
     let dragIndex = -1;
     let isDraggingDryHop = false; 
+    let isDraggingRackDump = false; // <-- NY VARIABEL FÖR RACK/DUMP
 
     canvas.addEventListener('pointerdown', (e) => {
         const rect = canvas.getBoundingClientRect();
         const xPos = e.clientX - rect.left;
         let xVal = labChart.scales.x.getValueForPixel(xPos);
 
-        const hopMagnet = isMobile ? 1.5 : 0.6; 
+        const actionMagnet = isMobile ? 1.5 : 0.6; 
         
+        // 1. KOLLA RACK/DUMP FÖRST
+        if (typeof rackDumpData !== 'undefined' && rackDumpData.enabled) {
+            if (Math.abs(xVal - rackDumpData.day) < actionMagnet) {
+                isDraggingRackDump = true;
+                canvas.style.cursor = 'ew-resize'; 
+                return; 
+            }
+        }
+
+        // 2. KOLLA TORRHUMLING SEDAN
         if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
-            if (Math.abs(xVal - dryHopData.day) < hopMagnet) {
+            if (Math.abs(xVal - dryHopData.day) < actionMagnet) {
                 isDraggingDryHop = true;
                 canvas.style.cursor = 'ew-resize'; 
                 return; 
             }
         }
 
+        // 3. KOLLA VANLIGA GRAFPUNKTER
         const points = labChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, false);
         if (points.length > 0) {
             isDragging = true;
@@ -1098,12 +1178,26 @@ function initLabChart() {
     });
 
     canvas.addEventListener('touchstart', (e) => {
-        if (isDragging || isDraggingDryHop) e.preventDefault();
+        if (isDragging || isDraggingDryHop || isDraggingRackDump) e.preventDefault();
         const points = labChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, false);
-        if (points.length > 0 || isDraggingDryHop) e.preventDefault(); 
+        if (points.length > 0 || isDraggingDryHop || isDraggingRackDump) e.preventDefault(); 
     }, { passive: false });
 
     window.addEventListener('pointermove', (e) => {
+        
+        // --- DRA RACK/DUMP ---
+        if (isDraggingRackDump) {
+            const rect = canvas.getBoundingClientRect();
+            const xPos = e.clientX - rect.left;
+            let xVal = labChart.scales.x.getValueForPixel(xPos);
+            xVal = Math.max(0, Math.round(xVal * 2) / 2);
+            rackDumpData.day = xVal;
+            labChart.update('none');
+            if (typeof updateSummaryText === 'function') updateSummaryText();
+            return; 
+        }
+
+        // --- DRA TORRHUMLING ---
         if (isDraggingDryHop) {
             const rect = canvas.getBoundingClientRect();
             const xPos = e.clientX - rect.left;
@@ -1115,6 +1209,7 @@ function initLabChart() {
             return; 
         }
 
+        // --- DRA VANLIGA GRAFPUNKTER ---
         if (isDragging && dragIndex !== -1) {
             const rect = canvas.getBoundingClientRect();
             const xPos = e.clientX - rect.left;
@@ -1162,11 +1257,19 @@ function initLabChart() {
     });
 
     window.addEventListener('pointerup', () => {
+        // --- SLÄPP RACK/DUMP ---
+        if (isDraggingRackDump) {
+            isDraggingRackDump = false;
+            canvas.style.cursor = 'default';
+            if (typeof updateSummaryText === 'function') updateSummaryText();
+        }
+        // --- SLÄPP TORRHUMLING ---
         if (isDraggingDryHop) {
             isDraggingDryHop = false;
             canvas.style.cursor = 'default';
             if (typeof updateSummaryText === 'function') updateSummaryText();
         }
+        // --- SLÄPP VANLIG GRAFPUNKT ---
         if (isDragging) {
             isDragging = false;
             dragIndex = -1;
