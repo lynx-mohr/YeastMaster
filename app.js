@@ -319,7 +319,7 @@ const profileDay = latest.profile_day || currentDay;
             
             // SKICKA IN PROFILE-DAY ISTÄLLET FÖR CURRENT-DAY!
             checkActionAlerts(profileDay, currentStrain, currentProfileName);
-            
+
             // 6. Progress (Grafisk bar)
             const targetDays = 14; 
             const percent = Math.min((currentDay / targetDays) * 100, 100).toFixed(0);
@@ -5265,3 +5265,52 @@ window.removeActiveDevice = async function() {
         alert("Nätverksfel! Kunde inte nå servern för att ta bort enheten.");
     }
 };
+
+// ==========================================
+// --- ACTION ALERT SYSTEM (DASHBOARD) ---
+// ==========================================
+function checkActionAlerts(currentDay, strainName, profileName) {
+    try {
+        const alertBanner = document.getElementById('dashboard-action-alert');
+        const alertText = document.getElementById('alert-action-name');
+        
+        if (!alertBanner || !alertText || !profileName || !strainName) return;
+
+        // Göm larmet som standard varje gång vi uppdaterar
+        alertBanner.style.display = 'none';
+
+        let activeProfile = null;
+        
+        // Kolla först dina egna Custom Profiles
+        const customProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
+        activeProfile = customProfiles.find(p => p.s && p.s.toUpperCase() === profileName.toUpperCase());
+
+        // Om vi inte hittade den där, kolla maskinens standardprofiler
+        if (!activeProfile && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
+            const cleanStrain = formatOledName(strainName).toUpperCase();
+            activeProfile = yeastDatabase.yeasts.find(p => p.p && p.p.toUpperCase() === profileName.toUpperCase() && p.s && p.s.toUpperCase() === cleanStrain);
+        }
+
+        if (!activeProfile) return; // Hittade ingen matchande profil
+
+        // Vi ger larmet en tidsfönster på 1.0 dagar
+        const alertWindow = 1.0; 
+
+        // Kolla Rack / Dump
+        if (activeProfile.rackDumpDay && currentDay >= activeProfile.rackDumpDay && currentDay < (activeProfile.rackDumpDay + alertWindow)) {
+            alertText.innerText = "RACK / DUMP YEAST";
+            alertBanner.style.background = "var(--accent-secondary, #F2994A)"; // Orange/Guld
+            alertBanner.style.boxShadow = "0 4px 15px rgba(242, 153, 74, 0.4)";
+            alertBanner.style.display = 'block';
+        } 
+        // Kolla Torrhumling
+        else if (activeProfile.dryHopDay && currentDay >= activeProfile.dryHopDay && currentDay < (activeProfile.dryHopDay + alertWindow)) {
+            alertText.innerText = "ADD DRY HOPS";
+            alertBanner.style.background = "#8CC63F"; // Grön
+            alertBanner.style.boxShadow = "0 4px 15px rgba(140, 198, 63, 0.4)";
+            alertBanner.style.display = 'block';
+        }
+    } catch (err) {
+        console.error("Larm-detektiven förhindrade en krasch: ", err);
+    }
+}

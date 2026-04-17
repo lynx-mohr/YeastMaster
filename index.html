@@ -36,46 +36,40 @@
         </div>
     </div>
 
-    <section id="view-dashboard" style="display: none;">
-
+   <section id="view-dashboard" style="display: none;">
+        
         <div id="dashboard-action-alert" style="display: none; background: var(--accent-secondary, #F2994A); color: #000; font-weight: 900; text-align: center; padding: 12px; margin: 0 20px 20px 20px; border-radius: 8px; font-size: 0.95rem; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(242, 153, 74, 0.4); cursor: pointer;" onclick="this.style.display='none'">
-        ⚠️ ACTION REQUIRED: <span id="alert-action-name">RACK / DUMP YEAST</span> TODAY!
-        <div style="font-size: 0.7rem; opacity: 0.7; margin-top: 4px;">(Tap to dismiss)</div>
-    </div>
-    
- <div class="oled-screen" style="position: relative;">
-    
-    <div id="start-demo-btn" class="info-circle-btn" style="position: absolute; top: 15px; right: 15px; z-index: 10;">
-        i
-    </div>
-          <div class="device-name-display" style="font-size: 0.75rem; color: var(--accent-color); font-weight: 800; letter-spacing: 2px; margin-top: -5px; margin-bottom: 15px; position: relative; z-index: 10;">
-        MIN YEASTMASTER
-    </div>
+            ⚠️ ACTION REQUIRED: <span id="alert-action-name">RACK / DUMP YEAST</span> TODAY!
+            <div style="font-size: 0.7rem; opacity: 0.7; margin-top: 4px;">(Tap to dismiss)</div>
+        </div>
+
+        <div class="oled-screen" style="position: relative;">
+            <div id="start-demo-btn" class="info-circle-btn" style="position: absolute; top: 15px; right: 15px; z-index: 10;">
+                i
+            </div>
+            
+            <div class="device-name-display" style="font-size: 0.75rem; color: var(--accent-color); font-weight: 800; letter-spacing: 2px; margin-top: -5px; margin-bottom: 15px; position: relative; z-index: 10;">
+                MIN YEASTMASTER
+            </div>
+            
             <div class="main-display">
                 <div class="left-col"> 
                     <div class="carboy-wrapper">
                         <div class="air-floating">Air: <span id="air-temp-val">--°C</span></div>
-<svg viewBox="0 0 100 92" class="carboy-svg">
-    <defs>
-        <clipPath id="bottle-clip">
-            <path d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" />
-        </clipPath>
-    </defs>
-
-    <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
-
-  <g clip-path="url(#bottle-clip)">
-       <path class="beer-liquid" fill="var(--beer-color, #4a4a4a)" 
-      d="M 0,38 L 150,38 V 100 H 0 Z" />
-        
-        <g id="bubble-stream"></g>
-    </g>
-    </g>
-
-    <path class="glass-line" fill="none" stroke="var(--oled-color)" stroke-width="2.5" 
-          d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" />
-</svg>
-            <div class="beer-temp" data-text="--"><span id="temp-beer-val">--</span></div>
+                        <svg viewBox="0 0 100 92" class="carboy-svg">
+                            <defs>
+                                <clipPath id="bottle-clip">
+                                    <path d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" />
+                                </clipPath>
+                            </defs>
+                            <rect x="38" y="10" width="24" height="4" fill="var(--oled-color)" rx="1.5" />
+                            <g clip-path="url(#bottle-clip)">
+                                <path class="beer-liquid" fill="var(--beer-color, #4a4a4a)" d="M 0,38 L 150,38 V 100 H 0 Z" />
+                                <g id="bubble-stream"></g>
+                            </g>
+                            <path class="glass-line" fill="none" stroke="var(--oled-color)" stroke-width="2.5" d="M44,14 V30 A 30 30 0 1 0 56 30 V14 Z" />
+                        </svg>
+                        <div class="beer-temp" data-text="--"><span id="temp-beer-val">--</span></div>
                     </div>
                 </div>
                 
