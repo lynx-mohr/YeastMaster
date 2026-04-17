@@ -53,7 +53,9 @@ body.light-mode .oled-screen {
     box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
 }
 
-body.light-mode .separator-line { border-top: 2px solid #eee; }
+body.light-mode .separator-line { 
+    border-top: 3px solid #cccccc; 
+}
 body.light-mode .btn-primary { border: 1px solid #ccc; }
 
 /* =========================================
