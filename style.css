@@ -3561,3 +3561,33 @@ body.light-mode .hw-image-box {
     border-color: #ccc;
     color: #888;
 }
+
+/* =========================================
+   LIGHT MODE: MAIN NAVIGATION BAR
+   ========================================= */
+
+body.light-mode .main-nav {
+    /* Ljus, nästan helt vit bakgrund med lite frostat glas-effekt */
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #ddd; /* Ändrar den mörka linjen till en ljusgrå */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* En mjuk, lyxig skugga under menyn */
+}
+
+/* Gör de inaktiva länkarna (gråa) lite mörkare så de syns bra mot det vita */
+body.light-mode .nav-text,
+body.light-mode .nav-icon {
+    color: #888;
+    fill: #888;
+}
+
+/* När man hovrar över inaktiva länkar i ljust läge (blir mörkgrå istället för ljusgrå) */
+body.light-mode .nav-item:not(.active):hover .nav-text,
+body.light-mode .nav-item:not(.active):hover .nav-icon {
+    color: #222;
+    fill: #222;
+}
+
+/* Fixar textskuggan på den aktiva accentfärgen så den inte ser smutsig ut mot det vita */
+body.light-mode .nav-item.active .nav-text {
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+}
