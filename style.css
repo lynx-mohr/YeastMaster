@@ -3635,3 +3635,23 @@ body.light-mode .close-btn:hover {
 body.light-mode .modal-body hr {
     border-color: #eee;
 }
+
+/* =========================================
+   --- LIGHT MODE FIX: LÄSBAR TEXT I MODALEN ---
+   ========================================= */
+
+/* Gör all standardtext mörkgrå i Light Mode, 
+   MEN skydda våra snygga gröna och orangea larmfärger! */
+body.light-mode .modal-body p:not([style*="8CC63F"]):not([style*="F2994A"]):not([style*="--accent"]),
+body.light-mode .modal-body div:not([style*="8CC63F"]):not([style*="F2994A"]):not([style*="--accent"]),
+body.light-mode .modal-body span:not([style*="8CC63F"]):not([style*="F2994A"]):not([style*="--accent"]),
+body.light-mode .modal-body i,
+body.light-mode .modal-body em {
+    color: #333333 !important;
+}
+
+/* Gör fet text ännu mörkare (nästan svart) för extra bra kontrast */
+body.light-mode .modal-body strong:not([style*="8CC63F"]):not([style*="F2994A"]):not([style*="--accent"]),
+body.light-mode .modal-body b:not([style*="8CC63F"]):not([style*="F2994A"]):not([style*="--accent"]) {
+    color: #111111 !important;
+}
