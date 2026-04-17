@@ -3488,3 +3488,29 @@ body.light-mode .btn-secondary:active {
         filter: brightness(0.8);
     }
 }
+
+/* =========================================
+   KLICKBARA KORT (THE HARDWARE UNIT)
+   ========================================= */
+
+.hardware-card {
+    cursor: pointer;
+    transition: background 0.2s ease;
+    /* Ingen border eller fast bakgrundsfärg här, så den smälter in */
+}
+
+/* En extremt subtil highlight när man hovrar över hela rutan */
+.hardware-card:hover {
+    background: rgba(128, 128, 128, 0.05); 
+    border-radius: 8px;
+}
+
+.animated-arrow {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* När man hovrar över rutan, flytta pilen 6px till höger och tänd den med accentfärgen */
+.hardware-card:hover .animated-arrow {
+    transform: translateX(6px);
+    color: var(--accent-color) !important;
+}
