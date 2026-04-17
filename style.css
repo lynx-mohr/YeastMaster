@@ -3665,3 +3665,35 @@ body.light-mode .modal-body h6 {
 }
     
 }
+
+/* =========================================
+   --- NUCLEAR LIGHT MODE FIX: RUBRIKER ---
+   ========================================= */
+
+/* Denna regel letar upp rubrik-liknande text och tvingar den att bli mörk,
+   även om det finns inline-styles som försöker göra den ljusgrå. */
+body.light-mode .modal-body strong,
+body.light-mode .modal-body b,
+body.light-mode .modal-body h1,
+body.light-mode .modal-body h2,
+body.light-mode .modal-body h3,
+body.light-mode .modal-body h4,
+body.light-mode .modal-body h5 {
+    color: #111111 !important;
+    opacity: 1 !important;
+}
+
+/* Fixar specifikt de där "underrubrikerna" som ofta är lite gråare */
+body.light-mode .modal-body .yeast-master-profile-header, 
+body.light-mode .modal-body [style*="color: #aaa"],
+body.light-mode .modal-body [style*="color: #888"],
+body.light-mode .modal-body [style*="color: #ccc"] {
+    color: #222222 !important;
+}
+
+/* Men vi måste fortfarande rädda våra Action Markers (gröna och orangea) 
+   så att de INTE blir svarta! */
+body.light-mode .modal-body [style*="8CC63F"], 
+body.light-mode .modal-body [style*="F2994A"] {
+    color: inherit !important; /* Låter ursprungsfärgen vinna här */
+}
