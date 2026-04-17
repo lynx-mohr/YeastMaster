@@ -2376,6 +2376,73 @@ window.toggleHwProfile = function(uniqueId, btnElement) {
     }
 };
 
+// =======================================================
+// --- LOAD TEMPLATE INTO PROFILER (VÄG 1) ---
+// =======================================================
+window.loadProfileIntoLab = function(strainName, profileName) {
+    // 1. Hitta den valda standardprofilen i databasen
+    if (typeof yeastDatabase === 'undefined' || !yeastDatabase.yeasts) return;
+    const profile = yeastDatabase.yeasts.find(p => p.s === strainName && p.p === profileName);
+    if (!profile) return;
+
+    // 2. Fyll i inmatningsfälten i The Profiler
+    const nameInput = document.getElementById('custom-profile-name');
+    const yeastInput = document.getElementById('custom-base-yeast');
+    
+    // Vi skapar ett föreslaget namn (t.ex. LACTIC_B) och tar bort skräptecken
+    let shortName = profileName.replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '_').substring(0, 8).toUpperCase();
+    if(nameInput) nameInput.value = shortName;
+
+    // Leta upp rätt jäst i rullistan (Vi söker på namnet)
+    if (yeastInput) {
+        for (let i = 0; i < yeastInput.options.length; i++) {
+            if (yeastInput.options[i].text.includes(strainName) || strainName.includes(yeastInput.options[i].text)) {
+                yeastInput.selectedIndex = i;
+                break;
+            }
+        }
+        // Tvinga fram "change"-eventet så att rullistan aktiverar grafen!
+        yeastInput.dispatchEvent(new Event('change'));
+    }
+
+    // 3. Översätt databasens steg till grafens punkter
+    const s = profile.steps;
+    
+    // Liten hjälpfunktion för att hantera C/F dynamiskt när vi laddar in
+    function fromCelsius(c) {
+        return currentTempUnit === 'F' ? (c * 9/5) + 32 : c;
+    }
+
+    if (s.length >= 4) {
+        profilePoints[0] = { x: 0, y: fromCelsius(s[0][1]) };
+        profilePoints[1] = { x: s[1][0], y: fromCelsius(s[1][1]) };
+        profilePoints[2] = { x: s[2][0], y: fromCelsius(s[2][1]) };
+        // Skapa en liten platå för "Cleanup" i grafen för att snygga till drag-logiken
+        profilePoints[3] = { x: s[2][0] + 0.5, y: fromCelsius(s[2][1]) }; 
+        profilePoints[4] = { x: s[3][0], y: fromCelsius(s[3][1]) };
+        profilePoints[5] = { x: s.length > 4 ? s[4][0] : s[3][0] + 5, y: fromCelsius(s.length > 4 ? s[4][1] : s[3][1]) };
+    }
+
+    // 4. Stäng rutan och hoppa till The Profiler
+    closeYeastModal();
+    showView('lab');
+
+    // Nollställ eventuella gamla Action Markers som låg kvar sedan tidigare
+    if (typeof rackDumpData !== 'undefined' && rackDumpData.enabled) toggleRackDumpLine();
+    if (typeof dryHopData !== 'undefined' && dryHopData.enabled) toggleDryHopLine();
+
+    // 5. Uppdatera UI och rita om grafen!
+    if (typeof labChart !== 'undefined') {
+        const lastPointX = profilePoints[5].x;
+        labChart.options.scales.x.max = Math.max(16, lastPointX + 1);
+        labChart.update('none');
+    }
+    if (typeof updateSummaryText === 'function') updateSummaryText();
+    
+    // Scrolla upp till toppen så man ser vad man gör
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
 function openYeastModal(yeast) {
     const modal = document.getElementById('yeast-info-modal');
     const modalTitle = document.getElementById('modal-yeast-name');
@@ -2504,6 +2571,8 @@ function openYeastModal(yeast) {
                     if (steps[1][1] === steps[0][1]) { profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Hold until Day ${steps[1][0]}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Reach ${steps[1][1].toFixed(1)}°C by Day ${steps[1][0]}</span></div>`; }
                     if (steps[2][1] >= steps[1][1]) { let text = steps[2][1] > steps[1][1] ? `Rise to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}` : `Hold until Day ${steps[2][0]}`; profileListHtml += `<div class="summary-row"><span class="label">Cleanup</span><span class="value">${text}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}</span></div>`; }
                     if (steps[3][1] < steps[2][1]) { profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[3][1].toFixed(1)}°C by Day ${steps[3][0]}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Condition</span><span class="value">Hold until Day ${steps[3][0]}</span></div>`; }
+                        profileListHtml += `<button class="btn-secondary" style="width: 100%; margin-top: 15px; border-color: var(--accent-color); color: var(--accent-color);" onclick="loadProfileIntoLab('${targetStrainName}', '${prof.p}')">✏️ EDIT IN PROFILER</button>`;
+                    
                     profileListHtml += `</div>`; 
                 });
                 profileListHtml += `</div>`; detailedText += profileListHtml; 
