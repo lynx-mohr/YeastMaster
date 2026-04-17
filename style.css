@@ -3179,7 +3179,7 @@ body.light-mode #pitch-result div[style] {
 }
 
 .hw-profile-btn strong {
-    color: #fff;
+    color: #ffffff !important; 
     font-weight: 800;
     transition: color 0.2s ease;
 }
@@ -3191,12 +3191,12 @@ body.light-mode #pitch-result div[style] {
 
 /* Hover-effekt: Texten blir grön för att visa att den går att klicka på */
 .hw-profile-btn:hover strong {
-    color: var(--accent-color);
+    color: var(--accent-color) !important;
 }
 
 /* När profilen är utfälld/aktiv */
 .hw-profile-btn.active strong {
-    color: var(--accent-color);
+    color: var(--accent-color) !important;
 }
 
 /* Själva utfällbara rutan (Profile Summary) */
@@ -3266,7 +3266,7 @@ body.light-mode #pitch-result div[style] {
 }
 
 /* Light mode support */
-body.light-mode .hw-profile-btn strong { color: #111; }
+body.light-mode .hw-profile-btn strong { color: #111111 !important; }
 body.light-mode .hw-profile-btn:hover strong, 
 body.light-mode .hw-profile-btn.active strong { color: var(--accent-color); }
 body.light-mode .hw-profile-summary { background: #f9f9f9; border-color: #ccc; }
