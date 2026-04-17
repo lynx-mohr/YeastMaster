@@ -3599,3 +3599,39 @@ body.light-mode .nav-item:not(.active):hover .nav-icon {
 body.light-mode .nav-item.active .nav-text {
     text-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
 }
+
+/* =========================================
+   --- LIGHT MODE FIX: JÄST- OCH CUSTOM-MODALER ---
+   ========================================= */
+
+body.light-mode .modal-content {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+body.light-mode .modal-header {
+    border-bottom-color: #eee;
+}
+
+body.light-mode .modal-body {
+    color: #444; /* Gör standardtexten mörkgrå och läsvänlig */
+}
+
+body.light-mode .modal-body h3,
+body.light-mode .modal-body strong {
+    color: #111; /* Gör underrubriker och fetstil nästan svarta */
+}
+
+body.light-mode .close-btn {
+    color: #888;
+}
+
+body.light-mode .close-btn:hover {
+    color: #111;
+}
+
+/* Eventuella streckade linjer inuti modalen */
+body.light-mode .modal-body hr {
+    border-color: #eee;
+}
