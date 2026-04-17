@@ -408,7 +408,13 @@ canvas#beer-chart {
     width: 100%; 
     text-align: left; 
     margin-bottom: 20px; 
-    padding: 0;
+    
+    /* NYTT: Trycker ner rubrikerna 20px så de linjerar exakt med Settings på mobilen! */
+    padding-top: 20px; 
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    
     box-sizing: border-box; /* Ser till att paddingen inte gör headern bredare än 100% */
 }
 
