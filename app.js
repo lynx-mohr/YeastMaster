@@ -115,7 +115,9 @@ function showView(viewName, pushToHistory = true) {
         dashboard: document.getElementById('view-dashboard'),
         settings: document.getElementById('view-settings'),
         about: document.getElementById('view-about'),
-        hardware: document.getElementById('view-hardware')
+        hardware: document.getElementById('view-hardware'),
+        'about-library': document.getElementById('view-about-library'),
+        'about-cloud': document.getElementById('view-about-cloud')
     };
 
     if (!views[viewName]) return;
