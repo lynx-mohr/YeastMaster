@@ -3429,6 +3429,9 @@ function formatTempText(text) {
 // ==============================================================
 // --- DEN ENDA SANNA SPARFUNKTIONEN (Med Moln & Celsius-koll) ---
 // ==============================================================
+// ==============================================================
+// --- DEN ENDA SANNA SPARFUNKTIONEN (Med Moln & Celsius-koll) ---
+// ==============================================================
 function saveProfileToLibrary() {
     let rawName = document.getElementById('custom-profile-name').value.trim().toUpperCase();
     const profileName = rawName !== "" ? rawName : "CUSTOM_1";
@@ -3444,7 +3447,9 @@ function saveProfileToLibrary() {
     const profileData = {
         s: profileName,             
         p: `Custom (${baseYeast})`, 
-        dryHopDay: dryHopData.enabled ? dryHopData.day : null, 
+        // --- HÄR SPARAS BÅDA ACTION MARKERS ---
+        dryHopDay: (typeof dryHopData !== 'undefined' && dryHopData.enabled) ? dryHopData.day : null, 
+        rackDumpDay: (typeof rackDumpData !== 'undefined' && rackDumpData.enabled) ? rackDumpData.day : null, 
         steps: [
             [profilePoints[0].x, parseFloat(toCelsius(profilePoints[0].y).toFixed(1))],
             [profilePoints[1].x, parseFloat(toCelsius(profilePoints[1].y).toFixed(1))],
@@ -3459,7 +3464,7 @@ function saveProfileToLibrary() {
     savedProfiles.push(profileData);
     localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
 
-    // 2. --- NYTT: SKICKA TILL MOLNET DIREKT! ---
+    // 2. SKICKA TILL MOLNET DIREKT!
     if (typeof pushLibraryToCloud === 'function') {
         pushLibraryToCloud();
     }
@@ -3487,7 +3492,7 @@ function saveProfileToLibrary() {
         btn.style.color = "";
         document.getElementById('custom-profile-name').value = '';
 
-        // NYTT: Scrolla ner till botten när vi landar i biblioteket!
+        // Scrolla ner till botten när vi landar i biblioteket!
         setTimeout(() => {
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }, 100);
