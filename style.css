@@ -3514,3 +3514,50 @@ body.light-mode .btn-secondary:active {
     transform: translateX(6px);
     color: var(--accent-color) !important;
 }
+
+/* =========================================
+   HARDWARE FEATURE CARDS (DARK & LIGHT)
+   ========================================= */
+
+/* Dark Mode (Standard) */
+.hw-feature-card {
+    background: rgba(255, 255, 255, 0.03); /* Mjuk, lite lyxigare mörk bakgrund */
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.hw-feature-text {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0 0 15px 0;
+}
+
+.hw-image-box {
+    width: 100%;
+    height: 150px;
+    background: #000;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #444;
+    color: #666;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.85rem;
+}
+
+/* Light Mode Overrides */
+body.light-mode .hw-feature-card {
+    background: #ffffff;
+    border-color: #ddd;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03); /* Mjuk och snygg skugga */
+}
+
+body.light-mode .hw-image-box {
+    background: #f8fafc;
+    border-color: #ccc;
+    color: #888;
+}
