@@ -2413,15 +2413,39 @@ window.loadProfileIntoLab = function(strainName, profileName) {
         return currentTempUnit === 'F' ? (c * 9/5) + 32 : c;
     }
 
-    if (s.length >= 4) {
-        profilePoints[0] = { x: 0, y: fromCelsius(s[0][1]) };
-        profilePoints[1] = { x: s[1][0], y: fromCelsius(s[1][1]) };
-        profilePoints[2] = { x: s[2][0], y: fromCelsius(s[2][1]) };
-        // Skapa en liten platå för "Cleanup" i grafen för att snygga till drag-logiken
-        profilePoints[3] = { x: s[2][0] + 0.5, y: fromCelsius(s[2][1]) }; 
-        profilePoints[4] = { x: s[3][0], y: fromCelsius(s[3][1]) };
-        profilePoints[5] = { x: s.length > 4 ? s[4][0] : s[3][0] + 5, y: fromCelsius(s.length > 4 ? s[4][1] : s[3][1]) };
-    }
+        if (s.length > 1) {
+            // 1. Pitch och Primary (steg 0 och 1 är alltid samma)
+            profilePoints[0] = { x: 0, y: fromCelsius(s[0][1]) };
+            profilePoints[1] = { x: s[1][0], y: fromCelsius(s[1][1]) };
+
+            // 2. Är nästa steg (s[2]) en varm städning, eller en kall Cold Crash?
+            // Vi säger att allt under 8°C betyder att profilen har skippat städningen.
+            let hasCleanStep = (s.length > 2 && s[2][1] >= 8.0);
+
+            if (hasCleanStep) {
+                // STANDARD: Profilen HAR ett städ-steg
+                profilePoints[2] = { x: s[2][0], y: fromCelsius(s[2][1]) };
+                profilePoints[3] = { x: s[2][0] + 0.5, y: fromCelsius(s[2][1]) };
+
+                if (s.length > 3) {
+                    profilePoints[4] = { x: s[3][0], y: fromCelsius(s[3][1]) };
+                    profilePoints[5] = { x: s.length > 4 ? s[4][0] : s[3][0] + 5, y: fromCelsius(s.length > 4 ? s[4][1] : s[3][1]) };
+                }
+            } else {
+                // SPECIAL (T.ex. Dry English): Profilen GÅR DIREKT PÅ COLD CRASH
+                let crashDay = s.length > 2 ? s[2][0] : s[1][0] + 4;
+                let crashTemp = s.length > 2 ? s[2][1] : 2.0;
+                let primaryTemp = s[1][1];
+
+                // Fyll "Clean"-punkterna med Primary-temperatur så linjen går rakt fram!
+                profilePoints[2] = { x: s[1][0] + ((crashDay - s[1][0]) / 2), y: fromCelsius(primaryTemp) }; 
+                profilePoints[3] = { x: crashDay - 0.5, y: fromCelsius(primaryTemp) }; 
+                
+                // Sätt punkt 4 och 5 till själva kraschen
+                profilePoints[4] = { x: crashDay, y: fromCelsius(crashTemp) };
+                profilePoints[5] = { x: s.length > 3 ? s[3][0] : crashDay + 5, y: fromCelsius(s.length > 3 ? s[3][1] : crashTemp) };
+            }
+        }
 
     // 4. Stäng rutan och hoppa till The Profiler
     closeYeastModal();
