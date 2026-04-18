@@ -2422,10 +2422,15 @@ window.loadProfileIntoLab = function(strainName, profileName) {
             // Vi säger att allt under 8°C betyder att profilen har skippat städningen.
             let hasCleanStep = (s.length > 2 && s[2][1] >= 8.0);
 
-            if (hasCleanStep) {
-                // STANDARD: Profilen HAR ett städ-steg
-                profilePoints[2] = { x: s[2][0], y: fromCelsius(s[2][1]) };
-                profilePoints[3] = { x: s[2][0] + 0.5, y: fromCelsius(s[2][1]) };
+     if (hasCleanStep) {
+                // PLATÅN ÄR STÄDFASEN! 
+                // Vi separerar handtagen så att de tydligt visar att hela den platta linjen är "Clean"
+                
+                // Sätt 'Clean Start' 25% in på platån så att handtagen inte krockar med 'Prim'
+                let plateauStartDay = s[1][0] + ((s[2][0] - s[1][0]) * 0.25); 
+                
+                profilePoints[2] = { x: plateauStartDay, y: fromCelsius(s[2][1]) };
+                profilePoints[3] = { x: s[2][0], y: fromCelsius(s[2][1]) };
 
                 if (s.length > 3) {
                     profilePoints[4] = { x: s[3][0], y: fromCelsius(s[3][1]) };
