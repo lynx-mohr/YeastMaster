@@ -964,24 +964,52 @@ function toggleDryHopLine() {
 }
 
 function updateSummaryText() {
-    // Uppdatera Temperaturer
-   document.getElementById('val-t1').innerText = profilePoints[0].y.toFixed(1) + '°' + currentTempUnit;
-    document.getElementById('val-t3').innerText = profilePoints[2].y.toFixed(1) + '°' + currentTempUnit;
-    document.getElementById('val-t4').innerText = profilePoints[4].y.toFixed(1) + '°' + currentTempUnit;
-    
-    // HÄR VAR FELET! Den hämtade temp från fel punkt. Nu hämtar den från punkt 4 (Cold Crash)
-    document.getElementById('val-t4').innerText = profilePoints[4].y.toFixed(1); 
+    const p = profilePoints;
+    const unit = '°' + currentTempUnit;
 
-    // Uppdatera Dagar
-    document.getElementById('val-d2').innerText = Math.round(profilePoints[1].x); // Slut Primary
-    document.getElementById('val-d3').innerText = Math.round(profilePoints[2].x); // Start Cleanup
-    document.getElementById('val-d4').innerText = Math.round(profilePoints[4].x); // Slut Cold Crash
-    
-    // Slut Condition är nu punkt 5
-    const conditionElement = document.getElementById('val-d5');
-    if (conditionElement) conditionElement.innerText = Math.round(profilePoints[5].x);
+    // 1. Uppdatera Pitch
+    if(document.getElementById('val-t1')) {
+        document.getElementById('val-t1').innerText = p[0].y.toFixed(1) + unit;
+    }
 
-    // Torrhumling
+    // 2. PRIMARY (Smart logik för Free Rise vs Hold)
+    const primContainer = document.getElementById('val-d2')?.parentElement;
+    if (primContainer) {
+        if (Math.abs(p[1].y - p[0].y) < 0.2) {
+            primContainer.innerHTML = `Hold until Day <span id="val-d2" style="font-weight:bold;">${Math.round(p[1].x)}</span>`;
+        } else {
+            const action = p[1].y > p[0].y ? "Free rise to" : "Ramp down to";
+            primContainer.innerHTML = `${action} ${p[1].y.toFixed(1)}${unit} by Day <span id="val-d2" style="font-weight:bold;">${Math.round(p[1].x)}</span>`;
+        }
+    }
+
+    // 3. CLEANUP (Smart logik)
+    const cleanContainer = document.getElementById('val-d3')?.parentElement;
+    if (cleanContainer) {
+        if (Math.abs(p[2].y - p[1].y) < 0.2) {
+            cleanContainer.innerHTML = `Hold at ${p[2].y.toFixed(1)}${unit} until Day <span id="val-d3" style="font-weight:bold;">${Math.round(p[2].x)}</span>`;
+        } else {
+            cleanContainer.innerHTML = `Reach ${p[2].y.toFixed(1)}${unit} by Day <span id="val-d3" style="font-weight:bold;">${Math.round(p[2].x)}</span>`;
+        }
+    }
+
+    // 4. COLD CRASH (Smart logik)
+    const crashContainer = document.getElementById('val-d4')?.parentElement;
+    if (crashContainer) {
+        if (Math.abs(p[4].y - p[3].y) < 0.2) {
+             crashContainer.innerHTML = `Hold at ${p[4].y.toFixed(1)}${unit} until Day <span id="val-d4" style="font-weight:bold;">${Math.round(p[4].x)}</span>`;
+        } else {
+             crashContainer.innerHTML = `Drop to ${p[4].y.toFixed(1)}${unit} by Day <span id="val-d4" style="font-weight:bold;">${Math.round(p[4].x)}</span>`;
+        }
+    }
+
+    // 5. CONDITIONING
+    const condContainer = document.getElementById('val-d5')?.parentElement;
+    if (condContainer) {
+        condContainer.innerHTML = `Hold until Day <span id="val-d5" style="font-weight:bold;">${Math.round(p[5].x)}</span>`;
+    }
+
+    // 6. ACTION MARKERS (Humle etc)
     if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
         const hopVal = document.getElementById('hop-day-val');
         if (hopVal) hopVal.innerText = dryHopData.day.toFixed(1);
@@ -1249,8 +1277,7 @@ function initLabChart() {
 
             profilePoints[dragIndex] = { x: xVal, y: yVal };
 
-            if (dragIndex === 0) profilePoints[1].y = yVal;
-            if (dragIndex === 1) profilePoints[0].y = yVal;
+         // Punkt 0 och 1 (Pitch/Primary) får nu ha olika Y-värden!
             if (dragIndex === 2) profilePoints[3].y = yVal;
             if (dragIndex === 3) profilePoints[2].y = yVal;
             if (dragIndex === 4) profilePoints[5].y = yVal;
