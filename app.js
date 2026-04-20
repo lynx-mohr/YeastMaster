@@ -2420,10 +2420,14 @@ window.loadProfileIntoLab = function(strainName, profileName) {
     let shortName = profileName.replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '_').substring(0, 8).toUpperCase();
     if(nameInput) nameInput.value = shortName;
 
-    // Leta upp rätt jäst i rullistan (Vi söker på namnet)
+// Leta upp rätt jäst i rullistan
     if (yeastInput) {
+        let targetSearch = (fullYeastName || strainName).toUpperCase();
         for (let i = 0; i < yeastInput.options.length; i++) {
-            if (yeastInput.options[i].text.includes(strainName) || strainName.includes(yeastInput.options[i].text)) {
+            let optText = yeastInput.options[i].text.toUpperCase();
+            
+            // Nu letar vi efter det exakta namnet vi fick från kortet!
+            if (optText === targetSearch || optText.includes(strainName.toUpperCase()) || strainName.toUpperCase().includes(optText)) {
                 yeastInput.selectedIndex = i;
                 break;
             }
@@ -2635,8 +2639,7 @@ function openYeastModal(yeast) {
                     if (steps[1][1] === steps[0][1]) { profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Hold until Day ${steps[1][0]}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Reach ${steps[1][1].toFixed(1)}°C by Day ${steps[1][0]}</span></div>`; }
                     if (steps[2][1] >= steps[1][1]) { let text = steps[2][1] > steps[1][1] ? `Rise to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}` : `Hold until Day ${steps[2][0]}`; profileListHtml += `<div class="summary-row"><span class="label">Cleanup</span><span class="value">${text}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}</span></div>`; }
                     if (steps[3][1] < steps[2][1]) { profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[3][1].toFixed(1)}°C by Day ${steps[3][0]}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Condition</span><span class="value">Hold until Day ${steps[3][0]}</span></div>`; }
-                        profileListHtml += `<button class="btn-secondary" style="width: 100%; margin-top: 15px; border-color: var(--accent-color); color: var(--accent-color);" onclick="loadProfileIntoLab('${targetStrainName}', '${prof.p}')">✏️ EDIT IN PROFILER</button>`;
-                    
+                        profileListHtml += `<button class="btn-secondary" style="width: 100%; margin-top: 15px; border-color: var(--accent-color); color: var(--accent-color);" onclick="loadProfileIntoLab('${targetStrainName}', '${prof.p}', '${yeast.name}')">✏️ EDIT IN PROFILER</button>`;
                     profileListHtml += `</div>`; 
                 });
                 profileListHtml += `</div>`; detailedText += profileListHtml; 
