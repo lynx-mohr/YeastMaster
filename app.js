@@ -5640,9 +5640,7 @@ window.startLibraryTour = function() {
     tooltip.style.lineHeight = '1.4';
     tooltip.style.textAlign = 'center';
 
-// 3. Definiera Stegen (Utan krockande scroll-kommandon!)
-// 3. Definiera Stegen
-    libTourSteps = [
+libTourSteps = [
         // Steg 1: Intro
         {
             selector: '.yeast-card:first-child',
@@ -5665,16 +5663,14 @@ window.startLibraryTour = function() {
                 }
             }
         },
-        // --- NYTT STEG 3: Ligg kvar, men byt text ---
+        // Steg 3: Ligg kvar, men byt text
         {
             selector: '#yeast-info-modal .hw-profile-btn',
             text: 'Click to expand the profile to see the temperature steps!',
             alignLeft: true,
-            action: () => {
-                // Gör inget speciellt, vi byter bara texten i rutan!
-            }
+            action: () => {}
         },
-// --- STEG 4: Fäll ut och peka på Edit-knappen ---
+        // Steg 4: Fäll ut och peka på Edit-knappen
         {
             selector: '#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]',
             text: 'Want to tweak a profile? Click "Edit in Profiler" to add Dry Hop or Racking alarms!',
@@ -5689,38 +5685,78 @@ window.startLibraryTour = function() {
                 }, 150);
             }
         },
-// Steg: Teleportera till fejk-profilern
+
+        // --- STEG 5: DEN ÄKTA GRAFEN ---
         {
-            selector: '#tour-fake-profiler h3',
-            text: 'Welcome to The Profiler! Here you can tweak the curve and set your custom alarms.',
+            selector: '#lab-chart',
+            text: 'Welcome to The Profiler! Here you can visually drag the points to tweak the fermentation curve.',
             action: () => {
-                createTourMagic(); // Bygg kulissen
-                closeYeastModal();
-                document.getElementById('tour-fake-profiler').style.display = 'flex';
+                if (typeof closeYeastModal === 'function') closeYeastModal();
+                document.body.style.overflow = 'hidden'; 
+                if (typeof showView === 'function') showView('lab');
+                window.scrollTo({ top: 0, behavior: 'instant' });
+
+                // Ge fliken tid att synas innan vi ber Chart.js att rita
+                setTimeout(() => {
+                    const yeast = yeastStrains.find(y => y.id === 'us-05');
+                    if (yeast && typeof loadProfileIntoLab === 'function') {
+                        let firstProfileName = "Standard / Low Ester"; 
+                        if (typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
+                            const profiles = yeastDatabase.yeasts.filter(p => p.s === "US-05");
+                            if (profiles.length > 0) firstProfileName = profiles[0].p;
+                        }
+                        
+                        loadProfileIntoLab("US-05", firstProfileName, yeast.name);
+
+                        // DEN KIRURGISKA LÖSNINGEN:
+                        if (typeof labChart !== 'undefined' && labChart !== null) {
+                            labChart.resize(); // Läs av den nya fönsterstorleken
+                            labChart.update('none'); // Rita
+                        }
+                        if (typeof updateSummaryText === 'function') updateSummaryText();
+                    }
+                }, 300); 
             }
         },
-        // Steg: Visa Dry Hops / Rack
+        
+        // --- STEG 6: TÄND LARMEN ---
         {
-            selector: '#fake-hop-btn',
-            text: 'Set your alarms for Dry hops and racking! They will show up on your timeline.',
+            selector: '#btn-add-hops',
+            text: 'Set your alarms for Dry hops and racking! They will show up on your timeline and alert you.',
             alignLeft: true,
             action: () => {
-                document.getElementById('fake-hop-line').style.display = 'block';
-                document.getElementById('fake-rack-line').style.display = 'block';
-                document.getElementById('fake-hop-text').style.display = 'block';
-                document.getElementById('fake-rack-text').style.display = 'block';
+                // Använd dina egna funktioner för att slå på larmen (om de är avstängda)
+                if (typeof dryHopData !== 'undefined' && !dryHopData.enabled) toggleDryHopLine();
+                if (typeof rackDumpData !== 'undefined' && !rackDumpData.enabled) toggleRackDumpLine();
             }
         },
-        // Steg: Tillbaka till biblioteket
+        // --- STEG 7: TILLBAKA TILL BIBLIOTEKET ---
         {
             selector: 'button[onclick*="openAddStrainModal"]',
             text: 'Now you are back! Use the House Bank to save your own unique captures.',
             action: () => {
-                document.getElementById('tour-fake-profiler').style.display = 'none';
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                // Stäng av larmen igen
+                if (typeof dryHopData !== 'undefined' && dryHopData.enabled) toggleDryHopLine();
+                if (typeof rackDumpData !== 'undefined' && rackDumpData.enabled) toggleRackDumpLine();
+                
+                if (typeof showView === 'function') showView('library');
+                
+                setTimeout(() => {
+                    const targetBtn = document.querySelector('button[onclick*="openAddStrainModal"]');
+                    if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 200);
+            }
+        },
+        // Steg 8: Avslut
+        {
+            selector: '.library-header h2',
+            text: 'Tour ended! You are now ready to master the Yeast Library. 🍻 Click anywhere to finish.',
+            action: () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
     ];
+    
 
     currentLibStep = -1;
     overlay.onclick = window.nextLibraryTourStep;
