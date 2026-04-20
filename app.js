@@ -905,7 +905,7 @@ const dryHopPlugin = {
 // --- DATA-TILLSTÅND FÖR RACK/DUMP ---
 let rackDumpData = {
     enabled: false,
-    day: 8.0, 
+    day: 9.0, // <-- Ändrad till 9.0 (1 dag in i Condition)
     isDragging: false,
     color: '#F2994A' // Sekundär färg (Orange/Guld)
 };
@@ -5719,13 +5719,15 @@ libTourSteps = [
             }
         },
 
-        // --- STEG 6: TÄND LARMEN ---
+     // --- STEG 6: TÄND LARMEN ---
         {
-            selector: '#btn-add-hops',
+            selector: '#lab-chart', // <-- Pekar nu på grafen, så rutan hamnar centrerad precis under!
             text: 'Set your alarms for Dry hops and racking! They will show up on your timeline and alert you.',
-            alignLeft: true,
             action: () => {
-                // Använd dina egna funktioner för att slå på larmen (om de är avstängda)
+                // Tvinga racking-linjen till dag 9.0 för just denna demo-profil
+                if (typeof rackDumpData !== 'undefined') rackDumpData.day = 9.0;
+                
+                // Tänd dina äkta linjer!
                 if (typeof dryHopData !== 'undefined' && !dryHopData.enabled) toggleDryHopLine();
                 if (typeof rackDumpData !== 'undefined' && !rackDumpData.enabled) toggleRackDumpLine();
             }
