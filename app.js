@@ -280,20 +280,36 @@ if (!user && !activeDeviceId) {
             document.querySelector('.beer-temp').setAttribute('data-text', safeBeerTemp);
             document.getElementById('air-temp-val').innerText = safeAirTemp;
 
-            // 2. Info (Yeast & Profile)
-      let displayStrain = (latest.strain || "---").toUpperCase();
-let displayProfile = (latest.profile || "---").toUpperCase();
+// 2. Info (Yeast & Profile)
+            let displayStrain = (latest.strain || "---").toUpperCase();
+            let displayProfile = (latest.profile || "---").toUpperCase();
 
-            // Om det är en custom, flytta stjärnan till profilen istället
-            if (displayStrain.startsWith("CUSTOM (") && displayStrain.endsWith(")")) {
-                displayStrain = displayStrain.replace("CUSTOM (", "").replace(")", "");
-                displayProfile = "★ " + displayProfile;
+            // Om kylen skickar en vanlig asterisk (*), uppgradera den till en snygg stjärna i webben
+            if (displayProfile.startsWith("* ")) {
+                displayProfile = displayProfile.replace("* ", "★ ");
             }
 
+            // 1. Fånga det gamla "CUSTOM"-formatet (Fallback)
+            if (displayStrain.startsWith("CUSTOM (") && displayStrain.endsWith(")")) {
+                displayStrain = displayStrain.replace("CUSTOM (", "").replace(")", "");
+                if (!displayProfile.startsWith("★ ")) displayProfile = "★ " + displayProfile;
+            }
+
+            // 2. Leta efter stjärnor/asterisker i jästnamnet och flytta ner dem!
+            if (displayStrain.startsWith("* ") || displayStrain.startsWith("★ ")) {
+                displayStrain = displayStrain.replace("* ", "").replace("★ ", ""); 
+                
+                if (!displayProfile.startsWith("★ ")) {
+                    displayProfile = "★ " + displayProfile;
+                }
+            }
+
+            // Skriv ut Jäst (i svarta boxen)
             const strainValEl = document.getElementById('strain-val');
             strainValEl.innerText = displayStrain;
             strainValEl.style.fontSize = displayStrain.length > 12 ? "0.8em" : "";
 
+            // Skriv ut Profil (under boxen)
             const profileValEl = document.getElementById('profile-val');
             profileValEl.innerText = displayProfile;
             
@@ -2961,7 +2977,7 @@ selectedStrains.forEach(id => {
                         let baseStrainFull = deviceProfile.p; // "Wyeast 1084 Irish Ale"
                         
                      deviceProfile.s = formatOledName(baseStrainFull); // Blir "Scot. Ale"
-deviceProfile.p = "★ " + customName.substring(0, 10); // Blir "★ PELLE"
+deviceProfile.p = "* " + customName.substring(0, 10); // Använd vanlig asterisk för OLED!
                         
                         profilesToSend.push(deviceProfile);
                     });
