@@ -5674,30 +5674,49 @@ window.startLibraryTour = function() {
                 // Gör inget speciellt, vi byter bara texten i rutan!
             }
         },
-        // --- NYTT STEG 4: Fäll ut och peka på Edit-knappen ---
+// --- STEG 4: Fäll ut och peka på Edit-knappen ---
         {
             selector: '#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]',
             text: 'Want to tweak a profile? Click "Edit in Profiler" to add Dry Hop or Racking alarms!',
             action: () => {
-                // 1. Klicka upp profilen automatiskt
                 const firstProfileBtn = document.querySelector('#yeast-info-modal .hw-profile-btn');
                 if (firstProfileBtn && !firstProfileBtn.classList.contains('active')) {
                     firstProfileBtn.click(); 
                 }
-                
-                // 2. Rulla ner till edit-knappen inuti modalen
                 setTimeout(() => {
                     const targetBtn = document.querySelector('#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]');
                     if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 150);
             }
         },
-        // --- TEMPORÄRT AVSLUT ---
+        // --- NYTT STEG 5: Hoppa in i The Profiler ---
         {
-            selector: '.library-header h2',
-            text: 'Etapp 1 klar! Nästa steg blir att hoppa in i The Profiler. Klicka för att avsluta.',
+            selector: '#lab-chart', // Kontrollera att ditt diagram-id är #lab-chart
+            text: 'Welcome to The Profiler! Here you can drag the points to adjust the curve and set your custom alarms.',
             action: () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                // 1. Stäng modalen
+                if (typeof closeYeastModal === 'function') closeYeastModal();
+                
+                // 2. Tvinga fönstret att vara låst (eftersom closeYeastModal kan låsa upp det)
+                document.body.style.overflow = 'hidden'; 
+                
+                // 3. Byt till lab-vyn (Profiler)
+                if (typeof showView === 'function') {
+                    showView('lab');
+                }
+            }
+        },
+        // --- STEG 6: Tillbaka till biblioteket och visa House Bank ---
+        {
+            selector: 'button[onclick*="openAddStrainModal"]',
+            text: 'Finally, use the House Bank to save your own unique captures or house strains!',
+            action: () => {
+                if (typeof showView === 'function') showView('library');
+                
+                setTimeout(() => {
+                    const targetBtn = document.querySelector('button[onclick*="openAddStrainModal"]');
+                    if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
             }
         }
     ];
