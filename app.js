@@ -5689,48 +5689,39 @@ window.startLibraryTour = function() {
                 }, 150);
             }
         },
-        // --- NYTT STEG 5: Hoppa in i The Profiler ---
-// --- STEG 5: Hoppa in i The Profiler (Den robusta metoden) ---
+
+// Steg: Teleportera till fejk-profilern
         {
-            selector: '#lab-chart', 
-            text: 'Welcome to The Profiler! Here you can drag the points to adjust the curve and set your custom alarms.',
+            selector: '#tour-fake-profiler h3',
+            text: 'Welcome to The Profiler! Here you can tweak the curve and set your custom alarms.',
             action: () => {
-                // 1. Stäng modalen
-                if (typeof closeYeastModal === 'function') closeYeastModal();
-                
-                // 2. Byt vy - Vi testar att köra din flik-logik
-                if (typeof showView === 'function') showView('lab');
-
-                // 3. VÄNTA – precis som med fejk-kortet behöver DOMen landa
-                setTimeout(() => {
-                    // Hitta US-05 datan
-                    const yeast = yeastStrains.find(y => y.id === 'us-05');
-                    
-                    // Försök hitta dina fält baserat på deras typ om ID saknas
-                    const nameInput = document.querySelector('input[placeholder*="JUICEBMB"]') || 
-                                      document.querySelector('input[id*="name"]');
-                    const strainSelect = document.querySelector('select[id*="strain"]') || 
-                                         document.querySelector('select');
-
-                    if (yeast) {
-                        // Tvinga in texten i fälten manuellt (precis som fejk-kortet)
-                        if (nameInput) nameInput.value = "US-05 Standard";
-                        if (strainSelect) strainSelect.value = yeast.id;
-
-                        // Trigga din officiella laddnings-funktion
-                        if (typeof loadProfileIntoLab === 'function') {
-                            loadProfileIntoLab(yeast.id, 0); 
-                        }
-                    }
-                    
-                    // Tvinga fönstret att rulla upp så vi ser grafen
-                    window.scrollTo(0, 0);
-                    
-                    // En sista "spark" för att få grafen att rita om sig
-                    window.dispatchEvent(new Event('resize'));
-                }, 250); 
+                createTourMagic(); // Bygg kulissen
+                closeYeastModal();
+                document.getElementById('tour-fake-profiler').style.display = 'flex';
             }
         },
+        // Steg: Visa Dry Hops / Rack
+        {
+            selector: '#fake-hop-btn',
+            text: 'Set your alarms for Dry hops and racking! They will show up on your timeline.',
+            alignLeft: true,
+            action: () => {
+                document.getElementById('fake-hop-line').style.display = 'block';
+                document.getElementById('fake-rack-line').style.display = 'block';
+                document.getElementById('fake-hop-text').style.display = 'block';
+                document.getElementById('fake-rack-text').style.display = 'block';
+            }
+        },
+        // Steg: Tillbaka till biblioteket
+        {
+            selector: 'button[onclick*="openAddStrainModal"]',
+            text: 'Now you are back! Use the House Bank to save your own unique captures.',
+            action: () => {
+                document.getElementById('tour-fake-profiler').style.display = 'none';
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }
+        }
+
         // --- STEG 6: Tillbaka till biblioteket och visa House Bank ---
         {
             selector: 'button[onclick*="openAddStrainModal"]',
@@ -5828,3 +5819,29 @@ window.nextLibraryTourStep = function(e) {
         }
     }, 100);
 };
+
+function createTourMagic() {
+    if (document.getElementById('tour-fake-profiler')) return;
+    const fake = document.createElement('div');
+    fake.id = 'tour-fake-profiler';
+    fake.style.cssText = `position:fixed;top:0;left:0;width:100vw;height:100vh;background:#111;z-index:9999990;display:none;flex-direction:column;align-items:center;padding:20px;box-sizing:border-box;color:white;font-family:sans-serif;`;
+    fake.innerHTML = `
+        <div style="width:100%;max-width:500px;">
+            <h3>The Profiler</h3>
+            <div style="display:flex;gap:10px;margin-bottom:20px;">
+                <input type="text" value="US-05 Standard ★" style="flex:1;background:#000;border:1px solid #444;color:#fff;padding:8px;" disabled>
+                <select style="flex:1;background:#000;border:1px solid #444;color:#fff;" disabled><option>SafAle US-05</option></select>
+            </div>
+            <div style="width:100%;height:200px;background:#000;border:1px solid #333;position:relative;margin-bottom:20px;">
+                <svg width="100%" height="100%"><path d="M0 100 L150 100 L250 60 L400 60 L500 180" fill="none" stroke="#8CC63F" stroke-width="2"/></svg>
+                <div id="fake-hop-line" style="position:absolute;top:0;left:60%;width:2px;height:100%;background:#CCFF00;display:none;"></div>
+                <div id="fake-rack-line" style="position:absolute;top:0;left:80%;width:2px;height:100%;background:#FF3300;display:none;"></div>
+            </div>
+            <button id="fake-hop-btn" style="width:100%;background:#000;border:1px solid #CCFF00;color:#CCFF00;padding:10px;margin-bottom:10px;" disabled>+ ADD DRY HOPS</button>
+            <div style="background:#222;padding:10px;font-size:0.8rem;line-height:1.6;">
+                <div style="color:#CCFF00;display:none;" id="fake-hop-text">Dry Hop: Day 5 @ 19°C</div>
+                <div style="color:#FF3300;display:none;" id="fake-rack-text">Racking: Day 8 @ 15°C</div>
+            </div>
+        </div>`;
+    document.body.appendChild(fake);
+}
