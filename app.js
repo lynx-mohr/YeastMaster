@@ -5718,7 +5718,7 @@ libTourSteps = [
                 }, 300); 
             }
         },
-        
+
         // --- STEG 6: TÄND LARMEN ---
         {
             selector: '#btn-add-hops',
@@ -5730,24 +5730,47 @@ libTourSteps = [
                 if (typeof rackDumpData !== 'undefined' && !rackDumpData.enabled) toggleRackDumpLine();
             }
         },
-        // --- STEG 7: TILLBAKA TILL BIBLIOTEKET ---
+       // --- STEG 7: TILLBAKA TILL BIBLIOTEKET & SKAPA FEJK-KORT ---
         {
-            selector: 'button[onclick*="openAddStrainModal"]',
-            text: 'Now you are back! Use the House Bank to save your own unique captures.',
+            selector: '#tour-fake-custom-card',
+            text: 'When saved, your modded profile lands at the bottom of the library with a ★ star, ready to be synced!',
             action: () => {
-                // Stäng av larmen igen
+                // 1. Stäng av larmen i labbet
                 if (typeof dryHopData !== 'undefined' && dryHopData.enabled) toggleDryHopLine();
                 if (typeof rackDumpData !== 'undefined' && rackDumpData.enabled) toggleRackDumpLine();
                 
+                // 2. Byt vy tillbaka till biblioteket
                 if (typeof showView === 'function') showView('library');
                 
+                // 3. Skapa fejk-kortet (som använder din riktiga CSS för custom-profiles!)
+                let fakeCard = document.getElementById('tour-fake-custom-card');
+                if (!fakeCard) {
+                    fakeCard = document.createElement('div');
+                    fakeCard.id = 'tour-fake-custom-card';
+                    fakeCard.className = 'yeast-card custom-profile'; 
+                    fakeCard.innerHTML = '<h3>★ US-05 Standard</h3>';
+                    
+                    const grid = document.getElementById('yeast-grid');
+                    if (grid) grid.appendChild(fakeCard);
+                }
+                
+                // 4. Scrolla ner till det nya kortet
                 setTimeout(() => {
-                    const targetBtn = document.querySelector('button[onclick*="openAddStrainModal"]');
-                    if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const fakeCardEl = document.getElementById('tour-fake-custom-card');
+                    if (fakeCardEl) fakeCardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 200);
             }
         },
-        // Steg 8: Avslut
+        // --- STEG 8: HOUSE BANK ---
+        {
+            selector: 'button[onclick*="openAddStrainModal"]',
+            text: 'Finally, use the House Bank to save your own unique captures or house strains!',
+            action: () => {
+                const targetBtn = document.querySelector('button[onclick*="openAddStrainModal"]');
+                if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        },
+        // --- STEG 9: AVSLUT ---
         {
             selector: '.library-header h2',
             text: 'Tour ended! You are now ready to master the Yeast Library. 🍻 Click anywhere to finish.',
