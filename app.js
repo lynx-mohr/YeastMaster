@@ -5695,37 +5695,33 @@ window.startLibraryTour = function() {
             selector: '#lab-chart', 
             text: 'Welcome to The Profiler! Here you can drag the points to adjust the curve and set your custom alarms.',
             action: () => {
-                // 1. Stäng modalen först
+                // 1. Stäng modalen och byt vy direkt
                 if (typeof closeYeastModal === 'function') closeYeastModal();
+                if (typeof showView === 'function') showView('lab');
                 
-                // 2. Tvinga scroll-lås
-                document.body.style.overflow = 'hidden'; 
-
-                // 3. HITTA JÄSTEN OCH LADDA DEN PÅ RIKTIGT
-                const yeast = yeastStrains.find(y => y.id === 'us-05');
-                if (yeast) {
-                    // Vi sätter US-05 som vald jäst i din globala variabel (om du har en sån)
-                    // och triggar din laddningsfunktion för Ale-profilen (index 0)
-                    if (typeof loadProfileIntoLab === 'function') {
-                        loadProfileIntoLab(yeast.id, 0); 
-                    }
-
-                    // 4. Uppdatera dropdowns och titlar manuellt för säkerhets skull
-                    const strainSelect = document.getElementById('lab-strain-select');
-                    if (strainSelect) strainSelect.value = yeast.id;
-                    
-                    const profileNameInput = document.getElementById('lab-profile-name');
-                    if (profileNameInput) profileNameInput.value = "US-05 Standard";
-                }
-
-                // 5. Byt till lab-vyn
-                if (typeof showView === 'function') {
-                    showView('lab');
-                }
-                
-                // 6. FIX: Tvinga skärmen att rulla upp till toppen i den nya vyn 
-                // så att "fingret" inte scrollar bort grafen direkt
+                // 2. Tvinga scroll till toppen så vi ser grafen
                 window.scrollTo({ top: 0, behavior: 'instant' });
+
+                // 3. VÄNTA 100ms – Detta ger webbläsaren tid att rendera Profiler-vyn
+                setTimeout(() => {
+                    const yeast = yeastStrains.find(y => y.id === 'us-05');
+                    if (yeast) {
+                        // Kör din laddningsfunktion
+                        if (typeof loadProfileIntoLab === 'function') {
+                            loadProfileIntoLab(yeast.id, 0); 
+                        }
+
+                        // Uppdatera dropdown och namn manuellt som backup
+                        const strainSelect = document.getElementById('lab-strain-select');
+                        if (strainSelect) strainSelect.value = yeast.id;
+                        
+                        const profileNameInput = document.getElementById('lab-profile-name');
+                        if (profileNameInput) profileNameInput.value = yeast.name + " Standard";
+                        
+                        // Om du har en global variabel som håller koll på vald jäst i labbet, sätt den här:
+                        // window.currentLabYeast = yeast; 
+                    }
+                }, 100); 
             }
         },
         // --- STEG 6: Tillbaka till biblioteket och visa House Bank ---
