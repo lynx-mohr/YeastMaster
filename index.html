@@ -118,43 +118,47 @@
     </section>
 
 <section id="view-library" style="display: none;">
-   <div class="library-header">
-<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-    <h1 style="margin: 0;">Yeast Library</h1>
-    <div class="info-icon" onclick="toggleLibraryInfo(this)">i</div>
-    
-    <div class="sync-status" style="margin-left: auto;">Selected: <span id="fav-count">0</span>/10</div>
-</div>
-
-<div id="library-info-box" class="floating-info-box" style="display: none;">
-    Browse the collection of yeast strains. <br>
-    <strong>Double-click</strong> (or long-press) a card to read about them and the Yeastmaster profiles.<br>
-    Select up to 10 favorites and sync them directly to your YeastMaster unit!
-    
-    <button id="btn-library-tour" class="ym-btn-outline" style="margin-top: 15px; width: 100%; border-color: var(--accent-color); color: var(--accent-color); font-size: 0.8rem; padding: 8px;">
-        ✨ TAKE A QUICK TOUR
-    </button>
-</div>
-
-<div style="margin-bottom: 20px;">
-    <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')..." style="width: 100%;">
-</div>
+    <div class="library-header">
         
-<div class="yeast-grid" id="yeast-grid">
-</div>
-
-<button onclick="openAddStrainModal()" class="btn-secondary" style="width: 100%; margin-top: 15px; margin-bottom: 20px; padding: 10px; font-size: 0.8rem; border-color: var(--accent-color); color: var(--accent-color);">
-    + ADD HOUSE STRAIN / WILD CAPTURE
-</button>
+        <div style="position: relative; display: flex; align-items: center; gap: 15px; margin-bottom: 5px;">
+            <h2 style="margin: 0;">Yeast Library</h2>
             
-        <div style="padding: 0 20px; margin-top: 20px;">
-            <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">TARGET DEVICE</label>
-            <select id="sync-target-device" style="width: 100%; background: #000; border: 2px solid #444; color: var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; font-weight: 800; outline: none; margin-bottom: 10px;">
-                <option value="">Laddar enheter...</option>
-            </select>
-            <button id="sync-btn" class="sync-button" onclick="syncToSelectedDevice()">SYNC TO SELECTED DEVICE</button>
+            <button onclick="toggleLibraryInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; transition: all 0.3s ease; padding: 0;">
+                i
+            </button>
+
+            <div class="sync-status" style="margin-left: auto; margin-bottom: 0;">Selected: <span id="fav-count">0</span>/10</div>
         </div>
-    </section> 
+
+        <div id="library-info-box" class="floating-info-box" style="display: none;">
+            Browse the collection of yeast strains. <br>
+            <strong>Double-click</strong> (or long-press) a card to read about them and the Yeastmaster profiles.<br>
+            Select up to 10 favorites and sync them directly to your YeastMaster unit!
+            
+            <button id="btn-library-tour" class="ym-btn-outline" style="margin-top: 15px; width: 100%; border-color: var(--accent-color); color: var(--accent-color); font-size: 0.8rem; padding: 8px;">
+                ✨ TAKE A QUICK TOUR
+            </button>
+        </div>
+  
+        <div style="margin-bottom: 20px; margin-top: 10px;">
+            <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')..." style="width: 100%;">
+        </div>
+
+    </div> <div class="yeast-grid" id="yeast-grid">
+    </div>
+
+    <button onclick="openAddStrainModal()" class="btn-secondary" style="width: 100%; margin-top: 15px; margin-bottom: 20px; padding: 10px; font-size: 0.8rem; border-color: var(--accent-color); color: var(--accent-color);">
+        + ADD HOUSE STRAIN / WILD CAPTURE
+    </button>
+            
+    <div style="padding: 0 20px; margin-top: 20px;">
+        <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">TARGET DEVICE</label>
+        <select id="sync-target-device" style="width: 100%; background: #000; border: 2px solid #444; color: var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; font-weight: 800; outline: none; margin-bottom: 10px;">
+            <option value="">Laddar enheter...</option>
+        </select>
+        <button id="sync-btn" class="sync-button" onclick="syncToSelectedDevice()">SYNC TO SELECTED DEVICE</button>
+    </div>
+</section>
 
 <section id="view-lab" style="display: none;">
 <div class="library-header">
