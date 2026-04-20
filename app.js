@@ -5574,3 +5574,191 @@ function checkActionAlerts(currentDay, strainName, profileName) {
     }
 }
 
+// ==========================================
+// --- YEAST LIBRARY TOUR (PREMIUM VERSION) ---
+// ==========================================
+let currentLibStep = -1;
+let libTourSteps = [];
+window.isLibraryTourActive = false; 
+
+// --- 1. PREMIUM FRYS-FUNKTIONER (Inget hopp åt höger!) ---
+function lockTourScroll(e) { e.preventDefault(); }
+function lockTourKeys(e) {
+    // Hindra scrollning med piltangenter och mellanslag
+    if(['Space', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(e.code)) {
+        e.preventDefault();
+    }
+}
+
+function disableAllScrolling() {
+    // Vi gömmer INTE scroll-listen (så inget hoppar åt höger), 
+    // men vi blockerar alla fysiska försök att scrolla!
+    window.addEventListener('wheel', lockTourScroll, { passive: false });
+    window.addEventListener('touchmove', lockTourScroll, { passive: false });
+    window.addEventListener('keydown', lockTourKeys, { passive: false });
+}
+
+function enableAllScrolling() {
+    window.removeEventListener('wheel', lockTourScroll);
+    window.removeEventListener('touchmove', lockTourScroll);
+    window.removeEventListener('keydown', lockTourKeys);
+}
+// ---------------------------------------------------------
+
+window.startLibraryTour = function() {
+    window.isLibraryTourActive = true;
+    disableAllScrolling(); // FRYS SKÄRMEN!
+
+    // 1. Stäng inforutan
+    const infoBox = document.getElementById('library-info-box');
+    if (infoBox) infoBox.style.display = 'none';
+
+    const iBtn = document.querySelector('.info-icon');
+    if (iBtn) {
+        iBtn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)';
+        iBtn.style.color = '#8CC63F';
+    }
+
+    // 2. Förbered Overlay och Tooltip
+    const overlay = document.getElementById('demo-overlay');
+    const tooltip = document.getElementById('demo-tour-tooltip');
+    if (!overlay || !tooltip) return;
+
+    // Garantera att mörkret täcker hela skärmen och ligger LÄNGST FRAM
+    overlay.style.display = 'block';
+    overlay.style.backgroundColor = 'transparent';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.zIndex = '9999998'; 
+    tooltip.style.zIndex = '9999999'; 
+
+    tooltip.style.width = '280px';
+    tooltip.style.whiteSpace = 'normal';
+    tooltip.style.lineHeight = '1.4';
+    tooltip.style.textAlign = 'center';
+
+// 3. Definiera Stegen (Utan krockande scroll-kommandon!)
+    libTourSteps = [
+        {
+            selector: '.yeast-card:first-child',
+            text: 'Single-click a card to select it for your device. Double-click to open details!'
+            // Tourens radar sköter scrollningen automatiskt nu!
+        },
+        {
+            selector: '#yeast-info-modal .hw-profile-btn',
+            text: 'Here are the hardware profiles. Click on them to see the profiles temperature steps.',
+            alignLeft: true,
+            action: () => {
+                // Öppna US-05 så vi garanterat har profiler att visa
+                const yeast = yeastStrains.find(y => y.id === 'us-05') || yeastStrains.find(y => !y.isCustom);
+                if (yeast) openYeastModal(yeast); 
+            }
+        },
+        {
+            selector: '#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]',
+            text: 'Want to tweak a profile? Click "Edit in Profiler". Modded profiles get a ★ star!',
+            action: () => {
+                // Rulla ner snyggt inuti jästkortet så Edit-knappen syns
+                const targetBtn = document.querySelector('#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]');
+                if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        },
+        {
+            selector: 'button[onclick*="openAddStrainModal"]',
+            text: 'Use this button to add your own wild captures or house strains to your permanent House Bank!',
+            action: () => {
+                closeYeastModal(); // Stäng modalen. Touren scrollar sedan ner automatiskt!
+            }
+        },
+        {
+            selector: '.library-header h2',
+            text: 'Tour ended! You are now ready to master the Yeast Library. 🍻 Click anywhere to finish.'
+            // Radar-funktionen scrollar oss snyggt tillbaka till toppen!
+        }
+    ];
+
+    currentLibStep = -1;
+    overlay.onclick = window.nextLibraryTourStep;
+    window.nextLibraryTourStep();
+};
+
+window.nextLibraryTourStep = function(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    currentLibStep++;
+    const overlay = document.getElementById('demo-overlay');
+    const tooltip = document.getElementById('demo-tour-tooltip');
+
+    // Är touren slut?
+    if (currentLibStep >= libTourSteps.length) {
+        if(overlay) {
+            overlay.style.display = 'none';
+            overlay.style.zIndex = ''; 
+        }
+        if(tooltip) {
+            tooltip.style.display = 'none';
+            tooltip.style.zIndex = ''; 
+            tooltip.style.width = 'auto'; 
+        }
+        closeYeastModal();
+        enableAllScrolling(); // SLÄPP SKÄRMEN FRI!
+        window.isLibraryTourActive = false; 
+        overlay.onclick = null;
+        return;
+    }
+
+    const step = libTourSteps[currentLibStep];
+
+    if (step.action) step.action();
+    if (tooltip) tooltip.style.display = 'none';
+
+    // Smart vänteloop: Leta efter knappen och scrolla till den
+    let attempts = 0;
+    const findTarget = setInterval(() => {
+        attempts++;
+        const target = document.querySelector(step.selector);
+
+        // Kolla att knappen existerar och syns på skärmen
+        if (target && target.offsetHeight > 0) {
+            clearInterval(findTarget); 
+
+            // Scrolla fram målet mjukt
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Vänta 400ms så att scroll-animationen hinner bli HELT klar
+            setTimeout(() => {
+                tooltip.style.display = 'block';
+                document.getElementById('demo-tour-text').innerText = step.text;
+
+                const rect = target.getBoundingClientRect();
+                const topPos = rect.bottom + window.scrollY + 10;
+                
+                // Justera pilen till vänster om 'alignLeft' är aktiverat
+                let leftPos;
+                if (step.alignLeft) {
+                    leftPos = rect.left + window.scrollX + 50; 
+                } else {
+                    leftPos = rect.left + window.scrollX + (rect.width / 2);
+                }
+
+                tooltip.style.top = topPos + 'px';
+                tooltip.style.left = leftPos + 'px';
+
+                tooltip.style.animation = 'none';
+                void tooltip.offsetWidth;
+                tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+            }, 400); // 400ms ger den mjuka scrollen tid att stanna
+            
+        } else if (attempts > 20) {
+            clearInterval(findTarget);
+            console.warn("Tour missed target:", step.selector);
+            window.nextLibraryTourStep();
+        }
+    }, 100);
+};
