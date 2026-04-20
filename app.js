@@ -5763,16 +5763,64 @@ libTourSteps = [
                 }, 200);
             }
         },
-        // --- STEG 8: HOUSE BANK ---
+      // --- STEG 8: HOUSE BANK KNAPPEN ---
         {
             selector: 'button[onclick*="openAddStrainModal"]',
-            text: 'Finally, use the House Bank to save your own unique captures or house strains!',
+            text: 'In the library you have the option to add your own unique captures and wild yeast.',
             action: () => {
                 const targetBtn = document.querySelector('button[onclick*="openAddStrainModal"]');
                 if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         },
-        // --- STEG 9: AVSLUT ---
+        // --- STEG 9: VISA HOUSE STRAIN MODALEN ---
+        {
+            selector: '#modal-yeast-name', 
+            text: 'You can track capture dates, origins, and keep personal lab notes for every wild yeast you find!',
+            action: () => {
+                // Skapa en temporär fake-husjäst som matchar din bild exakt
+                const fakeHouseStrain = {
+                    id: "tour-fake-house-strain",
+                    name: "Wild001",
+                    origin: "Backyard",
+                    captureDate: "2025-04-20", 
+                    temp: "23",
+                    tags: ["Farmhouse", "sour", "House Strain"],
+                    desc: "Decent attenuation. Tried to brew with this 2 times.",
+                    isHouseStrain: true
+                };
+                
+                // Öppna den med din egen funktion!
+                if (typeof openYeastModal === 'function') openYeastModal(fakeHouseStrain);
+            }
+        },
+        // --- STEG 10: TILLBAKA TILL BIBLIOTEKET & VISA KORTET ---
+        {
+            selector: '#tour-fake-house-card',
+            text: 'Your wild captures live safely at the bottom of your library, right next to your modded profiles!',
+            action: () => {
+                // Stäng modalen
+                if (typeof closeYeastModal === 'function') closeYeastModal();
+                
+                // Skapa det visuella fejk-kortet för biblioteket
+                let fakeHouseCard = document.getElementById('tour-fake-house-card');
+                if (!fakeHouseCard) {
+                    fakeHouseCard = document.createElement('div');
+                    fakeHouseCard.id = 'tour-fake-house-card';
+                    fakeHouseCard.className = 'yeast-card house-strain'; 
+                    fakeHouseCard.innerHTML = '<h3>Wild001 🦠</h3>';
+                    
+                    const grid = document.getElementById('yeast-grid');
+                    if (grid) grid.appendChild(fakeHouseCard);
+                }
+                
+                // Scrolla mjukt ner till korten i botten
+                setTimeout(() => {
+                    const fakeHouseCardEl = document.getElementById('tour-fake-house-card');
+                    if (fakeHouseCardEl) fakeHouseCardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 200);
+            }
+        },
+        // --- STEG 11: AVSLUT ---
         {
             selector: '.library-header h2',
             text: 'Tour ended! You are now ready to master the Yeast Library. 🍻 Click anywhere to finish.',
