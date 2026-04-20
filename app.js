@@ -5575,25 +5575,41 @@ function checkActionAlerts(currentDay, strainName, profileName) {
 }
 
 // ==========================================
-// --- YEAST LIBRARY TOUR (ULTIMAT LÅST VERSION) ---
+// --- YEAST LIBRARY TOUR (ULTIMAT LÅST VERSION MED ANTI-HOPP) ---
 // ==========================================
 let currentLibStep = -1;
 let libTourSteps = [];
 window.isLibraryTourActive = false; // Spärr för Live Demon
 
-// Frys-funktioner för att stoppa all scrollning
+// Frys-funktioner för att stoppa all scrollning (Med Anti-Hopp logik)
 function lockTourScroll(e) { e.preventDefault(); }
+
+let scrollbarWidth = 0; // Variabel för att minnas bredden
 
 function disableAllScrolling() {
     window.addEventListener('wheel', lockTourScroll, { passive: false });
     window.addEventListener('touchmove', lockTourScroll, { passive: false });
+    
+    // Räkna ut hur bred scroll-listen är
+    scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    
+    // Lägg till en osynlig kudde till höger som är exakt lika bred som scroll-listen
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
+    
+    // Göm scroll-listen
     document.body.style.overflow = 'hidden'; 
 }
 
 function enableAllScrolling() {
     window.removeEventListener('wheel', lockTourScroll);
     window.removeEventListener('touchmove', lockTourScroll);
+    
+    // Ta bort kudden
+    document.body.style.paddingRight = '';
+    
+    // Visa scroll-listen igen
     document.body.style.overflow = '';
+    
     const modal = document.getElementById('yeast-info-modal');
     if (modal) modal.style.overflowY = 'auto';
 }
@@ -5620,7 +5636,7 @@ window.startLibraryTour = function() {
     overlay.style.display = 'block';
     overlay.style.backgroundColor = 'transparent';
     
-    // FIX 1: Astronomiskt högt Z-index så att Mörkret ALLTID är framför Modalen!
+    // Astronomiskt högt Z-index så att Mörkret ALLTID är framför Modalen!
     overlay.style.zIndex = '9999998'; 
     tooltip.style.zIndex = '9999999'; 
 
@@ -5641,7 +5657,7 @@ window.startLibraryTour = function() {
             text: 'Here are the hardware profiles. Click on them to see the profiles temperature steps.',
             alignLeft: true,
             action: () => {
-                // FIX 2: Tvinga fram US-05 så vi garanterat har hårdvaruprofiler att visa!
+                // Tvinga fram US-05 så vi garanterat har hårdvaruprofiler att visa!
                 const yeast = yeastStrains.find(y => y.id === 'us-05') || yeastStrains.find(y => !y.isCustom);
                 if (yeast) {
                     openYeastModal(yeast); 
@@ -5658,7 +5674,7 @@ window.startLibraryTour = function() {
             selector: '#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]',
             text: 'Want to tweak a profile? Click "Edit in Profiler". Modded profiles get a ★ star!',
             action: () => {
-                // FIX 3: Scrolla ner inuti modalen så att Edit-knappen syns!
+                // Scrolla ner inuti modalen så att Edit-knappen syns!
                 const modal = document.getElementById('yeast-info-modal');
                 const targetBtn = document.querySelector('#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]');
                 if (modal && targetBtn) {
@@ -5673,18 +5689,18 @@ window.startLibraryTour = function() {
             text: 'Use this button to add your own wild captures or house strains to your permanent House Bank!',
             action: () => {
                 closeYeastModal(); 
-                enableAllScrolling(); 
+                enableAllScrolling(); // Släpp skärmen tillfälligt för scroll
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                setTimeout(disableAllScrolling, 500); 
+                setTimeout(disableAllScrolling, 500); // Frys igen när vi är framme
             }
         },
         {
             selector: '.library-header h2',
             text: 'Tour ended! You are now ready to master the Yeast Library. 🍻 Click anywhere to finish.',
             action: () => {
-                enableAllScrolling(); 
+                enableAllScrolling(); // Släpp skärmen tillfälligt för scroll
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                setTimeout(disableAllScrolling, 500); 
+                setTimeout(disableAllScrolling, 500); // Frys igen när vi är framme
             }
         }
     ];
@@ -5716,7 +5732,7 @@ window.nextLibraryTourStep = function(e) {
             tooltip.style.width = 'auto'; 
         }
         closeYeastModal();
-        enableAllScrolling(); 
+        enableAllScrolling(); // Släpp skärmen helt när touren är slut
         window.isLibraryTourActive = false; 
         overlay.onclick = null;
         return;
