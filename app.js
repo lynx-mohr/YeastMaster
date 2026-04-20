@@ -5689,7 +5689,6 @@ window.startLibraryTour = function() {
                 }, 150);
             }
         },
-
 // Steg: Teleportera till fejk-profilern
         {
             selector: '#tour-fake-profiler h3',
@@ -5719,20 +5718,6 @@ window.startLibraryTour = function() {
             action: () => {
                 document.getElementById('tour-fake-profiler').style.display = 'none';
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            }
-        }
-
-        // --- STEG 6: Tillbaka till biblioteket och visa House Bank ---
-        {
-            selector: 'button[onclick*="openAddStrainModal"]',
-            text: 'Finally, use the House Bank to save your own unique captures or house strains!',
-            action: () => {
-                if (typeof showView === 'function') showView('library');
-                
-                setTimeout(() => {
-                    const targetBtn = document.querySelector('button[onclick*="openAddStrainModal"]');
-                    if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 100);
             }
         }
     ];
