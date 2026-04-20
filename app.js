@@ -5690,17 +5690,25 @@ window.startLibraryTour = function() {
             }
         },
         // --- NYTT STEG 5: Hoppa in i The Profiler ---
+// --- STEG 5: Ladda US-05 och hoppa in i The Profiler ---
         {
-            selector: '#lab-chart', // Kontrollera att ditt diagram-id är #lab-chart
+            selector: '#lab-chart', 
             text: 'Welcome to The Profiler! Here you can drag the points to adjust the curve and set your custom alarms.',
             action: () => {
-                // 1. Stäng modalen
+                // 1. Hitta US-05 datan och ladda in den i labbet
+                const yeast = yeastStrains.find(y => y.id === 'us-05');
+                if (yeast && typeof loadProfileIntoLab === 'function') {
+                    // Vi väljer första profilen (t.ex. Ale) och laddar den
+                    loadProfileIntoLab(yeast.id, 0); 
+                }
+
+                // 2. Stäng modalen
                 if (typeof closeYeastModal === 'function') closeYeastModal();
                 
-                // 2. Tvinga fönstret att vara låst (eftersom closeYeastModal kan låsa upp det)
+                // 3. Tvinga scroll-lås (viktigt!)
                 document.body.style.overflow = 'hidden'; 
                 
-                // 3. Byt till lab-vyn (Profiler)
+                // 4. Byt till lab-vyn
                 if (typeof showView === 'function') {
                     showView('lab');
                 }
