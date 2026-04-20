@@ -280,8 +280,26 @@ if (!user && !activeDeviceId) {
             document.querySelector('.beer-temp').setAttribute('data-text', safeBeerTemp);
             document.getElementById('air-temp-val').innerText = safeAirTemp;
 
-            // 2. Info
-            document.getElementById('strain-val').innerText = (latest.strain || "IRISH ALE").toUpperCase();
+// 2. Info (Med smart formatering för långa namn)
+            let displayStrain = (latest.strain || "IRISH ALE").toUpperCase();
+            
+            // Om det är en custom, korta ner det snyggt! (CUSTOM (LONDON III) -> ★ LONDON III)
+            if (displayStrain.startsWith("CUSTOM (") && displayStrain.endsWith(")")) {
+                displayStrain = displayStrain.replace("CUSTOM (", "★ ").replace(")", "");
+            }
+            
+            const strainValEl = document.getElementById('strain-val');
+            strainValEl.innerText = displayStrain;
+            
+            // Krymp texten dynamiskt om den är för lång för den svarta boxen
+            if (displayStrain.length > 14) {
+                strainValEl.style.fontSize = "0.75em";
+            } else if (displayStrain.length > 10) {
+                strainValEl.style.fontSize = "0.85em";
+            } else {
+                strainValEl.style.fontSize = ""; // Standardstorlek
+            }
+
             document.getElementById('profile-val').innerText = latest.profile || "LOW ESTER";
             
             const action = (latest.action || "IDLE").toUpperCase();
@@ -2857,21 +2875,37 @@ function formatOledName(fullName) {
     if (!fullName) return "";
     let shortName = fullName;
     
-    // Regler för vad som ska klippas bort (t.ex. "Wyeast 1084 ")
+    // 1. Om det är en egengjord profil (ex: "Custom (London III)"), plocka ut innanmätet
+    if (shortName.startsWith("Custom (") && shortName.endsWith(")")) {
+        // Skalar bort "Custom (" och ")"
+        shortName = shortName.substring(8, shortName.length - 1);
+        // Lägg till en liten stjärna för att visa att det är ett hemmabygge!
+        shortName = "* " + shortName; 
+    }
+
+    // 2. Regler för vad som ska klippas bort från originalnamnen
     const prefixesToRemove = [
         /Wyeast\s\d+\s/i,       // Tar bort "Wyeast 1084 "
         /WLP\d+\s/i,            // Tar bort "WLP001 "
         /SafAle\s/i,            // Tar bort "SafAle "
         /SafLager\s/i,          // Tar bort "SafLager "
         /Lallemand\s/i,         // Tar bort "Lallemand "
-        /Imperial\s[A-Z0-9]+\s/i // Tar bort "Imperial B45 "
+        /Imperial\s[A-Z0-9]+\s/i, // Tar bort "Imperial B45 "
+        /Omega\s[A-Z0-9-]+\s/i  // Tar bort Omega-prefix
     ];
     
     prefixesToRemove.forEach(regex => {
         shortName = shortName.replace(regex, "");
     });
     
-    return shortName.trim(); // Returnerar t.ex. bara "Irish Ale"
+    shortName = shortName.trim();
+
+    // 3. Brutal nödspärr: Om det fortfarande är mer än 14 tecken, kapa det brutalt.
+    if (shortName.length > 14) {
+        shortName = shortName.substring(0, 13).trim() + ".";
+    }
+    
+    return shortName; 
 }
 
 // ==========================================
