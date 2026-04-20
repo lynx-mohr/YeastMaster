@@ -5695,23 +5695,37 @@ window.startLibraryTour = function() {
             selector: '#lab-chart', 
             text: 'Welcome to The Profiler! Here you can drag the points to adjust the curve and set your custom alarms.',
             action: () => {
-                // 1. Hitta US-05 datan och ladda in den i labbet
-                const yeast = yeastStrains.find(y => y.id === 'us-05');
-                if (yeast && typeof loadProfileIntoLab === 'function') {
-                    // Vi väljer första profilen (t.ex. Ale) och laddar den
-                    loadProfileIntoLab(yeast.id, 0); 
-                }
-
-                // 2. Stäng modalen
+                // 1. Stäng modalen först
                 if (typeof closeYeastModal === 'function') closeYeastModal();
                 
-                // 3. Tvinga scroll-lås (viktigt!)
+                // 2. Tvinga scroll-lås
                 document.body.style.overflow = 'hidden'; 
-                
-                // 4. Byt till lab-vyn
+
+                // 3. HITTA JÄSTEN OCH LADDA DEN PÅ RIKTIGT
+                const yeast = yeastStrains.find(y => y.id === 'us-05');
+                if (yeast) {
+                    // Vi sätter US-05 som vald jäst i din globala variabel (om du har en sån)
+                    // och triggar din laddningsfunktion för Ale-profilen (index 0)
+                    if (typeof loadProfileIntoLab === 'function') {
+                        loadProfileIntoLab(yeast.id, 0); 
+                    }
+
+                    // 4. Uppdatera dropdowns och titlar manuellt för säkerhets skull
+                    const strainSelect = document.getElementById('lab-strain-select');
+                    if (strainSelect) strainSelect.value = yeast.id;
+                    
+                    const profileNameInput = document.getElementById('lab-profile-name');
+                    if (profileNameInput) profileNameInput.value = "US-05 Standard";
+                }
+
+                // 5. Byt till lab-vyn
                 if (typeof showView === 'function') {
                     showView('lab');
                 }
+                
+                // 6. FIX: Tvinga skärmen att rulla upp till toppen i den nya vyn 
+                // så att "fingret" inte scrollar bort grafen direkt
+                window.scrollTo({ top: 0, behavior: 'instant' });
             }
         },
         // --- STEG 6: Tillbaka till biblioteket och visa House Bank ---
