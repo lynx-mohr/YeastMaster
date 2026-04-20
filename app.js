@@ -2406,93 +2406,93 @@ window.toggleHwProfile = function(uniqueId, btnElement) {
 // =======================================================
 // --- LOAD TEMPLATE INTO PROFILER (VÄG 1) ---
 // =======================================================
-window.loadProfileIntoLab = function(strainName, profileName) {
+window.loadProfileIntoLab = function(strainName, profileName, fullYeastName) {
     // 1. Hitta den valda standardprofilen i databasen
     if (typeof yeastDatabase === 'undefined' || !yeastDatabase.yeasts) return;
     const profile = yeastDatabase.yeasts.find(p => p.s === strainName && p.p === profileName);
-    if (!profile) return;
+    
+    if (!profile) {
+        console.error("Kunde inte hitta profilen i databasen!", strainName, profileName);
+        return;
+    }
 
     // 2. Fyll i inmatningsfälten i The Profiler
     const nameInput = document.getElementById('custom-profile-name');
     const yeastInput = document.getElementById('custom-base-yeast');
     
-    // Vi skapar ett föreslaget namn (t.ex. LACTIC_B) och tar bort skräptecken
-    let shortName = profileName.replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '_').substring(0, 8).toUpperCase();
+    let shortName = profileName.replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '_').substring(0, 12).toUpperCase();
     if(nameInput) nameInput.value = shortName;
 
-// Leta upp rätt jäst i rullistan
+    // Leta upp rätt jäst i rullistan
     if (yeastInput) {
         let targetSearch = (fullYeastName || strainName).toUpperCase();
         for (let i = 0; i < yeastInput.options.length; i++) {
             let optText = yeastInput.options[i].text.toUpperCase();
             
-            // Nu letar vi efter det exakta namnet vi fick från kortet!
+            // Matchar exakt namn ELLER det gamla korta namnet
             if (optText === targetSearch || optText.includes(strainName.toUpperCase()) || strainName.toUpperCase().includes(optText)) {
                 yeastInput.selectedIndex = i;
                 break;
             }
         }
-        // Tvinga fram "change"-eventet så att rullistan aktiverar grafen!
         yeastInput.dispatchEvent(new Event('change'));
     }
 
     // 3. Översätt databasens steg till grafens punkter
     const s = profile.steps;
     
-    // Liten hjälpfunktion för att hantera C/F dynamiskt när vi laddar in
     function fromCelsius(c) {
         return currentTempUnit === 'F' ? (c * 9/5) + 32 : c;
     }
 
- if (s.length > 1) {
-            // 1. Pitch och Primary (steg 0 och 1 är alltid samma)
-            profilePoints[0] = { x: 0, y: fromCelsius(s[0][1]) };
-            profilePoints[1] = { x: s[1][0], y: fromCelsius(s[1][1]) };
+    if (s.length > 1) {
+        // 1. Pitch och Primary (steg 0 och 1 är alltid samma)
+        profilePoints[0] = { x: 0, y: fromCelsius(s[0][1]) };
+        profilePoints[1] = { x: s[1][0], y: fromCelsius(s[1][1]) };
 
-            // 2. Leta efter Cold Crash (Första steget efter primary som är under 10°C)
-            let crashIndex = s.findIndex((step, idx) => idx > 1 && step[1] < 10.0);
+        // 2. Leta efter Cold Crash (Första steget efter primary som är under 10°C)
+        let crashIndex = s.findIndex((step, idx) => idx > 1 && step[1] < 10.0);
 
-            if (crashIndex !== -1) {
-                let crashStep = s[crashIndex];
-                
-                // Räkna hur många steg som ligger mellan Primary och Krasch
-                let stepsBetween = crashIndex - 1; 
+        if (crashIndex !== -1) {
+            let crashStep = s[crashIndex];
+            
+            // Räkna hur många steg som ligger mellan Primary och Krasch
+            let stepsBetween = crashIndex - 1; 
 
-                if (stepsBetween === 1) {
-                    // T.ex. 4-stegs profil (Går direkt från Primary till Crash)
-                    // Vi skapar en artificiell platt "Clean"-linje för grafen
-                    profilePoints[2] = { x: s[1][0] + ((crashStep[0] - s[1][0]) * 0.25), y: fromCelsius(s[1][1]) };
-                    profilePoints[3] = { x: crashStep[0] - 0.5, y: fromCelsius(s[1][1]) };
-                } 
-                else if (stepsBetween === 2) {
-                    // T.ex. 5-stegs profil (Vanlig Free rise, sen platå, sen krasch)
-                    let cleanStart = s[2];
-                    profilePoints[2] = { x: s[1][0] + ((cleanStart[0] - s[1][0]) * 0.25), y: fromCelsius(cleanStart[1]) };
-                    profilePoints[3] = { x: cleanStart[0], y: fromCelsius(cleanStart[1]) };
-                }
-                else if (stepsBetween >= 3) {
-                    // T.ex. 6-stegs profil (Hardcore: Spikrak primary, ramp upp, platå, krasch)
-                    profilePoints[2] = { x: s[2][0], y: fromCelsius(s[2][1]) };
-                    profilePoints[3] = { x: s[3][0], y: fromCelsius(s[3][1]) };
-                }
-
-                // Sätt själva kraschen och konditioneringen
-                profilePoints[4] = { x: crashStep[0], y: fromCelsius(crashStep[1]) };
-                let lastStep = s[s.length - 1];
-                profilePoints[5] = { x: lastStep[0], y: fromCelsius(lastStep[1]) };
-
-            } else {
-                // FALLBACK: Om profilen helt saknar Cold Crash
-                let lastStep = s[s.length - 1] || s[1];
-                profilePoints[2] = { x: s[1][0] + 1, y: fromCelsius(lastStep[1]) };
-                profilePoints[3] = { x: lastStep[0] - 0.5, y: fromCelsius(lastStep[1]) };
-                profilePoints[4] = { x: lastStep[0], y: fromCelsius(lastStep[1]) };
-                profilePoints[5] = { x: lastStep[0] + 5, y: fromCelsius(lastStep[1]) };
+            if (stepsBetween === 1) {
+                // T.ex. 4-stegs profil (Går direkt från Primary till Crash)
+                profilePoints[2] = { x: s[1][0] + ((crashStep[0] - s[1][0]) * 0.25), y: fromCelsius(s[1][1]) };
+                profilePoints[3] = { x: crashStep[0] - 0.5, y: fromCelsius(s[1][1]) };
+            } 
+            else if (stepsBetween === 2) {
+                // T.ex. 5-stegs profil (Vanlig Free rise, sen platå, sen krasch)
+                let cleanStart = s[2];
+                profilePoints[2] = { x: s[1][0] + ((cleanStart[0] - s[1][0]) * 0.25), y: fromCelsius(cleanStart[1]) };
+                profilePoints[3] = { x: cleanStart[0], y: fromCelsius(cleanStart[1]) };
             }
+            else if (stepsBetween >= 3) {
+                // T.ex. 6-stegs profil (Hardcore: Spikrak primary, ramp upp, platå, krasch)
+                profilePoints[2] = { x: s[2][0], y: fromCelsius(s[2][1]) };
+                profilePoints[3] = { x: s[3][0], y: fromCelsius(s[3][1]) };
+            }
+
+            // Sätt själva kraschen och konditioneringen
+            profilePoints[4] = { x: crashStep[0], y: fromCelsius(crashStep[1]) };
+            let lastStep = s[s.length - 1];
+            profilePoints[5] = { x: lastStep[0], y: fromCelsius(lastStep[1]) };
+
+        } else {
+            // FALLBACK: Om profilen helt saknar Cold Crash
+            let lastStep = s[s.length - 1] || s[1];
+            profilePoints[2] = { x: s[1][0] + 1, y: fromCelsius(lastStep[1]) };
+            profilePoints[3] = { x: lastStep[0] - 0.5, y: fromCelsius(lastStep[1]) };
+            profilePoints[4] = { x: lastStep[0], y: fromCelsius(lastStep[1]) };
+            profilePoints[5] = { x: lastStep[0] + 5, y: fromCelsius(lastStep[1]) };
         }
+    }
 
     // 4. Stäng rutan och hoppa till The Profiler
-    closeYeastModal();
+    if (typeof closeYeastModal === 'function') closeYeastModal();
     showView('lab');
 
     // Nollställ eventuella gamla Action Markers som låg kvar sedan tidigare
@@ -2500,7 +2500,7 @@ window.loadProfileIntoLab = function(strainName, profileName) {
     if (typeof dryHopData !== 'undefined' && dryHopData.enabled) toggleDryHopLine();
 
     // 5. Uppdatera UI och rita om grafen!
-    if (typeof labChart !== 'undefined') {
+    if (typeof labChart !== 'undefined' && labChart) {
         const lastPointX = profilePoints[5].x;
         labChart.options.scales.x.max = Math.max(16, lastPointX + 1);
         labChart.update('none');
