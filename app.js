@@ -280,28 +280,24 @@ if (!user && !activeDeviceId) {
             document.querySelector('.beer-temp').setAttribute('data-text', safeBeerTemp);
             document.getElementById('air-temp-val').innerText = safeAirTemp;
 
-// 2. Info (Med smart formatering för långa namn)
-            let displayStrain = (latest.strain || "IRISH ALE").toUpperCase();
-            
-            // Om det är en custom, korta ner det snyggt! (CUSTOM (LONDON III) -> ★ LONDON III)
+            // 2. Info (Yeast & Profile)
+      let displayStrain = (latest.strain || "---").toUpperCase();
+let displayProfile = (latest.profile || "---").toUpperCase();
+
+            // Om det är en custom, flytta stjärnan till profilen istället
             if (displayStrain.startsWith("CUSTOM (") && displayStrain.endsWith(")")) {
-                displayStrain = displayStrain.replace("CUSTOM (", "★ ").replace(")", "");
-            }
-            
-            const strainValEl = document.getElementById('strain-val');
-            strainValEl.innerText = displayStrain;
-            
-            // Krymp texten dynamiskt om den är för lång för den svarta boxen
-            if (displayStrain.length > 14) {
-                strainValEl.style.fontSize = "0.75em";
-            } else if (displayStrain.length > 10) {
-                strainValEl.style.fontSize = "0.85em";
-            } else {
-                strainValEl.style.fontSize = ""; // Standardstorlek
+                displayStrain = displayStrain.replace("CUSTOM (", "").replace(")", "");
+                displayProfile = "★ " + displayProfile;
             }
 
-            document.getElementById('profile-val').innerText = latest.profile || "LOW ESTER";
+            const strainValEl = document.getElementById('strain-val');
+            strainValEl.innerText = displayStrain;
+            strainValEl.style.fontSize = displayStrain.length > 12 ? "0.8em" : "";
+
+            const profileValEl = document.getElementById('profile-val');
+            profileValEl.innerText = displayProfile;
             
+            // --- BEHÅLL DESSA TVÅ RADER ---
             const action = (latest.action || "IDLE").toUpperCase();
             document.getElementById('action-val').innerText = action;
 
@@ -2870,42 +2866,29 @@ async function populateSyncDevices(uid) {
     }
 }
 
-// Funktion som tvättar namnen så de får plats på OLED-skärmen
 function formatOledName(fullName) {
     if (!fullName) return "";
-    let shortName = fullName;
+    let name = fullName;
     
-    // 1. Om det är en egengjord profil (ex: "Custom (London III)"), plocka ut innanmätet
-    if (shortName.startsWith("Custom (") && shortName.endsWith(")")) {
-        // Skalar bort "Custom (" och ")"
-        shortName = shortName.substring(8, shortName.length - 1);
-        // Lägg till en liten stjärna för att visa att det är ett hemmabygge!
-        shortName = "* " + shortName; 
+    // 1. Om det är en "Custom (...)", plocka bara ut det som står inuti parentesen
+    if (name.startsWith("Custom (") && name.endsWith(")")) {
+        name = name.substring(8, name.length - 1);
     }
 
-    // 2. Regler för vad som ska klippas bort från originalnamnen
-    const prefixesToRemove = [
-        /Wyeast\s\d+\s/i,       // Tar bort "Wyeast 1084 "
-        /WLP\d+\s/i,            // Tar bort "WLP001 "
-        /SafAle\s/i,            // Tar bort "SafAle "
-        /SafLager\s/i,          // Tar bort "SafLager "
-        /Lallemand\s/i,         // Tar bort "Lallemand "
-        /Imperial\s[A-Z0-9]+\s/i, // Tar bort "Imperial B45 "
-        /Omega\s[A-Z0-9-]+\s/i  // Tar bort Omega-prefix
+    // 2. Tvätta bort prefix
+    const prefixes = [
+        /Wyeast\s\d+\s/i, /WLP\d+\s/i, /SafAle\s/i, /SafLager\s/i, 
+        /Lallemand\s/i, /Imperial\s[A-Z0-9]+\s/i, /Omega\s[A-Z0-9-]+\s/i
     ];
-    
-    prefixesToRemove.forEach(regex => {
-        shortName = shortName.replace(regex, "");
-    });
-    
-    shortName = shortName.trim();
+    prefixes.forEach(reg => name = name.replace(reg, ""));
 
-    // 3. Brutal nödspärr: Om det fortfarande är mer än 14 tecken, kapa det brutalt.
-    if (shortName.length > 14) {
-        shortName = shortName.substring(0, 13).trim() + ".";
-    }
-    
-    return shortName; 
+    // 3. Smart förkortning för att rädda plats (t.ex. Scottish -> Scot.)
+    name = name.replace(/Scottish/i, "Scot.")
+               .replace(/American/i, "Amer.")
+               .replace(/California/i, "Cali.")
+               .replace(/Belgian/i, "Belg.");
+
+    return name.trim().substring(0, 14); // Max 14 tecken för säkerhets skull
 }
 
 // ==========================================
@@ -2977,10 +2960,8 @@ selectedStrains.forEach(id => {
                         let customName = deviceProfile.s; // "Pelle"
                         let baseStrainFull = deviceProfile.p; // "Wyeast 1084 Irish Ale"
                         
-                        // Den vita rutan (s) ska ha den tvättade bas-jästen
-                        deviceProfile.s = formatOledName(baseStrainFull); 
-                        // Texten under (p) får heta ditt egna namn
-                        deviceProfile.p = customName; 
+                     deviceProfile.s = formatOledName(baseStrainFull); // Blir "Scot. Ale"
+deviceProfile.p = "★ " + customName.substring(0, 10); // Blir "★ PELLE"
                         
                         profilesToSend.push(deviceProfile);
                     });
