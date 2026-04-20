@@ -3519,6 +3519,88 @@ window.deleteHouseStrain = function(id) {
     if (typeof populateBaseYeastDropdown === "function") populateBaseYeastDropdown();
 };
 
+const libraryTourSteps = [
+    { 
+        selector: '.yeast-card:first-child', 
+        text: 'Click once to select a yeast for your device. Double-click to read about it!' 
+    },
+    { 
+        selector: '.hw-profile-btn', 
+        text: 'Inside a yeast, you’ll find Hardware Profiles. These control your fridge automatically.' 
+    },
+    { 
+        selector: '.btn-secondary', // Knappen "Edit in Profiler"
+        text: 'Found a profile you like but want to tweak? Click "Edit in Profiler" to mod it!' 
+    },
+    { 
+        selector: '#yeast-grid', // Vi siktar på botten av gridet
+        text: 'Modded profiles appear at the bottom with a ★ star. They are unique to your hardware!' 
+    },
+    { 
+        selector: 'button[onclick*="openAddStrainModal"]', 
+        text: 'Have your own wild capture or house strain? Add it here to your permanent House Bank!' 
+    }
+];
+
+function startLibraryTour() {
+    // Om vi inte har några kort än, visa ett meddelande
+    if (document.querySelectorAll('.yeast-card').length === 0) {
+        alert("Select or add some yeast first to see the tour!");
+        return;
+    }
+
+    // Vi återanvänder ditt befintliga demo-overlay system
+    const overlay = document.getElementById('demo-overlay');
+    const tooltip = document.getElementById('demo-tour-tooltip');
+    
+    if (!overlay || !tooltip) return;
+
+    overlay.style.display = 'block';
+    
+    let currentStep = 0;
+
+    const showStep = () => {
+        if (currentStep >= libraryTourSteps.length) {
+            overlay.style.display = 'none';
+            tooltip.style.display = 'none';
+            return;
+        }
+
+        const step = libraryTourSteps[currentStep];
+        const target = document.querySelector(step.selector);
+
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            setTimeout(() => {
+                tooltip.style.display = 'block';
+                document.getElementById('demo-tour-text').innerText = step.text;
+                
+                const rect = target.getBoundingClientRect();
+                tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+                tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2)) + 'px';
+            }, 400);
+        } else {
+            // Om elementet inte syns (t.ex. modalen inte är öppen), hoppa till nästa
+            currentStep++;
+            showStep();
+        }
+    };
+
+    overlay.onclick = () => {
+        currentStep++;
+        showStep();
+    };
+
+    showStep();
+}
+
+// Koppla knappen vid start
+document.addEventListener('DOMContentLoaded', () => {
+    const tourBtn = document.getElementById('btn-library-tour');
+    if (tourBtn) tourBtn.onclick = startLibraryTour;
+});
+
 // ==========================================
 // --- TOGGLE FÖR IN THE LAB (ACADEMY) INFO ---
 // ==========================================
