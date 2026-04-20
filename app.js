@@ -5575,16 +5575,41 @@ function checkActionAlerts(currentDay, strainName, profileName) {
 }
 
 // ==========================================
-// --- YEAST LIBRARY TOUR (LÅST VERSION) ---
+// --- YEAST LIBRARY TOUR (LÅST & JUSTERAD) ---
 // ==========================================
 let currentLibStep = -1;
 let libTourSteps = [];
-window.isLibraryTourActive = false; // Spärr för Live Demon
+window.isLibraryTourActive = false; 
+
+// --- NYTT: Frys-funktioner för att stoppa all scrollning ---
+function lockTourScroll(e) { e.preventDefault(); }
+
+function disableAllScrolling() {
+    // Stoppar scrollhjul och touch-dragningar
+    window.addEventListener('wheel', lockTourScroll, { passive: false });
+    window.addEventListener('touchmove', lockTourScroll, { passive: false });
+    document.body.style.overflow = 'hidden'; // Fryser bakgrunden
+    
+    // Fryser även själva jäst-modalen om den är öppen
+    const modal = document.getElementById('yeast-info-modal');
+    if (modal) modal.style.overflowY = 'hidden';
+}
+
+function enableAllScrolling() {
+    window.removeEventListener('wheel', lockTourScroll);
+    window.removeEventListener('touchmove', lockTourScroll);
+    document.body.style.overflow = '';
+    
+    const modal = document.getElementById('yeast-info-modal');
+    if (modal) modal.style.overflowY = 'auto';
+}
+// -----------------------------------------------------------
 
 window.startLibraryTour = function() {
     window.isLibraryTourActive = true;
+    disableAllScrolling(); // FRYS SKÄRMEN!
 
-    // 1. Stäng inforutan och återställ i-knappen
+    // 1. Stäng inforutan
     const infoBox = document.getElementById('library-info-box');
     if (infoBox) infoBox.style.display = 'none';
 
@@ -5601,12 +5626,9 @@ window.startLibraryTour = function() {
 
     overlay.style.display = 'block';
     overlay.style.backgroundColor = 'transparent';
-    
-    // HÄR ÄR MAGIN: Tvinga mörkret att ligga FRAMFÖR modalen så man inte kan klicka på knapparna!
-    overlay.style.zIndex = '99998'; 
-    tooltip.style.zIndex = '99999'; // Pilen ligger allra längst fram
+    overlay.style.zIndex = '99998'; // Mörkret FRAMFÖR modalen
+    tooltip.style.zIndex = '99999'; // Pilen allra längst fram
 
-    // Tvinga rutan att bli större så all text ryms
     tooltip.style.width = '280px';
     tooltip.style.whiteSpace = 'normal';
     tooltip.style.lineHeight = '1.4';
@@ -5621,13 +5643,22 @@ window.startLibraryTour = function() {
         },
         {
             selector: '#yeast-info-modal .hw-profile-btn',
-            text: 'Here are the Hardware Profiles. These control your fridge temperatures automatically!',
+            text: 'Here are the hardware profiles. Click on them to see the profiles temperature steps.',
+            alignLeft: true, // NYTT: Säger åt pilen att lägga sig till vänster!
             action: () => {
                 const firstCard = document.querySelector('.yeast-card:first-child');
                 if (firstCard) {
                     const yeastId = firstCard.onclick.toString().match(/'([^']+)'/)?.[1];
                     const yeast = yeastStrains.find(y => y.id === yeastId) || yeastStrains[0];
-                    openYeastModal(yeast); // Öppnar modalen åt dig
+                    openYeastModal(yeast); 
+                    
+                    // Tillfälligt stäng av frysningen precis när modalen öppnas så vi kan rulla upp den till toppen, sen frysa igen
+                    const modal = document.getElementById('yeast-info-modal');
+                    if (modal) {
+                        modal.style.overflowY = 'auto';
+                        modal.scrollTo(0, 0);
+                        setTimeout(() => { modal.style.overflowY = 'hidden'; }, 50);
+                    }
                 }
             }
         },
@@ -5639,14 +5670,19 @@ window.startLibraryTour = function() {
             selector: 'button[onclick*="openAddStrainModal"]',
             text: 'Use this button to add your own wild captures or house strains to your permanent House Bank!',
             action: () => {
-                closeYeastModal(); // Stänger modalen inför sista steget
+                closeYeastModal(); // Stäng modalen
+                enableAllScrolling(); // Släpp spärren kort för att kunna scrolla ner till knappen
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                setTimeout(disableAllScrolling, 500); // Frys igen när vi är framme
             }
         },
         {
             selector: '.library-header h2',
             text: 'Tour ended! You are now ready to master the Yeast Library. 🍻 Click anywhere to finish.',
             action: () => {
+                enableAllScrolling(); 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(disableAllScrolling, 500); 
             }
         }
     ];
@@ -5670,14 +5706,15 @@ window.nextLibraryTourStep = function(e) {
     if (currentLibStep >= libTourSteps.length) {
         if(overlay) {
             overlay.style.display = 'none';
-            overlay.style.zIndex = ''; // Återställ z-index!
+            overlay.style.zIndex = ''; 
         }
         if(tooltip) {
             tooltip.style.display = 'none';
-            tooltip.style.zIndex = ''; // Återställ z-index!
-            tooltip.style.width = 'auto'; // Återställ bredden
+            tooltip.style.zIndex = ''; 
+            tooltip.style.width = 'auto'; 
         }
         closeYeastModal();
+        enableAllScrolling(); // SLÄPP SKÄRMEN FRI!
         window.isLibraryTourActive = false; 
         overlay.onclick = null;
         return;
@@ -5685,12 +5722,10 @@ window.nextLibraryTourStep = function(e) {
 
     const step = libTourSteps[currentLibStep];
 
-    // Kör funktionen för steget
     if (step.action) step.action();
-
     if (tooltip) tooltip.style.display = 'none';
 
-    // Den smarta vänteloopen som väntar på att modalen hinner öppnas
+    // Smart vänteloop
     let attempts = 0;
     const findTarget = setInterval(() => {
         attempts++;
@@ -5699,15 +5734,30 @@ window.nextLibraryTourStep = function(e) {
         if (target && target.offsetWidth > 0) {
             clearInterval(findTarget); 
 
-            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Scrolla fram målet om det behövs (smooth)
+            if (!document.getElementById('yeast-info-modal').contains(target)) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
 
             setTimeout(() => {
                 tooltip.style.display = 'block';
                 document.getElementById('demo-tour-text').innerText = step.text;
 
                 const rect = target.getBoundingClientRect();
-                tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
-                tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2)) + 'px';
+                const topPos = rect.bottom + window.scrollY + 10;
+                
+                // NY LOGIK FÖR VÄNSTERSTÄLLNING
+                let leftPos;
+                if (step.alignLeft) {
+                    // Peka ca 50 pixlar in från vänsterkanten istället för mitten
+                    leftPos = rect.left + window.scrollX + 50;
+                } else {
+                    // Standard: Mitten av elementet
+                    leftPos = rect.left + window.scrollX + (rect.width / 2);
+                }
+
+                tooltip.style.top = topPos + 'px';
+                tooltip.style.left = leftPos + 'px';
 
                 tooltip.style.animation = 'none';
                 void tooltip.offsetWidth;
