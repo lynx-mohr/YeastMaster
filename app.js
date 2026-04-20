@@ -5805,28 +5805,89 @@ window.nextLibraryTourStep = function(e) {
     }, 100);
 };
 
+// --- PREMIUM KULISS-BYGGARE (Nu på riktigt, ingen Commodore 64!) ---
 function createTourMagic() {
     if (document.getElementById('tour-fake-profiler')) return;
     const fake = document.createElement('div');
     fake.id = 'tour-fake-profiler';
-    fake.style.cssText = `position:fixed;top:0;left:0;width:100vw;height:100vh;background:#111;z-index:9999990;display:none;flex-direction:column;align-items:center;padding:20px;box-sizing:border-box;color:white;font-family:sans-serif;`;
+    
+    // Yttre container som täcker hela skärmen med rätt bakgrundsfärg
+    fake.style.cssText = `position:fixed;top:0;left:0;width:100vw;height:100vh;background:#121212;z-index:9999990;display:none;flex-direction:column;align-items:center;padding:40px 20px;box-sizing:border-box;color:white;font-family:'Lexend', sans-serif;`;
+    
+    // HTML som exakt matchar din riktiga layout
     fake.innerHTML = `
-        <div style="width:100%;max-width:500px;">
-            <h3>The Profiler</h3>
-            <div style="display:flex;gap:10px;margin-bottom:20px;">
-                <input type="text" value="US-05 Standard ★" style="flex:1;background:#000;border:1px solid #444;color:#fff;padding:8px;" disabled>
-                <select style="flex:1;background:#000;border:1px solid #444;color:#fff;" disabled><option>SafAle US-05</option></select>
+        <div style="width: 100%; max-width: 800px;">
+            
+            <div style="display: flex; align-items: center; margin-bottom: 25px;">
+                <h3 style="color: #fff; margin: 0; font-size: 1.5rem; font-weight: 800;">The Profiler</h3>
+                <div style="border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; margin-left: 10px; font-weight: bold;">i</div>
             </div>
-            <div style="width:100%;height:200px;background:#000;border:1px solid #333;position:relative;margin-bottom:20px;">
-                <svg width="100%" height="100%"><path d="M0 100 L150 100 L250 60 L400 60 L500 180" fill="none" stroke="#8CC63F" stroke-width="2"/></svg>
-                <div id="fake-hop-line" style="position:absolute;top:0;left:60%;width:2px;height:100%;background:#CCFF00;display:none;"></div>
-                <div id="fake-rack-line" style="position:absolute;top:0;left:80%;width:2px;height:100%;background:#FF3300;display:none;"></div>
+
+            <div style="display: flex; gap: 15px; margin-bottom: 25px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 0.65rem; color: #888; font-weight: bold; margin-bottom: 8px; display: block; letter-spacing: 0.5px;">PROFILE NAME</label>
+                    <div style="background: #0a0a0a; border: 1px solid #333; color: #555; padding: 12px 15px; border-radius: 6px; font-size: 0.85rem;">US-05 Standard ★</div>
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 0.65rem; color: #888; font-weight: bold; margin-bottom: 8px; display: block; letter-spacing: 0.5px;">PICK STRAIN</label>
+                    <div style="background: #0a0a0a; border: 1px solid #333; color: #fff; padding: 12px 15px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; display: flex; justify-content: space-between;">
+                        SafAle US-05 <span style="font-size: 0.6rem; color: #666;">▼</span>
+                    </div>
+                </div>
             </div>
-            <button id="fake-hop-btn" style="width:100%;background:#000;border:1px solid #CCFF00;color:#CCFF00;padding:10px;margin-bottom:10px;" disabled>+ ADD DRY HOPS</button>
-            <div style="background:#222;padding:10px;font-size:0.8rem;line-height:1.6;">
-                <div style="color:#CCFF00;display:none;" id="fake-hop-text">Dry Hop: Day 5 @ 19°C</div>
-                <div style="color:#FF3300;display:none;" id="fake-rack-text">Racking: Day 8 @ 15°C</div>
+
+            <div style="background: #111; border: 1px solid #222; border-radius: 8px; padding: 25px; padding-bottom: 80px; position: relative; margin-bottom: 20px;">
+                <div style="color: #fff; font-weight: 800; font-size: 0.8rem; margin-bottom: 25px; letter-spacing: 1px;">PROFILE BUILDER</div>
+
+                <div style="width: 100%; height: 260px; position: relative;">
+                    <svg width="100%" height="100%" viewBox="0 0 600 260" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="rgba(140,198,63,0.3)"/>
+                                <stop offset="100%" stop-color="rgba(140,198,63,0)"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M0 160 L180 160 L300 90 L420 90 L600 240" fill="url(#chartGradient)"/>
+                        <path d="M0 160 L180 160 L300 90 L420 90 L600 240" fill="none" stroke="#8CC63F" stroke-width="2.5"/>
+                        <circle cx="180" cy="160" r="4.5" fill="#8CC63F" stroke="#111" stroke-width="2"/>
+                        <circle cx="300" cy="90" r="4.5" fill="#8CC63F" stroke="#111" stroke-width="2"/>
+                        <circle cx="420" cy="90" r="4.5" fill="#8CC63F" stroke="#111" stroke-width="2"/>
+                    </svg>
+
+                    <div id="fake-hop-line" style="position:absolute;top:0;left:62%;width:1px;height:100%;background:#CCFF00;display:none;box-shadow:0 0 8px rgba(204,255,0,0.8);"></div>
+                    <div id="fake-rack-line" style="position:absolute;top:0;left:85%;width:1px;height:100%;background:#FF3300;display:none;box-shadow:0 0 8px rgba(255,51,0,0.8);"></div>
+                </div>
+
+                <div style="position: absolute; bottom: -15px; left: 25px; background: #1a1a1a; border: 1px solid #333; border-left: 3px solid #8CC63F; border-radius: 8px; padding: 20px; width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);">
+                    <div style="color: #8CC63F; font-weight: 800; font-size: 0.65rem; margin-bottom: 15px; letter-spacing: 1px;">PROFILE SUMMARY</div>
+                    
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 10px; color: #aaa;">
+                        <span style="font-weight: 700; color: #eee;">Pitch</span><span style="font-weight: 700; color: #fff;">Day 0 @ 19.0°C</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 10px; color: #aaa;">
+                        <span style="font-weight: 700; color: #eee;">Primary</span><span style="font-weight: 700; color: #fff;">Hold until Day 4</span>
+                    </div>
+                    
+                    <div id="fake-hop-text" style="display: none; justify-content: space-between; font-size: 0.75rem; margin-bottom: 10px; color: #CCFF00; font-weight: bold;">
+                        <span>Dry Hop</span><span>Reach 22.0°C by Day 5</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 10px; color: #aaa;">
+                        <span style="font-weight: 700; color: #eee;">Cleanup</span><span style="font-weight: 700; color: #fff;">Reach 22.0°C by Day 6</span>
+                    </div>
+                    
+                    <div id="fake-rack-text" style="display: none; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0; color: #FF3300; font-weight: bold;">
+                        <span>Racking</span><span>Drop to 3.0°C by Day 8</span>
+                    </div>
+                </div>
             </div>
-        </div>`;
+
+            <div style="display: flex; gap: 15px;">
+                <button id="fake-hop-btn" style="flex: 1; background: #0a0a0a; border: 1px solid #222; color: #ccc; padding: 18px; border-radius: 6px; font-weight: bold; font-size: 0.75rem; letter-spacing: 1px; cursor: default;">+ ADD DRY HOPS</button>
+                <button style="flex: 1; background: #0a0a0a; border: 1px solid #222; color: #ccc; padding: 18px; border-radius: 6px; font-weight: bold; font-size: 0.75rem; letter-spacing: 1px; cursor: default;">+ RACK / DUMP</button>
+            </div>
+
+        </div>
+    `;
     document.body.appendChild(fake);
 }
