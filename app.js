@@ -5575,7 +5575,7 @@ function checkActionAlerts(currentDay, strainName, profileName) {
 }
 
 // ==========================================
-// --- YEAST LIBRARY TOUR (FIXAD VERSION) ---
+// --- YEAST LIBRARY TOUR (LÅST VERSION) ---
 // ==========================================
 let currentLibStep = -1;
 let libTourSteps = [];
@@ -5601,8 +5601,12 @@ window.startLibraryTour = function() {
 
     overlay.style.display = 'block';
     overlay.style.backgroundColor = 'transparent';
+    
+    // HÄR ÄR MAGIN: Tvinga mörkret att ligga FRAMFÖR modalen så man inte kan klicka på knapparna!
+    overlay.style.zIndex = '99998'; 
+    tooltip.style.zIndex = '99999'; // Pilen ligger allra längst fram
 
-    // FIX 1: Tvinga rutan att bli större så all text ryms snyggt!
+    // Tvinga rutan att bli större så all text ryms
     tooltip.style.width = '280px';
     tooltip.style.whiteSpace = 'normal';
     tooltip.style.lineHeight = '1.4';
@@ -5623,7 +5627,7 @@ window.startLibraryTour = function() {
                 if (firstCard) {
                     const yeastId = firstCard.onclick.toString().match(/'([^']+)'/)?.[1];
                     const yeast = yeastStrains.find(y => y.id === yeastId) || yeastStrains[0];
-                    openYeastModal(yeast); // Öppnar modalen
+                    openYeastModal(yeast); // Öppnar modalen åt dig
                 }
             }
         },
@@ -5635,11 +5639,10 @@ window.startLibraryTour = function() {
             selector: 'button[onclick*="openAddStrainModal"]',
             text: 'Use this button to add your own wild captures or house strains to your permanent House Bank!',
             action: () => {
-                closeYeastModal(); // Stänger modalen så vi ser huvudvyn igen
+                closeYeastModal(); // Stänger modalen inför sista steget
             }
         },
         {
-            // FIX 3: Det nya avslutningssteget!
             selector: '.library-header h2',
             text: 'Tour ended! You are now ready to master the Yeast Library. 🍻 Click anywhere to finish.',
             action: () => {
@@ -5665,39 +5668,39 @@ window.nextLibraryTourStep = function(e) {
 
     // Är touren slut?
     if (currentLibStep >= libTourSteps.length) {
-        if(overlay) overlay.style.display = 'none';
-        if(tooltip) tooltip.style.display = 'none';
+        if(overlay) {
+            overlay.style.display = 'none';
+            overlay.style.zIndex = ''; // Återställ z-index!
+        }
+        if(tooltip) {
+            tooltip.style.display = 'none';
+            tooltip.style.zIndex = ''; // Återställ z-index!
+            tooltip.style.width = 'auto'; // Återställ bredden
+        }
         closeYeastModal();
-        window.isLibraryTourActive = false; // Släpp spärren
+        window.isLibraryTourActive = false; 
         overlay.onclick = null;
-        
-        // Återställ tooltipens bredd om Live Demon vill använda den
-        if(tooltip) tooltip.style.width = 'auto'; 
         return;
     }
 
     const step = libTourSteps[currentLibStep];
 
-    // Kör funktionen för steget (t.ex. öppna/stäng modal)
+    // Kör funktionen för steget
     if (step.action) step.action();
 
     if (tooltip) tooltip.style.display = 'none';
 
-    // ========================================================
-    // FIX 2: DEN MAGISKA VÄNTELOOPEN (Hittar gömda knappar)
-    // ========================================================
+    // Den smarta vänteloopen som väntar på att modalen hinner öppnas
     let attempts = 0;
     const findTarget = setInterval(() => {
         attempts++;
         const target = document.querySelector(step.selector);
 
-        // Kolla om målet finns OCH att det har en bredd (dvs. inte är display:none)
         if (target && target.offsetWidth > 0) {
-            clearInterval(findTarget); // Sluta leta! Vi hittade knappen.
+            clearInterval(findTarget); 
 
             target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            // Vänta 300ms så scrollen hinner klart, sen rita pilen
             setTimeout(() => {
                 tooltip.style.display = 'block';
                 document.getElementById('demo-tour-text').innerText = step.text;
@@ -5712,7 +5715,6 @@ window.nextLibraryTourStep = function(e) {
             }, 300);
             
         } else if (attempts > 15) {
-            // Vi gav upp efter 1.5 sekunder. Gå vidare för att undvika frysning.
             clearInterval(findTarget);
             console.warn("Tour missed target:", step.selector);
             window.nextLibraryTourStep();
