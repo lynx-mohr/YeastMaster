@@ -5640,45 +5640,43 @@ window.startLibraryTour = function() {
     tooltip.style.lineHeight = '1.4';
     tooltip.style.textAlign = 'center';
 
-    // 3. Definiera Stegen
+// 3. Definiera Stegen (Utan krockande scroll-kommandon!)
     libTourSteps = [
         {
             selector: '.yeast-card:first-child',
-            text: 'Single-click a card to select it for your device. Double-click to open details!',
-            action: () => { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            text: 'Single-click a card to select it for your device. Double-click to open details!'
+            // Tourens radar sköter scrollningen automatiskt nu!
         },
         {
             selector: '#yeast-info-modal .hw-profile-btn',
             text: 'Here are the hardware profiles. Click on them to see the profiles temperature steps.',
-            alignLeft: true, // Förskjuter pilen till vänster!
+            alignLeft: true,
             action: () => {
-                // Tvinga fram US-05 så vi garanterat har hårdvaruprofiler
+                // Öppna US-05 så vi garanterat har profiler att visa
                 const yeast = yeastStrains.find(y => y.id === 'us-05') || yeastStrains.find(y => !y.isCustom);
-                if (yeast) {
-                    openYeastModal(yeast); 
-                    // Obs: Vi låser INTE scrollen inuti modalen här längre, 
-                    // annars kan touren inte scrolla ner till knappen!
-                }
+                if (yeast) openYeastModal(yeast); 
             }
         },
         {
             selector: '#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]',
-            text: 'Want to tweak a profile? Click "Edit in Profiler". Modded profiles get a ★ star!'
+            text: 'Want to tweak a profile? Click "Edit in Profiler". Modded profiles get a ★ star!',
+            action: () => {
+                // Rulla ner snyggt inuti jästkortet så Edit-knappen syns
+                const targetBtn = document.querySelector('#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]');
+                if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         },
         {
             selector: 'button[onclick*="openAddStrainModal"]',
             text: 'Use this button to add your own wild captures or house strains to your permanent House Bank!',
             action: () => {
-                closeYeastModal(); // Stäng modalen
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                closeYeastModal(); // Stäng modalen. Touren scrollar sedan ner automatiskt!
             }
         },
         {
             selector: '.library-header h2',
-            text: 'Tour ended! You are now ready to master the Yeast Library. 🍻 Click anywhere to finish.',
-            action: () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+            text: 'Tour ended! You are now ready to master the Yeast Library. 🍻 Click anywhere to finish.'
+            // Radar-funktionen scrollar oss snyggt tillbaka till toppen!
         }
     ];
 
