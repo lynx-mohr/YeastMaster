@@ -680,9 +680,11 @@ function renderYeastLibrary(filter = "") {
         
         const icon = yeast.isHouseStrain ? ' 🦠' : '';
 
-        // HELT REN HTML NU: Bara rubriken och eventuell ikon!
+      // Lägg till stjärna om det är en moddad hårdvaruprofil
+        const starPrefix = yeast.isCustom ? '★ ' : '';
+
         card.innerHTML = `
-            <h3>${yeast.name}${icon}</h3>
+            <h3>${starPrefix}${yeast.name}${icon}</h3>
         `;
 
         let clickTimer = null;
@@ -2763,24 +2765,30 @@ window.addEventListener('DOMContentLoaded', () => {
         if (typeof calculatePitch === "function") calculatePitch();
     }
 
-   // 5. Tema och Färg (Ladda sparade val)
+    // 5. Tema och Färg (Ladda sparade val)
     const savedAccent = localStorage.getItem('accentColor');
     if (savedAccent && typeof setAccent === "function") {
-        // Vi måste låtsas "klicka" på rätt knapp för att färgerna ska bli rätt!
         const matchingDot = document.querySelector(`.color-dot[style*="${savedAccent}"]`);
         if (matchingDot) {
             setAccent(savedAccent, matchingDot);
         } else {
-             // Fallback om pricken inte hittas
-             document.documentElement.style.setProperty('--accent-color', savedAccent);
-             const savedSec = localStorage.getItem('accentSecondary');
-             if(savedSec) document.documentElement.style.setProperty('--accent-secondary', savedSec);
+            document.documentElement.style.setProperty('--accent-color', savedAccent);
+            const savedSec = localStorage.getItem('accentSecondary');
+            if(savedSec) document.documentElement.style.setProperty('--accent-secondary', savedSec);
         }
     }
     
-if (localStorage.getItem('theme') === 'light') {
+    // HÄR ÄR RADERNA DU VAR RÄDD SKULLE FÖRSVINNA:
+    if (localStorage.getItem('theme') === 'light') {
         document.body.classList.add('light-mode');
     }
+
+    // 6. RITA BIBLIOTEKET (Denna rad lägger vi till för stjärnorna!)
+    if (typeof renderYeastLibrary === "function") {
+        renderYeastLibrary();
+    }
+
+    console.log("🚀 YeastMaster System Fully Initialized");
 });
 
 // --- FUNKTION FÖR ATT RADERA EN PROFIL ---
@@ -3694,7 +3702,6 @@ window.addEventListener('DOMContentLoaded', () => {
     // 3. Uppdatera UI:t (detta tänder rätt knappar och ritar grafen)
     setTempUnit(savedUnit);
     
-    // ... resten av din DOMContentLoaded-kod (loadCustomProfiles, etc) ...
 });
 
 // Hjälpfunktion för att göra decimaldagar läsbara (t.ex. 3.2 -> "3 d and 5 h")
