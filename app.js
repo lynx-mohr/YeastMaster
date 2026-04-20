@@ -2440,42 +2440,50 @@ window.loadProfileIntoLab = function(strainName, profileName) {
         return currentTempUnit === 'F' ? (c * 9/5) + 32 : c;
     }
 
-        if (s.length > 1) {
+ if (s.length > 1) {
             // 1. Pitch och Primary (steg 0 och 1 är alltid samma)
             profilePoints[0] = { x: 0, y: fromCelsius(s[0][1]) };
             profilePoints[1] = { x: s[1][0], y: fromCelsius(s[1][1]) };
 
-            // 2. Är nästa steg (s[2]) en varm städning, eller en kall Cold Crash?
-            // Vi säger att allt under 8°C betyder att profilen har skippat städningen.
-            let hasCleanStep = (s.length > 2 && s[2][1] >= 8.0);
+            // 2. Leta efter Cold Crash (Första steget efter primary som är under 10°C)
+            let crashIndex = s.findIndex((step, idx) => idx > 1 && step[1] < 10.0);
 
-     if (hasCleanStep) {
-                // PLATÅN ÄR STÄDFASEN! 
-                // Vi separerar handtagen så att de tydligt visar att hela den platta linjen är "Clean"
+            if (crashIndex !== -1) {
+                let crashStep = s[crashIndex];
                 
-                // Sätt 'Clean Start' 25% in på platån så att handtagen inte krockar med 'Prim'
-                let plateauStartDay = s[1][0] + ((s[2][0] - s[1][0]) * 0.25); 
-                
-                profilePoints[2] = { x: plateauStartDay, y: fromCelsius(s[2][1]) };
-                profilePoints[3] = { x: s[2][0], y: fromCelsius(s[2][1]) };
+                // Räkna hur många steg som ligger mellan Primary och Krasch
+                let stepsBetween = crashIndex - 1; 
 
-                if (s.length > 3) {
-                    profilePoints[4] = { x: s[3][0], y: fromCelsius(s[3][1]) };
-                    profilePoints[5] = { x: s.length > 4 ? s[4][0] : s[3][0] + 5, y: fromCelsius(s.length > 4 ? s[4][1] : s[3][1]) };
+                if (stepsBetween === 1) {
+                    // T.ex. 4-stegs profil (Går direkt från Primary till Crash)
+                    // Vi skapar en artificiell platt "Clean"-linje för grafen
+                    profilePoints[2] = { x: s[1][0] + ((crashStep[0] - s[1][0]) * 0.25), y: fromCelsius(s[1][1]) };
+                    profilePoints[3] = { x: crashStep[0] - 0.5, y: fromCelsius(s[1][1]) };
+                } 
+                else if (stepsBetween === 2) {
+                    // T.ex. 5-stegs profil (Vanlig Free rise, sen platå, sen krasch)
+                    let cleanStart = s[2];
+                    profilePoints[2] = { x: s[1][0] + ((cleanStart[0] - s[1][0]) * 0.25), y: fromCelsius(cleanStart[1]) };
+                    profilePoints[3] = { x: cleanStart[0], y: fromCelsius(cleanStart[1]) };
                 }
-            } else {
-                // SPECIAL (T.ex. Dry English): Profilen GÅR DIREKT PÅ COLD CRASH
-                let crashDay = s.length > 2 ? s[2][0] : s[1][0] + 4;
-                let crashTemp = s.length > 2 ? s[2][1] : 2.0;
-                let primaryTemp = s[1][1];
+                else if (stepsBetween >= 3) {
+                    // T.ex. 6-stegs profil (Hardcore: Spikrak primary, ramp upp, platå, krasch)
+                    profilePoints[2] = { x: s[2][0], y: fromCelsius(s[2][1]) };
+                    profilePoints[3] = { x: s[3][0], y: fromCelsius(s[3][1]) };
+                }
 
-                // Fyll "Clean"-punkterna med Primary-temperatur så linjen går rakt fram!
-                profilePoints[2] = { x: s[1][0] + ((crashDay - s[1][0]) / 2), y: fromCelsius(primaryTemp) }; 
-                profilePoints[3] = { x: crashDay - 0.5, y: fromCelsius(primaryTemp) }; 
-                
-                // Sätt punkt 4 och 5 till själva kraschen
-                profilePoints[4] = { x: crashDay, y: fromCelsius(crashTemp) };
-                profilePoints[5] = { x: s.length > 3 ? s[3][0] : crashDay + 5, y: fromCelsius(s.length > 3 ? s[3][1] : crashTemp) };
+                // Sätt själva kraschen och konditioneringen
+                profilePoints[4] = { x: crashStep[0], y: fromCelsius(crashStep[1]) };
+                let lastStep = s[s.length - 1];
+                profilePoints[5] = { x: lastStep[0], y: fromCelsius(lastStep[1]) };
+
+            } else {
+                // FALLBACK: Om profilen helt saknar Cold Crash
+                let lastStep = s[s.length - 1] || s[1];
+                profilePoints[2] = { x: s[1][0] + 1, y: fromCelsius(lastStep[1]) };
+                profilePoints[3] = { x: lastStep[0] - 0.5, y: fromCelsius(lastStep[1]) };
+                profilePoints[4] = { x: lastStep[0], y: fromCelsius(lastStep[1]) };
+                profilePoints[5] = { x: lastStep[0] + 5, y: fromCelsius(lastStep[1]) };
             }
         }
 
