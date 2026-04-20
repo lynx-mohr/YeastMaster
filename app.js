@@ -4834,6 +4834,9 @@ function startDemoTour() {
 }
 
 function nextDemoStep() {
+
+    if (window.isLibraryTourActive) return;
+
     currentDemoStep++;
 
     const tooltip = document.getElementById('demo-tour-tooltip');
@@ -5570,3 +5573,133 @@ function checkActionAlerts(currentDay, strainName, profileName) {
         console.error("Larm-detektiven förhindrade en krasch: ", err);
     }
 }
+
+// ==========================================
+// --- YEAST LIBRARY TOUR ---
+// ==========================================
+
+let currentLibStep = -1;
+let libTourSteps = [];
+window.isLibraryTourActive = false; // Spärren som tystar den andra touren!
+
+window.startLibraryTour = function() {
+    window.isLibraryTourActive = true; 
+
+    // 1. Stäng inforutan och återställ i-knappen
+    const infoBox = document.getElementById('library-info-box');
+    if (infoBox) infoBox.style.display = 'none';
+    const iBtn = document.querySelector('.info-icon');
+    if (iBtn) {
+        iBtn.style.backgroundColor = 'rgba(140, 198, 63, 0.15)';
+        iBtn.style.color = '#8CC63F';
+    }
+
+    // 2. Förbered Overlay och Tooltip
+    const overlay = document.getElementById('demo-overlay');
+    const tooltip = document.getElementById('demo-tour-tooltip');
+    if (!overlay || !tooltip) return;
+
+    // Gör overlayen helt genomskinlig så man ser korten
+    overlay.style.display = 'block';
+    overlay.style.backgroundColor = 'transparent'; 
+
+    // Tvinga tooltipens storlek så lång text får plats
+    tooltip.style.width = '260px';
+    tooltip.style.whiteSpace = 'normal';
+    tooltip.style.lineHeight = '1.4';
+    tooltip.style.textAlign = 'center';
+
+    // 3. Definiera stegen
+    libTourSteps = [
+        { 
+            selector: '.yeast-card:first-child', 
+            text: 'Single-click a card to select it for your device. Double-click to open details!',
+            action: () => { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        },
+        { 
+            selector: '.hw-profile-btn', 
+            text: 'Here are the Hardware Profiles. These control your fridge temperatures automatically!',
+            action: () => {
+                const firstCard = document.querySelector('.yeast-card:first-child');
+                if (firstCard) {
+                    // Klicka fram modalen automatiskt!
+                    const yeastId = firstCard.onclick.toString().match(/'([^']+)'/)?.[1];
+                    const yeast = yeastStrains.find(y => y.id === yeastId) || yeastStrains[0];
+                    openYeastModal(yeast);
+                }
+            }
+        },
+        { 
+            selector: '.btn-secondary[onclick*="loadProfileIntoLab"]', 
+            text: 'Want to tweak a profile? Click "Edit in Profiler". Modded profiles get a ★ star!' 
+        },
+        { 
+            selector: 'button[onclick*="openAddStrainModal"]', 
+            text: 'Use this button to add your own wild captures or house strains to your permanent House Bank!',
+            action: () => {
+                closeYeastModal(); // Stäng modalen inför sista steget
+            }
+        }
+    ];
+
+    currentLibStep = -1;
+    
+    // Kapa klick-lyssnaren på skärmen
+    overlay.onclick = window.nextLibraryTourStep;
+    
+    window.nextLibraryTourStep();
+};
+
+window.nextLibraryTourStep = function(e) {
+    // Hindra "spökklick"
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    currentLibStep++;
+    const overlay = document.getElementById('demo-overlay');
+    const tooltip = document.getElementById('demo-tour-tooltip');
+
+    // Är touren slut?
+    if (currentLibStep >= libTourSteps.length) {
+        if(overlay) overlay.style.display = 'none';
+        if(tooltip) tooltip.style.display = 'none';
+        closeYeastModal();
+        window.isLibraryTourActive = false; // Släpp spärren så Live-demon funkar igen!
+        overlay.onclick = null; 
+        return;
+    }
+
+    const step = libTourSteps[currentLibStep];
+    
+    // Kör action (t.ex. öppna modal)
+    if (step.action) step.action();
+
+    // Göm tooltipen tillfälligt under scroll
+    if (tooltip) tooltip.style.display = 'none';
+
+    // Vänta 400ms så att modalen hinner "poppa upp" innan vi letar efter knapparna
+    setTimeout(() => {
+        const target = document.querySelector(step.selector);
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            setTimeout(() => {
+                tooltip.style.display = 'block';
+                document.getElementById('demo-tour-text').innerText = step.text;
+                
+                const rect = target.getBoundingClientRect();
+                tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+                tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2)) + 'px';
+                
+                tooltip.style.animation = 'none';
+                void tooltip.offsetWidth; 
+                tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+            }, 100);
+        } else {
+            // Hittade inte knappen? (Kan hända om första jästen saknar profil), hoppa vidare!
+            window.nextLibraryTourStep();
+        }
+    }, 400); 
+};
