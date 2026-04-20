@@ -5690,38 +5690,45 @@ window.startLibraryTour = function() {
             }
         },
         // --- NYTT STEG 5: Hoppa in i The Profiler ---
-// --- STEG 5: Ladda US-05 och hoppa in i The Profiler ---
+// --- STEG 5: Hoppa in i The Profiler (Den robusta metoden) ---
         {
             selector: '#lab-chart', 
             text: 'Welcome to The Profiler! Here you can drag the points to adjust the curve and set your custom alarms.',
             action: () => {
-                // 1. Stäng modalen och byt vy direkt
+                // 1. Stäng modalen
                 if (typeof closeYeastModal === 'function') closeYeastModal();
-                if (typeof showView === 'function') showView('lab');
                 
-                // 2. Tvinga scroll till toppen så vi ser grafen
-                window.scrollTo({ top: 0, behavior: 'instant' });
+                // 2. Byt vy - Vi testar att köra din flik-logik
+                if (typeof showView === 'function') showView('lab');
 
-                // 3. VÄNTA 100ms – Detta ger webbläsaren tid att rendera Profiler-vyn
+                // 3. VÄNTA – precis som med fejk-kortet behöver DOMen landa
                 setTimeout(() => {
+                    // Hitta US-05 datan
                     const yeast = yeastStrains.find(y => y.id === 'us-05');
+                    
+                    // Försök hitta dina fält baserat på deras typ om ID saknas
+                    const nameInput = document.querySelector('input[placeholder*="JUICEBMB"]') || 
+                                      document.querySelector('input[id*="name"]');
+                    const strainSelect = document.querySelector('select[id*="strain"]') || 
+                                         document.querySelector('select');
+
                     if (yeast) {
-                        // Kör din laddningsfunktion
+                        // Tvinga in texten i fälten manuellt (precis som fejk-kortet)
+                        if (nameInput) nameInput.value = "US-05 Standard";
+                        if (strainSelect) strainSelect.value = yeast.id;
+
+                        // Trigga din officiella laddnings-funktion
                         if (typeof loadProfileIntoLab === 'function') {
                             loadProfileIntoLab(yeast.id, 0); 
                         }
-
-                        // Uppdatera dropdown och namn manuellt som backup
-                        const strainSelect = document.getElementById('lab-strain-select');
-                        if (strainSelect) strainSelect.value = yeast.id;
-                        
-                        const profileNameInput = document.getElementById('lab-profile-name');
-                        if (profileNameInput) profileNameInput.value = yeast.name + " Standard";
-                        
-                        // Om du har en global variabel som håller koll på vald jäst i labbet, sätt den här:
-                        // window.currentLabYeast = yeast; 
                     }
-                }, 100); 
+                    
+                    // Tvinga fönstret att rulla upp så vi ser grafen
+                    window.scrollTo(0, 0);
+                    
+                    // En sista "spark" för att få grafen att rita om sig
+                    window.dispatchEvent(new Event('resize'));
+                }, 250); 
             }
         },
         // --- STEG 6: Tillbaka till biblioteket och visa House Bank ---
