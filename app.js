@@ -5575,35 +5575,28 @@ function checkActionAlerts(currentDay, strainName, profileName) {
 }
 
 // ==========================================
-// --- YEAST LIBRARY TOUR (LÅST & JUSTERAD) ---
+// --- YEAST LIBRARY TOUR (ULTIMAT LÅST VERSION) ---
 // ==========================================
 let currentLibStep = -1;
 let libTourSteps = [];
-window.isLibraryTourActive = false; 
+window.isLibraryTourActive = false; // Spärr för Live Demon
 
-// --- NYTT: Frys-funktioner för att stoppa all scrollning ---
+// Frys-funktioner för att stoppa all scrollning
 function lockTourScroll(e) { e.preventDefault(); }
 
 function disableAllScrolling() {
-    // Stoppar scrollhjul och touch-dragningar
     window.addEventListener('wheel', lockTourScroll, { passive: false });
     window.addEventListener('touchmove', lockTourScroll, { passive: false });
-    document.body.style.overflow = 'hidden'; // Fryser bakgrunden
-    
-    // Fryser även själva jäst-modalen om den är öppen
-    const modal = document.getElementById('yeast-info-modal');
-    if (modal) modal.style.overflowY = 'hidden';
+    document.body.style.overflow = 'hidden'; 
 }
 
 function enableAllScrolling() {
     window.removeEventListener('wheel', lockTourScroll);
     window.removeEventListener('touchmove', lockTourScroll);
     document.body.style.overflow = '';
-    
     const modal = document.getElementById('yeast-info-modal');
     if (modal) modal.style.overflowY = 'auto';
 }
-// -----------------------------------------------------------
 
 window.startLibraryTour = function() {
     window.isLibraryTourActive = true;
@@ -5626,8 +5619,10 @@ window.startLibraryTour = function() {
 
     overlay.style.display = 'block';
     overlay.style.backgroundColor = 'transparent';
-    overlay.style.zIndex = '99998'; // Mörkret FRAMFÖR modalen
-    tooltip.style.zIndex = '99999'; // Pilen allra längst fram
+    
+    // FIX 1: Astronomiskt högt Z-index så att Mörkret ALLTID är framför Modalen!
+    overlay.style.zIndex = '9999998'; 
+    tooltip.style.zIndex = '9999999'; 
 
     tooltip.style.width = '280px';
     tooltip.style.whiteSpace = 'normal';
@@ -5644,36 +5639,43 @@ window.startLibraryTour = function() {
         {
             selector: '#yeast-info-modal .hw-profile-btn',
             text: 'Here are the hardware profiles. Click on them to see the profiles temperature steps.',
-            alignLeft: true, // NYTT: Säger åt pilen att lägga sig till vänster!
+            alignLeft: true,
             action: () => {
-                const firstCard = document.querySelector('.yeast-card:first-child');
-                if (firstCard) {
-                    const yeastId = firstCard.onclick.toString().match(/'([^']+)'/)?.[1];
-                    const yeast = yeastStrains.find(y => y.id === yeastId) || yeastStrains[0];
+                // FIX 2: Tvinga fram US-05 så vi garanterat har hårdvaruprofiler att visa!
+                const yeast = yeastStrains.find(y => y.id === 'us-05') || yeastStrains.find(y => !y.isCustom);
+                if (yeast) {
                     openYeastModal(yeast); 
                     
-                    // Tillfälligt stäng av frysningen precis när modalen öppnas så vi kan rulla upp den till toppen, sen frysa igen
                     const modal = document.getElementById('yeast-info-modal');
                     if (modal) {
-                        modal.style.overflowY = 'auto';
-                        modal.scrollTo(0, 0);
-                        setTimeout(() => { modal.style.overflowY = 'hidden'; }, 50);
+                        modal.style.overflowY = 'hidden'; // Lås scrollen inuti modalen
+                        modal.scrollTo(0, 0); // Börja högst upp
                     }
                 }
             }
         },
         {
-            selector: '#yeast-info-modal .btn-secondary',
-            text: 'Want to tweak a profile? Click "Edit in Profiler". Modded profiles get a ★ star!'
+            selector: '#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]',
+            text: 'Want to tweak a profile? Click "Edit in Profiler". Modded profiles get a ★ star!',
+            action: () => {
+                // FIX 3: Scrolla ner inuti modalen så att Edit-knappen syns!
+                const modal = document.getElementById('yeast-info-modal');
+                const targetBtn = document.querySelector('#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]');
+                if (modal && targetBtn) {
+                    modal.style.overflowY = 'auto'; // Släpp spärren tillfälligt
+                    targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => { modal.style.overflowY = 'hidden'; }, 300); // Lås igen
+                }
+            }
         },
         {
             selector: 'button[onclick*="openAddStrainModal"]',
             text: 'Use this button to add your own wild captures or house strains to your permanent House Bank!',
             action: () => {
-                closeYeastModal(); // Stäng modalen
-                enableAllScrolling(); // Släpp spärren kort för att kunna scrolla ner till knappen
+                closeYeastModal(); 
+                enableAllScrolling(); 
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                setTimeout(disableAllScrolling, 500); // Frys igen när vi är framme
+                setTimeout(disableAllScrolling, 500); 
             }
         },
         {
@@ -5714,7 +5716,7 @@ window.nextLibraryTourStep = function(e) {
             tooltip.style.width = 'auto'; 
         }
         closeYeastModal();
-        enableAllScrolling(); // SLÄPP SKÄRMEN FRI!
+        enableAllScrolling(); 
         window.isLibraryTourActive = false; 
         overlay.onclick = null;
         return;
@@ -5734,7 +5736,6 @@ window.nextLibraryTourStep = function(e) {
         if (target && target.offsetWidth > 0) {
             clearInterval(findTarget); 
 
-            // Scrolla fram målet om det behövs (smooth)
             if (!document.getElementById('yeast-info-modal').contains(target)) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
@@ -5746,13 +5747,10 @@ window.nextLibraryTourStep = function(e) {
                 const rect = target.getBoundingClientRect();
                 const topPos = rect.bottom + window.scrollY + 10;
                 
-                // NY LOGIK FÖR VÄNSTERSTÄLLNING
                 let leftPos;
                 if (step.alignLeft) {
-                    // Peka ca 50 pixlar in från vänsterkanten istället för mitten
                     leftPos = rect.left + window.scrollX + 50;
                 } else {
-                    // Standard: Mitten av elementet
                     leftPos = rect.left + window.scrollX + (rect.width / 2);
                 }
 
