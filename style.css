@@ -975,35 +975,25 @@ body.light-mode .academy-card:hover {
     }
 }
 
-/* --- ACADEMY MOBILE VERTICAL LINE (PANSARVAGNEN) --- */
+/* =========================================
+   --- MOBIL-MARKERING AV KLICKBARA SEKTIONER ---
+   ========================================= */
 @media (max-width: 768px) {
-    /* Vi siktar på både .wizard-step och din gamla .ym-academy-content för att vara 110% säkra */
-    .wizard-step p,
-    .wizard-step ul,
-    .ym-academy-content p,
-    .ym-academy-content ul {
+    /* Vi siktar direkt på de klickbara korten istället för lösa textstycken! */
+    .hardware-card,
+    .academy-card {
+        /* Skapar den snygga accent-linjen till vänster */
+        border-left: 3px solid var(--accent-color) !important;
+        
+        /* Rakare hörn just på vänstersidan gör att linjen ser ut som en markör */
+        border-top-left-radius: 2px !important;
+        border-bottom-left-radius: 2px !important;
+        
+        /* Tvingar in innehållet lite så det inte krockar med linjen */
         padding-left: 15px !important; 
-        /* Om --accent-color misslyckas, använd YeastMaster-grönt som backup! */
-        border-left: 3px solid var(--accent-color, #8CC63F) !important; 
-        border-radius: 2px !important;
-        opacity: 0.9 !important;
-        display: block !important; /* Säkerställer att det är ett block-element */
-    }
-
-    /* Sy ihop linjerna */
-    .wizard-step p + p,
-    .wizard-step p + ul,
-    .wizard-step ul + p,
-    .ym-academy-content p + p {
-        margin-top: 0 !important;
-        padding-top: 15px !important; 
-    }
-    
-    /* Rör inte eventuella Pro-tip-boxar (som har egna border-left i koden) */
-    div[style*="border-left"] p,
-    .warning-box p {
-        border-left: none !important;
-        padding-left: 0 !important;
+        
+        /* Valfritt: En extremt svag glöd bakom hela rutan för att visa att den är klickbar */
+        background: rgba(255, 255, 255, 0.02) !important;
     }
 }
 
