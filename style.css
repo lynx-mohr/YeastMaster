@@ -974,6 +974,32 @@ body.light-mode .academy-card:hover {
         font-size: 1.2rem; /* Gör siffran lite mindre så den inte krockar med % */
     }
 }
+
+/* --- ACADEMY MOBILE VERTICAL LINE --- */
+@media (max-width: 768px) {
+    /* Måltavlan: Paragrafer och listor som ligger direkt under en rubrik i academin */
+    .ym-academy-content > p,
+    .ym-academy-content > ul {
+        /* 1. Skapa plats och linje till vänster */
+        padding-left: 15px; 
+        border-left: 3px solid var(--accent-color); 
+        
+        /* 2. Mjuka upp kanterna på linjen (frivilligt men snyggt) */
+        border-radius: 2px;
+        
+        /* 3. Lätt dämpning av färg/ljusstyrka för att det inte ska bli skrikigt */
+        opacity: 0.9;
+        
+        /* 4. Avstånd mellan styckena */
+        margin-bottom: 20px;
+    }
+
+    /* Om du har flera stycken efter varandra, vill vi inte bryta linjen i onödan */
+    .ym-academy-content > p + p {
+        margin-top: -10px; /* Dra ihop dem lite */
+    }
+}
+
 .res-card.accent { border-left-color: var(--accent-color); }
 .res-label { display: block; font-size: 0.6rem; color: #888; font-weight: 800; margin-bottom: 5px;}
 .res-val { display: block; font-size: 1.5rem; font-weight: 800; color: #fff; }
