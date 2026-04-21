@@ -4052,6 +4052,14 @@ if (user) {
             const devices = await res.json();
 
             window.allFetchedDevices = devices; // Spara listan globalt för Heartbeat
+
+            if (devices.length > 0) {
+                // Om vi inte har en vald enhet än, ta den första i listan
+                if (!activeDeviceId) activeDeviceId = devices[0].device_id; 
+
+                const macDisplay = document.getElementById('setting-mac-display');
+                if (macDisplay) macDisplay.textContent = activeDeviceId;
+
             const activeDev = devices.find(d => d.device_id === activeDeviceId) || devices[0];
             if (activeDev) {
                 window.currentDeviceData = activeDev;
