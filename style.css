@@ -1238,6 +1238,32 @@ body.light-mode .phase-row {
     color: #333 !important;
 }
 
+/* --- ACTIVE DEVICE TEXT COLOR --- */
+/* Standard (Dark Mode) */
+#setting-active-device {
+    color: #ffffff;
+}
+
+/* När man öppnar rullistan (alternativen inuti) */
+#setting-active-device option {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+/* Light Mode Overrides */
+body.light-mode #setting-active-device {
+    color: #111111; /* Blir mörk text mot ljus bakgrund */
+}
+
+body.light-mode #setting-active-device option {
+    background-color: #ffffff;
+    color: #111111;
+}
+
+body.light-mode #setting-mac-display {
+    color: #666666 !important;
+}
+
 /* --- FRYS BAKGRUNDEN NÄR MODAL ÄR ÖPPEN --- */
 html.modal-open, body.modal-open {
     overflow: hidden !important;
