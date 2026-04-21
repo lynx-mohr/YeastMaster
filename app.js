@@ -5939,9 +5939,9 @@ window.nextLibraryTourStep = function(e) {
     
                 // Bygg texten och lägg till EXIT-krysset om det INTE är sista steget
                 let htmlContent = step.text;
-                if (currentLibStep < libTourSteps.length - 1) {
+            if (currentLibStep < libTourSteps.length - 1) {
                     htmlContent += '<span onclick="window.confirmAbortTour(event)" style="position: absolute; top: 8px; right: 12px; color: #ff4444; font-size: 1.2rem; font-weight: bold; cursor: pointer; pointer-events: auto; line-height: 1; transition: 0.2s;">&times;</span>';
-                    document.getElementById('demo-tour-text').style.paddingRight = '15px'; // Skapa utrymme för krysset
+                    document.getElementById('demo-tour-text').style.paddingRight = '30px'; // Dubbelt så stor krockkudde!
                 } else {
                     document.getElementById('demo-tour-text').style.paddingRight = '0';
                 }
