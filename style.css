@@ -1264,6 +1264,38 @@ body.light-mode #setting-mac-display {
     color: #666666 !important;
 }
 
+/* --- LIGHT MODE FIX FÖR INLOGGNINGSRUTAN --- */
+
+/* 1. Gör själva boxen vit med en mjuk skugga */
+body.light-mode .auth-box {
+    background-color: #ffffff !important;
+    border-color: #dddddd !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* 2. Gör "YeastMaster"-rubriken mörk så den syns */
+body.light-mode .auth-box h2 {
+    color: #111111 !important;
+}
+
+/* 3. Justera knappen så den inte försvinner (valfritt om den redan ser bra ut) */
+body.light-mode .auth-box button {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #111;
+}
+
+/* 4. Om du har "Logga in för att se dina enheter"-text i en p-tagg */
+body.light-mode .auth-box p {
+    color: #666666 !important;
+}
+
+/* 5. Se till att hela inloggnings-containern har rätt bakgrund */
+body.light-mode #login-container, 
+body.light-mode #claim-container {
+    background-color: transparent; /* Låter bodyns ljusgrå färg lysa igenom */
+}
+
 /* --- FRYS BAKGRUNDEN NÄR MODAL ÄR ÖPPEN --- */
 html.modal-open, body.modal-open {
     overflow: hidden !important;
