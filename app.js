@@ -70,6 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Vi låter dem börja på SOUL-vyn (där glaset fylls) eller den flik de klickat på.
  // Berätta för mobilens bakåtknapp att "soul" är startplatsen
     history.replaceState({ view: 'soul' }, null, "");
+
+    showView('soul', false);
+
 });
 // --- KONFIGURATION ---
 let activeDeviceId = null;
@@ -5658,11 +5661,12 @@ window.startLibraryTour = function() {
 overlay.style.zIndex = '2147483640'; // Extremt maxat för att alltid slå modalen!
     tooltip.style.zIndex = '2147483647'; 
 
-  tooltip.style.width = 'max-content';
-    tooltip.style.maxWidth = window.innerWidth <= 768 ? '85vw' : '320px';
+tooltip.style.width = 'max-content';
+    tooltip.style.maxWidth = window.innerWidth <= 768 ? '85vw' : '320px'; 
     tooltip.style.whiteSpace = 'normal';
-    tooltip.style.lineHeight = '1.4';
-    tooltip.style.textAlign = 'center';
+    tooltip.style.lineHeight = '1.5';     // Lite luftigare radavstånd är skönt för ögat
+    tooltip.style.textAlign = 'left';     // Snygg vänsterjustering!
+    tooltip.style.pointerEvents = 'auto'; // Livsviktig! Gör att vi faktiskt kan klicka på knappen i rutan.
 
 libTourSteps = [
         // Steg 1: Intro
@@ -5910,9 +5914,9 @@ window.nextLibraryTourStep = function(e) {
             setTimeout(() => {
                 tooltip.style.display = 'block';
     
+              // Sätt texten och den nya EXIT-knappen
                 document.getElementById('demo-tour-text').innerHTML = step.text + 
-               '<div style="text-align: right; margin-top: 15px;"><span onclick="window.abortLibraryTour(event)" style="color:#ff4444; font-size:0.75rem; font-weight:800; letter-spacing:1px; cursor:pointer; padding:6px 10px; border-radius:4px; display:inline-block; background:rgba(255,68,68,0.15); transition: 0.2s;">SKIP TOUR ✕</span></div>';
-
+                '<div style="text-align: right; margin-top: 15px;"><span onclick="window.abortLibraryTour(event)" style="color:#ff4444; font-size:0.75rem; font-weight:800; letter-spacing:1px; cursor:pointer; padding:6px 10px; border-radius:4px; display:inline-block; background:rgba(255,68,68,0.15); transition: 0.2s; pointer-events: auto;">EXIT TOUR ✕</span></div>';
                 // VIKTIGT: Läs av positionen IGEN efter att scrollen är helt färdig!
                 const finalRect = target.getBoundingClientRect();
                 let topPos = finalRect.bottom + window.scrollY + 15; 
