@@ -4032,44 +4032,40 @@ function updateDeviceStatusUI(isOnline) {
     }
 }
 
-    // Huvudmotorn: Inloggningsvakten
+// Huvudmotorn: Inloggningsvakten
 auth.onAuthStateChanged(async (user) => {
-    isAuthResolved = true; // <-- LÄGG TILL DENNA RAD HÄR! Nu vet appen att Firebase är redo.
+    isAuthResolved = true; 
 
     const soulLoginPrompt = document.getElementById('soul-login-prompt');
-    const logoutBtn = document.getElementById('btn-logout'); // <-- 1. Hämta knappen
+    const logoutBtn = document.getElementById('btn-logout');
 
-if (user) {
+    if (user) {
         // --- ANVÄNDAREN ÄR INLOGGAD ---
         if (soulLoginPrompt) soulLoginPrompt.style.display = 'none';
-        if (logoutBtn) logoutBtn.style.display = 'block'; // <-- 2. Visa knappen!
+        if (logoutBtn) logoutBtn.style.display = 'block';
 
         await fetchLibraryFromCloud(user.uid);
 
         try {
-            // EN HÄMTNING FRÅN SERVER
             const res = await fetch(`${API_BASE}/my-devices?uid=${user.uid}`);
             const devices = await res.json();
 
-            window.allFetchedDevices = devices; // Spara listan globalt för Heartbeat
+            window.allFetchedDevices = devices; // Spara listan globalt
 
             if (devices.length > 0) {
-                // Om vi inte har en vald enhet än, ta den första i listan
+                // 1. Sätt aktiv enhet om den saknas
                 if (!activeDeviceId) activeDeviceId = devices[0].device_id; 
 
                 const macDisplay = document.getElementById('setting-mac-display');
                 if (macDisplay) macDisplay.textContent = activeDeviceId;
 
-            const activeDev = devices.find(d => d.device_id === activeDeviceId) || devices[0];
-            if (activeDev) {
-                window.currentDeviceData = activeDev;
-                updateHeartbeatDisplay(activeDev.lastSeen); // Kickstarta UI
-            }
-            
-            if (devices.length > 0) {
-                activeDeviceId = devices[0].device_id; 
-                
-                // 1. FYLL RULLISTAN I SETTINGS (Dashboard Switcher)
+                const activeDev = devices.find(d => d.device_id === activeDeviceId) || devices[0];
+                if (activeDev) {
+                    window.currentDeviceData = activeDev;
+                    if (typeof updateHeartbeatDisplay === 'function') updateHeartbeatDisplay(activeDev.lastSeen);
+                }
+
+                // 2. FYLL RULLISTAN I SETTINGS
                 if (deviceSelect) {
                     deviceSelect.innerHTML = ""; 
                     devices.forEach(dev => {
@@ -4082,7 +4078,7 @@ if (user) {
                     deviceSelect.value = activeDeviceId; 
                 }
 
-                // 2. FYLL RULLISTAN I BIBLIOTEKET (Sync Target)
+                // 3. FYLL RULLISTAN I BIBLIOTEKET
                 const syncDropdown = document.getElementById('sync-target-device');
                 if (syncDropdown) {
                     syncDropdown.innerHTML = "";
@@ -4095,7 +4091,7 @@ if (user) {
                     });
                 }
                 
-                // 3. LADDA NAMN TILL DASHBOARD & FÄLT
+                // 4. LADDA NAMN TILL DASHBOARD
                 const currentNick = getSavedNickname(activeDeviceId);
                 if (nickInput) nickInput.value = currentNick !== "MIN YEASTMASTER" ? currentNick : "";
                 updateDashboardNickname(currentNick);
@@ -4107,38 +4103,25 @@ if (user) {
             }
         } catch (err) {
             console.error("Auth fetch error:", err);
-            // Nödåtgärd om servern strular: Lägg till Demo-Kylen
             if (deviceSelect) deviceSelect.innerHTML = '<option value="TEST">Demo Kyl</option>';
         }
     } else {
-        // ==========================================
         // --- ANVÄNDARE ÄR UTLOGGAD (GÄST-LÄGE) ---
-        // ==========================================
         activeDeviceId = null; 
         selectedStrains = []; 
         
-        if (logoutBtn) logoutBtn.style.display = 'none'; // <--- GÖM KNAPPEN! (LÄGG TILL)
+        if (logoutBtn) logoutBtn.style.display = 'none';
         
-        // Återställ rullistor
         if (deviceSelect) deviceSelect.innerHTML = '<option value="">Logga in för att se enheter</option>';
         const syncDropdown = document.getElementById('sync-target-device');
         if (syncDropdown) syncDropdown.innerHTML = '<option value="">Logga in för att synka</option>';
         
-        // Visa login-uppmaningen på startsidan
         if (soulLoginPrompt) soulLoginPrompt.style.display = 'block';
         
-        // 1. VIKTIGT: Kör uppdateringen! Eftersom activeDeviceId är null, 
-        // kommer din updateDashboard att direkt rendera din Demo-vy!
         if (typeof updateDashboard === 'function') updateDashboard();
-        
-        // 2. Tvinga dem inte till login! Om de laddar sidan på nytt, låt dem 
-        // stanna på 'soul'-vyn (startsidan) eller den vy de just nu befinner sig i.
-        // Vi tar bort showView('login') helt.
-        
-        console.log("Gäst-läge aktiverat. Full tillgång till demo och inställningar!");
+        console.log("Gäst-läge aktiverat.");
     }
 });
-
 // Innehållet för de olika modulerna
 const academyModules = {
   
