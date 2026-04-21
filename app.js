@@ -275,6 +275,11 @@ if (!user && !activeDeviceId) {
             const latest = sortedData[sortedData.length - 1];
             console.log("Senaste sorterade datan:", latest);
 
+            // Vi använder tidsstämpeln 'time' från den senaste loggen
+            if (latest && latest.time && typeof updateHeartbeatDisplay === 'function') {
+                updateHeartbeatDisplay(latest.time);
+            }
+
             // 1. Temperaturer (Med inbyggd spärr för urkopplade sensorer)
             const safeBeerTemp = latest.temp <= -100 ? "--" : (convertTemp(latest.temp).toFixed(1) + '°' + currentTempUnit);
             const safeAirTemp = latest.air_temp <= -100 ? "--" : (convertTemp(latest.air_temp).toFixed(1) + '°' + currentTempUnit);
@@ -4045,6 +4050,13 @@ if (user) {
             // EN HÄMTNING FRÅN SERVER
             const res = await fetch(`${API_BASE}/my-devices?uid=${user.uid}`);
             const devices = await res.json();
+
+            window.allFetchedDevices = devices; // Spara listan globalt för Heartbeat
+            const activeDev = devices.find(d => d.device_id === activeDeviceId) || devices[0];
+            if (activeDev) {
+                window.currentDeviceData = activeDev;
+                updateHeartbeatDisplay(activeDev.lastSeen); // Kickstarta UI
+            }
             
             if (devices.length > 0) {
                 activeDeviceId = devices[0].device_id; 
