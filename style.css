@@ -3687,6 +3687,7 @@ body.light-mode .modal-body em {
 body.light-mode .modal-body strong:not([style*="8CC63F"]):not([style*="F2994A"]):not([style*="--accent"]),
 body.light-mode .modal-body b:not([style*="8CC63F"]):not([style*="F2994A"]):not([style*="--accent"]) {
     color: #111111 !important;
+}
 /* Tvingar även alla rubriknivåer inne i modalen att bli mörka i Light Mode */
 body.light-mode .modal-body h1,
 body.light-mode .modal-body h2,
@@ -3697,7 +3698,6 @@ body.light-mode .modal-body h6 {
     color: #111111 !important;
 }
     
-}
 
 /* =========================================
    --- NUCLEAR LIGHT MODE FIX: RUBRIKER ---
