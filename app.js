@@ -3597,30 +3597,25 @@ function startLibraryTour() {
 
 // --- FUNKTION FÖR ATT AVBRYTA TOUREN ---
 window.abortLibraryTour = function(e) {
-    if (e) e.stopPropagation(); // Hindra klicket från att gå vidare till nästa steg
-
-    const overlay = document.getElementById('demo-overlay');
-    const tooltip = document.getElementById('demo-tour-tooltip');
-
-    // Nollställ gränssnittet
-    if(overlay) { overlay.style.display = 'none'; overlay.style.zIndex = ''; }
-    if(tooltip) { tooltip.style.display = 'none'; tooltip.style.zIndex = ''; tooltip.style.width = 'auto'; tooltip.style.maxWidth = ''; }
-
-    // Städa bort alla fejk-element om de råkar vara framme
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation(); // Skottsäker vägg: Hindrar klicket från att gå vidare
+    }
+    
+    // Tvinga touren till slutet och kör din vanliga, perfekta städlogik!
+    currentLibStep = 999;
+    window.nextLibraryTourStep();
+    
+    // Extra städning ifall vi är mitt i en animation
     const f1 = document.getElementById('tour-fake-custom-card'); if (f1) f1.remove();
     const f2 = document.getElementById('tour-fake-house-card'); if (f2) f2.remove();
-    const f3 = document.getElementById('tour-fake-profiler'); if (f3) f3.remove(); // Ifall vi testar den i framtiden
-
-    // Stäng modaler och slå på scroll
-    if (typeof closeYeastModal === 'function') closeYeastModal();
-    if (typeof enableAllScrolling === 'function') enableAllScrolling(); 
     
-    // Tvinga tillbaka användaren till biblioteket om de hoppat av mitt inuti Profilern
-    if (typeof showView === 'function') showView('library');
-
-    window.isLibraryTourActive = false; 
-    currentLibStep = 999; // Säkerställ att tourens indexbrytare löser ut
-    if(overlay) overlay.onclick = null;
+    // Om användaren avbryter medan de är inne i Lab-vyn, hoppa tillbaka till biblioteket
+    const labView = document.getElementById('view-lab');
+    if (labView && labView.style.display === 'block') {
+        if (typeof showView === 'function') showView('library');
+    }
 };
 
 // Koppla knappen vid start
@@ -5663,8 +5658,8 @@ window.startLibraryTour = function() {
 overlay.style.zIndex = '2147483640'; // Extremt maxat för att alltid slå modalen!
     tooltip.style.zIndex = '2147483647'; 
 
-    tooltip.style.width = 'max-content'; // Anpassar sig efter texten
-    tooltip.style.maxWidth = '85vw';     // Blir aldrig bredare än 85% av mobilskärmen
+  tooltip.style.width = 'max-content';
+    tooltip.style.maxWidth = window.innerWidth <= 768 ? '85vw' : '320px';
     tooltip.style.whiteSpace = 'normal';
     tooltip.style.lineHeight = '1.4';
     tooltip.style.textAlign = 'center';
@@ -5916,7 +5911,7 @@ window.nextLibraryTourStep = function(e) {
                 tooltip.style.display = 'block';
     
                 document.getElementById('demo-tour-text').innerHTML = step.text + 
-                '<br><br><div style="text-align: right;"><span onclick="window.abortLibraryTour(event)" style="color:#ff4444; font-size:0.7rem; font-weight:800; letter-spacing:1px; cursor:pointer; padding:6px 10px; border-radius:4px; display:inline-block; background:rgba(255,68,68,0.1);">SKIP TOUR ✕</span></div>';
+               '<div style="text-align: right; margin-top: 15px;"><span onclick="window.abortLibraryTour(event)" style="color:#ff4444; font-size:0.75rem; font-weight:800; letter-spacing:1px; cursor:pointer; padding:6px 10px; border-radius:4px; display:inline-block; background:rgba(255,68,68,0.15); transition: 0.2s;">SKIP TOUR ✕</span></div>';
 
                 // VIKTIGT: Läs av positionen IGEN efter att scrollen är helt färdig!
                 const finalRect = target.getBoundingClientRect();
@@ -5960,7 +5955,6 @@ window.nextLibraryTourStep = function(e) {
     }, 100);
 };
 
-// --- PREMIUM KULISS-BYGGARE (Nu på riktigt, ingen Commodore 64!) ---
 function createTourMagic() {
     if (document.getElementById('tour-fake-profiler')) return;
     const fake = document.createElement('div');
