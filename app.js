@@ -5937,23 +5937,26 @@ window.nextLibraryTourStep = function(e) {
             setTimeout(() => {
                 tooltip.style.display = 'block';
     
-            // Bygg texten på ett skottsäkert sätt
+          // Bygg texten tajtare och snyggare
                 let htmlContent = '';
                 
                 // Lägg BARA till krysset om vi INTE är på sista steget
                 if (currentLibStep < libTourSteps.length - 1) {
-                    // 1. Kapsla in texten i en låda med en stenhård högermarginal (35px)
-                    htmlContent += '<div style="padding-right: 35px;">' + step.text + '</div>';
+                    // 1. Minska krockkudden till 20px (istället för 35/45)
+                    htmlContent += '<div style="padding-right: 20px;">' + step.text + '</div>';
                     
-                    // 2. Lägg det fria krysset bredvid
-                    htmlContent += '<span onclick="window.confirmAbortTour(event)" style="position: absolute; top: 8px; right: 12px; color: #ff4444; font-size: 1.2rem; font-weight: bold; cursor: pointer; pointer-events: auto; line-height: 1; transition: 0.2s;">&times;</span>';
+                    // 2. Skjut in krysset tajtare i hörnet (top: 6px, right: 8px) och sänk font-size ett snäpp
+                    htmlContent += '<span onclick="window.confirmAbortTour(event)" style="position: absolute; top: 6px; right: 8px; color: #ff4444; font-size: 1.1rem; font-weight: bold; cursor: pointer; pointer-events: auto; line-height: 1; transition: 0.2s;">&times;</span>';
                 } else {
                     htmlContent += '<div>' + step.text + '</div>';
                 }
                 
                 document.getElementById('demo-tour-text').innerHTML = htmlContent;
-                document.getElementById('demo-tour-text').style.paddingRight = '0'; // Rensa bort den gamla spök-regeln!
+                document.getElementById('demo-tour-text').style.paddingRight = '0';
                 
+                document.getElementById('demo-tour-text').innerHTML = htmlContent;
+                document.getElementById('demo-tour-text').style.paddingRight = '0'; // Rensa bort den gamla spök-regeln!
+
                 // VIKTIGT: Läs av positionen IGEN efter att scrollen är helt färdig!
                 const finalRect = target.getBoundingClientRect();
                 let topPos = finalRect.bottom + window.scrollY + 15; 
