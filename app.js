@@ -2876,7 +2876,7 @@ async function populateSyncDevices(uid) {
                 }
             }
         }
-        
+
         dropdown.innerHTML = ""; 
         
         if (devices.length === 0) {
@@ -6137,7 +6137,7 @@ function updateHeartbeatDisplay(lastSeenTimestamp) {
     const diffMs = now - lastSeen;
     const diffMins = Math.floor(diffMs / 60000);
 
-    if (diffMins < 5) {
+    if (diffMins < 16) {
         statusSpan.innerText = "CONNECTED";
         statusSpan.style.color = "#8CC63F"; // YeastMaster Grön
     } else {
