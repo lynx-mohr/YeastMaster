@@ -977,26 +977,28 @@ body.light-mode .academy-card:hover {
 
 /* --- ACADEMY MOBILE VERTICAL LINE --- */
 @media (max-width: 768px) {
-    /* Måltavlan: Paragrafer och listor som ligger direkt under en rubrik i academin */
-    .ym-academy-content > p,
-    .ym-academy-content > ul {
-        /* 1. Skapa plats och linje till vänster */
-        padding-left: 15px; 
-        border-left: 3px solid var(--accent-color); 
-        
-        /* 2. Mjuka upp kanterna på linjen (frivilligt men snyggt) */
+    /* Siktar på all text och alla listor inuti wizard-stegen */
+    .wizard-step p,
+    .wizard-step ul {
+        /* !important tvingar fram detta även om vi skrivit en annan padding i app.js */
+        padding-left: 15px !important; 
+        border-left: 3px solid var(--accent-color) !important; 
         border-radius: 2px;
-        
-        /* 3. Lätt dämpning av färg/ljusstyrka för att det inte ska bli skrikigt */
         opacity: 0.9;
-        
-        /* 4. Avstånd mellan styckena */
-        margin-bottom: 20px;
     }
 
-    /* Om du har flera stycken efter varandra, vill vi inte bryta linjen i onödan */
-    .ym-academy-content > p + p {
-        margin-top: -10px; /* Dra ihop dem lite */
+    /* MAGI: Om två stycken ligger efter varandra, sy ihop deras linjer till en enda lång! */
+    .wizard-step p + p,
+    .wizard-step p + ul,
+    .wizard-step ul + p {
+        margin-top: 0 !important;
+        padding-top: 15px; 
+    }
+    
+    /* Rör inte eventuella Pro-tip-boxar som redan har en egen design */
+    .wizard-step div[style*="border-left"] p {
+        border-left: none !important;
+        padding-left: 0 !important;
     }
 }
 
