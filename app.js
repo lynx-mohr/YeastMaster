@@ -5632,10 +5632,11 @@ window.startLibraryTour = function() {
     overlay.style.left = '0';
     overlay.style.width = '100vw';
     overlay.style.height = '100vh';
-    overlay.style.zIndex = '9999998'; 
-    tooltip.style.zIndex = '9999999'; 
+overlay.style.zIndex = '2147483640'; // Extremt maxat för att alltid slå modalen!
+    tooltip.style.zIndex = '2147483647'; 
 
-    tooltip.style.width = '280px';
+    tooltip.style.width = 'max-content'; // Anpassar sig efter texten
+    tooltip.style.maxWidth = '85vw';     // Blir aldrig bredare än 85% av mobilskärmen
     tooltip.style.whiteSpace = 'normal';
     tooltip.style.lineHeight = '1.4';
     tooltip.style.textAlign = 'center';
@@ -5882,29 +5883,44 @@ window.nextLibraryTourStep = function(e) {
             // Scrolla fram målet mjukt
             target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            // Vänta 400ms så att scroll-animationen hinner bli HELT klar
+           // Vi ökar till 600ms så mobilens animationer (modaler etc) hinner landa helt
             setTimeout(() => {
                 tooltip.style.display = 'block';
                 document.getElementById('demo-tour-text').innerText = step.text;
 
-                const rect = target.getBoundingClientRect();
-                const topPos = rect.bottom + window.scrollY + 10;
+                // VIKTIGT: Läs av positionen IGEN efter att scrollen är helt färdig!
+                const finalRect = target.getBoundingClientRect();
+                let topPos = finalRect.bottom + window.scrollY + 15; 
                 
-                // Justera pilen till vänster om 'alignLeft' är aktiverat
                 let leftPos;
                 if (step.alignLeft) {
-                    leftPos = rect.left + window.scrollX + 50; 
+                    leftPos = finalRect.left + window.scrollX + 20; // Minskad från 50 till 20 för mobil
                 } else {
-                    leftPos = rect.left + window.scrollX + (rect.width / 2);
+                    leftPos = finalRect.left + window.scrollX + (finalRect.width / 2);
                 }
 
                 tooltip.style.top = topPos + 'px';
                 tooltip.style.left = leftPos + 'px';
 
+                // --- MOBIL-KROCKKUDDEN ---
+                // Tvinga webbläsaren att räkna ut exakt hur bred rutan faktiskt blev
+                const ttWidth = tooltip.offsetWidth;
+                const screenWidth = window.innerWidth;
+                
+                // Krockkudde Höger: Om rutan försöker smita utanför skärmen till höger
+                if (leftPos + (ttWidth / 2) > screenWidth - 15) {
+                    tooltip.style.left = (screenWidth - (ttWidth / 2) - 15) + 'px';
+                }
+                // Krockkudde Vänster: Om rutan försöker smita utanför skärmen till vänster
+                if (leftPos - (ttWidth / 2) < 15) {
+                    tooltip.style.left = (ttWidth / 2) + 15 + 'px';
+                }
+                // -------------------------
+
                 tooltip.style.animation = 'none';
                 void tooltip.offsetWidth;
                 tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-            }, 400); // 400ms ger den mjuka scrollen tid att stanna
+            }, 600); // <- Ändrad från 400 till 600
             
         } else if (attempts > 20) {
             clearInterval(findTarget);
