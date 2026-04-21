@@ -3598,6 +3598,20 @@ function startLibraryTour() {
     showStep();
 }
 
+// --- FUNKTION FÖR ATT BEKRÄFTA AVSLUT ---
+window.confirmAbortTour = function(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation(); 
+    }
+    
+    // Webbläsarens inbyggda Ja/Nej-fråga
+    if (confirm("EXIT TOUR?")) {
+        window.abortLibraryTour();
+    }
+};
+
 // --- FUNKTION FÖR ATT AVBRYTA TOUREN ---
 window.abortLibraryTour = function(e) {
     if (e) {
@@ -5885,6 +5899,15 @@ window.nextLibraryTourStep = function(e) {
             tooltip.style.zIndex = ''; 
             tooltip.style.width = 'auto'; 
         }
+        
+        // --- STÄDA BORT FEJK-KORTEN ---
+        const fakeCard = document.getElementById('tour-fake-custom-card');
+        if (fakeCard) fakeCard.remove();
+        
+        const fakeHouseCard = document.getElementById('tour-fake-house-card');
+        if (fakeHouseCard) fakeHouseCard.remove();
+        // ------------------------------
+        
         closeYeastModal();
         enableAllScrolling(); // SLÄPP SKÄRMEN FRI!
         window.isLibraryTourActive = false; 
@@ -5910,13 +5933,21 @@ window.nextLibraryTourStep = function(e) {
             // Scrolla fram målet mjukt
             target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-           // Vi ökar till 600ms så mobilens animationer (modaler etc) hinner landa helt
+            // Vi ökar till 600ms så mobilens animationer (modaler etc) hinner landa helt
             setTimeout(() => {
                 tooltip.style.display = 'block';
     
-              // Sätt texten och den nya EXIT-knappen
-                document.getElementById('demo-tour-text').innerHTML = step.text + 
-                '<div style="text-align: right; margin-top: 15px;"><span onclick="window.abortLibraryTour(event)" style="color:#ff4444; font-size:0.75rem; font-weight:800; letter-spacing:1px; cursor:pointer; padding:6px 10px; border-radius:4px; display:inline-block; background:rgba(255,68,68,0.15); transition: 0.2s; pointer-events: auto;">EXIT TOUR ✕</span></div>';
+                // Bygg texten och lägg till EXIT-krysset om det INTE är sista steget
+                let htmlContent = step.text;
+                if (currentLibStep < libTourSteps.length - 1) {
+                    htmlContent += '<span onclick="window.confirmAbortTour(event)" style="position: absolute; top: 8px; right: 12px; color: #ff4444; font-size: 1.2rem; font-weight: bold; cursor: pointer; pointer-events: auto; line-height: 1; transition: 0.2s;">&times;</span>';
+                    document.getElementById('demo-tour-text').style.paddingRight = '15px'; // Skapa utrymme för krysset
+                } else {
+                    document.getElementById('demo-tour-text').style.paddingRight = '0';
+                }
+                
+                document.getElementById('demo-tour-text').innerHTML = htmlContent;
+
                 // VIKTIGT: Läs av positionen IGEN efter att scrollen är helt färdig!
                 const finalRect = target.getBoundingClientRect();
                 let topPos = finalRect.bottom + window.scrollY + 15; 
