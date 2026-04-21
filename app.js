@@ -5686,7 +5686,7 @@ libTourSteps = [
         // Steg 1: Intro
         {
             selector: '.yeast-card:first-child',
-            text: 'Single-click a card to select it for your device. Double-click to open details!',
+            text: 'Double-click on a card to read about the strain. Single-click to select it for your device. !',
             action: () => { window.scrollTo({ top: 0, behavior: 'smooth' }); }
         },
         // Steg 2: Hardware Profiles
