@@ -2863,6 +2863,20 @@ async function populateSyncDevices(uid) {
         if (!res.ok) throw new Error("Servern svarade inte med 200 OK");
         
         const devices = await res.json();
+
+        window.allFetchedDevices = devices; // Spara listan globalt
+        
+        // Om vi redan vet vilken enhet som är vald, uppdatera statusen direkt!
+        if (typeof activeDeviceId !== 'undefined' && activeDeviceId) {
+            const activeDeviceData = devices.find(d => d.device_id === activeDeviceId);
+            if (activeDeviceData) {
+                window.currentDeviceData = activeDeviceData;
+                if (typeof updateHeartbeatDisplay === 'function') {
+                    updateHeartbeatDisplay(activeDeviceData.lastSeen);
+                }
+            }
+        }
+        
         dropdown.innerHTML = ""; 
         
         if (devices.length === 0) {
@@ -3981,9 +3995,36 @@ if (deviceSelect) {
             macDisplay.textContent = activeDeviceId ? activeDeviceId : "--";
         }
         
+        // ==========================================
+        // --- NYTT: HEARTBEAT (När du byter enhet) ---
+        // ==========================================
+        // Antag att du har sparat alla dina enheter i en global array när du hämtade dem, 
+        // t.ex. window.allFetchedDevices (Kolla vad din array heter i funktionen som hämtar /api/my-devices)
+        if (window.allFetchedDevices) {
+            const selectedDeviceData = window.allFetchedDevices.find(d => d.device_id === activeDeviceId);
+            if (selectedDeviceData) {
+                window.currentDeviceData = selectedDeviceData; // Spara för timern
+                updateHeartbeatDisplay(selectedDeviceData.lastSeen); // Uppdatera UI direkt!
+            }
+        }
+        
         // Uppdatera Dashboarden
         if (typeof updateDashboard === 'function') updateDashboard();
     });
+}
+
+// Uppdaterar status-texten i Settings
+function updateDeviceStatusUI(isOnline) {
+    const statusSpan = document.getElementById('setting-device-status');
+    if (!statusSpan) return;
+
+    if (isOnline) {
+        statusSpan.innerText = "CONNECTED";
+        statusSpan.style.color = "#8CC63F"; // Grön
+    } else {
+        statusSpan.innerText = "OFFLINE";
+        statusSpan.style.color = "#ff4444"; // Röd
+    }
 }
 
     // Huvudmotorn: Inloggningsvakten
@@ -6084,3 +6125,31 @@ function createTourMagic() {
     `;
     document.body.appendChild(fake);
 }
+
+function updateHeartbeatDisplay(lastSeenTimestamp) {
+    const statusSpan = document.getElementById('setting-device-status'); // Se till att du har detta ID i din HTML
+    if (!statusSpan || !lastSeenTimestamp) return;
+
+    const lastSeen = new Date(lastSeenTimestamp);
+    const now = new Date();
+    
+    // Räkna ut skillnaden i minuter
+    const diffMs = now - lastSeen;
+    const diffMins = Math.floor(diffMs / 60000);
+
+    if (diffMins < 5) {
+        statusSpan.innerText = "CONNECTED";
+        statusSpan.style.color = "#8CC63F"; // YeastMaster Grön
+    } else {
+        statusSpan.innerText = `OFFLINE (${diffMins}m ago)`;
+        statusSpan.style.color = "#ff4444"; // Röd
+    }
+}
+
+// Körs i bakgrunden varje 30:e sekund för att hålla statusen färsk i Settings
+setInterval(() => {
+    // Kollar om vi har en vald enhet och om den har en senast-sedd-stämpel
+    if (window.currentDeviceData && window.currentDeviceData.lastSeen) {
+        updateHeartbeatDisplay(window.currentDeviceData.lastSeen);
+    }
+}, 30000);

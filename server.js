@@ -62,6 +62,12 @@ app.post('/api/update', async (req, res) => {
 
     try {
         await logsCollection.insertOne(newEntry);
+
+        await userDevicesCollection.updateOne(
+            { device_id: device_id },
+            { $set: { lastSeen: new Date() } }
+        );
+        
         res.status(200).send({ message: "Data sparad med device_id!" });
     } catch (e) {
         res.status(500).send({ error: "Kunde inte spara i databasen" });
