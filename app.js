@@ -5937,17 +5937,23 @@ window.nextLibraryTourStep = function(e) {
             setTimeout(() => {
                 tooltip.style.display = 'block';
     
-                // Bygg texten och lägg till EXIT-krysset om det INTE är sista steget
-                let htmlContent = step.text;
-          if (currentLibStep < libTourSteps.length - 1) {
+            // Bygg texten på ett skottsäkert sätt
+                let htmlContent = '';
+                
+                // Lägg BARA till krysset om vi INTE är på sista steget
+                if (currentLibStep < libTourSteps.length - 1) {
+                    // 1. Kapsla in texten i en låda med en stenhård högermarginal (35px)
+                    htmlContent += '<div style="padding-right: 35px;">' + step.text + '</div>';
+                    
+                    // 2. Lägg det fria krysset bredvid
                     htmlContent += '<span onclick="window.confirmAbortTour(event)" style="position: absolute; top: 8px; right: 12px; color: #ff4444; font-size: 1.2rem; font-weight: bold; cursor: pointer; pointer-events: auto; line-height: 1; transition: 0.2s;">&times;</span>';
-                    document.getElementById('demo-tour-text').style.paddingRight = '45px'; // <-- Nu tar vi i med råge!
                 } else {
-                    document.getElementById('demo-tour-text').style.paddingRight = '0';
+                    htmlContent += '<div>' + step.text + '</div>';
                 }
                 
                 document.getElementById('demo-tour-text').innerHTML = htmlContent;
-
+                document.getElementById('demo-tour-text').style.paddingRight = '0'; // Rensa bort den gamla spök-regeln!
+                
                 // VIKTIGT: Läs av positionen IGEN efter att scrollen är helt färdig!
                 const finalRect = target.getBoundingClientRect();
                 let topPos = finalRect.bottom + window.scrollY + 15; 
