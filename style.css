@@ -975,28 +975,33 @@ body.light-mode .academy-card:hover {
     }
 }
 
-/* --- ACADEMY MOBILE VERTICAL LINE --- */
+/* --- ACADEMY MOBILE VERTICAL LINE (PANSARVAGNEN) --- */
 @media (max-width: 768px) {
-    /* Siktar på all text och alla listor inuti wizard-stegen */
+    /* Vi siktar på både .wizard-step och din gamla .ym-academy-content för att vara 110% säkra */
     .wizard-step p,
-    .wizard-step ul {
-        /* !important tvingar fram detta även om vi skrivit en annan padding i app.js */
+    .wizard-step ul,
+    .ym-academy-content p,
+    .ym-academy-content ul {
         padding-left: 15px !important; 
-        border-left: 3px solid var(--accent-color) !important; 
-        border-radius: 2px;
-        opacity: 0.9;
+        /* Om --accent-color misslyckas, använd YeastMaster-grönt som backup! */
+        border-left: 3px solid var(--accent-color, #8CC63F) !important; 
+        border-radius: 2px !important;
+        opacity: 0.9 !important;
+        display: block !important; /* Säkerställer att det är ett block-element */
     }
 
-    /* MAGI: Om två stycken ligger efter varandra, sy ihop deras linjer till en enda lång! */
+    /* Sy ihop linjerna */
     .wizard-step p + p,
     .wizard-step p + ul,
-    .wizard-step ul + p {
+    .wizard-step ul + p,
+    .ym-academy-content p + p {
         margin-top: 0 !important;
-        padding-top: 15px; 
+        padding-top: 15px !important; 
     }
     
-    /* Rör inte eventuella Pro-tip-boxar som redan har en egen design */
-    .wizard-step div[style*="border-left"] p {
+    /* Rör inte eventuella Pro-tip-boxar (som har egna border-left i koden) */
+    div[style*="border-left"] p,
+    .warning-box p {
         border-left: none !important;
         padding-left: 0 !important;
     }
