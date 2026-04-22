@@ -377,8 +377,23 @@ const profileDay = latest.profile_day || currentDay;
                 targetTempElement.innerText = targetTemp <= -100 ? "--" : (convertTemp(targetTemp).toFixed(1) + '°' + currentTempUnit);
             }
             
-            // Skicka den sorterade datan till grafen
-            updateChart(sortedData);
+        // ==========================================
+            // --- DATATVÄTT FÖR GRAFEN (Ta bort spikar) ---
+            // ==========================================
+            const cleanChartData = sortedData.map(log => {
+                // Skapa en kopia av loggen så vi inte råkar sabba originalet
+                let cleanLog = { ...log }; 
+                
+                // Om temperaturen är orimligt låg (t.ex. vid glapp på sladden skickar den ofta -127)
+                // Sätt den till 'null'. Graf-biblioteket struntar i 'null' och slipper rita spiken!
+                if (cleanLog.temp <= -50) cleanLog.temp = null;
+                if (cleanLog.air_temp <= -50) cleanLog.air_temp = null;
+                
+                return cleanLog;
+            });
+
+            // Skicka den TVÄTTADE datan till grafen
+            updateChart(cleanChartData);
         }
     } catch (error) {
         console.error("Kunde inte hämta data:", error);
