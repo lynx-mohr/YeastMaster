@@ -2,13 +2,16 @@ const express = require('express');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
 
+// --- NYTT: Importera web-push ---
+const webpush = require('web-push');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const uri = process.env.MONGO_URI; 
 const client = new MongoClient(uri);
 
-let db, logsCollection, userDevicesCollection;
+let db, logsCollection, userDevicesCollection, userLibrariesCollection, pushSubscriptionsCollection;
 
 async function connectDB() {
     try {
@@ -16,9 +19,10 @@ async function connectDB() {
         db = client.db('yeastMasterDB');
         logsCollection = db.collection('fermentationLogs');
         userDevicesCollection = db.collection('userDevices'); 
-        
-        // --- NYTT: Samlingen för det globala profil-biblioteket ---
         userLibrariesCollection = db.collection('userLibraries'); 
+        
+        // --- NYTT: Samlingen för Push-prenumerationer ---
+        pushSubscriptionsCollection = db.collection('pushSubscriptions');
         
         console.log("Ansluten till MongoDB!");
     } catch (e) {
@@ -31,12 +35,25 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('.'));
 
+// ==========================================
+// --- NYTT: VAPID-INSTÄLLNINGAR FÖR PUSH ---
+// ==========================================
+const publicVapidKey = process.env.PUBLIC_VAPID_KEY || 'BDyiHE0Oi9dtL5fr3zYc_b0_WCDurbyKHTEMsJOTZbVnMnvlJRJiZCxtXZjAmyIrzPx9W1RNTdcUnU60VZvCX9w'; 
+const privateVapidKey = process.env.PRIVATE_VAPID_KEY || '9TFEG-Dt9CPzgOvNqaio_rA_4jV3yupcf-4nYsL7_0Q';
+
+// Sätt upp din identitet för Apple/Google
+webpush.setVapidDetails(
+    'mailto:support@yeastmaster.com', 
+    publicVapidKey, 
+    privateVapidKey
+);
+
+
 // --- 1. MOTTAGAREN (Från ESP32) ---
 app.post('/api/update', async (req, res) => {
-
     console.log("Inkommande data från ESP32:", req.body);
   
-   const { device_id, temp, air_temp, day, phase_day, status, action, token, strain, profile, target_temp } = req.body;
+    const { device_id, temp, air_temp, day, phase_day, status, action, token, strain, profile, target_temp } = req.body;
 
     if (token !== "YeastMaster-Super-Secret-2024") {
         return res.status(401).send({ error: "Obehörig!" });
@@ -56,7 +73,6 @@ app.post('/api/update', async (req, res) => {
         action: action || "IDLE", 
         strain,
         profile,
-        // 2. LÄGG TILL DEN I OBJEKTET SOM SPARAS HÄR:
         target_temp 
     };
 
@@ -104,7 +120,6 @@ app.post('/api/claim-device', async (req, res) => {
     }
 
     try {
-        // Upsert: Skapa länken om den inte finns, annars uppdatera namnet
         await userDevicesCollection.updateOne(
             { device_id: device_id },
             { $set: { uid: uid, name: name || "Min YeastMaster", claimed_at: new Date() } },
@@ -133,14 +148,9 @@ app.get('/api/my-devices', async (req, res) => {
 });
 
 // ==========================================
-// --- 6. SYNK-MOTOR FÖR JÄSTPROFILER ---
-// ==========================================
-
-// ==========================================
 // --- 6. GLOBALT BIBLIOTEK FÖR WEBBAPPEN ---
 // ==========================================
 
-// A1. Spara hela biblioteket till molnet (Kopplat till ditt konto)
 app.post('/api/my-library', async (req, res) => {
     const { uid, libraryData } = req.body;
 
@@ -149,7 +159,6 @@ app.post('/api/my-library', async (req, res) => {
     }
 
     try {
-        // Upsert: Skapa ett bibliotek för användaren om det saknas, annars uppdatera det
         await userLibrariesCollection.updateOne(
             { uid: uid },
             { $set: { library: libraryData, last_updated: new Date() } },
@@ -161,7 +170,6 @@ app.post('/api/my-library', async (req, res) => {
     }
 });
 
-// A2. Appen hämtar biblioteket när du loggar in (Mobil eller PC)
 app.get('/api/my-library', async (req, res) => {
     const { uid } = req.query;
 
@@ -172,7 +180,7 @@ app.get('/api/my-library', async (req, res) => {
         if (userLib && userLib.library) {
             res.status(200).json(userLib.library);
         } else {
-            res.status(200).json(null); // Om man är helt ny och saknar bibliotek
+            res.status(200).json(null);
         }
     } catch (e) {
         res.status(500).send({ error: "Kunde inte hämta biblioteket" });
@@ -180,10 +188,9 @@ app.get('/api/my-library', async (req, res) => {
 });
 
 // ==========================================
-// --- SYNK-MOTOR FÖR ESP32 (Max 10 profiler) ---
+// --- SYNK-MOTOR FÖR ESP32 ---
 // ==========================================
 
-// A. Appen skickar de 10 valda profilerna till en specifik maskin
 app.post('/api/sync-profiles', async (req, res) => {
     const { uid, device_id, yeastData } = req.body;
 
@@ -192,7 +199,6 @@ app.post('/api/sync-profiles', async (req, res) => {
     }
 
     try {
-        // Sparar den valda 10-listan på just denna enhet
         await userDevicesCollection.updateOne(
             { uid: uid, device_id: device_id },
             { $set: { syncedProfiles: yeastData } }
@@ -204,18 +210,15 @@ app.post('/api/sync-profiles', async (req, res) => {
     }
 });
 
-// B. ESP32 ropar på denna URL för att hämta SIN specifika lilla lista!
 app.get('/api/device-sync/:mac', async (req, res) => {
     const mac = req.params.mac;
 
     try {
         const device = await userDevicesCollection.findOne({ device_id: mac });
         
-        // Om kylen har en sparad 10-lista i databasen, skicka den!
         if (device && device.syncedProfiles && device.syncedProfiles.yeasts) {
             res.json(device.syncedProfiles);
         } else {
-            // Fallback om man inte synkat något än
             res.json({
                 "yeasts": [
                     {
@@ -244,23 +247,122 @@ app.post('/api/remove-device', async (req, res) => {
     }
 
     try {
-        console.log(`Försöker ta bort enhet ${device_id} för användare ${uid}...`);
-
-        // Leta upp dokumentet i MongoDB och radera det
         const result = await userDevicesCollection.deleteOne({ uid: uid, device_id: device_id });
 
         if (result.deletedCount === 1) {
-            console.log("Enhet borttagen från databasen!");
             res.status(200).send({ message: "Enheten är borttagen" });
         } else {
-            console.log("Enheten hittades inte, eller tillhörde inte denna användare.");
             res.status(404).send({ error: "Enheten hittades inte i databasen" });
         }
     } catch (e) {
-        console.error("Fel vid borttagning av enhet i databasen:", e);
         res.status(500).send({ error: "Kunde inte radera enheten från molnet." });
     }
 });
+
+
+// ==========================================
+// --- NYTT: MOTTA OCH SPARA PRENUMERATIONER PÅ LARM ---
+// ==========================================
+app.post('/api/subscribe', async (req, res) => {
+    const { uid, sub } = req.body;
+
+    if (!uid || !sub) {
+        return res.status(400).send({ error: "Saknar uid eller prenumerationsobjekt" });
+    }
+
+    try {
+        // Spara prenumerationen i databasen kopplad till användaren
+        await pushSubscriptionsCollection.updateOne(
+            { uid: uid },
+            { $set: { subscription: sub, last_updated: new Date() } },
+            { upsert: true }
+        );
+
+        res.status(201).json({ message: 'Prenumeration mottagen och sparad!' });
+
+        // --- TESTLARM: Skickar ett larm direkt som kvitto ---
+        const payload = JSON.stringify({
+            title: 'YeastMaster System',
+            body: 'Din telefon är nu kopplad och redo för brygglarm! 🍻',
+            url: '/'
+        });
+
+        webpush.sendNotification(sub, payload).catch(err => console.error("Push Error:", err));
+
+    } catch (e) {
+        console.error("Kunde inte spara prenumeration:", e);
+        res.status(500).send({ error: "Databasfel" });
+    }
+});
+
+
+// ==========================================
+// --- NYTT: LARM-VAKTEN (WATCHDOG) ---
+// ==========================================
+// Denna funktion körs var 5:e minut och letar efter fel på alla inkopplade maskiner.
+setInterval(async () => {
+    console.log("Watchdog: Kollar efter larm...");
+    
+    if(!userDevicesCollection || !logsCollection || !pushSubscriptionsCollection) return;
+
+    try {
+        // Hämta alla enheter som finns i databasen
+        const devices = await userDevicesCollection.find({}).toArray();
+
+        for (let device of devices) {
+            if (!device.uid || !device.device_id) continue;
+
+            // Hämta den allra senaste loggen för just denna kyl
+            const latestLogArray = await logsCollection.find({ device_id: device.device_id }).sort({ time: -1 }).limit(1).toArray();
+            if (latestLogArray.length === 0) continue;
+            
+            const latestLog = latestLogArray[0];
+            const now = new Date();
+            const timeSinceLastLogMs = now - new Date(latestLog.time);
+            
+            let alarmTitle = null;
+            let alarmBody = null;
+
+            // --- REGLER FÖR ATT SKICKA LARM ---
+            
+            // Regel 1: OFFLINE. Om ingen data kommit in på över 30 minuter.
+            if (timeSinceLastLogMs > (30 * 60 * 1000)) {
+                alarmTitle = '🚨 STRÖMAVBROTT / OFFLINE';
+                alarmBody = `${device.name || 'En av dina kylar'} har inte skickat data på över 30 minuter!`;
+            } 
+            // Regel 2: TEMPERATUR. Om vi är i RUNNING och temperaturen svänger > 2 grader från målet.
+            else if (latestLog.status !== 'FINISHED' && latestLog.status !== 'IDLE' && latestLog.temp > -100) {
+                const diff = Math.abs(latestLog.temp - latestLog.target_temp);
+                if (diff >= 2.0) {
+                    alarmTitle = '⚠️ TEMPERATURVARNING';
+                    alarmBody = `${device.name || 'Din kyl'} avviker med ${diff.toFixed(1)}°C från målet! Aktuell temp: ${latestLog.temp}°C`;
+                }
+            }
+
+            // Om ett larm upptäcktes, hämta användarens telefon-adress och skicka notisen!
+            if (alarmTitle && alarmBody) {
+                const userSub = await pushSubscriptionsCollection.findOne({ uid: device.uid });
+                
+                if (userSub && userSub.subscription) {
+                    const payload = JSON.stringify({
+                        title: alarmTitle,
+                        body: alarmBody,
+                        url: '/'
+                    });
+                    
+                    // Skicka Push-notisen via Google/Apple
+                    webpush.sendNotification(userSub.subscription, payload)
+                        .then(() => console.log(`Skickade larm till UID ${device.uid}`))
+                        .catch(err => console.error("Kunde inte skicka larm:", err));
+                }
+            }
+        }
+    } catch (e) {
+        console.error("Fel i larm-vakten:", e);
+    }
+
+}, 5 * 60 * 1000); // 5 * 60 * 1000 ms = Körs exakt var 5:e minut.
+
 
 // --- DENNA MÅSTE ALLTID LIGGA SIST ---
 app.listen(PORT, '0.0.0.0', () => {

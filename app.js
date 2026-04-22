@@ -6156,3 +6156,58 @@ setInterval(() => {
         updateHeartbeatDisplay(window.currentDeviceData.lastSeen);
     }
 }, 30000);
+
+// En hjälpfunktion för att konvertera VAPID-nycklar (standardkrav för Push API)
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+}
+
+// Funktionen som triggas när du klickar på "Aktivera Larm"
+async function subscribeToPushNotifications() {
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+        try {
+            // 1. Fråga användaren om lov
+            const permission = await Notification.requestPermission();
+            
+            if (permission === 'granted') {
+                const registration = await navigator.serviceWorker.ready;
+
+                // 2. OBS! Denna nyckel ska vi skapa på din server i nästa steg!
+                const publicVapidKey = 'DyiHE0Oi9dtL5fr3zYc_b0_WCDurbyKHTEMsJOTZbVnMnvlJRJiZCxtXZjAmyIrzPx9W1RNTdcUnU60VZvCX9w';
+                const convertedVapidKey = urlBase64ToUint8Array(publicVapidKey);
+
+                // 3. Hämta den unika adressen för denna telefon
+                const subscription = await registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: convertedVapidKey
+                });
+
+                console.log('Prenumeration skapad!', subscription);
+
+                // 4. Skicka 'subscription' till din Node.js-server så den sparas på din Firebase-användare
+                
+                await fetch('https://soulofbeer-live.onrender.com/api/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid: user.uid, sub: subscription })
+                });
+                
+               alert("Larm aktiverade!");
+
+            } else {
+                alert('Du måste tillåta notiser i webbläsarens inställningar.');
+            }
+        } catch (error) {
+            console.error('Kunde inte prenumerera:', error);
+        }
+    } else {
+        alert('Push-notiser stöds inte av denna webbläsare.');
+    }
+}
