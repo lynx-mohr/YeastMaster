@@ -377,19 +377,17 @@ const profileDay = latest.profile_day || currentDay;
                 targetTempElement.innerText = targetTemp <= -100 ? "--" : (convertTemp(targetTemp).toFixed(1) + '°' + currentTempUnit);
             }
             
-        // ==========================================
-            // --- DATATVÄTT FÖR GRAFEN (Ta bort spikar) ---
+   // ==========================================
+            // --- DATATVÄTT 2.0: KASTA UT SPIKARNA ---
             // ==========================================
-            const cleanChartData = sortedData.map(log => {
-                // Skapa en kopia av loggen så vi inte råkar sabba originalet
-                let cleanLog = { ...log }; 
+            // .filter() sparar BARA de loggar som returnerar 'true'
+            const cleanChartData = sortedData.filter(log => {
+                // Kolla om temperaturen finns och är absurd låg
+                if (log.temp !== undefined && log.temp <= -50) return false; // Kasta ut!
+                if (log.air_temp !== undefined && log.air_temp <= -50) return false; // Kasta ut!
                 
-                // Om temperaturen är orimligt låg (t.ex. vid glapp på sladden skickar den ofta -127)
-                // Sätt den till 'null'. Graf-biblioteket struntar i 'null' och slipper rita spiken!
-                if (cleanLog.temp <= -50) cleanLog.temp = null;
-                if (cleanLog.air_temp <= -50) cleanLog.air_temp = null;
-                
-                return cleanLog;
+                // Om allt ser bra ut, släpp igenom loggen till grafen
+                return true; 
             });
 
             // Skicka den TVÄTTADE datan till grafen
