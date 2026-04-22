@@ -377,8 +377,21 @@ const profileDay = latest.profile_day || currentDay;
                 targetTempElement.innerText = targetTemp <= -100 ? "--" : (convertTemp(targetTemp).toFixed(1) + '°' + currentTempUnit);
             }
             
-            // Skicka den sorterade datan till grafen
-            updateChart(sortedData);
+   // ==========================================
+            // --- DATATVÄTT 2.0: KASTA UT SPIKARNA ---
+            // ==========================================
+            // .filter() sparar BARA de loggar som returnerar 'true'
+            const cleanChartData = sortedData.filter(log => {
+                // Kolla om temperaturen finns och är absurd låg
+                if (log.temp !== undefined && log.temp <= -50) return false; // Kasta ut!
+                if (log.air_temp !== undefined && log.air_temp <= -50) return false; // Kasta ut!
+                
+                // Om allt ser bra ut, släpp igenom loggen till grafen
+                return true; 
+            });
+
+            // Skicka den TVÄTTADE datan till grafen
+            updateChart(cleanChartData);
         }
     } catch (error) {
         console.error("Kunde inte hämta data:", error);
