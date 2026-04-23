@@ -58,7 +58,7 @@ webpush.setVapidDetails(
 app.post('/api/update', async (req, res) => {
     console.log("Inkommande data från ESP32:", req.body);
   
-    const { device_id, temp, air_temp, day, phase_day, status, action, token, strain, profile, target_temp } = req.body;
+const { device_id, temp, air_temp, day, phase_day, status, action, token, strain, profile, target_temp, active_alert } = req.body;
 
     if (token !== "YeastMaster-Super-Secret-2024") {
         return res.status(401).send({ error: "Obehörig!" });
@@ -78,7 +78,8 @@ app.post('/api/update', async (req, res) => {
         action: action || "IDLE", 
         strain,
         profile,
-        target_temp 
+        target_temp, 
+        active_alert
     };
 
     try {
