@@ -38,10 +38,15 @@ app.use(express.static('.'));
 // ==========================================
 // --- NYTT: VAPID-INSTÄLLNINGAR FÖR PUSH ---
 // ==========================================
-const publicVapidKey = process.env.PUBLIC_VAPID_KEY || 'BDyiHE0Oi9dtL5fr3zYc_b0_WCDurbyKHTEMsJOTZbVnMnvlJRJiZCxtXZjAmyIrzPx9W1RNTdcUnU60VZvCX9w'; 
-const privateVapidKey = process.env.PRIVATE_VAPID_KEY || '9TFEG-Dt9CPzgOvNqaio_rA_4jV3yupcf-4nYsL7_0Q';
+// Leta upp där du definierade nycklarna tidigare och ändra till detta:
+const publicVapidKey = process.env.PUBLIC_VAPID_KEY; 
+const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
 
-// Sätt upp din identitet för Apple/Google
+// Om du vill ha en extra säkerhetskoll:
+if (!publicVapidKey || !privateVapidKey) {
+    console.error("FEL: VAPID-nycklar saknas i miljövariablerna!");
+}
+
 webpush.setVapidDetails(
     'mailto:support@yeastmaster.com', 
     publicVapidKey, 
