@@ -6193,7 +6193,7 @@ async function subscribeToPushNotifications() {
                 const registration = await navigator.serviceWorker.ready;
 
                 // 2. OBS! Denna nyckel ska vi skapa på din server i nästa steg!
-                const publicVapidKey = 'DyiHE0Oi9dtL5fr3zYc_b0_WCDurbyKHTEMsJOTZbVnMnvlJRJiZCxtXZjAmyIrzPx9W1RNTdcUnU60VZvCX9w';
+                const publicVapidKey = 'BDyiHE0Oi9dtL5fr3zYc_b0_WCDurbyKHTEMsJOTZbVnMnvlJRJiZCxtXZjAmyIrzPx9W1RNTdcUnU60VZvCX9w';
                 const convertedVapidKey = urlBase64ToUint8Array(publicVapidKey);
 
                 // 3. Hämta den unika adressen för denna telefon
