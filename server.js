@@ -335,7 +335,14 @@ setInterval(async () => {
                 alarmTitle = '🚨 STRÖMAVBROTT / OFFLINE';
                 alarmBody = `${device.name || 'En av dina kylar'} har inte skickat data på över 30 minuter!`;
             } 
-            // Regel 2: TEMPERATUR. Om vi är i RUNNING och temperaturen svänger > 2 grader från målet.
+
+// === REGEL 2: HÅRDVARULARM (T.ex. DRY HOP eller DUMP YEAST) ===
+else if (latestLog.active_alert && latestLog.active_alert !== "") {
+    alarmTitle = '🔔 DAGS FÖR ÅTGÄRD!';
+    alarmBody = `${device.name || 'YeastMaster'} meddelar: ${latestLog.active_alert}`;
+}
+
+            // Regel 3: TEMPERATUR. Om vi är i RUNNING och temperaturen svänger > 2 grader från målet.
             else if (latestLog.status !== 'FINISHED' && latestLog.status !== 'IDLE' && latestLog.temp > -100) {
                 const diff = Math.abs(latestLog.temp - latestLog.target_temp);
                 if (diff >= 2.0) {
