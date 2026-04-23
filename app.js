@@ -6186,41 +6186,56 @@ function urlBase64ToUint8Array(base64String) {
 async function subscribeToPushNotifications() {
     if ('serviceWorker' in navigator && 'PushManager' in window) {
         try {
-            // 1. Fråga användaren om lov
+            // 1. Kolla om användaren är inloggad först
+            const user = auth.currentUser;
+            if (!user) {
+                alert("You must be logged in to enable notifications.");
+                return;
+            }
+
+            // 2. Fråga användaren om lov
             const permission = await Notification.requestPermission();
             
             if (permission === 'granted') {
                 const registration = await navigator.serviceWorker.ready;
 
-                // 2. OBS! Denna nyckel ska vi skapa på din server i nästa steg!
+                // 3. Din VAPID-nyckel
                 const publicVapidKey = 'BDyiHE0Oi9dtL5fr3zYc_b0_WCDurbyKHTEMsJOTZbVnMnvlJRJiZCxtXZjAmyIrzPx9W1RNTdcUnU60VZvCX9w';
                 const convertedVapidKey = urlBase64ToUint8Array(publicVapidKey);
 
-                // 3. Hämta den unika adressen för denna telefon
+                // 4. Hämta den unika adressen (subscription) för denna enhet
                 const subscription = await registration.pushManager.subscribe({
                     userVisibleOnly: true,
                     applicationServerKey: convertedVapidKey
                 });
 
-                console.log('Prenumeration skapad!', subscription);
+                console.log('Push Subscription created!', subscription);
 
-                // 4. Skicka 'subscription' till din Node.js-server så den sparas på din Firebase-användare
-                
-                await fetch('https://soulofbeer-live.onrender.com/api/subscribe', {
+                // 5. Skicka till servern (Nu med korrekt user.uid)
+                const response = await fetch('https://soulofbeer-live.onrender.com/api/subscribe', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ uid: user.uid, sub: subscription })
+                    body: JSON.stringify({ 
+                        uid: user.uid, 
+                        sub: subscription 
+                    })
                 });
-                
-               alert("Larm aktiverade!");
+
+                if (response.ok) {
+                    alert("Notifications enabled successfully! 🍻");
+                } else {
+                    console.error("Server responded with an error");
+                    alert("Failed to save subscription on server.");
+                }
 
             } else {
-                alert('Du måste tillåta notiser i webbläsarens inställningar.');
+                alert('Please allow notifications in your browser settings to receive alerts.');
             }
         } catch (error) {
             console.error('Kunde inte prenumerera:', error);
+            alert("An error occurred while setting up notifications.");
         }
     } else {
-        alert('Push-notiser stöds inte av denna webbläsare.');
+        alert('Push notifications are not supported by this browser.');
     }
 }
