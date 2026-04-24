@@ -404,13 +404,20 @@ setInterval(async () => {
                 
                 if (userSub && userSub.subscription) {
                     const timeString = new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
-                    const payload = JSON.stringify({
+                 const payload = JSON.stringify({
                         title: alarmTitle,
                         body: `[${timeString}] ${alarmBody}`,
                         url: '/'
                     });
                     
-                    webpush.sendNotification(userSub.subscription, payload)
+                    // ---> NYTT: Tvinga Apple/Google att leverera direkt (urgency: high)
+                    const pushOptions = {
+                        urgency: 'high',
+                        TTL: 24 * 60 * 60 // Låt notisen ligga och vänta i max 24h om telefonen är helt avstängd
+                    };
+                    
+                    // Skicka Push-notisen via Google/Apple MED VÅRA NYA OPTIONS
+                    webpush.sendNotification(userSub.subscription, payload, pushOptions)
                         .then(() => {
                             console.log(`Skickade larm till UID ${device.uid}: ${alarmTitle}`);
                         })
