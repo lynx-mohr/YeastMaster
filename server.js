@@ -301,6 +301,8 @@ app.post('/api/subscribe', async (req, res) => {
     }
 });
 
+// --- NYTT: Minne för att undvika Push-spam ---
+const notifiedLogs = {};
 
 // ==========================================
 // --- NYTT: LARM-VAKTEN (WATCHDOG) ---
@@ -325,6 +327,12 @@ setInterval(async () => {
             const latestLog = latestLogArray[0];
             const now = new Date();
             const timeSinceLastLogMs = now - new Date(latestLog.time);
+
+            // ---> NYTT: HAR VI REDAN LARMAT FÖR JUST DENNA LOGG? <---
+            const logIdStr = latestLog._id.toString();
+            if (notifiedLogs[device.device_id] === logIdStr) {
+                continue; // Vi har redan larmat för denna, hoppa över och vänta på ny data!
+            }
             
             let alarmTitle = null;
             let alarmBody = null;
@@ -357,15 +365,21 @@ else if (latestLog.active_alert && latestLog.active_alert !== "") {
                 const userSub = await pushSubscriptionsCollection.findOne({ uid: device.uid });
                 
                 if (userSub && userSub.subscription) {
+                    // ---> NYTT: LÄGG TILL KLOCKSLAG I NOTISEN (Så telefonen vet att det är ett nytt larm)
+                    const timeString = new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
                     const payload = JSON.stringify({
                         title: alarmTitle,
-                        body: alarmBody,
+                       body: `[${timeString}] ${alarmBody}`,
                         url: '/'
                     });
                     
                     // Skicka Push-notisen via Google/Apple
                     webpush.sendNotification(userSub.subscription, payload)
-                        .then(() => console.log(`Skickade larm till UID ${device.uid}`))
+                        .then(() => {
+                            console.log(`Skickade larm till UID ${device.uid}`);
+                            // ---> NYTT: SPARA I MINNET ATT VI HAR LARMAT FÖR DENNA MÄTNING <---
+                            notifiedLogs[device.device_id] = logIdStr; 
+                        })
                         .catch(err => console.error("Kunde inte skicka larm:", err));
                 }
             }
