@@ -246,9 +246,9 @@ async function updateDashboard() {
     // Om Firebase fortfarande funderar, avbryt och rita ingenting!
     if (!isAuthResolved) return;
 
-const user = auth.currentUser;
+    const user = auth.currentUser;
 
-if (!user && !activeDeviceId) {
+    if (!user && !activeDeviceId) {
         renderDemoDashboard();
         return; 
     }
@@ -275,6 +275,21 @@ if (!user && !activeDeviceId) {
             const latest = sortedData[sortedData.length - 1];
             console.log("Senaste sorterade datan:", latest);
 
+            // ==========================================
+            // --- NYTT: LOGIK FÖR LARM-MODALEN ---
+            // ==========================================
+            const modal = document.getElementById('alert-modal');
+            const msgElem = document.getElementById('modal-msg');
+
+            // Kolla om servern/ESP32:an skickar med ett aktivt larm i den SENASTE loggen
+            if (latest.active_alert && latest.active_alert !== "") {
+                msgElem.innerText = latest.active_alert; // Sätt in texten från ESP32
+                if (modal) modal.style.display = 'flex'; // Visa popupen!
+            } else {
+                if (modal) modal.style.display = 'none'; // Göm den om allt är lugnt
+            }
+            // ==========================================
+
             // Vi använder tidsstämpeln 'time' från den senaste loggen
             if (latest && latest.time && typeof updateHeartbeatDisplay === 'function') {
                 updateHeartbeatDisplay(latest.time);
@@ -288,7 +303,7 @@ if (!user && !activeDeviceId) {
             document.querySelector('.beer-temp').setAttribute('data-text', safeBeerTemp);
             document.getElementById('air-temp-val').innerText = safeAirTemp;
 
-// 2. Info (Yeast & Profile)
+            // 2. Info (Yeast & Profile)
             let displayStrain = (latest.strain || "---").toUpperCase();
             let displayProfile = (latest.profile || "---").toUpperCase();
 
@@ -342,21 +357,22 @@ if (!user && !activeDeviceId) {
                 arrow.classList.remove('blink-active');
             }
 
-
-         // 4. Status (Hämta direkt från C++)
+            // 4. Status (Hämta direkt från C++)
             document.getElementById('status-text').innerText = latest.status.toUpperCase();
             
             // 5. Dagar (Hämta direkt från C++)
             const currentDay = latest.day || 0;
             const phaseDay = latest.phase_day || 0;
-const profileDay = latest.profile_day || currentDay;
+            const profileDay = latest.profile_day || currentDay;
 
-// --- VÄCK LARM-DETEKTIVEN ---
+            // --- VÄCK LARM-DETEKTIVEN ---
             const currentStrain = latest.strain || "Unknown";
             const currentProfileName = latest.profile || "Unknown";
             
             // SKICKA IN PROFILE-DAY ISTÄLLET FÖR CURRENT-DAY!
-            checkActionAlerts(profileDay, currentStrain, currentProfileName);
+            if (typeof checkActionAlerts === 'function') {
+                checkActionAlerts(profileDay, currentStrain, currentProfileName);
+            }
 
             // 6. Progress (Grafisk bar)
             const targetDays = 14; 
@@ -371,13 +387,14 @@ const profileDay = latest.profile_day || currentDay;
             
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
-           const targetTemp = latest.target_temp || 0; 
+            
+            const targetTemp = latest.target_temp || 0; 
             const targetTempElement = document.getElementById('target-temp-val');
             if (targetTempElement) {
                 targetTempElement.innerText = targetTemp <= -100 ? "--" : (convertTemp(targetTemp).toFixed(1) + '°' + currentTempUnit);
             }
             
-   // ==========================================
+            // ==========================================
             // --- DATATVÄTT 2.0: KASTA UT SPIKARNA ---
             // ==========================================
             // .filter() sparar BARA de loggar som returnerar 'true'
@@ -396,6 +413,20 @@ const profileDay = latest.profile_day || currentDay;
     } catch (error) {
         console.error("Kunde inte hämta data:", error);
     }
+}
+
+// ==========================================
+// --- NYTT: FUNKTION FÖR ATT STÄNGA MODALEN ---
+// ==========================================
+// Denna anropas när du klickar på "JAG HAR FIXAT DET!"
+function dismissAlert() {
+    const modal = document.getElementById('alert-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+    
+    // Framtida uppgradering: Här kan vi lägga till kod för att säga till
+    // servern/ESP32:an att sluta pipa om vi vill styra det från appen!
 }
 
 //Grafen
