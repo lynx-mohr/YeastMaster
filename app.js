@@ -276,17 +276,42 @@ async function updateDashboard() {
             console.log("Senaste sorterade datan:", latest);
 
             // ==========================================
-            // --- NYTT: LOGIK FÖR LARM-MODALEN ---
+            // --- NYTT: LOGIK FÖR LARM-FLIKEN (BANNER) ---
             // ==========================================
-            const modal = document.getElementById('alert-modal');
-            const msgElem = document.getElementById('modal-msg');
+            const banner = document.getElementById('top-banner-alert');
+            const bannerTitle = document.getElementById('banner-title');
 
-            // Kolla om servern/ESP32:an skickar med ett aktivt larm i den SENASTE loggen
+            // 1. Finns det ett larm från ESP32 just nu?
             if (latest.active_alert && latest.active_alert !== "") {
-                msgElem.innerText = latest.active_alert; // Sätt in texten från ESP32
-                if (modal) modal.style.display = 'flex'; // Visa popupen!
+                
+                // Om detta är ett NYTT larm, återställ kvittensen
+                if (currentAlertStr !== latest.active_alert) {
+                    currentAlertStr = latest.active_alert;
+                    alertDismissedByUser = false;
+                }
+
+                // 2. Visa bannern om användaren inte har klickat bort den
+                if (!alertDismissedByUser) {
+                    let displayMsg = latest.active_alert; // Standard-text
+                    
+                    // Snygga till texten till engelska!
+                    if (latest.active_alert.includes("DRY HOP")) {
+                        displayMsg = "🌿 TIME TO DRY HOP!";
+                    } else if (latest.active_alert.includes("DUMP YEAST") || latest.active_alert.includes("RACK")) {
+                        displayMsg = "🧪 TIME TO DUMP YEAST!";
+                    } else if (latest.active_alert.includes("CRASH")) {
+                        displayMsg = "❄️ TIME TO COLD CRASH!";
+                    }
+                    
+                    if (bannerTitle) bannerTitle.innerText = displayMsg;
+                    if (banner) banner.style.display = 'block';
+                }
+
             } else {
-                if (modal) modal.style.display = 'none'; // Göm den om allt är lugnt
+                // Inget larm från ESP32:an längre (tiden har gått ut, eller det är lugnt)
+                currentAlertStr = "";
+                alertDismissedByUser = false;
+                if (banner) banner.style.display = 'none';
             }
             // ==========================================
 
@@ -6268,5 +6293,16 @@ async function subscribeToPushNotifications() {
         }
     } else {
         alert('Push notifications are not supported by this browser.');
+    }
+}
+
+// ==========================================
+// --- KVITTERA BANNERN ---
+// ==========================================
+function dismissBannerAlert() {
+    alertDismissedByUser = true; // Kom ihåg att vi har klickat bort detta specifika larm
+    const banner = document.getElementById('top-banner-alert');
+    if (banner) {
+        banner.style.display = 'none';
     }
 }
