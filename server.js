@@ -301,13 +301,15 @@ app.post('/api/subscribe', async (req, res) => {
     }
 });
 
-// --- NYTT: Minne för att undvika Push-spam ---
-const notifiedLogs = {};
+// --- MINNEN FÖR LARM-VAKTEN ---
+const notifiedLogs = {}; // Minne för att undvika spam för engångshändelser
+const alertState = {};   // Minne för temperatur-eskalering (15 min intensivt, sen 60 min)
 
 // ==========================================
-// --- NYTT: LARM-VAKTEN (WATCHDOG) ---
+// --- LARM-VAKTEN (WATCHDOG) ---
 // ==========================================
-// Denna funktion körs var 5:e minut och letar efter fel på alla inkopplade maskiner.
+// Körs var 1:a minut för att snabbt upptäcka nya loggar, 
+// men skickar bara push enligt reglerna.
 setInterval(async () => {
     console.log("Watchdog: Kollar efter larm...");
     
@@ -320,20 +322,18 @@ setInterval(async () => {
         for (let device of devices) {
             if (!device.uid || !device.device_id) continue;
 
+            const deviceId = device.device_id;
+
             // Hämta den allra senaste loggen för just denna kyl
-            const latestLogArray = await logsCollection.find({ device_id: device.device_id }).sort({ time: -1 }).limit(1).toArray();
+            const latestLogArray = await logsCollection.find({ device_id: deviceId }).sort({ time: -1 }).limit(1).toArray();
             if (latestLogArray.length === 0) continue;
             
             const latestLog = latestLogArray[0];
-            const now = new Date();
-            const timeSinceLastLogMs = now - new Date(latestLog.time);
-
-            // ---> NYTT: HAR VI REDAN LARMAT FÖR JUST DENNA LOGG? <---
+            const now = Date.now();
+            const timeSinceLastLogMs = now - new Date(latestLog.time).getTime();
             const logIdStr = latestLog._id.toString();
-            if (notifiedLogs[device.device_id] === logIdStr) {
-                continue; // Vi har redan larmat för denna, hoppa över och vänta på ny data!
-            }
-            
+
+            let shouldNotify = false;
             let alarmTitle = null;
             let alarmBody = null;
 
@@ -341,44 +341,78 @@ setInterval(async () => {
             
             // Regel 1: OFFLINE. Om ingen data kommit in på över 30 minuter.
             if (timeSinceLastLogMs > (30 * 60 * 1000)) {
-                alarmTitle = '🚨 STRÖMAVBROTT / OFFLINE';
-                alarmBody = `${device.name || 'En av dina kylar'} har inte skickat data på över 30 minuter!`;
+                if (notifiedLogs[deviceId] !== logIdStr + "_offline") {
+                    alarmTitle = '🚨 STRÖMAVBROTT / OFFLINE';
+                    alarmBody = `${device.name || 'En av dina kylar'} har inte skickat data på över 30 minuter!`;
+                    shouldNotify = true;
+                    notifiedLogs[deviceId] = logIdStr + "_offline"; // Kom ihåg detta strömavbrott
+                }
             } 
-
-// === REGEL 2: HÅRDVARULARM (T.ex. DRY HOP eller DUMP YEAST) ===
-else if (latestLog.active_alert && latestLog.active_alert !== "") {
-    alarmTitle = '🔔 DAGS FÖR ÅTGÄRD!';
-    alarmBody = `${device.name || 'YeastMaster'} meddelar: ${latestLog.active_alert}`;
-}
-
-            // Regel 3: TEMPERATUR. Om vi är i RUNNING och temperaturen svänger > 2 grader från målet.
-            else if (latestLog.status !== 'FINISHED' && latestLog.status !== 'IDLE' && latestLog.temp > -100) {
-                const diff = Math.abs(latestLog.temp - latestLog.target_temp);
-                if (diff >= 2.0) {
-                    alarmTitle = '⚠️ TEMPERATURVARNING';
-                    alarmBody = `${device.name || 'Din kyl'} avviker med ${diff.toFixed(1)}°C från målet! Aktuell temp: ${latestLog.temp}°C`;
+            
+            // Regel 2: HÅRDVARULARM (T.ex. DRY HOP eller DUMP YEAST)
+            else if (latestLog.active_alert && latestLog.active_alert !== "") {
+                if (notifiedLogs[deviceId] !== logIdStr) {
+                    alarmTitle = '🔔 DAGS FÖR ÅTGÄRD!';
+                    alarmBody = `${device.name || 'YeastMaster'} meddelar: ${latestLog.active_alert}`;
+                    shouldNotify = true;
+                    notifiedLogs[deviceId] = logIdStr; // Kom ihåg detta specifika larm
                 }
             }
+            
+            // Regel 3: TEMPERATUR (Eskalering)
+            else if (latestLog.status !== 'FINISHED' && latestLog.status !== 'IDLE' && latestLog.temp > -100) {
+                const diff = Math.abs(latestLog.temp - latestLog.target_temp);
+                
+                if (diff >= 2.0) {
+                    // Vi har ett pågående temp-fel!
+                    if (!alertState[deviceId]) {
+                        // Första gången vi upptäcker felet, skapa ett minne
+                        alertState[deviceId] = {
+                            firstDetected: now,
+                            lastNotified: 0
+                        };
+                    }
 
-            // Om ett larm upptäcktes, hämta användarens telefon-adress och skicka notisen!
-            if (alarmTitle && alarmBody) {
+                    const state = alertState[deviceId];
+                    const minutesSinceStart = (now - state.firstDetected) / (60 * 1000);
+                    const minutesSinceLastNotify = (now - state.lastNotified) / (60 * 1000);
+
+                    // Eskaleringslogiken: Var 5:e minut första kvarten, därefter var 60:e minut
+                    if (minutesSinceStart <= 15) {
+                        if (minutesSinceLastNotify >= 5) shouldNotify = true;
+                    } else {
+                        if (minutesSinceLastNotify >= 60) shouldNotify = true;
+                    }
+
+                    if (shouldNotify) {
+                        alarmTitle = '⚠️ TEMPERATURVARNING';
+                        alarmBody = `${device.name || 'Din kyl'} avviker med ${diff.toFixed(1)}°C från målet! Aktuell temp: ${latestLog.temp}°C`;
+                        state.lastNotified = now; // Stämpla klockan för senaste notis
+                    }
+                } else {
+                    // Temperaturen är OK igen (< 2 graders diff), rensa eskaleringsminnet!
+                    delete alertState[deviceId];
+                }
+            } else {
+                // Maskinen är Idle/Finished eller sensorn är trasig. Rensa minnet.
+                delete alertState[deviceId];
+            }
+
+            // --- SKICKA PUSH-NOTISEN ---
+            if (shouldNotify && alarmTitle && alarmBody) {
                 const userSub = await pushSubscriptionsCollection.findOne({ uid: device.uid });
                 
                 if (userSub && userSub.subscription) {
-                    // ---> NYTT: LÄGG TILL KLOCKSLAG I NOTISEN (Så telefonen vet att det är ett nytt larm)
                     const timeString = new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
                     const payload = JSON.stringify({
                         title: alarmTitle,
-                       body: `[${timeString}] ${alarmBody}`,
+                        body: `[${timeString}] ${alarmBody}`,
                         url: '/'
                     });
                     
-                    // Skicka Push-notisen via Google/Apple
                     webpush.sendNotification(userSub.subscription, payload)
                         .then(() => {
-                            console.log(`Skickade larm till UID ${device.uid}`);
-                            // ---> NYTT: SPARA I MINNET ATT VI HAR LARMAT FÖR DENNA MÄTNING <---
-                            notifiedLogs[device.device_id] = logIdStr; 
+                            console.log(`Skickade larm till UID ${device.uid}: ${alarmTitle}`);
                         })
                         .catch(err => console.error("Kunde inte skicka larm:", err));
                 }
@@ -388,7 +422,7 @@ else if (latestLog.active_alert && latestLog.active_alert !== "") {
         console.error("Fel i larm-vakten:", e);
     }
 
-}, 5 * 60 * 1000); // 5 * 60 * 1000 ms = Körs exakt var 5:e minut.
+}, 1 * 60 * 1000); // 1 * 60 * 1000 ms = Körs exakt var 1:a minut.
 
 
 // --- DENNA MÅSTE ALLTID LIGGA SIST ---
