@@ -137,7 +137,7 @@ function showView(viewName, pushToHistory = true) {
     let animClass = '';
     // Kollar om vi flyttar oss i huvudmenyn
     if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-        // Går vi till höger i menyn (t.ex. Home -> Library) så ska bilden komma IN från höger
+        // Går vi till höger i menyn ska bilden komma IN från höger
         animClass = (newIndex > oldIndex) ? 'slide-in-right' : 'slide-in-left';
     }
 
@@ -151,11 +151,10 @@ function showView(viewName, pushToHistory = true) {
                 const isFlexView = (key === 'login' || key === 'claim');
                 views[key].style.display = isFlexView ? 'flex' : 'block';
                 
-                // 2. DET MAGISKA HACKET: Tvinga webbläsaren att registrera att vi tagit bort klassen
-                // Genom att be om offsetWidth, tvingar vi fram en "Reflow" (omritning)
+                // 2. DET MAGISKA HACKET: Tvinga fram en "Reflow"
                 void views[key].offsetWidth; 
                 
-                // 3. Lägg på animationen igen – nu är webbläsaren med på noterna!
+                // 3. Lägg på animationen igen
                 if (animClass) {
                     views[key].classList.add(animClass);
                 }
@@ -165,32 +164,29 @@ function showView(viewName, pushToHistory = true) {
         }
     });
 
- // --- MAGI: FYLL PÅ GLASET AUTOMATISKT NÄR VI GÅR TILL HOME ---
+    // --- MAGI: FYLL PÅ GLASET AUTOMATISKT NÄR VI GÅR TILL HOME ---
     if (viewName === 'soul') {
         const glass = document.getElementById('interactive-beer-glass');
         if (glass) {
-            // 1. Töm glaset och ta bort gamla animationer direkt
             glass.classList.remove('anim-drain', 'anim-fill');
             void glass.offsetWidth; 
             
-            // 2. VÄNTA 800ms (medan "YEAST"-texten tonar in) och fyll sedan på!
             setTimeout(() => {
                 glass.classList.add('anim-fill');
             }, 800);
         }
     }
 
-    // =========================================================
-    // --- LÄGG TILL DETTA: KOLLA LARM-SWITCH NÄR INSTÄLLNINGAR ÖPPNAS ---
-    // =========================================================
+    // --- KOLLA LARM-SWITCH NÄR INSTÄLLNINGAR ÖPPNAS ---
     if (viewName === 'settings') {
+        // Sätt switchen i rätt läge direkt när vyn laddas
         checkPushStatusOnLoad();
     }
 
     // Uppdatera vilken vy som är aktiv nu för nästa gång vi klickar
     currentActiveView = viewName;
 
-    // --- UPPDATERA MENYN ---
+    // --- UPPDATERA MENYN (Städad, bara en kopia nu!) ---
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
         const clickEvent = item.getAttribute('onclick');
