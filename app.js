@@ -6360,3 +6360,31 @@ async function togglePushNotifications(checkboxElement) {
         await unsubscribeFromPushNotifications();
     }
 }
+
+// --- KOLLAR OM LARM-SWITCHEN SKA VARA PÅ ELLER AV NÄR SIDAN LADDAS ---
+async function checkPushStatusOnLoad() {
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+        try {
+            // Vänta på att service workern är redo
+            const registration = await navigator.serviceWorker.ready;
+            // Fråga webbläsaren om denna enhet prenumererar just nu
+            const subscription = await registration.pushManager.getSubscription();
+            
+            // Hitta din snygga switch i HTML
+            const pushToggle = document.getElementById('pushToggle');
+            
+            // Om switchen finns på skärmen just nu, uppdatera den!
+            if (pushToggle) {
+                if (subscription) {
+                    // Prenumeration finns! Dra switchen till PÅ
+                    pushToggle.checked = true;
+                } else {
+                    // Ingen prenumeration. Låt switchen vara AV
+                    pushToggle.checked = false;
+                }
+            }
+        } catch (error) {
+            console.error("Kunde inte kolla prenumerationsstatus:", error);
+        }
+    }
+}
