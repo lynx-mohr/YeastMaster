@@ -107,6 +107,7 @@ if ('scrollRestoration' in history) {
 let currentActiveView = 'soul'; 
 
 // Lägg till 'pushToHistory = true' i parentesen!
+// Lägg till 'pushToHistory = true' i parentesen!
 function showView(viewName, pushToHistory = true) {
     const views = {
         login: document.getElementById('login-container'),
@@ -197,35 +198,6 @@ function showView(viewName, pushToHistory = true) {
 
     // --- NY FIX: Brutal scroll till toppen ---
     setTimeout(() => {
-        window.scrollTo(0, 0);
-        document.body.scrollTop = 0; 
-        document.documentElement.scrollTop = 0;
-    }, 10);
-}
-
-    // Uppdatera vilken vy som är aktiv nu för nästa gång vi klickar
-    currentActiveView = viewName;
-
-    // --- UPPDATERA MENYN ---
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-        const clickEvent = item.getAttribute('onclick');
-        if (clickEvent && clickEvent.includes(`'${viewName}'`)) {
-            item.classList.add('active');
-        }
-    });
-  // --- UPPDATERA MENYN ---
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-        const clickEvent = item.getAttribute('onclick');
-        if (clickEvent && clickEvent.includes(`'${viewName}'`)) {
-            item.classList.add('active');
-        }
-    });
-
-// --- NY FIX: Brutal scroll till toppen ---
-    setTimeout(() => {
-        // Hoppa direkt till toppen utan 'smooth' för att undvika konflikter
         window.scrollTo(0, 0);
         document.body.scrollTop = 0; 
         document.documentElement.scrollTop = 0;
