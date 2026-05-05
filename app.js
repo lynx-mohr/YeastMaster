@@ -180,6 +180,33 @@ function showView(viewName, pushToHistory = true) {
         }
     }
 
+    // =========================================================
+    // --- LÄGG TILL DETTA: KOLLA LARM-SWITCH NÄR INSTÄLLNINGAR ÖPPNAS ---
+    // =========================================================
+    if (viewName === 'settings') {
+        checkPushStatusOnLoad();
+    }
+
+    // Uppdatera vilken vy som är aktiv nu för nästa gång vi klickar
+    currentActiveView = viewName;
+
+    // --- UPPDATERA MENYN ---
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+        const clickEvent = item.getAttribute('onclick');
+        if (clickEvent && clickEvent.includes(`'${viewName}'`)) {
+            item.classList.add('active');
+        }
+    });
+
+    // --- NY FIX: Brutal scroll till toppen ---
+    setTimeout(() => {
+        window.scrollTo(0, 0);
+        document.body.scrollTop = 0; 
+        document.documentElement.scrollTop = 0;
+    }, 10);
+}
+
     // Uppdatera vilken vy som är aktiv nu för nästa gång vi klickar
     currentActiveView = viewName;
 
@@ -6296,6 +6323,44 @@ async function subscribeToPushNotifications() {
     }
 }
 
+async function unsubscribeFromPushNotifications() {
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+        try {
+            const user = auth.currentUser;
+            if (!user) return; // Användaren måste vara inloggad
+
+            const registration = await navigator.serviceWorker.ready;
+            // Hämta den nuvarande prenumerationen
+            const subscription = await registration.pushManager.getSubscription();
+
+            if (subscription) {
+                // 1. Säg åt webbläsaren att sluta lyssna
+                const successful = await subscription.unsubscribe();
+                
+                if (successful) {
+                    console.log('Unsubscribed from push notifications in browser.');
+
+                    // 2. Säg åt servern att ta bort denna enhet från databasen
+                    const response = await fetch('https://soulofbeer-live.onrender.com/api/unsubscribe', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            uid: user.uid, 
+                            endpoint: subscription.endpoint // Skickas med så servern vet exakt VILKEN telefon som ska tas bort
+                        })
+                    });
+
+                    if (response.ok) {
+                        console.log("Subscription removed from server.");
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Ett fel uppstod vid avregistrering:', error);
+        }
+    }
+}
+
 // ==========================================
 // --- KVITTERA BANNERN ---
 // ==========================================
@@ -6304,5 +6369,26 @@ function dismissBannerAlert() {
     const banner = document.getElementById('top-banner-alert');
     if (banner) {
         banner.style.display = 'none';
+    }
+}
+
+async function togglePushNotifications(checkboxElement) {
+    if (checkboxElement.checked) {
+        // Användaren drog switchen till PÅ
+        console.log("Aktiverar notiser...");
+        
+        // Din befintliga funktion! (Vi kan lägga till await om du vill)
+        await subscribeToPushNotifications();
+        
+        // UX-TIPS: Om användaren tryckte "Blockera" i webbläsarens popup, 
+        // borde vi dra tillbaka switchen till "AV" här. 
+        if (Notification.permission !== 'granted') {
+             checkboxElement.checked = false;
+        }
+
+    } else {
+        // Användaren drog switchen till AV
+        console.log("Avaktiverar notiser...");
+        await unsubscribeFromPushNotifications();
     }
 }

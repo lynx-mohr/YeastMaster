@@ -301,6 +301,34 @@ app.post('/api/subscribe', async (req, res) => {
     }
 });
 
+// ==========================================
+// --- NYTT: TA BORT PRENUMERATIONER (AVAKTIVERA LARM) ---
+// ==========================================
+app.post('/api/unsubscribe', async (req, res) => {
+    const { uid, endpoint } = req.body;
+
+    if (!uid || !endpoint) {
+        return res.status(400).send({ error: "Saknar uid eller prenumerationens endpoint" });
+    }
+
+    try {
+        // Eftersom vi bara sparar EN prenumeration per användare (med upsert i /subscribe),
+        // räcker det med att radera det dokument som tillhör användaren (uid).
+        const result = await pushSubscriptionsCollection.deleteOne({ uid: uid });
+
+        if (result.deletedCount === 1) {
+            console.log(`Prenumeration raderad från servern för UID: ${uid}`);
+            res.status(200).send({ message: "Prenumeration borttagen från servern." });
+        } else {
+            // Om ingen prenumeration hittades (användaren kanske redan var avregistrerad)
+            res.status(404).send({ error: "Ingen prenumeration hittades för denna användare." });
+        }
+    } catch (e) {
+        console.error("Kunde inte radera prenumeration från server:", e);
+        res.status(500).send({ error: "Databasfel vid avregistrering." });
+    }
+});
+
 // --- MINNEN FÖR LARM-VAKTEN ---
 const notifiedLogs = {}; // Minne för att undvika spam för engångshändelser
 const alertState = {};   // Minne för temperatur-eskalering (15 min intensivt, sen 60 min)
