@@ -280,66 +280,70 @@ console.log("Kollar larmstatus. Hela latest-objektet:", latest);
 console.log("Värde på active_alert:", latest.active_alert);
             
 // ==========================================
-            // --- LARM-DETEKTIVEN (FELSÖKNING) ---
+            // --- NYTT: SMART BANNER-LOGIK (Inklusive Temp & Strömavbrott) ---
             // ==========================================
             const banner = document.getElementById('top-banner-alert');
             const bannerTitle = document.getElementById('banner-title');
             
             let alertToDisplay = "";
-            console.log("🔍 Tidsmaskin startar. Letar i " + sortedData.length + " historiska loggar...");
 
-            // 1. TIDSRESAN
-            for (let i = sortedData.length - 1; i >= 0; i--) {
-                if (sortedData[i].active_alert && sortedData[i].active_alert !== "") {
-                    
-                    const alertTime = new Date(sortedData[i].time).getTime();
-                    const now = new Date().getTime();
-                    const hoursSinceAlert = (now - alertTime) / (1000 * 60 * 60);
-
-                    console.log(`🚨 Hittade larm i historiken! Typ: "${sortedData[i].active_alert}", Ålder: ${hoursSinceAlert.toFixed(2)} timmar.`);
-
-                    if (hoursSinceAlert < 6) {
-                        alertToDisplay = sortedData[i].active_alert;
-                    }
-                    break; 
+            // --- 1. KOLLA WATCHDOG-LARM (Matte i frontend) ---
+            const nowTime = new Date().getTime();
+            const logTime = latest.time ? new Date(latest.time).getTime() : nowTime;
+            
+            // A. Strömavbrott / Tappad anslutning (>30 minuter gammal data)
+            if ((nowTime - logTime) > (30 * 60 * 1000)) {
+                alertToDisplay = "POWER_OUTAGE";
+            } 
+            // B. Temperatur-avvikelse (>2.0°C diff, förutsatt att sensorerna funkar)
+            else if (latest.temp > -50 && latest.target_temp > -50) {
+                const tempDiff = Math.abs(latest.temp - latest.target_temp);
+                if (tempDiff >= 2.0) {
+                    alertToDisplay = "TEMP_WARNING";
                 }
             }
 
+            // --- 2. KOLLA HÅRDVARU-LARM (Dry hop, Dump, från ESP32) ---
             if (alertToDisplay === "") {
-                console.log("👻 Hittade INGET larm i historiken (de senaste 6 timmarna). ESP32 raderade det för snabbt!");
+                // Skanna historiken efter det senaste hårdvarularmet (max 6 timmar gammalt)
+                for (let i = sortedData.length - 1; i >= 0; i--) {
+                    if (sortedData[i].active_alert && sortedData[i].active_alert !== "") {
+                        const alertAgeHours = (nowTime - new Date(sortedData[i].time).getTime()) / (1000 * 60 * 60);
+                        if (alertAgeHours < 6) {
+                            alertToDisplay = sortedData[i].active_alert;
+                        }
+                        break; 
+                    }
+                }
             }
 
-            // 2. MINNES-KOLLEN
+            // --- 3. MINNES-KOLL & KVITTENS ---
             const dismissedAlert = localStorage.getItem('ym_dismissed_alert');
-            console.log(`🧠 Webbläsarens minne: Har vi kvitterat något larm nyligen? Svar: "${dismissedAlert || "Nej"}"`);
-
             if (alertToDisplay !== "" && alertToDisplay === dismissedAlert) {
-                console.log("🚫 Larmet stoppades: Det fanns ett larm, men webbläsaren säger att vi redan klickat bort det.");
-                alertToDisplay = ""; 
+                alertToDisplay = ""; // Redan kvitterat, tysta larmet!
             }
 
-            // 3. STÄDNING
-            const currentAction = (latest.action || "").toUpperCase();
-            console.log(`⚙️ ESP32 gör just nu: "${currentAction}"`);
-
-            // NYTT: Rensa alltid minnet om kylen lämnar IDLE
-            if (currentAction !== "IDLE" && currentAction !== "WAITING" && currentAction !== "") {
-                if (dismissedAlert) console.log("🧹 ESP32 är aktiv. Rensar gammalt larm-minne.");
-                localStorage.removeItem('ym_dismissed_alert');
-            }
-
-            // 4. VISA BANNERN
+            // --- 4. VISA BANNERN MED RÄTT TEXT ---
             if (alertToDisplay !== "") {
-                console.log("✅ Allt ser bra ut. VISAR BANNERN NU!");
-                let displayMsg = alertToDisplay; 
+                let displayMsg = alertToDisplay; // Standardtext
                 
-                if (alertToDisplay.includes("DRY HOP")) displayMsg = "🌿 TIME TO DRY HOP!";
-                else if (alertToDisplay.includes("DUMP") || alertToDisplay.includes("RACK")) displayMsg = "🧪 TIME TO DUMP YEAST!";
-                else if (alertToDisplay.includes("CRASH")) displayMsg = "❄️ TIME TO COLD CRASH!";
+                // Formatera texten snyggt baserat på larmtyp
+                if (alertToDisplay === "POWER_OUTAGE") {
+                    displayMsg = "⚠️ CONNECTION LOST! Check power/WiFi.";
+                } else if (alertToDisplay === "TEMP_WARNING") {
+                    displayMsg = "🔥 TEMP DEVIATION! >2.0°C difference.";
+                } else if (alertToDisplay.includes("DRY HOP")) {
+                    displayMsg = "🌿 TIME TO DRY HOP!";
+                } else if (alertToDisplay.includes("DUMP") || alertToDisplay.includes("RACK")) {
+                    displayMsg = "🧪 TIME TO DUMP YEAST!";
+                } else if (alertToDisplay.includes("CRASH")) {
+                    displayMsg = "❄️ TIME TO COLD CRASH!";
+                }
                 
                 if (bannerTitle) bannerTitle.innerText = displayMsg;
                 if (banner) banner.style.display = 'block';
                 
+                // Spara strängen så kvittens-knappen vet vad den stänger
                 window.currentActiveAlertString = alertToDisplay; 
             } else {
                 if (banner) banner.style.display = 'none';
