@@ -2979,7 +2979,7 @@ async function populateSyncDevices(uid) {
 
     // Säkerhetskoll
     if (!uid) {
-        dropdown.innerHTML = '<option value="">Logga in för att se enheter</option>';
+        dropdown.innerHTML = '<option value="">Log in to see devices</option>';
         return;
     }
 
@@ -4234,9 +4234,9 @@ auth.onAuthStateChanged(async (user) => {
         
         if (logoutBtn) logoutBtn.style.display = 'none';
         
-        if (deviceSelect) deviceSelect.innerHTML = '<option value="">Logga in för att se enheter</option>';
+        if (deviceSelect) deviceSelect.innerHTML = '<option value="">Log in to see devices</option>';
         const syncDropdown = document.getElementById('sync-target-device');
-        if (syncDropdown) syncDropdown.innerHTML = '<option value="">Logga in för att synka</option>';
+        if (syncDropdown) syncDropdown.innerHTML = '<option value="">Add device to sync</option>';
         
         if (soulLoginPrompt) soulLoginPrompt.style.display = 'block';
         
