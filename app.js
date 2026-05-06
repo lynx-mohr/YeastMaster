@@ -4178,6 +4178,9 @@ auth.onAuthStateChanged(async (user) => {
                 // 1. Sätt aktiv enhet om den saknas
                 if (!activeDeviceId) activeDeviceId = devices[0].device_id; 
 
+                const removeRow = document.getElementById('row-remove-device');
+                if (removeRow) removeRow.style.display = 'flex'; // Använd flex för att behålla din snygga layout
+
                 const macDisplay = document.getElementById('setting-mac-display');
                 if (macDisplay) macDisplay.textContent = activeDeviceId;
 
