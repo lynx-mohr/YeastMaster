@@ -917,7 +917,7 @@ function setActive(clickedElement) {
 }
 
 // ==========================================
-// THE ARCANE LAB (Interaktiv Profilbyggare)
+// THE PROFILER (Interaktiv Profilbyggare)
 // ==========================================
 
 let labChart;
@@ -2634,8 +2634,8 @@ function openYeastModal(yeast) {
     modalTitle.innerText = yeast.name;
     let detailedText = "";
 
-// 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN ARCANE LAB
-  // 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN ARCANE LAB
+// 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN PROFILER
+  // 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN PROFILER
     if (yeast.isCustom) {
         const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
         const profileData = savedProfiles.find(p => p.s === yeast.name);
@@ -2829,7 +2829,7 @@ window.addEventListener('DOMContentLoaded', () => {
         loadCustomProfiles();
     }
 
-    // 2. Fyll rullistan i Arcane Lab
+    // 2. Fyll rullistan i Profiler
     if (typeof populateBaseYeastDropdown === "function") {
         populateBaseYeastDropdown();
     }
@@ -3981,7 +3981,7 @@ async function fetchLibraryFromCloud(uid) {
             
             // Vi kollar om vi fick något svar överhuvudtaget
             if (data) {
-                // 1. Hantera Custom Profiles (dina Arcane Lab-recept)
+                // 1. Hantera Custom Profiles (dina Profiler-recept)
                 // Vi kollar om objektet innehåller profiler
                 if (data.customProfiles && Array.isArray(data.customProfiles)) {
                     localStorage.setItem('customYeastProfiles', JSON.stringify(data.customProfiles));
