@@ -6459,12 +6459,20 @@ function clearDeviceSettingsUI() {
     const nickEl = document.getElementById('setting-nickname');
     const macEl = document.getElementById('setting-mac-display');
     const activeDeviceSelect = document.getElementById('setting-active-device');
+    
+    // De nya elementen
+    const pushToggle = document.getElementById('pushToggle');
+    const removeRow = document.getElementById('row-remove-device');
 
     if (statusEl) {
         statusEl.innerText = "WAITING...";
-        statusEl.style.color = "#888"; // Återställ från grön "CONNECTED"
+        statusEl.style.color = "#888"; 
     }
     if (nickEl) nickEl.value = "";
     if (macEl) macEl.innerText = "--";
-    if (activeDeviceSelect) activeDeviceSelect.innerHTML = '<option value="">Logga in för att se v</option>';
+    if (activeDeviceSelect) activeDeviceSelect.innerHTML = '<option value="">Log in to see devices</option>';
+    
+    // --- NYTT: Stäng av push och göm papperskorgen ---
+    if (pushToggle) pushToggle.checked = false;
+    if (removeRow) removeRow.style.display = 'none';
 }
