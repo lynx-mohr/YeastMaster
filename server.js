@@ -405,12 +405,14 @@ setInterval(async () => {
                     const minutesSinceStart = (now - state.firstDetected) / (60 * 1000);
                     const minutesSinceLastNotify = (now - state.lastNotified) / (60 * 1000);
 
-                    // Eskaleringslogiken: Var 5:e minut första kvarten, därefter var 60:e minut
-                    if (minutesSinceStart <= 15) {
-                        if (minutesSinceLastNotify >= 5) shouldNotify = true;
-                    } else {
-                        if (minutesSinceLastNotify >= 60) shouldNotify = true;
-                    }
+                // ==========================================
+// NY LUGNARE ESKALERINGSLOGIK
+// ==========================================
+// minutesSinceLastNotify kommer att vara extremt hög första gången felet upptäcks (eftersom lastNotified är 0).
+// Därefter väntar vi 120 minuter (2 timmar) innan vi skickar nästa påminnelse.
+if (minutesSinceLastNotify >= 120) {
+    shouldNotify = true;
+}
 
                     if (shouldNotify) {
                         alarmTitle = '⚠️ TEMPERATURVARNING';
