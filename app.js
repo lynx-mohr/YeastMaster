@@ -6360,7 +6360,9 @@ async function unsubscribeFromPushNotifications() {
 // --- KVITTERA BANNERN ---
 // ==========================================
 function dismissBannerAlert() {
-    alertDismissedByUser = true; // Kom ihåg att vi har klickat bort detta specifika larm
+    alertDismissedByUser = true; 
+    localStorage.removeItem('ym_active_alert'); // <-- NYTT: Rensa webbläsarens minne
+    
     const banner = document.getElementById('top-banner-alert');
     if (banner) {
         banner.style.display = 'none';
