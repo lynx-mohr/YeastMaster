@@ -1,3 +1,9 @@
+// ==========================================
+// --- GLOBALA VARIABLER ---
+// ==========================================
+let currentAlertStr = "";
+let alertDismissedByUser = false;
+
 const yeastStrains = [
     // ==========================================
     // --- DRY YEASTS (Torrjäst) ---
@@ -270,6 +276,9 @@ async function updateDashboard() {
             const latest = sortedData[sortedData.length - 1];
             console.log("Senaste sorterade datan:", latest);
 
+console.log("Kollar larmstatus. Hela latest-objektet:", latest);
+console.log("Värde på active_alert:", latest.active_alert);
+            
             // ==========================================
             // --- NYTT: LOGIK FÖR LARM-FLIKEN (BANNER) ---
             // ==========================================
