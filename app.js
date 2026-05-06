@@ -4242,6 +4242,8 @@ auth.onAuthStateChanged(async (user) => {
         
         if (typeof updateDashboard === 'function') updateDashboard();
         console.log("Gäst-läge aktiverat.");
+
+        clearDeviceSettingsUI();
     }
 });
 // Innehållet för de olika modulerna
@@ -6447,4 +6449,22 @@ async function checkPushStatusOnLoad() {
             console.error("Kunde inte kolla prenumerationsstatus:", error);
         }
     }
+}
+
+// ==========================================
+// --- STÄDA SETTINGS-VYN VID UTLOGGNING ---
+// ==========================================
+function clearDeviceSettingsUI() {
+    const statusEl = document.getElementById('setting-device-status');
+    const nickEl = document.getElementById('setting-nickname');
+    const macEl = document.getElementById('setting-mac-display');
+    const activeDeviceSelect = document.getElementById('setting-active-device');
+
+    if (statusEl) {
+        statusEl.innerText = "WAITING...";
+        statusEl.style.color = "#888"; // Återställ från grön "CONNECTED"
+    }
+    if (nickEl) nickEl.value = "";
+    if (macEl) macEl.innerText = "--";
+    if (activeDeviceSelect) activeDeviceSelect.innerHTML = '<option value="">Logga in för att se v</option>';
 }
