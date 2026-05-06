@@ -279,42 +279,65 @@ async function updateDashboard() {
 console.log("Kollar larmstatus. Hela latest-objektet:", latest);
 console.log("Värde på active_alert:", latest.active_alert);
             
-            // ==========================================
-            // --- NYTT: LOGIK FÖR LARM-FLIKEN (BANNER) ---
+    // ==========================================
+            // --- NYTT: LOGIK FÖR LARM-FLIKEN (SKOTTSÄKER TIDSRESA) ---
             // ==========================================
             const banner = document.getElementById('top-banner-alert');
             const bannerTitle = document.getElementById('banner-title');
+            
+            let alertToDisplay = "";
 
-            // 1. Finns det ett larm från ESP32 just nu?
-            if (latest.active_alert && latest.active_alert !== "") {
-                
-                // Om detta är ett NYTT larm, återställ kvittensen
-                if (currentAlertStr !== latest.active_alert) {
-                    currentAlertStr = latest.active_alert;
-                    alertDismissedByUser = false;
-                }
-
-                // 2. Visa bannern om användaren inte har klickat bort den
-                if (!alertDismissedByUser) {
-                    let displayMsg = latest.active_alert; // Standard-text
+            // 1. TIDSRESAN: Skanna bakåt i all inläst data för att hitta det allra senaste larmet.
+            // Vi letar från slutet av arrayen (nyast) mot början (äldst).
+            for (let i = sortedData.length - 1; i >= 0; i--) {
+                if (sortedData[i].active_alert && sortedData[i].active_alert !== "") {
                     
-                    // Snygga till texten till engelska!
-                    if (latest.active_alert.includes("DRY HOP")) {
-                        displayMsg = "🌿 TIME TO DRY HOP!";
-                    } else if (latest.active_alert.includes("DUMP YEAST") || latest.active_alert.includes("RACK")) {
-                        displayMsg = "🧪 TIME TO DUMP YEAST!";
-                    } else if (latest.active_alert.includes("CRASH")) {
-                        displayMsg = "❄️ TIME TO COLD CRASH!";
+                    // Vi hittade ett larm! Kolla hur gammalt det är.
+                    const alertTime = new Date(sortedData[i].time).getTime();
+                    const now = new Date().getTime();
+                    const hoursSinceAlert = (now - alertTime) / (1000 * 60 * 60);
+
+                    // Om larmet är yngre än t.ex. 6 timmar, plockar vi upp det.
+                    if (hoursSinceAlert < 6) {
+                        alertToDisplay = sortedData[i].active_alert;
                     }
-                    
-                    if (bannerTitle) bannerTitle.innerText = displayMsg;
-                    if (banner) banner.style.display = 'block';
+                    break; // Vi har hittat det senaste larmet, avbryt loopen!
                 }
+            }
 
+            // 2. Kolla om användaren redan har klickat bort detta i appen
+            const dismissedAlert = localStorage.getItem('ym_dismissed_alert');
+            if (alertToDisplay !== "" && alertToDisplay === dismissedAlert) {
+                alertToDisplay = ""; // Användaren har kvitterat, tysta larmet!
+            }
+
+            // 3. SMART STÄDNING: Om ESP32:an har börjat jobba aktivt igen 
+            // (dvs du har tryckt på den fysiska knappen på bryggverket) rensar vi minnet.
+            const currentAction = (latest.action || "").toUpperCase();
+            if (currentAction === "COOLING" || currentAction === "HEATING") {
+                localStorage.removeItem('ym_dismissed_alert');
+                alertToDisplay = ""; // Dölj larmet, faran är över!
+            }
+
+            // 4. Visa bannern!
+            if (alertToDisplay !== "") {
+                let displayMsg = alertToDisplay; 
+                
+                // Snygga till texten
+                if (alertToDisplay.includes("DRY HOP")) {
+                    displayMsg = "🌿 TIME TO DRY HOP!";
+                } else if (alertToDisplay.includes("DUMP") || alertToDisplay.includes("RACK")) {
+                    displayMsg = "🧪 TIME TO DUMP YEAST!";
+                } else if (alertToDisplay.includes("CRASH")) {
+                    displayMsg = "❄️ TIME TO COLD CRASH!";
+                }
+                
+                if (bannerTitle) bannerTitle.innerText = displayMsg;
+                if (banner) banner.style.display = 'block';
+                
+                // Spara undan strängen så dismissBannerAlert vet vad den ska stänga
+                window.currentActiveAlertString = alertToDisplay; 
             } else {
-                // Inget larm från ESP32:an längre (tiden har gått ut, eller det är lugnt)
-                currentAlertStr = "";
-                alertDismissedByUser = false;
                 if (banner) banner.style.display = 'none';
             }
             // ==========================================
