@@ -324,6 +324,24 @@ console.log("Värde på active_alert:", latest.active_alert);
                 updateHeartbeatDisplay(latest.time);
             }
 
+            // ==========================================
+            // --- NYTT: UPPDATERA LAST SYNC TIME ---
+            // ==========================================
+            if (latest && latest.time) {
+                const syncDate = new Date(latest.time);
+                const timeString = syncDate.toLocaleTimeString('sv-SE', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    second: '2-digit' // Ta bort denna om du bara vill se HH:MM
+                });
+                
+                const syncElement = document.getElementById('last-sync-time');
+                if (syncElement) {
+                    syncElement.innerText = timeString;
+                }
+            }
+            // ==========================================
+            
             // 1. Temperaturer (Med inbyggd spärr för urkopplade sensorer)
             const safeBeerTemp = latest.temp <= -100 ? "--" : (convertTemp(latest.temp).toFixed(1) + '°' + currentTempUnit);
             const safeAirTemp = latest.air_temp <= -100 ? "--" : (convertTemp(latest.air_temp).toFixed(1) + '°' + currentTempUnit);
