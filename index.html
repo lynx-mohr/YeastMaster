@@ -17,7 +17,7 @@
 
 <div id="top-banner-alert" style="display: none; position: fixed; top: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; z-index: 9999; background: #f39c12; color: #000; padding: 15px; border-radius: 8px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(242, 153, 74, 0.4); animation: slideDown 0.4s ease-out;" onclick="dismissBannerAlert()">
             <div id="banner-title" style="font-weight: 900; font-size: 1.1rem; letter-spacing: 1px;">🔔 ACTION REQUIRED</div>
-            <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 5px;">(Tap to dismiss)</div>
+            <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 5px;" data-i18n="alerts.tap_dismiss">(Tap to dismiss)</div>
         </div>
         
         <style>
@@ -30,21 +30,21 @@
     <div id="login-container">
         <div class="auth-box">
             <h1>YeastMaster</h1>
-                        <button id="btn-login" class="btn-primary">Login via Google</button>
+                        <button id="btn-login" class="btn-primary" data-i18n="login.btn">Login via Google</button>
         </div>
     </div>
 
     <div id="claim-container" style="display: none;">
         <div class="auth-box">
-            <h2>Connect Device</h2>
-            <p>Enter ID from the OLED menu</p>
+            <h2 data-i18n="claim.title">Connect Device</h2>
+            <p data-i18n="claim.desc">Enter ID from the OLED menu</p>
             <input type="text" id="input-mac" placeholder="E4:B0:63:AE:1C:25" style="margin-bottom: 10px;">
             
-            <input type="text" id="input-nickname" placeholder="Nickname (e.g., Fridge 1 / Large Conical)" 
+            <input type="text" id="input-nickname" placeholder="Nickname (e.g., Fridge 1 / Large Conical)" data-i18n-placeholder="claim.nick_placeholder"
                    style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
             
-            <button id="btn-claim" class="btn-primary">Aktivera Bryggverk</button>
-            <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.6;">Action-meny -> Device ID</p>
+            <button id="btn-claim" class="btn-primary" data-i18n="claim.btn_activate">Aktivera Bryggverk</button>
+            <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.6;" data-i18n="claim.hint">Action-meny -> Device ID</p>
         </div>
     </div>
 
@@ -60,13 +60,13 @@
             </div>
 
             <div style="font-size: 0.65rem; color: #888; font-weight: 600; text-transform: uppercase; margin-top: -10px; margin-bottom: 15px; position: relative; z-index: 10;">
-    Last sync: <span id="last-sync-time" style="color: #aaa;">Waiting...</span>
+    <span data-i18n="dashboard.last_sync">Last sync:</span> <span id="last-sync-time" style="color: #aaa;" data-i18n="dashboard.waiting">Waiting...</span>
 </div>
             
             <div class="main-display">
                 <div class="left-col"> 
                     <div class="carboy-wrapper">
-                        <div class="air-floating">Air: <span id="air-temp-val">--°C</span></div>
+                        <div class="air-floating"><span data-i18n="dashboard.air">Air:</span> <span id="air-temp-val">--°C</span></div>
                         <svg viewBox="0 0 100 92" class="carboy-svg">
                             <defs>
                                 <clipPath id="bottle-clip">
@@ -97,13 +97,13 @@
             <hr class="separator-line">
 
             <div class="progress-section">
-                <div style="font-size: 1.2rem; font-weight: 800; letter-spacing: 1px;">PROGRESS</div>
+                <div style="font-size: 1.2rem; font-weight: 800; letter-spacing: 1px;" data-i18n="dashboard.progress">PROGRESS</div>
                 <hr style="border-top: 1px dashed #555; margin: 4px 0 10px 0; opacity: 0.6;">
                 <div class="progress-widget">
                     <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; color: #888;">
-                        <span>START</span>
+                        <span data-i18n="dashboard.start">START</span>
                         <span id="progress-percent">0%</span>
-                        <span>READY</span>
+                        <span data-i18n="dashboard.ready">READY</span>
                     </div>
                     <div class="progress-bar-bg">
                         <div id="progress-fill" class="progress-fill-anim"></div>
@@ -111,15 +111,15 @@
                 </div>
 
                 <div class="phase-info">
-                    <div class="phase-row">Phase: <span id="status-text" style="font-weight: 800; color: #fff;">--</span></div>
-                    <div class="day-row">Since start: <span id="day-val" style="color: var(--oled-color);">0 h</span></div>
-                    <div class="phase-day-row">Time in phase: <span id="phase-day-val" style="color: var(--accent-color);">0 h</span></div>
-                   <div class="target-temp-row">Goal temp in phase: <span id="target-temp-val" style="color: #0088ff;">0.0</span></div>
+                    <div class="phase-row"><span data-i18n="dashboard.phase">Phase:</span> <span id="status-text" style="font-weight: 800; color: #fff;">--</span></div>
+                    <div class="day-row"><span data-i18n="dashboard.since_start">Since start:</span> <span id="day-val" style="color: var(--oled-color);">0 h</span></div>
+                    <div class="phase-day-row"><span data-i18n="dashboard.time_phase">Time in phase:</span> <span id="phase-day-val" style="color: var(--accent-color);">0 h</span></div>
+                   <div class="target-temp-row"><span data-i18n="dashboard.goal_temp">Goal temp in phase:</span> <span id="target-temp-val" style="color: #0088ff;">0.0</span></div>
                 </div>
             </div>
 
             <div class="chart-section">
-                <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 4px; margin-top: 4px; letter-spacing: 1px;">TEMP HISTORY</div>
+                <div style="font-size: 0.85rem; font-weight: 800; color: #888; margin-bottom: 4px; margin-top: 4px; letter-spacing: 1px;" data-i18n="dashboard.history">TEMP HISTORY</div>
                 <div class="chart-container">
                     <canvas id="beer-chart"></canvas>
                 </div>
@@ -131,83 +131,83 @@
 <section id="view-library" style="display: none;">
     <div class="library-header">
         <div style="position: relative; display: flex; align-items: center; gap: 15px; margin-bottom: 5px;">
-            <h2 style="margin: 0;">Yeast Library</h2>
+            <h2 style="margin: 0;" data-i18n="library.title">Yeast Library</h2>
             
             <button class="info-icon" onclick="toggleLibraryInfo(this, event)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; transition: all 0.3s ease; padding: 0;">
                 i
             </button>
 
             <div id="library-info-box" class="floating-info-box" style="display: none;">
-                Browse the collection of yeast strains. <br>
-                <strong>Double-click</strong> (or long-press) a card to read about them and the Yeastmaster profiles.<br>
-                Select up to 10 favorites and sync them directly to your YeastMaster unit!
+                <span data-i18n="library.info_1">Browse the collection of yeast strains.</span> <br>
+                <span data-i18n="library.info_2"><strong>Double-click</strong> (or long-press) a card to read about them and the Yeastmaster profiles.</span><br>
+                <span data-i18n="library.info_3">Select up to 10 favorites and sync them directly to your YeastMaster unit!</span>
                 
-                <button id="btn-library-tour" class="ym-btn-outline" style="margin-top: 15px; width: 100%; border-color: var(--accent-color); color: var(--accent-color); font-size: 0.8rem; padding: 8px;">
+                <button id="btn-library-tour" class="ym-btn-outline" style="margin-top: 15px; width: 100%; border-color: var(--accent-color); color: var(--accent-color); font-size: 0.8rem; padding: 8px;" data-i18n="library.btn_tour">
                     ✨ TAKE A QUICK TOUR
                 </button>
             </div>
-        </div> <div class="sync-status" style="margin-bottom: 10px;">Selected: <span id="fav-count">0</span>/10</div>
-        <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')...">
+        </div> <div class="sync-status" style="margin-bottom: 10px;"><span data-i18n="library.selected">Selected:</span> <span id="fav-count">0</span>/10</div>
+        <input type="text" id="yeast-search" placeholder="Search strains (e.g. 'IPA', 'WLP')..." data-i18n-placeholder="library.search_placeholder">
     </div>
             
     <div class="yeast-grid" id="yeast-grid">
     </div>
 
-    <button onclick="openAddStrainModal()" class="btn-secondary" style="width: 100%; margin-top: 15px; margin-bottom: 20px; padding: 10px; font-size: 0.8rem; border-color: var(--accent-color); color: var(--accent-color);">
+    <button onclick="openAddStrainModal()" class="btn-secondary" style="width: 100%; margin-top: 15px; margin-bottom: 20px; padding: 10px; font-size: 0.8rem; border-color: var(--accent-color); color: var(--accent-color);" data-i18n="library.btn_add_strain">
         + ADD HOUSE STRAIN / WILD CAPTURE
     </button>
                 
     <div style="padding: 0 20px; margin-top: 20px;">
-        <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">TARGET DEVICE</label>
+        <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;" data-i18n="library.target_device">TARGET DEVICE</label>
         <select id="sync-target-device" style="width: 100%; background: #000; border: 2px solid #444; color: var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; font-weight: 800; outline: none; margin-bottom: 10px;">
-            <option value="">Laddar enheter...</option>
+            <option value="" data-i18n="library.loading_devices">Laddar enheter...</option>
         </select>
-        <button id="sync-btn" class="sync-button" onclick="syncToSelectedDevice()">SYNC TO SELECTED DEVICE</button>
+        <button id="sync-btn" class="sync-button" onclick="syncToSelectedDevice()" data-i18n="library.btn_sync">SYNC TO SELECTED DEVICE</button>
     </div>
 </section>
 
 <section id="view-lab" style="display: none;">
 <div class="library-header">
         <div style="position: relative; display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
-            <h2 style="margin: 0;">The Profiler</h2> 
+            <h2 style="margin: 0;" data-i18n="lab.title">The Profiler</h2> 
             
             <button onclick="toggleProfilerInfo(this)" style="background: rgba(140, 198, 63, 0.15); border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Lexend'; font-weight: bold; transition: all 0.3s ease; padding: 0;">
                 i
             </button>
 
             <div id="profiler-info-box" class="floating-info-box" style="display: none;">
-                Pick a strain and drag the points to build your fermentation profile.<br>
-                When you're done, save and find your tailored profile in the Yeast library. <br>
-                Don't forget the dry hops!
+                <span data-i18n="lab.info_1">Pick a strain and drag the points to build your fermentation profile.</span><br>
+                <span data-i18n="lab.info_2">When you're done, save and find your tailored profile in the Yeast library.</span> <br>
+                <span data-i18n="lab.info_3">Don't forget the dry hops!</span>
             </div>
         </div>
     </div>
 
   <div id="profile-inputs" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: flex-end;">
     <div style="flex: 1;">
-        <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">PROFILE NAME</label>
-        <input type="text" id="custom-profile-name" maxlength="8" placeholder="e.g. JUICEBMB" 
+        <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;" data-i18n="lab.profile_name">PROFILE NAME</label>
+        <input type="text" id="custom-profile-name" maxlength="8" placeholder="e.g. JUICEBMB" data-i18n-placeholder="lab.profile_name_placeholder"
                style="width: 100%; height: 45px; background: #000; border: 1px solid #333; color: #fff; padding: 0 10px; border-radius: 8px; font-family: 'Lexend', sans-serif; text-transform: uppercase; font-weight: 800; outline: none; font-size: 0.8rem;">
     </div>
 
     <div style="flex: 1;">
         <select id="custom-base-yeast" 
                 style="width: 100%; height: 45px; background: #000; border: 1px solid #333; color: #fff; padding: 0 5px 0 10px; border-radius: 8px; font-family: 'Lexend', sans-serif; font-weight: 800; text-transform: uppercase; outline: none; font-size: 0.8rem; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23888%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 10px auto;">
-            <option value="">Pick strain</option>
+            <option value="" data-i18n="lab.pick_strain">Pick strain</option>
         </select>
     </div>
 </div>
 
        <div class="chart-section" style="margin: 20px; padding: 20px; border-radius: 15px;">
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-    <div style="font-size: 0.85rem; font-weight: 800; color: #888; letter-spacing: 1px;">PROFILE BUILDER</div>
-    <button id="btn-zoom" onclick="toggleChartZoom()" style="display: none; background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; font-family: 'Lexend'; font-weight: 600; font-size: 0.7rem; cursor: pointer;">
+    <div style="font-size: 0.85rem; font-weight: 800; color: #888; letter-spacing: 1px;" data-i18n="lab.builder_title">PROFILE BUILDER</div>
+    <button id="btn-zoom" onclick="toggleChartZoom()" style="display: none; background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; font-family: 'Lexend'; font-weight: 600; font-size: 0.7rem; cursor: pointer;" data-i18n="lab.btn_overview">
         🔍 OVERVIEW
     </button>
 </div>
     
 <div class="chart-container" style="height: 300px; width: 100%; position: relative; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;">
-    <div id="chart-placeholder" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; color: #555; font-size: 1.1rem; font-weight: 600; padding: 20px;">
+    <div id="chart-placeholder" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; color: #555; font-size: 1.1rem; font-weight: 600; padding: 20px;" data-i18n="lab.chart_placeholder">
         Pick a base yeast and name your profile above 👆
     </div>
     
@@ -217,63 +217,63 @@
 </div>
 
 <div id="profile-summary" class="phase-info">
-    <div class="summary-header">PROFILE SUMMARY</div>
+    <div class="summary-header" data-i18n="lab.summary_title">PROFILE SUMMARY</div>
     
     <div class="summary-row">
-        <span class="label">Pitch</span>
-        <span class="value">Day 0 @ <strong id="val-t1">19.0°C</strong></span>
+        <span class="label" data-i18n="lab.phase_pitch">Pitch</span>
+        <span class="value"><span data-i18n="lab.day">Day 0 @</span> <strong id="val-t1">19.0°C</strong></span>
     </div>
     <div class="summary-row">
-        <span class="label">Primary</span>
-        <span class="value">Hold until Day <strong id="val-d2" style="color:var(--oled-color);">3</strong></span>
+        <span class="label" data-i18n="lab.phase_primary">Primary</span>
+        <span class="value"><span data-i18n="lab.hold_until">Hold until Day</span> <strong id="val-d2" style="color:var(--oled-color);">3</strong></span>
     </div>
     <div class="summary-row">
-        <span class="label">Cleanup</span>
-        <span class="value">Reach <strong id="val-t3">22.0°C</strong> by Day <span id="val-d3">5</span></span>
+        <span class="label" data-i18n="lab.phase_cleanup">Cleanup</span>
+        <span class="value"><span data-i18n="lab.reach">Reach</span> <strong id="val-t3">22.0°C</strong> <span data-i18n="lab.by_day">by Day</span> <span id="val-d3">5</span></span>
     </div>
     <div class="summary-row">
-        <span class="label">Cold Crash</span>
-        <span class="value">Drop to <strong id="val-t4">3.0°C</strong> by Day <span id="val-d4">8</span></span>
+        <span class="label" data-i18n="lab.phase_crash">Cold Crash</span>
+        <span class="value"><span data-i18n="lab.drop_to">Drop to</span> <strong id="val-t4">3.0°C</strong> <span data-i18n="lab.by_day">by Day</span> <span id="val-d4">8</span></span>
     </div>
     <div class="summary-row">
-        <span class="label">Condition</span>
-        <span class="value">Hold until Day <span id="val-d5">14</span></span>
+        <span class="label" data-i18n="lab.phase_condition">Condition</span>
+        <span class="value"><span data-i18n="lab.hold_until">Hold until Day</span> <span id="val-d5">14</span></span>
     </div>
 </div>
 
        <div class="lab-actions" style="margin: 20px; text-align: center; border-top: 1px solid #333; padding-top: 20px;">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-                <button id="btn-add-hops" class="btn-secondary" style="padding: 10px; font-size: 0.85rem;" onclick="toggleDryHopLine()">+ ADD DRY HOPS</button>
-                <button id="btn-add-dump" class="btn-secondary" style="padding: 10px; font-size: 0.85rem;" onclick="toggleRackDumpLine()">+ RACK / DUMP</button>
+                <button id="btn-add-hops" class="btn-secondary" style="padding: 10px; font-size: 0.85rem;" onclick="toggleDryHopLine()" data-i18n="lab.btn_add_hops">+ ADD DRY HOPS</button>
+                <button id="btn-add-dump" class="btn-secondary" style="padding: 10px; font-size: 0.85rem;" onclick="toggleRackDumpLine()" data-i18n="lab.btn_add_dump">+ RACK / DUMP</button>
             </div>
             
             <div id="hop-schedule-text" style="font-size: 0.85rem; color: #888; display: none; margin-bottom: 5px;">
-                Dry Hop scheduled on Day <span id="hop-day-val" style="color: var(--accent-color); font-weight: 800;">5.0</span>
+                <span data-i18n="lab.schedule_hop">Dry Hop scheduled on Day</span> <span id="hop-day-val" style="color: var(--accent-color); font-weight: 800;">5.0</span>
             </div>
             <div id="dump-schedule-text" style="font-size: 0.85rem; color: #888; display: none;">
-                Rack / Dump scheduled on Day <span id="dump-day-val" style="color: var(--accent-secondary, #F2994A); font-weight: 800;">8.0</span>
+                <span data-i18n="lab.schedule_dump">Rack / Dump scheduled on Day</span> <span id="dump-day-val" style="color: var(--accent-secondary, #F2994A); font-weight: 800;">8.0</span>
             </div>
         </div>
 
         <div style="margin: 20px;">
-           <button type="button" id="btn-save-profile" class="btn-primary" onclick="saveProfileToLibrary()">SAVE PROFILE</button>
+           <button type="button" id="btn-save-profile" class="btn-primary" onclick="saveProfileToLibrary()" data-i18n="lab.btn_save">SAVE PROFILE</button>
         </div>
     </section>
 
   <section id="view-settings" style="display: none; padding: 20px;">
-    <h2 style="margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">SETTINGS</h2>
+    <h2 style="margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;" data-i18n="settings.title">SETTINGS</h2>
 
     <div class="settings-group">
         <div class="settings-row">
-            <span class="settings-label">Theme</span>
+            <span class="settings-label" data-i18n="settings.theme">Theme</span>
             <div class="theme-toggle-compact">
-                <button class="theme-btn-small active" id="btn-theme-dark" onclick="setTheme('dark')">Dark</button>
-                <button class="theme-btn-small" id="btn-theme-light" onclick="setTheme('light')">Light</button>
+                <button class="theme-btn-small active" id="btn-theme-dark" onclick="setTheme('dark')" data-i18n="settings.theme_dark">Dark</button>
+                <button class="theme-btn-small" id="btn-theme-light" onclick="setTheme('light')" data-i18n="settings.theme_light">Light</button>
             </div>
         </div>
 
         <div class="settings-row">
-            <span class="settings-label">Temperature Unit</span>
+            <span class="settings-label" data-i18n="settings.temp_unit">Temperature Unit</span>
             <div class="theme-toggle-compact">
                 <button class="theme-btn-small active" id="btn-unit-c" onclick="setTempUnit('C')">°C</button>
                 <button class="theme-btn-small" id="btn-unit-f" onclick="setTempUnit('F')">°F</button>
@@ -281,7 +281,7 @@
         </div>
 
         <div class="settings-row">
-            <span class="settings-label">Accent Color</span>
+            <span class="settings-label" data-i18n="settings.accent">Accent Color</span>
             <div class="color-picker">
                 <div class="color-dot active" style="background: #00e5ff;" onclick="setAccent('#00e5ff', this)"></div>
                 <div class="color-dot" style="background: #ff4444;" onclick="setAccent('#ff4444', this)"></div>
@@ -292,71 +292,80 @@
         </div>
     </div>
 
-  <h3 style="color: #666; font-size: 0.8rem; margin: 30px 0 10px 10px; text-transform: uppercase; letter-spacing: 1.5px;">Notifications</h3>
+    <div class="settings-row">
+    <span class="settings-label" data-i18n="settings.lang">Language</span>
+    <div class="theme-toggle-compact">
+        <button class="theme-btn-small lang-btn" onclick="setLanguage('en')">EN</button>
+        <button class="theme-btn-small lang-btn" onclick="setLanguage('sv')">SV</button>
+        <button class="theme-btn-small lang-btn" onclick="setLanguage('de')">DE</button>
+    </div>
+</div>
+
+  <h3 style="color: #666; font-size: 0.8rem; margin: 30px 0 10px 10px; text-transform: uppercase; letter-spacing: 1.5px;" data-i18n="settings.notifications_title">Notifications</h3>
 
 <div class="settings-group" style="padding-bottom: 15px;">
-    <p style="font-size: 0.85rem; color: var(--text-dim, #888); margin-bottom: 15px; line-height: 1.4; padding: 0 5px;">
+    <p style="font-size: 0.85rem; color: var(--text-dim, #888); margin-bottom: 15px; line-height: 1.4; padding: 0 5px;" data-i18n="settings.push_desc">
         Enable push notifications to receive alerts on your phone regarding temperature fluctuations, power outages, or when it's time to dry hop.
     </p>
     
     <div class="settings-row" style="margin-bottom: 0;">
-        <span class="settings-label" style="font-size: 0.9rem;">🔔 Push Notifications</span>
+        <span class="settings-label" style="font-size: 0.9rem;" data-i18n="settings.push">🔔 Push Notifications</span>
         <label class="toggle-switch">
             <input type="checkbox" id="pushToggle" onchange="togglePushNotifications(this)">
             <span class="slider"></span>
         </label>
     </div>
 </div>
-    <h3 style="color: #666; font-size: 0.8rem; margin: 30px 0 10px 10px; text-transform: uppercase; letter-spacing: 1.5px;">Device Management</h3>
+    <h3 style="color: #666; font-size: 0.8rem; margin: 30px 0 10px 10px; text-transform: uppercase; letter-spacing: 1.5px;" data-i18n="settings.device_mgmt">Device Management</h3>
     
     <div class="settings-group">
         <div class="settings-row">
-            <span class="settings-label">Active Device</span>
+            <span class="settings-label" data-i18n="settings.active_device">Active Device</span>
         <select id="setting-active-device" style="max-width: 150px; background: transparent; border: none; text-align: right; font-weight: 800; font-family: 'Lexend'; outline: none; cursor: pointer;">
             </select>
         </div>
         
       <div class="settings-row">
-            <span class="settings-label">Status</span>
+            <span class="settings-label" data-i18n="settings.status">Status</span>
             <span id="setting-device-status" style="font-size: 0.8rem; font-weight: 800; color: #888;">WAITING...</span>
         </div>
         <div class="settings-row">
-            <span class="settings-label">Nickname</span>
-            <input type="text" id="setting-nickname" placeholder="Name your device..." 
+            <span class="settings-label" data-i18n="settings.nickname">Nickname</span>
+            <input type="text" id="setting-nickname" placeholder="Name your device..." data-i18n-placeholder="settings.nickname_placeholder"
                    style="width: 150px; background: transparent; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 0.9rem; text-align: right; outline: none; transition: color 0.3s ease;">
         </div>
 
         <div class="settings-row">
-            <span class="settings-label">Device ID (MAC)</span>
+            <span class="settings-label" data-i18n="settings.mac">Device ID (MAC)</span>
             <span id="setting-mac-display" style="font-family: 'Roboto Mono', monospace; font-size: 0.85rem; color: #888; letter-spacing: 1px;">--</span>
         </div>
 
        <div class="settings-row" id="row-remove-device">
-            <button onclick="removeActiveDevice()" style="background: transparent; color: #ff4444; border: none; padding: 0; cursor: pointer; font-weight: bold; font-family: 'Lexend', sans-serif; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; width: 100%; justify-content: flex-start;">
+            <button onclick="removeActiveDevice()" style="background: transparent; color: #ff4444; border: none; padding: 0; cursor: pointer; font-weight: bold; font-family: 'Lexend', sans-serif; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; width: 100%; justify-content: flex-start;" data-i18n="settings.remove">
                 🗑️ Remove Active Device
             </button>
         </div>
 
-        <button onclick="showAddDevice()" class="add-new-device-btn" style="background: transparent; color: var(--accent-color); border: 2px dashed #333; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; font-family: 'Lexend'; transition: all 0.3s ease; margin-top: 15px;">
+        <button onclick="showAddDevice()" class="add-new-device-btn" style="background: transparent; color: var(--accent-color); border: 2px dashed #333; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; font-family: 'Lexend'; transition: all 0.3s ease; margin-top: 15px;" data-i18n="settings.btn_add_device">
             + ADD NEW YEASTMASTER
         </button>
     </div>
 
     <div style="margin-top: 40px; padding-top: 25px; border-top: 1px dashed #333;">
-        <h4 style="color: var(--text-dim, #888); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; text-align: center;">Support & Feedback</h4>
+        <h4 style="color: var(--text-dim, #888); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; text-align: center;" data-i18n="settings.support_title">Support & Feedback</h4>
         
         <div style="display: flex; gap: 10px;">
-            <a href="mailto:support@yeastmaster.com?subject=Bug%20Report" style="flex: 1; text-align: center; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.75rem; transition: 0.2s;">
+            <a href="mailto:support@yeastmaster.com?subject=Bug%20Report" style="flex: 1; text-align: center; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.75rem; transition: 0.2s;" data-i18n="settings.btn_bug">
                 🐛 REPORT BUG
             </a>
-            <a href="mailto:hello@yeastmaster.com?subject=Feature%20Request" style="flex: 1; text-align: center; background: rgba(140, 198, 63, 0.1); border: 1px solid var(--accent-color); color: var(--accent-color); padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.75rem; transition: 0.2s;">
+            <a href="mailto:hello@yeastmaster.com?subject=Feature%20Request" style="flex: 1; text-align: center; background: rgba(140, 198, 63, 0.1); border: 1px solid var(--accent-color); color: var(--accent-color); padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.75rem; transition: 0.2s;" data-i18n="settings.btn_idea">
                 💡 SUGGEST IDEA
             </a>
         </div>
     </div>
         
     <div style="margin-top: 40px; text-align: center;">
-        <button id="btn-logout" style="background: transparent; color: #ff4444; border: 1px solid #ff4444; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer;">
+        <button id="btn-logout" style="background: transparent; color: #ff4444; border: 1px solid #ff4444; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer;" data-i18n="settings.btn_logout">
             LOG OUT
         </button>
         <p style="margin-top: 15px; font-size: 0.7rem; opacity: 0.4;">YeastMaster v1.0.4 - Pro Edition</p>
@@ -367,10 +376,10 @@
         <div class="home-title-section" style="margin-top: 20px; margin-bottom: 40px; display: flex; align-items: center; justify-content: flex-start; gap: 20px;">
             
             <div>
-                <h1 class="animate-fade delay-1 yeast-title" style=font-weight: 900; line-height: 0.8; margin: 0; color: var(--accent-color); letter-spacing: -3px; font-family: 'Lexend', sans-serif;">
+                <h1 class="animate-fade delay-1 yeast-title" style="font-weight: 900; line-height: 0.8; margin: 0; color: var(--accent-color); letter-spacing: -3px; font-family: 'Lexend', sans-serif;" data-i18n="soul.title">
                     YEAST
                 </h1>
-                <p class="animate-fade delay-2 yeast-subtitle" style="font-size: 1.6rem; font-weight: 300; margin: 5px 0 0 2px; font-family: 'Lexend', sans-serif; letter-spacing: 1px; color: var(--text-dim);">
+                <p class="animate-fade delay-2 yeast-subtitle" style="font-size: 1.6rem; font-weight: 300; margin: 5px 0 0 2px; font-family: 'Lexend', sans-serif; letter-spacing: 1px; color: var(--text-dim);" data-i18n="soul.subtitle">
                     The Soul of beer.
                 </p>
             </div>
@@ -395,29 +404,29 @@
 
         </div> <div class="animate-fade delay-3" style="line-height: 1.7; font-size: 1.1rem; color: var(--text-dim); font-weight: 400; max-width: 600px;">
             <p style="margin-bottom: 25px;">
-                We believe the true soul of beer lives within the yeast. As the old brewing adage goes: 
-                <span style="color: var(--text-main); font-style: italic; font-weight: 600;">"The brewer makes wort, but the yeast makes beer."</span> 
-                There is a profound wonder in how these microscopic artisans transform a simple, sweet liquid into the infinitely complex and soulful elixir we call beer.
+                <span data-i18n="soul.desc1_a">We believe the true soul of beer lives within the yeast. As the old brewing adage goes:</span> 
+                <span style="color: var(--text-main); font-style: italic; font-weight: 600;" data-i18n="soul.desc1_quote">"The brewer makes wort, but the yeast makes beer."</span> 
+                <span data-i18n="soul.desc1_b">There is a profound wonder in how these microscopic artisans transform a simple, sweet liquid into the infinitely complex and soulful elixir we call beer.</span>
             </p>
             
-            <p style="margin-bottom: 40px;">
+            <p style="margin-bottom: 40px;" data-i18n="soul.desc2">
                 Soulof.beer is a tribute to this biological magic. Whether you are here to explore our library of historic strains or to take full command of your fermentation, this is your laboratory. Monitor your brew in real-time, sync custom profiles to your YeastMaster-unit, and master the art of fermentation.
             </p>
         </div>
 
         <div onclick="showView('about')" class="about-card-btn animate-fade delay-3" style="background: rgba(0, 229, 255, 0.05); border: 1px solid var(--accent-color); border-radius: 12px; padding: 20px; margin-bottom: 40px; cursor: pointer; transition: all 0.3s ease; text-align: left; display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <h3 style="color: var(--accent-color); margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 800;">What is YeastMaster?</h3>
-                <p style="margin: 0; color: var(--text-dim); font-size: 0.9rem;">Discover the hardware and the app features.</p>
+                <h3 style="color: var(--accent-color); margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 800;" data-i18n="soul.what_is">What is YeastMaster?</h3>
+                <p style="margin: 0; color: var(--text-dim); font-size: 0.9rem;" data-i18n="soul.what_desc">Discover the hardware and the app features.</p>
             </div>
             <div style="color: var(--accent-color); font-size: 1.5rem; font-weight: bold;">→</div>
         </div>
 
         <div id="soul-login-prompt" class="animate-fade delay-3" style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #222;">
-            <p style="margin-bottom: 20px; font-size: 0.9rem; color: var(--text-dim); letter-spacing: 0.5px;">
+            <p style="margin-bottom: 20px; font-size: 0.9rem; color: var(--text-dim); letter-spacing: 0.5px;" data-i18n="soul.prompt">
                 Ready to manage your library or monitor your unit?
             </p>
-            <button class="btn-primary" style="width: 100%; max-width: 300px;" onclick="showView('login')">
+            <button class="btn-primary" style="width: 100%; max-width: 300px;" onclick="showView('login')" data-i18n="soul.btn_login">
                 GO TO LOGIN
             </button>
         </div>
@@ -425,23 +434,23 @@
     </section>
 
 <section id="view-about" style="display: none; padding: 30px 20px;">
-        <button onclick="showView('soul')" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;">
+        <button onclick="showView('soul')" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;" data-i18n="about.back">
             ← BACK
         </button>
 
-        <h2 style="margin-bottom: 20px; font-weight: 900; letter-spacing: -1px; font-size: 2rem; color: var(--text-main);">
+        <h2 style="margin-bottom: 20px; font-weight: 900; letter-spacing: -1px; font-size: 2rem; color: var(--text-main);" data-i18n="about.title">
             YEASTMASTER
         </h2>
 
         <div style="line-height: 1.6; font-size: 1rem; color: var(--text-dim);">
-            <p style="margin-bottom: 20px;">
+            <p style="margin-bottom: 20px;" data-i18n="about.desc">
                 Take absolute command of your fermentation. YeastMaster is a dedicated hardware unit and cloud ecosystem designed for the modern homebrewer, bridging the gap between the biological art of brewing and precise data control.
             </p>
 
             <div onclick="showView('hardware')" class="hardware-card" style="padding: 20px; margin-top: 30px; margin-bottom: 30px; text-align: left; display: flex; justify-content: space-between; align-items: center;">
     <div>
-        <h3 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 800;">📟 The Hardware Unit</h3>
-        <p style="margin: 0; color: var(--text-dim); font-size: 0.95rem; line-height: 1.5;">
+        <h3 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 800;" data-i18n="about.hw_title">📟 The Hardware Unit</h3>
+        <p style="margin: 0; color: var(--text-dim); font-size: 0.95rem; line-height: 1.5;" data-i18n="about.hw_desc">
             A dedicated physical controller with a crisp OLED display. Click to explore how it controls your fridge and heating element.
         </p>
     </div>
@@ -451,10 +460,10 @@
            <div onclick="showView('about-cloud')" class="hardware-card" style="padding: 20px; margin-bottom: 20px; text-align: left; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-                        <h3 style="color: var(--text-main); margin: 0; font-size: 1.2rem; font-weight: 800;">☁️ The Cloud App</h3>
-                        <span style="background: rgba(140, 198, 63, 0.2); border: 1px solid #8CC63F; color: #8CC63F; font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 12px; letter-spacing: 1px;">FREE</span>
+                        <h3 style="color: var(--text-main); margin: 0; font-size: 1.2rem; font-weight: 800;" data-i18n="about.cloud_title">☁️ The Cloud App</h3>
+                        <span style="background: rgba(140, 198, 63, 0.2); border: 1px solid #8CC63F; color: #8CC63F; font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 12px; letter-spacing: 1px;" data-i18n="about.free">FREE</span>
                     </div>
-                    <p style="margin: 0; color: var(--text-dim); font-size: 0.95rem; line-height: 1.5;">
+                    <p style="margin: 0; color: var(--text-dim); font-size: 0.95rem; line-height: 1.5;" data-i18n="about.cloud_desc">
                         Monitor your fermentation from anywhere in the world. Build custom temperature profiles in the Profiler, manage your dry hop schedules, and sync everything effortlessly.
                     </p>
                 </div>
@@ -464,10 +473,10 @@
             <div onclick="showView('about-library')" class="hardware-card" style="padding: 20px; margin-bottom: 40px; text-align: left; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-                        <h3 style="color: var(--text-main); margin: 0; font-size: 1.2rem; font-weight: 800;">🔬 The Yeast Library</h3>
-                        <span style="background: rgba(140, 198, 63, 0.2); border: 1px solid #8CC63F; color: #8CC63F; font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 12px; letter-spacing: 1px;">FREE</span>
+                        <h3 style="color: var(--text-main); margin: 0; font-size: 1.2rem; font-weight: 800;" data-i18n="about.lib_title">🔬 The Yeast Library</h3>
+                        <span style="background: rgba(140, 198, 63, 0.2); border: 1px solid #8CC63F; color: #8CC63F; font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 12px; letter-spacing: 1px;" data-i18n="about.free">FREE</span>
                     </div>
-                    <p style="margin: 0; color: var(--text-dim); font-size: 0.95rem; line-height: 1.5;">
+                    <p style="margin: 0; color: var(--text-dim); font-size: 0.95rem; line-height: 1.5;" data-i18n="about.lib_desc">
                         Stop guessing. Discover our ever-growing guide to the world's most popular yeast strains and learn how to coax out the perfect flavors for your beer.
                     </p>
                 </div>
@@ -476,100 +485,87 @@
     </section>
 
     <section id="view-about-library" style="display: none; padding: 30px 20px;">
-        <button onclick="showView('about')" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;">
+        <button onclick="showView('about')" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;" data-i18n="about.back">
             ← BACK
         </button>
 
-        <h2 style="margin-bottom: 10px; font-weight: 900; letter-spacing: -1px; font-size: 2rem; color: var(--text-main);">
+        <h2 style="margin-bottom: 10px; font-weight: 900; letter-spacing: -1px; font-size: 2rem; color: var(--text-main);" data-i18n="about_lib.title">
             THE YEAST LIBRARY
         </h2>
-        <p style="color: var(--text-dim); line-height: 1.6; margin-bottom: 30px;">
+        <p style="color: var(--text-dim); line-height: 1.6; margin-bottom: 30px;" data-i18n="about_lib.desc">
             A decoder ring for the world of brewing microbiology. We don't sell yeast — we help you master it.
         </p>
 
         <div class="hw-feature-card">
-            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;">🕵️‍♂️ Cracking the Code</h3>
+            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;" data-i18n="about_lib.card1_title">🕵️‍♂️ Cracking the Code</h3>
             <p class="hw-feature-text">
-                If you're new to brewing, names like <strong>WLP001</strong> or <strong>Wyeast 1056</strong> might look like secret passwords. Here is the translation: 
+                <span data-i18n="about_lib.card1_p1">If you're new to brewing, names like <strong>WLP001</strong> or <strong>Wyeast 1056</strong> might look like secret passwords. Here is the translation:</span> 
                 <br><br>
-                <strong>WLP</strong> stands for White Labs, and <strong>Wyeast</strong> is another legendary laboratory. Both produce top-tier <em>liquid</em> yeast. Names like <strong>SafAle</strong>, <strong>Fermentis</strong>, and <strong>Lallemand</strong> are famous producers of <em>dry</em> yeast. We have handpicked the absolute best and most interesting commercial strains from all of them and gathered their data in one place.
+                <span data-i18n="about_lib.card1_p2"><strong>WLP</strong> stands for White Labs, and <strong>Wyeast</strong> is another legendary laboratory. Both produce top-tier <em>liquid</em> yeast. Names like <strong>SafAle</strong>, <strong>Fermentis</strong>, and <strong>Lallemand</strong> are famous producers of <em>dry</em> yeast. We have handpicked the absolute best and most interesting commercial strains from all of them and gathered their data in one place.</span>
             </p>
         </div>
 
         <div class="hw-feature-card">
-            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;">🌡️ Why Temperature is Everything</h3>
+            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;" data-i18n="about_lib.card2_title">🌡️ Why Temperature is Everything</h3>
             <p class="hw-feature-text">
-                Any yeast can ferment sugar into alcohol. But <em>how</em> the beer tastes depends entirely on temperature. A Belgian yeast fermented at 18°C might taste like clean pear, but if you let it rise to 25°C it explodes with spicy black pepper and bubblegum. 
+                <span data-i18n="about_lib.card2_p1">Any yeast can ferment sugar into alcohol. But <em>how</em> the beer tastes depends entirely on temperature. A Belgian yeast fermented at 18°C might taste like clean pear, but if you let it rise to 25°C it explodes with spicy black pepper and bubblegum.</span> 
                 <br><br>
-                Our library provides detailed guides on how to treat each specific strain to coax out the perfect flavors (esters and phenols), including when to raise the heat for a "Diacetyl Rest" to clean up buttery off-flavors.
-            </p>
-        </div>
-
-        <div class="hw-feature-card">
-            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;">🚀 The YeastMaster Bonus</h3>
-            <p class="hw-feature-text">
-                This library is completely free to read. If you own a physical <strong>YeastMaster Hardware Unit</strong>, it becomes a superpower. 
-                <br><br>
-                Instead of manually adjusting your fridge every day, you can select your favorite strains in the library, pick a tailored temperature profile, and click <strong>"SYNC"</strong>. The YeastMaster will automatically guide your fermentation through every phase, day by day, letting you brew world-class beer in your sleep.
-               <br><br>
-                <span style="display: block; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #444; color: #999;">
-                    🎓 <em><strong>New to yeast science?</strong> Don't sweat it. Jump over to the <strong>Academy in The Lab</strong> for interactive, step-by-step lessons that will take you from a complete beginner to a confident yeast wrangler in no time.</em>
-                </span>
+                <span data-i18n="about_lib.card2_p2">Our library provides detailed guides on how to treat each specific strain to coax out the perfect flavors (esters and phenols), including when to raise the heat for a "Diacetyl Rest" to clean up buttery off-flavors.</span>
             </p>
         </div>
     </section>
 
   <section id="view-about-cloud" style="display: none; padding: 30px 20px;">
-        <button onclick="showView('about')" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;">
+        <button onclick="showView('about')" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;" data-i18n="about.back">
             ← BACK
         </button>
 
-        <h2 style="margin-bottom: 10px; font-weight: 900; letter-spacing: -1px; font-size: 2rem; color: var(--text-main);">
+        <h2 style="margin-bottom: 10px; font-weight: 900; letter-spacing: -1px; font-size: 2rem; color: var(--text-main);" data-i18n="about_cloud.title">
             THE CLOUD APP
         </h2>
-        <p style="color: var(--text-dim); line-height: 1.6; margin-bottom: 30px;">
+        <p style="color: var(--text-dim); line-height: 1.6; margin-bottom: 30px;" data-i18n="about_cloud.desc">
             Your digital command center. YeastMaster isn't just a smart thermometer; it's a complete ecosystem for managing your fermentation from anywhere in the world.
         </p>
 
         <div class="hw-feature-card">
-            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;">📡 Global Monitoring</h3>
-            <p class="hw-feature-text">
+            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;" data-i18n="about_cloud.card1_title">📡 Global Monitoring</h3>
+            <p class="hw-feature-text" data-i18n="about_cloud.card1_p1">
                 Whether you're at work, on the couch, or on vacation, the Live Dashboard keeps you connected to your brew. Watch the temperature curve draw itself in real-time, check the ambient air in your fridge, and get ultimate peace of mind knowing exactly what phase your yeast is currently working through.
             </p>
         </div>
 
         <div class="hw-feature-card">
-            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;">📈 The Profiler</h3>
+            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;" data-i18n="about_cloud.card2_title">📈 The Profiler</h3>
             <p class="hw-feature-text">
-                Professional brewers rarely keep their tanks at one static temperature. Fermentation is a journey. 
+                <span data-i18n="about_cloud.card2_p1">Professional brewers rarely keep their tanks at one static temperature. Fermentation is a journey.</span> 
                 <br><br>
-                In <strong>The Profiler</strong>, you can visually drag and drop data points to build custom temperature curves. Want to pitch the yeast cool, let the temperature rise naturally during active fermentation, and automatically trigger a cold crash on day 10? Just draw the curve, save it, and sync it to your fridge.
+                <span data-i18n="about_cloud.card2_p2">In <strong>The Profiler</strong>, you can visually drag and drop data points to build custom temperature curves. Want to pitch the yeast cool, let the temperature rise naturally during active fermentation, and automatically trigger a cold crash on day 10? Just draw the curve, save it, and sync it to your fridge.</span>
             </p>
         </div>
 
      <div class="hw-feature-card">
-            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;">🎓 The Lab & Academy</h3>
-            <p class="hw-feature-text">
+            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;" data-i18n="about_cloud.card3_title">🎓 The Lab & Academy</h3>
+            <p class="hw-feature-text" data-i18n="about_cloud.card3_p1">
                 The cloud app isn't just for monitoring. Jump over to <strong>The Lab</strong> to access professional pitch calculators, or explore the <strong>Academy</strong> for interactive, step-by-step lessons that will take you from a complete beginner to a confident yeast wrangler in no time.
             </p>
         </div>
     </section>
 
 <section id="view-hardware" style="display: none; padding: 30px 20px;">
-        <button onclick="showView('about')" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;">
+        <button onclick="showView('about')" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;" data-i18n="about.back">
             ← BACK
         </button>
 
-        <h2 style="margin-bottom: 10px; font-weight: 900; letter-spacing: -1px; font-size: 2rem; color: var(--text-main);">
+        <h2 style="margin-bottom: 10px; font-weight: 900; letter-spacing: -1px; font-size: 2rem; color: var(--text-main);" data-i18n="about_hw.title">
             THE HARDWARE
         </h2>
-        <p style="color: var(--text-dim); line-height: 1.6; margin-bottom: 30px;">
+        <p style="color: var(--text-dim); line-height: 1.6; margin-bottom: 30px;" data-i18n="about_hw.desc">
             YeastMaster is built around a custom ESP32 brain, designed to sit seamlessly on your fermentation chamber. It operates 100% locally, meaning your beer is safe even if the WiFi drops.
         </p>
 
         <div class="hw-feature-card">
-            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;">📺 Retro OLED Interface</h3>
-            <p class="hw-feature-text">
+            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;" data-i18n="about_hw.card1_title">📺 Retro OLED Interface</h3>
+            <p class="hw-feature-text" data-i18n="about_hw.card1_p1">
                 A high-contrast OLED screen paired with a tactile rotary encoder gives you a classic, laboratory-grade interface. Adjust offsets, change yeast profiles, or trigger a cold crash right at the fridge.
             </p>
             <div class="hw-image-box">
@@ -578,8 +574,8 @@
         </div>
 
         <div class="hw-feature-card">
-            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;">🌡️ Dual Temp Probes</h3>
-            <p class="hw-feature-text">
+            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;" data-i18n="about_hw.card2_title">🌡️ Dual Temp Probes</h3>
+            <p class="hw-feature-text" data-i18n="about_hw.card2_p1">
                 Precision requires data. YeastMaster uses two detachable, waterproof sensors. One measures the ambient air in the fridge, while the other sits directly in the beer (or taped to the fermenter), allowing the PID logic to prevent massive temperature swings.
             </p>
             <div class="hw-image-box">
@@ -588,8 +584,8 @@
         </div>
 
         <div class="hw-feature-card">
-            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;">⚡ Wireless Relays</h3>
-            <p class="hw-feature-text">
+            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;" data-i18n="about_hw.card3_title">⚡ Wireless Relays</h3>
+            <p class="hw-feature-text" data-i18n="about_hw.card3_p1">
                 No dangerous high-voltage wiring. YeastMaster sends 433MHz radio signals directly to wireless smart plugs. One for your fridge (cooling), and one for a heat mat (heating). Total control, zero electrical hazards.
             </p>
             <div class="hw-image-box" style="position: relative; overflow: hidden;">
@@ -603,12 +599,12 @@
 <section id="view-librarian" style="display: none;">
     <div class="library-header" style="margin-bottom: 20px;">
         <div style="position: relative; display: flex; align-items: center; gap: 10px;">
-            <h2 style="margin: 0; line-height: 1;">In the lab</h2> 
+            <h2 style="margin: 0; line-height: 1;" data-i18n="academy.title">In the lab</h2> 
             <button onclick="toggleAcademyInfo(this)" class="info-circle-btn">i</button>
             <div id="academy-info-box" class="floating-info-box" style="display: none;">
-                <h3 style="color: var(--accent-color); margin-bottom: 10px; font-size: 1.2rem;">Yeast Management Academy</h3>
-                <strong style="color: var(--text-main);">Roll up your sleeves and become a microbiologist!</strong><br><br>
-                Step into the Lab and discover the fascinating world of yeast management.
+                <h3 style="color: var(--accent-color); margin-bottom: 10px; font-size: 1.2rem;" data-i18n="academy.info_title">Yeast Management Academy</h3>
+                <strong style="color: var(--text-main);" data-i18n="academy.info_1">Roll up your sleeves and become a microbiologist!</strong><br><br>
+                <span data-i18n="academy.info_2">Step into the Lab and discover the fascinating world of yeast management.</span>
             </div>
         </div>
     </div>
@@ -622,13 +618,13 @@
     </div>
 
     <div style="position: relative; z-index: 2;">
-        <span style="background: var(--accent-color); color: #000; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">Start Here</span>
+        <span style="background: var(--accent-color); color: #000; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;" data-i18n="academy.hero_tag">Start Here</span>
         
-        <h2 style="margin: 10px 0; font-size: 2.2rem; font-weight: 900; letter-spacing: -1px; color: var(--text-main);">Welcome to the Lab</h2>
+        <h2 style="margin: 10px 0; font-size: 2.2rem; font-weight: 900; letter-spacing: -1px; color: var(--text-main);" data-i18n="academy.hero_title">Welcome to the Lab</h2>
         
-        <p style="color: var(--text-dim); max-width: 400px; line-height: 1.5; margin-bottom: 20px;">You're already a microbiologist. Let's set up your kitchen lab and start harvesting liquid gold.</p>
+        <p style="color: var(--text-dim); max-width: 400px; line-height: 1.5; margin-bottom: 20px;" data-i18n="academy.hero_desc">You're already a microbiologist. Let's set up your kitchen lab and start harvesting liquid gold.</p>
         
-        <button class="btn-primary" style="width: auto; padding: 10px 25px; background: var(--accent-color); color: #000; font-family: 'Lexend'; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;">GET STARTED ➔</button>
+        <button class="btn-primary" style="width: auto; padding: 10px 25px; background: var(--accent-color); color: #000; font-family: 'Lexend'; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;" data-i18n="academy.hero_btn">GET STARTED ➔</button>
     </div>
 </div>
 
@@ -641,8 +637,8 @@
             <div class="academy-card" onclick="openPitchCalcModal()">
                 <div class="academy-card-icon">🧮</div>
                 <div class="academy-card-content">
-                    <h4>Pitch Calculators</h4>
-                    <p>Calculate optimal pitch rates and starter steps.</p>
+                    <h4 data-i18n="academy.calc_title">Pitch Calculators</h4>
+                    <p data-i18n="academy.calc_desc">Calculate optimal pitch rates and starter steps.</p>
                 </div>
                 <div class="academy-card-arrow">→</div>
             </div>
@@ -650,8 +646,8 @@
             <div class="academy-card" onclick="openAcademyModule('washing')">
                 <div class="academy-card-icon">🧽</div>
                 <div class="academy-card-content">
-                    <h4>Yeast Washing 101</h4>
-                    <p>Tvätta jästkakan och skörda "flytande guld" (slurry).</p>
+                    <h4 data-i18n="academy.washing_title">Yeast Washing 101</h4>
+                    <p data-i18n="academy.washing_desc">Tvätta jästkakan och skörda "flytande guld" (slurry).</p>
                 </div>
                 <div class="academy-card-arrow">→</div>
             </div>
@@ -659,8 +655,8 @@
             <div class="academy-card" onclick="openAcademyModule('starters')">
                 <div class="academy-card-icon">🧪</div>
                 <div class="academy-card-content">
-                    <h4>Yeast Starters 101</h4>
-                    <p>Wake up your yeast and ensure a healthy fermentation.</p>
+                    <h4 data-i18n="academy.starters_title">Yeast Starters 101</h4>
+                    <p data-i18n="academy.starters_desc">Wake up your yeast and ensure a healthy fermentation.</p>
                 </div>
                 <div class="academy-card-arrow">→</div>
             </div>
@@ -668,8 +664,8 @@
             <div class="academy-card" onclick="openAcademyModule('stirplate')">
                 <div class="academy-card-icon">🌪️</div>
                 <div class="academy-card-content">
-                    <h4>Stir Plates 101</h4>
-                    <p>Why magnetic vortexes are a brewer's best friend.</p>
+                    <h4 data-i18n="academy.stirplate_title">Stir Plates 101</h4>
+                    <p data-i18n="academy.stirplate_desc">Why magnetic vortexes are a brewer's best friend.</p>
                 </div>
                 <div class="academy-card-arrow">→</div>
             </div>
@@ -677,8 +673,8 @@
             <div class="academy-card" onclick="openAcademyModule('counting')">
                 <div class="academy-card-icon">🔬</div>
                 <div class="academy-card-content">
-                    <h4>Pro Cell Counting</h4>
-                    <p>Using microscopes and hemocytometers like a pro.</p>
+                    <h4 data-i18n="academy.counting_title">Pro Cell Counting</h4>
+                    <p data-i18n="academy.counting_desc">Using microscopes and hemocytometers like a pro.</p>
                 </div>
                 <div class="academy-card-arrow">→</div>
             </div>
@@ -686,8 +682,8 @@
             <div class="academy-card" onclick="openAcademyModule('agar')">
                 <div class="academy-card-icon">🧫</div>
                 <div class="academy-card-content">
-                    <h4>Mastering Agar Plates</h4>
-                    <p>Learn to pour, streak, and isolate pure strains.</p>
+                    <h4 data-i18n="academy.agar_title">Mastering Agar Plates</h4>
+                    <p data-i18n="academy.agar_desc">Learn to pour, streak, and isolate pure strains.</p>
                 </div>
                 <div class="academy-card-arrow">→</div>
             </div>
@@ -695,8 +691,8 @@
             <div class="academy-card" onclick="openAcademyModule('wild')">
                 <div class="academy-card-icon">🍏</div>
                 <div class="academy-card-content">
-                    <h4>Capturing Wild Yeast</h4>
-                    <p>Hunt for local microbes and brew something unique.</p>
+                    <h4 data-i18n="academy.wild_title">Capturing Wild Yeast</h4>
+                    <p data-i18n="academy.wild_desc">Hunt for local microbes and brew something unique.</p>
                 </div>
                 <div class="academy-card-arrow">→</div>
             </div>
@@ -704,7 +700,7 @@
     </div> 
     
     <div id="academy-module-view" style="display: none; padding: 0;">
-        <button onclick="closeAcademyModule()" class="back-btn-academy" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;">← BACK TO ACADEMY</button>
+        <button onclick="closeAcademyModule()" class="back-btn-academy" style="background: none; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 1rem; cursor: pointer; margin-bottom: 20px; padding: 0; display: flex; align-items: center; gap: 5px;" data-i18n="academy.btn_back">← BACK TO ACADEMY</button>
         
         <div id="academy-module-content"></div> 
     </div>
@@ -714,27 +710,27 @@
     <nav class="main-nav">
         <div class="nav-item active" onclick="showView('soul')">
             <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
-            <span class="nav-text">HOME</span>
+            <span class="nav-text" data-i18n="nav.home">HOME</span>
         </div>
         <div class="nav-item" onclick="showView('library')">
             <svg class="nav-icon" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h2v7l2-1.5 2 1.5V4h6v16z"/></svg>
-            <span class="nav-text">YEAST LIBRARY</span>
+            <span class="nav-text" data-i18n="nav.library">YEAST LIBRARY</span>
         </div>
         <div class="nav-item" onclick="showView('librarian')">
             <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 19.92L14.07 8V4h1V2H8.93v2h1v4L3 19.92c-.37.75.17 1.65 1.01 1.65h15.98c.84 0 1.38-.9.1-1.65zM12 4h1.07v3.52l1.6 3.12-5.34.01 1.6-3.13V4H12zm-5.74 12l2.31-4.5h6.86l2.31 4.5H6.26z"/></svg>
-            <span class="nav-text">LAB</span>
+            <span class="nav-text" data-i18n="nav.lab">LAB</span>
         </div>
         <div class="nav-item" onclick="showView('lab')">
             <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 21V3h2v16h16v2H3z"/><path d="M7 12h3l3-4h2l3 6h3v2h-4l-3-6h-2l-3 4H7z"/></svg>
-            <span class="nav-text">PROFILER</span>
+            <span class="nav-text" data-i18n="nav.profiler">PROFILER</span>
         </div>
         <div class="nav-item" onclick="showView('dashboard')">
             <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 2.21.72 4.25 1.94 5.91l1.46-1.46C4.52 15.12 4 13.62 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.62-.52 3.12-1.4 4.45l1.46 1.46C21.28 16.25 22 14.21 22 12c0-5.52-4.48-10-10-10zm2 10c0-1.1-.9-2-2-2s-2 .9-2 2c0 .74.4 1.39 1 1.73V20h2v-6.27c.6-.34 1-.99 1-1.73z"/></svg>
-            <span class="nav-text">LIVE</span>
+            <span class="nav-text" data-i18n="nav.live">LIVE</span>
         </div>
         <div class="nav-item" onclick="showView('settings')">
             <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19.4 13l-2.1-1.7c.1-.3.1-.6.1-.9s0-.6-.1-.9l2.1-1.7c.2-.2.3-.4.2-.6l-2-3.5c-.1-.2-.3-.3-.6-.2l-2.5 1c-.5-.4-1-.7-1.6-.9l-.4-2.6c0-.2-.2-.4-.5-.4h-4c-.2 0-.4.2-.5.4l-.4 2.6c-.6.2-1.1.6-1.6.9l-2.5-1c-.2-.1-.5 0-.6.2l-2 3.5c-.1.2 0 .5.2.6l2.1 1.7c-.1.3-.1.6-.1.9s0 .6.1.9l-2.1 1.7c-.2.2-.3.4-.2.6l2 3.5c.1.2.3.3.6.2l2.5-1c.5.4 1 .7 1.6.9l.4 2.6c0 .2.2.4.5.4h4c.2 0 .4-.2.5-.4l.4-2.6c.6-.2 1.1-.6 1.6-.9l2.5 1c.2.1.5 0 .6-.2l2-3.5c.1-.2 0-.5-.2-.6zM12 15.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z"/></svg>
-            <span class="nav-text">SETTINGS</span>
+            <span class="nav-text" data-i18n="nav.settings">SETTINGS</span>
         </div>
     </nav>
 
@@ -747,10 +743,10 @@
             <div class="modal-body" id="modal-yeast-desc"></div>
             
             <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button id="modal-edit-btn" class="btn-secondary" style="display: none; flex: 1; padding: 12px; border-color: var(--accent-color); color: var(--accent-color); border-radius: 8px; font-family: 'Lexend'; font-weight: bold; cursor: pointer;">
+                <button id="modal-edit-btn" class="btn-secondary" style="display: none; flex: 1; padding: 12px; border-color: var(--accent-color); color: var(--accent-color); border-radius: 8px; font-family: 'Lexend'; font-weight: bold; cursor: pointer;" data-i18n="library.btn_edit">
                     EDIT DETAILS
                 </button>
-                <button id="modal-delete-btn" class="btn-danger" style="display: none; flex: 1; padding: 12px; background: #550000; border: 1px solid #ff0000; color: #fff; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; cursor: pointer;">
+                <button id="modal-delete-btn" class="btn-danger" style="display: none; flex: 1; padding: 12px; background: #550000; border: 1px solid #ff0000; color: #fff; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; cursor: pointer;" data-i18n="library.btn_delete">
                     DELETE
                 </button>
             </div>
@@ -767,76 +763,76 @@
 
 <div id="demo-tour-tooltip" class="tour-tooltip">
     <div class="tour-arrow"></div>
-    <span id="demo-tour-text">Temp inside vessel</span>
+    <span id="demo-tour-text" data-i18n="tour.tooltip">Temp inside vessel</span>
 </div>
 
 <div id="live-info-box" class="profiler-style-info" style="display: none;">
-    <p>Welcome to the LIVE VIEW!    </p>
-    <p>This is your digital command center. Once your YeastMaster is connected, you can monitor your active fermentation in real-time, from anywhere in the world.</p>
-    <p>All vital stats are streamed directly to this dashboard, giving you total control and peace of mind.</p>
-    <p style="margin-top: 15px;"><strong>Want a quick tour of the interface?</strong></p>
+    <p data-i18n="tour.welcome">Welcome to the LIVE VIEW!    </p>
+    <p data-i18n="tour.p1">This is your digital command center. Once your YeastMaster is connected, you can monitor your active fermentation in real-time, from anywhere in the world.</p>
+    <p data-i18n="tour.p2">All vital stats are streamed directly to this dashboard, giving you total control and peace of mind.</p>
+    <p style="margin-top: 15px;"><strong data-i18n="tour.p3">Want a quick tour of the interface?</strong></p>
     
     <div class="info-box-buttons">
-        <button id="btn-exit-intro" class="text-btn">Exit Demo</button>
-        <button id="btn-start-tour" class="text-btn action-btn">Continue</button>
+        <button id="btn-exit-intro" class="text-btn" data-i18n="tour.btn_exit">Exit Demo</button>
+        <button id="btn-start-tour" class="text-btn action-btn" data-i18n="tour.btn_start">Continue</button>
     </div>
 </div>
 <div id="pitch-calc-modal" class="ym-modal" style="display: none;">
     <div class="ym-modal-content">
         <span class="ym-close-btn" onclick="closePitchCalcModal()">&times;</span>
         
-        <h3>Pitch Calculators</h3>
-        <p class="lab-description">Choose your yeast source:</p>
+        <h3 data-i18n="calc.title">Pitch Calculators</h3>
+        <p class="lab-description" data-i18n="calc.choose">Choose your yeast source:</p>
 
 <div id="selected-yeast-header" style="display: none; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px dashed #444;">
-            <h4 style="margin: 0; color: #8CC63F;">Selected: <span id="selected-yeast-text" style="color: #fff;"></span></h4>
-            <button onclick="resetCalcSelection()" style="background: none; border: 1px solid #555; color: #aaa; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em;">Change</button>
+            <h4 style="margin: 0; color: #8CC63F;"><span data-i18n="calc.selected">Selected:</span> <span id="selected-yeast-text" style="color: #fff;"></span></h4>
+            <button onclick="resetCalcSelection()" style="background: none; border: 1px solid #555; color: #aaa; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em;" data-i18n="calc.btn_change">Change</button>
         </div>
 
         <div class="calc-btn-grid" id="main-calc-buttons">
-            <button class="ym-btn-outline" onclick="selectCalc('dry', this)">Dry Yeast</button>
-            <button class="ym-btn-outline" onclick="selectCalc('liquid', this)">Liquid Yeast</button>
-            <button class="ym-btn-outline" onclick="selectCalc('slurry', this)">Slurry</button>
-            <button class="ym-btn-outline" onclick="selectCalc('bank', this)">From Yeast Bank</button>
+            <button class="ym-btn-outline" onclick="selectCalc('dry', this)" data-i18n="calc.btn_dry">Dry Yeast</button>
+            <button class="ym-btn-outline" onclick="selectCalc('liquid', this)" data-i18n="calc.btn_liquid">Liquid Yeast</button>
+            <button class="ym-btn-outline" onclick="selectCalc('slurry', this)" data-i18n="calc.btn_slurry">Slurry</button>
+            <button class="ym-btn-outline" onclick="selectCalc('bank', this)" data-i18n="calc.btn_bank">From Yeast Bank</button>
         </div>
 
         <div id="bank-sub-options" class="sub-options-container" style="display: none;">
-            <h4>Inoculation Method</h4>
+            <h4 data-i18n="calc.inoculation">Inoculation Method</h4>
             <div class="calc-btn-grid sub-grid">
-                <button class="ym-btn-outline sub-btn" onclick="selectSub('loop', this)">Single Loop</button>
-                <button class="ym-btn-outline sub-btn" onclick="selectSub('wash', this)">Whole Slant Wash</button>
+                <button class="ym-btn-outline sub-btn" onclick="selectSub('loop', this)" data-i18n="calc.btn_loop">Single Loop</button>
+                <button class="ym-btn-outline sub-btn" onclick="selectSub('wash', this)" data-i18n="calc.btn_wash">Whole Slant Wash</button>
             </div>
         </div>
         <div id="calc-input-section" style="display: none; margin-top: 25px; padding-top: 20px; border-top: 1px solid #333;">
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                 <div class="ym-input-group">
-                    <label>Batch Size (Liters)</label>
+                    <label data-i18n="calc.batch_size">Batch Size (Liters)</label>
                     <input type="number" id="calc-vol" value="20" step="0.5">
                 </div>
                 <div class="ym-input-group">
-                    <label>Original Gravity (SG)</label>
+                    <label data-i18n="calc.og">Original Gravity (SG)</label>
                     <input type="number" id="calc-og" value="1.050" step="0.001">
                 </div>
             </div>
 
             <div class="ym-input-group" style="margin-bottom: 20px;">
-                <label>Target Pitch Rate</label>
+                <label data-i18n="calc.pitch_rate">Target Pitch Rate</label>
                 <select id="calc-rate" class="ym-select">
-                    <option value="0.35">0.35 (Low / Manufacturer rec.)</option>
-                    <option value="0.50">0.50 (Standard Ale)</option>
-                    <option value="0.75" selected>0.75 (Pro Ale Pitch)</option>
-                    <option value="1.00">1.00 (High Gravity Ale)</option>
-                    <option value="1.50">1.50 (Standard Lager)</option>
+                    <option value="0.35" data-i18n="calc.rate_low">0.35 (Low / Manufacturer rec.)</option>
+                    <option value="0.50" data-i18n="calc.rate_std">0.50 (Standard Ale)</option>
+                    <option value="0.75" selected data-i18n="calc.rate_pro">0.75 (Pro Ale Pitch)</option>
+                    <option value="1.00" data-i18n="calc.rate_high">1.00 (High Gravity Ale)</option>
+                    <option value="1.50" data-i18n="calc.rate_lager">1.50 (Standard Lager)</option>
                 </select>
             </div>
 
             <div id="dynamic-extra-fields"></div>
 
-            <button class="ym-btn-primary" onclick="calculatePitch()" style="width: 100%; margin-top: 10px;">Calculate</button>
+            <button class="ym-btn-primary" onclick="calculatePitch()" style="width: 100%; margin-top: 10px;" data-i18n="calc.btn_calc">Calculate</button>
             
             <div id="calc-result-box" style="display: none; margin-top: 20px; padding: 15px; background: rgba(140, 198, 63, 0.1); border-left: 4px solid #8CC63F; border-radius: 4px;">
-                <h4 style="margin: 0 0 5px 0; color: #8CC63F;">Results</h4>
+                <h4 style="margin: 0 0 5px 0; color: #8CC63F;" data-i18n="calc.results">Results</h4>
                 <p id="calc-result-text" style="margin: 0; font-size: 0.95em; line-height: 1.4;"></p>
             </div>
         </div>
@@ -848,41 +844,41 @@
     <div class="ym-modal-content">
         <span class="ym-close-btn" onclick="closeAddStrainModal()">&times;</span>
         
-        <h3 style="color: var(--accent-color); margin-bottom: 5px;">House Bank</h3>
-        <p class="lab-description" style="margin-bottom: 20px;">Catalog your wild captures, house blends, or local yeast strains.</p>
+        <h3 style="color: var(--accent-color); margin-bottom: 5px;" data-i18n="add_strain.title">House Bank</h3>
+        <p class="lab-description" style="margin-bottom: 20px;" data-i18n="add_strain.desc">Catalog your wild captures, house blends, or local yeast strains.</p>
 
         <div class="ym-input-group" style="margin-bottom: 15px;">
-            <label>Strain Name</label>
-            <input type="text" id="hs-name" placeholder="e.g. Backyard Apple Wild" maxlength="22" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+            <label data-i18n="add_strain.name">Strain Name</label>
+            <input type="text" id="hs-name" placeholder="e.g. Backyard Apple Wild" data-i18n-placeholder="add_strain.name_placeholder" maxlength="22" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
         </div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
             <div class="ym-input-group">
-                <label>Origin / Source</label>
-                <input type="text" id="hs-origin" placeholder="e.g. My Garden" maxlength="15" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                <label data-i18n="add_strain.origin">Origin / Source</label>
+                <input type="text" id="hs-origin" placeholder="e.g. My Garden" data-i18n-placeholder="add_strain.origin_placeholder" maxlength="15" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
             </div>
             <div class="ym-input-group">
-                <label>Capture Date</label>
+                <label data-i18n="add_strain.date">Capture Date</label>
                 <input type="date" id="hs-date" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
             </div>
         </div>
 
         <div class="ym-input-group" style="margin-bottom: 15px;">
-            <label>Temp Range</label>
-            <input type="text" id="hs-temp" placeholder="e.g. 18-25°C" maxlength="15" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+            <label data-i18n="add_strain.temp">Temp Range</label>
+            <input type="text" id="hs-temp" placeholder="e.g. 18-25°C" data-i18n-placeholder="add_strain.temp_placeholder" maxlength="15" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
         </div>
 
         <div class="ym-input-group" style="margin-bottom: 15px;">
-            <label>Tags (comma separated)</label>
-            <input type="text" id="hs-tags" placeholder="e.g. Sour, Funky, Farmhouse" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+            <label data-i18n="add_strain.tags">Tags (comma separated)</label>
+            <input type="text" id="hs-tags" placeholder="e.g. Sour, Funky, Farmhouse" data-i18n-placeholder="add_strain.tags_placeholder" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
         </div>
 
         <div class="ym-input-group" style="margin-bottom: 20px;">
-            <label>Description / Notes</label>
-            <textarea id="hs-desc" rows="3" placeholder="Notes on flavor, attenuation, history..." style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 400; resize: vertical;"></textarea>
+            <label data-i18n="add_strain.notes">Description / Notes</label>
+            <textarea id="hs-desc" rows="3" placeholder="Notes on flavor, attenuation, history..." data-i18n-placeholder="add_strain.notes_placeholder" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 400; resize: vertical;"></textarea>
         </div>
 
-        <button class="ym-btn-primary" onclick="saveHouseStrain()" style="width: 100%;">Save to Library</button>
+        <button class="ym-btn-primary" onclick="saveHouseStrain()" style="width: 100%;" data-i18n="add_strain.btn_save">Save to Library</button>
     </div>
 </div>
 
