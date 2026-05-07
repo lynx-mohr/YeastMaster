@@ -276,10 +276,7 @@ async function updateDashboard() {
             const latest = sortedData[sortedData.length - 1];
             console.log("Senaste sorterade datan:", latest);
 
-console.log("Kollar larmstatus. Hela latest-objektet:", latest);
-console.log("Värde på active_alert:", latest.active_alert);
-            
-// ==========================================
+            // ==========================================
             // --- NYTT: SMART BANNER-LOGIK (Inklusive Temp & Strömavbrott) ---
             // ==========================================
             const banner = document.getElementById('top-banner-alert');
@@ -305,7 +302,6 @@ console.log("Värde på active_alert:", latest.active_alert);
 
             // --- 2. KOLLA HÅRDVARU-LARM (Dry hop, Dump, från ESP32) ---
             if (alertToDisplay === "") {
-                // Skanna historiken efter det senaste hårdvarularmet (max 6 timmar gammalt)
                 for (let i = sortedData.length - 1; i >= 0; i--) {
                     if (sortedData[i].active_alert && sortedData[i].active_alert !== "") {
                         const alertAgeHours = (nowTime - new Date(sortedData[i].time).getTime()) / (1000 * 60 * 60);
@@ -325,32 +321,29 @@ console.log("Värde på active_alert:", latest.active_alert);
 
             // --- 4. VISA BANNERN MED RÄTT TEXT ---
             if (alertToDisplay !== "") {
-                let displayMsg = alertToDisplay; // Standardtext
+                let displayMsg = alertToDisplay; 
                 
-                // Formatera texten snyggt baserat på larmtyp
+                // Formatera texten snyggt baserat på larmtyp och översätt (om ordboken finns)
                 if (alertToDisplay === "POWER_OUTAGE") {
-                    displayMsg = "⚠️ CONNECTION LOST! Check power/WiFi.";
+                    displayMsg = translations?.[currentLang]?.alerts?.power || "⚠️ CONNECTION LOST! Check power/WiFi.";
                 } else if (alertToDisplay === "TEMP_WARNING") {
-                    displayMsg = "🔥 TEMP DEVIATION! >2.0°C difference.";
+                    displayMsg = translations?.[currentLang]?.alerts?.temp || "🔥 TEMP DEVIATION! >2.0°C difference.";
                 } else if (alertToDisplay.includes("DRY HOP")) {
-                    displayMsg = "🌿 TIME TO DRY HOP!";
+                    displayMsg = translations?.[currentLang]?.alerts?.dry_hop || "🌿 TIME TO DRY HOP!";
                 } else if (alertToDisplay.includes("DUMP") || alertToDisplay.includes("RACK")) {
-                    displayMsg = "🧪 TIME TO DUMP YEAST!";
+                    displayMsg = translations?.[currentLang]?.alerts?.dump || "🧪 TIME TO DUMP YEAST!";
                 } else if (alertToDisplay.includes("CRASH")) {
-                    displayMsg = "❄️ TIME TO COLD CRASH!";
+                    displayMsg = translations?.[currentLang]?.alerts?.crash || "❄️ TIME TO COLD CRASH!";
                 }
                 
                 if (bannerTitle) bannerTitle.innerText = displayMsg;
                 if (banner) banner.style.display = 'block';
-                
-                // Spara strängen så kvittens-knappen vet vad den stänger
                 window.currentActiveAlertString = alertToDisplay; 
             } else {
                 if (banner) banner.style.display = 'none';
             }
             // ==========================================
 
-            // Vi använder tidsstämpeln 'time' från den senaste loggen
             if (latest && latest.time && typeof updateHeartbeatDisplay === 'function') {
                 updateHeartbeatDisplay(latest.time);
             }
@@ -361,9 +354,7 @@ console.log("Värde på active_alert:", latest.active_alert);
             if (latest && latest.time) {
                 const syncDate = new Date(latest.time);
                 const timeString = syncDate.toLocaleTimeString('sv-SE', { 
-                    hour: '2-digit', 
-                    minute: '2-digit',
-                    second: '2-digit' // Ta bort denna om du bara vill se HH:MM
+                    hour: '2-digit', minute: '2-digit', second: '2-digit'
                 });
                 
                 const syncElement = document.getElementById('last-sync-time');
@@ -371,8 +362,7 @@ console.log("Värde på active_alert:", latest.active_alert);
                     syncElement.innerText = timeString;
                 }
             }
-            // ==========================================
-            
+
             // 1. Temperaturer (Med inbyggd spärr för urkopplade sensorer)
             const safeBeerTemp = latest.temp <= -100 ? "--" : (convertTemp(latest.temp).toFixed(1) + '°' + currentTempUnit);
             const safeAirTemp = latest.air_temp <= -100 ? "--" : (convertTemp(latest.air_temp).toFixed(1) + '°' + currentTempUnit);
@@ -385,36 +375,29 @@ console.log("Värde på active_alert:", latest.active_alert);
             let displayStrain = (latest.strain || "---").toUpperCase();
             let displayProfile = (latest.profile || "---").toUpperCase();
 
-            // Om kylen skickar en vanlig asterisk (*), uppgradera den till en snygg stjärna i webben
             if (displayProfile.startsWith("* ")) {
                 displayProfile = displayProfile.replace("* ", "★ ");
             }
 
-            // 1. Fånga det gamla "CUSTOM"-formatet (Fallback)
             if (displayStrain.startsWith("CUSTOM (") && displayStrain.endsWith(")")) {
                 displayStrain = displayStrain.replace("CUSTOM (", "").replace(")", "");
                 if (!displayProfile.startsWith("★ ")) displayProfile = "★ " + displayProfile;
             }
 
-            // 2. Leta efter stjärnor/asterisker i jästnamnet och flytta ner dem!
             if (displayStrain.startsWith("* ") || displayStrain.startsWith("★ ")) {
                 displayStrain = displayStrain.replace("* ", "").replace("★ ", ""); 
-                
                 if (!displayProfile.startsWith("★ ")) {
                     displayProfile = "★ " + displayProfile;
                 }
             }
 
-            // Skriv ut Jäst (i svarta boxen)
             const strainValEl = document.getElementById('strain-val');
             strainValEl.innerText = displayStrain;
             strainValEl.style.fontSize = displayStrain.length > 12 ? "0.8em" : "";
 
-            // Skriv ut Profil (under boxen)
             const profileValEl = document.getElementById('profile-val');
             profileValEl.innerText = displayProfile;
             
-            // --- BEHÅLL DESSA TVÅ RADER ---
             const action = (latest.action || "IDLE").toUpperCase();
             document.getElementById('action-val').innerText = action;
 
@@ -435,33 +418,46 @@ console.log("Värde på active_alert:", latest.active_alert);
                 arrow.classList.remove('blink-active');
             }
 
-            // 4. Status (Hämta direkt från C++)
-            document.getElementById('status-text').innerText = latest.status.toUpperCase();
-            
-            // 5. Dagar (Hämta direkt från C++)
-            const currentDay = latest.day || 0;
-            const phaseDay = latest.phase_day || 0;
-            const profileDay = latest.profile_day || currentDay;
+            // ==========================================
+            // --- FIX FÖR IDLE-BUGGEN (Hämta sista kända tid) ---
+            // ==========================================
+            let displayStatusText = (latest.status || "--").toUpperCase();
+            let displayDay = latest.day || 0;
+            let displayPhaseDay = latest.phase_day || 0;
+            let profileDay = latest.profile_day || displayDay;
+
+            // Om maskinen är IDLE/FINISHED och visar 0, titta bakåt i tiden!
+            if ((displayStatusText === "IDLE" || displayStatusText === "FINISHED") && displayDay === 0) {
+                for (let i = sortedData.length - 1; i >= 0; i--) {
+                    if (sortedData[i].day > 0) {
+                        displayDay = sortedData[i].day;
+                        displayPhaseDay = sortedData[i].phase_day;
+                        profileDay = sortedData[i].profile_day || sortedData[i].day;
+                        break;
+                    }
+                }
+            }
+
+            document.getElementById('status-text').innerText = displayStatusText;
 
             // --- VÄCK LARM-DETEKTIVEN ---
             const currentStrain = latest.strain || "Unknown";
             const currentProfileName = latest.profile || "Unknown";
             
-            // SKICKA IN PROFILE-DAY ISTÄLLET FÖR CURRENT-DAY!
             if (typeof checkActionAlerts === 'function') {
                 checkActionAlerts(profileDay, currentStrain, currentProfileName);
             }
 
             // 6. Progress (Grafisk bar)
             const targetDays = 14; 
-            const percent = Math.min((currentDay / targetDays) * 100, 100).toFixed(0);
+            const percent = Math.min((displayDay / targetDays) * 100, 100).toFixed(0);
 
             // 7. Skriv ut till skärmen!
             const dayValEl = document.getElementById('day-val');
             const phaseDayValEl = document.getElementById('phase-day-val');
 
-            if (dayValEl) dayValEl.innerText = formatDaysToHuman(currentDay);
-            if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(phaseDay);
+            if (dayValEl) dayValEl.innerText = formatDaysToHuman(displayDay);
+            if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(displayPhaseDay);
             
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
@@ -471,21 +467,15 @@ console.log("Värde på active_alert:", latest.active_alert);
             if (targetTempElement) {
                 targetTempElement.innerText = targetTemp <= -100 ? "--" : (convertTemp(targetTemp).toFixed(1) + '°' + currentTempUnit);
             }
-            
             // ==========================================
-            // --- DATATVÄTT 2.0: KASTA UT SPIKARNA ---
-            // ==========================================
-            // .filter() sparar BARA de loggar som returnerar 'true'
+
+            // DATATVÄTT 2.0: KASTA UT SPIKARNA
             const cleanChartData = sortedData.filter(log => {
-                // Kolla om temperaturen finns och är absurd låg
-                if (log.temp !== undefined && log.temp <= -50) return false; // Kasta ut!
-                if (log.air_temp !== undefined && log.air_temp <= -50) return false; // Kasta ut!
-                
-                // Om allt ser bra ut, släpp igenom loggen till grafen
+                if (log.temp !== undefined && log.temp <= -50) return false; 
+                if (log.air_temp !== undefined && log.air_temp <= -50) return false; 
                 return true; 
             });
 
-            // Skicka den TVÄTTADE datan till grafen
             updateChart(cleanChartData);
         }
     } catch (error) {
@@ -3068,31 +3058,63 @@ async function syncToSelectedDevice() {
     const targetDeviceId = syncDropdown ? syncDropdown.value : null;
 
     if (!targetDeviceId) {
-        alert("Vänligen välj en målenhet i rullistan ovanför knappen!");
+        alert(translations[currentLang]?.alerts?.no_device || "Vänligen välj en målenhet i rullistan ovanför knappen!");
         return;
     }
 
     if (!selectedStrains || selectedStrains.length === 0) {
-        alert("Du måste välja minst en jäst/profil (markera med stjärnan ★) för att kunna synka!");
+        alert(translations[currentLang]?.alerts?.no_strains || "Du måste välja minst en jäst/profil (markera med stjärnan ★) för att kunna synka!");
         return;
     }
 
     const user = auth.currentUser;
     if (!user) {
-        alert("Du måste vara inloggad för att kunna synka till molnet.");
+        alert(translations[currentLang]?.alerts?.login_sync || "Du måste vara inloggad för att kunna synka till molnet.");
         return;
     }
 
     const originalText = syncBtn.innerText;
-    syncBtn.innerText = "PACKING PROFILES... 📦";
+    syncBtn.innerText = "VERIFYING STATUS... 🔍";
     syncBtn.style.opacity = "0.7";
     syncBtn.style.pointerEvents = "none";
+
+    // ==========================================
+    // --- NYTT: SÄKERHETSSPÄRR FÖR AKTIV JÄSNING ---
+    // ==========================================
+    try {
+        // Hämta den absolut senaste loggen från denna specifika kyl
+        const res = await fetch(`${API_BASE}/data?device_id=${targetDeviceId}`);
+        const history = await res.json();
+
+        if (history && history.length > 0) {
+            // Sortera tidslinjen så vi garanterat tittar på sekunden just nu
+            history.sort((a, b) => new Date(a.time) - new Date(b.time));
+            const absoluteLatest = history[history.length - 1];
+
+            const status = (absoluteLatest.status || "").toUpperCase();
+            
+            // Om kylen är mitt i en jäsning (ACTIVE), stoppa synken!
+            if (status === "ACTIVE" || status === "COOLING" || status === "HEATING") {
+                alert(translations[currentLang]?.alerts?.sync_blocked || "⚠️ SYNKNING AVBRUTEN!\n\nDin YeastMaster kör just nu en aktiv jäsning. Att synka ett nytt bibliotek nu kan skriva över den pågående profilen och förstöra jäsningen.\n\nPausa eller avsluta jäsningen på enheten först.");
+                syncBtn.innerText = originalText;
+                syncBtn.style.opacity = "1";
+                syncBtn.style.pointerEvents = "auto";
+                return; // Avbryter funktionen helt
+            }
+        }
+    } catch (e) {
+        console.error("Kunde inte verifiera maskinens status inför synk", e);
+        // Tillåt synk att fortsätta om vi inte får svar, i fall historiken bara är tom
+    }
+    // ==========================================
+
+    syncBtn.innerText = "PACKING PROFILES... 📦";
 
     try {
         let profilesToSend = [];
 
         // DEN KOMPLETTA ORDBOKEN FÖR SYNK-MOTORN
- const hwStrainNames = {
+        const hwStrainNames = {
             "us-05": "US-05", "s-04": "S-04", "w-34-70": "W-34/70", "be-256": "BE-256",
             "wb-06": "WB-06", "verdant": "Verdant IPA", "voss": "Voss Kveik", "nottingham": "Nottingham", 
             "wlp001": "Cali Ale", "wlp300": "Hefeweizen", "belle-saison": "Belle Saison", 
@@ -3110,7 +3132,7 @@ async function syncToSelectedDevice() {
             "wyeast-2112": "Cali Lager", "wlp380": "Hefeweizen 4", "wyeast-1007": "Ger. Ale 1007"
         };
 
-selectedStrains.forEach(id => {
+        selectedStrains.forEach(id => {
             const strainObj = yeastStrains.find(y => y.id === id);
             
             if (strainObj && strainObj.isCustom) {
@@ -3128,8 +3150,8 @@ selectedStrains.forEach(id => {
                         let customName = deviceProfile.s; // "Pelle"
                         let baseStrainFull = deviceProfile.p; // "Wyeast 1084 Irish Ale"
                         
-                     deviceProfile.s = formatOledName(baseStrainFull); // Blir "Scot. Ale"
-deviceProfile.p = "* " + customName.substring(0, 10); // Använd vanlig asterisk för OLED!
+                        deviceProfile.s = formatOledName(baseStrainFull); // Blir "Scot. Ale"
+                        deviceProfile.p = "* " + customName.substring(0, 10); // Använd vanlig asterisk för OLED!
                         
                         profilesToSend.push(deviceProfile);
                     });
@@ -3152,7 +3174,7 @@ deviceProfile.p = "* " + customName.substring(0, 10); // Använd vanlig asterisk
         });
 
         if (profilesToSend.length === 0) {
-            alert("Kunde inte packa profilerna! Dubbelkolla att namnen matchar databasen.");
+            alert(translations[currentLang]?.alerts?.sync_empty || "Kunde inte packa profilerna! Dubbelkolla att namnen matchar databasen.");
             syncBtn.innerText = originalText;
             syncBtn.style.opacity = "1";
             syncBtn.style.pointerEvents = "auto";
