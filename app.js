@@ -319,6 +319,9 @@ async function updateDashboard() {
                 alertToDisplay = ""; // Redan kvitterat, tysta larmet!
             }
 
+const lang = window.currentLang || 'sv';
+const t = window.translations?.[lang]?.alerts;
+
             // --- 4. VISA BANNERN MED RÄTT TEXT ---
             if (alertToDisplay !== "") {
                 let displayMsg = alertToDisplay; 
