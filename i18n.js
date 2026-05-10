@@ -26,9 +26,22 @@ const translations = {
             status: "Status",
             status_connected: "CONNECTED",
             nickname: "Nickname",
+            device_id: "Device ID (MAC)",
             remove: "Remove Active Device",
             add_device: "+ ADD NEW YEASTMASTER",
-            support: "SUPPORT & FEEDBACK"
+            support: "SUPPORT & FEEDBACK",
+            btn_bug: "REPORT BUG",
+            btn_idea: "SUGGEST IDEA",
+            btn_logout: "LOG OUT"
+        },
+        status: {
+            offline: "OFFLINE",
+            min_ago: "m ago",
+            idle: "IDLE",
+            running: "RUNNING",
+            cooling: "COOLING",
+            heating: "HEATING",
+            finished: "FINISHED"
         },
         alerts: {
             dry_hop: "🌿 TIME TO DRY HOP!",
@@ -63,9 +76,22 @@ const translations = {
             status: "Status",
             status_connected: "ANSLUTEN",
             nickname: "Smeknamn",
+            device_id: "Enhets-ID (MAC)",
             remove: "Ta bort enhet",
             add_device: "+ LÄGG TILL YEASTMASTER",
-            support: "SUPPORT & FEEDBACK"
+            support: "SUPPORT & FEEDBACK",
+            btn_bug: "RAPPORTERA BUGG",
+            btn_idea: "FÖRESLÅ IDÉ",
+            btn_logout: "LOGGA UT"
+        },
+        status: {
+            offline: "OFFLINE",
+            min_ago: "m sedan",
+            idle: "VILOLÄGE",
+            running: "AKTIV",
+            cooling: "KYLER",
+            heating: "VÄRMER",
+            finished: "AVSLUTAD"
         },
         alerts: {
             dry_hop: "🌿 DAGS ATT TORRHUMLA!",
@@ -100,9 +126,22 @@ const translations = {
             status: "Status",
             status_connected: "VERBUNDEN",
             nickname: "Spitzname",
+            device_id: "Geräte-ID (MAC)",
             remove: "Gerät entfernen",
             add_device: "+ YEASTMASTER HINZUFÜGEN",
-            support: "HILFE & FEEDBACK"
+            support: "HILFE & FEEDBACK",
+            btn_bug: "FEHLER MELDEN",
+            btn_idea: "IDEE VORSCHLAGEN",
+            btn_logout: "ABMELDEN"
+        },
+        status: {
+            offline: "OFFLINE",
+            min_ago: "m her",
+            idle: "LEERLAUF",
+            running: "LÄUFT",
+            cooling: "KÜHLT",
+            heating: "HEIZT",
+            finished: "BEENDET"
         },
         alerts: {
             dry_hop: "🌿 ZEIT ZUM HOPFENSTOPFEN!",
