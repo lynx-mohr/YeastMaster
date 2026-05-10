@@ -102,7 +102,7 @@ const translations = {
         }
     },
     de: {
-        nav: { home: "START", library: "BIBLIOTHEK", lab: "AKADEMIE", profiler: "PROFILE", live: "LIVE", settings: "SETUP" },
+        nav: { home: "START", library: "BIBLIOTHEK", lab: "AKADEMIE", profiler: "PROFILER", live: "LIVE", settings: "SETUP" },
         dashboard: { 
             progress: "FORTSCHRITT", 
             since_start: "Seit Start", 
