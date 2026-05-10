@@ -157,8 +157,17 @@ const translations = {
 window.translations = translations;
 window.currentLang = localStorage.getItem('ym_language') || 'en';
 
+// 1. Hämta sparat språk eller kör engelska som standard
+window.currentLang = localStorage.getItem('ym_language') || 'en';
+
+// 2. Denna funktion körs nu automatiskt när filen laddas
+function initLanguage() {
+    // Vi anropar setLanguage med det sparade språket
+    // för att uppdatera både texter och knapparnas utseende direkt
+    setLanguage(window.currentLang);
+}
+
 function updateTexts() {
-    // 1. Översätt vanlig text
     document.querySelectorAll('[data-i18n]').forEach(element => {
         const keyString = element.getAttribute('data-i18n');
         const keys = keyString.split('.');
@@ -167,7 +176,6 @@ function updateTexts() {
         if (text) element.innerText = text;
     });
 
-    // 2. Översätt placeholders i input-fält
     document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
         const keyString = element.getAttribute('data-i18n-placeholder');
         const keys = keyString.split('.');
@@ -182,8 +190,13 @@ function setLanguage(lang) {
     localStorage.setItem('ym_language', lang);
     updateTexts();
     
-    // Uppdatera knapparnas utseende i UI:t
+    // Uppdatera knapparnas utseende (markerar den aktiva knappen)
     document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('onclick').includes(lang));
+        // Vi kollar om knappen har rätt lang-kod i sitt onclick-anrop
+        const isActive = btn.getAttribute('onclick').includes(`'${lang}'`);
+        btn.classList.toggle('active', isActive);
     });
 }
+
+// KÖR INITIERINGEN DIREKT!
+initLanguage();
