@@ -1,4 +1,5 @@
 // i18n.js
+
 const translations = {
     en: {
         nav: { home: "HOME", library: "LIBRARY", lab: "ACADEMY", profiler: "PROFILER", live: "LIVE", settings: "SETTINGS" },
@@ -12,15 +13,22 @@ const translations = {
         settings: {
             title: "SETTINGS",
             theme: "Theme",
+            dark: "DARK",
+            light: "LIGHT",
             temp_unit: "Temperature Unit",
             accent: "Accent Color",
+            language_label: "Language",
+            notifications_title: "NOTIFICATIONS",
             push: "Push Notifications",
             push_desc: "Enable push notifications to receive alerts on your phone regarding temperature fluctuations, power outages, or when it's time to dry hop.",
             device_mgmt: "Device Management",
             active_device: "Active Device",
             status: "Status",
+            status_connected: "CONNECTED",
             nickname: "Nickname",
-            remove: "Remove Active Device"
+            remove: "Remove Active Device",
+            add_device: "+ ADD NEW YEASTMASTER",
+            support: "SUPPORT & FEEDBACK"
         },
         alerts: {
             dry_hop: "🌿 TIME TO DRY HOP!",
@@ -42,15 +50,22 @@ const translations = {
         settings: {
             title: "INSTÄLLNINGAR",
             theme: "Tema",
+            dark: "MÖRK",
+            light: "LJUS",
             temp_unit: "Temperaturenhet",
             accent: "Accentfärg",
+            language_label: "Språk",
+            notifications_title: "NOTISER",
             push: "Push-notiser",
             push_desc: "Aktivera push-notiser för att få larm i mobilen om temperaturavvikelser, strömavbrott eller när det är dags att torrhumla.",
             device_mgmt: "Hantera enheter",
             active_device: "Aktiv enhet",
             status: "Status",
+            status_connected: "ANSLUTEN",
             nickname: "Smeknamn",
-            remove: "Ta bort enhet"
+            remove: "Ta bort enhet",
+            add_device: "+ LÄGG TILL YEASTMASTER",
+            support: "SUPPORT & FEEDBACK"
         },
         alerts: {
             dry_hop: "🌿 DAGS ATT TORRHUMLA!",
@@ -61,7 +76,7 @@ const translations = {
         }
     },
     de: {
-        nav: { home: "START", library: "BIBLIOTHEK", lab: "AKADEMIE", profiler: "PROFILER", live: "LIVE", settings: "SETUP" },
+        nav: { home: "START", library: "BIBLIOTHEK", lab: "AKADEMIE", profiler: "PROFILE", live: "LIVE", settings: "SETUP" },
         dashboard: { 
             progress: "FORTSCHRITT", 
             since_start: "Seit Start", 
@@ -72,15 +87,22 @@ const translations = {
         settings: {
             title: "EINSTELLUNGEN",
             theme: "Thema",
+            dark: "DUNKEL",
+            light: "HELL",
             temp_unit: "Temperatureinheit",
             accent: "Akzentfarbe",
+            language_label: "Sprache",
+            notifications_title: "BENACHRICHTIGUNGEN",
             push: "Push-Benachrichtigungen",
             push_desc: "Aktivieren Sie Push-Benachrichtigungen, um Alarme bei Temperaturabweichungen, Stromausfällen oder Hopfenstopfen zu erhalten.",
             device_mgmt: "Geräteverwaltung",
             active_device: "Aktives Gerät",
             status: "Status",
+            status_connected: "VERBUNDEN",
             nickname: "Spitzname",
-            remove: "Gerät entfernen"
+            remove: "Gerät entfernen",
+            add_device: "+ YEASTMASTER HINZUFÜGEN",
+            support: "HILFE & FEEDBACK"
         },
         alerts: {
             dry_hop: "🌿 ZEIT ZUM HOPFENSTOPFEN!",
@@ -92,14 +114,16 @@ const translations = {
     }
 };
 
-let currentLang = localStorage.getItem('ym_language') || 'en';
+// Exportera till globala window-objektet
+window.translations = translations;
+window.currentLang = localStorage.getItem('ym_language') || 'en';
 
 function updateTexts() {
     // 1. Översätt vanlig text
     document.querySelectorAll('[data-i18n]').forEach(element => {
         const keyString = element.getAttribute('data-i18n');
         const keys = keyString.split('.');
-        let text = translations[currentLang];
+        let text = translations[window.currentLang];
         keys.forEach(k => { if(text) text = text[k]; });
         if (text) element.innerText = text;
     });
@@ -108,14 +132,14 @@ function updateTexts() {
     document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
         const keyString = element.getAttribute('data-i18n-placeholder');
         const keys = keyString.split('.');
-        let text = translations[currentLang];
+        let text = translations[window.currentLang];
         keys.forEach(k => { if(text) text = text[k]; });
         if (text) element.placeholder = text;
     });
 }
 
 function setLanguage(lang) {
-    currentLang = lang;
+    window.currentLang = lang;
     localStorage.setItem('ym_language', lang);
     updateTexts();
     
