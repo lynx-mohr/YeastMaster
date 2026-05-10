@@ -4000,10 +4000,12 @@ function formatDaysToHuman(decimalDays) {
         h = 0;
     }
     
-    if (d === 0) return h + " h"; // Om det gått mindre än ett dygn, visa bara timmar
-    if (h === 0) return d + " d"; // Om det är exakta dygn, visa bara dagar
+    if (d === 0) return h + " h"; // Ex: "6 h"
+    if (h === 0) return d + " d"; // Ex: "14 d"
     
-    return `${d} d and ${h} h`;
+    // Här tar vi bort "and" och kör ett kommatecken istället.
+    // Det fungerar på engelska, svenska och tyska utan att behöva översättas!
+    return `${d} d, ${h} h`; 
 }
 
 // ==========================================
