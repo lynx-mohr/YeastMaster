@@ -267,8 +267,8 @@
         <div class="settings-row">
             <span class="settings-label" data-i18n="settings.theme">Theme</span>
             <div class="theme-toggle-compact">
-                <button class="theme-btn-small active" id="btn-theme-dark" onclick="setTheme('dark')" data-i18n="settings.theme_dark">Dark</button>
-                <button class="theme-btn-small" id="btn-theme-light" onclick="setTheme('light')" data-i18n="settings.theme_light">Light</button>
+                <button class="theme-btn-small active" id="btn-theme-dark" onclick="setTheme('dark')" data-i18n="settings.dark">DARK</button>
+                <button class="theme-btn-small" id="btn-theme-light" onclick="setTheme('light')" data-i18n="settings.light">LIGHT</button>
             </div>
         </div>
 
@@ -290,76 +290,78 @@
                 <div class="color-dot" style="background: #ff9800;" onclick="setAccent('#ff9800', this)"></div>
             </div>
         </div>
+
+        <div class="settings-row">
+            <span class="settings-label" data-i18n="settings.language_label">Language</span>
+            <div class="theme-toggle-compact">
+                <button class="theme-btn-small lang-btn" onclick="setLanguage('en')">EN</button>
+                <button class="theme-btn-small lang-btn" onclick="setLanguage('sv')">SV</button>
+                <button class="theme-btn-small lang-btn" onclick="setLanguage('de')">DE</button>
+            </div>
+        </div>
     </div>
 
-    <div class="settings-row">
-    <span class="settings-label" data-i18n="settings.lang">Language</span>
-    <div class="theme-toggle-compact">
-        <button class="theme-btn-small lang-btn" onclick="setLanguage('en')">EN</button>
-        <button class="theme-btn-small lang-btn" onclick="setLanguage('sv')">SV</button>
-        <button class="theme-btn-small lang-btn" onclick="setLanguage('de')">DE</button>
-    </div>
-</div>
+    <h3 style="color: #666; font-size: 0.8rem; margin: 30px 0 10px 10px; text-transform: uppercase; letter-spacing: 1.5px;" data-i18n="settings.notifications_title">NOTIFICATIONS</h3>
 
-  <h3 style="color: #666; font-size: 0.8rem; margin: 30px 0 10px 10px; text-transform: uppercase; letter-spacing: 1.5px;" data-i18n="settings.notifications_title">Notifications</h3>
-
-<div class="settings-group" style="padding-bottom: 15px;">
-    <p style="font-size: 0.85rem; color: var(--text-dim, #888); margin-bottom: 15px; line-height: 1.4; padding: 0 5px;" data-i18n="settings.push_desc">
-        Enable push notifications to receive alerts on your phone regarding temperature fluctuations, power outages, or when it's time to dry hop.
-    </p>
-    
-    <div class="settings-row" style="margin-bottom: 0;">
-        <span class="settings-label" style="font-size: 0.9rem;" data-i18n="settings.push">🔔 Push Notifications</span>
-        <label class="toggle-switch">
-            <input type="checkbox" id="pushToggle" onchange="togglePushNotifications(this)">
-            <span class="slider"></span>
-        </label>
+    <div class="settings-group" style="padding-bottom: 15px;">
+        <p style="font-size: 0.85rem; color: var(--text-dim, #888); margin-bottom: 15px; line-height: 1.4; padding: 0 5px;" data-i18n="settings.push_desc">
+            Enable push notifications to receive alerts on your phone regarding temperature fluctuations, power outages, or when it's time to dry hop.
+        </p>
+        
+        <div class="settings-row" style="margin-bottom: 0;">
+            <span class="settings-label" style="font-size: 0.9rem;">🔔 <span data-i18n="settings.push">Push Notifications</span></span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="pushToggle" onchange="togglePushNotifications(this)">
+                <span class="slider"></span>
+            </label>
+        </div>
     </div>
-</div>
-    <h3 style="color: #666; font-size: 0.8rem; margin: 30px 0 10px 10px; text-transform: uppercase; letter-spacing: 1.5px;" data-i18n="settings.device_mgmt">Device Management</h3>
+
+    <h3 style="color: #666; font-size: 0.8rem; margin: 30px 0 10px 10px; text-transform: uppercase; letter-spacing: 1.5px;" data-i18n="settings.device_mgmt">DEVICE MANAGEMENT</h3>
     
     <div class="settings-group">
         <div class="settings-row">
             <span class="settings-label" data-i18n="settings.active_device">Active Device</span>
-        <select id="setting-active-device" style="max-width: 150px; background: transparent; border: none; text-align: right; font-weight: 800; font-family: 'Lexend'; outline: none; cursor: pointer;">
+            <select id="setting-active-device" style="max-width: 150px; background: transparent; border: none; text-align: right; font-weight: 800; font-family: 'Lexend'; outline: none; cursor: pointer;">
             </select>
         </div>
         
-      <div class="settings-row">
+        <div class="settings-row">
             <span class="settings-label" data-i18n="settings.status">Status</span>
             <span id="setting-device-status" style="font-size: 0.8rem; font-weight: 800; color: #888;">WAITING...</span>
         </div>
+        
         <div class="settings-row">
             <span class="settings-label" data-i18n="settings.nickname">Nickname</span>
-            <input type="text" id="setting-nickname" placeholder="Name your device..." data-i18n-placeholder="settings.nickname_placeholder"
+            <input type="text" id="setting-nickname" placeholder="Name your device..." data-i18n-placeholder="settings.nickname"
                    style="width: 150px; background: transparent; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 0.9rem; text-align: right; outline: none; transition: color 0.3s ease;">
         </div>
 
         <div class="settings-row">
-            <span class="settings-label" data-i18n="settings.mac">Device ID (MAC)</span>
+            <span class="settings-label" data-i18n="settings.device_id">Device ID (MAC)</span>
             <span id="setting-mac-display" style="font-family: 'Roboto Mono', monospace; font-size: 0.85rem; color: #888; letter-spacing: 1px;">--</span>
         </div>
 
-       <div class="settings-row" id="row-remove-device">
-            <button onclick="removeActiveDevice()" style="background: transparent; color: #ff4444; border: none; padding: 0; cursor: pointer; font-weight: bold; font-family: 'Lexend', sans-serif; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; width: 100%; justify-content: flex-start;" data-i18n="settings.remove">
-                🗑️ Remove Active Device
+        <div class="settings-row" id="row-remove-device">
+            <button onclick="removeActiveDevice()" style="background: transparent; color: #ff4444; border: none; padding: 0; cursor: pointer; font-weight: bold; font-family: 'Lexend', sans-serif; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; width: 100%; justify-content: flex-start;">
+                🗑️ <span data-i18n="settings.remove">Remove Active Device</span>
             </button>
         </div>
 
-        <button onclick="showAddDevice()" class="add-new-device-btn" style="background: transparent; color: var(--accent-color); border: 2px dashed #333; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; font-family: 'Lexend'; transition: all 0.3s ease; margin-top: 15px;" data-i18n="settings.btn_add_device">
+        <button onclick="showAddDevice()" class="add-new-device-btn" style="background: transparent; color: var(--accent-color); border: 2px dashed #333; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; font-family: 'Lexend'; transition: all 0.3s ease; margin-top: 15px;" data-i18n="settings.add_device">
             + ADD NEW YEASTMASTER
         </button>
     </div>
 
     <div style="margin-top: 40px; padding-top: 25px; border-top: 1px dashed #333;">
-        <h4 style="color: var(--text-dim, #888); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; text-align: center;" data-i18n="settings.support_title">Support & Feedback</h4>
+        <h4 style="color: var(--text-dim, #888); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; text-align: center;" data-i18n="settings.support">SUPPORT & FEEDBACK</h4>
         
         <div style="display: flex; gap: 10px;">
-            <a href="mailto:support@yeastmaster.com?subject=Bug%20Report" style="flex: 1; text-align: center; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.75rem; transition: 0.2s;" data-i18n="settings.btn_bug">
-                🐛 REPORT BUG
+            <a href="mailto:support@yeastmaster.com?subject=Bug%20Report" style="flex: 1; text-align: center; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.75rem; transition: 0.2s;">
+                🐛 <span data-i18n="settings.btn_bug">REPORT BUG</span>
             </a>
-            <a href="mailto:hello@yeastmaster.com?subject=Feature%20Request" style="flex: 1; text-align: center; background: rgba(140, 198, 63, 0.1); border: 1px solid var(--accent-color); color: var(--accent-color); padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.75rem; transition: 0.2s;" data-i18n="settings.btn_idea">
-                💡 SUGGEST IDEA
+            <a href="mailto:hello@yeastmaster.com?subject=Feature%20Request" style="flex: 1; text-align: center; background: rgba(140, 198, 63, 0.1); border: 1px solid var(--accent-color); color: var(--accent-color); padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.75rem; transition: 0.2s;">
+                💡 <span data-i18n="settings.btn_idea">SUGGEST IDEA</span>
             </a>
         </div>
     </div>
