@@ -34,6 +34,19 @@ const translations = {
             btn_idea: "SUGGEST IDEA",
             btn_logout: "LOG OUT"
         },
+
+        action: {
+      COOLING: "COOLING",
+      HEATING: "HEATING",
+      IDLE: "IDLE"
+    },
+    phase: {
+      PRIMARY: "PRIMARY",
+      "DIACETYL REST": "DIACETYL REST",
+      "COLD CRASH": "COLD CRASH"
+    },
+
+
         status: {
             offline: "OFFLINE",
             min_ago: "m ago",
@@ -52,7 +65,7 @@ const translations = {
         }
     },
     sv: {
-        nav: { home: "HEM", library: "BIBLIOTEK", lab: "AKADEMI", profiler: "PROFILER", live: "LIVE", settings: "INSTÄLLN." },
+        nav: { home: "HEM", library: "BIBLIOTEK", lab: "AKADEMI", profiler: "PROFILERARE", live: "LIVE", settings: "INSTÄLLNINGAR" },
         dashboard: { 
             progress: "FRAMSTEG", 
             since_start: "Sedan start", 
@@ -84,6 +97,19 @@ const translations = {
             btn_idea: "FÖRESLÅ IDÉ",
             btn_logout: "LOGGA UT"
         },
+
+        action: {
+      COOLING: "KYLER",
+      HEATING: "VÄRMER",
+      IDLE: "VILAR"
+    },
+    phase: {
+      PRIMARY: "PRIMÄRJÄSNING",
+      "DIACETYL REST": "DIAKETYLRAST",
+      "COLD CRASH": "KALLKRASCH",
+
+    },
+  
         status: {
             offline: "OFFLINE",
             min_ago: "m sedan",
@@ -134,6 +160,18 @@ const translations = {
             btn_idea: "IDEE VORSCHLAGEN",
             btn_logout: "ABMELDEN"
         },
+
+        action: {
+      COOLING: "KÜHLT",
+      HEATING: "HEIZT",
+      IDLE: "RUHT"
+    },
+    phase: {
+      PRIMARY: "HAUPTGÄRUNG",
+      "DIACETYL REST": "DIACETYLRAST",
+      "COLD CRASH": "COLD CRASH" // Ofta samma på tyska
+    },
+    
         status: {
             offline: "OFFLINE",
             min_ago: "m her",
