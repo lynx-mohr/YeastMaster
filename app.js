@@ -6192,6 +6192,20 @@ window.nextLibraryTourStep = function(e) {
             window.nextLibraryTourStep();
         }
     }, 100);
+    // ==============================================================
+    // --- NYTT: SMART UPPDATERING NÄR APPEN VAKNAR FRÅN BAKGRUNDEN ---
+    // ==============================================================
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+            console.log("Appen vaknade från bakgrunden! Laddar om data direkt...");
+            
+            // Kolla att vi faktiskt har en vald enhet och att funktionen finns
+            if (typeof activeDeviceId !== 'undefined' && activeDeviceId && typeof updateDashboard === 'function') {
+                updateDashboard();
+            }
+        }
+    });
+    // ==============================================================
 };
 
 function createTourMagic() {

@@ -171,7 +171,7 @@ const translations = {
       "DIACETYL REST": "DIACETYLRAST",
       "COLD CRASH": "COLD CRASH" // Ofta samma på tyska
     },
-    
+
         status: {
             offline: "OFFLINE",
             min_ago: "m her",
@@ -195,8 +195,6 @@ const translations = {
 window.translations = translations;
 window.currentLang = localStorage.getItem('ym_language') || 'en';
 
-// 1. Hämta sparat språk eller kör engelska som standard
-window.currentLang = localStorage.getItem('ym_language') || 'en';
 
 // 2. Denna funktion körs nu automatiskt när filen laddas
 function initLanguage() {
