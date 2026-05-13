@@ -618,7 +618,7 @@ canvas#beer-chart {
     }
 
     .progress-section {
-        padding-top: 65px !important; /* Standard är 35px, här tvingar vi ner den på PC */
+        padding-top: 45px !important; /* Standard är 35px, här tvingar vi ner den på PC */
     }
     
     #lab-chart {
