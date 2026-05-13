@@ -13,6 +13,7 @@ const translations = {
             last_sync: "LAST SYNC",
             start: "START",
             ready: "READY",
+            air: "Luft:",
             days: "d" // Ex: 4 d
         },
         settings: {
@@ -69,7 +70,7 @@ const translations = {
     sv: {
         nav: { home: "HEM", library: "BIBLIOTEK", lab: "AKADEMI", profiler: "PROFILERARE", live: "LIVE", settings: "INSTÄLLNINGAR" },
         dashboard: { 
-            progress: "FRAMSTEG", 
+            progress: "Progress", 
             since_start: "Sedan start", 
             time_phase: "Tid i fas", 
             goal_temp: "Måltemp i fas",
@@ -78,6 +79,7 @@ const translations = {
             last_sync: "SENASTE SYNC",
             start: "START",
             ready: "KLAR",
+            air: "Luft:",
             days: "d" // Går bra med "d" på svenska också, annars "dagar"
         },
         settings: {
@@ -143,6 +145,7 @@ const translations = {
             last_sync: "LETZTER SYNC",
             start: "START",
             ready: "FERTIG",
+            air: "Luft:"
             days: "Tage" // Ex: 4 Tage istället för 4 d
         },
         settings: {
