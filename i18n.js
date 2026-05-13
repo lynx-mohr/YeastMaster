@@ -8,7 +8,12 @@ const translations = {
             since_start: "Since start", 
             time_phase: "Time in phase", 
             goal_temp: "Goal temp in phase",
-            history: "TEMP HISTORY"
+            history: "TEMP HISTORY",
+            fridge: "FRIDGE",
+            last_sync: "LAST SYNC",
+            start: "START",
+            ready: "READY",
+            days: "d" // Ex: 4 d
         },
         settings: {
             title: "SETTINGS",
@@ -34,19 +39,16 @@ const translations = {
             btn_idea: "SUGGEST IDEA",
             btn_logout: "LOG OUT"
         },
-
         action: {
-      COOLING: "COOLING",
-      HEATING: "HEATING",
-      IDLE: "IDLE"
-    },
-    phase: {
-      PRIMARY: "PRIMARY",
-      "DIACETYL REST": "DIACETYL REST",
-      "COLD CRASH": "COLD CRASH"
-    },
-
-
+            COOLING: "COOLING",
+            HEATING: "HEATING",
+            IDLE: "IDLE"
+        },
+        phase: {
+            PRIMARY: "PRIMARY",
+            "DIACETYL REST": "DIACETYL REST",
+            "COLD CRASH": "COLD CRASH"
+        },
         status: {
             offline: "OFFLINE",
             min_ago: "m ago",
@@ -71,7 +73,12 @@ const translations = {
             since_start: "Sedan start", 
             time_phase: "Tid i fas", 
             goal_temp: "Måltemp i fas",
-            history: "TEMPERATURHISTORIK"
+            history: "TEMPERATURHISTORIK",
+            fridge: "JÄSKÄRL", // Bytte till Jäskärl, passar bra om det är en tank också!
+            last_sync: "SENASTE SYNC",
+            start: "START",
+            ready: "KLAR",
+            days: "d" // Går bra med "d" på svenska också, annars "dagar"
         },
         settings: {
             title: "INSTÄLLNINGAR",
@@ -97,19 +104,16 @@ const translations = {
             btn_idea: "FÖRESLÅ IDÉ",
             btn_logout: "LOGGA UT"
         },
-
         action: {
-      COOLING: "KYLER",
-      HEATING: "VÄRMER",
-      IDLE: "VILAR"
-    },
-    phase: {
-      PRIMARY: "PRIMÄRJÄSNING",
-      "DIACETYL REST": "DIAKETYLRAST",
-      "COLD CRASH": "KALLKRASCH",
-
-    },
-  
+            COOLING: "KYLER",
+            HEATING: "VÄRMER",
+            IDLE: "VILAR"
+        },
+        phase: {
+            PRIMARY: "PRIMÄRJÄSNING",
+            "DIACETYL REST": "DIAKETYLRAST",
+            "COLD CRASH": "KALLKRASCH"
+        },
         status: {
             offline: "OFFLINE",
             min_ago: "m sedan",
@@ -134,9 +138,15 @@ const translations = {
             since_start: "Seit Start", 
             time_phase: "Zeit in Phase", 
             goal_temp: "Zieltemp in Phase",
-            history: "TEMPERATURVERLAUF"
+            history: "TEMPERATURVERLAUF",
+            fridge: "KÜHLSCHRANK",
+            last_sync: "LETZTER SYNC",
+            start: "START",
+            ready: "FERTIG",
+            days: "Tage" // Ex: 4 Tage istället för 4 d
         },
         settings: {
+            // ... (samma som din kod) ...
             title: "EINSTELLUNGEN",
             theme: "Thema",
             dark: "DUNKEL",
@@ -160,18 +170,16 @@ const translations = {
             btn_idea: "IDEE VORSCHLAGEN",
             btn_logout: "ABMELDEN"
         },
-
         action: {
-      COOLING: "KÜHLT",
-      HEATING: "HEIZT",
-      IDLE: "RUHT"
-    },
-    phase: {
-      PRIMARY: "HAUPTGÄRUNG",
-      "DIACETYL REST": "DIACETYLRAST",
-      "COLD CRASH": "COLD CRASH" // Ofta samma på tyska
-    },
-
+            COOLING: "KÜHLT",
+            HEATING: "HEIZT",
+            IDLE: "RUHT"
+        },
+        phase: {
+            PRIMARY: "HAUPTGÄRUNG",
+            "DIACETYL REST": "DIACETYLRAST",
+            "COLD CRASH": "COLD CRASH" 
+        },
         status: {
             offline: "OFFLINE",
             min_ago: "m her",
@@ -195,11 +203,7 @@ const translations = {
 window.translations = translations;
 window.currentLang = localStorage.getItem('ym_language') || 'en';
 
-
-// 2. Denna funktion körs nu automatiskt när filen laddas
 function initLanguage() {
-    // Vi anropar setLanguage med det sparade språket
-    // för att uppdatera både texter och knapparnas utseende direkt
     setLanguage(window.currentLang);
 }
 
@@ -226,13 +230,10 @@ function setLanguage(lang) {
     localStorage.setItem('ym_language', lang);
     updateTexts();
     
-    // Uppdatera knapparnas utseende (markerar den aktiva knappen)
     document.querySelectorAll('.lang-btn').forEach(btn => {
-        // Vi kollar om knappen har rätt lang-kod i sitt onclick-anrop
         const isActive = btn.getAttribute('onclick').includes(`'${lang}'`);
         btn.classList.toggle('active', isActive);
     });
 }
 
-// KÖR INITIERINGEN DIREKT!
 initLanguage();
