@@ -1,5 +1,3 @@
-// i18n.js
-
 const translations = {
     en: {
         nav: { home: "HOME", library: "LIBRARY", lab: "ACADEMY", profiler: "PROFILER", live: "LIVE", settings: "SETTINGS" },
@@ -13,9 +11,9 @@ const translations = {
             last_sync: "LAST SYNC",
             start: "START",
             ready: "READY",
-            air: "Luft:",
+            air: "Air:",
             phase_label: "Phase:",
-            days: "d" // Ex: 4 d
+            days: "d" 
         },
         settings: {
             title: "SETTINGS",
@@ -71,18 +69,18 @@ const translations = {
     sv: {
         nav: { home: "HEM", library: "BIBLIOTEK", lab: "AKADEMI", profiler: "PROFILERARE", live: "LIVE", settings: "INSTÄLLNINGAR" },
         dashboard: { 
-            progress: "Progress", 
+            progress: "FRAMSTEG", 
             since_start: "Sedan start", 
             time_phase: "Tid i fas", 
             goal_temp: "Måltemp i fas",
             history: "TEMPERATURHISTORIK",
-            fridge: "JÄSKÄRL", // Bytte till Jäskärl, passar bra om det är en tank också!
+            fridge: "JÄSKÄRL", 
             last_sync: "SENASTE SYNC",
             start: "START",
             ready: "KLAR",
             air: "Luft:",
             phase_label: "Fas:",
-            days: "d" // Går bra med "d" på svenska också, annars "dagar"
+            days: "d" 
         },
         settings: {
             title: "INSTÄLLNINGAR",
@@ -114,7 +112,7 @@ const translations = {
             IDLE: "VILAR"
         },
         phase: {
-            PRIMARY: "PRIMÄRJÄSNING",
+            PRIMARY: "PRIMÄR",
             "DIACETYL REST": "DIAKETYLRAST",
             "COLD CRASH": "KALLKRASCH"
         },
@@ -147,12 +145,11 @@ const translations = {
             last_sync: "LETZTER SYNC",
             start: "START",
             ready: "FERTIG",
-            air: "Luft:"
+            air: "Luft:",
             phase_label: "Phase:",
-            days: "t" // Ex: 4 Tage istället för 4 d
+            days: "d" 
         },
         settings: {
-            // ... (samma som din kod) ...
             title: "EINSTELLUNGEN",
             theme: "Thema",
             dark: "DUNKEL",
