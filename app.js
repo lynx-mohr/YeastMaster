@@ -3951,10 +3951,16 @@ function resetProfiler() {
     if (yeastSelect) {
         yeastSelect.value = '';
         
-        // MAGIN: Vi lurar appen att användaren precis ändrade rullistan. 
-        // Då kommer din inbyggda kod automatiskt att rensa grafen och 
-        // visa "Pick a base yeast..."-texten igen!
+        // Triggers din befintliga kod för att rensa grafen
         yeastSelect.dispatchEvent(new Event('change'));
+    }
+
+    // 3. Nollställ "Profile Summary"-rutan!
+    const summaryBox = document.getElementById('profile-summary');
+    if (summaryBox) {
+        // Tömmer hela rutan. Om du hellre vill ha ett litet meddelande 
+        // kan du byta ut '' mot t.ex. '<p style="text-align:center; color:#888; padding:20px;">Select a base yeast to see summary.</p>'
+        summaryBox.innerHTML = ''; 
     }
 }
 
