@@ -3941,9 +3941,23 @@ function formatTempText(text) {
     });
 }
 
-// ==============================================================
-// --- DEN ENDA SANNA SPARFUNKTIONEN (Med Moln & Celsius-koll) ---
-// ==============================================================
+function resetProfiler() {
+    // 1. Töm textfältet för profilens namn
+    const nameInput = document.getElementById('custom-profile-name');
+    if (nameInput) nameInput.value = '';
+
+    // 2. Återställ rullistan för basjäst till default (tom)
+    const yeastSelect = document.getElementById('custom-base-yeast');
+    if (yeastSelect) {
+        yeastSelect.value = '';
+        
+        // MAGIN: Vi lurar appen att användaren precis ändrade rullistan. 
+        // Då kommer din inbyggda kod automatiskt att rensa grafen och 
+        // visa "Pick a base yeast..."-texten igen!
+        yeastSelect.dispatchEvent(new Event('change'));
+    }
+}
+
 // ==============================================================
 // --- DEN ENDA SANNA SPARFUNKTIONEN (Med Moln & Celsius-koll) ---
 // ==============================================================
@@ -4005,7 +4019,8 @@ function saveProfileToLibrary() {
         btn.style.backgroundColor = ""; 
         btn.style.borderColor = "";
         btn.style.color = "";
-        document.getElementById('custom-profile-name').value = '';
+
+        resetProfiler();
 
         // Scrolla ner till botten när vi landar i biblioteket!
         setTimeout(() => {
@@ -6567,3 +6582,5 @@ window.addEventListener('languageChanged', () => {
     console.log("Språk bytt! Tvingar uppdatering av dashboard...");
     updateDashboard(); 
 });
+
+
