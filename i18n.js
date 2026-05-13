@@ -237,6 +237,8 @@ function setLanguage(lang) {
         const isActive = btn.getAttribute('onclick').includes(`'${lang}'`);
         btn.classList.toggle('active', isActive);
     });
+    
+    window.dispatchEvent(new Event('languageChanged'));
 }
 
 initLanguage();
