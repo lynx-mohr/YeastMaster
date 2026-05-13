@@ -1126,63 +1126,69 @@ function toggleDryHopLine() {
 }
 
 function updateSummaryText() {
+    const summaryBox = document.getElementById('profile-summary');
+    if (!summaryBox) return; // Finns inte rutan, avbryt snyggt.
+
+    // Om grafen inte har laddat sina punkter än, avbryt.
+    if (typeof profilePoints === 'undefined' || profilePoints.length < 6) return;
+
     const p = profilePoints;
     const unit = '°' + currentTempUnit;
 
-    // --- Hämta aktuella ord från ordboken (Fallback till engelska om det saknas) ---
-    const langObj = translations[window.currentLang] && translations[window.currentLang].profiler ? translations[window.currentLang].profiler : translations['en'].profiler;
-    
-    // Kortkommandon för att göra koden renare
+    // --- SKOTTSÄKER ORDBOK (Reservhjul) ---
+    // Letar upp dina nya ord i i18n.js. Hittar den inget använder den engelska i reserv.
+    let langObj = {};
+    if (typeof translations !== 'undefined' && translations[window.currentLang] && translations[window.currentLang].profiler) {
+        langObj = translations[window.currentLang].profiler;
+    }
+
     const t_day = langObj.day || "Day";
     const t_hold = langObj.hold_until || "Hold until Day";
     const t_rise = langObj.free_rise || "Free rise to";
     const t_drop = langObj.drop_to || "Drop to";
     const t_reach = langObj.reach || "Reach";
+    const t_rise_to = langObj.rise_to || "Rise to";
     const t_by = langObj.by_day || "by Day";
 
-    // 1. Uppdatera Pitch
-    if(document.getElementById('val-t1')) {
-        document.getElementById('val-t1').innerText = p[0].y.toFixed(1) + unit;
+    // 1. PITCH
+    const pitchText = `${t_day} ${Math.round(p[0].x)} @ ${p[0].y.toFixed(1)}${unit}`;
+
+    // 2. PRIMARY
+    let primText = `${t_hold} ${Math.round(p[1].x)}`;
+    if (Math.abs(p[1].y - p[0].y) >= 0.2) {
+        const action = p[1].y > p[0].y ? t_rise : t_drop;
+        primText = `${action} ${p[1].y.toFixed(1)}${unit} ${t_by} ${Math.round(p[1].x)}`;
     }
 
-    // 2. PRIMARY (Smart logik för Free Rise vs Hold)
-    const primContainer = document.getElementById('val-d2')?.parentElement;
-    if (primContainer) {
-        if (Math.abs(p[1].y - p[0].y) < 0.2) {
-            primContainer.innerHTML = `${t_hold} <span id="val-d2" style="font-weight:bold;">${Math.round(p[1].x)}</span>`;
-        } else {
-            const action = p[1].y > p[0].y ? t_rise : t_drop;
-            primContainer.innerHTML = `${action} ${p[1].y.toFixed(1)}${unit} ${t_by} <span id="val-d2" style="font-weight:bold;">${Math.round(p[1].x)}</span>`;
-        }
+    // 3. CLEANUP
+    let cleanText = `${t_hold} ${Math.round(p[2].x)}`;
+    if (Math.abs(p[2].y - p[1].y) >= 0.2) {
+        const action = p[2].y > p[1].y ? t_reach : t_drop;
+        cleanText = `${action} ${p[2].y.toFixed(1)}${unit} ${t_by} ${Math.round(p[2].x)}`;
     }
 
-    // 3. CLEANUP (Smart logik)
-    const cleanContainer = document.getElementById('val-d3')?.parentElement;
-    if (cleanContainer) {
-        if (Math.abs(p[2].y - p[1].y) < 0.2) {
-            cleanContainer.innerHTML = `Hold at ${p[2].y.toFixed(1)}${unit} until Day <span id="val-d3" style="font-weight:bold;">${Math.round(p[2].x)}</span>`;
-        } else {
-            cleanContainer.innerHTML = `${t_reach} ${p[2].y.toFixed(1)}${unit} ${t_by} <span id="val-d3" style="font-weight:bold;">${Math.round(p[2].x)}</span>`;
-        }
+    // 4. COLD CRASH
+    let crashText = `${t_hold} ${Math.round(p[4].x)}`;
+    if (Math.abs(p[4].y - p[3].y) >= 0.2) {
+        const action = p[4].y > p[3].y ? t_rise_to : t_drop;
+        crashText = `${action} ${p[4].y.toFixed(1)}${unit} ${t_by} ${Math.round(p[4].x)}`;
     }
 
-    // 4. COLD CRASH (Smart logik)
-    const crashContainer = document.getElementById('val-d4')?.parentElement;
-    if (crashContainer) {
-        if (Math.abs(p[4].y - p[3].y) < 0.2) {
-             crashContainer.innerHTML = `Hold at ${p[4].y.toFixed(1)}${unit} until Day <span id="val-d4" style="font-weight:bold;">${Math.round(p[4].x)}</span>`;
-        } else {
-             crashContainer.innerHTML = `${t_drop} ${p[4].y.toFixed(1)}${unit} ${t_by} <span id="val-d4" style="font-weight:bold;">${Math.round(p[4].x)}</span>`;
-        }
-    }
+    // 5. CONDITION
+    const condText = `${t_hold} ${Math.round(p[5].x)}`;
 
-    // 5. CONDITIONING
-    const condContainer = document.getElementById('val-d5')?.parentElement;
-    if (condContainer) {
-        condContainer.innerHTML = `${t_hold} <span id="val-d5" style="font-weight:bold;">${Math.round(p[5].x)}</span>`;
-    }
+    // --- BYGG IHOP HELA LÅDAN FRÅN BÖRJAN ---
+    // Här skapar vi de snygga raderna och trycker in översättningarna direkt!
+    summaryBox.innerHTML = `
+        <div class="summary-header" data-i18n="profiler.summary">${langObj.summary || "PROFILE SUMMARY"}</div>
+        <div class="summary-row"><span class="label" data-i18n="profiler.pitch">${langObj.pitch || "Pitch"}</span><span class="value">${pitchText}</span></div>
+        <div class="summary-row"><span class="label" data-i18n="profiler.primary">${langObj.primary || "Primary"}</span><span class="value">${primText}</span></div>
+        <div class="summary-row"><span class="label" data-i18n="profiler.cleanup">${langObj.cleanup || "Cleanup"}</span><span class="value">${cleanText}</span></div>
+        <div class="summary-row"><span class="label" data-i18n="profiler.cold_crash">${langObj.cold_crash || "Cold Crash"}</span><span class="value">${crashText}</span></div>
+        <div class="summary-row"><span class="label" data-i18n="profiler.condition">${langObj.condition || "Condition"}</span><span class="value">${condText}</span></div>
+    `;
 
-    // 6. ACTION MARKERS (Humle etc)
+    // (Valfritt) Uppdatera humle-siffran om du har den synlig någonstans
     if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
         const hopVal = document.getElementById('hop-day-val');
         if (hopVal) hopVal.innerText = dryHopData.day.toFixed(1);
