@@ -613,6 +613,10 @@ canvas#beer-chart {
         flex-direction: row !important;
         justify-content: space-between !important;
     }
+    .right-col {
+        margin-top: -40px !important; /* Lyfter upp hela högersidan! */
+    }
+    
     #lab-chart {
         width: 100% !important;
         height: 100% !important;
