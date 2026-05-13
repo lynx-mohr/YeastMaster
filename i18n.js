@@ -136,8 +136,8 @@ const translations = {
         dashboard: { 
             progress: "FORTSCHRITT", 
             since_start: "Seit Start", 
-            time_phase: "Zeit in Phase", 
-            goal_temp: "Zieltemp in Phase",
+            time_phase: "Phasendauer", 
+            goal_temp: "Zieltemp. Phase",
             history: "TEMPERATURVERLAUF",
             fridge: "KÜHLSCHRANK",
             last_sync: "LETZTER SYNC",
