@@ -1129,6 +1129,17 @@ function updateSummaryText() {
     const p = profilePoints;
     const unit = '°' + currentTempUnit;
 
+    // --- Hämta aktuella ord från ordboken (Fallback till engelska om det saknas) ---
+    const langObj = translations[window.currentLang] && translations[window.currentLang].profiler ? translations[window.currentLang].profiler : translations['en'].profiler;
+    
+    // Kortkommandon för att göra koden renare
+    const t_day = langObj.day || "Day";
+    const t_hold = langObj.hold_until || "Hold until Day";
+    const t_rise = langObj.free_rise || "Free rise to";
+    const t_drop = langObj.drop_to || "Drop to";
+    const t_reach = langObj.reach || "Reach";
+    const t_by = langObj.by_day || "by Day";
+
     // 1. Uppdatera Pitch
     if(document.getElementById('val-t1')) {
         document.getElementById('val-t1').innerText = p[0].y.toFixed(1) + unit;
@@ -1138,10 +1149,10 @@ function updateSummaryText() {
     const primContainer = document.getElementById('val-d2')?.parentElement;
     if (primContainer) {
         if (Math.abs(p[1].y - p[0].y) < 0.2) {
-            primContainer.innerHTML = `Hold until Day <span id="val-d2" style="font-weight:bold;">${Math.round(p[1].x)}</span>`;
+            primContainer.innerHTML = `${t_hold} <span id="val-d2" style="font-weight:bold;">${Math.round(p[1].x)}</span>`;
         } else {
-            const action = p[1].y > p[0].y ? "Free rise to" : "Ramp down to";
-            primContainer.innerHTML = `${action} ${p[1].y.toFixed(1)}${unit} by Day <span id="val-d2" style="font-weight:bold;">${Math.round(p[1].x)}</span>`;
+            const action = p[1].y > p[0].y ? t_rise : t_drop;
+            primContainer.innerHTML = `${action} ${p[1].y.toFixed(1)}${unit} ${t_by} <span id="val-d2" style="font-weight:bold;">${Math.round(p[1].x)}</span>`;
         }
     }
 
@@ -1151,7 +1162,7 @@ function updateSummaryText() {
         if (Math.abs(p[2].y - p[1].y) < 0.2) {
             cleanContainer.innerHTML = `Hold at ${p[2].y.toFixed(1)}${unit} until Day <span id="val-d3" style="font-weight:bold;">${Math.round(p[2].x)}</span>`;
         } else {
-            cleanContainer.innerHTML = `Reach ${p[2].y.toFixed(1)}${unit} by Day <span id="val-d3" style="font-weight:bold;">${Math.round(p[2].x)}</span>`;
+            cleanContainer.innerHTML = `${t_reach} ${p[2].y.toFixed(1)}${unit} ${t_by} <span id="val-d3" style="font-weight:bold;">${Math.round(p[2].x)}</span>`;
         }
     }
 
@@ -1161,14 +1172,14 @@ function updateSummaryText() {
         if (Math.abs(p[4].y - p[3].y) < 0.2) {
              crashContainer.innerHTML = `Hold at ${p[4].y.toFixed(1)}${unit} until Day <span id="val-d4" style="font-weight:bold;">${Math.round(p[4].x)}</span>`;
         } else {
-             crashContainer.innerHTML = `Drop to ${p[4].y.toFixed(1)}${unit} by Day <span id="val-d4" style="font-weight:bold;">${Math.round(p[4].x)}</span>`;
+             crashContainer.innerHTML = `${t_drop} ${p[4].y.toFixed(1)}${unit} ${t_by} <span id="val-d4" style="font-weight:bold;">${Math.round(p[4].x)}</span>`;
         }
     }
 
     // 5. CONDITIONING
     const condContainer = document.getElementById('val-d5')?.parentElement;
     if (condContainer) {
-        condContainer.innerHTML = `Hold until Day <span id="val-d5" style="font-weight:bold;">${Math.round(p[5].x)}</span>`;
+        condContainer.innerHTML = `${t_hold} <span id="val-d5" style="font-weight:bold;">${Math.round(p[5].x)}</span>`;
     }
 
     // 6. ACTION MARKERS (Humle etc)
