@@ -2692,30 +2692,35 @@ function al(yopenYeastModeast) {
             const s = profileData.steps;
             const baseYeast = profileData.p.replace('Custom (', '').replace(')', '');
             
-            // --- SMART LOGIK FÖR ATT LÄSA AV VAD SOM FAKTISKT HÄNDER ---
-            
+            // --- SMART LOGIK (Skottsäker med parseFloat) ---
+            const d0 = s[0][0], t0 = parseFloat(s[0][1]);
+            const d1 = s[1][0], t1 = parseFloat(s[1][1]);
+            const d2 = s[2][0], t2 = parseFloat(s[2][1]);
+            const d3 = s[3][0], t3 = parseFloat(s[3][1]);
+            const d4 = s[4][0], t4 = parseFloat(s[4][1]);
+
             // 1. Pitch
-            const pitchTemp = parseFloat(s[0][1]).toFixed(1);
+            const pitchTemp = t0.toFixed(1);
             
             // 2. Primary
-            let primaryText = `Hold until Day ${s[1][0]}`;
-            if (s[1][1] > s[0][1]) primaryText = `Free rise to ${parseFloat(s[1][1]).toFixed(1)}°C by Day ${s[1][0]}`;
-            else if (s[1][1] < s[0][1]) primaryText = `Drop to ${parseFloat(s[1][1]).toFixed(1)}°C by Day ${s[1][0]}`;
+            let primaryText = `Hold until Day ${d1}`;
+            if (t1 > t0) primaryText = `Free rise to ${t1.toFixed(1)}°C by Day ${d1}`;
+            else if (t1 < t0) primaryText = `Drop to ${t1.toFixed(1)}°C by Day ${d1}`;
             
             // 3. Cleanup
-            let cleanupText = `Hold until Day ${s[2][0]}`;
-            if (s[2][1] > s[1][1]) cleanupText = `Reach ${parseFloat(s[2][1]).toFixed(1)}°C by Day ${s[2][0]}`;
-            else if (s[2][1] < s[1][1]) cleanupText = `Drop to ${parseFloat(s[2][1]).toFixed(1)}°C by Day ${s[2][0]}`;
+            let cleanupText = `Hold until Day ${d2}`;
+            if (t2 > t1) cleanupText = `Reach ${t2.toFixed(1)}°C by Day ${d2}`;
+            else if (t2 < t1) cleanupText = `Drop to ${t2.toFixed(1)}°C by Day ${d2}`;
 
             // 4. Hold Warm
-            let holdText = `Hold until Day ${s[3][0]}`;
-            if (s[3][1] > s[2][1]) holdText = `Reach ${parseFloat(s[3][1]).toFixed(1)}°C by Day ${s[3][0]}`;
-            else if (s[3][1] < s[2][1]) holdText = `Drop to ${parseFloat(s[3][1]).toFixed(1)}°C by Day ${s[3][0]}`;
+            let holdText = `Hold until Day ${d3}`;
+            if (t3 > t2) holdText = `Reach ${t3.toFixed(1)}°C by Day ${d3}`;
+            else if (t3 < t2) holdText = `Drop to ${t3.toFixed(1)}°C by Day ${d3}`;
 
             // 5. Cold Crash
-            let crashText = `Hold until Day ${s[4][0]}`;
-            if (s[4][1] < s[3][1]) crashText = `Drop to ${parseFloat(s[4][1]).toFixed(1)}°C by Day ${s[4][0]}`;
-            else if (s[4][1] > s[3][1]) crashText = `Rise to ${parseFloat(s[4][1]).toFixed(1)}°C by Day ${s[4][0]}`;
+            let crashText = `Hold until Day ${d4}`;
+            if (t4 < t3) crashText = `Drop to ${t4.toFixed(1)}°C by Day ${d4}`;
+            else if (t4 > t3) crashText = `Rise to ${t4.toFixed(1)}°C by Day ${d4}`;
 
             // Formaterar texten snyggare och kollar om Action Markers finns
             detailedText = `
