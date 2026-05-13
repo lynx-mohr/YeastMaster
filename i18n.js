@@ -15,6 +15,29 @@ const translations = {
             phase_label: "Phase:",
             days: "d" 
         },
+
+        profiler: {
+            profile_name: "PROFILE NAME",
+            profile_builder: "PROFILE BUILDER",
+            overview: "OVERVIEW",
+            summary: "PROFILE SUMMARY",
+            name_placeholder: "My Lager...",
+            pick_yeast: "Pick a base yeast...",
+            save: "SAVE TO LIBRARY",
+            day: "Day",
+            hold_until: "Hold until Day",
+            free_rise: "Free rise to",
+            drop_to: "Drop to",
+            reach: "Reach",
+            rise_to: "Rise to",
+            by_day: "by Day",
+            pitch: "Pitch",
+            primary: "Primary",
+            cleanup: "Cleanup",
+            cold_crash: "Cold Crash",
+            condition: "Condition"
+        },
+        
         settings: {
             title: "SETTINGS",
             theme: "Theme",
@@ -82,6 +105,29 @@ const translations = {
             phase_label: "Fas:",
             days: "d" 
         },
+
+profiler: {
+            profile_name: "PROFILNAMN",
+            profile_builder: "PROFILBYGGARE",
+            overview: "ÖVERSIKT",
+            summary: "PROFILSAMMANFATTNING",
+            name_placeholder: "Min Lager...",
+            pick_yeast: "Välj en basjäst...",
+            save: "SPARA TILL BIBLIOTEK",
+            day: "Dag",
+            hold_until: "Håll till Dag",
+            free_rise: "Fri höjning till",
+            drop_to: "Sänk till",
+            reach: "Nå",
+            rise_to: "Höj till",
+            by_day: "vid Dag",
+            pitch: "Pitch",
+            primary: "Primär",
+            cleanup: "Diacetylrast",
+            cold_crash: "Kallkrasch",
+            condition: "Konditionering"
+        },
+
         settings: {
             title: "INSTÄLLNINGAR",
             theme: "Tema",
@@ -149,6 +195,29 @@ const translations = {
             phase_label: "Phase:",
             days: "d" 
         },
+
+        profiler: {
+            profile_name: "PROFILNAME",
+            profile_builder: "PROFILERSTELLER",
+            overview: "ÜBERSICHT",
+            summary: "PROFILZUSAMMENFASSUNG",
+            name_placeholder: "Mein Lager...",
+            pick_yeast: "Basishefe wählen...",
+            save: "IN BIBLIOTHEK SPEICHERN",
+            day: "Tag",
+            hold_until: "Halten bis Tag",
+            free_rise: "Freier Anstieg auf",
+            drop_to: "Senken auf",
+            reach: "Erreiche",
+            rise_to: "Erhöhen auf",
+            by_day: "an Tag",
+            pitch: "Anstellen",
+            primary: "Hauptgärung",
+            cleanup: "Diacetylrast",
+            cold_crash: "Cold Crash",
+            condition: "Konditionierung"
+        },
+
         settings: {
             title: "EINSTELLUNGEN",
             theme: "Thema",
