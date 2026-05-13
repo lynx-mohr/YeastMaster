@@ -398,8 +398,10 @@ async function updateDashboard() {
             const profileValEl = document.getElementById('profile-val');
             profileValEl.innerText = displayProfile;
             
-            const action = (latest.action || "IDLE").toUpperCase();
-            document.getElementById('action-val').innerText = action;
+         const action = (latest.action || "IDLE").toUpperCase();
+// Slå upp ordet i ordboken (fallback till engelska om det saknas)
+const translatedAction = translations[window.currentLang]?.action?.[action] || action;
+document.getElementById('action-val').innerText = translatedAction;
 
             // 3. Pil-logik
             const arrow = document.getElementById('status-arrow');
@@ -438,7 +440,11 @@ async function updateDashboard() {
                 }
             }
 
-            document.getElementById('status-text').innerText = displayStatusText;
+      // Kolla först i "phase"-ordboken, sen i "status"-ordboken
+const translatedStatus = translations[window.currentLang]?.phase?.[displayStatusText] 
+                      || translations[window.currentLang]?.status?.[displayStatusText] 
+                      || displayStatusText;
+document.getElementById('status-text').innerText = translatedStatus;
 
             // --- VÄCK LARM-DETEKTIVEN ---
             const currentStrain = latest.strain || "Unknown";
@@ -456,8 +462,11 @@ async function updateDashboard() {
             const dayValEl = document.getElementById('day-val');
             const phaseDayValEl = document.getElementById('phase-day-val');
 
-            if (dayValEl) dayValEl.innerText = formatDaysToHuman(displayDay);
-            if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(displayPhaseDay);
+            // Hämta rätt förkortning för dagar, t.ex. "Tage" för tyska
+const daySuffix = translations[window.currentLang]?.dashboard?.days || "d";
+
+if (dayValEl) dayValEl.innerText = formatDaysToHuman(displayDay) + " " + daySuffix;
+if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(displayPhaseDay) + " " + daySuffix;
             
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
