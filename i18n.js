@@ -14,7 +14,7 @@ const translations = {
             start: "START",
             ready: "READY",
             air: "Luft:",
-            phase_label: "Phase:"
+            phase_label: "Phase:",
             days: "d" // Ex: 4 d
         },
         settings: {
@@ -81,7 +81,7 @@ const translations = {
             start: "START",
             ready: "KLAR",
             air: "Luft:",
-            phase_label: "Fas:"
+            phase_label: "Fas:",
             days: "d" // Går bra med "d" på svenska också, annars "dagar"
         },
         settings: {
@@ -148,7 +148,7 @@ const translations = {
             start: "START",
             ready: "FERTIG",
             air: "Luft:"
-            phase_label: "Fas:"
+            phase_label: "Phase:",
             days: "t" // Ex: 4 Tage istället för 4 d
         },
         settings: {
