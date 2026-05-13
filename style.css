@@ -616,6 +616,10 @@ canvas#beer-chart {
     .right-col {
         margin-top: -40px !important; /* Lyfter upp hela högersidan! */
     }
+
+    .progress-section {
+        padding-top: 65px !important; /* Standard är 35px, här tvingar vi ner den på PC */
+    }
     
     #lab-chart {
         width: 100% !important;
