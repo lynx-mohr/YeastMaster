@@ -2673,7 +2673,7 @@ window.loadProfileIntoLab = function(strainName, profileName, fullYeastName) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-function openYeastModal(yeast) {
+function al(yopenYeastModeast) {
     const modal = document.getElementById('yeast-info-modal');
     const modalTitle = document.getElementById('modal-yeast-name');
     const modalDesc = document.getElementById('modal-yeast-desc');
@@ -2684,7 +2684,6 @@ function openYeastModal(yeast) {
     let detailedText = "";
 
 // 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN PROFILER
-  // 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN PROFILER
     if (yeast.isCustom) {
         const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
         const profileData = savedProfiles.find(p => p.s === yeast.name);
@@ -2693,17 +2692,42 @@ function openYeastModal(yeast) {
             const s = profileData.steps;
             const baseYeast = profileData.p.replace('Custom (', '').replace(')', '');
             
+            // --- SMART LOGIK FÖR ATT LÄSA AV VAD SOM FAKTISKT HÄNDER ---
+            
+            // 1. Pitch
+            const pitchTemp = parseFloat(s[0][1]).toFixed(1);
+            
+            // 2. Primary
+            let primaryText = `Hold until Day ${s[1][0]}`;
+            if (s[1][1] > s[0][1]) primaryText = `Free rise to ${parseFloat(s[1][1]).toFixed(1)}°C by Day ${s[1][0]}`;
+            else if (s[1][1] < s[0][1]) primaryText = `Drop to ${parseFloat(s[1][1]).toFixed(1)}°C by Day ${s[1][0]}`;
+            
+            // 3. Cleanup
+            let cleanupText = `Hold until Day ${s[2][0]}`;
+            if (s[2][1] > s[1][1]) cleanupText = `Reach ${parseFloat(s[2][1]).toFixed(1)}°C by Day ${s[2][0]}`;
+            else if (s[2][1] < s[1][1]) cleanupText = `Drop to ${parseFloat(s[2][1]).toFixed(1)}°C by Day ${s[2][0]}`;
+
+            // 4. Hold Warm
+            let holdText = `Hold until Day ${s[3][0]}`;
+            if (s[3][1] > s[2][1]) holdText = `Reach ${parseFloat(s[3][1]).toFixed(1)}°C by Day ${s[3][0]}`;
+            else if (s[3][1] < s[2][1]) holdText = `Drop to ${parseFloat(s[3][1]).toFixed(1)}°C by Day ${s[3][0]}`;
+
+            // 5. Cold Crash
+            let crashText = `Hold until Day ${s[4][0]}`;
+            if (s[4][1] < s[3][1]) crashText = `Drop to ${parseFloat(s[4][1]).toFixed(1)}°C by Day ${s[4][0]}`;
+            else if (s[4][1] > s[3][1]) crashText = `Rise to ${parseFloat(s[4][1]).toFixed(1)}°C by Day ${s[4][0]}`;
+
             // Formaterar texten snyggare och kollar om Action Markers finns
             detailedText = `
                 <div style="line-height: 1.6;">
                     <p style="color: var(--accent-color); font-weight: 800; margin-bottom: 15px;">Created by you!</p>
                     <p>This profile is used with <strong>${baseYeast}</strong> and these are the profile steps:</p>
                     <ul style="list-style: none; padding: 0; margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
-                        <li><strong style="color: #fff;">Pitch:</strong> Start at ${s[0][1]}°C.</li>
-                        <li><strong style="color: #fff;">Primary:</strong> Hold until Day ${s[1][0]}.</li>
-                        <li><strong style="color: #fff;">Cleanup:</strong> Reach ${s[2][1]}°C by Day ${s[2][0]}.</li>
-                        <li><strong style="color: #fff;">Hold Warm:</strong> Hold until Day ${s[3][0]}.</li>
-                        <li><strong style="color: #fff;">Cold Crash:</strong> Drop to ${s[4][1]}°C by Day ${s[4][0]}.</li>
+                        <li><strong style="color: #fff;">Pitch:</strong> Start at ${pitchTemp}°C.</li>
+                        <li><strong style="color: #fff;">Primary:</strong> ${primaryText}.</li>
+                        <li><strong style="color: #fff;">Cleanup:</strong> ${cleanupText}.</li>
+                        <li><strong style="color: #fff;">Hold Warm:</strong> ${holdText}.</li>
+                        <li><strong style="color: #fff;">Cold Crash:</strong> ${crashText}.</li>
                     </ul>
                     
                     <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #333;">
