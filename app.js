@@ -2673,7 +2673,7 @@ window.loadProfileIntoLab = function(strainName, profileName, fullYeastName) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-function al(yopenYeastModeast) {
+function openYeastModal(yeast) {
     const modal = document.getElementById('yeast-info-modal');
     const modalTitle = document.getElementById('modal-yeast-name');
     const modalDesc = document.getElementById('modal-yeast-desc');
@@ -2683,7 +2683,9 @@ function al(yopenYeastModeast) {
     modalTitle.innerText = yeast.name;
     let detailedText = "";
 
-// 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN PROFILER
+    // ====================================================================
+    // 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN PROFILER
+    // ====================================================================
     if (yeast.isCustom) {
         const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
         const profileData = savedProfiles.find(p => p.s === yeast.name);
@@ -2692,12 +2694,12 @@ function al(yopenYeastModeast) {
             const s = profileData.steps;
             const baseYeast = profileData.p.replace('Custom (', '').replace(')', '');
             
-            // --- SMART LOGIK (Skottsäker med parseFloat) ---
-            const d0 = s[0][0], t0 = parseFloat(s[0][1]);
-            const d1 = s[1][0], t1 = parseFloat(s[1][1]);
-            const d2 = s[2][0], t2 = parseFloat(s[2][1]);
-            const d3 = s[3][0], t3 = parseFloat(s[3][1]);
-            const d4 = s[4][0], t4 = parseFloat(s[4][1]);
+            // --- SÄKERHETS-KOLL: Förhindrar krasch om en profil har färre än 5 steg ---
+            const d0 = s[0] ? s[0][0] : 0, t0 = s[0] ? parseFloat(s[0][1]) : 0;
+            const d1 = s[1] ? s[1][0] : 0, t1 = s[1] ? parseFloat(s[1][1]) : 0;
+            const d2 = s[2] ? s[2][0] : 0, t2 = s[2] ? parseFloat(s[2][1]) : 0;
+            const d3 = s[3] ? s[3][0] : 0, t3 = s[3] ? parseFloat(s[3][1]) : 0;
+            const d4 = s[4] ? s[4][0] : 0, t4 = s[4] ? parseFloat(s[4][1]) : 0;
 
             // 1. Pitch
             const pitchTemp = t0.toFixed(1);
@@ -2745,12 +2747,10 @@ function al(yopenYeastModeast) {
             detailedText = `<p>Custom profile data not found.</p>`;
         }
     }
-// ====================================================================
+    // ====================================================================
     // 2. KOLLA OM DET ÄR DIN EGEN HUSJÄST (House Bank)
     // ====================================================================
     else if (yeast.isHouseStrain) {
-        
-        // --- NYTT: Formatera datumet så det ser snyggt ut (t.ex. "14 Apr 2026") ---
         let displayDate = "Unknown";
         if (yeast.captureDate) {
             const dateObj = new Date(yeast.captureDate);
@@ -2791,12 +2791,10 @@ function al(yopenYeastModeast) {
     else {
         detailedText = yeastDescriptions[yeast.id] || yeastDescriptions[yeast.name];
         
-        // Fallback OM vi skulle sakna en kommersiell text
         if (!detailedText) {
             detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:20px; color: #fff;">Passar till:</h3><p>${yeast.styles}</p>`;
         }
 
-        // LÄGG TILL INKLUDERADE MASKINPROFILER
         const hwStrainNames = {
             "us-05": "US-05", "s-04": "S-04", "w-34-70": "W-34/70", "be-256": "BE-256",
             "wb-06": "WB-06", "verdant": "Verdant IPA", "voss": "Voss Kveik", "nottingham": "Nottingham", 
@@ -2838,7 +2836,11 @@ function al(yopenYeastModeast) {
         }
     }
 
-    modalDesc.innerHTML = formatTempText(detailedText);
+    if (typeof formatTempText === 'function') {
+        modalDesc.innerHTML = formatTempText(detailedText);
+    } else {
+        modalDesc.innerHTML = detailedText;
+    }
 
     // --- STYR KNAPPARNA FÖR EDIT OCH DELETE ---
     const editBtn = document.getElementById('modal-edit-btn');
@@ -2849,22 +2851,25 @@ function al(yopenYeastModeast) {
             editBtn.style.display = 'block'; 
             editBtn.onclick = (e) => { 
                 e.preventDefault();
-                closeYeastModal(); 
-                openAddStrainModal(yeast); 
+                if(typeof closeYeastModal === 'function') closeYeastModal(); 
+                if(typeof openAddStrainModal === 'function') openAddStrainModal(yeast); 
             }; 
         }
         if(deleteBtn) { 
             deleteBtn.style.display = 'block'; 
             deleteBtn.onclick = () => { 
-                deleteHouseStrain(yeast.id); 
-                closeYeastModal(); 
+                if(typeof deleteHouseStrain === 'function') deleteHouseStrain(yeast.id); 
+                if(typeof closeYeastModal === 'function') closeYeastModal(); 
             }; 
         }
     } else if (yeast.isCustom) {
         if(editBtn) editBtn.style.display = 'none';
         if(deleteBtn) { 
             deleteBtn.style.display = 'block'; 
-            deleteBtn.onclick = () => { deleteCustomProfile(yeast.name); closeYeastModal(); }; 
+            deleteBtn.onclick = () => { 
+                if(typeof deleteCustomProfile === 'function') deleteCustomProfile(yeast.name); 
+                if(typeof closeYeastModal === 'function') closeYeastModal(); 
+            }; 
         }
     } else {
         if(editBtn) editBtn.style.display = 'none';
