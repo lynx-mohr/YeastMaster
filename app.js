@@ -458,15 +458,22 @@ document.getElementById('status-text').innerText = translatedStatus;
             const targetDays = 14; 
             const percent = Math.min((displayDay / targetDays) * 100, 100).toFixed(0);
 
-            // 7. Skriv ut till skärmen!
+         // 7. Skriv ut till skärmen!
             const dayValEl = document.getElementById('day-val');
             const phaseDayValEl = document.getElementById('phase-day-val');
 
-            // Hämta rätt förkortning för dagar, t.ex. "Tage" för tyska
-const daySuffix = translations[window.currentLang]?.dashboard?.days || "d";
+            // Hämta de formaterade strängarna från din funktion (ex. "4 d, 14 h")
+            let startStr = formatDaysToHuman(displayDay);
+            let phaseStr = formatDaysToHuman(displayPhaseDay);
 
-if (dayValEl) dayValEl.innerText = formatDaysToHuman(displayDay) + " " + daySuffix;
-if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(displayPhaseDay) + " " + daySuffix;
+            // Om vi kör tyska: Byt ut lilla 'd' mot stora 'T' (Tage)
+            if (window.currentLang === 'de') {
+                startStr = startStr.replace('d', 'T');
+                phaseStr = phaseStr.replace('d', 'T');
+            }
+
+            if (dayValEl) dayValEl.innerText = startStr;
+            if (phaseDayValEl) phaseDayValEl.innerText = phaseStr;
             
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
