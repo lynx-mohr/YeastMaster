@@ -3955,12 +3955,15 @@ function resetProfiler() {
         yeastSelect.dispatchEvent(new Event('change'));
     }
 
-    // 3. Nollställ "Profile Summary"-rutan!
+  // 3. Nollställ "Profile Summary"-rutan (men behåll rubriken!)
     const summaryBox = document.getElementById('profile-summary');
     if (summaryBox) {
-        // Tömmer hela rutan. Om du hellre vill ha ett litet meddelande 
-        // kan du byta ut '' mot t.ex. '<p style="text-align:center; color:#888; padding:20px;">Select a base yeast to see summary.</p>'
-        summaryBox.innerHTML = ''; 
+        summaryBox.innerHTML = `
+            <div class="summary-header" data-i18n="profiler.summary">PROFILE SUMMARY</div>
+            <div style="padding: 10px 0; color: #666; font-size: 0.85rem; font-style: italic; text-align: center;" data-i18n="profiler.pick_yeast">Pick a base yeast...</div>
+        `;
+        // Tvinga appen att översätta den nya HTML-koden vi just la in
+        if (typeof updateTexts === 'function') updateTexts();
     }
 }
 
