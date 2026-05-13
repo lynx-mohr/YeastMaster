@@ -462,11 +462,12 @@ document.getElementById('status-text').innerText = translatedStatus;
             const dayValEl = document.getElementById('day-val');
             const phaseDayValEl = document.getElementById('phase-day-val');
 
-            if (dayValEl) dayValEl.innerText = formatDaysToHuman(displayDay);
-            if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(displayPhaseDay);
-
-            if (dayValEl) dayValEl.innerText = startStr;
-            if (phaseDayValEl) phaseDayValEl.innerText = phaseStr;
+            if (dayValEl) {
+                dayValEl.innerText = formatDaysToHuman(displayDay);
+            }
+            if (phaseDayValEl) {
+                phaseDayValEl.innerText = formatDaysToHuman(displayPhaseDay);
+            }
             
             document.getElementById('progress-percent').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
