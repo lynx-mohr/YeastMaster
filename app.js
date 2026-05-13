@@ -468,8 +468,8 @@ document.getElementById('status-text').innerText = translatedStatus;
 
             // Om vi kör tyska: Byt ut lilla 'd' mot stora 'T' (Tage)
             if (window.currentLang === 'de') {
-                startStr = startStr.replace('d', 'T');
-                phaseStr = phaseStr.replace('d', 'T');
+                startStr = startStr.replace('d', 't');
+                phaseStr = phaseStr.replace('d', 't');
             }
 
             if (dayValEl) dayValEl.innerText = startStr;
