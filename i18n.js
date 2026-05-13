@@ -69,7 +69,7 @@ const translations = {
     sv: {
         nav: { home: "HEM", library: "BIBLIOTEK", lab: "AKADEMI", profiler: "PROFILERARE", live: "LIVE", settings: "INSTÄLLNINGAR" },
         dashboard: { 
-            progress: "FRAMSTEG", 
+            progress: "PROGRESS", 
             since_start: "Sedan start", 
             time_phase: "Tid i fas", 
             goal_temp: "Måltemp i fas",
