@@ -6528,11 +6528,8 @@ function clearDeviceSettingsUI() {
     if (removeRow) removeRow.style.display = 'none';
 }
 
-// Lyssna efter språkbyten och tvinga dashboarden att rita om sig direkt
+// Lyssna efter språkbyten och tvinga dashboarden att uppdateras
 window.addEventListener('languageChanged', () => {
-    // Om vi redan har tagit emot data från ESP32:an...
-    if (typeof latest !== 'undefined' && latest) {
-        // ...kör funktionen som uppdaterar mätvärdena igen! När man byter språk är detta bra. 
-        updateDashboard(); 
-    }
+    console.log("Språk bytt! Tvingar uppdatering av dashboard...");
+    updateDashboard(); 
 });
