@@ -458,19 +458,12 @@ document.getElementById('status-text').innerText = translatedStatus;
             const targetDays = 14; 
             const percent = Math.min((displayDay / targetDays) * 100, 100).toFixed(0);
 
-         // 7. Skriv ut till skärmen!
+       // 7. Skriv ut till skärmen!
             const dayValEl = document.getElementById('day-val');
             const phaseDayValEl = document.getElementById('phase-day-val');
 
-            // Hämta de formaterade strängarna från din funktion (ex. "4 d, 14 h")
-            let startStr = formatDaysToHuman(displayDay);
-            let phaseStr = formatDaysToHuman(displayPhaseDay);
-
-            // Om vi kör tyska: Byt ut lilla 'd' mot stora 'T' (Tage)
-            if (window.currentLang === 'de') {
-                startStr = startStr.replace('d', 't');
-                phaseStr = phaseStr.replace('d', 't');
-            }
+            if (dayValEl) dayValEl.innerText = formatDaysToHuman(displayDay);
+            if (phaseDayValEl) phaseDayValEl.innerText = formatDaysToHuman(displayPhaseDay);
 
             if (dayValEl) dayValEl.innerText = startStr;
             if (phaseDayValEl) phaseDayValEl.innerText = phaseStr;
