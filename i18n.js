@@ -35,9 +35,14 @@ const translations = {
             primary: "Primary",
             cleanup: "Cleanup",
             cold_crash: "Cold Crash",
-            condition: "Condition"
+            condition: "Condition",
+            tab_title: "The Profiler",
+            add_dry_hops: "+ ADD DRY HOPS",
+            rack_dump: "+ RACK / DUMP",
+            save_profile: "SAVE PROFILE",
+            days: "Days"
         },
-        
+
         settings: {
             title: "SETTINGS",
             theme: "Theme",
@@ -125,7 +130,12 @@ profiler: {
             primary: "Primär",
             cleanup: "Diacetylrast",
             cold_crash: "Kallkrasch",
-            condition: "Konditionering"
+            condition: "Konditionering",
+            tab_title: "Profilbyggaren", // Eller "The Profiler" om du vill behålla det som ett varumärkesnamn!
+            add_dry_hops: "+ LÄGG TILL TORRHUMLING",
+            rack_dump: "+ TAPPA OM / DUMPA",
+            save_profile: "SPARA PROFIL",
+            days: "Dagar"
         },
 
         settings: {
@@ -215,7 +225,12 @@ profiler: {
             primary: "Hauptgärung",
             cleanup: "Diacetylrast",
             cold_crash: "Cold Crash",
-            condition: "Konditionierung"
+            condition: "Konditionierung",
+            tab_title: "Der Profiler",
+            add_dry_hops: "+ KALTHOPFUNG",
+            rack_dump: "+ UMSCHLAUCHEN / ABZIEHEN",
+            save_profile: "PROFIL SPEICHERN",
+            days: "Tage"
         },
 
         settings: {
