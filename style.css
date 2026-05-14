@@ -323,13 +323,6 @@ body.light-mode .phase-info {
     text-transform: uppercase;
 }
 
-.summary-row {
-    display: flex;
-    justify-content: space-between; /* Trycker namnet till vänster och värdet till höger */
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
 
 /* Light mode-linjer */
 body.light-mode .summary-row {
@@ -340,18 +333,9 @@ body.light-mode .summary-row {
     border-bottom: none; /* Ingen linje efter sista raden */
 }
 
-.summary-row .label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--oled-color);
-}
 
-.summary-row .value {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 0.85rem;
-    color: var(--oled-color);
-    text-align: right;
-}
+
+
 
 /* Om skärmen är riktigt smal, minska texten pyttelite till */
 @media (max-width: 360px) {
@@ -3829,4 +3813,23 @@ body.light-mode .modal-body [style*="F2994A"] {
 
 .toggle-switch input:checked + .slider:before {
   transform: translateX(24px);
+}
+
+/* --- FIX FÖR LÅNGA TEXTER I PROFILE SUMMARY --- */
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start !important; /* Håller texterna i ovankant när de radbryts */
+    gap: 15px !important; /* Den magiska krockkudden! Hindrar texterna från att nudda varandra */
+}
+
+.summary-row .label {
+    flex-shrink: 0 !important; /* Tvingar vänsteretiketten (t.ex. "Cold Crash") att behålla sin bredd så den inte krossas */
+}
+
+.summary-row .value {
+    text-align: right;
+    flex-grow: 1; /* Låter den långa texten ta upp den plats som är kvar... */
+    word-break: break-word; /* ...och tvingar den att radbryta snyggt på högersidan! */
+    line-height: 1.4; /* Gör radavståndet lite luftigare när det blir två rader */
 }
