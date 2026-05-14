@@ -36,11 +36,36 @@ const translations = {
             cleanup: "Cleanup",
             cold_crash: "Cold Crash",
             condition: "Condition",
-            tab_title: "The Profiler",
-            add_dry_hops: "+ ADD DRY HOPS",
-            rack_dump: "+ RACK / DUMP",
-            save_profile: "SAVE PROFILE",
-            days: "Days"
+           
+        },
+
+        lab: {
+            title: "The Profiler",
+            info_1: "Pick a strain and drag the points to build your fermentation profile.",
+            info_2: "When you're done, save and find your tailored profile in the Yeast library.",
+            info_3: "Don't forget the dry hops!",
+            profile_name: "PROFILE NAME",
+            profile_name_placeholder: "e.g. JUICEBMB",
+            pick_strain: "Pick strain",
+            builder_title: "PROFILE BUILDER",
+            btn_overview: "🔍 OVERVIEW",
+            chart_placeholder: "Pick a base yeast and name your profile above 👆",
+            summary_title: "PROFILE SUMMARY",
+            phase_pitch: "Pitch",
+            phase_primary: "Primary",
+            phase_cleanup: "Cleanup",
+            phase_crash: "Cold Crash",
+            phase_condition: "Condition",
+            day: "Day 0 @",
+            hold_until: "Hold until Day",
+            reach: "Reach",
+            drop_to: "Drop to",
+            by_day: "by Day",
+            btn_add_hops: "+ ADD DRY HOPS",
+            btn_add_dump: "+ RACK / DUMP",
+            schedule_hop: "Dry Hop scheduled on Day",
+            schedule_dump: "Rack / Dump scheduled on Day",
+            btn_save: "SAVE PROFILE"
         },
 
         settings: {
@@ -131,11 +156,36 @@ profiler: {
             cleanup: "Diacetylrast",
             cold_crash: "Kallkrasch",
             condition: "Konditionering",
-            tab_title: "Profilbyggaren", // Eller "The Profiler" om du vill behålla det som ett varumärkesnamn!
-            add_dry_hops: "+ LÄGG TILL TORRHUMLING",
-            rack_dump: "+ TAPPA OM / DUMPA",
-            save_profile: "SPARA PROFIL",
-            days: "Dagar"
+          
+        },
+
+        lab: {
+            title: "Profilbyggaren",
+            info_1: "Välj en jäst och dra i punkterna för att bygga din jäsprofil.",
+            info_2: "När du är klar, spara och hitta din skräddarsydda profil i Jästbiblioteket.",
+            info_3: "Glöm inte torrhumlingen!",
+            profile_name: "PROFILNAMN",
+            profile_name_placeholder: "t.ex. JUICEBMB",
+            pick_strain: "Välj jäst",
+            builder_title: "PROFILBYGGARE",
+            btn_overview: "🔍 ÖVERSIKT",
+            chart_placeholder: "Välj en basjäst och namnge din profil ovan 👆",
+            summary_title: "PROFILSAMMANFATTNING",
+            phase_pitch: "Pitch",
+            phase_primary: "Primär",
+            phase_cleanup: "Diacetylrast",
+            phase_crash: "Kallkrasch",
+            phase_condition: "Konditionering",
+            day: "Dag 0 @",
+            hold_until: "Håll till Dag",
+            reach: "Nå",
+            drop_to: "Sänk till",
+            by_day: "vid Dag",
+            btn_add_hops: "+ LÄGG TILL TORRHUMLING",
+            btn_add_dump: "+ TAPPA OM / DUMPA",
+            schedule_hop: "Torrhumling schemalagd till Dag",
+            schedule_dump: "Omtappning schemalagd till Dag",
+            btn_save: "SPARA PROFIL"
         },
 
         settings: {
@@ -226,11 +276,36 @@ profiler: {
             cleanup: "Diacetylrast",
             cold_crash: "Cold Crash",
             condition: "Konditionierung",
-            tab_title: "Der Profiler",
-            add_dry_hops: "+ KALTHOPFUNG",
-            rack_dump: "+ UMSCHLAUCHEN / ABZIEHEN",
-            save_profile: "PROFIL SPEICHERN",
-            days: "Tage"
+           
+        },
+
+        lab: {
+            title: "Der Profiler",
+            info_1: "Wähle eine Hefe und ziehe die Punkte, um dein Gärprofil zu erstellen.",
+            info_2: "Wenn du fertig bist, speichere und finde dein Profil in der Hefebibliothek.",
+            info_3: "Vergiss das Hopfenstopfen nicht!",
+            profile_name: "PROFILNAME",
+            profile_name_placeholder: "z.B. JUICEBMB",
+            pick_strain: "Hefe wählen",
+            builder_title: "PROFILERSTELLER",
+            btn_overview: "🔍 ÜBERSICHT",
+            chart_placeholder: "Wähle eine Basishefe und benenne dein Profil oben 👆",
+            summary_title: "PROFILZUSAMMENFASSUNG",
+            phase_pitch: "Anstellen",
+            phase_primary: "Hauptgärung",
+            phase_cleanup: "Diacetylrast",
+            phase_crash: "Cold Crash",
+            phase_condition: "Konditionierung",
+            day: "Tag 0 @",
+            hold_until: "Halten bis Tag",
+            reach: "Erreiche",
+            drop_to: "Senken auf",
+            by_day: "an Tag",
+            btn_add_hops: "+ KALTHOPFUNG",
+            btn_add_dump: "+ UMSCHLAUCHEN",
+            schedule_hop: "Kalthopfung geplant für Tag",
+            schedule_dump: "Umschlauchen geplant für Tag",
+            btn_save: "PROFIL SPEICHERN"
         },
 
         settings: {
