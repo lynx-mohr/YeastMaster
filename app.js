@@ -6609,4 +6609,17 @@ window.addEventListener('languageChanged', () => {
     updateDashboard(); 
 });
 
+// Lyssna på när språket ändras för att översätta Chart.js-grafen i Profiler
+window.addEventListener('languageChanged', () => {
+    if (typeof labChart !== 'undefined' && labChart !== null) {
+        let xAxisLabel = "Days";
+        if (window.currentLang === 'sv') xAxisLabel = "Dagar";
+        if (window.currentLang === 'de') xAxisLabel = "Tage";
+        
+        if (labChart.options.scales.x.title) {
+            labChart.options.scales.x.title.text = xAxisLabel;
+        }
+        labChart.update('none'); // Uppdatera grafen ljudlöst utan animation
+    }
+});
 
