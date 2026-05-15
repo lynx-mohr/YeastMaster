@@ -3843,7 +3843,7 @@ body.chart-fullscreen-active #profile-inputs,
 body.chart-fullscreen-active #profile-summary,
 body.chart-fullscreen-active .lab-actions,
 body.chart-fullscreen-active #btn-save-profile {
-    display: none !important; /* Göm alla menyer och knappar */
+    display: none !important;
 }
 
 body.chart-fullscreen-active #view-lab {
@@ -3857,9 +3857,10 @@ body.chart-fullscreen-active .chart-section {
     border-radius: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
+    box-sizing: border-box !important; /* Superviktig: Hindrar paddingen från att skapa scroll */
     display: flex;
     flex-direction: column;
-    background: #000 !important; /* Mörkt och stilrent i fullscreen */
+    background: #000 !important;
     z-index: 9999;
     position: fixed;
     top: 0;
@@ -3867,26 +3868,26 @@ body.chart-fullscreen-active .chart-section {
 }
 
 body.chart-fullscreen-active .chart-container {
-    flex-grow: 1;
-    height: 100% !important;
+    flex-grow: 1; /* Ta all plats som blir över efter "Profile Builder"-rubriken... */
+    min-height: 0 !important; /* ...men absolut inte en enda pixel mer! (Fixar canvas-krock) */
     width: 100% !important;
-    overflow: hidden !important; /* Förbjuder skärmen från att scrolla upp/ner */
-    display: flex;
-    align-items: center; /* Centrerar grafen perfekt vertikalt */
-    justify-content: center;
+    overflow: hidden !important; 
+    position: relative !important;
+    margin-top: 5px;
 }
 
-/* Den hopslagna och städade regeln för scroll-arean! */
 body.chart-fullscreen-active #chart-scroll-area {
-    min-width: 100% !important; /* Fyller skärmen på bredden */
-    height: 100% !important;    /* Fyller skärmen på höjden */
-    max-height: 100% !important;
-    min-height: 100% !important;
+    position: absolute !important; /* Låser fast den innanför containern */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-width: 100% !important;
+    height: 100% !important;
 }
 
-/* Ser till att Chart.js-grafen hänger med i samma storlek */
 body.chart-fullscreen-active canvas#lab-chart {
     height: 100% !important;
-    max-height: 100% !important;
-    min-height: 100% !important;
+    width: 100% !important;
+}100% !important;
 }
