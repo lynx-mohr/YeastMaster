@@ -3867,6 +3867,7 @@ body.chart-fullscreen-active .chart-section {
     display: block !important;
 }
 
+/* 4. Placera Profile Builder-rubriken exakt i toppen */
 body.chart-fullscreen-active .chart-section > div:first-child {
     position: absolute !important;
     top: 10px !important;
@@ -3874,18 +3875,22 @@ body.chart-fullscreen-active .chart-section > div:first-child {
     right: 15px !important;
     height: 35px !important;
     margin: 0 !important;
+    z-index: 10 !important; /* MAGIN 1: Tvingar Close-knappen att ligga OVANPÅ grafen! */
 }
 
 /* 5. STENHÅRD MATEMATIK FÖR HÖJDEN */
 body.chart-fullscreen-active .chart-container {
     position: absolute !important;
-    top: 1px !important; 
+    top: 45px !important; /* Ligger precis tryggt under knappen */
     left: 10px !important;
-    /* Vi tvingar bredden till 100% minus 20px marginal */
     width: calc(100vw - 20px) !important;
-    /* Vi tvingar höjden till 100% minus 50px (topp) och 60px (botten) = 110px avdrag! */
-    height: calc(100vh - 80px) !important;
-    height: calc(100dvh - 80px) !important; 
+    
+    /* MAGIN 2: Vi maximerar höjden! 
+       Vi drar bara av 45px för toppen och 20px för botten = totalt 65px avdrag. */
+    height: calc(100vh - 65px) !important;
+    height: calc(100dvh - 65px) !important; 
+    
+    overflow: hidden !important;
     margin: 0 !important;
     padding: 0 !important;
 }
