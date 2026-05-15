@@ -6665,7 +6665,11 @@ document.addEventListener('fullscreenchange', () => {
         isChartFullscreen = false;
         
         setTimeout(() => {
-            if (typeof labChart !== 'undefined') labChart.resize();
+            if (typeof labChart !== 'undefined') {
+                // Återställ proportionerna när vi går tillbaka till normalläget!
+                labChart.options.maintainAspectRatio = true;
+                labChart.resize();
+            }
         }, 300);
     }
 });
