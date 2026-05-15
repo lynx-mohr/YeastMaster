@@ -6655,7 +6655,7 @@ function toggleLandscapeChart() {
     }, 300);
 }
 
-// NYTT: Säkerhetsnät om användaren stänger fullscreen med telefonens "Tillbaka"-knapp
+// Säkerhetsnät om användaren stänger fullscreen med telefonens "Tillbaka"-knapp
 document.addEventListener('fullscreenchange', () => {
     if (!document.fullscreenElement && isChartFullscreen) {
         document.body.classList.remove('chart-fullscreen-active');
@@ -6666,8 +6666,8 @@ document.addEventListener('fullscreenchange', () => {
         
         setTimeout(() => {
             if (typeof labChart !== 'undefined') {
-                // Återställ proportionerna när vi går tillbaka till normalläget!
                 labChart.options.maintainAspectRatio = true;
+                labChart.update('none'); // Tvingar fram en nyritning här också!
                 labChart.resize();
             }
         }, 300);
