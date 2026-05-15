@@ -3879,7 +3879,7 @@ body.chart-fullscreen-active .chart-section > div:first-child {
 /* 5. STENHÅRD MATEMATIK FÖR HÖJDEN */
 body.chart-fullscreen-active .chart-container {
     position: absolute !important;
-    top: 50px !important; 
+    top: 35px !important; 
     left: 10px !important;
     /* Vi tvingar bredden till 100% minus 20px marginal */
     width: calc(100vw - 20px) !important;
