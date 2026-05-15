@@ -201,9 +201,16 @@
        <div class="chart-section" style="margin: 20px; padding: 20px; border-radius: 15px;">
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
     <div style="font-size: 0.85rem; font-weight: 800; color: #888; letter-spacing: 1px;" data-i18n="lab.builder_title">PROFILE BUILDER</div>
-    <button id="btn-zoom" onclick="toggleChartZoom()" style="display: none; background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; font-family: 'Lexend'; font-weight: 600; font-size: 0.7rem; cursor: pointer;" data-i18n="lab.btn_overview">
-        🔍 OVERVIEW
-    </button>
+    
+    <div style="display: flex; gap: 8px;">
+        <button id="btn-zoom" onclick="toggleChartZoom()" style="display: none; background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; font-family: 'Lexend'; font-weight: 600; font-size: 0.7rem; cursor: pointer;" data-i18n="lab.btn_overview">
+            🔍 OVERVIEW
+        </button>
+        <!-- Vår nya Fullscreen-knapp! -->
+        <button id="btn-fullscreen" onclick="toggleLandscapeChart()" style="background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; font-family: 'Lexend'; font-weight: 600; font-size: 0.7rem; cursor: pointer;">
+            ⤢ FULLSCREEN
+        </button>
+    </div>
 </div>
     
 <div class="chart-container" style="height: 300px; width: 100%; position: relative; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;">
