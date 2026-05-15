@@ -6645,9 +6645,13 @@ function toggleLandscapeChart() {
         isChartFullscreen = false;
     }
     
-    // 4. Säg åt grafen att den har fått nya dimensioner! (Superviktigt)
+// 4. Säg åt grafen att den har fått nya dimensioner!
     setTimeout(() => {
-        if (typeof labChart !== 'undefined') labChart.resize();
+        if (typeof labChart !== 'undefined') {
+            // MAGIN: Tvinga grafen att släppa proportionerna i Fullscreen!
+            labChart.options.maintainAspectRatio = !isChartFullscreen; 
+            labChart.resize();
+        }
     }, 300);
 }
 
