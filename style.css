@@ -3837,13 +3837,11 @@ body.light-mode .modal-body [style*="F2994A"] {
 /* =========================================
    FULLSCREEN LANDSCAPE CHART MODE
    ========================================= */
-/* 1. Lås skärmen så den inte kan scrollas */
 body.chart-fullscreen-active {
     overflow: hidden !important;
     touch-action: none !important;
 }
 
-/* 2. Göm allt brus */
 body.chart-fullscreen-active .main-nav,
 body.chart-fullscreen-active .library-header,
 body.chart-fullscreen-active #profile-inputs,
@@ -3858,7 +3856,6 @@ body.chart-fullscreen-active #view-lab {
     margin: 0 !important;
 }
 
-/* 3. Tvinga huvudrutan över skärmen */
 body.chart-fullscreen-active .chart-section {
     position: fixed !important;
     top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
@@ -3870,7 +3867,6 @@ body.chart-fullscreen-active .chart-section {
     display: block !important;
 }
 
-/* 4. Placera Profile Builder-rubriken exakt i toppen */
 body.chart-fullscreen-active .chart-section > div:first-child {
     position: absolute !important;
     top: 10px !important;
@@ -3880,25 +3876,29 @@ body.chart-fullscreen-active .chart-section > div:first-child {
     margin: 0 !important;
 }
 
-/* 5. Lås graf-containern EXAKT mellan rubriken och botten */
+/* 5. STENHÅRD MATEMATIK FÖR HÖJDEN */
 body.chart-fullscreen-active .chart-container {
     position: absolute !important;
     top: 50px !important; 
-    bottom: 60px !important; /* Håller grafen ovanför telefonens knappar! */
     left: 10px !important;
-    right: 10px !important;
-    width: auto !important;
-    height: auto !important;
+    /* Vi tvingar bredden till 100% minus 20px marginal */
+    width: calc(100vw - 20px) !important;
+    /* Vi tvingar höjden till 100% minus 50px (topp) och 60px (botten) = 110px avdrag! */
+    height: calc(100vh - 110px) !important;
+    height: calc(100dvh - 110px) !important; 
     margin: 0 !important;
     padding: 0 !important;
 }
 
-/* 6. Ge föräldern en relativ position så att Chart.js känner sig trygg */
+/* 6. Fäst scroll-arean inuti vår uträknade låda */
 body.chart-fullscreen-active #chart-scroll-area {
-    position: relative !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 0 !important;
+    position: absolute !important;
+    top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+    min-width: 0 !important; /* Livsviktig: tar bort din inline 600px! */
 }
 
-/* RADERA REGEL 7! Låt Chart.js sköta canvasen själv! */
+/* 7. Låt grafen suga åt sig lådans storlek */
+body.chart-fullscreen-active canvas#lab-chart {
+    width: 100% !important;
+    height: 100% !important;
+}
