@@ -3434,27 +3434,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initBeerCycler();
 });
 
-// --- ZOOM-FUNKTION FÖR MOBIL (OVERVIEW / DETALJ) ---
-let isZoomedIn = true; // Grafen är 600px bred från början
-function toggleChartZoom() {
-    const area = document.getElementById('chart-scroll-area');
-    const btn = document.getElementById('btn-zoom');
-    
-    if (!area || !btn) return;
-
-    if (isZoomedIn) {
-        // Zooma ut: Låt grafen krympa för att få plats på skärmen
-        area.style.minWidth = '100%';
-        btn.innerText = '🔍 ZOOM IN';
-    } else {
-        // Zooma in: Tvinga grafen att bli 600px bred för scroll & precision
-        area.style.minWidth = '600px';
-        btn.innerText = '🔍 OVERVIEW';
-    }
-    
-    isZoomedIn = !isZoomedIn;
-}
-
+        
 function setTheme(mode) {
     const body = document.body;
     const btnDark = document.getElementById('btn-theme-dark');
