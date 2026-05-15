@@ -3884,8 +3884,8 @@ body.chart-fullscreen-active .chart-container {
     /* Vi tvingar bredden till 100% minus 20px marginal */
     width: calc(100vw - 20px) !important;
     /* Vi tvingar höjden till 100% minus 50px (topp) och 60px (botten) = 110px avdrag! */
-    height: calc(100vh - 140px) !important;
-    height: calc(100dvh - 140px) !important; 
+    height: calc(100vh - 150px) !important;
+    height: calc(100dvh - 150px) !important; 
     margin: 0 !important;
     padding: 0 !important;
 }
