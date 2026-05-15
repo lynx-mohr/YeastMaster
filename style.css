@@ -3870,7 +3870,8 @@ body.chart-fullscreen-active .chart-section {
     background: #000 !important;
     z-index: 9999;
     position: fixed;
-    top: 0;
+  bottom: 0 !important; /* MAGIN: Låser fast hela rutan i botten! */
+    top: auto !important; /* Släpper taget om toppen */
     left: 0;
 }
 
