@@ -6631,7 +6631,7 @@ function toggleLandscapeChart() {
 
           
         // NYTT: Den automatiska scrollen! Tvingar bort adressfältet och luften
-        setTimeout(() => window.scrollTo(0, 0), 100);
+ setTimeout(() => window.scrollTo(0, 9999), 100);
         
     } else {
         // 1. Gå ur Fullscreen och släpp landskaps-låset
