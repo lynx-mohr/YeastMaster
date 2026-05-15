@@ -3858,11 +3858,10 @@ body.chart-fullscreen-active #view-lab {
     margin: 0 !important;
 }
 
-/* 3. Tvinga huvudrutan över skärmen - UTAN height: 100vh! */
+/* 3. Tvinga huvudrutan över skärmen */
 body.chart-fullscreen-active .chart-section {
     position: fixed !important;
     top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
-    /* width och height är borttagna, top/bottom/left/right gör jobbet mycket bättre på mobil */
     background: #000 !important;
     z-index: 9999 !important;
     margin: 0 !important;
@@ -3871,7 +3870,7 @@ body.chart-fullscreen-active .chart-section {
     display: block !important;
 }
 
-/* 4. Placera Profile Builder-rubriken (och Close-knappen) exakt i toppen */
+/* 4. Placera Profile Builder-rubriken exakt i toppen */
 body.chart-fullscreen-active .chart-section > div:first-child {
     position: absolute !important;
     top: 10px !important;
@@ -3885,7 +3884,7 @@ body.chart-fullscreen-active .chart-section > div:first-child {
 body.chart-fullscreen-active .chart-container {
     position: absolute !important;
     top: 50px !important; 
-    bottom: 60px !important; /* MAGIN: Tryck upp botten med 60px istället för 15px! */
+    bottom: 60px !important; /* Håller grafen ovanför telefonens knappar! */
     left: 10px !important;
     right: 10px !important;
     width: auto !important;
@@ -3894,19 +3893,12 @@ body.chart-fullscreen-active .chart-container {
     padding: 0 !important;
 }
 
-/* 6. Fäst scroll-arean inuti containern */
+/* 6. Ge föräldern en relativ position så att Chart.js känner sig trygg */
 body.chart-fullscreen-active #chart-scroll-area {
-    position: absolute !important;
-    top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+    position: relative !important;
     width: 100% !important;
     height: 100% !important;
     min-width: 0 !important;
 }
 
-/* 7. Säg åt canvasen att fylla 100% av utrymmet och fäst den i toppen */
-body.chart-fullscreen-active canvas#lab-chart {
-    position: absolute !important;
-    top: 0 !important; left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-}
+/* RADERA REGEL 7! Låt Chart.js sköta canvasen själv! */
