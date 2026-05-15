@@ -6623,3 +6623,64 @@ window.addEventListener('languageChanged', () => {
     }
 });
 
+
+// ==========================================
+// --- FULLSCREEN LANDSCAPE CHART ---
+// ==========================================
+let isChartFullscreen = false;
+
+function toggleLandscapeChart() {
+    const btn = document.getElementById('btn-fullscreen');
+    
+    if (!isChartFullscreen) {
+        // 1. Tvinga webbläsaren till Fullscreen
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().then(() => {
+                // 2. När vi är i fullscreen, försök låsa skärmen till landskap!
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(err => console.log("Låsning stöds ej på denna enhet."));
+                }
+            }).catch(err => console.log("Fullscreen misslyckades."));
+        }
+        
+        // 3. Städa bort alla menyer med vår CSS-klass
+        document.body.classList.add('chart-fullscreen-active');
+        btn.innerHTML = '✖ CLOSE';
+        isChartFullscreen = true;
+        
+    } else {
+        // 1. Gå ur Fullscreen och släpp landskaps-låset
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+        if (screen.orientation && screen.orientation.unlock) {
+            screen.orientation.unlock();
+        }
+        
+        // 2. Visa menyerna igen
+        document.body.classList.remove('chart-fullscreen-active');
+        btn.innerHTML = '⤢ FULLSCREEN';
+        isChartFullscreen = false;
+    }
+    
+    // 4. Säg åt grafen att den har fått nya dimensioner! (Superviktigt)
+    setTimeout(() => {
+        if (typeof labChart !== 'undefined') labChart.resize();
+    }, 300);
+}
+
+// NYTT: Säkerhetsnät om användaren stänger fullscreen med telefonens "Tillbaka"-knapp
+document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && isChartFullscreen) {
+        document.body.classList.remove('chart-fullscreen-active');
+        const btn = document.getElementById('btn-fullscreen');
+        if (btn) btn.innerHTML = '⤢ FULLSCREEN';
+        if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+        isChartFullscreen = false;
+        
+        setTimeout(() => {
+            if (typeof labChart !== 'undefined') labChart.resize();
+        }, 300);
+    }
+});
