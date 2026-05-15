@@ -3833,3 +3833,45 @@ body.light-mode .modal-body [style*="F2994A"] {
     word-break: break-word; /* ...och tvingar den att radbryta snyggt på högersidan! */
     line-height: 1.4; /* Gör radavståndet lite luftigare när det blir två rader */
 }
+
+/* =========================================
+   FULLSCREEN LANDSCAPE CHART MODE
+   ========================================= */
+body.chart-fullscreen-active .main-nav,
+body.chart-fullscreen-active .library-header,
+body.chart-fullscreen-active #profile-inputs,
+body.chart-fullscreen-active #profile-summary,
+body.chart-fullscreen-active .lab-actions,
+body.chart-fullscreen-active #btn-save-profile {
+    display: none !important; /* Göm alla menyer och knappar */
+}
+
+body.chart-fullscreen-active #view-lab {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body.chart-fullscreen-active .chart-section {
+    margin: 0 !important;
+    padding: 15px !important;
+    border-radius: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    display: flex;
+    flex-direction: column;
+    background: #000 !important; /* Mörkt och stilrent i fullscreen */
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+body.chart-fullscreen-active .chart-container {
+    flex-grow: 1;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+body.chart-fullscreen-active #chart-scroll-area {
+    min-width: 100% !important; /* Släpp på 600px-låset så den fyller hela landskapsskärmen */
+}
