@@ -242,7 +242,7 @@ profiler: {
     de: {
         nav: { home: "START", library: "BIBLIOTHEK", lab: "AKADEMIE", profiler: "PROFILER", live: "LIVE", settings: "SETUP" },
         dashboard: { 
-            progress: "FORTSCHRITT", 
+            progress: "VERLAUF", 
             since_start: "Seit Start", 
             time_phase: "Phasendauer", 
             goal_temp: "Zieltemp. Phase",
