@@ -6628,6 +6628,10 @@ function toggleLandscapeChart() {
         document.body.classList.add('chart-fullscreen-active');
         btn.innerHTML = '✖ CLOSE';
         isChartFullscreen = true;
+
+          
+        // NYTT: Den automatiska scrollen! Tvingar bort adressfältet och luften
+        setTimeout(() => window.scrollTo(0, 0), 100);
         
     } else {
         // 1. Gå ur Fullscreen och släpp landskaps-låset
