@@ -3880,7 +3880,7 @@ body.chart-fullscreen-active .chart-section > div:first-child {
 body.chart-fullscreen-active .chart-container {
     position: absolute !important;
     top: 10px !important; 
-    left: 10px !important;
+    left: 1px !important;
     /* Vi tvingar bredden till 100% minus 20px marginal */
     width: calc(100vw - 20px) !important;
     /* Vi tvingar höjden till 100% minus 50px (topp) och 60px (botten) = 110px avdrag! */
