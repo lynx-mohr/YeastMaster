@@ -3837,11 +3837,13 @@ body.light-mode .modal-body [style*="F2994A"] {
 /* =========================================
    FULLSCREEN LANDSCAPE CHART MODE
    ========================================= */
+/* 1. Lås skärmen så den inte kan scrollas */
 body.chart-fullscreen-active {
     overflow: hidden !important;
     touch-action: none !important;
 }
 
+/* 2. Göm allt brus */
 body.chart-fullscreen-active .main-nav,
 body.chart-fullscreen-active .library-header,
 body.chart-fullscreen-active #profile-inputs,
@@ -3852,55 +3854,60 @@ body.chart-fullscreen-active #btn-save-profile {
 }
 
 body.chart-fullscreen-active #view-lab {
-    padding: 0 !important; margin: 0 !important;
+    padding: 0 !important; 
+    margin: 0 !important;
 }
 
-/* 1. Huvudsektionen blir en låda som fyller exakt skärmen */
+/* 3. Tvinga huvudrutan över exakt hela skärmen - NOLL padding! */
 body.chart-fullscreen-active .chart-section {
     position: fixed !important;
     top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
     width: 100vw !important;
-    height: 100vh !important; /* För PC */
-    height: 100dvh !important; /* För Mobil (tar bort adressfältet) */
+    height: 100vh !important;
     background: #000 !important;
     z-index: 9999 !important;
-    padding: 15px !important;
     margin: 0 !important;
-    box-sizing: border-box !important;
-    display: flex !important;
-    flex-direction: column !important;
+    padding: 0 !important; /* Tar bort all inbyggd padding som kan ställa till det */
     border-radius: 0 !important;
+    display: block !important; /* Stänger av Flexbox helt */
 }
 
-/* 2. Låt rubriken sitta tryggt i toppen */
+/* 4. Placera Profile Builder-rubriken (och Close-knappen) exakt i toppen */
 body.chart-fullscreen-active .chart-section > div:first-child {
-    flex-shrink: 0 !important;
-    margin-bottom: 10px !important;
+    position: absolute !important;
+    top: 10px !important;
+    left: 15px !important;
+    right: 15px !important;
+    height: 35px !important;
+    margin: 0 !important;
 }
 
-/* 3. Containern tar all kvarvarande plats, MAGIN är height: 0 */
+/* 5. Lås graf-containern EXAKT mellan rubriken och botten */
 body.chart-fullscreen-active .chart-container {
-    flex-grow: 1 !important;
-    position: relative !important;
-    width: 100% !important;
-    height: 0 !important; /* Tvingar Chart.js att hålla sig inom Flexboxen! */
-    min-height: 0 !important;
-    overflow: hidden !important;
+    position: absolute !important;
+    top: 50px !important; /* Börjar precis under rubriken (tar bort luften i toppen!) */
+    bottom: 15px !important; /* Slutar 15px från botten (så X-axeln ALLTID syns!) */
+    left: 10px !important;
+    right: 10px !important;
+    width: auto !important;
+    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
 }
 
-/* 4. Scroll-arean fyller containern */
+/* 6. Fäst scroll-arean inuti containern */
 body.chart-fullscreen-active #chart-scroll-area {
     position: absolute !important;
     top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    min-width: 0 !important; /* Ta bort 600px-spärren */
+    min-width: 0 !important;
 }
 
-/* 5. Tvinga canvasen att lyda */
+/* 7. Säg åt canvasen att fylla 100% av utrymmet och fäst den i toppen */
 body.chart-fullscreen-active canvas#lab-chart {
+    position: absolute !important;
+    top: 0 !important; left: 0 !important;
     width: 100% !important;
     height: 100% !important;
 }
