@@ -3837,6 +3837,13 @@ body.light-mode .modal-body [style*="F2994A"] {
 /* =========================================
    FULLSCREEN LANDSCAPE CHART MODE
    ========================================= */
+
+/* Lås hela webbsidan så den absolut inte kan scrollas i bakgrunden */
+body.chart-fullscreen-active {
+    overflow: hidden !important;
+    touch-action: none !important; /* Detta dödar allt "gummibands-scrollande" med fingret på mobiler */
+}
+
 body.chart-fullscreen-active .main-nav,
 body.chart-fullscreen-active .library-header,
 body.chart-fullscreen-active #profile-inputs,
@@ -3856,7 +3863,7 @@ body.chart-fullscreen-active .chart-section {
     padding: 15px !important;
     border-radius: 0 !important;
     width: 100vw !important;
-    height: 100vh !important;
+    height: 100dvh !important;
     box-sizing: border-box !important; /* Superviktig: Hindrar paddingen från att skapa scroll */
     display: flex;
     flex-direction: column;
