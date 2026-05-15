@@ -3881,14 +3881,14 @@ body.chart-fullscreen-active .chart-section > div:first-child {
 /* 5. STENHÅRD MATEMATIK FÖR HÖJDEN */
 body.chart-fullscreen-active .chart-container {
     position: absolute !important;
-    top: 45px !important; /* Ligger precis tryggt under knappen */
+    top: 45px !important; 
     left: 10px !important;
     width: calc(100vw - 20px) !important;
     
-    /* MAGIN 2: Vi maximerar höjden! 
-       Vi drar bara av 45px för toppen och 20px för botten = totalt 65px avdrag. */
-    height: calc(100vh - 65px) !important;
-    height: calc(100dvh - 65px) !important; 
+    /* Vi backar bandet lite! 45px topp + 50px botten = 95px avdrag.
+       Detta ger X-axelns siffror den plats de behöver. */
+    height: calc(100vh - 95px) !important;
+    height: calc(100dvh - 95px) !important; 
     
     overflow: hidden !important;
     margin: 0 !important;
