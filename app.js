@@ -6650,6 +6650,10 @@ function toggleLandscapeChart() {
         if (typeof labChart !== 'undefined') {
             // MAGIN: Tvinga grafen att släppa proportionerna i Fullscreen!
             labChart.options.maintainAspectRatio = !isChartFullscreen; 
+            
+            // DEN HÄR RADEN SAKNADES! Tvingar grafen att måla upp sig själv direkt:
+            labChart.update('none'); 
+            
             labChart.resize();
         }
     }, 300);
