@@ -3870,8 +3870,23 @@ body.chart-fullscreen-active .chart-container {
     flex-grow: 1;
     height: 100% !important;
     width: 100% !important;
+    overflow: hidden !important; /* Förbjuder skärmen från att scrolla upp/ner */
+    display: flex;
+    align-items: center; /* Centrerar grafen perfekt vertikalt */
+    justify-content: center;
 }
 
+/* Den hopslagna och städade regeln för scroll-arean! */
 body.chart-fullscreen-active #chart-scroll-area {
-    min-width: 100% !important; /* Släpp på 600px-låset så den fyller hela landskapsskärmen */
+    min-width: 100% !important; /* Fyller skärmen på bredden */
+    height: 100% !important;    /* Fyller skärmen på höjden */
+    max-height: 100% !important;
+    min-height: 100% !important;
+}
+
+/* Ser till att Chart.js-grafen hänger med i samma storlek */
+body.chart-fullscreen-active canvas#lab-chart {
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 100% !important;
 }
