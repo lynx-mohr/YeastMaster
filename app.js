@@ -4061,7 +4061,7 @@ window.abortLibraryTour = function(e) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation(); // Skottsäker vägg: Hindrar klicket från att gå vidare
-    }
+    },
     
     // Tvinga touren till slutet och kör din vanliga, perfekta städlogik!
     currentLibStep = 999;
