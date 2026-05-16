@@ -342,7 +342,7 @@ soul: {
     demoPrompt: "Möchten Sie bara sehen, wie es funktioniert?",
     demoBtn: "DEMO-MODUS ERKUNDEN",
     guestMode: "Im Gastmodus ausführen"
-}
+},
 
         settings: {
             title: "EINSTELLUNGEN",
