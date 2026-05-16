@@ -2476,7 +2476,7 @@ const yeastDescriptions = {
             <li><strong style="color: #fff;">Altbier Crisp:</strong> Runs at 15 °C. Supresses fruitiness and ensures a smooth, lager-like finish.</li>
             <li><strong style="color: #fff;">Pseudo Lager:</strong> Dropped all the way down to 13 °C. Acts like a lager yeast, but finishes significantly faster. Needs a good cold crash to clear up!</li>
         </ul>
-    `
+    `,
     // ==========================================
     // --- NEW DRY YEASTS (Torrjäst) ---
     // ==========================================
