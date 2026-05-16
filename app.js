@@ -6114,7 +6114,6 @@ function checkActionAlerts(currentDay, strainName, profileName) {
 }
 
 // ==========================================
-// ==========================================
 // --- YEAST LIBRARY TOUR (PREMIUM VERSION) ---
 // ==========================================
 let currentLibStep = -1;
@@ -6150,7 +6149,7 @@ window.startLibraryTour = function() {
     disableAllScrolling(); // FRYS SKÄRMEN!
 
     // Hämta rätt översättning direkt baserat på valt språk
-    const t = translations[window.currentLang]?.libTour || translations['en']?.libTour || {};
+    const t = translations[window.currentLang]?.libTour || translations['en'].libTour;
 
     // 1. Stäng inforutan
     const infoBox = document.getElementById('library-info-box');
@@ -6188,13 +6187,13 @@ window.startLibraryTour = function() {
         // Steg 1: Intro
         {
             selector: '.yeast-card:first-child',
-            text: t.step1 || "Double-click on a card to read about the strain. Single-click to select it for your device!",
+            text: t.step1,
             action: () => { window.scrollTo({ top: 0, behavior: 'smooth' }); }
         },
         // Steg 2: Hardware Profiles
         {
             selector: '#yeast-info-modal .hw-profile-btn',
-            text: t.step2 || "Here are the hardware profiles. These control your fridge temperatures automatically.",
+            text: t.step2,
             alignLeft: true,
             action: () => {
                 const yeast = yeastStrains.find(y => y.id === 'us-05') || yeastStrains.find(y => !y.isCustom);
@@ -6210,14 +6209,14 @@ window.startLibraryTour = function() {
         // Steg 3: Byt text på samma knapp
         {
             selector: '#yeast-info-modal .hw-profile-btn',
-            text: t.step3 || "Click to expand the profile to see the temperature steps!",
+            text: t.step3,
             alignLeft: true,
             action: () => {}
         },
         // Steg 4: Peka på Edit-knappen
         {
             selector: '#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]',
-            text: t.step4 || "Want to tweak a profile? Click 'Edit in Profiler' to add Dry Hop or Racking alarms!",
+            text: t.step4,
             action: () => {
                 const firstProfileBtn = document.querySelector('#yeast-info-modal .hw-profile-btn');
                 if (firstProfileBtn && !firstProfileBtn.classList.contains('active')) {
@@ -6232,7 +6231,7 @@ window.startLibraryTour = function() {
         // Steg 5: Grafen
         {
             selector: '#lab-chart',
-            text: t.step5 || "Welcome to The Profiler! Here you can visually drag the points to tweak the fermentation curve.",
+            text: t.step5,
             action: () => {
                 if (typeof closeYeastModal === 'function') closeYeastModal();
                 document.body.style.overflow = 'hidden'; 
@@ -6261,7 +6260,7 @@ window.startLibraryTour = function() {
         // Steg 6: Larmen
         {
             selector: '#lab-chart', 
-            text: t.step6 || "Set your alarms for Dry hops and racking! They will show up on your timeline and alert you.",
+            text: t.step6,
             action: () => {
                 if (typeof rackDumpData !== 'undefined') rackDumpData.day = 9.0;
                 if (typeof dryHopData !== 'undefined' && !dryHopData.enabled) toggleDryHopLine();
@@ -6271,7 +6270,7 @@ window.startLibraryTour = function() {
         // Steg 7: Fejk-kort i biblioteket
         {
             selector: '#tour-fake-custom-card',
-            text: t.step7 || "When saved, your modded profile lands at the bottom of the library with a ★ star, ready to be synced!",
+            text: t.step7,
             action: () => {
                 if (typeof dryHopData !== 'undefined' && dryHopData.enabled) toggleDryHopLine();
                 if (typeof rackDumpData !== 'undefined' && rackDumpData.enabled) toggleRackDumpLine();
@@ -6290,14 +6289,14 @@ window.startLibraryTour = function() {
                 
                 setTimeout(() => {
                     const fakeCardEl = document.getElementById('tour-fake-custom-card');
-                    if (fakeCardEl) fakeCardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    if (fakeCardEl) fakeCardCardEl = fakeCardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 200);
             }
         },
         // Steg 8: House Bank-knappen
         {
             selector: 'button[onclick*="openAddStrainModal"]',
-            text: t.step8 || "In the library you have the option to add your own unique captures and wild yeast.",
+            text: t.step8,
             action: () => {
                 const targetBtn = document.querySelector('button[onclick*="openAddStrainModal"]');
                 if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -6306,7 +6305,7 @@ window.startLibraryTour = function() {
         // Steg 9: House Strain modalen
         {
             selector: '#modal-yeast-name', 
-            text: t.step9 || "You can track capture dates, origins, and keep personal lab notes for every wild yeast you find!",
+            text: t.step9,
             action: () => {
                 const fakeHouseStrain = {
                     id: "tour-fake-house-strain",
@@ -6324,7 +6323,7 @@ window.startLibraryTour = function() {
         // Steg 10: Fejk-kort husjäst
         {
             selector: '#tour-fake-house-card',
-            text: t.step10 || "Your wild captures live safely at the bottom of your library, right next to your modded profiles!",
+            text: t.step10,
             action: () => {
                 if (typeof closeYeastModal === 'function') closeYeastModal();
                 
@@ -6348,12 +6347,18 @@ window.startLibraryTour = function() {
         // Steg 11: Avslut
         {
             selector: '.library-header h2',
-            text: t.step11 || "Tour ended! You are now ready to master the Yeast Library. 🍻 Click anywhere to finish.",
+            text: t.step11,
             action: () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
     ];
+
+    currentLibStep = -1;
+    overlay.onclick = window.nextLibraryTourStep;
+    window.nextLibraryTourStep();
+};
+    
 
     currentLibStep = -1;
     overlay.onclick = window.nextLibraryTourStep;
@@ -6418,13 +6423,16 @@ window.nextLibraryTourStep = function(e) {
             // Vi ökar till 600ms så mobilens animationer (modaler etc) hinner landa helt
             setTimeout(() => {
                 tooltip.style.display = 'block';
-        
-                // Bygg texten tajtare och snyggare
+    
+          // Bygg texten tajtare och snyggare
                 let htmlContent = '';
                 
                 // Lägg BARA till krysset om vi INTE är på sista steget
                 if (currentLibStep < libTourSteps.length - 1) {
+                    // 1. Minska krockkudden till 20px (istället för 35/45)
                     htmlContent += '<div style="padding-right: 20px;">' + step.text + '</div>';
+                    
+                    // 2. Skjut in krysset tajtare i hörnet (top: 6px, right: 8px) och sänk font-size ett snäpp
                     htmlContent += '<span onclick="window.confirmAbortTour(event)" style="position: absolute; top: 6px; right: 8px; color: #ff4444; font-size: 1.1rem; font-weight: bold; cursor: pointer; pointer-events: auto; line-height: 1; transition: 0.2s;">&times;</span>';
                 } else {
                     htmlContent += '<div>' + step.text + '</div>';
@@ -6432,6 +6440,9 @@ window.nextLibraryTourStep = function(e) {
                 
                 document.getElementById('demo-tour-text').innerHTML = htmlContent;
                 document.getElementById('demo-tour-text').style.paddingRight = '0';
+                
+                document.getElementById('demo-tour-text').innerHTML = htmlContent;
+                document.getElementById('demo-tour-text').style.paddingRight = '0'; // Rensa bort den gamla spök-regeln!
 
                 // VIKTIGT: Läs av positionen IGEN efter att scrollen är helt färdig!
                 const finalRect = target.getBoundingClientRect();
@@ -6439,7 +6450,7 @@ window.nextLibraryTourStep = function(e) {
                 
                 let leftPos;
                 if (step.alignLeft) {
-                    leftPos = finalRect.left + window.scrollX + 20; 
+                    leftPos = finalRect.left + window.scrollX + 20; // Minskad från 50 till 20 för mobil
                 } else {
                     leftPos = finalRect.left + window.scrollX + (finalRect.width / 2);
                 }
@@ -6465,7 +6476,7 @@ window.nextLibraryTourStep = function(e) {
                 tooltip.style.animation = 'none';
                 void tooltip.offsetWidth;
                 tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-            }, 600);
+            }, 600); // <- Ändrad från 400 till 600
             
         } else if (attempts > 20) {
             clearInterval(findTarget);
@@ -6473,6 +6484,20 @@ window.nextLibraryTourStep = function(e) {
             window.nextLibraryTourStep();
         }
     }, 100);
+    // ==============================================================
+    // --- NYTT: SMART UPPDATERING NÄR APPEN VAKNAR FRÅN BAKGRUNDEN ---
+    // ==============================================================
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+            console.log("Appen vaknade från bakgrunden! Laddar om data direkt...");
+            
+            // Kolla att vi faktiskt har en vald enhet och att funktionen finns
+            if (typeof activeDeviceId !== 'undefined' && activeDeviceId && typeof updateDashboard === 'function') {
+                updateDashboard();
+            }
+        }
+    });
+    // ==============================================================
 };
 
 function createTourMagic() {
@@ -6486,10 +6511,12 @@ function createTourMagic() {
     // HTML som exakt matchar din riktiga layout
     fake.innerHTML = `
         <div style="width: 100%; max-width: 800px;">
+            
             <div style="display: flex; align-items: center; margin-bottom: 25px;">
                 <h3 style="color: #fff; margin: 0; font-size: 1.5rem; font-weight: 800;">The Profiler</h3>
                 <div style="border: 1px solid #8CC63F; color: #8CC63F; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; margin-left: 10px; font-weight: bold;">i</div>
             </div>
+
             <div style="display: flex; gap: 15px; margin-bottom: 25px;">
                 <div style="flex: 1;">
                     <label style="font-size: 0.65rem; color: #888; font-weight: bold; margin-bottom: 8px; display: block; letter-spacing: 0.5px;">PROFILE NAME</label>
@@ -6502,40 +6529,65 @@ function createTourMagic() {
                     </div>
                 </div>
             </div>
+
             <div style="background: #111; border: 1px solid #222; border-radius: 8px; padding: 25px; padding-bottom: 80px; position: relative; margin-bottom: 20px;">
                 <div style="color: #fff; font-weight: 800; font-size: 0.8rem; margin-bottom: 25px; letter-spacing: 1px;">PROFILE BUILDER</div>
+
                 <div style="width: 100%; height: 260px; position: relative;">
                     <svg width="100%" height="100%" viewBox="0 0 600 260" preserveAspectRatio="none">
-                        <defs><linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(140,198,63,0.3)"/><stop offset="100%" stop-color="rgba(140,198,63,0)"/></linearGradient></defs>
+                        <defs>
+                            <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="rgba(140,198,63,0.3)"/>
+                                <stop offset="100%" stop-color="rgba(140,198,63,0)"/>
+                            </linearGradient>
+                        </defs>
                         <path d="M0 160 L180 160 L300 90 L420 90 L600 240" fill="url(#chartGradient)"/>
                         <path d="M0 160 L180 160 L300 90 L420 90 L600 240" fill="none" stroke="#8CC63F" stroke-width="2.5"/>
                         <circle cx="180" cy="160" r="4.5" fill="#8CC63F" stroke="#111" stroke-width="2"/>
                         <circle cx="300" cy="90" r="4.5" fill="#8CC63F" stroke="#111" stroke-width="2"/>
                         <circle cx="420" cy="90" r="4.5" fill="#8CC63F" stroke="#111" stroke-width="2"/>
                     </svg>
+
                     <div id="fake-hop-line" style="position:absolute;top:0;left:62%;width:1px;height:100%;background:#CCFF00;display:none;box-shadow:0 0 8px rgba(204,255,0,0.8);"></div>
                     <div id="fake-rack-line" style="position:absolute;top:0;left:85%;width:1px;height:100%;background:#FF3300;display:none;box-shadow:0 0 8px rgba(255,51,0,0.8);"></div>
                 </div>
+
                 <div style="position: absolute; bottom: -15px; left: 25px; background: #1a1a1a; border: 1px solid #333; border-left: 3px solid #8CC63F; border-radius: 8px; padding: 20px; width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);">
                     <div style="color: #8CC63F; font-weight: 800; font-size: 0.65rem; margin-bottom: 15px; letter-spacing: 1px;">PROFILE SUMMARY</div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 10px; color: #aaa;"><span style="font-weight: 700; color: #eee;">Pitch</span><span style="font-weight: 700; color: #fff;">Day 0 @ 19.0°C</span></div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 10px; color: #aaa;"><span style="font-weight: 700; color: #eee;">Primary</span><span style="font-weight: 700; color: #fff;">Hold until Day 4</span></div>
-                    <div id="fake-hop-text" style="display: none; justify-content: space-between; font-size: 0.75rem; margin-bottom: 10px; color: #CCFF00; font-weight: bold;"><span>Dry Hop</span><span>Reach 22.0°C by Day 5</span></div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 10px; color: #aaa;"><span style="font-weight: 700; color: #eee;">Cleanup</span><span style="font-weight: 700; color: #fff;">Reach 22.0°C by Day 6</span></div>
-                    <div id="fake-rack-text" style="display: none; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0; color: #FF3300; font-weight: bold;"><span>Racking</span><span>Drop to 3.0°C by Day 8</span></div>
+                    
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 10px; color: #aaa;">
+                        <span style="font-weight: 700; color: #eee;">Pitch</span><span style="font-weight: 700; color: #fff;">Day 0 @ 19.0°C</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 10px; color: #aaa;">
+                        <span style="font-weight: 700; color: #eee;">Primary</span><span style="font-weight: 700; color: #fff;">Hold until Day 4</span>
+                    </div>
+                    
+                    <div id="fake-hop-text" style="display: none; justify-content: space-between; font-size: 0.75rem; margin-bottom: 10px; color: #CCFF00; font-weight: bold;">
+                        <span>Dry Hop</span><span>Reach 22.0°C by Day 5</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 10px; color: #aaa;">
+                        <span style="font-weight: 700; color: #eee;">Cleanup</span><span style="font-weight: 700; color: #fff;">Reach 22.0°C by Day 6</span>
+                    </div>
+                    
+                    <div id="fake-rack-text" style="display: none; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0; color: #FF3300; font-weight: bold;">
+                        <span>Racking</span><span>Drop to 3.0°C by Day 8</span>
+                    </div>
                 </div>
             </div>
+
             <div style="display: flex; gap: 15px;">
                 <button id="fake-hop-btn" style="flex: 1; background: #0a0a0a; border: 1px solid #222; color: #ccc; padding: 18px; border-radius: 6px; font-weight: bold; font-size: 0.75rem; letter-spacing: 1px; cursor: default;">+ ADD DRY HOPS</button>
                 <button style="flex: 1; background: #0a0a0a; border: 1px solid #222; color: #ccc; padding: 18px; border-radius: 6px; font-weight: bold; font-size: 0.75rem; letter-spacing: 1px; cursor: default;">+ RACK / DUMP</button>
             </div>
+
         </div>
     `;
     document.body.appendChild(fake);
 }
 
 function updateHeartbeatDisplay(lastSeenTimestamp) {
-    const statusSpan = document.getElementById('setting-device-status'); 
+    const statusSpan = document.getElementById('setting-device-status'); // Se till att du har detta ID i din HTML
     if (!statusSpan || !lastSeenTimestamp) return;
 
     const lastSeen = new Date(lastSeenTimestamp);
@@ -6761,7 +6813,7 @@ function clearDeviceSettingsUI() {
 // Lyssna efter språkbyten och tvinga dashboarden att uppdateras
 window.addEventListener('languageChanged', () => {
     console.log("Språk bytt! Tvingar uppdatering av dashboard...");
-    if (typeof updateDashboard === 'function') updateDashboard(); 
+    updateDashboard(); 
 });
 
 // Lyssna på när språket ändras för att översätta Chart.js-grafen i Profiler
@@ -6851,18 +6903,5 @@ document.addEventListener('fullscreenchange', () => {
                 labChart.resize();
             }
         }, 300);
-    }
-});
-
-// ==============================================================
-// --- GLOBAL EVENT LISTENER FÖR ATT UPPDATERA FRÅN BAKGRUNDEN ---
-// ==============================================================
-document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-        console.log("Appen vaknade från bakgrunden! Laddar om data direkt...");
-        
-        if (typeof activeDeviceId !== 'undefined' && activeDeviceId && typeof updateDashboard === 'function') {
-            updateDashboard();
-        }
     }
 });
