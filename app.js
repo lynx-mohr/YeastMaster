@@ -68,7 +68,26 @@ const yeastStrains = [
     { id: "wlp570", name: "WLP570 Belgian Golden", origin: "Belgium", temp: "20-25°C", tags: ["Ale", "Belgian", "Pear", "Liquid"], desc: "Duvel-stammen. Jäser torrt med toner av päron och vitt vin.", styles: "Belgian Strong Gold" },
     { id: "wyeast-2112", name: "Wyeast 2112 California", origin: "USA", temp: "14-20°C", tags: ["Lager", "Hybrid", "Steam", "Liquid"], desc: "Anchor Steam-jästen. Lagerkaraktär jäsas i rumstemp.", styles: "California Common" },
     { id: "wlp380", name: "WLP380 Hefeweizen IV", origin: "Germany", temp: "19-22°C", tags: ["Wheat", "Clove", "Spicy", "Liquid"], desc: "Mindre banan, mer kryddnejlika än WLP300.", styles: "Hefeweizen, Weizenbock" },
-    { id: "wyeast-1007", name: "Wyeast 1007 German Ale", origin: "Germany", temp: "13-20°C", tags: ["Ale", "German", "Clean", "Liquid"], desc: "Krispig och ren. Kan jäsas kallt för lagerprofil.", styles: "Altbier, German Ale" }
+    { id: "wyeast-1007", name: "Wyeast 1007 German Ale", origin: "Germany", temp: "13-20°C", tags: ["Ale", "German", "Clean", "Liquid"], desc: "Krispig och ren. Kan jäsas kallt för lagerprofil.", styles: "Altbier, German Ale" },
+    // ==========================================
+    // --- EXPANSION: THE FINAL 12 ---
+    // ==========================================
+    
+    // Nya Torrjäster
+    { id: "s-189", name: "SafLager S-189", origin: "Switzerland", temp: "9-15°C", tags: ["Lager", "Swiss", "Crisp", "Dry"], desc: "Schweizisk precision. Ger en elegant floral och örtig ton till ljusa lagers.", styles: "Pilsner, Bock" },
+    { id: "be-134", name: "SafAle BE-134", origin: "Belgium", temp: "18-28°C", tags: ["Ale", "Saison", "Bone-Dry", "Dry"], desc: "Ett monster för torra Saisons. Äter allt socker och lämnar kryddiga fenoler.", styles: "Saison, Farmhouse" },
+    { id: "koln", name: "LalBrew Köln", origin: "Germany", temp: "12-20°C", tags: ["Ale", "Hybrid", "Kölsch", "Dry"], desc: "Äntligen en äkta Kölsch-stam i torr form. Ren, krispig och kräver lagring.", styles: "Kölsch, Blonde Ale" },
+    { id: "m44", name: "Mangrove Jack's M44", origin: "USA", temp: "15-23°C", tags: ["Ale", "West Coast", "Clean", "Dry"], desc: "Sjunker som en sten och lämnar en extremt ren och torr West Coast-profil.", styles: "West Coast IPA, APA" },
+    { id: "m15", name: "Mangrove Jack's M15", origin: "UK", temp: "18-22°C", tags: ["Ale", "English", "Malty", "Dry"], desc: "Mörkölens mästare. Lämnar en fyllig kropp och komplexa mörka frukter.", styles: "Stout, Porter, Barleywine" },
+
+    // Nya Flytande Jäster
+    { id: "hothead", name: "Omega OYL-057 HotHead", origin: "Norway", temp: "22-37°C", tags: ["Kveik", "Mango", "Honey", "Liquid"], desc: "Kveik som ger len honung och mango istället för apelsin. Älskar värme.", styles: "Pale Ale, Blonde" },
+    { id: "imperial-l13", name: "Imperial L13 Global", origin: "Europe", temp: "10-15°C", tags: ["Lager", "Macro", "Clean", "Liquid"], desc: "Heineken/Carlsberg-stammen. Förlåtande och extremt ren för ljusa lagers.", styles: "International Lager, Pilsner" },
+    { id: "wyeast-3726", name: "Wyeast 3726 Farmhouse", origin: "Belgium", temp: "21-29°C", tags: ["Ale", "Saison", "Rustic", "Liquid"], desc: "Fantastisk Saison-jäst. Rustik krydda som ALDRIG stannar av som Dupont.", styles: "Saison, Farmhouse Ale" },
+    { id: "wlp005", name: "WLP005 British Ale", origin: "UK", temp: "18-22°C", tags: ["Ale", "English", "Fruity", "Liquid"], desc: "Ringwood-stammen. Fruktig och maltig, kräver en bra diacetyl-rast.", styles: "English Pale Ale, Bitter" },
+    { id: "wlp815", name: "WLP815 Belgian Lager", origin: "Belgium", temp: "10-14°C", tags: ["Lager", "Belgian", "Crisp", "Liquid"], desc: "Stella Artois-stammen. Krispig men med en elegant, svag fruktighet.", styles: "Premium Lager, Pilsner" },
+    { id: "wlp023", name: "WLP023 Burton Ale", origin: "UK", temp: "20-23°C", tags: ["Ale", "English", "Apple", "Liquid"], desc: "Från Burton-on-Trent. Känd för äpple-, päron- och honungstoner.", styles: "English IPA, ESB" },
+    { id: "wyeast-1028", name: "Wyeast 1028 London Ale", origin: "UK", temp: "15-22°C", tags: ["Ale", "Minerally", "Woody", "Liquid"], desc: "Torr, rik och jordig/mineralisk. Perfekt balanserad för mörka maltsorter.", styles: "Porter, Stout" }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
