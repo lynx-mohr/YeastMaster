@@ -6619,6 +6619,11 @@ window.addEventListener('languageChanged', () => {
         }
         labChart.update('none'); // Uppdatera grafen ljudlöst utan animation
     }
+
+    // MAGIN: Tvinga även sammanfattningen (Profile Summary) att direkt översätta sig!
+    if (typeof updateSummaryText === 'function') {
+        updateSummaryText();
+    }
 });
 
 
