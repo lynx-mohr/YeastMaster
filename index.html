@@ -894,14 +894,28 @@
 <style>
 /* 1. Gäller ENBART när rutan är i Fullscreen */
 .chart-section.is-fullscreen {
+    position: fixed !important;
+    top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; 
+    z-index: 99999 !important;  
     display: flex !important;
     flex-direction: column !important;
     background: #000 !important;
     width: 100vw !important;
-    height: 100vh !important; /* Fyller hela den fysiska skärmen */
+    height: 100vh !important; 
     margin: 0 !important;
     padding: 15px !important;
     box-sizing: border-box !important;
+    
+    /* SPÄRR 1: Stoppar dig från att råka svajpa till Live-vyn! */
+    touch-action: none !important; 
+    overscroll-behavior: none !important;
+}
+
+/* SPÄRR 2: Göm fripassagerarna som råkade följa med in i rutan! */
+.chart-section.is-fullscreen #profile-summary,
+.chart-section.is-fullscreen .lab-actions,
+.chart-section.is-fullscreen #btn-save-profile {
+    display: none !important;
 }
 
 /* 2. Låt rubriken lägga sig tryggt överst */
@@ -911,10 +925,10 @@
     height: auto !important;
 }
 
-/* 3. Grafen Tvingas fylla resten av skärmen, utan att trycka ut X-axeln */
+/* 3. Grafen Tvingas fylla resten av skärmen (när fripassagerarna är borta) */
 .chart-section.is-fullscreen .chart-container {
-    flex-grow: 1 !important; /* Tar över allt utrymme under rubriken */
-    height: 0 !important;    /* Hemligheten för att Flexbox + Chart.js ska fungera */
+    flex-grow: 1 !important; 
+    height: 0 !important;    
     min-height: 0 !important;
     position: relative !important;
     width: 100% !important;
