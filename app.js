@@ -1315,7 +1315,7 @@ function initLabChart() {
             },
             animation: { duration: 0 }
         },
-        plugins: [{
+      plugins: [{
             id: 'customCanvasDrawing',
             afterDatasetsDraw(chart) {
                 const ctx = chart.ctx;
@@ -1342,16 +1342,34 @@ function initLabChart() {
                     ctx.fillText(text, midX, midY);
                 }
 
-                drawText('PRIM', 0, 1);    
-                drawText('CLEAN', 2, 3);   
-                drawText('COLD CRASH', 3, 4, 15, 5);      
-                drawText('COND', 4, 5);
+                // --- ÖVERSÄTTNINGSLOGIKEN ---
+                let textPrim = 'PRIM';
+                let textClean = 'CLEAN';
+                let textCrash = 'COLD CRASH';
+                let textCond = 'COND';
+
+                if (window.currentLang === 'sv') {
+                    textPrim = 'PRIMÄR';
+                    textClean = 'D-RAST';
+                    textCrash = 'KALLKRASCH';
+                    textCond = 'LAGRING';
+                } else if (window.currentLang === 'de') {
+                    textPrim = 'HAUPTGÄRUNG';
+                    textClean = 'D-RAST';
+                    textCrash = 'COLD CRASH'; // Ofta engelska i tysk bryggning, annars KÜHLUNG
+                    textCond = 'REIFUNG';
+                }
+
+                // Rita ut de översatta orden!
+                drawText(textPrim, 0, 1);    
+                drawText(textClean, 2, 3);   
+                drawText(textCrash, 3, 4, 15, 5);      
+                drawText(textCond, 4, 5);
 
                 ctx.restore();
             }
         }]
     });
-
     // --- DRAG LOGIKEN FORTSÄTTER HÄR NERE ---
     let isDragging = false;
     let dragIndex = -1;
