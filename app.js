@@ -6148,6 +6148,9 @@ window.startLibraryTour = function() {
     window.isLibraryTourActive = true;
     disableAllScrolling(); // FRYS SKÄRMEN!
 
+    // Hämta rätt översättning direkt baserat på valt språk
+    const t = translations[window.currentLang]?.libTour || translations['en'].libTour;
+
     // 1. Stäng inforutan
     const infoBox = document.getElementById('library-info-box');
     if (infoBox) infoBox.style.display = 'none';
@@ -6163,7 +6166,6 @@ window.startLibraryTour = function() {
     const tooltip = document.getElementById('demo-tour-tooltip');
     if (!overlay || !tooltip) return;
 
-    // Garantera att mörkret täcker hela skärmen och ligger LÄNGST FRAM
     overlay.style.display = 'block';
     overlay.style.backgroundColor = 'transparent';
     overlay.style.position = 'fixed';
@@ -6171,27 +6173,27 @@ window.startLibraryTour = function() {
     overlay.style.left = '0';
     overlay.style.width = '100vw';
     overlay.style.height = '100vh';
-overlay.style.zIndex = '2147483640'; // Extremt maxat för att alltid slå modalen!
+    overlay.style.zIndex = '2147483640'; 
     tooltip.style.zIndex = '2147483647'; 
 
-tooltip.style.width = 'max-content';
+    tooltip.style.width = 'max-content';
     tooltip.style.maxWidth = window.innerWidth <= 768 ? '85vw' : '320px'; 
     tooltip.style.whiteSpace = 'normal';
-    tooltip.style.lineHeight = '1.5';     // Lite luftigare radavstånd är skönt för ögat
-    tooltip.style.textAlign = 'left';     // Snygg vänsterjustering!
-    tooltip.style.pointerEvents = 'auto'; // Livsviktig! Gör att vi faktiskt kan klicka på knappen i rutan.
+    tooltip.style.lineHeight = '1.5';     
+    tooltip.style.textAlign = 'left';     
+    tooltip.style.pointerEvents = 'auto'; 
 
-libTourSteps = [
+    libTourSteps = [
         // Steg 1: Intro
         {
             selector: '.yeast-card:first-child',
-            text: 'Double-click on a card to read about the strain. Single-click to select it for your device!',
+            text: t.step1,
             action: () => { window.scrollTo({ top: 0, behavior: 'smooth' }); }
         },
         // Steg 2: Hardware Profiles
         {
             selector: '#yeast-info-modal .hw-profile-btn',
-            text: 'Here are the hardware profiles. These control your fridge temperatures automatically.',
+            text: t.step2,
             alignLeft: true,
             action: () => {
                 const yeast = yeastStrains.find(y => y.id === 'us-05') || yeastStrains.find(y => !y.isCustom);
@@ -6204,17 +6206,17 @@ libTourSteps = [
                 }
             }
         },
-        // Steg 3: Ligg kvar, men byt text
+        // Steg 3: Byt text på samma knapp
         {
             selector: '#yeast-info-modal .hw-profile-btn',
-            text: 'Click to expand the profile to see the temperature steps!',
+            text: t.step3,
             alignLeft: true,
             action: () => {}
         },
-        // Steg 4: Fäll ut och peka på Edit-knappen
+        // Steg 4: Peka på Edit-knappen
         {
             selector: '#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]',
-            text: 'Want to tweak a profile? Click "Edit in Profiler" to add Dry Hop or Racking alarms!',
+            text: t.step4,
             action: () => {
                 const firstProfileBtn = document.querySelector('#yeast-info-modal .hw-profile-btn');
                 if (firstProfileBtn && !firstProfileBtn.classList.contains('active')) {
@@ -6226,18 +6228,16 @@ libTourSteps = [
                 }, 150);
             }
         },
-
-        // --- STEG 5: DEN ÄKTA GRAFEN ---
+        // Steg 5: Grafen
         {
             selector: '#lab-chart',
-            text: 'Welcome to The Profiler! Here you can visually drag the points to tweak the fermentation curve.',
+            text: t.step5,
             action: () => {
                 if (typeof closeYeastModal === 'function') closeYeastModal();
                 document.body.style.overflow = 'hidden'; 
                 if (typeof showView === 'function') showView('lab');
                 window.scrollTo({ top: 0, behavior: 'instant' });
 
-                // Ge fliken tid att synas innan vi ber Chart.js att rita
                 setTimeout(() => {
                     const yeast = yeastStrains.find(y => y.id === 'us-05');
                     if (yeast && typeof loadProfileIntoLab === 'function') {
@@ -6246,46 +6246,36 @@ libTourSteps = [
                             const profiles = yeastDatabase.yeasts.filter(p => p.s === "US-05");
                             if (profiles.length > 0) firstProfileName = profiles[0].p;
                         }
-                        
                         loadProfileIntoLab("US-05", firstProfileName, yeast.name);
 
-                        // DEN KIRURGISKA LÖSNINGEN:
                         if (typeof labChart !== 'undefined' && labChart !== null) {
-                            labChart.resize(); // Läs av den nya fönsterstorleken
-                            labChart.update('none'); // Rita
+                            labChart.resize(); 
+                            labChart.update('none'); 
                         }
                         if (typeof updateSummaryText === 'function') updateSummaryText();
                     }
                 }, 300); 
             }
         },
-
-     // --- STEG 6: TÄND LARMEN ---
+        // Steg 6: Larmen
         {
-            selector: '#lab-chart', // <-- Pekar nu på grafen, så rutan hamnar centrerad precis under!
-            text: 'Set your alarms for Dry hops and racking! They will show up on your timeline and alert you.',
+            selector: '#lab-chart', 
+            text: t.step6,
             action: () => {
-                // Tvinga racking-linjen till dag 9.0 för just denna demo-profil
                 if (typeof rackDumpData !== 'undefined') rackDumpData.day = 9.0;
-                
-                // Tänd dina äkta linjer!
                 if (typeof dryHopData !== 'undefined' && !dryHopData.enabled) toggleDryHopLine();
                 if (typeof rackDumpData !== 'undefined' && !rackDumpData.enabled) toggleRackDumpLine();
             }
         },
-       // --- STEG 7: TILLBAKA TILL BIBLIOTEKET & SKAPA FEJK-KORT ---
+        // Steg 7: Fejk-kort i biblioteket
         {
             selector: '#tour-fake-custom-card',
-            text: 'When saved, your modded profile lands at the bottom of the library with a ★ star, ready to be synced!',
+            text: t.step7,
             action: () => {
-                // 1. Stäng av larmen i labbet
                 if (typeof dryHopData !== 'undefined' && dryHopData.enabled) toggleDryHopLine();
                 if (typeof rackDumpData !== 'undefined' && rackDumpData.enabled) toggleRackDumpLine();
-                
-                // 2. Byt vy tillbaka till biblioteket
                 if (typeof showView === 'function') showView('library');
                 
-                // 3. Skapa fejk-kortet (som använder din riktiga CSS för custom-profiles!)
                 let fakeCard = document.getElementById('tour-fake-custom-card');
                 if (!fakeCard) {
                     fakeCard = document.createElement('div');
@@ -6297,28 +6287,26 @@ libTourSteps = [
                     if (grid) grid.appendChild(fakeCard);
                 }
                 
-                // 4. Scrolla ner till det nya kortet
                 setTimeout(() => {
                     const fakeCardEl = document.getElementById('tour-fake-custom-card');
-                    if (fakeCardEl) fakeCardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    if (fakeCardEl) fakeCardCardEl = fakeCardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 200);
             }
         },
-      // --- STEG 8: HOUSE BANK KNAPPEN ---
+        // Steg 8: House Bank-knappen
         {
             selector: 'button[onclick*="openAddStrainModal"]',
-            text: 'In the library you have the option to add your own unique captures and wild yeast.',
+            text: t.step8,
             action: () => {
                 const targetBtn = document.querySelector('button[onclick*="openAddStrainModal"]');
                 if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         },
-        // --- STEG 9: VISA HOUSE STRAIN MODALEN ---
+        // Steg 9: House Strain modalen
         {
             selector: '#modal-yeast-name', 
-            text: 'You can track capture dates, origins, and keep personal lab notes for every wild yeast you find!',
+            text: t.step9,
             action: () => {
-                // Skapa en temporär fake-husjäst som matchar din bild exakt
                 const fakeHouseStrain = {
                     id: "tour-fake-house-strain",
                     name: "Wild001",
@@ -6329,20 +6317,16 @@ libTourSteps = [
                     desc: "Decent attenuation. Tried to brew with this 2 times.",
                     isHouseStrain: true
                 };
-                
-                // Öppna den med din egen funktion!
                 if (typeof openYeastModal === 'function') openYeastModal(fakeHouseStrain);
             }
         },
-        // --- STEG 10: TILLBAKA TILL BIBLIOTEKET & VISA KORTET ---
+        // Steg 10: Fejk-kort husjäst
         {
             selector: '#tour-fake-house-card',
-            text: 'Your wild captures live safely at the bottom of your library, right next to your modded profiles!',
+            text: t.step10,
             action: () => {
-                // Stäng modalen
                 if (typeof closeYeastModal === 'function') closeYeastModal();
                 
-                // Skapa det visuella fejk-kortet för biblioteket
                 let fakeHouseCard = document.getElementById('tour-fake-house-card');
                 if (!fakeHouseCard) {
                     fakeHouseCard = document.createElement('div');
@@ -6354,22 +6338,26 @@ libTourSteps = [
                     if (grid) grid.appendChild(fakeHouseCard);
                 }
                 
-                // Scrolla mjukt ner till korten i botten
                 setTimeout(() => {
                     const fakeHouseCardEl = document.getElementById('tour-fake-house-card');
                     if (fakeHouseCardEl) fakeHouseCardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 200);
             }
         },
-        // --- STEG 11: AVSLUT ---
+        // Steg 11: Avslut
         {
             selector: '.library-header h2',
-            text: 'Tour ended! You are now ready to master the Yeast Library. 🍻 Click anywhere to finish.',
+            text: t.step11,
             action: () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
     ];
+
+    currentLibStep = -1;
+    overlay.onclick = window.nextLibraryTourStep;
+    window.nextLibraryTourStep();
+};
     
 
     currentLibStep = -1;
