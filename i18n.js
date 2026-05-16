@@ -67,7 +67,17 @@ const translations = {
             schedule_dump: "Rack / Dump scheduled on Day",
             btn_save: "SAVE PROFILE"
         },
-
+        
+soul: {
+    welcome: "Welcome to YeastMaster",
+    subtitle: "Precision in every bubble",
+    loginPrompt: "Log out or log in with Google to manage your devices and sync your yeast library to the cloud.",
+    loginBtn: "LOG IN WITH GOOGLE",
+    demoPrompt: "Just want to see how it works?",
+    demoBtn: "EXPLORE DEMO MODE",
+    guestMode: "Running in guest mode"
+},
+        
         settings: {
             title: "SETTINGS",
             theme: "Theme",
@@ -188,6 +198,16 @@ profiler: {
             btn_save: "SPARA PROFIL"
         },
 
+        soul: {
+    welcome: "Välkommen till YeastMaster",
+    subtitle: "Precision i varje bubbla",
+    loginPrompt: "Logga in med Google för att hantera dina enheter och synka ditt jästbibliotek i molnet.",
+    loginBtn: "LOGGA IN MED GOOGLE",
+    demoPrompt: "Vill du bara se hur appen fungerar?",
+    demoBtn: "UTFORSKA DEMOLÄGE",
+    guestMode: "Kör i gäsläge"
+},
+
         settings: {
             title: "INSTÄLLNINGAR",
             theme: "Tema",
@@ -307,6 +327,16 @@ profiler: {
             schedule_dump: "Umschlauchen geplant für Tag",
             btn_save: "PROFIL SPEICHERN"
         },
+
+        soul: {
+    welcome: "Willkommen bei YeastMaster,
+    subtitle: "Präzision in jener Blase",
+    loginPrompt: "Melden Sie sich an, um Ihre Geräte zu verwalten och Ihre Hefe-Bibliothek in der Cloud zu synchronisieren.",
+    loginBtn: "MIT GOOGLE ANMELDEN",
+    demoPrompt: "Möchten Sie bara sehen, wie es funktioniert?",
+    demoBtn: "DEMO-MODUS ERKUNDEN",
+    guestMode: "Im Gastmodus ausführen"
+}
 
         settings: {
             title: "EINSTELLUNGEN",
