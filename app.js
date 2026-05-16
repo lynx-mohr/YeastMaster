@@ -3040,9 +3040,22 @@ function openYeastModal(yeast) {
             "lutra": "Lutra Kveik", "philly-sour": "Philly Sour", "wlp820": "Oktoberfest",
             "bry-97": "BRY-97", "k-97": "K-97", "windsor": "Windsor", "mexican-lager": "Mexican Lager",
             "hornindal": "Hornindal", "wyeast-3724": "Belg. Saison", "wlp570": "Belg. Golden",
-            "wyeast-2112": "Cali Lager", "wlp380": "Hefeweizen 4", "wyeast-1007": "Ger. Ale 1007"
+            "wyeast-2112": "Cali Lager", "wlp380": "Hefeweizen 4", "wyeast-1007": "Ger. Ale 1007",
+            
+            // --- NYA TILLÄGG: DE 12 NYA ---
+            "s-189": "S-189", 
+            "be-134": "BE-134", 
+            "koln": "Köln", 
+            "m44": "M44", 
+            "m15": "M15",
+            "hothead": "HotHead", 
+            "imperial-l13": "Imperial L13", 
+            "wyeast-3726": "Farmhouse 3726",
+            "wlp005": "British 005", 
+            "wlp815": "Belg. Lager 815", 
+            "wlp023": "Burton 023", 
+            "wyeast-1028": "London 1028"
         };
-
         const targetStrainName = hwStrainNames[yeast.id];
         if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
             const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
