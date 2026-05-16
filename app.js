@@ -6611,27 +6611,26 @@ let isChartFullscreen = false;
 
 function toggleLandscapeChart() {
     const btn = document.getElementById('btn-fullscreen');
+    // MAGIN: Vi plockar ut BARA graf-sektionen, inte hela appen!
+    const chartSection = document.querySelector('#view-lab .chart-section'); 
     
-    if (!isChartFullscreen) {
-        // 1. Tvinga webbläsaren till Fullscreen
-        const elem = document.documentElement;
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen().then(() => {
-                // 2. När vi är i fullscreen, försök låsa skärmen till landskap!
+    if (!document.fullscreenElement) {
+        // 1. Sätt ENBART sektionen i Fullscreen
+        if (chartSection.requestFullscreen) {
+            chartSection.requestFullscreen().then(() => {
                 if (screen.orientation && screen.orientation.lock) {
-                    screen.orientation.lock('landscape').catch(err => console.log("Låsning stöds ej på denna enhet."));
+                    screen.orientation.lock('landscape').catch(e => console.log("Lås stöds ej."));
                 }
-            }).catch(err => console.log("Fullscreen misslyckades."));
+            }).catch(err => console.log(err));
         }
         
-        // 3. Städa bort alla menyer med vår CSS-klass
-        document.body.classList.add('chart-fullscreen-active');
-        btn.innerHTML = '✖ CLOSE';
+        // Lägg till vår flagga
+        chartSection.classList.add('is-fullscreen');
+        if (btn) btn.innerHTML = '✖ CLOSE';
         isChartFullscreen = true;
 
-        
     } else {
-        // 1. Gå ur Fullscreen och släpp landskaps-låset
+        // 2. Gå ur Fullscreen
         if (document.exitFullscreen) {
             document.exitFullscreen();
         }
@@ -6639,30 +6638,27 @@ function toggleLandscapeChart() {
             screen.orientation.unlock();
         }
         
-        // 2. Visa menyerna igen
-        document.body.classList.remove('chart-fullscreen-active');
-        btn.innerHTML = '⤢ FULLSCREEN';
+        chartSection.classList.remove('is-fullscreen');
+        if (btn) btn.innerHTML = '⤢ FULLSCREEN';
         isChartFullscreen = false;
     }
     
-// 4. Säg åt grafen att den har fått nya dimensioner!
+    // 3. Väck Chart.js!
     setTimeout(() => {
         if (typeof labChart !== 'undefined') {
-            // MAGIN: Tvinga grafen att släppa proportionerna i Fullscreen!
             labChart.options.maintainAspectRatio = !isChartFullscreen; 
-            
-            // DEN HÄR RADEN SAKNADES! Tvingar grafen att måla upp sig själv direkt:
             labChart.update('none'); 
-            
             labChart.resize();
         }
     }, 300);
 }
 
-// Säkerhetsnät om användaren stänger fullscreen med telefonens "Tillbaka"-knapp
+// Säkerhetsnätet om man trycker på mobilens inbyggda bakåt-knapp
 document.addEventListener('fullscreenchange', () => {
     if (!document.fullscreenElement && isChartFullscreen) {
-        document.body.classList.remove('chart-fullscreen-active');
+        const chartSection = document.querySelector('#view-lab .chart-section');
+        if (chartSection) chartSection.classList.remove('is-fullscreen');
+        
         const btn = document.getElementById('btn-fullscreen');
         if (btn) btn.innerHTML = '⤢ FULLSCREEN';
         if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
@@ -6671,9 +6667,11 @@ document.addEventListener('fullscreenchange', () => {
         setTimeout(() => {
             if (typeof labChart !== 'undefined') {
                 labChart.options.maintainAspectRatio = true;
-                labChart.update('none'); // Tvingar fram en nyritning här också!
+                labChart.update('none'); 
                 labChart.resize();
             }
         }, 300);
+    }
+});
     }
 });
