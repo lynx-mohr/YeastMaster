@@ -3867,28 +3867,27 @@ body.chart-fullscreen-active .chart-section {
     display: block !important;
 }
 
-/* 4. Placera Profile Builder-rubriken exakt i toppen */
-body.chart-fullscreen-active .chart-section > div:first-child {
+/* 4. Placera Profile Builder-rubriken EXAKT i toppen */
+body.chart-fullscreen-active #lab-header {
     position: absolute !important;
-    top: 10px !important;
+    top: 10px !important; /* Ligger endast 10px från skärmens fysiska överkant! */
     left: 15px !important;
     right: 15px !important;
     height: 35px !important;
     margin: 0 !important;
-    z-index: 10 !important; /* MAGIN 1: Tvingar Close-knappen att ligga OVANPÅ grafen! */
+    z-index: 10 !important; /* Tvingar knappen att vara överst */
 }
 
 /* 5. STENHÅRD MATEMATIK FÖR HÖJDEN */
 body.chart-fullscreen-active .chart-container {
     position: absolute !important;
-    top: 45px !important; 
+    top: 50px !important; /* Börjar precis under rubriken, högst upp! */
     left: 10px !important;
     width: calc(100vw - 20px) !important;
     
-    /* Vi backar bandet lite! 45px topp + 50px botten = 95px avdrag.
-       Detta ger X-axelns siffror den plats de behöver. */
-    height: calc(100vh - 105px) !important;
-    height: calc(100dvh - 105px) !important; 
+    /* Maximerad höjd! Vi drar bara bort 50px (toppen) + ca 30-50px (botten för X-axeln) */
+    height: calc(100vh - 90px) !important;
+    height: calc(100dvh - 90px) !important; 
     
     overflow: hidden !important;
     margin: 0 !important;
