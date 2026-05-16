@@ -36,7 +36,6 @@ const translations = {
             cleanup: "Cleanup",
             cold_crash: "Cold Crash",
             condition: "Condition",
-           
         },
 
         lab: {
@@ -68,18 +67,18 @@ const translations = {
             btn_save: "SAVE PROFILE"
         },
         
-soul: {
-    title: "YEAST",
-    subtitle: "The Soul of beer.",
-    desc1_a: "We believe the true soul of beer lives within the yeast. As the old brewing adage goes: ",
-    desc1_quote: '"The brewer makes wort, but the yeast makes beer."',
-    desc1_b: " There is a profound wonder in how these microscopic artisans transform a simple, sweet liquid into the infinitely complex and soulful elixir we call beer.",
-    desc2: "Soulof.beer is a tribute to this biological magic. Whether you are here to explore our library of historic strains or to take full command of your fermentation, this is your laboratory. Monitor your brew in real-time, sync custom profiles to your YeastMaster-unit, and master the art of fermentation.",
-    what_is: "What is YeastMaster?",
-    what_desc: "Discover the hardware and the app features.",
-    prompt: "Ready to manage your library or monitor your unit?",
-    btn_login: "GO TO LOGIN"
-},
+        soul: {
+            title: "YEAST",
+            subtitle: "The Soul of beer.",
+            desc1_a: "We believe the true soul of beer lives within the yeast. As the old brewing adage goes: ",
+            desc1_quote: '"The brewer makes wort, but the yeast makes beer."',
+            desc1_b: " There is a profound wonder in how these microscopic artisans transform a simple, sweet liquid into the infinitely complex and soulful elixir we call beer.",
+            desc2: "Soulof.beer is a tribute to this biological magic. Whether you are here to explore our library of historic strains or to take full command of your fermentation, this is your laboratory. Monitor your brew in real-time, sync custom profiles to your YeastMaster-unit, and master the art of fermentation.",
+            what_is: "What is YeastMaster?",
+            what_desc: "Discover the hardware and the app features.",
+            prompt: "Ready to manage your library or monitor your unit?",
+            btn_login: "GO TO LOGIN"
+        },
         
         settings: {
             title: "SETTINGS",
@@ -149,7 +148,7 @@ soul: {
             days: "d" 
         },
 
-profiler: {
+        profiler: {
             profile_name: "PROFILNAMN",
             profile_builder: "PROFILBYGGARE",
             overview: "ÖVERSIKT",
@@ -169,7 +168,6 @@ profiler: {
             cleanup: "Diacetylrast",
             cold_crash: "Kallkrasch",
             condition: "Konditionering",
-          
         },
 
         lab: {
@@ -201,18 +199,18 @@ profiler: {
             btn_save: "SPARA PROFIL"
         },
 
-soul: {
-    title: "HEFE",
-    subtitle: "Die Seele des Bieres.",
-    desc1_a: "Wir glauben, dass die wahre Seele des Bieres in der Hefe lebt. Wie ett altes Brausprichwort sagt: ",
-    desc1_quote: '"Der Brauer macht die Würze, aber die Hefe macht das Bier."',
-    desc1_b: " Es ist ein tiefes Wunder, wie diese mikroskopisch kleinen Handwerker eine einfache, süße Flüssigkeit in das unendlich komplexe und seelenvolle Elixier verwandeln, das wir Bier nennen.",
-    desc2: "Soulof.beer ist eine Hommage an diese biologische Magie. Ob Sie hier sind, um unsere Bibliothek historischer Stämme zu erkunden oder die volle Kontrolle über Ihre Gärung zu übernehmen – dies ist Ihr Labor. Überwachen Sie Sud in Echtzeit, synchronisieren Sie benutzerdefinierte Profile mit Ihrer YeastMaster-Einheit und meistern Sie die Kunst der Gärung.",
-    what_is: "Was ist YeastMaster?",
-    what_desc: "Entdecken Sie die Hardware und die App-Funktionen.",
-    prompt: "Bereit, Ihre Bibliothek zu verwalten oder Ihr Gerät zu überwachen?",
-    btn_login: "ZUM LOGIN"
-},
+        soul: {
+            title: "JÄST",
+            subtitle: "Ölens själ.",
+            desc1_a: "Vi tror att ölens sanna själ lever inom jästen. Som det gamla bryggordspråket säger: ",
+            desc1_quote: '"Bryggaren gör vörten, men jästen gör ölet."',
+            desc1_b: " Det finns ett djupt under i hur dessa mikroskopiska hantverkare förvandlar en enkel, söt vätska till det oändligt komplexa och själfulla elixiret vi kallar öl.",
+            desc2: "Soulof.beer är en hyllning till denna biologiska magi. Oavsett om du är här för att utforska vårt bibliotek av historiska stammar eller för att ta full kontroll över din jäsning, är detta ditt laboratorium. Övervaka din brygd i realtid, synka anpassade profiler till din YeastMaster-enhet och bemästra jäsningens konst.",
+            what_is: "Vad är YeastMaster?",
+            what_desc: "Upptäck hårdvaran och appens funktioner.",
+            prompt: "Redo att hantera ditt bibliotek eller övervaka din enhet?",
+            btn_login: "GÅ TILL INLOGGNING"
+        },
 
         settings: {
             title: "INSTÄLLNINGAR",
@@ -302,7 +300,6 @@ soul: {
             cleanup: "Diacetylrast",
             cold_crash: "Cold Crash",
             condition: "Konditionierung",
-           
         },
 
         lab: {
@@ -335,14 +332,17 @@ soul: {
         },
 
         soul: {
-    welcome: "Willkommen bei YeastMaster,
-    subtitle: "Präzision in jener Blase",
-    loginPrompt: "Melden Sie sich an, um Ihre Geräte zu verwalten och Ihre Hefe-Bibliothek in der Cloud zu synchronisieren.",
-    loginBtn: "MIT GOOGLE ANMELDEN",
-    demoPrompt: "Möchten Sie bara sehen, wie es funktioniert?",
-    demoBtn: "DEMO-MODUS ERKUNDEN",
-    guestMode: "Im Gastmodus ausführen"
-},
+            title: "HEFE",
+            subtitle: "Die Seele des Bieres.",
+            desc1_a: "Wir glauben, dass die wahre Seele des Bieres in der Hefe lebt. Wie ein altes Brausprichwort sagt: ",
+            desc1_quote: '"Der Brauer macht die Würze, aber die Hefe macht das Bier."',
+            desc1_b: " Es ist ein tiefes Wunder, wie diese mikroskopisch kleinen Handwerker eine einfache, süße Flüssigkeit in das unendlich komplexe und seelenvolle Elixier verwandeln, das wir Bier nennen.",
+            desc2: "Soulof.beer ist eine Hommage an diese biologische Magie. Ob Sie hier sind, um unsere Bibliothek historischer Stämme zu erkunden oder die volle Kontrolle über Ihre Gärung zu übernehmen – dies ist Ihr Labor. Überwachen Sie Ihren Sud in Echtzeit, synchronisieren Sie benutzerdefinierte Profile mit Ihrer YeastMaster-Einheit und meistern Sie die Kunst der Gärung.",
+            what_is: "Was ist YeastMaster?",
+            what_desc: "Entdecken Sie die Hardware und die App-Funktionen.",
+            prompt: "Bereit, Ihre Bibliothek zu verwalten oder Ihr Gerät zu überwachen?",
+            btn_login: "ZUM LOGIN"
+        },
 
         settings: {
             title: "EINSTELLUNGEN",
@@ -429,8 +429,11 @@ function setLanguage(lang) {
     updateTexts();
     
     document.querySelectorAll('.lang-btn').forEach(btn => {
-        const isActive = btn.getAttribute('onclick').includes(`'${lang}'`);
-        btn.classList.toggle('active', isActive);
+        const onclickAttr = btn.getAttribute('onclick');
+        if (onclickAttr) {
+            const isActive = onclickAttr.includes(`'${lang}'`);
+            btn.classList.toggle('active', isActive);
+        }
     });
     
     window.dispatchEvent(new Event('languageChanged'));
