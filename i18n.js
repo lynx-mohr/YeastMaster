@@ -145,7 +145,20 @@ const translations = {
             crash: "❄️ TIME TO COLD CRASH!",
             power: "⚠️ CONNECTION LOST! Check power/WiFi.",
             temp: "🔥 TEMP DEVIATION! >2.0°C difference."
-        }
+        },
+        libTour: {
+    step1: "Double-click on a card to read about the strain. Single-click to select it for your device!",
+    step2: "Here are the hardware profiles. These control your fridge temperatures automatically.",
+    step3: "Click to expand the profile to see the temperature steps!",
+    step4: "Want to tweak a profile? Click 'Edit in Profiler' to add Dry Hop or Racking alarms!",
+    step5: "Welcome to The Profiler! Here you can visually drag the points to tweak the fermentation curve.",
+    step6: "Set your alarms for Dry hops and racking! They will show up on your timeline and alert you.",
+    step7: "When saved, your modded profile lands at the bottom of the library with a ★ star, ready to be synced!",
+    step8: "In the library you have the option to add your own unique captures and wild yeast.",
+    step9: "You can track capture dates, origins, and keep personal lab notes for every wild yeast you find!",
+    step10: "Your wild captures live safely at the bottom of your library, right next to your modded profiles!",
+    step11: "Tour ended! You are now ready to master the Yeast Library. 🍻 Click anywhere to finish."
+},
     },
     sv: {
         nav: { home: "HEM", library: "BIBLIOTEK", lab: "AKADEMI", profiler: "PROFILERARE", live: "LIVE", settings: "INSTÄLLNINGAR" },
@@ -293,7 +306,20 @@ const translations = {
             crash: "❄️ DAGS FÖR COLD CRASH!",
             power: "⚠️ ANSLUTNING BRUTEN! Kolla ström/WiFi.",
             temp: "🔥 TEMP-AVVIKELSE! >2.0°C skillnad."
-        }
+        },
+        libTour: {
+    step1: "Dubbelklicka på ett kort för att läsa om stammen. Enkelklicka för att välja den till din enhet!",
+    step2: "Här är hårdvaruprofilerna. Dessa styr dina kylskåpstemperaturer helt automatiskt.",
+    step3: "Klicka för att fälla ut profilen och se alla temperatursteg!",
+    step4: "Vill du skräddarsy en profil? Klicka på 'Redigera i Profilerare' för att lägga till larm för torrhumling eller omtappning!",
+    step5: "Välkommen till Profileraren! Här kan du dra i punkterna visuellt för att justera jäsningkurvan.",
+    step6: "Ställ in dina larm för torrhumling och omtappning! De dyker upp på din tidslinje och varnar dig när det är dags.",
+    step7: "När du sparar hamnar din modifierade profil längst ner i biblioteket med en ★-stjärna, redo att synkas!",
+    step8: "I biblioteket har du även möjlighet att lägga till dina egna unika vildfångster och husjäster.",
+    step9: "Du kan spåra fångstdatum, ursprung och föra personliga labbackanteckningar för varje vildjäst du hittar!",
+    step10: "Dina vildfångster sparas säkert längst ner i ditt bibliotek, precis bredvid dina modifierade profiler!",
+    step11: "Touren är slut! Du är nu redo att bemästra Jästbiblioteket. 🍻 Klicka var som helst för att avsluta."
+},
     },
     de: {
         nav: { home: "START", library: "BIBLIOTHEK", lab: "AKADEMIE", profiler: "PROFILER", live: "LIVE", settings: "SETUP" },
@@ -441,7 +467,20 @@ const translations = {
             crash: "❄️ ZEIT FÜR COLD CRASH!",
             power: "⚠️ VERBINDUNG UNTERBROCHEN!",
             temp: "🔥 TEMP-ABWEICHUNG! >2.0°C diff."
-        }
+        },
+        libTour: {
+    step1: "Doppelklicken Sie auf eine Karte, um mehr über den Stamm zu erfahren. Einmal klicken, um ihn für Ihr Gerät auszuwählen!",
+    step2: "Hier sind die Hardware-Profile. Diese steuern Ihre Kühlschranktemperaturen vollautomatisch.",
+    step3: "Klicken Sie hier, um das Profil zu erweitern und die Temperaturschritte zu sehen!",
+    step4: "Möchten Sie ein Profil anpassen? Klicken Sie auf 'Im Profiler bearbeiten', um Hopfenstopf- oder Umschlaubalarme hinzuzufügen!",
+    step5: "Willkommen im Profiler! Hier können Sie die Datenpunkte visuell ziehen, um die Gärungskurve anzupassen.",
+    step6: "Stellen Sie Ihre Alarme für Hopfenstopfen und Umschwung ein! Sie werden auf Ihrer Timeline angezeigt und alarmieren Sie rechtzeitig.",
+    step7: "Nach dem Speichern landet Ihr geändertes Profil mit einem ★-Stern unten in der Bibliothek, bereit zum Synchronisieren!",
+    step8: "In der Bibliothek haben Sie die Möglichkeit, Ihre eigenen einzigartigen Wildfänge und Haushefen hinzuzufügen.",
+    step9: "Sie können Fangdaten und Herkunft verfolgen und persönliche Labornotizen für jede gefundene Wildhefe führen!",
+    step10: "Ihre Wildfänge leben sicher ganz unten in Ihrer Bibliothek, direkt neben Ihren modifizierten Profilen!",
+    step11: "Tour beendet! Sie sind jetzt bereit, die Hefebibliothek zu meistern. 🍻 Klicken Sie irgendwo hin, um abzuschließen."
+},
     }
 };
 
