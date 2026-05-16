@@ -6673,5 +6673,3 @@ document.addEventListener('fullscreenchange', () => {
         }, 300);
     }
 });
-    }
-});
