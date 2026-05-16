@@ -901,17 +901,24 @@
     flex-direction: column !important;
     background: #000 !important;
     width: 100vw !important;
-    height: 100vh !important; 
+    
+    /* MAGIN 1: dVH tvingar rutan ända ner i botten på moderna mobiler */
+    height: 100dvh !important; 
+    
     margin: 0 !important;
-    padding: 15px !important;
+    /* MAGIN 2: Vi minskar botten-paddingen från 15px till 5px */
+    padding: 15px 15px 5px 15px !important; 
     box-sizing: border-box !important;
     
-    /* SPÄRR 1: Stoppar dig från att råka svajpa till Live-vyn! */
+    /* MAGIN 3: Ta bort den runda gråa ramen för att fylla hörn till hörn */
+    border-radius: 0 !important;
+    border: none !important;
+    
     touch-action: none !important; 
     overscroll-behavior: none !important;
 }
 
-/* SPÄRR 2: Göm fripassagerarna som råkade följa med in i rutan! */
+/* SPÄRR 2: Göm fripassagerarna */
 .chart-section.is-fullscreen #profile-summary,
 .chart-section.is-fullscreen .lab-actions,
 .chart-section.is-fullscreen #btn-save-profile {
@@ -921,14 +928,15 @@
 /* 2. Låt rubriken lägga sig tryggt överst */
 .chart-section.is-fullscreen #lab-header {
     flex-shrink: 0 !important;
-    margin: 0 0 15px 0 !important; 
+    /* Minskade marginalen under rubriken lite för att ge grafen mer plats */
+    margin: 0 0 10px 0 !important; 
     height: auto !important;
 }
 
-/* 3. Grafen Tvingas fylla resten av skärmen (när fripassagerarna är borta) */
+/* 3. Grafen Tvingas fylla resten av skärmen maximalt */
 .chart-section.is-fullscreen .chart-container {
     flex-grow: 1 !important; 
-    height: 0 !important;    
+    height: 100% !important; /* Tvingar grafen att svälla ut i all ny plats */
     min-height: 0 !important;
     position: relative !important;
     width: 100% !important;
