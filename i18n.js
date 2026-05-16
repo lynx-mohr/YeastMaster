@@ -79,6 +79,22 @@ const translations = {
             prompt: "Ready to manage your library or monitor your unit?",
             btn_login: "GO TO LOGIN"
         },
+
+        library: {
+    title: "Yeast Library",
+    info_1: "Browse the collection of yeast strains.",
+    info_2: "<strong>Double-click</strong> (or long-press) a card to read about them and the Yeastmaster profiles.",
+    info_3: "Select up to 10 favorites and sync them directly to your YeastMaster unit!",
+    btn_tour: "✨ TAKE A QUICK TOUR",
+    selected: "Selected:",
+    search_placeholder: "Search strains (e.g. 'IPA', 'WLP')...",
+    btn_add_strain: "+ ADD HOUSE STRAIN / WILD CAPTURE",
+    target_device: "TARGET DEVICE",
+    loading_devices: "Loading devices...",
+    btn_sync: "SYNC TO SELECTED DEVICE",
+    btn_edit: "EDIT DETAILS",
+    btn_delete: "DELETE"
+},
         
         settings: {
             title: "SETTINGS",
@@ -212,6 +228,22 @@ const translations = {
             btn_login: "GÅ TILL INLOGGNING"
         },
 
+        library: {
+    title: "Jästbibliotek",
+    info_1: "Bläddra i samlingen av jäststammar.",
+    info_2: "<strong>Dubbelklicka</strong> (eller håll inne) på ett kort för att läsa om stammen och dess YeastMaster-profiler.",
+    info_3: "Välj upp till 10 favoriter och synka dem direkt till din YeastMaster-enhet!",
+    btn_tour: "✨ TA EN SNABB TOUR",
+    selected: "Valda:",
+    search_placeholder: "Sök jäststammar (t.ex. 'IPA', 'WLP')...",
+    btn_add_strain: "+ LÄGG TILL HUSJÄST / VILDFÅNGST",
+    target_device: "MÅLENHET",
+    loading_devices: "Laddar enheter...",
+    btn_sync: "SYNKA TILL VALD ENHET",
+    btn_edit: "REDIGERA DETALJER",
+    btn_delete: "TA BORT"
+},
+
         settings: {
             title: "INSTÄLLNINGAR",
             theme: "Tema",
@@ -343,6 +375,22 @@ const translations = {
             prompt: "Bereit, Ihre Bibliothek zu verwalten oder Ihr Gerät zu überwachen?",
             btn_login: "ZUM LOGIN"
         },
+
+        library: {
+    title: "Hefebibliothek",
+    info_1: "Durchsuchen Sie die Sammlung von Hefestämmen.",
+    info_2: "<strong>Doppelklicken</strong> (oder gedrückt halten) Sie auf eine Karte, um mehr über sie und die YeastMaster-Profile zu erfahren.",
+    info_3: "Wählen Sie bis zu 10 Favoriten aus und synchronisieren Sie diese direkt mit Ihrem YeastMaster!",
+    btn_tour: "✨ EINE KURZE TOUR MACHEN",
+    selected: "Ausgewählt:",
+    search_placeholder: "Hefestämme suchen (z.B. 'IPA', 'WLP')...",
+    btn_add_strain: "+ HAUSHEFE / WILDFANG HINZUFÜGEN",
+    target_device: "ZIELGERÄT",
+    loading_devices: "Geräte werden geladen...",
+    btn_sync: "MIT AUSGEWÄHLTEM GERÄT SYNCHRONISIEREN",
+    btn_edit: "DETAILS BEARBEITEN",
+    btn_delete: "LÖSCHEN"
+},
 
         settings: {
             title: "EINSTELLUNGEN",
