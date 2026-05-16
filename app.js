@@ -6114,6 +6114,7 @@ function checkActionAlerts(currentDay, strainName, profileName) {
 }
 
 // ==========================================
+// ==========================================
 // --- YEAST LIBRARY TOUR (PREMIUM VERSION) ---
 // ==========================================
 let currentLibStep = -1;
@@ -6358,12 +6359,6 @@ window.startLibraryTour = function() {
     overlay.onclick = window.nextLibraryTourStep;
     window.nextLibraryTourStep();
 };
-    
-
-    currentLibStep = -1;
-    overlay.onclick = window.nextLibraryTourStep;
-    window.nextLibraryTourStep();
-};
 
 window.nextLibraryTourStep = function(e) {
     if (e) {
@@ -6423,23 +6418,17 @@ window.nextLibraryTourStep = function(e) {
             // Vi ökar till 600ms så mobilens animationer (modaler etc) hinner landa helt
             setTimeout(() => {
                 tooltip.style.display = 'block';
-    
-          // Bygg texten tajtare och snyggare
+        
+                // Bygg texten tajtare och snyggare
                 let htmlContent = '';
                 
                 // Lägg BARA till krysset om vi INTE är på sista steget
                 if (currentLibStep < libTourSteps.length - 1) {
-                    // 1. Minska krockkudden till 20px (istället för 35/45)
                     htmlContent += '<div style="padding-right: 20px;">' + step.text + '</div>';
-                    
-                    // 2. Skjut in krysset tajtare i hörnet (top: 6px, right: 8px) och sänk font-size ett snäpp
                     htmlContent += '<span onclick="window.confirmAbortTour(event)" style="position: absolute; top: 6px; right: 8px; color: #ff4444; font-size: 1.1rem; font-weight: bold; cursor: pointer; pointer-events: auto; line-height: 1; transition: 0.2s;">&times;</span>';
                 } else {
                     htmlContent += '<div>' + step.text + '</div>';
                 }
-                
-                document.getElementById('demo-tour-text').innerHTML = htmlContent;
-                document.getElementById('demo-tour-text').style.paddingRight = '0';
                 
                 document.getElementById('demo-tour-text').innerHTML = htmlContent;
                 document.getElementById('demo-tour-text').style.paddingRight = '0'; // Rensa bort den gamla spök-regeln!
@@ -6476,7 +6465,7 @@ window.nextLibraryTourStep = function(e) {
                 tooltip.style.animation = 'none';
                 void tooltip.offsetWidth;
                 tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-            }, 600); // <- Ändrad från 400 till 600
+            }, 600);
             
         } else if (attempts > 20) {
             clearInterval(findTarget);
@@ -6484,20 +6473,6 @@ window.nextLibraryTourStep = function(e) {
             window.nextLibraryTourStep();
         }
     }, 100);
-    // ==============================================================
-    // --- NYTT: SMART UPPDATERING NÄR APPEN VAKNAR FRÅN BAKGRUNDEN ---
-    // ==============================================================
-    document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "visible") {
-            console.log("Appen vaknade från bakgrunden! Laddar om data direkt...");
-            
-            // Kolla att vi faktiskt har en vald enhet och att funktionen finns
-            if (typeof activeDeviceId !== 'undefined' && activeDeviceId && typeof updateDashboard === 'function') {
-                updateDashboard();
-            }
-        }
-    });
-    // ==============================================================
 };
 
 function createTourMagic() {
@@ -6587,7 +6562,7 @@ function createTourMagic() {
 }
 
 function updateHeartbeatDisplay(lastSeenTimestamp) {
-    const statusSpan = document.getElementById('setting-device-status'); // Se till att du har detta ID i din HTML
+    const statusSpan = document.getElementById('setting-device-status'); 
     if (!statusSpan || !lastSeenTimestamp) return;
 
     const lastSeen = new Date(lastSeenTimestamp);
@@ -6727,7 +6702,7 @@ async function unsubscribeFromPushNotifications() {
 // ==========================================
 function dismissBannerAlert() {
     alertDismissedByUser = true; 
-    localStorage.removeItem('ym_active_alert'); // <-- NYTT: Rensa webbläsarens minne
+    localStorage.removeItem('ym_active_alert'); 
     
     const banner = document.getElementById('top-banner-alert');
     if (banner) {
@@ -6835,7 +6810,6 @@ window.addEventListener('languageChanged', () => {
     }
 });
 
-
 // ==========================================
 // --- FULLSCREEN LANDSCAPE CHART ---
 // ==========================================
@@ -6903,5 +6877,18 @@ document.addEventListener('fullscreenchange', () => {
                 labChart.resize();
             }
         }, 300);
+    }
+});
+
+// ==============================================================
+// --- GLOBAL EVENT LISTENER FÖR ATT UPPDATERA FRÅN BAKGRUNDEN ---
+// ==============================================================
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+        console.log("Appen vaknade från bakgrunden! Laddar om data direkt...");
+        
+        if (typeof activeDeviceId !== 'undefined' && activeDeviceId && typeof updateDashboard === 'function') {
+            updateDashboard();
+        }
     }
 });
