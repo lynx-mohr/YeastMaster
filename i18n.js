@@ -628,7 +628,9 @@ function updateTexts() {
         const keys = keyString.split('.');
         let text = translations[window.currentLang];
         keys.forEach(k => { if(text) text = text[k]; });
-        if (text) element.innerText = text;
+        
+        // MAGIN: Ändrat från innerText till innerHTML här nere! 👇
+        if (text) element.innerHTML = text; 
     });
 
     document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
