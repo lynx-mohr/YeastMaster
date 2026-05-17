@@ -95,6 +95,50 @@ const translations = {
     btn_edit: "EDIT DETAILS",
     btn_delete: "DELETE"
 },
+
+        about: {
+            back: "← BACK",
+            title: "YEASTMASTER",
+            desc: "Take absolute command of your fermentation. YeastMaster is a dedicated hardware unit and cloud ecosystem designed for the modern homebrewer, bridging the gap between the biological art of brewing and precise data control.",
+            hw_title: "📟 The Hardware Unit",
+            hw_desc: "A dedicated physical controller with a crisp OLED display. Click to explore how it controls your fridge and heating element.",
+            cloud_title: "☁️ The Cloud App",
+            free: "FREE",
+            cloud_desc: "Monitor your fermentation from anywhere in the world. Build custom temperature profiles in the Profiler, manage your dry hop schedules, and sync everything effortlessly.",
+            lib_title: "🔬 The Yeast Library",
+            lib_desc: "Stop guessing. Discover our ever-growing guide to the world's most popular yeast strains and learn how to coax out the perfect flavors for your beer."
+        },
+        about_lib: {
+            title: "THE YEAST LIBRARY",
+            desc: "A decoder ring for the world of brewing microbiology. We don't sell yeast — we help you master it.",
+            card1_title: "🕵️‍♂️ Cracking the Code",
+            card1_p1: "If you're new to brewing, names like <strong>WLP001</strong> or <strong>Wyeast 1056</strong> might look like secret passwords. Here is the translation:",
+            card1_p2: "<strong>WLP</strong> stands for White Labs, and <strong>Wyeast</strong> is another legendary laboratory. Both produce top-tier <em>liquid</em> yeast. Names like <strong>SafAle</strong>, <strong>Fermentis</strong>, and <strong>Lallemand</strong> are famous producers of <em>dry</em> yeast. We have handpicked the absolute best and most interesting commercial strains from all of them and gathered their data in one place.",
+            card2_title: "🌡️ Why Temperature is Everything",
+            card2_p1: "Any yeast can ferment sugar into alcohol. But <em>how</em> the beer tastes depends entirely on temperature. A Belgian yeast fermented at 18°C might taste like clean pear, but if you let it rise to 25°C it explodes with spicy black pepper and bubblegum.",
+            card2_p2: "Our library provides detailed guides on how to treat each specific strain to coax out the perfect flavors (esters and phenols), including when to raise the heat for a 'Diacetyl Rest' to clean up buttery off-flavors."
+        },
+        about_cloud: {
+            title: "THE CLOUD APP",
+            desc: "Your digital command center. YeastMaster isn't just a smart thermometer; it's a complete ecosystem for managing your fermentation from anywhere in the world.",
+            card1_title: "📡 Global Monitoring",
+            card1_p1: "Whether you're at work, on the couch, or on vacation, the Live Dashboard keeps you connected to your brew. Watch the temperature curve draw itself in real-time, check the ambient air in your fridge, and get ultimate peace of mind knowing exactly what phase your yeast is currently working through.",
+            card2_title: "📈 The Profiler",
+            card2_p1: "Professional brewers rarely keep their tanks at one static temperature. Fermentation is a journey.",
+            card2_p2: "In <strong>The Profiler</strong>, you can visually drag and drop data points to build custom temperature curves. Want to pitch the yeast cool, let the temperature rise naturally during active fermentation, and automatically trigger a cold crash on day 10? Just draw the curve, save it, and sync it to your fridge.",
+            card3_title: "🎓 The Lab & Academy",
+            card3_p1: "The cloud app isn't just for monitoring. Jump over to <strong>The Lab</strong> to access professional pitch calculators, or explore the <strong>Academy</strong> for interactive, step-by-step lessons that will take you from a complete beginner to a confident yeast wrangler in no time."
+        },
+        about_hw: {
+            title: "THE HARDWARE",
+            desc: "YeastMaster is built around a custom ESP32 brain, designed to sit seamlessly on your fermentation chamber. It operates 100% locally, meaning your beer is safe even if the WiFi drops.",
+            card1_title: "📺 Retro OLED Interface",
+            card1_p1: "A high-contrast OLED screen paired with a tactile rotary encoder gives you a classic, laboratory-grade interface. Adjust offsets, change yeast profiles, or trigger a cold crash right at the fridge.",
+            card2_title: "🌡️ Dual Temp Probes",
+            card2_p1: "Precision requires data. YeastMaster uses two detachable, waterproof sensors. One measures the ambient air in the fridge, while the other sits directly in the beer (or taped to the fermenter), allowing the PID logic to prevent massive temperature swings.",
+            card3_title: "⚡ Wireless Relays",
+            card3_p1: "No dangerous high-voltage wiring. YeastMaster sends 433MHz radio signals directly to wireless smart plugs. One for your fridge (cooling), and one for a heat mat (heating). Total control, zero electrical hazards."
+        },
         
         settings: {
             title: "SETTINGS",
@@ -256,6 +300,49 @@ const translations = {
     btn_edit: "REDIGERA DETALJER",
     btn_delete: "TA BORT"
 },
+about: {
+            back: "← TILLBAKA",
+            title: "YEASTMASTER",
+            desc: "Ta absolut kontroll över din jäsning. YeastMaster är en dedikerad hårdvaruenhet och ett molnekosystem designat för den moderna hembryggaren, som överbryggar klyftan mellan bryggningens biologiska konst och exakt datakontroll.",
+            hw_title: "📟 Hårdvaran",
+            hw_desc: "En dedikerad fysisk kontroller med en skarp OLED-skärm. Klicka för att se hur den styr din kyl och värmekälla.",
+            cloud_title: "☁️ Molnappen",
+            free: "GRATIS",
+            cloud_desc: "Övervaka din jäsning var du än är i världen. Bygg anpassade temperaturprofiler i Profileraren, hantera torrhumling och synka allt smidigt.",
+            lib_title: "🔬 Jästbiblioteket",
+            lib_desc: "Sluta gissa. Upptäck vår växande guide till världens mest populära jäststammar och lär dig hur du lockar fram de perfekta smakerna till ditt öl."
+        },
+        about_lib: {
+            title: "JÄSTBIBLIOTEKET",
+            desc: "En avkodningsring för bryggningens mikrobiologi. Vi säljer inte jäst — vi hjälper dig att bemästra den.",
+            card1_title: "🕵️‍♂️ Knäck koden",
+            card1_p1: "Om du är ny inom bryggning kan namn som <strong>WLP001</strong> eller <strong>Wyeast 1056</strong> se ut som hemliga lösenord. Här är översättningen:",
+            card1_p2: "<strong>WLP</strong> står för White Labs, och <strong>Wyeast</strong> är ett annat legendariskt laboratorium. Båda producerar <em>flytande</em> jäst av högsta klass. Namn som <strong>SafAle</strong>, <strong>Fermentis</strong> och <strong>Lallemand</strong> är kända tillverkare av <em>torrjäst</em>. Vi har handplockat de absolut bästa och mest intressanta kommersiella stammarna från dem alla och samlat deras data på ett och samma ställe.",
+            card2_title: "🌡️ Varför temperatur är allt",
+            card2_p1: "Vilken jäst som helst kan jäsa socker till alkohol. Men <em>hur</em> ölet smakar beror helt på temperaturen. En belgisk jäst som jäser vid 18°C kan smaka som ren päron, men låter du den stiga till 25°C exploderar den av kryddig svartpeppar och tuggummi.",
+            card2_p2: "Vårt bibliotek ger dig detaljerade guider till hur du hanterar varje specifik stam för att locka fram de perfekta smakerna (estrar och fenoler), inklusive när du ska höja värmen för en 'Diacetylrast' för att städa upp smöriga bismaker."
+        },
+        about_cloud: {
+            title: "MOLNAPPEN",
+            desc: "Din digitala kommandocentral. YeastMaster är inte bara en smart termometer; det är ett komplett ekosystem för att hantera din jäsning oavsett var du befinner dig.",
+            card1_title: "📡 Global Övervakning",
+            card1_p1: "Oavsett om du är på jobbet, i soffan eller på semester, håller Live Dashboard dig uppkopplad till din brygd. Se temperaturkurvan ritas upp i realtid, håll koll på luften i kylen och få ultimat sinnesro genom att veta exakt vilken fas din jäst befinner sig i.",
+            card2_title: "📈 Profileraren",
+            card2_p1: "Professionella bryggare håller sällan sina tankar på en och samma statiska temperatur. Jäsning är en resa.",
+            card2_p2: "I <strong>Profileraren</strong> kan du visuellt dra och släppa datapunkter för att bygga anpassade temperaturkurvor. Vill du pitcha jästen svalt, låta temperaturen stiga naturligt under aktiv jäsning, och automatiskt trigga en kallkrasch på dag 10? Rita bara kurvan, spara den och synka den till din kyl.",
+            card3_title: "🎓 Labbet & Akademin",
+            card3_p1: "Molnappen är inte bara till för övervakning. Hoppa över till <strong>Labbet</strong> för att få tillgång till professionella pitch-kalkylatorer, eller utforska <strong>Akademin</strong> för interaktiva steg-för-steg-lektioner som tar dig från total nybörjare till en självsäker jästhanterare på nolltid."
+        },
+        about_hw: {
+            title: "HÅRDVARAN",
+            desc: "YeastMaster är byggd kring en skräddarsydd ESP32-hjärna, designad för att sitta sömlöst på ditt jäskåp. Den fungerar 100 % lokalt, vilket betyder att din öl är säker även om WiFi-nätverket går ner.",
+            card1_title: "📺 Retro OLED-gränssnitt",
+            card1_p1: "En högkontrast OLED-skärm kombinerat med en taktil ratt ger dig ett klassiskt gränssnitt av laboratoriekvalitet. Justera offsets, byt jästprofiler eller trigga en kallkrasch direkt vid kylen.",
+            card2_title: "🌡️ Dubbla Temperatursensorer",
+            card2_p1: "Precision kräver data. YeastMaster använder två avtagbara, vattentäta sensorer. Den ena mäter den omgivande luften i kylen, medan den andra sitter direkt i ölet (eller tejpad på jäskärlet), vilket låter PID-logiken förhindra massiva temperatursvängningar.",
+            card3_title: "⚡ Trådlösa Reläer",
+            card3_p1: "Ingen farlig högspänningsdragning. YeastMaster skickar 433MHz-radiosignaler direkt till trådlösa smarta uttag. Ett för din kyl (kylning) och ett för en värmematta (värmning). Total kontroll, noll elektriska risker."
+        },
 
         settings: {
             title: "INSTÄLLNINGAR",
@@ -417,6 +504,49 @@ const translations = {
     btn_edit: "DETAILS BEARBEITEN",
     btn_delete: "LÖSCHEN"
 },
+about: {
+            back: "← ZURÜCK",
+            title: "YEASTMASTER",
+            desc: "Übernehmen Sie die absolute Kontrolle über Ihre Gärung. YeastMaster ist eine dedizierte Hardwareeinheit und ein Cloud-Ökosystem für den modernen Heimbrauer, das die Lücke zwischen der biologischen Kunst des Brauens und präziser Datenkontrolle schließt.",
+            hw_title: "📟 Die Hardware",
+            hw_desc: "Ein physischer Controller mit einem klaren OLED-Display. Klicken Sie, um zu sehen, wie er Ihren Kühlschrank und Ihre Heizung steuert.",
+            cloud_title: "☁️ Die Cloud-App",
+            free: "KOSTENLOS",
+            cloud_desc: "Überwachen Sie Ihre Gärung von überall auf der Welt. Erstellen Sie Temperaturprofile im Profiler, verwalten Sie Hopfenstopfen und synchronisieren Sie alles mühelos.",
+            lib_title: "🔬 Die Hefebibliothek",
+            lib_desc: "Hören Sie auf zu raten. Entdecken Sie unseren stetig wachsenden Leitfaden zu den beliebtesten Hefestämmen der Welt."
+        },
+        about_lib: {
+            title: "DIE HEFEBIBLIOTHEK",
+            desc: "Ein Entschlüsselungsring für die Braumikrobiologie. Wir verkaufen keine Hefe — wir helfen Ihnen, sie zu meistern.",
+            card1_title: "🕵️‍♂️ Den Code knacken",
+            card1_p1: "Wenn Sie neu im Brauen sind, sehen Namen wie <strong>WLP001</strong> oder <strong>Wyeast 1056</strong> vielleicht wie geheime Passwörter aus. Hier ist die Übersetzung:",
+            card1_p2: "<strong>WLP</strong> steht für White Labs, und <strong>Wyeast</strong> ist ein weiteres legendäres Labor. Beide produzieren erstklassige <em>flüssige</em> Hefe. Namen wie <strong>SafAle</strong>, <strong>Fermentis</strong> und <strong>Lallemand</strong> sind berühmte Hersteller von <em>Trockenhefe</em>. Wir haben die absolut besten kommerziellen Stämme ausgewählt und ihre Daten an einem Ort gesammelt.",
+            card2_title: "🌡️ Warum die Temperatur alles ist",
+            card2_p1: "Jede Hefe kann Zucker zu Alkohol vergären. Aber <em>wie</em> das Bier schmeckt, hängt ganz von der Temperatur ab. Eine bei 18°C vergorene belgische Hefe schmeckt vielleicht nach reiner Birne, aber bei 25°C explodiert sie mit würzigem schwarzem Pfeffer und Kaugummi.",
+            card2_p2: "Unsere Bibliothek bietet detaillierte Anleitungen, wie Sie jeden Stamm behandeln müssen, um die perfekten Aromen herauszukitzeln, einschließlich wann Sie die Wärme für eine 'Diacetylrast' erhöhen sollten."
+        },
+        about_cloud: {
+            title: "DIE CLOUD-APP",
+            desc: "Ihr digitales Kommandozentrum. YeastMaster ist nicht nur ein smartes Thermometer; es ist ein komplettes Ökosystem zur Steuerung Ihrer Gärung.",
+            card1_title: "📡 Globale Überwachung",
+            card1_p1: "Egal ob Sie bei der Arbeit, auf der Couch oder im Urlaub sind, das Live-Dashboard hält Sie mit Ihrem Sud verbunden. Beobachten Sie, wie sich die Temperaturkurve in Echtzeit zeichnet und wissen Sie genau, in welcher Phase sich Ihre Hefe befindet.",
+            card2_title: "📈 Der Profiler",
+            card2_p1: "Professionelle Brauer halten ihre Tanks selten auf einer konstanten Temperatur. Gärung ist eine Reise.",
+            card2_p2: "Im <strong>Profiler</strong> können Sie Datenpunkte visuell per Drag-and-Drop verschieben, um eigene Temperaturkurven zu erstellen. Zeichnen Sie die Kurve, speichern Sie sie und synchronisieren Sie sie mit Ihrem Kühlschrank.",
+            card3_title: "🎓 Das Labor & Akademie",
+            card3_p1: "Springen Sie hinüber ins <strong>Labor</strong>, um auf professionelle Pitch-Rechner zuzugreifen, oder erkunden Sie die <strong>Akademie</strong> für interaktive Lektionen, die Sie im Handumdrehen vom Anfänger zum Hefe-Meister machen."
+        },
+        about_hw: {
+            title: "DIE HARDWARE",
+            desc: "YeastMaster basiert auf einem benutzerdefinierten ESP32-Gehirn, das nahtlos an Ihrem Gärschrank angebracht wird. Es arbeitet zu 100 % lokal – Ihr Bier ist sicher, auch wenn das WLAN ausfällt.",
+            card1_title: "📺 Retro-OLED-Schnittstelle",
+            card1_p1: "Ein kontrastreiches OLED-Display gepaart mit einem taktilen Drehregler bietet Ihnen eine klassische Labor-Schnittstelle. Passen Sie Offsets an, ändern Sie Hefeprofile oder starten Sie einen Cold Crash direkt am Kühlschrank.",
+            card2_title: "🌡️ Zwei Temperatursensoren",
+            card2_p1: "Präzision erfordert Daten. YeastMaster verwendet zwei abnehmbare, wasserdichte Sensoren. Einer misst die Umgebungsluft im Kühlschrank, während der andere direkt im Bier sitzt.",
+            card3_title: "⚡ Drahtlose Relais",
+            card3_p1: "Keine gefährliche Hochspannungsverkabelung. YeastMaster sendet 433-MHz-Funksignale direkt an drahtlose smarte Steckdosen. Totale Kontrolle, null elektrische Gefahren."
+        },
 
         settings: {
             title: "EINSTELLUNGEN",
