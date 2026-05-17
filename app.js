@@ -6737,13 +6737,43 @@ async function unsubscribeFromPushNotifications() {
 // ==========================================
 // --- KVITTERA BANNERN ---
 // ==========================================
-function dismissBannerAlert() {
+// ==========================================
+// --- KVITTERA BANNERN OCH TYSTA SERVER ---
+// ==========================================
+async function dismissBannerAlert() {
     alertDismissedByUser = true; 
-    localStorage.removeItem('ym_active_alert'); // <-- NYTT: Rensa webbläsarens minne
+    
+    // Spara lokalt vilken typ av larm vi precis klickade bort
+    const dismissedAlertType = window.currentActiveAlertString || "UNKNOWN";
+    localStorage.setItem('ym_dismissed_alert', dismissedAlertType); 
+    localStorage.removeItem('ym_active_alert'); 
     
     const banner = document.getElementById('top-banner-alert');
     if (banner) {
         banner.style.display = 'none';
+    }
+
+    // --- NYTT: Skicka kvittens till Render-servern ---
+    if (typeof activeDeviceId !== 'undefined' && activeDeviceId) {
+        try {
+            console.log(`Skickar kvittens för ${dismissedAlertType} till servern...`);
+            const response = await fetch(`${API_BASE}/dismiss-alert`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    device_id: activeDeviceId,
+                    alert_type: dismissedAlertType
+                })
+            });
+
+            if (response.ok) {
+                console.log("Servern mottog kvittensen. Push-notiser för detta larm pausas.");
+            } else {
+                console.warn("Servern svarade, men kunde inte registrera kvittensen.");
+            }
+        } catch (error) {
+            console.error("Kunde inte nå servern för att kvittera larmet:", error);
+        }
     }
 }
 
