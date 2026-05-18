@@ -944,6 +944,11 @@ function openYeastDetail(yeast) {
     const detail = document.getElementById('yeast-detail-view');
     const content = document.getElementById('yeast-detail-content');
     
+    // --- HISSEN UPP TILL HÖGSTA VÅNINGEN ---
+    if (detail) detail.scrollTop = 0;
+    if (content) content.scrollTop = 0;
+    // ----
+    
     content.innerHTML = `
         <h1 style="color:var(--accent-color)">${yeast.name}</h1>
         <p style="opacity:0.6; font-size:1.1rem;">${yeast.origin} | ${yeast.temp}</p>
