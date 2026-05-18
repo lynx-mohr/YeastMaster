@@ -4046,51 +4046,71 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function renderDemoDashboard() {
-    const displayElement = document.querySelector('.device-name-display');
-    if (displayElement) displayElement.innerHTML = "<span style='color:#ff4444;'>DEMO MODE</span>";
+    // 1. Översätt "DEMO MODE" i toppen
+    let demoModeText = "DEMO MODE";
+    if (window.currentLang === 'sv') demoModeText = "DEMOLÄGE";
+    if (window.currentLang === 'de') demoModeText = "DEMO-MODUS";
 
-    document.getElementById('strain-val').innerText = "OLD BAVARIAN";
-    document.getElementById('profile-val').innerText = "Brulosophy";
-    
-    document.getElementById('action-val').innerText = "HEATING";
+    const displayElement = document.querySelector('.device-name-display');
+    if (displayElement) displayElement.innerHTML = `<span style='color:#ff4444;'>${demoModeText}</span>`;
 
-    const displayTemp = currentTempUnit === 'F' ? "68.2°F" : "20.1°C";
-    document.getElementById('temp-beer-val').innerText = displayTemp;
-    
-    const beerTempEl = document.querySelector('.beer-temp');
-    if (beerTempEl) beerTempEl.setAttribute('data-text', displayTemp);
-    
-    document.getElementById('air-temp-val').innerText = currentTempUnit === 'F' ? "73.4°F" : "23.0°C";
-    
-    document.getElementById('status-text').innerText = "RAMPING";
-    document.getElementById('day-val').innerText = "4 d and 2 h";
-    document.getElementById('phase-day-val').innerText = "0 d and 1 h";
-    
-    document.getElementById('target-temp-val').innerText = currentTempUnit === 'F' ? "69.8°F" : "21.0°C";
+    // 2. Namn och profil (Dessa är egennamn och behöver inte översättas)
+    document.getElementById('strain-val').innerText = "OLD BAVARIAN";
+    document.getElementById('profile-val').innerText = "Brulosophy";
+    
+    // 3. Översätt "HEATING"
+    const actionText = "HEATING";
+    const translatedAction = translations[window.currentLang]?.action?.[actionText] || actionText;
+    document.getElementById('action-val').innerText = translatedAction;
 
-    document.getElementById('progress-percent').innerText = "29%";
-    document.getElementById('progress-fill').style.width = "29%";
+    // 4. Sätt Temperaturer
+    const displayTemp = currentTempUnit === 'F' ? "68.2°F" : "20.1°C";
+    document.getElementById('temp-beer-val').innerText = displayTemp;
+    
+    const beerTempEl = document.querySelector('.beer-temp');
+    if (beerTempEl) beerTempEl.setAttribute('data-text', displayTemp);
+    
+    document.getElementById('air-temp-val').innerText = currentTempUnit === 'F' ? "73.4°F" : "23.0°C";
+    
+    // 5. Översätt "RAMPING"
+    const statusText = "RAMPING";
+    const translatedStatus = translations[window.currentLang]?.phase?.[statusText] 
+                          || translations[window.currentLang]?.status?.[statusText] 
+                          || statusText;
+    document.getElementById('status-text').innerText = translatedStatus;
 
-    const arrow = document.getElementById('status-arrow');
-    if(arrow) {
-        arrow.innerText = "▲";
-        arrow.style.color = "#ff4444"; 
-        arrow.style.visibility = "visible";
-        arrow.classList.add('blink-active');
-    }
+    // 6. Tidsformat (Använder din universella formatDaysToHuman)
+    // 4 dagar och 2 timmar = 4 + (2/24)
+    document.getElementById('day-val').innerText = formatDaysToHuman(4 + (2/24));
+    // 0 dagar och 1 timme = 0 + (1/24)
+    document.getElementById('phase-day-val').innerText = formatDaysToHuman(0 + (1/24));
+    
+    document.getElementById('target-temp-val').innerText = currentTempUnit === 'F' ? "69.8°F" : "21.0°C";
 
-    const now = Date.now();
-    const fakeChartData = [
-        { time: new Date(now - 4000000).toISOString(), temp: 19.0 },
-        { time: new Date(now - 3000000).toISOString(), temp: 19.0 },
-        { time: new Date(now - 2000000).toISOString(), temp: 19.0 },
-        { time: new Date(now - 1000000).toISOString(), temp: 19.4 }, 
-        { time: new Date(now).toISOString(), temp: 20.1 }            
-    ];
-    
-    if (typeof updateChart === 'function') {
-        updateChart(fakeChartData); 
-    }
+    document.getElementById('progress-percent').innerText = "29%";
+    document.getElementById('progress-fill').style.width = "29%";
+
+    const arrow = document.getElementById('status-arrow');
+    if(arrow) {
+        arrow.innerText = "▲";
+        arrow.style.color = "#ff4444"; 
+        arrow.style.visibility = "visible";
+        arrow.classList.add('blink-active');
+    }
+
+    // Rita upp fejkgrafen
+    const now = Date.now();
+    const fakeChartData = [
+        { time: new Date(now - 4000000).toISOString(), temp: 19.0 },
+        { time: new Date(now - 3000000).toISOString(), temp: 19.0 },
+        { time: new Date(now - 2000000).toISOString(), temp: 19.0 },
+        { time: new Date(now - 1000000).toISOString(), temp: 19.4 }, 
+        { time: new Date(now).toISOString(), temp: 20.1 }            
+    ];
+    
+    if (typeof updateChart === 'function') {
+        updateChart(fakeChartData); 
+    }
 }
 
 // ==========================================
