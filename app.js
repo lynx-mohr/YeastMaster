@@ -191,8 +191,16 @@ if ('scrollRestoration' in history) {
 let currentActiveView = 'soul'; 
 
 // Lägg till 'pushToHistory = true' i parentesen!
-// Lägg till 'pushToHistory = true' i parentesen!
 function showView(viewName, pushToHistory = true) {
+
+    // --- DÖRRVAKT: Blockera flikbyten om touren är aktiv ---
+    const tourOverlay = document.getElementById('demo-overlay');
+    if (tourOverlay && (tourOverlay.style.display === 'block' || tourOverlay.classList.contains('active'))) {
+        console.log("Navigering blockerad: Guidad tour pågår!");
+        return; // Avbryt funktionen helt och hållet!
+    }
+    // -------------------------------------------------------
+    
     const views = {
         login: document.getElementById('login-container'),
         claim: document.getElementById('claim-container'),
