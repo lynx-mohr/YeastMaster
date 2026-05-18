@@ -948,7 +948,7 @@ function openYeastDetail(yeast) {
     if (detail) detail.scrollTop = 0;
     if (content) content.scrollTop = 0;
     // ----
-    
+
     content.innerHTML = `
         <h1 style="color:var(--accent-color)">${yeast.name}</h1>
         <p style="opacity:0.6; font-size:1.1rem;">${yeast.origin} | ${yeast.temp}</p>
@@ -4123,6 +4123,16 @@ function renderDemoDashboard() {
     if (typeof updateChart === 'function') {
         updateChart(fakeChartData); 
     }
+    // --- MOBILJUSTERING FÖR i-KNAPPEN ---
+const demoBtn = document.getElementById('start-demo-btn');
+if (demoBtn) {
+    const isMobile = window.innerWidth <= 768; // Känner av om det är mobil
+    if (isMobile) {
+        demoBtn.style.left = '55%'; // Skjuter den till höger om DEMO-MODUS på mobilen
+    } else {
+        demoBtn.style.left = '42%'; // Behåller ditt perfekta läge på datorn
+    }
+}
 }
 
 // ==========================================
