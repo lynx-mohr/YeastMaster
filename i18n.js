@@ -3375,7 +3375,7 @@ const translations = {
         
         soul: {
             title: "YEAST",
-            subtitle: "The Soul of beer.",
+            subtitle: "The Soul of beer",
             desc1_a: "We believe the true soul of beer lives within the yeast. As the old brewing adage goes: ",
             desc1_quote: '"The brewer makes wort, but the yeast makes beer."',
             desc1_b: " There is a profound wonder in how these microscopic artisans transform a simple, sweet liquid into the infinitely complex and soulful elixir we call beer.",
@@ -3650,7 +3650,7 @@ calc: {
 
         soul: {
             title: "JÄST",
-            subtitle: "Ölets själ.",
+            subtitle: "Ölets själ",
             desc1_a: "Vi tror att ölets sanna själ lever inom jästen. Som det gamla bryggordspråket säger: ",
             desc1_quote: '"Bryggaren gör vörten, men jästen gör ölet."',
             desc1_b: " Det finns ett djupt under i hur dessa mikroskopiska hantverkare förvandlar en enkel, söt vätska till det oändligt komplexa och själfulla elixiret vi kallar öl.",
@@ -3925,7 +3925,7 @@ about: {
 
         soul: {
             title: "HEFE",
-            subtitle: "Die Seele des Bieres.",
+            subtitle: "Die Seele des Bieres",
             desc1_a: "Wir glauben, dass die wahre Seele des Bieres in der Hefe lebt. Wie ein altes Brausprichwort sagt: ",
             desc1_quote: '"Der Brauer macht die Würze, aber die Hefe macht das Bier."',
             desc1_b: " Es ist ein tiefes Wunder, wie diese mikroskopisch kleinen Handwerker eine einfache, süße Flüssigkeit in das unendlich komplexe und seelenvolle Elixier verwandeln, das wir Bier nennen.",
