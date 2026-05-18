@@ -148,7 +148,6 @@ const hwStrainNames = {
     "la-01": "SafBrew LA-01"
 };
 
-let scrollPosition = 0; // Kommer ihåg scroll-läget
 
 document.addEventListener('DOMContentLoaded', () => {
     // Tvinga INGEN till login! 
@@ -2147,11 +2146,16 @@ function openYeastModal(yeast) {
         if(deleteBtn) deleteBtn.style.display = 'none';
     }
 
-    // 1. Öppna modalen först!
+  
+   // 1. Öppna modalen
     modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden'; 
 
-    // 2. --- HISSEN UPP TILL HÖGSTA VÅNINGEN (Körs 20ms efter att allt ritats ut!) ---
+    // 2. SPÄRRA BAKGRUNDEN (Den moderna, säkra metoden)
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    modal.style.overscrollBehavior = 'none'; // Magisk rad som hindrar iOS från att "blöda" scrollen vidare
+
+    // 3. --- HISSEN UPP TILL HÖGSTA VÅNINGEN ---
     setTimeout(() => {
         modal.scrollTop = 0;
         modalDesc.scrollTop = 0;
@@ -2161,12 +2165,23 @@ function openYeastModal(yeast) {
 }
 
 
-window.closeYeastModal = function() {
+function closeYeastModal() {
     const modal = document.getElementById('yeast-info-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    }
+    if (modal) modal.style.display = "none";
+    
+    // FRIGÖR BAKGRUNDEN IGEN
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+}
+
+// Stäng vid klick utanför rutan (på den suddiga bakgrunden)
+const yeastModalOverlay = document.getElementById('yeast-info-modal');
+if (yeastModalOverlay) {
+    yeastModalOverlay.addEventListener('click', function(event) {
+        if (event.target === this) {
+            closeYeastModal();
+        }
+    });
 }
 
 // Stäng vid klick utanför rutan
