@@ -3095,8 +3095,8 @@ window.abortLibraryTour = function(e) {
     const labView = document.getElementById('view-lab');
     if (labView && labView.style.display === 'block') {
         if (typeof showView === 'function') showView('library');
-    }
-};
+    };
+
 
 // Koppla knappen vid start
 document.addEventListener('DOMContentLoaded', () => {
