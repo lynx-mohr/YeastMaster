@@ -3017,7 +3017,10 @@ calc: {
             rate_high: "1.00 (High Gravity Ale)",
             rate_lager: "1.50 (Standard Lager)",
             btn_calc: "Calculate",
-            results: "Results"
+            results: "Results",
+            cells_in_pack: "Cells in Pack",
+            mfg_date: "Mfg Date",
+            add_package: "+ Add another package",
         },
 
         about: {
@@ -3272,7 +3275,10 @@ calc: {
             rate_high: "1.00 (Stark Ale / High Gravity)",
             rate_lager: "1.50 (Standard Lager)",
             btn_calc: "Beräkna",
-            results: "Resultat"
+            results: "Resultat",
+         cells_in_pack: "Celler per förpackning",
+            mfg_date: "Tillverkningsdatum",
+            add_package: "+ Lägg till förpackning",
         },
 
 about: {
@@ -3527,9 +3533,12 @@ calc: {
             rate_high: "1.00 (Starkes Ale)",
             rate_lager: "1.50 (Standard Lager)",
             btn_calc: "Berechnen",
-            results: "Ergebnisse"
+            results: "Ergebnisse",
+          cells_in_pack: "Zellen pro Packung",
+            mfg_date: "Herstellungsdatum",
+            add_package: "+ Weiteres Paket hinzufügen",
         },
-        
+
 about: {
             back: "← ZURÜCK",
             title: "YEASTMASTER",
