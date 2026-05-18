@@ -944,10 +944,11 @@ function openYeastDetail(yeast) {
     const detail = document.getElementById('yeast-detail-view');
     const content = document.getElementById('yeast-detail-content');
     
-    // --- HISSEN UPP TILL HÖGSTA VÅNINGEN ---
+// --- HISSEN UPP TILL HÖGSTA VÅNINGEN (HAGELBÖSSAN) ---
     if (detail) detail.scrollTop = 0;
     if (content) content.scrollTop = 0;
-    // ----
+    window.scrollTo(0, 0); // Nollställer hela fönstret om det är det som scrollar
+    // -----------------------------------------------------
 
     content.innerHTML = `
         <h1 style="color:var(--accent-color)">${yeast.name}</h1>
