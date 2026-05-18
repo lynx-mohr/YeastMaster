@@ -4136,6 +4136,7 @@ if (demoBtn) {
         demoBtn.style.top = '12px';   // Flyttar ner den en millimeter på datorn så den slipper taket
     }
 }
+}
 
 // ==========================================
 // --- STÄNG INFO-RUTOR VID KLICK UTANFÖR ---
