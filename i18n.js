@@ -3440,7 +3440,7 @@ calc: {
             step_air: "Ambient temp",
             step_strain: "Yeast Strain",
             step_profile: "Fermentation profile",
-            step_action: "ACTION",
+            step_action: "Action",
             step_progress: "Fermentation completion",
             step_phase: "Current phase details",
             step_chart: "Temp change over time"
@@ -3715,7 +3715,7 @@ calc: {
             step_air: "Omgivande temp",
             step_strain: "Jäststam",
             step_profile: "Jäsningsprofil",
-            step_action: "ACTION",
+            step_action: "Action",
             step_progress: "Jäsningens förlopp",
             step_phase: "Detaljer om aktuell fas",
             step_chart: "Temp-förändring över tid"
@@ -3990,7 +3990,7 @@ calc: {
             step_air: "Umgebungstemp",
             step_strain: "Hefestamm",
             step_profile: "Gärprofil",
-            step_action: "ACTION",
+            step_action: "Action",
             step_progress: "Gärfortschritt",
             step_phase: "Details zur aktuellen Phase",
             step_chart: "Temp-Verlauf über die Zeit"
