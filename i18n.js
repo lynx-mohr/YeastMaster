@@ -2996,6 +2996,30 @@ const translations = {
     btn_delete: "DELETE"
 },
 
+calc: {
+            title: "Pitch Calculators",
+            choose: "Choose your yeast source:",
+            selected: "Selected:",
+            btn_change: "Change",
+            btn_dry: "Dry Yeast",
+            btn_liquid: "Liquid Yeast",
+            btn_slurry: "Slurry",
+            btn_bank: "From Yeast Bank",
+            inoculation: "Inoculation Method",
+            btn_loop: "Single Loop",
+            btn_wash: "Whole Slant Wash",
+            batch_size: "Batch Size (Liters)",
+            og: "Original Gravity (SG)",
+            pitch_rate: "Target Pitch Rate",
+            rate_low: "0.35 (Low / Manufacturer rec.)",
+            rate_std: "0.50 (Standard Ale)",
+            rate_pro: "0.75 (Pro Ale Pitch)",
+            rate_high: "1.00 (High Gravity Ale)",
+            rate_lager: "1.50 (Standard Lager)",
+            btn_calc: "Calculate",
+            results: "Results"
+        },
+
         about: {
             back: "← BACK",
             title: "YEASTMASTER",
@@ -3226,6 +3250,31 @@ const translations = {
     btn_edit: "REDIGERA DETALJER",
     btn_delete: "TA BORT"
 },
+
+calc: {
+            title: "Pitchkalkylator",
+            choose: "Välj din jästkälla:",
+            selected: "Vald:",
+            btn_change: "Ändra",
+            btn_dry: "Torrjäst",
+            btn_liquid: "Flytande Jäst",
+            btn_slurry: "Slurry (Jästkaka)",
+            btn_bank: "Från Jästbank",
+            inoculation: "Inokuleringsmetod",
+            btn_loop: "Enkel Ögla (Loop)",
+            btn_wash: "Hel Rörtvätt (Slant Wash)",
+            batch_size: "Batchvolym (Liter)",
+            og: "Original Gravity (SG)",
+            pitch_rate: "Målvärde (Pitch Rate)",
+            rate_low: "0.35 (Låg / Tillverkarens rek.)",
+            rate_std: "0.50 (Standard Ale)",
+            rate_pro: "0.75 (Proffsens Ale-nivå)",
+            rate_high: "1.00 (Stark Ale / High Gravity)",
+            rate_lager: "1.50 (Standard Lager)",
+            btn_calc: "Beräkna",
+            results: "Resultat"
+        },
+
 about: {
             back: "← TILLBAKA",
             title: "YEASTMASTER",
@@ -3456,6 +3505,31 @@ about: {
     btn_edit: "DETAILS BEARBEITEN",
     btn_delete: "LÖSCHEN"
 },
+
+calc: {
+            title: "Pitch-Rechner",
+            choose: "Wählen Sie Ihre Hefequelle:",
+            selected: "Ausgewählt:",
+            btn_change: "Ändern",
+            btn_dry: "Trockenhefe",
+            btn_liquid: "Flüssighefe",
+            btn_slurry: "Hefeaufschlämmung (Slurry)",
+            btn_bank: "Aus der Hefebank",
+            inoculation: "Inokulationsmethode",
+            btn_loop: "Einzelne Öse (Loop)",
+            btn_wash: "Ganze Röhrchenwaschung",
+            batch_size: "Chargengröße (Liter)",
+            og: "Stammwürze (SG)",
+            pitch_rate: "Ziel-Pitch-Rate",
+            rate_low: "0.35 (Niedrig / Herstellerempf.)",
+            rate_std: "0.50 (Standard Ale)",
+            rate_pro: "0.75 (Profi Ale Pitch)",
+            rate_high: "1.00 (Starkes Ale)",
+            rate_lager: "1.50 (Standard Lager)",
+            btn_calc: "Berechnen",
+            results: "Ergebnisse"
+        },
+        
 about: {
             back: "← ZURÜCK",
             title: "YEASTMASTER",
