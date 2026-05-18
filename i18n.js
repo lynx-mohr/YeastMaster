@@ -2900,7 +2900,7 @@ de: {
 
 const translations = {
     en: {
-        nav: { home: "HOME", library: "LIBRARY", lab: "ACADEMY", profiler: "PROFILER", live: "LIVE", settings: "SETTINGS" },
+        nav: { home: "HOME", library: "LIBRARY", lab: "LAB", profiler: "PROFILER", live: "LIVE", settings: "SETTINGS" },
         dashboard: { 
             progress: "PROGRESS", 
             since_start: "Since start", 
@@ -3131,7 +3131,7 @@ const translations = {
 },
     },
     sv: {
-        nav: { home: "HEM", library: "BIBLIOTEK", lab: "AKADEMI", profiler: "PROFILERARE", live: "LIVE", settings: "INSTÄLLNINGAR" },
+        nav: { home: "HEM", library: "BIBLIOTEK", lab: "LABBET", profiler: "PROFILERARE", live: "LIVE", settings: "INSTÄLLNINGAR" },
         dashboard: { 
             progress: "PROGRESS", 
             since_start: "Sedan start", 
@@ -3361,7 +3361,7 @@ about: {
 },
     },
     de: {
-        nav: { home: "START", library: "BIBLIOTHEK", lab: "AKADEMIE", profiler: "PROFILER", live: "LIVE", settings: "SETUP" },
+        nav: { home: "START", library: "BIBLIOTHEK", lab: "LABOR", profiler: "PROFILER", live: "LIVE", settings: "SETUP" },
         dashboard: { 
             progress: "VERLAUF", 
             since_start: "Seit Start", 
