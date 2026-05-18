@@ -200,7 +200,7 @@ function showView(viewName, pushToHistory = true) {
         return; // Avbryt funktionen helt och hållet!
     }
     // -------------------------------------------------------
-    
+
     const views = {
         login: document.getElementById('login-container'),
         claim: document.getElementById('claim-container'),
@@ -2995,43 +2995,29 @@ window.deleteHouseStrain = function(id) {
 };
 
 const libraryTourSteps = [
-    { 
-        selector: '.yeast-card:first-child', 
-        text: 'Click once to select a yeast for your device. Double-click to read about it!' 
-    },
-    { 
-        selector: '.hw-profile-btn', 
-        text: 'Inside a yeast, you’ll find Hardware Profiles. These control your fridge automatically.' 
-    },
-    { 
-        selector: '.btn-secondary', // Knappen "Edit in Profiler"
-        text: 'Found a profile you like but want to tweak? Click "Edit in Profiler" to mod it!' 
-    },
-    { 
-        selector: '#yeast-grid', // Vi siktar på botten av gridet
-        text: 'Modded profiles appear at the bottom with a ★ star. They are unique to your hardware!' 
-    },
-    { 
-        selector: 'button[onclick*="openAddStrainModal"]', 
-        text: 'Have your own wild capture or house strain? Add it here to your permanent House Bank!' 
-    }
+    { selector: '.yeast-card:first-child', i18nKey: 'step1' },
+    { selector: '.hw-profile-btn',         i18nKey: 'step2' },
+    { selector: '.btn-secondary',          i18nKey: 'step3' },
+    { selector: '#yeast-grid',             i18nKey: 'step4' },
+    { selector: 'button[onclick*="openAddStrainModal"]', i18nKey: 'step5' }
 ];
 
 function startLibraryTour() {
-    // Om vi inte har några kort än, visa ett meddelande
+    const lang = window.currentLang || 'en';
+
+    // Om vi inte har några kort än, visa ett översatt meddelande (Nu från libraryTour!)
     if (document.querySelectorAll('.yeast-card').length === 0) {
-        alert("Select or add some yeast first to see the tour!");
+        const alertMsg = translations[lang]?.libraryTour?.noYeast || "Select or add some yeast first to see the tour!";
+        alert(alertMsg);
         return;
     }
 
-    // Vi återanvänder ditt befintliga demo-overlay system
     const overlay = document.getElementById('demo-overlay');
     const tooltip = document.getElementById('demo-tour-tooltip');
     
     if (!overlay || !tooltip) return;
 
     overlay.style.display = 'block';
-    
     let currentStep = 0;
 
     const showStep = () => {
@@ -3049,14 +3035,16 @@ function startLibraryTour() {
             
             setTimeout(() => {
                 tooltip.style.display = 'block';
-                document.getElementById('demo-tour-text').innerText = step.text;
+                
+                // Peka på libraryTour istället för tour:
+                const stepText = translations[lang]?.libraryTour?.[step.i18nKey] || "Text missing";
+                document.getElementById('demo-tour-text').innerText = stepText;
                 
                 const rect = target.getBoundingClientRect();
                 tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
                 tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2)) + 'px';
             }, 400);
         } else {
-            // Om elementet inte syns (t.ex. modalen inte är öppen), hoppa till nästa
             currentStep++;
             showStep();
         }
@@ -3078,8 +3066,11 @@ window.confirmAbortTour = function(e) {
         e.stopImmediatePropagation(); 
     }
     
-    // Webbläsarens inbyggda Ja/Nej-fråga
-    if (confirm("EXIT TOUR?")) {
+    const lang = window.currentLang || 'en';
+    // Peka på libraryTour istället för tour:
+    const confirmMsg = translations[lang]?.libraryTour?.exitConfirm || "EXIT TOUR?";
+    
+    if (confirm(confirmMsg)) {
         window.abortLibraryTour();
     }
 };
@@ -3089,12 +3080,12 @@ window.abortLibraryTour = function(e) {
     if (e) {
         e.preventDefault();
         e.stopPropagation();
-        e.stopImmediatePropagation(); // Skottsäker vägg: Hindrar klicket från att gå vidare
+        e.stopImmediatePropagation();
     }
     
-    // Tvinga touren till slutet och kör din vanliga, perfekta städlogik!
     currentLibStep = 999;
     window.nextLibraryTourStep();
+};
     
     // Extra städning ifall vi är mitt i en animation
     const f1 = document.getElementById('tour-fake-custom-card'); if (f1) f1.remove();

@@ -3446,6 +3446,16 @@ calc: {
             step_chart: "Temp change over time"
         },
 
+        libraryTour: {
+            noYeast: "Select or add some yeast first to see the tour!",
+            exitConfirm: "EXIT TOUR?",
+            step1: "Click once to select a yeast for your device. Double-click to read about it!",
+            step2: "Inside a yeast, you’ll find Hardware Profiles. These control your fridge automatically.",
+            step3: "Found a profile you like but want to tweak? Click 'Edit in Profiler' to mod it!",
+            step4: "Modded profiles appear at the bottom with a ★ star. They are unique to your hardware!",
+            step5: "Have your own wild capture or house strain? Add it here to your permanent House Bank!"
+        },
+
         about: {
             back: "← BACK",
             title: "YEASTMASTER",
@@ -3721,6 +3731,16 @@ calc: {
             step_chart: "Temp-förändring över tid"
         },
 
+        libraryTour: {
+            noYeast: "Välj eller lägg till några jäster först för och se touren!",
+            exitConfirm: "AVSLUTA TOUREN?",
+            step1: "Klicka en gång för att välja en jäst till din enhet. Dubbelklicka för att läsa om den!",
+            step2: "Inne i ett jästkort hittar du hårdvaruprofiler. Dessa styr ditt kylskåp automatiskt.",
+            step3: "Hittat en profil du gillar men vill finjustera? Klicka på 'Edit in Profiler' för att ändra den!",
+            step4: "Ändrade profiler visas längst ner med en ★ stjärna. De är unika för din hårdvara!",
+            step5: "Har du en egen vildfångad jäst eller husblandning? Lägg till den här i din permanenta Husbank!"
+        },
+
 about: {
             back: "← TILLBAKA",
             title: "YEASTMASTER",
@@ -3994,6 +4014,16 @@ calc: {
             step_progress: "Gärfortschritt",
             step_phase: "Details zur aktuellen Phase",
             step_chart: "Temp-Verlauf über die Zeit"
+        },
+
+        libraryTour: {
+            noYeast: "Wähle eller füge zuerst einige Hefen hinzu, um die Tour zu sehen!",
+            exitConfirm: "TOUR BEENDEN?",
+            step1: "Einmal klicken, um eine Hefe für dein Gerät auszuwählen. Doppelklicken, um darüber zu lesen!",
+            step2: "In einer Hefekarte findest du Hardware-Profile. Diese steuern deinen Kühlschrank automatisch.",
+            step3: "Ein Profil gefunden, das dir gefällt, aber du möchtest es anpassen? Klicke auf 'Edit in Profiler', um es zu ändern!",
+            step4: "Geänderte Profile erscheinen unten mit einem ★ Stern. Sie sind einzigartig für deine Hardware!",
+            step5: "Hast du deine eigene Wildhefe oder Hausmischung? Füge sie hier deiner permanenten Hausbank hinzu!"
         },
 
 about: {
