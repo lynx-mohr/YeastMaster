@@ -4123,16 +4123,18 @@ function renderDemoDashboard() {
     if (typeof updateChart === 'function') {
         updateChart(fakeChartData); 
     }
-    // --- MOBILJUSTERING FÖR i-KNAPPEN ---
+// --- MOBILJUSTERING FÖR i-KNAPPEN ---
 const demoBtn = document.getElementById('start-demo-btn');
 if (demoBtn) {
     const isMobile = window.innerWidth <= 768; // Känner av om det är mobil
+    
     if (isMobile) {
-        demoBtn.style.left = '55%'; // Skjuter den till höger om DEMO-MODUS på mobilen
+        demoBtn.style.left = '55%';  // Skjuter till höger på mobilen så den slipper DEMO-MODUS
+        demoBtn.style.top = '13px';   // Flyttar ner den en millimeter extra på mobilen
     } else {
-        demoBtn.style.left = '42%'; // Behåller ditt perfekta läge på datorn
+        demoBtn.style.left = '42%';  // Ditt perfekta läge på datorn
+        demoBtn.style.top = '12px';   // Flyttar ner den en millimeter på datorn så den slipper taket
     }
-}
 }
 
 // ==========================================
