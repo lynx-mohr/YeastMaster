@@ -4130,7 +4130,7 @@ if (demoBtn) {
     
     if (isMobile) {
         demoBtn.style.left = '55%';  // Skjuter till höger på mobilen så den slipper DEMO-MODUS
-        demoBtn.style.top = '13px';   // Flyttar ner den en millimeter extra på mobilen
+        demoBtn.style.top = '14px';   // Flyttar ner den en millimeter extra på mobilen
     } else {
         demoBtn.style.left = '42%';  // Ditt perfekta läge på datorn
         demoBtn.style.top = '12px';   // Flyttar ner den en millimeter på datorn så den slipper taket
