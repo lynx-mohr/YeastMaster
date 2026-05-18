@@ -4211,7 +4211,7 @@ function selectCalc(type, clickedBtn) {
     document.getElementById('selected-yeast-text').innerText = clickedBtn.innerText;
     header.style.display = 'flex';
 
-const subOptions = document.getElementById('bank-sub-options');
+    const subOptions = document.getElementById('bank-sub-options');
     if (subOptions) {
         subOptions.style.display = 'none'; // Gömmer det gamla spöket för alltid!
     }
@@ -4221,6 +4221,10 @@ const subOptions = document.getElementById('bank-sub-options');
 
     const dynamicSection = document.getElementById('dynamic-extra-fields');
     dynamicSection.innerHTML = ''; 
+
+    // MAGIN: Hämta kalkylator-orden för det aktuella språket!
+    const currentLang = window.currentLang || 'en';
+    const t = translations[currentLang].calc;
 
     if (type === 'dry') {
         dynamicSection.innerHTML = `
@@ -4232,27 +4236,27 @@ const subOptions = document.getElementById('bank-sub-options');
     } 
     else if (type === 'liquid') {
         const today = new Date().toISOString().split('T')[0];
-        // HÄR ÄR DEN RENA, PERFEKTA HTML-KODEN FÖR FÖRSTA PAKETET
+        // HÄR ANVÄNDER VI ÖVERSÄTTNINGARNA (${t.cells_in_pack} osv)
         dynamicSection.innerHTML = `
             <div id="liquid-packs-container">
                 <div class="liquid-pack-row yeast-package-box">
                     <div class="ym-input-group">
-                        <label>Cells in pack</label>
+                        <label>${t.cells_in_pack}</label>
                         <input type="number" class="calc-liquid-pack" value="100" step="10">
                     </div>
                     <div class="ym-input-group">
-                        <label>Mfg Date</label>
+                        <label>${t.mfg_date}</label>
                         <input type="date" class="calc-liquid-date" value="${today}">
                     </div>
                     <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
                 </div>
             </div>
             <button onclick="addLiquidPack()" style="background: none; border: 1px dashed #8CC63F; color: #8CC63F; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; margin-bottom: 20px; font-size: 0.9em; font-weight: bold;">
-                + Add another package
+                ${t.add_package}
             </button>
         `;
     }
-else if (type === 'slurry') {
+    else if (type === 'slurry') {
         const today = new Date().toISOString().split('T')[0];
         dynamicSection.innerHTML = `
             <div class="ym-input-group" style="margin-bottom: 15px;">
@@ -4283,17 +4287,17 @@ else if (type === 'slurry') {
     }
 
     else if (type === 'bank') {
-        currentBankMethod = 'loop'; // Nollställ till Loop varje gång vi öppnar
+        currentBankMethod = 'loop'; 
         
         dynamicSection.innerHTML = `
             <div class="ym-input-group" style="margin-bottom: 20px;">
-                <label style="margin-bottom: 10px; display: block; color: var(--accent-color); font-weight: 800; letter-spacing: 1px; font-size: 0.8rem; text-transform: uppercase;">Inoculation Method</label>
+                <label style="margin-bottom: 10px; display: block; color: var(--accent-color); font-weight: 800; letter-spacing: 1px; font-size: 0.8rem; text-transform: uppercase;">${t.inoculation}</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <button onclick="setBankMethod('loop', this)" class="bank-method-btn" style="background: var(--accent-color); color: #000; border: 1px solid var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; cursor: pointer; transition: all 0.2s;">
-                        Single Loop
+                        ${t.btn_loop}
                     </button>
                     <button onclick="setBankMethod('slant', this)" class="bank-method-btn" style="background: transparent; color: var(--accent-color); border: 1px solid var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; cursor: pointer; transition: all 0.2s;">
-                        Whole Slant Wash
+                        ${t.btn_wash}
                     </button>
                 </div>
             </div>
@@ -4319,18 +4323,20 @@ function addLiquidPack() {
     const container = document.getElementById('liquid-packs-container');
     const today = new Date().toISOString().split('T')[0];
     
+    // MAGIN IGEN: Vi måste hämta orden här också, eftersom detta anropas när man klickar på "+ Lägg till förpackning"
+    const currentLang = window.currentLang || 'en';
+    const t = translations[currentLang].calc;
+    
     const newPack = document.createElement('div');
-    // RÄTT KLASSER KOPPLAS PÅ DIREKT
     newPack.className = 'liquid-pack-row yeast-package-box';
     
-    // RENT INNEHÅLL TILL DET NYA PAKETET
     newPack.innerHTML = `
         <div class="ym-input-group">
-            <label>Cells in pack</label>
+            <label>${t.cells_in_pack}</label>
             <input type="number" class="calc-liquid-pack" value="100" step="10">
         </div>
         <div class="ym-input-group">
-            <label>Mfg Date</label>
+            <label>${t.mfg_date}</label>
             <input type="date" class="calc-liquid-date" value="${today}">
         </div>
         <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
