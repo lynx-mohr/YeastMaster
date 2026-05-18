@@ -1994,15 +1994,6 @@ function openYeastModal(yeast) {
 
     if (!modal || !modalTitle || !modalDesc) return;
 
-    // --- HISSEN UPP TILL HÖGSTA VÅNINGEN ---
-    modal.scrollTop = 0;     // Nollställer overlayen
-    modalDesc.scrollTop = 0; // Nollställer själva beskrivningsboxen
-    
-    // Letar även reda på innehållsboxen inuti modalen och nollställer den
-    const modalContent = modal.querySelector('.modal-content');
-    if (modalContent) modalContent.scrollTop = 0;
-    // ---------------------------------------
-
     modalTitle.innerText = yeast.name;
     let detailedText = "";
     // ====================================================================
@@ -2107,7 +2098,7 @@ function openYeastModal(yeast) {
             </div>
         `;
     }
-  // ====================================================================
+    // ====================================================================
     // 3. VANLIG KOMMERSIELL JÄST FRÅN DATABASEN
     // ====================================================================
     else {
@@ -2122,7 +2113,6 @@ function openYeastModal(yeast) {
             detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:20px; color: #fff;">Passar till:</h3><p>${yeast.styles}</p>`;
         }
 
-        
         const targetStrainName = hwStrainNames[yeast.id];
         if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
             const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
@@ -2138,7 +2128,7 @@ function openYeastModal(yeast) {
                     if (steps[1][1] === steps[0][1]) { profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Hold until Day ${steps[1][0]}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Reach ${steps[1][1].toFixed(1)}°C by Day ${steps[1][0]}</span></div>`; }
                     if (steps[2][1] >= steps[1][1]) { let text = steps[2][1] > steps[1][1] ? `Rise to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}` : `Hold until Day ${steps[2][0]}`; profileListHtml += `<div class="summary-row"><span class="label">Cleanup</span><span class="value">${text}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}</span></div>`; }
                     if (steps[3][1] < steps[2][1]) { profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[3][1].toFixed(1)}°C by Day ${steps[3][0]}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Condition</span><span class="value">Hold until Day ${steps[3][0]}</span></div>`; }
-                        profileListHtml += `<button class="btn-secondary" style="width: 100%; margin-top: 15px; border-color: var(--accent-color); color: var(--accent-color);" onclick="loadProfileIntoLab('${targetStrainName}', '${prof.p}', '${yeast.name}')">✏️ EDIT IN PROFILER</button>`;
+                    profileListHtml += `<button class="btn-secondary" style="width: 100%; margin-top: 15px; border-color: var(--accent-color); color: var(--accent-color);" onclick="loadProfileIntoLab('${targetStrainName}', '${prof.p}', '${yeast.name}')">✏️ EDIT IN PROFILER</button>`;
                     profileListHtml += `</div>`; 
                 });
                 profileListHtml += `</div>`; detailedText += profileListHtml; 
@@ -2186,8 +2176,17 @@ function openYeastModal(yeast) {
         if(deleteBtn) deleteBtn.style.display = 'none';
     }
 
+    // 1. Öppna modalen först!
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden'; 
+
+    // 2. --- HISSEN UPP TILL HÖGSTA VÅNINGEN (Körs 20ms efter att allt ritats ut!) ---
+    setTimeout(() => {
+        modal.scrollTop = 0;
+        modalDesc.scrollTop = 0;
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent) modalContent.scrollTop = 0;
+    }, 20);
 }
 
 
