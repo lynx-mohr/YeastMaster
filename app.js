@@ -3005,8 +3005,9 @@ const libraryTourSteps = [
 function startLibraryTour() {
     const lang = window.currentLang || 'en';
 
-    // Om vi inte har några kort än, visa ett översatt meddelande (Nu från libraryTour!)
+    // Om vi inte har några kort än, visa ett översatt meddelande
     if (document.querySelectorAll('.yeast-card').length === 0) {
+        // OBS: Dubbelkolla att ditt globala objekt heter 'translations' eller t.ex. 'window.translations'
         const alertMsg = translations[lang]?.libraryTour?.noYeast || "Select or add some yeast first to see the tour!";
         alert(alertMsg);
         return;
@@ -3036,7 +3037,6 @@ function startLibraryTour() {
             setTimeout(() => {
                 tooltip.style.display = 'block';
                 
-                // Peka på libraryTour istället för tour:
                 const stepText = translations[lang]?.libraryTour?.[step.i18nKey] || "Text missing";
                 document.getElementById('demo-tour-text').innerText = stepText;
                 
@@ -3067,7 +3067,6 @@ window.confirmAbortTour = function(e) {
     }
     
     const lang = window.currentLang || 'en';
-    // Peka på libraryTour istället för tour:
     const confirmMsg = translations[lang]?.libraryTour?.exitConfirm || "EXIT TOUR?";
     
     if (confirm(confirmMsg)) {
@@ -3075,7 +3074,7 @@ window.confirmAbortTour = function(e) {
     }
 };
 
-// --- FUNKTION FÖR ATT AVBRYTA TOUREN ---
+// --- FUNKTION FÖR ATT AVBRYTA TOUREN (Nu helt innesluten och säker!) ---
 window.abortLibraryTour = function(e) {
     if (e) {
         e.preventDefault();
@@ -3083,20 +3082,22 @@ window.abortLibraryTour = function(e) {
         e.stopImmediatePropagation();
     }
     
-    currentLibStep = 999;
-    window.nextLibraryTourStep();
-};
+    // 1. Stäng ner tour-fönstren direkt
+    const overlay = document.getElementById('demo-overlay');
+    const tooltip = document.getElementById('demo-tour-tooltip');
+    if (overlay) overlay.style.display = 'none';
+    if (tooltip) tooltip.style.display = 'none';
     
-    // Extra städning ifall vi är mitt i en animation
+    // 2. Extra städning ifall vi är mitt i en animation (Nu inuti måsvingarna!)
     const f1 = document.getElementById('tour-fake-custom-card'); if (f1) f1.remove();
     const f2 = document.getElementById('tour-fake-house-card'); if (f2) f2.remove();
     
-    // Om användaren avbryter medan de är inne i Lab-vyn, hoppa tillbaka till biblioteket
+    // 3. Om användaren avbryter medan de är inne i Lab-vyn, hoppa tillbaka till biblioteket
     const labView = document.getElementById('view-lab');
     if (labView && labView.style.display === 'block') {
         if (typeof showView === 'function') showView('library');
-    };
-
+    }
+};
 
 // Koppla knappen vid start
 document.addEventListener('DOMContentLoaded', () => {
