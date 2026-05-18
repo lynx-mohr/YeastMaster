@@ -1994,9 +1994,17 @@ function openYeastModal(yeast) {
 
     if (!modal || !modalTitle || !modalDesc) return;
 
+    // --- HISSEN UPP TILL HÖGSTA VÅNINGEN ---
+    modal.scrollTop = 0;     // Nollställer overlayen
+    modalDesc.scrollTop = 0; // Nollställer själva beskrivningsboxen
+    
+    // Letar även reda på innehållsboxen inuti modalen och nollställer den
+    const modalContent = modal.querySelector('.modal-content');
+    if (modalContent) modalContent.scrollTop = 0;
+    // ---------------------------------------
+
     modalTitle.innerText = yeast.name;
     let detailedText = "";
-
     // ====================================================================
     // 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN PROFILER
     // ====================================================================
