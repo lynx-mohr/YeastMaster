@@ -87,7 +87,19 @@ const yeastStrains = [
     { id: "wlp005", name: "WLP005 British Ale", origin: "UK", temp: "18-22°C", tags: ["Ale", "English", "Fruity", "Liquid"], desc: "Ringwood-stammen. Fruktig och maltig, kräver en bra diacetyl-rast.", styles: "English Pale Ale, Bitter" },
     { id: "wlp815", name: "WLP815 Belgian Lager", origin: "Belgium", temp: "10-14°C", tags: ["Lager", "Belgian", "Crisp", "Liquid"], desc: "Stella Artois-stammen. Krispig men med en elegant, svag fruktighet.", styles: "Premium Lager, Pilsner" },
     { id: "wlp023", name: "WLP023 Burton Ale", origin: "UK", temp: "20-23°C", tags: ["Ale", "English", "Apple", "Liquid"], desc: "Från Burton-on-Trent. Känd för äpple-, päron- och honungstoner.", styles: "English IPA, ESB" },
-    { id: "wyeast-1028", name: "Wyeast 1028 London Ale", origin: "UK", temp: "15-22°C", tags: ["Ale", "Minerally", "Woody", "Liquid"], desc: "Torr, rik och jordig/mineralisk. Perfekt balanserad för mörka maltsorter.", styles: "Porter, Stout" }
+    { id: "wyeast-1028", name: "Wyeast 1028 London Ale", origin: "UK", temp: "15-22°C", tags: ["Ale", "Minerally", "Woody", "Liquid"], desc: "Torr, rik och jordig/mineralisk. Perfekt balanserad för mörka maltsorter.", styles: "Porter, Stout" },
+    // ==========================================
+    // --- EUROPEAN EXPANSION: DE 9 NYA ---
+    // ==========================================
+    { id: "m36", name: "Mangrove Jack's M36", origin: "UK/NZ", temp: "18-22°C", tags: ["Ale", "English", "Fruity", "Dry"], desc: "Mångsidig ale-stam som producerar en underbart komplex, lätt fruktighet.", styles: "Pale Ale, Bitter" },
+    { id: "m84", name: "Mangrove Jack's M84", origin: "UK/NZ", temp: "10-15°C", tags: ["Lager", "Bohemian", "Crisp", "Dry"], desc: "Klassisk europeisk lagerkaraktär—ren, elegant och med ett djupt maltfokus.", styles: "Pilsner, Lager" },
+    { id: "m20", name: "Mangrove Jack's M20", origin: "UK/NZ", temp: "18-24°C", tags: ["Wheat", "Bavarian", "Banana", "Dry"], desc: "Ren banan- och nejlikaelegans utan den skarpa syrligheten.", styles: "Hefeweizen, Dunkelweizen" },
+    { id: "m54", name: "Mangrove Jack's M54", origin: "UK/NZ", temp: "18-22°C", tags: ["Lager", "Hybrid", "Clean", "Dry"], desc: "Lagerstam som jäser rent och krispigt vid varma ale-temperaturer.", styles: "California Common, Pseudo-Lager" },
+    { id: "whc-saturated", name: "WHC Saturated", origin: "Ireland", temp: "19-22°C", tags: ["Ale", "NEIPA", "Juicy", "Liquid"], desc: "Optimerad för maximal biotransformation och extrem juice-karaktär.", styles: "Hazy IPA, NEIPA" },
+    { id: "whc-mango", name: "WHC Mango Madness", origin: "Ireland", temp: "30-40°C", tags: ["Kveik", "Mango", "Hot", "Liquid"], desc: "Termotolerant blend skapad för att jäsas kokhett. Tropisk explosion.", styles: "Tropical IPA, Pale Ale" },
+    { id: "pomona", name: "LalBrew Pomona", origin: "Canada", temp: "18-22°C", tags: ["Ale", "NEIPA", "Peach", "Dry"], desc: "Patenterad hybridstam, utvecklad specifikt för moderna Hazy IPAs.", styles: "NEIPA, Hazy Pale Ale" },
+    { id: "farmhouse-hybrid", name: "LalBrew Farmhouse", origin: "Canada", temp: "20-25°C", tags: ["Ale", "Saison", "Safe", "Dry"], desc: "Vetenskapligt framavlad hybrid utan diastaticus-risken.", styles: "Saison, Farmhouse Ale" },
+    { id: "la-01", name: "SafBrew LA-01", origin: "France", temp: "15-20°C", tags: ["Specialty", "Low ABV", "Sweet", "Dry"], desc: "Kan inte jäsa maltos. Perfekt för alkoholfri och alkoholsvag öl.", styles: "Non-Alcoholic, Low ABV" }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -2050,47 +2062,7 @@ function openYeastModal(yeast) {
             detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:20px; color: #fff;">Passar till:</h3><p>${yeast.styles}</p>`;
         }
 
-        const hwStrainNames = {
-            "us-05": "US-05", "s-04": "S-04", "w-34-70": "W-34/70", "be-256": "BE-256",
-            "wb-06": "WB-06", "verdant": "Verdant IPA", "voss": "Voss Kveik", "nottingham": "Nottingham", 
-            "wlp001": "Cali Ale", "wlp300": "Hefeweizen", "belle-saison": "Belle Saison", 
-            "t-58": "T-58", "s-23": "S-23", "wlp002": "English Ale", "wlp500": "Trappist", 
-            "diamond": "Diamond", "wlp066": "London Fog", "s-33": "S-33", "wlp800": "Pilsner Lager",
-            "novalager": "NovaLager", "wyeast-1968": "London ESB", "wlp920": "Old Bavarian",
-            "imperial-b45": "Imp. Gnome", "wyeast-1084": "Irish Ale", "wyeast-3944": "Belgian Wit",
-            "wlp833": "German Bock", "wlp007": "Dry English", "wyeast-1318": "London III",
-            "wyeast-2565": "Kolsch", "wlp095": "Burlington", "wlp090": "SD Super",
-            "wyeast-1272": "American II", "imperial-a24": "Dry Hop", "wlp530": "Westmalle",
-            "wyeast-3711": "French Saison", "wlp028": "Scottish Ale", "wyeast-1469": "W. Yorkshire",
-            "lutra": "Lutra Kveik", "philly-sour": "Philly Sour", "wlp820": "Oktoberfest",
-            "bry-97": "BRY-97", "k-97": "K-97", "windsor": "Windsor", "mexican-lager": "Mexican Lager",
-            "hornindal": "Hornindal", "wyeast-3724": "Belg. Saison", "wlp570": "Belg. Golden",
-            "wyeast-2112": "Cali Lager", "wlp380": "Hefeweizen 4", "wyeast-1007": "Ger. Ale 1007",
-            
-            // --- NYA TILLÄGG: DE 12 NYA ---
-            "s-189": "S-189", 
-            "be-134": "BE-134", 
-            "koln": "Köln", 
-            "m44": "M44", 
-            "m15": "M15",
-            "hothead": "HotHead", 
-            "imperial-l13": "Imperial L13", 
-            "wyeast-3726": "Farmhouse 3726",
-            "wlp005": "British 005", 
-            "wlp815": "Belg. Lager 815", 
-            "wlp023": "Burton 023", 
-            "wyeast-1028": "London 1028",
-            // --- EUROPEAN EXPANSION: DE 9 NYA ---
-            "m36": "M36",
-            "m84": "M84",
-            "m20": "M20",
-            "m54": "M54",
-            "whc-saturated": "WHC Saturated",
-            "whc-mango": "WHC Mango",
-            "pomona": "Pomona",
-            "farmhouse-hybrid": "LalBrew Farmhouse",
-            "la-01": "SafBrew LA-01"
-        };
+        
         
         const targetStrainName = hwStrainNames[yeast.id];
         if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
@@ -2436,48 +2408,7 @@ async function syncToSelectedDevice() {
     try {
         let profilesToSend = [];
 
-        // DEN KOMPLETTA ORDBOKEN FÖR SYNK-MOTORN
-        const hwStrainNames = {
-            "us-05": "US-05", "s-04": "S-04", "w-34-70": "W-34/70", "be-256": "BE-256",
-            "wb-06": "WB-06", "verdant": "Verdant IPA", "voss": "Voss Kveik", "nottingham": "Nottingham", 
-            "wlp001": "Cali Ale", "wlp300": "Hefeweizen", "belle-saison": "Belle Saison", 
-            "t-58": "T-58", "s-23": "S-23", "wlp002": "English Ale", "wlp500": "Trappist", 
-            "diamond": "Diamond", "wlp066": "London Fog", "s-33": "S-33", "wlp800": "Pilsner Lager",
-            "novalager": "NovaLager", "wyeast-1968": "London ESB", "wlp920": "Old Bavarian",
-            "imperial-b45": "Imp. Gnome", "wyeast-1084": "Irish Ale", "wyeast-3944": "Belgian Wit",
-            "wlp833": "German Bock", "wlp007": "Dry English", "wyeast-1318": "London III",
-            "wyeast-2565": "Kolsch", "wlp095": "Burlington", "wlp090": "SD Super",
-            "wyeast-1272": "American II", "imperial-a24": "Dry Hop", "wlp530": "Westmalle",
-            "wyeast-3711": "French Saison", "wlp028": "Scottish Ale", "wyeast-1469": "W. Yorkshire",
-            "lutra": "Lutra Kveik", "philly-sour": "Philly Sour", "wlp820": "Oktoberfest",
-            "bry-97": "BRY-97", "k-97": "K-97", "windsor": "Windsor", "mexican-lager": "Mexican Lager",
-            "hornindal": "Hornindal", "wyeast-3724": "Belg. Saison", "wlp570": "Belg. Golden",
-            "wyeast-2112": "Cali Lager", "wlp380": "Hefeweizen 4", "wyeast-1007": "Ger. Ale 1007",
-            
-            // --- NYA TILLÄGG: THE FINAL 12 ---
-            "s-189": "S-189", 
-            "be-134": "BE-134", 
-            "koln": "Köln", 
-            "m44": "M44", 
-            "m15": "M15",
-            "hothead": "HotHead", 
-            "imperial-l13": "Imperial L13", 
-            "wyeast-3726": "Farmhouse 3726",
-            "wlp005": "British 005", 
-            "wlp815": "Belg. Lager 815", 
-            "wlp023": "Burton 023", 
-            "wyeast-1028": "London 1028",
-            // --- EUROPEAN EXPANSION: DE 9 NYA ---
-            "m36": "M36",
-            "m84": "M84",
-            "m20": "M20",
-            "m54": "M54",
-            "whc-saturated": "WHC Saturated",
-            "whc-mango": "WHC Mango",
-            "pomona": "Pomona",
-            "farmhouse-hybrid": "LalBrew Farmhouse",
-            "la-01": "SafBrew LA-01"
-        };
+      
         selectedStrains.forEach(id => {
             const strainObj = yeastStrains.find(y => y.id === id);
             
