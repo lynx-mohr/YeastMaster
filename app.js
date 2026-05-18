@@ -2079,8 +2079,19 @@ function openYeastModal(yeast) {
             "wlp005": "British 005", 
             "wlp815": "Belg. Lager 815", 
             "wlp023": "Burton 023", 
-            "wyeast-1028": "London 1028"
+            "wyeast-1028": "London 1028",
+            // --- EUROPEAN EXPANSION: DE 9 NYA ---
+            "m36": "M36",
+            "m84": "M84",
+            "m20": "M20",
+            "m54": "M54",
+            "whc-saturated": "WHC Saturated",
+            "whc-mango": "WHC Mango",
+            "pomona": "Pomona",
+            "farmhouse-hybrid": "LalBrew Farmhouse",
+            "la-01": "SafBrew LA-01"
         };
+        
         const targetStrainName = hwStrainNames[yeast.id];
         if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
             const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);

@@ -978,7 +978,143 @@ const yeastDescriptions = {
         <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
             <li><strong style="color: #fff;">Minerally Stout:</strong> Locked at 18.5 °C. Supresses heavy fruitiness to let the minerally, woody notes shine through alongside the dark malts.</li>
         </ul>
-    `
+    `,
+
+    "m36": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">Mangrove Jack's M36 (Liberty Bell Ale)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Dry Yeast<br>
+                <strong>Equivalents:</strong> WLP051 (Similar soft fruit profile)
+            </p>
+            <p>A true darling of European homebrewers. M36 is a top-tier, highly versatile ale strain that produces a wonderfully complex, light fruitiness while beautifully enhancing both malt structure and hop bouquet.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. The Body Builder</h4>
+            <p>M36 doesn't strip away your malt body. It preserves a soft, velvety mouthfeel, making it absolutely stellar for modern English Bitters, rich Ambers, and even balanced American Pale Ales.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Balanced Ale:</strong> Keep it rock-steady at 19 °C to let the hops shine while the yeast builds a sturdy malt back-bone. Climb to 21 °C for a brief cleanup on Day 6.</li>
+                <li><strong style="color: #fff;">Pub Classic:</strong> Push it slightly warmer to 21 °C from the start to tease out those lovely British ester notes of pear and red berries.</li>
+            </ul>
+        `,
+
+        "m84": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">Mangrove Jack's M84 (Bohemian Lager)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Dry Yeast<br>
+                <strong>Equivalents:</strong> WLP800, Wyeast 2001 (Pilsner Urquell ancestry)
+            </p>
+            <p>The champion of dry lager yeasts for crisp, authentic continental beers. M84 is famous for yielding a classic European lager character—clean, elegant, and deeply malt-focused.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Patient and Crisp</h4>
+            <p>This yeast demands a bit more time to ferment out, but your patience is rewarded with an incredibly well-attenuated, brilliant beer that allows noble Saaz or Hallertau hops to shine.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Bohemian Crisp:</strong> The authentic path. Primary at 11 °C for 10 full days, ramping up to 15.5 °C for a thorough Diacetyl Rest, then dropping into a cold lagering slumber.</li>
+            </ul>
+        `,
+
+        "m20": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">Mangrove Jack's M20 (Bavarian Wheat)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Dry Yeast<br>
+                <strong>Equivalents:</strong> WLP300 / Wyeast 3068 (Similar flavor profile)
+            </p>
+            <p>The ultimate dry alternative for authentic German Weissbier. M20 is celebrated across Europe because it avoids the harsh, over-acidic finish often found in other dry wheat strains, focusing instead on pure banana and clove elegance.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Perfectly Balanced Esters</h4>
+            <p>It delivers a beautifully smooth, rich mouthfeel with a dense foam head, keeping the classic banana aromas front and center without letting them overrule the delicate spice.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Bavarian Classic:</strong> Ferment smoothly at 20 °C to balance the esters perfectly. If you want more banana madness, raise the ceiling to 22 °C by Day 3.</li>
+            </ul>
+        `,
+
+        "m54": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">Mangrove Jack's M54 (California Common)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Dry Yeast<br>
+                <strong>Equivalents:</strong> Wyeast 2112, WLP810
+            </p>
+            <p>A true lifesaver for brewers without a dedicated lager fridge. M54 is an authentic lager strain (Saccharomyces pastorianus) that has been selected to ferment cleanly at warm ale temperatures without producing any heavy lager sulfur.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. The Warm Lager Hack</h4>
+            <p>Want a crisp, clean lager but your cellar sits at 19 °C? M54 is your weapon. It chews through the sugar quickly and leaves an impossibly clean, crisp finish.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Warm Lager Hack:</strong> Run it comfortably at 18.5 °C for 6 days. It behaves beautifully, finishes clean, and clears up wonderfully after a short Cold Crash.</li>
+            </ul>
+        `,
+
+        "whc-saturated": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">WHC Lab Saturated (The Juice Engine)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Liquid Yeast<br>
+                <strong>Equivalents:</strong> Wyeast 1318, London Ale III ancestry
+            </p>
+            <p>Direct from the modern laboratories of Ireland! Saturated has become the premier choice for professional European craft breweries making award-winning Hazy IPAs. It is optimized for maximum biotransformation and a massive, pillowy mouthfeel.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Biotransformation Overdrive</h4>
+            <p>This strain contains specific enzymes that tear into your dry hops, chemically freeing hidden tropical oils and turning your beer into a literal juice bomb.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Saturated Haze:</strong> Pitch cool at 19 °C. Drop your heavy dry hops on Day 3 during active fermentation to trigger biotransformation. Let the heat rise to 22 °C to finish clean.</li>
+            </ul>
+        `,
+
+        "whc-mango": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">WHC Lab Mango Madness (The Tropical Beast)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Liquid Yeast<br>
+                <strong>Equivalents:</strong> Unique Kveik/Wild isolate blend
+            </p>
+            <p>Another Irish masterpiece. Mango Madness is a bio-selected blend of a thermotolerant Kveik strain and a unique wild isolate. It is designed to be fermented blazingly hot to unlock absurd levels of mango, guava, and pineapple esters.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Screaming Hot Gärung (30-40 °C)</h4>
+            <p>Do not cool this down! The hotter it gets, the crazier the tropical flavor explosion becomes, all while fermenting out completely in less than 72 hours.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Mango Madness:</strong> Lock your chamber at a scorching 35 °C! The fermentation will be violent, beautiful, and completely done in 3 days. Perfect for tropical Pale Ales.</li>
+            </ul>
+        `,
+
+        "pomona": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">LalBrew Pomona (The Hazy Revolution)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Dry Yeast<br>
+                <strong>Equivalents:</strong> Modern Hybrid (Specifically bred for NEIPA)
+            </p>
+            <p>The absolute newest cutting-edge tech in dry brewing. Pomona is a patented hybrid strain, developed in collaboration with top microbiologists specifically to survive the stressful environment of massive, heavy hop additions in modern Hazy IPAs.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Peach and Citrus Brilliance</h4>
+            <p>Pomona consistently produces beautiful notes of bright peach, apricot, and citrus that perfectly complement and elevate modern tropical hops like Citra and Mosaic.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Modern Hazy:</strong> Start at 20 °C to build a strong ester base, then ramp to 22 °C. It handles early dry-hop additions like an absolute champ.</li>
+            </ul>
+        `,
+
+        "farmhouse-hybrid": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">LalBrew Farmhouse (The Safe Saison)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Dry Yeast<br>
+                <strong>Equivalents:</strong> Non-diastatic Saison Hybrid
+            </p>
+            <p>A true revolution for farmhouse brewers. Historically, authentic Saison yeasts carry the STA1 gene (diastaticus), making them a massive infection risk for homebrew gear. LalBrew Farmhouse is a scientifically bred hybrid that delivers pure, rustic clove and pepper notes without the diastaticus risk!</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Predictable and Safe</h4>
+            <p>It will ferment to a normal, predictable final gravity, letting you brew rustic, complex Saisons without the fear of over-attenuation or bottle bombs down the road.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Safe Saison:</strong> Start comfortably at 22 °C, then let it free-rise naturally up to 26-27 °C to unlock that beautiful, rustic Belgian spice cabinet profile.</li>
+            </ul>
+        `,
+
+        "la-01": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">SafBrew LA-01 (The Non-Alcoholic Wizard)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Dry Yeast<br>
+                <strong>Equivalents:</strong> Saccharomyces cerevisiae var. chevalieri
+            </p>
+            <p>The ultimate joker card for the modern brewer. LA-01 is a specialized strain selected specifically for brewing low-alcohol or non-alcoholic beers. It is completely unable to ferment maltose—the primary sugar in wort.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Naturally Low Alcohol (<0.5% ABV)</h4>
+            <p>Because it only eats simple sugars (glucose/fructose), it naturally stops fermenting very early, leaving a rich, sweet malt body behind with virtually zero alcohol production.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster Profiles:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Ultra Low ABV:</strong> Ferment cool at 18 °C. The yeast will do its tiny job in just 2-3 days and then stop completely. <em>Crucial: Pasteurization or cold storage is mandatory since the beer remains full of unfermented sugars!</em></li>
+            </ul>
+        `,
     },
 
     sv: {
@@ -1938,7 +2074,142 @@ const yeastDescriptions = {
             <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
                 <li><strong style="color: #fff;">Minerally Stout:</strong> Låst på 18.5 °C. Undertrycker tung fruktighet för att låta de mineraliska, träiga tonerna skina igenom vid sidan av de mörka malterna.</li>
             </ul>
-        `
+        `,
+        "m36": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">Mangrove Jack's M36 (Liberty Bell Ale)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Torrjäst<br>
+                <strong>Motsvarigheter:</strong> WLP051 (Liknande mjuk fruktprofil)
+            </p>
+            <p>En riktig älskling bland europeiska hembryggare. M36 är en högklassig och enormt mångsidig ale-stam som producerar en underbart komplex, lätt fruktighet samtidigt som den vackert lyfter fram både maltstruktur och humlearom.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Kroppsbyggaren</h4>
+            <p>M36 klipper inte bort din maltkropp. Den bevarar en mjuk, sammetslen munkänsla, vilket gör den helt magisk för traditionella engelska Bitters, fylliga Ambers och till och med välbalanserade amerikanska Pale Ales.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-profiler:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Balanced Ale:</strong> Håll den bergstadigt på 19 °C för att låta humlen glänsa medan jästen bygger en stabil maltryggrad. Klättra till 21 °C för en kort städning på Dag 6.</li>
+                <li><strong style="color: #fff;">Pub Classic:</strong> Pressa den något varmare till 21 °C från start för att locka fram de där härliga brittiska estertonerna av päron och röda bär.</li>
+            </ul>
+        `,
+
+        "m84": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">Mangrove Jack's M84 (Bohemian Lager)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Torrjäst<br>
+                <strong>Motsvarigheter:</strong> WLP800, Wyeast 2001 (Pilsner Urquell-arv)
+            </p>
+            <p>Mästaren bland torr lagerjäst för krispiga, autentiska kontinentala öl. M84 är känd för att leverera en klassisk europeisk lagerkaraktär—ren, elegant och med ett djupt maltfokus.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Tålmodig och Krispig</h4>
+            <p>Denna jäst kräver lite mer tid på sig att jäsa ut, men ditt tålamod belönas med ett otroligt välutjäst, briljant öl som låter ädelhumle som Saaz eller Hallertau skina fullt ut.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-profiler:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Bohemian Crisp:</strong> Den autentiska vägen. Primärjäsning vid 11 °C i fulla 10 dagar, rampa sedan upp till 15.5 °C för en grundlig diacetylrast innan den faller i en kall lagringsdvala.</li>
+            </ul>
+        `,
+
+        "m20": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">Mangrove Jack's M20 (Bavarian Wheat)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Torrjäst<br>
+                <strong>Motsvarigheter:</strong> WLP300 / Wyeast 3068 (Liknande smakprofil)
+            </p>
+            <p>Det ultimata torra alternativet för en autentisk tysk Weissbier. M20 hyllas runt om i Europa eftersom den undviker den skarpa, överdrivet syrliga avslutningen som man ofta hittar hos andra torra vetestammar, och fokuserar istället på ren banan- och nejlikaelegans.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Perfekt Balanserade Estrar</h4>
+            <p>Den levererar en vackert mjuk, rik munkänsla med ett tätt skumtäcke, och håller de klassiska bananaromerna i fokus utan att låta dem dominera över den subtila kryddigheten.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-profiler:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Bavarian Classic:</strong> Jäs jämnt vid 20 °C för att balansera estrarna perfekt. Om du vill ha mer banangalenhet, höj taket till 22 °C till Dag 3.</li>
+            </ul>
+        `,
+
+        "m54": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">Mangrove Jack's M54 (California Common)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Torrjäst<br>
+                <strong>Motsvarigheter:</strong> Wyeast 2112, WLP810
+            </p>
+            <p>En sann livräddare för bryggare utan dedikerad lagerkyl. M54 är en äkta lagerstam (Saccharomyces pastorianus) som har valts ut för att jäsa rent vid varma ale-temperaturer utan att producera tungt lagersvavel.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Fusk-lager i Värmen</h4>
+            <p>Vill du ha en krispig, ren lager men källaren står på 19 °C? M54 är ditt vapen. Den tuggar sig igenom sockret snabbt och lämnar en omöjligt ren och krispig finish.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-profiler:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Warm Lager Hack:</strong> Kör den bekvämt vid 18.5 °C i 6 dagar. Den beter sig vackert, avslutar rent och klarnar upp underbart efter en kort kallkrasch.</li>
+            </ul>
+        `,
+
+        "whc-saturated": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">WHC Lab Saturated (The Juice Engine)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Flytande jäst<br>
+                <strong>Motsvarigheter:</strong> Wyeast 1318, London Ale III-arv
+            </p>
+            <p>Direkt från de moderna laboratorierna på Irland! Saturated har blivit det främsta valet för professionella europeiska hantverksbryggerier som skapar prisbelönta Hazy IPAs. Den är optimerad för maximal biotransformation och en massiv, mjuk munkänsla.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Biotransformation i Överväxel</h4>
+            <p>Denna stam innehåller specifika enzymer som sliter tag i din torrhumling och frigör dolda tropiska oljor kemiskt, vilket förvandlar ditt öl till en bokstavlig juicebomb.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-profiler:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Saturated Haze:</strong> Pitcha svalt vid 19 °C. Släpp i din tunga torrhumling på Dag 3 under aktiv jäsning för att trigga igång biotransformationen. Låt temperaturen stiga till 22 °C för att avsluta rent.</li>
+            </ul>
+        `,
+
+        "whc-mango": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">WHC Lab Mango Madness (The Tropical Beast)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Flytande jäst<br>
+                <strong>Motsvarigheter:</strong> Unik Kveik/vildisolat-blandning
+            </p>
+            <p>Ännu ett irländskt mästerverk. Mango Madness är en bioselekterad blandning av en termotolerant Kveik-stam och ett unikt vildisolat. Den är skapad för att jäsas kokhett för att låsa upp helt galna nivåer av mango-, guava- och ananasestrar.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Jäsning i Brännande Hetta (30-40 °C)</h4>
+            <p>Kyl inte ner den här! Ju varmare den blir, desto vildare blir den tropiska smakexplosionen, samtidigt som den jäser ut helt och hållet på under 72 timmar.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-profiler:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Mango Madness:</strong> Lås ditt jäskärl på brännande 35 °C! Jäsningen kommer att bli våldsam, vacker och helt klar på 3 dagar. Perfekt för tropiska Pale Ales.</li>
+            </ul>
+        `,
+
+        "pomona": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">LalBrew Pomona (The Hazy Revolution)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Torrjäst<br>
+                <strong>Motsvarigheter:</strong> Modern Hybrid (Särskilt framavlad för NEIPA)
+            </p>
+            <p>Den absolut senaste spjutspetstekniken inom torrjäst. Pomona är en patenterad hybridstam, utvecklad i samarbete med ledande mikrobiologer specifikt för att överleva den stressiga miljö som massiva, tunga humlegivor innebär i moderna Hazy IPAs.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Strålande Persika och Citrus</h4>
+            <p>Pomona producerar konsekvent vackra toner av ljus persika, aprikos och citrus som perfekt kompletterar och lyfter moderna tropiska humlesorter som Citra och Mosaic.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-profiler:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Modern Hazy:</strong> Starta vid 20 °C för att bygga en stark esterbas, rampa sedan till 22 °C. Den hanterar tidiga torrhumlingar som en absolut mästare.</li>
+            </ul>
+        `,
+
+        "farmhouse-hybrid": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">LalBrew Farmhouse (The Safe Saison)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Torrjäst<br>
+                <strong>Motsvarigheter:</strong> Icke-diastatisk Saison-hybrid
+            </p>
+            <p>En sann revolution för gårdsölsbryggare. Historiskt sett bär autentiska Saison-jäster på STA1-genen (diastaticus), vilket gör dem till en enorm infektionsrisk för hembryggningsutrustning. LalBrew Farmhouse är en vetenskapligt framavlad hybrid som levererar rena, rustika toner av nejlika och peppar utan diastaticus-risken!</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Förutsägbar och Säker</h4>
+            <p>Den kommer att jäsa till en normal, förutsägbar final gravity, vilket låter dig brygga rustika, komplexa Saisons utan rädsla för extrem utjäsning eller framtida flaskbomber.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-profiler:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Safe Saison:</strong> Starta bekvämt vid 22 °C, låt den sedan fri-rampa naturligt upp till 26-27 °C för och låsa upp den där vackra, rustika belgiska kryddskåpsprofilen.</li>
+            </ul>
+        `,
+
+        "la-01": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">SafBrew LA-01 (The Non-Alcoholic Wizard)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Torrjäst<br>
+                <strong>Motsvarigheter:</strong> Saccharomyces cerevisiae var. chevalieri
+            </p>
+            <p>Det ultimata jokerkortet för den moderna bryggaren. LA-01 är en specialiserad stam utvald specifikt för att brygga alkoholsvaga eller helt alkoholfria öl. Den saknar helt förmågan att jäsa maltos—det primära sockret i vört.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Naturligt Alkoholsvag (<0.5% ABV)</h4>
+            <p>Eftersom den bara äter enkla sockerarter (glukos/fruktos) stannar jäsningen naturligt väldigt tidigt. Den lämnar kvar en rik, söt maltkropp med praktiskt taget noll alkoholproduktion.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-profiler:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Ultra Low ABV:</strong> Jäs svalt vid 18 °C. Jästen gör sitt lilla jobb på bara 2-3 dagar och stannar sedan helt. <em>Kritiskt: Pastörisering eller iskall förvaring är obligatoriskt eftersom ölet är fullt av ojäst socker!</em></li>
+            </ul>
+        `,
     },
 de: {
 
@@ -2893,7 +3164,142 @@ de: {
             <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
                 <li><strong style="color: #fff;">Minerally Stout:</strong> Festgesetzt auf 18,5 °C. Unterdrückt schwere Fruchtigkeit, um die mineralischen, holzigen Noten neben den dunklen Malzen durchscheinen zu lassen.</li>
             </ul>
-        `
+        `,
+        "m36": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">Mangrove Jack's M36 (Liberty Bell Ale)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Trockenhefe<br>
+                <strong>Entsprechungen:</strong> WLP051 (Ähnliches weiches Fruchtprofil)
+            </p>
+            <p>Ein absoluter Liebling europäischer Heimbrauer. M36 ist ein erstklassiger, hochgradig vielseitiger Ale-Stamm, der eine wunderbar komplexe, leichte Fruchtigkeit erzeugt, während er sowohl die Malzstruktur als auch das Hopfenbouquet elegant hervorhebt.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Der Karosserie-Bauer</h4>
+            <p>M36 baut den Malzkörper Ihres Bieres nicht ab. Sie bewahrt ein weiches, samtiges Mundgefühl, was sie absolut fantastisch für traditionelle englische Bitters, milde Ambers und sogar ausgewogene American Pale Ales macht.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-Profile:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Balanced Ale:</strong> Halten Sie die Temperatur felsenfest bei 19 °C, um den Hopfen glänzen zu lassen, während die Hefe ein stabiles Malzrückgrat aufbaut. Steigen Sie an Tag 6 für eine kurze Reinigung auf 21 °C an.</li>
+                <li><strong style="color: #fff;">Pub Classic:</strong> Gären Sie von Anfang an etwas wärmer bei 21 °C, um die herrlichen britischen Esternoten von Birne und roten Beeren herauszukitzeln.</p>
+            </ul>
+        `,
+
+        "m84": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">Mangrove Jack's M84 (Bohemian Lager)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Trockenhefe<br>
+                <strong>Entsprechungen:</strong> WLP800, Wyeast 2001 (Pilsner Urquell Abstammung)
+            </p>
+            <p>Der Champion unter den Trockenlagerhefen für knackige, authentische kontinentale Biere. M84 ist berühmt für ein klassisches europäisches Lagerprofil – sauber, elegant und tief malzbetont.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Geduldig und knackig</h4>
+            <p>Diese Hefe benötigt etwas mehr Zeit zum Ausvergären, aber Ihre Geduld wird mit einem unglaublich gut ausvergorenen, brillanten Bier belohnt, das edle Hopfen wie Saazer oder Hallertauer voll zur Geltung bringt.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-Profile:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Bohemian Crisp:</strong> Der authentische Weg. Hauptgärung bei 11 °C für volle 10 Tage, gefolgt von einer Erhöhung auf 15,5 °C für eine gründliche Diacetylrast, bevor sie in eine kalte Lagerphase absinkt.</li>
+            </ul>
+        `,
+
+        "m20": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">Mangrove Jack's M20 (Bavarian Wheat)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Trockenhefe<br>
+                <strong>Entsprechungen:</strong> WLP300 / Wyeast 3068 (Ähnliches Geschmacksprofil)
+            </p>
+            <p>Die ultimative Trockenalternative für authentisches deutsches Weizenbier. M20 wird in ganz Europa geschätzt, weil sie den scharfen, übermäßig säuerlichen Abgang vermeidet, den man oft bei anderen Trockenweizenstämmen findet, und sich stattdessen auf reine Bananen- und Nelkeneleganz konzentriert.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Perfekt ausbalancierte Ester</h4>
+            <p>Sie liefert ein wunderschön weiches, reiches Mundgefühl mit einer dichten Schaumkrone und hält die klassischen Bananenaromen im Vordergrund, ohne die feine Würze zu dominieren.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-Profile:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Bavarian Classic:</strong> Jäsen Sie gleichmäßig bei 20 °C, um die Ester perfekt auszubalancieren. Wenn Sie mehr Bananenwahnsinn wollen, erhöhen Sie die Obergrenze bis Tag 3 på 22 °C.</li>
+            </ul>
+        `,
+
+        "m54": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">Mangrove Jack's M54 (California Common)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Trockenhefe<br>
+                <strong>Entsprechungen:</strong> Wyeast 2112, WLP810
+            </p>
+            <p>Ein echter Lebensretter für Brauer ohne eigenen Lagerkühlschrank. M54 ist ein echter Lagerstamm (Saccharomyces pastorianus), der so ausgewählt wurde, dass er bei warmen Ale-Temperaturen sauber gärt, ohne schweren Lagerschwefel zu produzieren.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Der warme Lager-Hack</h4>
+            <p>Sie wollen ein knackiges, sauberes Lagerbier, aber Ihr Keller hat 19 °C? M54 ist Ihre Waffe. Sie knabbert den Zucker schnell weg und hinterlässt ein unmöglich sauberes, knackiges Finish.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-Profile:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Warm Lager Hack:</strong> Lassen Sie sie bequem 6 Tage lang bei 18,5 °C laufen. Sie verhält sich wunderbar, endet sauber und klärt sich nach einem kurzen Cold Crash fantastisch auf.</li>
+            </ul>
+        `,
+
+        "whc-saturated": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">WHC Lab Saturated (The Juice Engine)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Flüssighefe<br>
+                <strong>Entsprechungen:</strong> Wyeast 1318, London Ale III Abstammung
+            </p>
+            <p>Direkt aus den modernen Labors Irlands! Saturated ist zur ersten Wahl für professionelle europäische Craft-Brauereien geworden, die preisgekrönte Hazy IPAs herstellen. Sie ist für maximale Biotransformation und ein massives, weiches Mundgefühl optimiert.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Biotransformation im Overdrive</h4>
+            <p>Dieser Stamm enthält spezifische Enzyme, die sich in Ihre Trockenhopfen beißen, versteckte tropische Öle chemisch freisetzen und Ihr Bier in eine buchstäbliche Saftbombe verwandeln.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-Profile:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Saturated Haze:</strong> Kühl anstellen bei 19 °C. Geben Sie Ihren schweren Trockenhopfen an Tag 3 während der aktiven Gärung hinzu, um die Biotransformation auszulösen. Lassen Sie die Temperatur auf 22 °C steigen, um sauber abzuschließen.</li>
+            </ul>
+        `,
+
+        "whc-mango": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">WHC Lab Mango Madness (The Tropical Beast)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Flüssighefe<br>
+                <strong>Entsprechungen:</strong> Einzigartige Kveik/Wildisolat-Mischung
+            </p>
+            <p>Ein weiteres irisches Meisterwerk. Mango Madness ist eine bio-selektierte Mischung aus einem thermotoleranten Kveik-Stamm und einem einzigartigen Wildisolat. Sie ist dafür konzipiert, glühend heiß vergoren zu werden, um absurde Mengen an Mango-, Guaven- und Ananasestern freizusetzen.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Glühend heiße Gärung (30-40 °C)</h4>
+            <p>Kühlen Sie diese Hefe bloß nicht ab! Je heißer es wird, desto verrückter wird die tropische Geschmacksexplosion, während sie in weniger als 72 Stunden vollständig ausgärt.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-Profile:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Mango Madness:</strong> Verriegeln Sie Ihren Gärtank bei sengenden 35 °C! Die Gärung wird heftig, wunderschön und in 3 Tagen vollständig abgeschlossen sein. Perfekt für tropische Pale Ales.</li>
+            </ul>
+        `,
+
+        "pomona": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">LalBrew Pomona (The Hazy Revolution)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Trockenhefe<br>
+                <strong>Entsprechungen:</strong> Modernes Hybrid (Speziell für NEIPA gezüchtet)
+            </p>
+            <p>Die absolut neueste Spitzentechnologie im Trockenbraubereich. Pomona ist ein patentierter Hybridstamm, der in Zusammenarbeit mit führenden Mikrobiologen speziell dafür entwickelt wurde, die stressige Umgebung massiver, schwerer Hopfengaben in modernen Hazy IPAs zu überstehen.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Brillanz von Pfirsich und Zitrusfrüchten</h4>
+            <p>Pomona produziert konstant wunderschöne Noten von hellem Pfirsich, Aprikose und Zitrusfrüchten, die moderne tropische Hopfensorten wie Citra und Mosaic perfekt ergänzen und aufwerten.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-Profile:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Modern Hazy:</strong> Start bei 20 °C, um eine starke Esterbasis aufzubauen, dann auf 22 °C steigen. Sie verkraftet frühe Trockenhopfenzugaben wie ein absoluter Champion.</li>
+            </ul>
+        `,
+
+        "farmhouse-hybrid": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">LalBrew Farmhouse (The Safe Saison)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Trockenhefe<br>
+                <strong>Entsprechungen:</strong> Nicht-diastatisches Saison-Hybrid
+            </p>
+            <p>Eine echte Revolution für Farmhouse-Brauer. Historisch gesehen tragen authentische Saison-Hefen das STA1-Gen (diastaticus), was sie zu einem massiven Infektionsrisiko für das Heimbrau-Equipment macht. LalBrew Farmhouse ist ein wissenschaftlich gezüchteter Hybrid, der reine, rustikale Nelken- und Pfeffernoten ohne das Diastaticus-Risiko liefert!</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Vorhersehbar und sicher</h4>
+            <p>Sie gärt bis zu einer normalen, vorhersehbaren Enddichte aus, sodass Sie rustikale, komplexe Saisons brauen können, ohne Angst vor Überextraktion oder zukünftigen Flaschenbomben haben zu müssen.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-Profile:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Safe Saison:</strong> Starten Sie bequem bei 22 °C und lassen Sie die Temperatur dann natürlich bis auf 26-27 °C steigen, um das wunderschöne, rustikale belgische Gewürzschrank-Profil freizuschalten.</li>
+            </ul>
+        `,
+
+        "la-01": `
+            <h3 style="color: var(--accent-color); margin-top: 0;">SafBrew LA-01 (The Non-Alcoholic Wizard)</h3>
+            <p style="font-size: 0.85rem; color: #8cc63f; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;">
+                <strong>Format:</strong> Trockenhefe<br>
+                <strong>Entsprechungen:</strong> Saccharomyces cerevisiae var. chevalieri
+            </p>
+            <p>Die ultimative Jokerkarte für den modernen Brauer. LA-01 ist ein Spezialstamm, der gezielt für das Brauen von alkoholfreien oder alkoholarmen Bieren ausgewählt wurde. Sie ist völlig unfähig, Maltose – den Hauptzucker in der Würze – zu vergären.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">1. Natürlich alkoholarm (<0,5% ABV)</h4>
+            <p>Da sie nur einfache Zucker (Glukose/Fruktose) frisst, stoppt die Gärung natürlich sehr früh und hinterlässt einen reichen, süßen Malzkörper bei praktisch null Alkoholproduktion.</p>
+            <h4 style="margin-top: 15px; color: #ccc;">YeastMaster-Profile:</h4>
+            <ul style="list-style: none; padding: 0; margin-top: 10px; gap: 8px; display: flex; flex-direction: column;">
+                <li><strong style="color: #fff;">Ultra Low ABV:</strong> Kühl gären bei 18 °C. Die Hefe erledigt ihre winzige Aufgabe in nur 2-3 Tagen und stoppt dann komplett. <em>Wichtig: Eine Pasteurisierung oder eiskalte Lagerung ist zwingend erforderlich, da das Bier voller unvergorener Zucker bleibt!</em></li>
+            </ul>
+        `,
 }
     };
 
