@@ -3650,8 +3650,8 @@ calc: {
 
         soul: {
             title: "JÄST",
-            subtitle: "Ölens själ.",
-            desc1_a: "Vi tror att ölens sanna själ lever inom jästen. Som det gamla bryggordspråket säger: ",
+            subtitle: "Ölets själ.",
+            desc1_a: "Vi tror att ölets sanna själ lever inom jästen. Som det gamla bryggordspråket säger: ",
             desc1_quote: '"Bryggaren gör vörten, men jästen gör ölet."',
             desc1_b: " Det finns ett djupt under i hur dessa mikroskopiska hantverkare förvandlar en enkel, söt vätska till det oändligt komplexa och själfulla elixiret vi kallar öl.",
             desc2: "Soulof.beer är en hyllning till denna biologiska magi. Oavsett om du är här för att utforska vårt bibliotek av historiska stammar eller för att ta full kontroll över din jäsning, är detta ditt laboratorium. Övervaka din brygd i realtid, synka anpassade profiler till din YeastMaster-enhet och bemästra jäsningens konst.",
