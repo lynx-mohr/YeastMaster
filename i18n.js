@@ -3039,6 +3039,32 @@ const translations = {
             card3_title: "⚡ Wireless Relays",
             card3_p1: "No dangerous high-voltage wiring. YeastMaster sends 433MHz radio signals directly to wireless smart plugs. One for your fridge (cooling), and one for a heat mat (heating). Total control, zero electrical hazards."
         },
+
+        academy: {
+            title: "In the lab",
+            info_title: "Yeast Management Academy",
+            info_1: "Roll up your sleeves and become a microbiologist!",
+            info_2: "Step into the Lab and discover the fascinating world of yeast management.",
+            hero_tag: "Start Here",
+            hero_title: "Welcome to the Lab",
+            hero_desc: "You're already a microbiologist. Let's set up your kitchen lab and start harvesting liquid gold.",
+            hero_btn: "GET STARTED ➔",
+            calc_title: "Pitch Calculators",
+            calc_desc: "Calculate optimal pitch rates and starter steps.",
+            washing_title: "Yeast Washing 101",
+            washing_desc: "Wash the yeast cake and harvest 'liquid gold' (slurry).",
+            starters_title: "Yeast Starters 101",
+            starters_desc: "Wake up your yeast and ensure a healthy fermentation.",
+            stirplate_title: "Stir Plates 101",
+            stirplate_desc: "Why magnetic vortexes are a brewer's best friend.",
+            counting_title: "Pro Cell Counting",
+            counting_desc: "Using microscopes and hemocytometers like a pro.",
+            agar_title: "Mastering Agar Plates",
+            agar_desc: "Learn to pour, streak, and isolate pure strains.",
+            wild_title: "Capturing Wild Yeast",
+            wild_desc: "Hunt for local microbes and brew something unique.",
+            btn_back: "← BACK TO ACADEMY"
+        },
         
         settings: {
             title: "SETTINGS",
@@ -3244,6 +3270,32 @@ about: {
             card3_p1: "Ingen farlig högspänningsdragning. YeastMaster skickar 433MHz-radiosignaler direkt till trådlösa smarta uttag. Ett för din kyl (kylning) och ett för en värmematta (värmning). Total kontroll, noll elektriska risker."
         },
 
+        academy: {
+            title: "I labbet",
+            info_title: "Yeast Management Academy",
+            info_1: "Kavla upp ärmarna och bli en mikrobiolog!",
+            info_2: "Kliv in i labbet och upptäck den fascinerande världen av jästhantering.",
+            hero_tag: "Börja Här",
+            hero_title: "Välkommen till Labbet",
+            hero_desc: "Du är redan en mikrobiolog. Låt oss sätta upp ditt kökslabb och börja skörda flytande guld.",
+            hero_btn: "KOM IGÅNG ➔",
+            calc_title: "Pitchkalkylator",
+            calc_desc: "Beräkna optimal jästmängd och förkultur.",
+            washing_title: "Jästtvätt 101",
+            washing_desc: "Tvätta jästkakan och skörda 'flytande guld' (slurry).",
+            starters_title: "Förkulturer 101",
+            starters_desc: "Väck din jäst och säkra en hälsosam jäsning.",
+            stirplate_title: "Magnetomrörare 101",
+            stirplate_desc: "Varför magnetiska virvlar är bryggarens bästa vän.",
+            counting_title: "Proffsens Cellräkning",
+            counting_desc: "Använd mikroskop och hemocytometer som ett proffs.",
+            agar_title: "Bemästra Agarplattor",
+            agar_desc: "Lär dig gjuta, stryka och isolera rena stammar.",
+            wild_title: "Fånga Vildjäst",
+            wild_desc: "Jaga lokala mikrober och brygg något unikt.",
+            btn_back: "← TILLBAKA TILL LABBET"
+        },
+
         settings: {
             title: "INSTÄLLNINGAR",
             theme: "Tema",
@@ -3446,6 +3498,32 @@ about: {
             card2_p1: "Präzision erfordert Daten. YeastMaster verwendet zwei abnehmbare, wasserdichte Sensoren. Einer misst die Umgebungsluft im Kühlschrank, während der andere direkt im Bier sitzt.",
             card3_title: "⚡ Drahtlose Relais",
             card3_p1: "Keine gefährliche Hochspannungsverkabelung. YeastMaster sendet 433-MHz-Funksignale direkt an drahtlose smarte Steckdosen. Totale Kontrolle, null elektrische Gefahren."
+        },
+
+        academy: {
+            title: "Im Labor",
+            info_title: "Yeast Management Academy",
+            info_1: "Krempeln Sie die Ärmel hoch und werden Sie Mikrobiologe!",
+            info_2: "Treten Sie ins Labor ein und entdecken Sie die faszinierende Welt des Hefemanagements.",
+            hero_tag: "Hier Starten",
+            hero_title: "Willkommen im Labor",
+            hero_desc: "Sie sind bereits ein Mikrobiologe. Richten wir Ihr Küchenlabor ein und fangen an, flüssiges Gold zu ernten.",
+            hero_btn: "LOS GEHT'S ➔",
+            calc_title: "Pitch-Rechner",
+            calc_desc: "Berechnen Sie optimale Pitch-Raten und Starter.",
+            washing_title: "Hefe Waschen 101",
+            washing_desc: "Waschen Sie den Hefekuchen und ernten Sie 'flüssiges Gold'.",
+            starters_title: "Hefestarter 101",
+            starters_desc: "Wecken Sie Ihre Hefe auf und sorgen Sie für eine gesunde Gärung.",
+            stirplate_title: "Magnetrührer 101",
+            stirplate_desc: "Warum magnetische Wirbel der beste Freund des Brauers sind.",
+            counting_title: "Profi Zellzählung",
+            counting_desc: "Verwenden Sie Mikroskope und Zählkammern wie ein Profi.",
+            agar_title: "Agarplatten Meistern",
+            agar_desc: "Lernen Sie, reine Stämme zu gießen, auszustreichen und zu isolieren.",
+            wild_title: "Wilde Hefe Fangen",
+            wild_desc: "Jagen Sie lokale Mikroben und brauen Sie etwas Einzigartiges.",
+            btn_back: "← ZURÜCK ZUM LABOR"
         },
 
         settings: {
