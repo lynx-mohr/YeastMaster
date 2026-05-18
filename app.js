@@ -148,6 +148,8 @@ const hwStrainNames = {
     "la-01": "SafBrew LA-01"
 };
 
+let scrollPosition = 0; // Kommer ihåg scroll-läget
+
 document.addEventListener('DOMContentLoaded', () => {
     // Tvinga INGEN till login! 
     // Vi låter dem börja på SOUL-vyn (där glaset fylls) eller den flik de klickat på.
@@ -2162,8 +2164,8 @@ function openYeastModal(yeast) {
 window.closeYeastModal = function() {
     const modal = document.getElementById('yeast-info-modal');
     if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = ''; // Släpp bakgrunden fri
+        modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
     }
 }
 
