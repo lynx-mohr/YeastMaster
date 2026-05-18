@@ -3856,7 +3856,7 @@ about: {
 },
     },
     de: {
-        nav: { home: "START", library: "BIBLIOTHEK", lab: "LABOR", profiler: "PROFILER", live: "LIVE", settings: "SETUP" },
+        nav: { home: "START", library: "BIBLIOTHEK", lab: "LABOR", profiler: "PROFILER", live: "LIVE", settings: "EINSTELLUNGEN" },
         dashboard: { 
             progress: "VERLAUF", 
             since_start: "Seit Start", 
