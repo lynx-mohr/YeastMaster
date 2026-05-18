@@ -3897,19 +3897,14 @@ window.addEventListener('DOMContentLoaded', () => {
 let currentDemoStep = -1;
 
 const demoSteps = [
-    // --- 1. TEMPERATURERNA ---
-    { selector: '.carboy-wrapper', text: 'Temp inside vessel', offsetY: -35, mobileOffsetY: -60 },
-    { selector: '.air-floating', text: 'Ambient temp', offsetY: -5, mobileOffsetY: 5 },
-    
-    // --- 2. JÄST & PROFIL (Uppe till höger) ---
-    { selector: '#strain-val', text: 'Yeast Strain', offsetY: 0, mobileOffsetY: 0 },
-    { selector: '#profile-val', text: 'Fermentation profile', offsetY: -5, mobileOffsetY: 0, mobileOffsetX: 0 },
-    { selector: '.action-status', text: 'HEATING / COOLING', offsetY: -10, mobileOffsetY: -10 },
-    
-    // --- 3. STATUS & HISTORIK (Nedre halvan) ---
-    { selector: '.progress-section', text: 'Fermentation completion', offsetY: -155, mobileOffsetY: -150 },
-    { selector: '.phase-info', text: 'Current phase details', offsetY: -5, mobileOffsetY: 0 },
-    { selector: '#beer-chart', text: 'Temp change over time', offsetY: 0, mobileOffsetY: 15 }
+    { selector: '.carboy-wrapper', i18nKey: 'step_beer', offsetY: -35, mobileOffsetY: -60 },
+    { selector: '.air-floating', i18nKey: 'step_air', offsetY: -5, mobileOffsetY: 5 },
+    { selector: '#strain-val', i18nKey: 'step_strain', offsetY: 0, mobileOffsetY: 0 },
+    { selector: '#profile-val', i18nKey: 'step_profile', offsetY: -5, mobileOffsetY: 0, mobileOffsetX: 0 },
+    { selector: '.action-status', i18nKey: 'step_action', offsetY: -10, mobileOffsetY: -10 },
+    { selector: '.progress-section', i18nKey: 'step_progress', offsetY: -155, mobileOffsetY: -150 },
+    { selector: '.phase-info', i18nKey: 'step_phase', offsetY: -5, mobileOffsetY: 0 },
+    { selector: '#beer-chart', i18nKey: 'step_chart', offsetY: 0, mobileOffsetY: 15 }
 ];
 
 function startDemoTour() {
@@ -3927,77 +3922,89 @@ function nextDemoStep() {
 
     if (window.isLibraryTourActive) return;
 
-    currentDemoStep++;
+    currentDemoStep++;
 
-    const tooltip = document.getElementById('demo-tour-tooltip');
-    const overlay = document.getElementById('demo-overlay');
+    const tooltip = document.getElementById('demo-tour-tooltip');
+    const overlay = document.getElementById('demo-overlay');
 
-    // 1. KONTROLL: Är touren slut?
-    if (currentDemoStep >= demoSteps.length) {
-        if (tooltip) tooltip.style.display = 'none';
-        if (overlay) overlay.style.display = 'none'; 
-        
-        setTimeout(() => {
-            if (!activeDeviceId) {
-                alert("Connect your own YeastMaster unit to monitor real data!");
-            }
-        }, 300);
-        return;
-    }
+    // 1. KONTROLL: Är touren slut?
+    if (currentDemoStep >= demoSteps.length) {
+        if (tooltip) tooltip.style.display = 'none';
+        if (overlay) overlay.style.display = 'none'; 
+        
+        setTimeout(() => {
+            if (!activeDeviceId) {
+                // Här kan vi också översätta alerten om du vill, men vi börjar med UI:t!
+                alert("Connect your own YeastMaster unit to monitor real data!");
+            }
+        }, 300);
+        return;
+    }
 
-    // 2. Hitta nästa element i din HTML
-    const targetEl = document.querySelector(demoSteps[currentDemoStep].selector);
-    
-    if (!targetEl) {
-        console.warn("Tour: Hittade inte " + demoSteps[currentDemoStep].selector);
-        nextDemoStep(); 
-        return;
-    }
+    // 2. Hitta nästa element i din HTML
+    const targetEl = document.querySelector(demoSteps[currentDemoStep].selector);
+    
+    if (!targetEl) {
+        console.warn("Tour: Hittade inte " + demoSteps[currentDemoStep].selector);
+        nextDemoStep(); 
+        return;
+    }
 
-    // --- Göm skylten DIREKT så den inte hänger kvar med gammal text! ---
-    if (tooltip) tooltip.style.display = 'none';
+    // --- Göm skylten DIREKT så den inte hänger kvar med gammal text! ---
+    if (tooltip) tooltip.style.display = 'none';
 
-    // 3. Scrolla mjukt så elementet alltid syns
-    targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // 3. Scrolla mjukt så elementet alltid syns
+    targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-    // 4. Beräkna positionen (Vänta 300ms så scrollen hinner klart först)
-    setTimeout(() => {
-        const tourTextEl = document.getElementById('demo-tour-text');
-        if (tourTextEl) tourTextEl.innerText = demoSteps[currentDemoStep].text;
+    // 4. Beräkna positionen (Vänta 300ms så scrollen hinner klart först)
+    setTimeout(() => {
+        const tourTextEl = document.getElementById('demo-tour-text');
+        
+        // --- HÄR ÄR MAGIN: ÖVERSÄTTNINGEN ---
+        if (tourTextEl) {
+            const currentLang = window.currentLang || 'en';
+            // Leta i 'tour'-sektionen i ordboken (eller engelska som reserv)
+            const tourDict = translations[currentLang]?.tour || translations['en'].tour;
+            // Hämta nyckeln vi lade in i arrayen (t.ex. 'step_beer')
+            const stepKey = demoSteps[currentDemoStep].i18nKey;
+            
+            // Sätt den översatta texten
+            tourTextEl.innerText = tourDict[stepKey] || "Text missing";
+        }
 
-        if (tooltip) {
-            tooltip.style.display = 'block';
+        if (tooltip) {
+            tooltip.style.display = 'block';
 
-            const rect = targetEl.getBoundingClientRect();
-            const isMobile = window.innerWidth <= 768;
-            
-            // --- HÖJD (Y-axel) ---
-            let stepOffsetY = 0;
-            if (isMobile && demoSteps[currentDemoStep].mobileOffsetY !== undefined) {
-                stepOffsetY = demoSteps[currentDemoStep].mobileOffsetY;
-            } else {
-                stepOffsetY = demoSteps[currentDemoStep].offsetY || 0;
-            }
-            const topPos = rect.bottom + window.scrollY + 15 + stepOffsetY; 
-            
-            // --- SIDLED (X-axel) ---
-            let stepOffsetX = 0;
-            if (isMobile && demoSteps[currentDemoStep].mobileOffsetX !== undefined) {
-                stepOffsetX = demoSteps[currentDemoStep].mobileOffsetX;
-            }
-            
-            let leftPos = rect.left + window.scrollX + (rect.width / 2) + stepOffsetX;
+            const rect = targetEl.getBoundingClientRect();
+            const isMobile = window.innerWidth <= 768;
+            
+            // --- HÖJD (Y-axel) ---
+            let stepOffsetY = 0;
+            if (isMobile && demoSteps[currentDemoStep].mobileOffsetY !== undefined) {
+                stepOffsetY = demoSteps[currentDemoStep].mobileOffsetY;
+            } else {
+                stepOffsetY = demoSteps[currentDemoStep].offsetY || 0;
+            }
+            const topPos = rect.bottom + window.scrollY + 15 + stepOffsetY; 
+            
+            // --- SIDLED (X-axel) ---
+            let stepOffsetX = 0;
+            if (isMobile && demoSteps[currentDemoStep].mobileOffsetX !== undefined) {
+                stepOffsetX = demoSteps[currentDemoStep].mobileOffsetX;
+            }
+            
+            let leftPos = rect.left + window.scrollX + (rect.width / 2) + stepOffsetX;
 
-            // --- SÄTT POSITIONERNA ---
-            tooltip.style.top = topPos + 'px';
-            tooltip.style.left = leftPos + 'px';
-            
-            // Tvinga webbläsaren att spela inhopp-animationen
-            tooltip.style.animation = 'none';
-            void tooltip.offsetWidth; 
-            tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-        }
-    }, 300);
+            // --- SÄTT POSITIONERNA ---
+            tooltip.style.top = topPos + 'px';
+            tooltip.style.left = leftPos + 'px';
+            
+            // Tvinga webbläsaren att spela inhopp-animationen
+            tooltip.style.animation = 'none';
+            void tooltip.offsetWidth; 
+            tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+        }
+    }, 300);
 
 }
 

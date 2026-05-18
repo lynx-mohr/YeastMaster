@@ -3429,6 +3429,23 @@ calc: {
             add_package: "+ Add another package",
         },
 
+        tour: {
+            welcome: "Welcome to the LIVE VIEW!",
+            p1: "This is your digital command center. Once your YeastMaster is connected, you can monitor your active fermentation in real-time, from anywhere in the world.",
+            p2: "All vital stats are streamed directly to this dashboard, giving you total control and peace of mind.",
+            p3: "Want a quick tour of the interface?",
+            btn_exit: "Exit Demo",
+            btn_start: "Continue",
+            step_beer: "Temp inside vessel",
+            step_air: "Ambient temp",
+            step_strain: "Yeast Strain",
+            step_profile: "Fermentation profile",
+            step_action: "HEATING / COOLING",
+            step_progress: "Fermentation completion",
+            step_phase: "Current phase details",
+            step_chart: "Temp change over time"
+        },
+
         about: {
             back: "← BACK",
             title: "YEASTMASTER",
@@ -3687,6 +3704,23 @@ calc: {
             add_package: "+ Lägg till förpackning",
         },
 
+        tour: {
+            welcome: "Välkommen till LIVE-VYN!",
+            p1: "Detta är din digitala kommandocentral. När din YeastMaster är ansluten kan du övervaka din pågående jäsning i realtid, var du än befinner dig.",
+            p2: "Alla viktiga värden strömmas direkt till denna instrumentpanel, vilket ger dig full kontroll och sinnesro.",
+            p3: "Vill du ha en snabb rundtur av gränssnittet?",
+            btn_exit: "Avsluta Demo",
+            btn_start: "Fortsätt",
+            step_beer: "Temp inuti kärlet",
+            step_air: "Omgivande temp",
+            step_strain: "Jäststam",
+            step_profile: "Jäsningsprofil",
+            step_action: "VÄRMER / KYLER",
+            step_progress: "Jäsningens förlopp",
+            step_phase: "Detaljer om aktuell fas",
+            step_chart: "Temp-förändring över tid"
+        },
+
 about: {
             back: "← TILLBAKA",
             title: "YEASTMASTER",
@@ -3943,6 +3977,23 @@ calc: {
           cells_in_pack: "Zellen pro Packung",
             mfg_date: "Herstellungsdatum",
             add_package: "+ Weiteres Paket hinzufügen",
+        },
+
+        tour: {
+            welcome: "Willkommen in der LIVE-ANSICHT!",
+            p1: "Dies ist deine digitale Kommandozentrale. Sobald dein YeastMaster verbunden ist, kannst du deine aktive Gärung in Echtzeit von überall auf der Welt überwachen.",
+            p2: "Alle wichtigen Daten werden direkt auf dieses Dashboard gestreamt und geben dir volle Kontrolle und Sicherheit.",
+            p3: "Möchtest du eine kurze Tour durch die Benutzeroberfläche?",
+            btn_exit: "Demo Beenden",
+            btn_start: "Weiter",
+            step_beer: "Temp im Behälter",
+            step_air: "Umgebungstemp",
+            step_strain: "Hefestamm",
+            step_profile: "Gärprofil",
+            step_action: "HEIZT / KÜHLT",
+            step_progress: "Gärfortschritt",
+            step_phase: "Details zur aktuellen Phase",
+            step_chart: "Temp-Verlauf über die Zeit"
         },
 
 about: {
