@@ -940,37 +940,6 @@ function renderYeastLibrary(filter = "") {
     }); 
 }
 
-function openYeastDetail(yeast) {
-    const detail = document.getElementById('yeast-detail-view');
-    const content = document.getElementById('yeast-detail-content');
-    
-// --- HISSEN UPP TILL HÖGSTA VÅNINGEN (HAGELBÖSSAN) ---
-    if (detail) detail.scrollTop = 0;
-    if (content) content.scrollTop = 0;
-    window.scrollTo(0, 0); // Nollställer hela fönstret om det är det som scrollar
-    // -----------------------------------------------------
-
-    content.innerHTML = `
-        <h1 style="color:var(--accent-color)">${yeast.name}</h1>
-        <p style="opacity:0.6; font-size:1.1rem;">${yeast.origin} | ${yeast.temp}</p>
-        <hr style="border:0; border-top:1px solid #222; margin:20px 0;">
-        <div style="background:#111; padding:20px; border-radius:10px;">
-            <h3>Beskrivning</h3>
-            <p>${yeast.desc}</p>
-            <h3 style="margin-top:20px;">Passar till</h3>
-            <p>${yeast.styles}</p>
-        </div>
-        <button class="btn-primary" style="margin-top:30px;" onclick="toggleFavorite('${yeast.id}'); closeYeastDetail();">
-            ${selectedStrains.includes(yeast.id) ? 'TA BORT FRÅN MINA 10' : 'VÄLJ DENNA JÄST'}
-        </button>
-    `;
-    history.pushState({ view: 'yeast-detail' }, "");
-    detail.style.display = "block";
-}
-
-function closeYeastDetail() {
-    document.getElementById('yeast-detail-view').style.display = "none";
-}
 
 function toggleFavorite(id) {
     const index = selectedStrains.indexOf(id);
