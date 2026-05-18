@@ -3602,488 +3602,7 @@ auth.onAuthStateChanged(async (user) => {
         clearDeviceSettingsUI();
     }
 });
-// Innehållet för de olika modulerna
-const academyModules = {
-  
-    // --- 0. INTRO: WELCOME TO THE LAB ---
-    'intro': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Welcome to the Lab</h2>
 
-        <div class="ym-academy-layout">
-            <div class="ym-academy-sidebar">
-                <h4>Your Path to Mastery:</h4>
-                <ul class="wizard-checklist">
-                    <li id="intro-mindset">1. The Mindset</li>
-                    <li id="intro-gear">2. The Kitchen Lab</li>
-                    <li id="intro-rewards">3. The Rewards</li>
-                    <li id="intro-roadmap">4. The Roadmap</li>
-                </ul>
-            </div>
-
-            <div class="ym-academy-content" id="module-wizard">
-                <div class="wizard-dots" id="wizard-dots">
-                    <div class="wizard-dot active"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                </div>
-
-                <div class="wizard-step active" data-step="0">
-                    <div class="wizard-icon">🧠✨</div>
-                    <h3>1. The Microbiologist Mindset</h3>
-                    <p>Yeast management sounds intimidating. People talk about sterile labs, laminar flow hoods, and expensive microscopes.</p>
-                    <p style="color: var(--accent-color); font-weight: bold; margin: 15px 0;">Forget all that for now.</p>
-                    <p>If you can brew a batch of beer without infecting it, you already have the hygiene skills needed to harvest and reuse yeast. Good sanitation is 95% of the work!</p>
-                </div>
-
-                <div class="wizard-step" data-step="1">
-                    <div class="wizard-icon">🫙🧽</div>
-                    <h3>2. The Kitchen Lab</h3>
-                    <p>You don't need a laboratory to start. Your kitchen counter is perfect. The core tools for your very first yeast harvest are incredibly simple:</p>
-                    <ul style="color: #aaa; margin-top: 15px; line-height: 1.6; padding-left: 20px;">
-                        <li>A spray bottle of <strong>Star San</strong> (or similar sanitizer).</li>
-                        <li>A few clean <strong>Mason Jars</strong> with lids.</li>
-                        <li>Some <strong>Dry Malt Extract (DME)</strong> to feed the yeast.</li>
-                        <li>A regular cooking pot to boil sterile water.</li>
-                    </ul>
-                </div>
-
-                <div class="wizard-step" data-step="2">
-                    <div class="wizard-icon">💰🍺</div>
-                    <h3>3. The Rewards</h3>
-                    <p>Why go through the trouble of saving and washing your own yeast?</p>
-                    <ul style="color: #aaa; margin-top: 15px; line-height: 1.6; padding-left: 20px;">
-                        <li><strong style="color: #fff;">Save Money:</strong> Liquid yeast is expensive. Buy a premium pack once, wash it, and use it for your next 5-10 batches!</li>
-                        <li><strong style="color: #fff;">Better Beer:</strong> Pitching a massive, healthy slurry of your own yeast leads to faster, cleaner fermentations without lag time.</li>
-                        <li><strong style="color: #fff;">Independence:</strong> Wake up on a Saturday and brew spontaneously, knowing you have world-class yeast ready in the fridge.</li>
-                    </ul>
-                </div>
-
-                <div class="wizard-step" data-step="3">
-                    <div class="wizard-icon">🗺️🚀</div>
-                    <h3>4. The Roadmap</h3>
-                    <p>Don't try to learn everything at once. Follow this path at your own pace:</p>
-                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-color); margin-top: 15px; font-size: 0.9rem; line-height: 1.6;">
-                    <strong style="color: #fff;">Level 1:</strong> Buy an Erlenmeyer flask and learn <em>Yeast Starters</em>.<br>
-                    <strong style="color: #fff;">Level 2:</strong> Master <em>Yeast Washing</em> from a finished beer.<br>
-                           <strong style="color: #fff;">Level 3:</strong> Build or buy a <em>Stir Plate</em> for massive cell growth.<br>
-                        <strong style="color: #fff;">Level 4:</strong> The final boss. <em>Agar Plates</em> and <em>Cell Counting</em>.
-                    </div>
-                </div>
-
-                <div class="wizard-controls">
-                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
-                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
-                </div>
-            </div>
-        </div>
-    `,    
-    
-      // --- 1. Kalkylatorn ---
-    'calc': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Pitch Calculator</h2>
-        <div class="calc-container" style="margin: 0; padding: 0; background: transparent; border: none;">
-            <div class="calc-inputs">
-                <div class="input-group">
-                    <label>Batch Volume (L)</label>
-                    <input type="number" id="pitch-vol" value="20" oninput="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
-                </div>
-                <div class="input-group">
-                    <label>Gravity (OG)</label>
-                    <input type="number" id="pitch-og" value="1.050" step="0.001" oninput="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
-                </div>
-                <div class="input-group">
-                    <label>Pitch Rate (M/ml/°P)</label>
-                    <select id="pitch-rate" onchange="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
-                        <option value="0.75">0.75 (Standard Ale)</option>
-                        <option value="1.0">1.0 (High Gravity Ale)</option>
-                        <option value="1.5">1.5 (Standard Lager)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Harvest Date</label>
-                    <input type="date" id="pitch-date" onchange="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
-                </div>
-            </div>
-
-            <div class="calc-results" style="display: flex; gap: 15px; margin-top: 20px;">
-                <div class="res-card" style="flex: 1; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #333;">
-                    <span class="res-label" style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">CELLS NEEDED</span>
-                    <span class="res-val" id="res-needed" style="display: block; font-size: 2rem; font-weight: 800; color: #fff;">--</span>
-                    <span class="res-unit" style="font-size: 0.8rem; color: #666;">Billion cells</span>
-                </div>
-                <div class="res-card accent" style="flex: 1; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #333; border-left: 4px solid var(--accent-color);">
-                    <span class="res-label" style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">EST. VIABILITY</span>
-                    <span class="res-val" id="res-viability" style="display: block; font-size: 2rem; font-weight: 800; color: #fff;">--</span>
-                    <span class="res-unit" id="res-days-old" style="font-size: 0.8rem; color: #666;">New</span>
-                </div>
-            </div>
-            <div id="pitch-warning" class="warning-box" style="display:none; margin-top: 20px; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 15px; border-radius: 8px; font-size: 0.9rem; text-align: center; font-weight: 600;">
-                ⚠️ Warning: Underpitching detected. Consider building a starter!
-            </div>
-        </div>
-    `,
-
-   // --- 2. YEAST STARTERS 101 ---
-    'starters': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Starters 101</h2>
-        
-        <div class="ym-academy-layout">
-            
-            <div class="ym-academy-sidebar">
-                <h4>You will need:</h4>
-                <ul class="wizard-checklist" id="wizard-checklist">
-                    <li id="item-flask">Erlenmeyer Flask</li>
-                    <li id="item-scale">Precision Scale</li>
-                    <li id="item-dme">Light DME</li>
-                    <li id="item-water">Clean Water</li>
-                    <li id="item-heat">Heat Source</li>
-                    <li id="item-yeast">Yeast Pack</li>
-                    <li id="item-stirbar">Stir Bar</li>
-                    <li id="item-stirplate">Stir Plate</li>
-                </ul>
-            </div>
-
-            <div class="ym-academy-content" id="module-wizard">
-                <div class="wizard-dots" id="wizard-dots">
-                    <div class="wizard-dot active"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                </div>
-
-                <div class="wizard-step active" data-step="0">
-                    <div class="wizard-icon">🧽🧪</div>
-                    <h3>1. Clean & Prepare</h3>
-                    <p>Before we start, hygiene is everything. Make sure your Erlenmeyer flask is completely clean and sanitized.</p>
-                </div>
-
-                <div class="wizard-step" data-step="1">
-                    <div class="wizard-icon">⚖️🌾</div>
-                    <h3>2. The Golden Ratio</h3>
-                    <p>Place the flask on the scale. Weigh exactly <strong>100g of DME</strong> for every <strong>1 Liter of water</strong>. This creates a perfect 1.036 specific gravity.</p>
-                </div>
-
-                <div class="wizard-step" data-step="2">
-                    <div class="wizard-icon">🔥🌡️</div>
-                    <h3>3. Boil & Sterilize</h3>
-                    <p>Move the flask to your heat source. Boil gently for 10-15 minutes to sterilize the wort. <br><br><em>Pro-tip: Add a drop of Fermcap-S to prevent boil-overs!</em></p>
-                </div>
-
-                <div class="wizard-step" data-step="3">
-                    <div class="wizard-icon">❄️🌪️</div>
-                    <h3>4. Chill, Pitch & Spin</h3>
-                    <p>Cool the flask to 20°C (68°F). Pitch your yeast, drop in the stir bar, and place it on the stir plate for 24-48 hours. Watch those cells multiply!</p>
-                </div>
-
-                <div class="wizard-controls">
-                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
-                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
-                </div>
-            </div>
-        </div>
-    `,
-
-    // --- 3. YEAST WASHING 101 ---
-    'washing': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Yeast Washing 101</h2>
-        
-        <div class="ym-academy-layout">
-            
-            <div class="ym-academy-sidebar">
-                <h4>You will need:</h4>
-                <ul class="wizard-checklist" id="wizard-checklist">
-                    <li id="item-jars">Mason Jars</li>
-                    <li id="item-starsan">Star San</li>
-                    <li id="item-water">Sterile Water (Cooled)</li>
-                    <li id="item-cake">Yeast Cake</li>
-                    <li id="item-fridge">Fridge Space</li>
-                </ul>
-            </div>
-
-            <div class="ym-academy-content" id="module-wizard">
-                <div class="wizard-dots" id="wizard-dots">
-                    <div class="wizard-dot active"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                </div>
-
-                <div class="wizard-step active" data-step="0">
-                    <div class="wizard-icon">🧽💧</div>
-                    <h3>1. Prep & Dilute</h3>
-                    <p>Sanitize everything with Star San. Pour your pre-boiled, cooled (sterile) water directly into the fermenter right on top of the dirty yeast cake.</p>
-                </div>
-
-                <div class="wizard-step" data-step="1">
-                    <div class="wizard-icon">🌪️💦</div>
-                    <h3>2. Shake it up</h3>
-                    <p>Put the lid back on the fermenter and swirl it vigorously! Break the yeast cake apart completely until the water looks like a thick, muddy slurry.</p>
-                </div>
-
-                <div class="wizard-step" data-step="2">
-                    <div class="wizard-icon">⏳🕰️</div>
-                    <h3>3. Let Gravity Work</h3>
-                    <p>Let the fermenter sit completely still for <strong>20-30 minutes</strong>. The heavy, dark trub and hop matter will sink rapidly, leaving the healthy yeast suspended in the milky liquid above.</p>
-                </div>
-
-                <div class="wizard-step" data-step="3">
-                    <div class="wizard-icon">🫗✨</div>
-                    <h3>4. Harvest the Gold</h3>
-                    <p>Carefully decant the milky liquid into your sanitized mason jars. Stop pouring the second you see the dark trub from the bottom trying to follow along.</p>
-                </div>
-
-                <div class="wizard-step" data-step="4">
-                    <div class="wizard-icon">🧊🧮</div>
-                    <h3>5. Crash & Pitch</h3>
-                    <p>Put the jars in the fridge. In a few days, the yeast will compact into a clean white layer. On brew day, decant the water, let it warm up, and measure the slurry into our Pitch Calculator!</p>
-                </div>
-
-                <div class="wizard-controls">
-                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
-                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
-                </div>
-            </div>
-        </div>
-    `,
-
-    // --- 4. AGAR PLATES ---
-    'agar': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Mastering Agar Plates</h2>
-        
-        <div class="ym-academy-layout">
-            <div class="ym-academy-sidebar">
-                <h4>The Lab Kit:</h4>
-                <ul class="wizard-checklist">
-                    <li id="agar-powder">Agar-Agar Powder</li>
-                    <li id="agar-dme">Light DME</li>
-                    <li id="agar-dishes">Petri Dishes</li>
-                    <li id="agar-loop">Inoculation Loop</li>
-                    <li id="agar-flame">Flame (Bunsen/Torch)</li>
-                </ul>
-            </div>
-
-            <div class="ym-academy-content" id="module-wizard">
-                <div class="wizard-dots" id="wizard-dots">
-                    <div class="wizard-dot active"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                </div>
-
-                <div class="wizard-step active" data-step="0">
-                    <div class="wizard-icon">🥣🔥</div>
-                    <h3>1. The Magic Gel</h3>
-                    <p>Agar is just a gelatin-like substance made from algae. By mixing it with standard yeast starter wort (DME and water) and boiling it, we create a solid, sterile food surface for yeast to grow on.</p>
-                </div>
-
-                <div class="wizard-step" data-step="1">
-                    <div class="wizard-icon">🧫✨</div>
-                    <h3>2. Pouring Plates</h3>
-                    <p>In a draft-free room (next to an open flame to create a sterile updraft that pushes dust away), carefully pour the hot liquid into sterile Petri dishes. Let them cool and solidify.</p>
-                </div>
-
-                <div class="wizard-step" data-step="2">
-                    <div class="wizard-icon">〰️🦠</div>
-                    <h3>3. Streaking for Isolation</h3>
-                    <p>Dip your sterilized loop into a yeast sample. Gently drag it across the agar surface in a zig-zag pattern. Sterilize the loop, drag it through your first lines, and make new zig-zags. This spreads the cells thinner and thinner.</p>
-                </div>
-
-                <div class="wizard-step" data-step="3">
-                    <div class="wizard-icon">⚪🔍</div>
-                    <h3>4. Harvesting a Colony</h3>
-                    <p>Incubate the plates in the dark at room temp. After a few days, you'll see individual white dots. Each dot is a pure colony grown from a <strong>single yeast cell</strong>! Scoop one up and pitch it into a tiny test-tube starter.</p>
-                </div>
-
-                <div class="wizard-controls">
-                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
-                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
-                </div>
-            </div>
-        </div>
-    `,
-
-    // --- 5. WILD YEAST ---
-    'wild': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Capturing Wild Yeast</h2>
-        
-        <div class="ym-academy-layout">
-            <div class="ym-academy-sidebar">
-                <h4>The Hunter's Kit:</h4>
-                <ul class="wizard-checklist">
-                    <li id="wild-jars">Mason Jars</li>
-                    <li id="wild-wort">Low-Gravity Wort</li>
-                    <li id="wild-hops">A few Hop Pellets</li>
-                    <li id="wild-cloth">Cheesecloth</li>
-                    <li id="wild-fruit">Fruit / Flowers</li>
-                </ul>
-            </div>
-
-            <div class="ym-academy-content" id="module-wizard">
-                <div class="wizard-dots" id="wizard-dots">
-                    <div class="wizard-dot active"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                </div>
-
-                <div class="wizard-step active" data-step="0">
-                    <div class="wizard-icon">🍯🛡️</div>
-                    <h3>1. The Bait</h3>
-                    <p>Create a weak wort (1.020 SG) and boil it with a few hop pellets. Hops are crucial here—they act as a shield against unwanted bacteria (like Lactobacillus), giving wild yeast a head start to take over the jar.</p>
-                </div>
-
-                <div class="wizard-step" data-step="1">
-                    <div class="wizard-icon">🍎🌿</div>
-                    <h3>2. The Capture</h3>
-                    <p>Drop unwashed, organic fruit (apples, grapes, berries) or local flowers into your jar of cooled wort. Alternatively, cover the jar with cheesecloth and leave it under a fruit tree overnight to catch yeast riding the breeze.</p>
-                </div>
-
-                <div class="wizard-step" data-step="2">
-                    <div class="wizard-icon">👃⚠️</div>
-                    <h3>3. The Sniff Test</h3>
-                    <p>Cover with foil and wait 3-5 days. If it ferments and smells like vomit, feet, or cheese—dump it (bacteria won). If it smells bready, fruity, or like Belgian spice—congratulations, you caught wild yeast!</p>
-                </div>
-
-                <div class="wizard-step" data-step="3">
-                    <div class="wizard-icon">🧫👑</div>
-                    <h3>4. Taming the Beast</h3>
-                    <p>Wild captures are always a mix of different yeast strains and maybe some wild mold. To make a reliable brewing yeast from this, use the <em>Agar Plate streaking method</em> to isolate a single, pure, great-smelling colony!</p>
-                </div>
-
-                <div class="wizard-controls">
-                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
-                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
-                </div>
-            </div>
-        </div>
-    `,
-
-// --- 6. STIR PLATES 101 ---
-    'stirplate': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">The Magic of Stir Plates</h2>
-        
-        <div class="ym-academy-layout">
-            <div class="ym-academy-sidebar">
-                <h4>Why use one?</h4>
-                <ul class="wizard-checklist">
-                    <li class="active-item" style="border-bottom: 1px dashed #333;">Constant Oxygenation</li>
-                    <li class="active-item" style="border-bottom: 1px dashed #333;">Drives off toxic CO2</li>
-                    <li class="active-item" style="border-bottom: 1px dashed #333;">Keeps yeast suspended</li>
-                    <li class="active-item" style="color: var(--accent-color) !important;">10x Cell Growth!</li>
-                </ul>
-            </div>
-
-            <div class="ym-academy-content" style="display: block !important;">
-                <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 20px;">
-                    <div style="font-size: 3rem; line-height: 1;">🌪️</div>
-                    <div>
-                        <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px;">The Vortex</h3>
-                        <p style="color: #ccc; line-height: 1.6; font-size: 0.95rem;">A magnetic stir plate creates a continuous vortex in your Erlenmeyer flask. This constant motion drastically increases the surface area of the liquid exposed to the air, pulling in oxygen which is crucial for yeast reproduction.</p>
-                    </div>
-                </div>
-
-                <div style="display: flex; gap: 20px; align-items: flex-start;">
-                    <div style="font-size: 3rem; line-height: 1;">🧲</div>
-                    <div>
-                        <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px;">How it works</h3>
-                        <p style="color: #ccc; line-height: 1.6; font-size: 0.95rem;">Inside the box is a spinning motor with a magnet attached to it. You drop a Teflon-coated "stir bar" (which is also a magnet) into your flask. As the motor spins, the stir bar locks onto the magnetic field and spins with it.</p>
-                    </div>
-                </div>
-
-                <div style="margin-top: 30px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; border-left: 4px solid #f39c12;">
-                    <strong style="color: #f39c12;">Pro-Tip:</strong> You don't need a massive tornado! A small dimple on the surface of the liquid is enough to keep the yeast in suspension and exchange gases perfectly.
-                </div>
-            </div>
-        </div>
-    `,
-
-  // --- 7. CELL COUNTING (HEMOCYTOMETER) ---
-    'counting': `
-        <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Pro Cell Counting</h2>
-        
-        <div class="ym-academy-layout">
-            <div class="ym-academy-sidebar">
-                <h4>The Pro Gear:</h4>
-                <ul class="wizard-checklist">
-                    <li id="item-hemo">Hemocytometer</li>
-                    <li id="item-microscope">Microscope (400x)</li>
-                    <li id="item-blue">Methylene Blue</li>
-                    <li id="item-pipette">Precision Pipettes</li>
-                    <li id="item-counter">Tally Counter</li>
-                </ul>
-            </div>
-
-            <div class="ym-academy-content" id="module-wizard">
-                <div class="wizard-dots" id="wizard-dots">
-                    <div class="wizard-dot active"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                    <div class="wizard-dot"></div>
-                </div>
-
-                <div class="wizard-step active" data-step="0">
-                    <div class="wizard-icon">🧪💧</div>
-                    <h3>1. Dilute & Stain</h3>
-                    <p>Yeast slurry is way too crowded to count. We must dilute it accurately! Mix 1 part slurry with 99 parts distilled water (a <strong>1:100 dilution</strong>).</p>
-                    <p style="font-size: 0.9em; color: #aaa;">Add a drop of <strong>Methylene Blue</strong> to the sample. Wait 1-2 minutes. Living cells will push the dye out and look clear. Dead cells will be stained blue!</p>
-                </div>
-
-                <div class="wizard-step" data-step="1">
-                    <div class="wizard-icon">🔬🩸</div>
-                    <h3>2. Load the Chamber</h3>
-                    <p>A Hemocytometer is a thick glass slide with a microscopic, laser-etched grid. Place the special coverslip over the grid.</p>
-                    <p style="font-size: 0.9em; color: #aaa;">Touch your pipette to the edge of the coverslip. <em>Capillary action</em> will suck the liquid right in. Let it sit for 3 minutes so the cells settle on the glass.</p>
-                </div>
-
-                <div class="wizard-step" data-step="2">
-                    <h3 style="margin-bottom: 10px;">3. The 5 Squares</h3>
-                    <p style="font-size: 0.9em; margin-bottom: 15px;">Locate the central grid at 400x magnification. It has 25 medium squares. To save time, we only count the <strong>4 corners</strong> and the <strong>center</strong> square (highlighted below).</p>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; background: #444; width: 140px; height: 140px; margin: 0 auto 15px; border: 2px solid #666; padding: 2px;">
-                        <div style="background: var(--accent-color);"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: var(--accent-color);"></div>
-                        <div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div>
-                        <div style="background: #111;"></div><div style="background: #111;"></div><div style="background: var(--accent-color);"></div><div style="background: #111;"></div><div style="background: #111;"></div>
-                        <div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div>
-                        <div style="background: var(--accent-color);"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: var(--accent-color);"></div>
-                    </div>
-                </div>
-
-                <div class="wizard-step" data-step="3">
-                    <div class="wizard-icon">📐🛑</div>
-                    <h3>4. The L-Rule</h3>
-                    <p>Some cells will sit exactly on the boundary lines. If you count them in one square, you might accidentally count them again in the next!</p>
-                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-color); margin-top: 15px; text-align: left;">
-                        <strong style="color: #fff;">The Universal Rule:</strong><br>
-                        Count cells that touch the <strong>Top</strong> and <strong>Right</strong> lines.<br>
-                        <em>Ignore</em> cells touching the <strong>Bottom</strong> and <strong>Left</strong> lines.
-                    </div>
-                </div>
-
-                <div class="wizard-step" data-step="4">
-                    <div class="wizard-icon">🧮✖️</div>
-                    <h3>5. The Magic Formula</h3>
-                    <p>Add up all the living (clear) cells you found in those 5 squares. Now plug it into the formula to find out how many cells are in one milliliter of your slurry!</p>
-                    <div style="background: #111; padding: 15px; border-radius: 8px; border: 1px dashed #444; margin-top: 15px; font-family: monospace; font-size: 0.95rem; color: var(--accent-color);">
-                        (Cells Counted / 5) <br>
-                        × 25 <br>
-                        × Dilution Factor (100) <br>
-                        × 10,000 <br>
-                        = Cells per mL
-                    </div>
-                </div>
-
-                <div class="wizard-controls">
-                    <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Back</button>
-                    <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Next ➔</button>
-                </div>
-            </div>
-        </div>
-    `,
-
-};
 
 // ==========================================
 // --- LOGIK FÖR WIZARDEN OCH CHECKLISTAN ---
@@ -4142,23 +3661,32 @@ function changeWizardStep(direction) {
 // ==========================================
 // --- ÖPPNA/STÄNG MODULER ---
 // ==========================================
+// ==========================================
+// --- ÖPPNA/STÄNG MODULER ---
+// ==========================================
 function openAcademyModule(moduleId) {
-    const overview = document.getElementById('lab-content-academy');
-    const moduleView = document.getElementById('academy-module-view');
-    const contentArea = document.getElementById('academy-module-content');
+    const overview = document.getElementById('lab-content-academy');
+    const moduleView = document.getElementById('academy-module-view');
+    const contentArea = document.getElementById('academy-module-content');
 
-    contentArea.innerHTML = academyModules[moduleId] || '<p style="color: #ff4444;">Module not found.</p>';
+    // MAGIN: Hämta "boken" från rätt språk-hylla på den globala anslagstavlan!
+    const langDict = window.academyModules[window.currentLang] || window.academyModules['en'];
 
-    overview.style.display = 'none';
-    moduleView.style.display = 'block';
+    // Tryck in texten
+    contentArea.innerHTML = langDict[moduleId] || '<p style="color: #ff4444;">Module not found.</p>';
 
-    // Om kalkylatorn öppnas: Tvinga den att räkna direkt
-    if (moduleId === 'calc') {
-        const dateInput = document.getElementById('pitch-date');
-        if (dateInput && !dateInput.value) dateInput.valueAsDate = new Date();
-        if (typeof calculatePitch === 'function') calculatePitch();
-    } 
-else if (moduleId === 'intro') {
+    overview.style.display = 'none';
+    moduleView.style.display = 'block';
+
+    // ==========================================
+    // WIZARD-LOGIKEN (Ska vara kvar exakt som förut!)
+    // ==========================================
+    if (moduleId === 'calc') {
+        const dateInput = document.getElementById('pitch-date');
+        if (dateInput && !dateInput.value) dateInput.valueAsDate = new Date();
+        if (typeof calculatePitch === 'function') calculatePitch();
+    } 
+    else if (moduleId === 'intro') {
         currentWizardStep = 0;
         totalWizardSteps = 4;
         stepActiveItems = {
@@ -4169,44 +3697,41 @@ else if (moduleId === 'intro') {
         };
         setTimeout(() => changeWizardStep(0), 10);
     }
-    // Om vi öppnar Yeast Starters
-    else if (moduleId === 'starters') {
-        currentWizardStep = 0;
-        totalWizardSteps = 4;
-        stepActiveItems = {
-            0: ['item-flask'],
-            1: ['item-flask', 'item-scale', 'item-dme', 'item-water'],
-            2: ['item-flask', 'item-heat'],
-            3: ['item-flask', 'item-yeast', 'item-stirbar', 'item-stirplate']
-        };
-        setTimeout(() => changeWizardStep(0), 10);
-    }
-    // Om vi öppnar Yeast Washing
-    else if (moduleId === 'washing') {
-        currentWizardStep = 0;
-        totalWizardSteps = 5; 
-        stepActiveItems = {
-            0: ['item-starsan', 'item-water', 'item-cake'],
-            1: ['item-cake'],
-            2: ['item-cake'],
-            3: ['item-jars'],
-            4: ['item-jars', 'item-fridge']
-        };
-        setTimeout(() => changeWizardStep(0), 10);
-    }
-else if (moduleId === 'counting') {
+    else if (moduleId === 'starters') {
         currentWizardStep = 0;
-        totalWizardSteps = 5; // Nu har vi 5 djupgående steg!
+        totalWizardSteps = 4;
         stepActiveItems = {
-            0: ['item-blue', 'item-pipette'], // Steg 1 handlar om spädning och färg
-            1: ['item-hemo'],                 // Steg 2 är själva glaset
-            2: ['item-microscope'],           // Steg 3 är titta i mikroskopet
-            3: ['item-microscope'],           // Steg 4 (L-rule) är fortfarande mikroskopet
-            4: ['item-counter']               // Steg 5 är matematiken
+            0: ['item-flask'],
+            1: ['item-flask', 'item-scale', 'item-dme', 'item-water'],
+            2: ['item-flask', 'item-heat'],
+            3: ['item-flask', 'item-yeast', 'item-stirbar', 'item-stirplate']
         };
         setTimeout(() => changeWizardStep(0), 10);
     }
-
+    else if (moduleId === 'washing') {
+        currentWizardStep = 0;
+        totalWizardSteps = 5; 
+        stepActiveItems = {
+            0: ['item-starsan', 'item-water', 'item-cake'],
+            1: ['item-cake'],
+            2: ['item-cake'],
+            3: ['item-jars'],
+            4: ['item-jars', 'item-fridge']
+        };
+        setTimeout(() => changeWizardStep(0), 10);
+    }
+    else if (moduleId === 'counting') {
+        currentWizardStep = 0;
+        totalWizardSteps = 5;
+        stepActiveItems = {
+            0: ['item-blue', 'item-pipette'],
+            1: ['item-hemo'],
+            2: ['item-microscope'],
+            3: ['item-microscope'],
+            4: ['item-counter']
+        };
+        setTimeout(() => changeWizardStep(0), 10);
+    }
     else if (moduleId === 'agar') {
         currentWizardStep = 0;
         totalWizardSteps = 4;
@@ -4229,11 +3754,15 @@ else if (moduleId === 'counting') {
         };
         setTimeout(() => changeWizardStep(0), 10);
     }
+    else if (moduleId === 'stirplate') {
+        // Om stirplate har en wizard behöver den config, just nu verkar den vara en statisk sida?
+        // Har lagt in detta som säkerhet.
+    }
 }
 
 function closeAcademyModule() {
-    document.getElementById('academy-module-view').style.display = 'none';
-    document.getElementById('lab-content-academy').style.display = 'block';
+    document.getElementById('academy-module-view').style.display = 'none';
+    document.getElementById('lab-content-academy').style.display = 'block';
 }
 
 // =========================================================
