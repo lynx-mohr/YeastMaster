@@ -3680,7 +3680,7 @@ chart_rack: "OMTAPPNING"
         library: {
     title: "Jästbibliotek",
     info_1: "Bläddra i samlingen av jäststammar.",
-    info_2: "<strong>Dubbelklicka</strong> (eller håll inne) på ett kort för att läsa om stammen och dess YeastMaster-profiler.",
+    info_2: "<strong>Dubbelklicka</strong> (eller långtryck) på ett kort för att läsa om stammen och dess YeastMaster-profiler.",
     info_3: "Välj upp till 10 favoriter och synka dem direkt till din YeastMaster-enhet!",
     btn_tour: "✨ TA EN SNABB TOUR",
     selected: "Valda:",
