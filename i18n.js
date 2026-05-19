@@ -3524,6 +3524,23 @@ calc: {
             wild_desc: "Hunt for local microbes and brew something unique.",
             btn_back: "← BACK TO ACADEMY"
         },
+
+        house_bank: {
+            title: "House Bank",
+            desc: "Catalog your wild captures, house blends, or local yeast strains.",
+            strain_name: "Strain Name",
+            strain_placeholder: "e.g. Backyard Apple Wild",
+            origin: "Origin / Source",
+            origin_placeholder: "e.g. My Garden",
+            date: "Capture Date",
+            temp: "Temp Range",
+            temp_placeholder: "e.g. 18-25°C",
+            tags: "Tags (comma separated)",
+            tags_placeholder: "e.g. Sour, Funky, Farmhouse",
+            notes: "Description / Notes",
+            notes_placeholder: "Notes on flavor, attenuation, history...",
+            save_btn: "Save to Library"
+        }
         
         settings: {
             title: "SETTINGS",
@@ -3810,6 +3827,23 @@ about: {
             btn_back: "← TILLBAKA TILL LABBET"
         },
 
+house_bank: {
+    title: "Husbunk",
+    desc: "Katalogisera dina vildfångster, husblandningar eller lokala jäststammar.",
+    strain_name: "Jästnamn",
+    strain_placeholder: "t.ex. Backyard Apple Wild",
+    origin: "Ursprung / Källa",
+    origin_placeholder: "t.ex. Min trädgård",
+    date: "Fångstdatum",
+    temp: "Temperaturområde",
+    temp_placeholder: "t.ex. 18-25°C",
+    tags: "Taggar (komma-separerade)",
+    tags_placeholder: "t.ex. Sur, Funkig, Farmhouse",
+    notes: "Beskrivning / Anteckningar",
+    notes_placeholder: "Anteckningar om smak, utjäsning, historia...",
+    save_btn: "Spara i biblioteket"
+}
+
         settings: {
             title: "INSTÄLLNINGAR",
             theme: "Tema",
@@ -4094,6 +4128,23 @@ about: {
             wild_desc: "Jagen Sie lokale Mikroben und brauen Sie etwas Einzigartiges.",
             btn_back: "← ZURÜCK ZUM LABOR"
         },
+
+        house_bank: {
+            title: "Hefe-Bank",
+            desc: "Katalogisieren Sie Ihre Wildfänge, Hausmischungen oder lokalen Hefestämme.",
+            strain_name: "Hefestamm-Name",
+            strain_placeholder: "z.B. Backyard Apple Wild",
+            origin: "Ursprung / Quelle",
+            origin_placeholder: "z.B. Mein Garten",
+            date: "Fangdatum",
+            temp: "Temperaturbereich",
+            temp_placeholder: "z.B. 18-25°C",
+            tags: "Tags (durch Komma getrennt)",
+            tags_placeholder: "z.B. Sauer, Funkig, Farmhouse",
+            notes: "Beschreibung / Notizen",
+            notes_placeholder: "Notizen zu Geschmack, Vergärung, Geschichte...",
+            save_btn: "In der Bibliothek speichern"
+        }
 
         settings: {
             title: "EINSTELLUNGEN",
