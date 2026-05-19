@@ -2739,14 +2739,15 @@ function handleSwipe() {
 }
 
 document.addEventListener('touchstart', e => {
-    // 1. SÄKERHETSSPÄRR: Ignorera svep om du rör grafen eller sökrutan
     if (e.target.closest('.chart-container') || e.target.tagName.toLowerCase() === 'input') return;
 
-    // 2. NY SÄKERHETSSPÄRR: Ignorera svep om Jäst-detaljvyn eller Modalen är öppen!
     const detailView = document.getElementById('yeast-detail-view');
     const infoModal = document.getElementById('yeast-info-modal');
+    const academyModule = document.getElementById('academy-module-view'); // <-- NY SPÄRR!
+
     if (detailView && detailView.style.display === 'block') return;
     if (infoModal && infoModal.style.display === 'flex') return;
+    if (academyModule && academyModule.style.display === 'block') return; // <-- NY SPÄRR!
 
     touchStartX = e.changedTouches[0].screenX;
     touchStartY = e.changedTouches[0].screenY;
@@ -2755,11 +2756,13 @@ document.addEventListener('touchstart', e => {
 document.addEventListener('touchend', e => {
     if (e.target.closest('.chart-container') || e.target.tagName.toLowerCase() === 'input') return;
 
-    // Samma spärr här för att vara 100% säkra
     const detailView = document.getElementById('yeast-detail-view');
     const infoModal = document.getElementById('yeast-info-modal');
+    const academyModule = document.getElementById('academy-module-view'); // <-- NY SPÄRR!
+
     if (detailView && detailView.style.display === 'block') return;
     if (infoModal && infoModal.style.display === 'flex') return;
+    if (academyModule && academyModule.style.display === 'block') return; // <-- NY SPÄRR!
 
     touchEndX = e.changedTouches[0].screenX;
     touchEndY = e.changedTouches[0].screenY;
