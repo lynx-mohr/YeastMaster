@@ -152,10 +152,21 @@ const hwStrainNames = {
 document.addEventListener('DOMContentLoaded', () => {
     // Tvinga INGEN till login! 
     // Vi låter dem börja på SOUL-vyn (där glaset fylls) eller den flik de klickat på.
- // Berätta för mobilens bakåtknapp att "soul" är startplatsen
+    // Berätta för mobilens bakåtknapp att "soul" är startplatsen
     history.replaceState({ view: 'soul' }, null, "");
 
     showView('soul', false);
+
+    // --- STÄNG "CONNECT DEVICE"-RUTAN VID KLICK I BAKGRUNDEN ---
+    const claimContainer = document.getElementById('claim-container');
+    if (claimContainer) {
+        claimContainer.addEventListener('click', function(event) {
+            // Kontrollera att klicket var på bakgrunden och inte på den vita rutan
+            if (event.target === this) {
+                showView('settings'); // Skickar användaren smidigt tillbaka till inställningar
+            }
+        });
+    }
 
 });
 // --- KONFIGURATION ---

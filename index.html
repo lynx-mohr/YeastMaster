@@ -34,19 +34,19 @@
         </div>
     </div>
 
-    <div id="claim-container" style="display: none;">
-        <div class="auth-box">
-            <h2 data-i18n="claim.title">Connect Device</h2>
-            <p data-i18n="claim.desc">Enter ID from the OLED menu</p>
-            <input type="text" id="input-mac" placeholder="E4:B0:63:AE:1C:25" style="margin-bottom: 10px;">
-            
-            <input type="text" id="input-nickname" placeholder="Nickname (e.g., Fridge 1 / Large Conical)" data-i18n-placeholder="claim.nick_placeholder"
-                   style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
-            
-            <button id="btn-claim" class="btn-primary" data-i18n="claim.btn_activate">Aktivera Bryggverk</button>
-            <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.6;" data-i18n="claim.hint">Action-meny -> Device ID</p>
-        </div>
+<div id="claim-container" style="display: none;">
+    <div class="auth-box">
+        <h2 data-i18n="claim.title">Connect Device</h2>
+        <p data-i18n="claim.desc">Enter ID from the OLED menu</p>
+        
+        <input type="text" id="input-mac" class="ym-input-field" placeholder="E4:B0:63:AE:1C:25" style="margin-bottom: 15px;">
+        
+        <input type="text" id="input-nickname" class="ym-input-field" placeholder="Nickname (e.g., Fridge 1 / Large Conical)" data-i18n-placeholder="claim.nick_placeholder" style="margin-bottom: 20px;">
+        
+        <button id="btn-claim" class="btn-primary" data-i18n="claim.btn_activate">Aktivera Bryggverk</button>
+        <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.6;" data-i18n="claim.hint">Action-meny -> Device ID</p>
     </div>
+</div>
 
  <section id="view-dashboard" style="display: none;">
     
