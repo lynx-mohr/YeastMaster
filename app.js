@@ -5487,32 +5487,38 @@ function openSupportModal(type) {
     const form = document.getElementById('support-form');
     const successMsg = document.getElementById('support-success');
 
-    // Återställ formen
+    // 1. Återställ formen
     form.style.display = 'block';
     successMsg.style.display = 'none';
     form.reset();
 
-    // Hämta inloggad användares mejl om den finns
+    // 2. Hämta inloggad användares mejl (om tillgängligt)
     if (auth.currentUser) {
         emailField.value = auth.currentUser.email;
     }
 
-    // Sätt rubrik och ämne baserat på vilken knapp man klickade på
+    // 3. Hämta översättnings-objektet
     const lang = window.currentLang || 'en';
     const t = window.translations?.[lang]?.support || {};
 
+    // 4. Sätt rubrik och ämne dynamiskt
     if (type === 'bug') {
         title.innerText = t.title_bug || "Rapportera Bugg";
-        subjectField.value = "Bug Report - YeastMaster";
+        subjectField.value = t.sub_bug || "Bug Report - YeastMaster";
     } else {
         title.innerText = t.title_idea || "Föreslå Idé";
-        subjectField.value = "Feature Request - YeastMaster";
+        subjectField.value = t.sub_idea || "Feature Request - YeastMaster";
     }
 
-    // Lås bakgrunden (samma som House Bank)
+    // 5. Uppdatera alla data-i18n element i modalen
+    // Detta fixar "Din e-post", "Meddelande", knappar osv.
+    if (typeof updateTexts === 'function') {
+        updateTexts();
+    }
+
+    // 6. Lås bakgrunden och visa modalen
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
-    
     modal.style.display = 'flex';
 }
 

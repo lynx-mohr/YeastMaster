@@ -3591,7 +3591,21 @@ calc: {
             crash: "❄️ TIME TO COLD CRASH!",
             power: "⚠️ CONNECTION LOST! Check power/WiFi.",
             temp: "🔥 TEMP DEVIATION! >2.0°C difference.",
-            login_add_device: "You need to log in to connect a YeastMaster device to your account."
+            login_add_device: "You need to log in to connect a YeastMaster device to your account.",
+
+            support: {
+                title_bug: "Report Bug",
+        title_idea: "Suggest Idea",
+        desc: "Your ideas and bug reports help us brew a better app!",
+        email: "Your email",
+        subject: "Subject",
+        message: "Message",
+        btn_send: "Send message",
+        success_title: "Sent!",
+        success_desc: "Thanks for your feedback. We'll be in touch!",
+        sub_bug: "Bug Report - YeastMaster",
+        sub_idea: "Feature Request - YeastMaster"
+    },
 
         },
        libTour: {
@@ -3897,6 +3911,22 @@ house_bank: {
             temp: "🔥 TEMP-AVVIKELSE! >2.0°C skillnad.",
             login_add_device: "Du måste logga in för att kunna koppla en YeastMaster-enhet till ditt konto."
         },
+
+        support: {
+
+        title_bug: "Rapportera Bugg",
+        title_idea: "Föreslå Idé",
+        desc: "Dina idéer och buggrapporter hjälper oss att brygga en bättre app!",
+        email: "Din e-post",
+        subject: "Ämne",
+        message: "Meddelande",
+        btn_send: "Skicka meddelande",
+        success_title: "Skickat!",
+        success_desc: "Tack för din feedback. Vi hörs snart!",
+        sub_bug: "Buggrapport - YeastMaster",
+        sub_idea: "Idéförslag - YeastMaster"
+    },
+
 libTour: {
             noYeast: "Välj eller lägg till några jäster först för att se touren!",
             exitConfirm: "AVSLUTA TOUREN?",
@@ -4201,6 +4231,22 @@ about: {
             login_add_device: "Sie müssen sich anmelden, um ein YeastMaster-Gerät mit Ihrem Konto zu verbinden."
 
         },
+
+        support: {
+            
+        title_bug: "Fehler melden",
+        title_idea: "Idee vorschlagen",
+        desc: "Ihre Ideen und Fehlerberichte helfen uns, eine bessere App zu brauen!",
+        email: "Ihre E-Mail",
+        subject: "Betreff",
+        message: "Nachricht",
+        btn_send: "Nachricht senden",
+        success_title: "Gesendet!",
+        success_desc: "Vielen Dank für Ihr Feedback. Wir melden uns!",
+        sub_bug: "Fehlerbericht - YeastMaster",
+        sub_idea: "Funktionsvorschlag - YeastMaster"
+    },
+
 libTour: {
             noYeast: "Wähle oder füge zuerst einige Hefen hinzu, um die Tour zu sehen!",
             exitConfirm: "TOUR BEENDEN?",
