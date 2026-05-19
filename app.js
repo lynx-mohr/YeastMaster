@@ -1048,7 +1048,7 @@ let dryHopData = {
     color: '#8CC63F'
 };
 
-/ --- CHART.JS PLUGIN: Torrhumlingslinjen ---
+// --- CHART.JS PLUGIN: Torrhumlingslinjen ---
 const dryHopPlugin = {
     id: 'dryHopLine',
     afterDraw: (chart) => {
@@ -1227,8 +1227,22 @@ function updateSummaryText() {
     const t_rise_to = langObj.rise_to || "Rise to";
     const t_by = langObj.by_day || "by Day";
 
+ // --- HÄMTA ÖVERSÄTTNINGAR FÖR DYNAMISK TEXT ---
+    const lang = window.currentLang || 'en';
+    const profilerT = window.translations[lang]?.profiler || window.translations['en'].profiler;
+
+    const t_day     = profilerT.day || "Day";
+    const t_hold    = profilerT.hold_until || "Hold until Day";
+    const t_rise    = profilerT.free_rise || "Free rise to";
+    const t_drop    = profilerT.drop_to || "Drop to";
+    const t_reach   = profilerT.reach || "Reach";
+    const t_by      = profilerT.by_day || "by Day";
+    const t_rise_to = profilerT.rise_to || "Rise to";
+    
+    // ------------------------------------------------
+
     // 1. PITCH
-    const pitchText = `${t_day} ${Math.round(p[0].x)} @ ${p[0].y.toFixed(1)}${unit}`;
+    const pitchText = `${t_day} 0 @ ${p[0].y.toFixed(1)}${unit}`; // (Tips: Pitch är alltid dag 0)
 
     // 2. PRIMARY
     let primText = `${t_hold} ${Math.round(p[1].x)}`;
