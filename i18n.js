@@ -3867,7 +3867,7 @@ house_bank: {
             add_device: "+ LÄGG TILL YEASTMASTER",
             support: "SUPPORT & FEEDBACK",
             btn_bug: "RAPPORTERA BUGG",
-            btn_idea: "FÖRESLÅ IDÉ",
+            btn_idea: "FÖRSLAGSLÅDA",
             btn_logout: "LOGGA UT"
         },
         action: {
