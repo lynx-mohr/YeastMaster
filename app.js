@@ -190,17 +190,15 @@ if ('scrollRestoration' in history) {
 // Vi skapar en variabel för att hålla koll på var vi VAR någonstans
 let currentActiveView = 'soul'; 
 
-// Lägg till 'pushToHistory = true' i parentesen!
-function showView(viewName, pushToHistory = true) {
-
+function showView(viewName, pushToHistory = true, forceOverride = false) { // <-- Lade till forceOverride
     // --- DÖRRVAKT: Blockera flikbyten om touren är aktiv ---
     const tourOverlay = document.getElementById('demo-overlay');
-    if (tourOverlay && (tourOverlay.style.display === 'block' || tourOverlay.classList.contains('active'))) {
+    // Om forceOverride är true, ignorera dörrvakten!
+    if (!forceOverride && tourOverlay && (tourOverlay.style.display === 'block' || tourOverlay.classList.contains('active'))) {
         console.log("Navigering blockerad: Guidad tour pågår!");
         return; // Avbryt funktionen helt och hållet!
     }
     // -------------------------------------------------------
-
     const views = {
         login: document.getElementById('login-container'),
         claim: document.getElementById('claim-container'),
