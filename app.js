@@ -2997,9 +2997,15 @@ window.deleteHouseStrain = function(id) {
 const libraryTourSteps = [
     { selector: '.yeast-card:first-child', i18nKey: 'step1' },
     { selector: '.hw-profile-btn',         i18nKey: 'step2' },
-    { selector: '.btn-secondary',          i18nKey: 'step3' },
-    { selector: '#yeast-grid',             i18nKey: 'step4' },
-    { selector: 'button[onclick*="openAddStrainModal"]', i18nKey: 'step5' }
+    { selector: '.hw-profile-summary',     i18nKey: 'step3' },
+    { selector: '.btn-secondary',          i18nKey: 'step4' },
+    { selector: '#view-lab',               i18nKey: 'step5' }, // Eller specifik knapp i profileraren
+    { selector: '.add-hop-btn-klass',      i18nKey: 'step6' }, // Byt till din faktiska klass/ID
+    { selector: '#yeast-grid',             i18nKey: 'step7' },
+    { selector: 'button[onclick*="openAddStrainModal"]', i18nKey: 'step8' },
+    { selector: '#house-bank-notes',       i18nKey: 'step9' }, // Byt till din faktiska klass/ID
+    { selector: '#house-bank-grid',        i18nKey: 'step10' }, // Byt till din faktiska klass/ID
+    { selector: 'body',                    i18nKey: 'step11' }
 ];
 
 function startLibraryTour() {
@@ -3008,7 +3014,7 @@ function startLibraryTour() {
     // Om vi inte har några kort än, visa ett översatt meddelande
     if (document.querySelectorAll('.yeast-card').length === 0) {
         // OBS: Dubbelkolla att ditt globala objekt heter 'translations' eller t.ex. 'window.translations'
-        const alertMsg = translations[lang]?.libraryTour?.noYeast || "Select or add some yeast first to see the tour!";
+const alertMsg = window.translations[lang]?.libTour?.noYeast || "Select or add some yeast first to see the tour!";
         alert(alertMsg);
         return;
     }
@@ -3037,7 +3043,7 @@ function startLibraryTour() {
             setTimeout(() => {
                 tooltip.style.display = 'block';
                 
-                const stepText = translations[lang]?.libraryTour?.[step.i18nKey] || "Text missing";
+                const stepText = window.translations[lang]?.libTour?.[step.i18nKey] || "Text missing";
                 document.getElementById('demo-tour-text').innerText = stepText;
                 
                 const rect = target.getBoundingClientRect();
@@ -3067,7 +3073,7 @@ window.confirmAbortTour = function(e) {
     }
     
     const lang = window.currentLang || 'en';
-    const confirmMsg = translations[lang]?.libraryTour?.exitConfirm || "EXIT TOUR?";
+    const confirmMsg = window.translations[lang]?.libTour?.exitConfirm || "EXIT TOUR?";
     
     if (confirm(confirmMsg)) {
         window.abortLibraryTour();
