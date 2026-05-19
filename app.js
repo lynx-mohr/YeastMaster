@@ -190,15 +190,22 @@ if ('scrollRestoration' in history) {
 // Vi skapar en variabel för att hålla koll på var vi VAR någonstans
 let currentActiveView = 'soul'; 
 
-function showView(viewName, pushToHistory = true, forceOverride = false) { // <-- Lade till forceOverride
-    // --- DÖRRVAKT: Blockera flikbyten om touren är aktiv ---
+function showView(viewName, pushToHistory = true, forceOverride = false) { 
+    // --- DÖRRVAKT 1: Blockera flikbyten om touren är aktiv ---
     const tourOverlay = document.getElementById('demo-overlay');
-    // Om forceOverride är true, ignorera dörrvakten!
     if (!forceOverride && tourOverlay && (tourOverlay.style.display === 'block' || tourOverlay.classList.contains('active'))) {
         console.log("Navigering blockerad: Guidad tour pågår!");
-        return; // Avbryt funktionen helt och hållet!
+        return; 
+    }
+
+    // --- DÖRRVAKT 2: Blockera flikbyten om House Bank-modalen är öppen ---
+    const addStrainModal = document.getElementById('add-strain-modal');
+    if (!forceOverride && addStrainModal && addStrainModal.style.display === 'flex') {
+        console.log("Navigering blockerad: House Bank-modal är öppen!");
+        return; 
     }
     // -------------------------------------------------------
+
     const views = {
         login: document.getElementById('login-container'),
         claim: document.getElementById('claim-container'),
@@ -2906,11 +2913,16 @@ function openAddStrainModal(existingStrain = null) {
     const nameInput = document.getElementById('hs-name');
     const dateInput = document.getElementById('hs-date');
 
+    // --- HÄMTA ÖVERSÄTTNINGAR ---
+    const lang = window.currentLang || 'en';
+    const t = window.translations?.[lang]?.house_bank || window.translations?.['en']?.house_bank || {};
+
     if (existingStrain && existingStrain.id) {
-        title.innerText = "Edit House Strain";
+        // Använd översatt titel för edit-läget
+        title.innerText = t.edit_title || "Edit House Strain"; 
         nameInput.value = existingStrain.name || '';
         document.getElementById('hs-origin').value = existingStrain.origin || '';
-        if(dateInput) dateInput.value = existingStrain.captureDate || ''; // Fyll i datumet
+        if(dateInput) dateInput.value = existingStrain.captureDate || ''; 
         document.getElementById('hs-temp').value = existingStrain.temp || '';
         document.getElementById('hs-tags').value = (existingStrain.tags || []).join(', ');
         document.getElementById('hs-desc').value = existingStrain.desc || '';
@@ -2918,7 +2930,8 @@ function openAddStrainModal(existingStrain = null) {
         nameInput.disabled = true;
         nameInput.style.opacity = "0.5";
     } else {
-        title.innerText = "House Bank";
+        // Använd översatt titel för nytt kort
+        title.innerText = t.title || "House Bank";
         nameInput.value = '';
         document.getElementById('hs-origin').value = '';
         
@@ -2936,11 +2949,21 @@ function openAddStrainModal(existingStrain = null) {
         nameInput.style.opacity = "1";
     }
 
+    // --- LÅS BAKGRUNDEN ---
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    modal.style.overscrollBehavior = 'none'; // Hindrar "studs"-scroll på iOS
+    
     modal.style.display = 'flex';
 }
 
 function closeAddStrainModal() {
     document.getElementById('add-strain-modal').style.display = 'none';
+
+    // --- LÅS UPP BAKGRUNDEN ---
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+
 }
 
 function saveHouseStrain() {
