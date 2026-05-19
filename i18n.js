@@ -3593,6 +3593,8 @@ calc: {
             temp: "🔥 TEMP DEVIATION! >2.0°C difference.",
             login_add_device: "You need to log in to connect a YeastMaster device to your account.",
 
+            },
+
         support: {
         title_bug: "Report Bug",
         title_idea: "Suggest Idea",
@@ -3606,9 +3608,10 @@ calc: {
         sub_bug: "Bug Report - YeastMaster",
         sub_idea: "Feature Request - YeastMaster",
         message_placeholder: "Tell us what happened or share your idea..."
-    },
+    
 
         },
+        
        libTour: {
             noYeast: "Select or add some yeast first to see the tour!",
             exitConfirm: "EXIT TOUR?",
