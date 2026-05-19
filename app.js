@@ -5477,3 +5477,91 @@ document.addEventListener('fullscreenchange', () => {
         }, 300);
     }
 });
+
+// Öppna Support-modalen
+function openSupportModal(type) {
+    const modal = document.getElementById('support-modal');
+    const title = document.getElementById('support-title');
+    const subjectField = document.getElementById('support-subject');
+    const emailField = document.getElementById('support-email');
+    const form = document.getElementById('support-form');
+    const successMsg = document.getElementById('support-success');
+
+    // Återställ formen
+    form.style.display = 'block';
+    successMsg.style.display = 'none';
+    form.reset();
+
+    // Hämta inloggad användares mejl om den finns
+    if (auth.currentUser) {
+        emailField.value = auth.currentUser.email;
+    }
+
+    // Sätt rubrik och ämne baserat på vilken knapp man klickade på
+    const lang = window.currentLang || 'en';
+    const t = window.translations?.[lang]?.support || {};
+
+    if (type === 'bug') {
+        title.innerText = t.title_bug || "Rapportera Bugg";
+        subjectField.value = "Bug Report - YeastMaster";
+    } else {
+        title.innerText = t.title_idea || "Föreslå Idé";
+        subjectField.value = "Feature Request - YeastMaster";
+    }
+
+    // Lås bakgrunden (samma som House Bank)
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    
+    modal.style.display = 'flex';
+}
+
+// Stäng Support-modalen
+function closeSupportModal() {
+    const modal = document.getElementById('support-modal');
+    modal.style.display = 'none';
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+}
+
+// Skicka meddelandet via Formspree
+async function sendSupportMessage(event) {
+    event.preventDefault();
+    const btn = document.getElementById('btn-send-support');
+    const form = document.getElementById('support-form');
+    const successMsg = document.getElementById('support-success');
+    
+    // HÄR: Ersätt YOUR_ID med ditt Formspree-ID sen
+    const formspreeUrl = "https://formspree.io/f/mqldaqwx"; 
+
+    btn.disabled = true;
+    btn.innerText = "...";
+
+    try {
+        const formData = new FormData(form);
+        const response = await fetch(formspreeUrl, {
+            method: 'POST',
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+            form.style.display = 'none';
+            successMsg.style.display = 'block';
+            // Stäng automatiskt efter 3 sekunder
+            setTimeout(closeSupportModal, 3000);
+        } else {
+            alert("Hoppsan! Något gick fel. Försök igen senare.");
+        }
+    } catch (error) {
+        alert("Kunde inte skicka. Kontrollera din internetanslutning.");
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "Skicka meddelande";
+    }
+}
+
+// --- BONUS: Klicka utanför för att stänga ---
+document.getElementById('support-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeSupportModal();
+});

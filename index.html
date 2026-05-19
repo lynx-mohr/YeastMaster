@@ -359,16 +359,15 @@
    <div style="margin-top: 40px; padding-top: 25px; border-top: 1px dashed #333;">
     <h4 style="color: var(--text-dim, #888); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; text-align: center;" data-i18n="settings.support">SUPPORT & FEEDBACK</h4>
     
-    <div style="display: flex; gap: 10px;">
-        <button onclick="window.location.href='mailto:support@yeastmaster.com?subject=Bug%20Report'" style="flex: 1; text-align: center; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; font-size: 0.75rem; cursor: pointer; transition: 0.2s;">
-            🐛 <span data-i18n="settings.btn_bug">REPORT BUG</span>
-        </button>
-        
-        <button onclick="window.location.href='mailto:hello@yeastmaster.com?subject=Feature%20Request'" style="flex: 1; text-align: center; background: rgba(140, 198, 63, 0.1); border: 1px solid var(--accent-color); color: var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; font-size: 0.75rem; cursor: pointer; transition: 0.2s;">
-            💡 <span data-i18n="settings.btn_idea">SUGGEST IDEA</span>
-        </button>
-    </div>
+  <div style="display: flex; gap: 10px;">
+    <button onclick="openSupportModal('bug')" style="flex: 1; text-align: center; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; font-size: 0.75rem; cursor: pointer;">
+        🐛 <span data-i18n="settings.btn_bug">REPORT BUG</span>
+    </button>
+    <button onclick="openSupportModal('idea')" style="flex: 1; text-align: center; background: rgba(140, 198, 63, 0.1); border: 1px solid var(--accent-color); color: var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; font-size: 0.75rem; cursor: pointer;">
+        💡 <span data-i18n="settings.btn_idea">SUGGEST IDEA</span>
+    </button>
 </div>
+
         
     <div style="margin-top: 40px; text-align: center;">
         <button id="btn-logout" style="background: transparent; color: #ff4444; border: 1px solid #ff4444; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer;" data-i18n="settings.btn_logout">
@@ -844,6 +843,41 @@
         
     </div>
 </div>
+
+<div id="support-modal" class="ym-modal" style="display: none;">
+    <div class="ym-modal-content">
+        <span class="ym-close-btn" onclick="closeSupportModal()">&times;</span>
+        
+        <h3 id="support-title" style="color: var(--accent-color); margin-bottom: 5px;">Support & Feedback</h3>
+        <p class="lab-description" style="margin-bottom: 20px;" data-i18n="support.desc">Dina idéer och buggrapporter hjälper oss att brygga en bättre app!</p>
+
+        <form id="support-form" onsubmit="sendSupportMessage(event)">
+            <div class="ym-input-group" style="margin-bottom: 15px;">
+                <label data-i18n="support.email">Din e-post</label>
+                <input type="email" name="email" id="support-email" class="ym-input-field" placeholder="bryggare@exempel.se" required>
+            </div>
+
+            <div class="ym-input-group" style="margin-bottom: 15px;">
+                <label data-i18n="support.subject">Ämne</label>
+                <input type="text" name="subject" id="support-subject" class="ym-input-field" readonly>
+            </div>
+
+            <div class="ym-input-group" style="margin-bottom: 20px;">
+                <label data-i18n="support.message">Meddelande</label>
+                <textarea name="message" id="support-message" class="ym-input-field" rows="5" placeholder="Berätta vad som hände eller vad du har för idé..." required></textarea>
+            </div>
+
+            <button type="submit" id="btn-send-support" class="ym-btn-primary" style="width: 100%;" data-i18n="support.btn_send">Skicka meddelande</button>
+        </form>
+        
+        <div id="support-success" style="display: none; text-align: center; padding: 20px;">
+            <i class="fa-solid fa-circle-check" style="font-size: 3rem; color: var(--accent-color); margin-bottom: 15px;"></i>
+            <h4 data-i18n="support.success_title">Skickat!</h4>
+            <p data-i18n="support.success_desc">Tack för din feedback. Vi hörs snart!</p>
+        </div>
+    </div>
+</div>
+
 
 <div id="add-strain-modal" class="ym-modal" style="display: none;">
     <div class="ym-modal-content">
