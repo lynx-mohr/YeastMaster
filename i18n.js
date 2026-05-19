@@ -3593,8 +3593,8 @@ calc: {
             temp: "🔥 TEMP DEVIATION! >2.0°C difference.",
             login_add_device: "You need to log in to connect a YeastMaster device to your account.",
 
-            support: {
-                title_bug: "Report Bug",
+        support: {
+        title_bug: "Report Bug",
         title_idea: "Suggest Idea",
         desc: "Your ideas and bug reports help us brew a better app!",
         email: "Your email",
@@ -3604,7 +3604,8 @@ calc: {
         success_title: "Sent!",
         success_desc: "Thanks for your feedback. We'll be in touch!",
         sub_bug: "Bug Report - YeastMaster",
-        sub_idea: "Feature Request - YeastMaster"
+        sub_idea: "Feature Request - YeastMaster",
+        message_placeholder: "Tell us what happened or share your idea..."
     },
 
         },
@@ -3924,7 +3925,8 @@ house_bank: {
         success_title: "Skickat!",
         success_desc: "Tack för din feedback. Vi hörs snart!",
         sub_bug: "Buggrapport - YeastMaster",
-        sub_idea: "Idéförslag - YeastMaster"
+        sub_idea: "Idéförslag - YeastMaster",
+        message_placeholder: "Berätta vad som hände eller vad du har för idé..."
     },
 
 libTour: {
@@ -4233,7 +4235,7 @@ about: {
         },
 
         support: {
-            
+
         title_bug: "Fehler melden",
         title_idea: "Idee vorschlagen",
         desc: "Ihre Ideen und Fehlerberichte helfen uns, eine bessere App zu brauen!",
@@ -4244,7 +4246,8 @@ about: {
         success_title: "Gesendet!",
         success_desc: "Vielen Dank für Ihr Feedback. Wir melden uns!",
         sub_bug: "Fehlerbericht - YeastMaster",
-        sub_idea: "Funktionsvorschlag - YeastMaster"
+        sub_idea: "Funktionsvorschlag - YeastMaster",
+        message_placeholder: "Erzählen Sie uns, was passiert ist oder was Ihre Idee ist..."
     },
 
 libTour: {
