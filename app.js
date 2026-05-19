@@ -3068,10 +3068,11 @@ window.startLibraryTour = function() {
             if (firstProfileBtn && !firstProfileBtn.classList.contains('active')) firstProfileBtn.click(); 
             setTimeout(() => { const targetBtn = document.querySelector('#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]'); if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);
         }},
-        { selector: '#lab-chart', i18nKey: 'step5', action: () => {
+  { selector: '#lab-chart', i18nKey: 'step5', action: () => {
             if (typeof closeYeastModal === 'function') closeYeastModal();
             document.body.style.overflow = 'hidden'; 
-            if (typeof showView === 'function') showView('lab');
+            // VIP-PASS FRAMVISAT: (false för pushHistory, true för forceOverride)
+            if (typeof showView === 'function') showView('lab', false, true); 
             window.scrollTo({ top: 0, behavior: 'instant' });
             setTimeout(() => {
                 const yeast = yeastStrains.find(y => y.id === 'us-05');
