@@ -1029,11 +1029,23 @@ window.onpopstate = function(event) {
     const support = document.getElementById('support-modal');
     const detail = document.getElementById('yeast-detail-view'); // Om du använder den
 
-    // 2. Kolla vilken som är öppen och stäng den
+    // 2. Kolla vilken som är öppen och stäng den / stega tillbaka
+    
+    // --- LOGIK FÖR AKADEMIN (Stega tillbaka eller stäng) ---
     if (academy && academy.style.display === 'block') {
-        closeAcademyModule();
-        return; 
+        if (event.state && event.state.page === 'academy') {
+            // Vi är kvar i lektionen, men backade ett steg (t.ex. steg 4 till 3)
+            currentWizardStep = event.state.step;
+            updateWizardUI(); // Rita om skärmen till det föregående steget
+            return; 
+        } else {
+            // Vi backade förbi Steg 0, stäng hela lektionen!
+            // (Skickar med false ifall din closeAcademyModule försöker göra en history.back)
+            closeAcademyModule(false); 
+            return;
+        }
     }
+
     if (pitch && pitch.style.display === 'flex') {
         closePitchCalcModal();
         return;
@@ -1061,7 +1073,7 @@ window.onpopstate = function(event) {
 
     // 3. Om ingen modal var öppen, byt flik baserat på historik
     if (event.state && event.state.view) {
-        showView(event.state.view, false);
+        showView(event.state.view, false); // false = skapa ingen ny brödsmula, vi backar ju!
     } else {
         // Fallback: Gå till startvyn
         showView('soul', false);
@@ -3935,31 +3947,58 @@ let stepActiveItems = {};
 
 // Körs när man trycker Next eller Back
 function changeWizardStep(direction, isFromPopState = false) {
-    // --- MAGIN: Om vi klickar "Back" i appens UI, låt mobilen sköta det! ---
+    // 1. Om vi klickar "Tillbaka" via knappen, låt mobilens/webbläsarens inbyggda historik sköta det!
     if (direction === -1 && !isFromPopState) {
-        history.back(); // Detta triggar din window.onpopstate automatiskt
+        history.back(); // Triggers window.onpopstate
         return;
     }
 
     let nextStep = currentWizardStep + direction;
 
-    if (nextStep < 0) {
-        closeAcademyModule();
-        return;
-    }
-    
-    if (nextStep >= totalWizardSteps) {
+    if (nextStep < 0 || nextStep >= totalWizardSteps) {
         closeAcademyModule();
         return;
     }
 
-    // --- MAGIN 2: Om vi klickar "Next", lägg till steget i mobilens historik ---
+    // 2. Lägg till i historiken om vi går framåt (Next)
     if (direction === 1 && !isFromPopState) {
         history.pushState({ page: 'academy', step: nextStep }, null, "");
     }
 
     currentWizardStep = nextStep;
-    updateWizardUI(); // Anropa rit-funktionen
+    updateWizardUI();
+}
+
+function updateWizardUI() {
+    // Uppdatera Wizarden (Text och Prickar)
+    document.querySelectorAll('.wizard-step').forEach(step => {
+        step.classList.remove('active');
+        if (parseInt(step.getAttribute('data-step')) === currentWizardStep) {
+            step.classList.add('active');
+        }
+    });
+
+    document.querySelectorAll('.wizard-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentWizardStep);
+    });
+
+    const prevBtn = document.getElementById('wiz-prev');
+    const nextBtn = document.getElementById('wiz-next');
+
+    if (prevBtn && nextBtn) {
+        prevBtn.disabled = currentWizardStep === 0;
+        nextBtn.innerText = currentWizardStep === totalWizardSteps - 1 ? "Finish! ✓" : "Next ➔";
+    }
+
+    // Den Levande Checklistan
+    document.querySelectorAll('.wizard-checklist li').forEach(li => li.classList.remove('active-item'));
+    const itemsToHighlight = stepActiveItems[currentWizardStep];
+    if (itemsToHighlight) {
+        itemsToHighlight.forEach(itemId => {
+            const element = document.getElementById(itemId);
+            if (element) element.classList.add('active-item');
+        });
+    }
 }
 
 // --- NY FUNKTION: Sköter bara utseendet så att den kan återanvändas ---
@@ -4019,6 +4058,9 @@ function openAcademyModule(moduleId) {
 
     overview.style.display = 'none';
     moduleView.style.display = 'block';
+
+    // MAGIN: Berätta för webbläsaren att lektionen har börjat på steg 0!
+history.pushState({ page: 'academy', step: 0 }, null, "");
 
     // ==========================================
     // WIZARD-LOGIKEN (Ska vara kvar exakt som förut!)
