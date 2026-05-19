@@ -158,9 +158,9 @@
                 
     <div style="padding: 0 20px; margin-top: 20px;">
         <label style="display: block; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;" data-i18n="library.target_device">TARGET DEVICE</label>
-        <select id="sync-target-device" style="width: 100%; background: #000; border: 2px solid #444; color: var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend', sans-serif; font-weight: 800; outline: none; margin-bottom: 10px;">
-            <option value="" data-i18n="library.loading_devices">Laddar enheter...</option>
-        </select>
+       <select id="sync-target-device" class="ym-select">
+    <option value="" data-i18n="library.loading_devices">Laddar enheter...</option>
+</select>
         <button id="sync-btn" class="sync-button" onclick="syncToSelectedDevice()" data-i18n="library.btn_sync">SYNC TO SELECTED DEVICE</button>
     </div>
 </section>
