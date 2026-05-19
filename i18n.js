@@ -3540,7 +3540,7 @@ calc: {
             notes: "Description / Notes",
             notes_placeholder: "Notes on flavor, attenuation, history...",
             save_btn: "Save to Library"
-        }
+        },
         
         settings: {
             title: "SETTINGS",
@@ -3842,7 +3842,7 @@ house_bank: {
     notes: "Beskrivning / Anteckningar",
     notes_placeholder: "Anteckningar om smak, utjäsning, historia...",
     save_btn: "Spara i biblioteket"
-}
+},
 
         settings: {
             title: "INSTÄLLNINGAR",
@@ -4144,7 +4144,7 @@ about: {
             notes: "Beschreibung / Notizen",
             notes_placeholder: "Notizen zu Geschmack, Vergärung, Geschichte...",
             save_btn: "In der Bibliothek speichern"
-        }
+        },
 
         settings: {
             title: "EINSTELLUNGEN",
