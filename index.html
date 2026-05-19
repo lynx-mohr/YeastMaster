@@ -356,18 +356,19 @@
 </button>
     </div>
 
-    <div style="margin-top: 40px; padding-top: 25px; border-top: 1px dashed #333;">
-        <h4 style="color: var(--text-dim, #888); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; text-align: center;" data-i18n="settings.support">SUPPORT & FEEDBACK</h4>
+   <div style="margin-top: 40px; padding-top: 25px; border-top: 1px dashed #333;">
+    <h4 style="color: var(--text-dim, #888); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; text-align: center;" data-i18n="settings.support">SUPPORT & FEEDBACK</h4>
+    
+    <div style="display: flex; gap: 10px;">
+        <button onclick="window.location.href='mailto:support@yeastmaster.com?subject=Bug%20Report'" style="flex: 1; text-align: center; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; font-size: 0.75rem; cursor: pointer; transition: 0.2s;">
+            🐛 <span data-i18n="settings.btn_bug">REPORT BUG</span>
+        </button>
         
-        <div style="display: flex; gap: 10px;">
-            <a href="mailto:support@yeastmaster.com?subject=Bug%20Report" style="flex: 1; text-align: center; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.75rem; transition: 0.2s;">
-                🐛 <span data-i18n="settings.btn_bug">REPORT BUG</span>
-            </a>
-            <a href="mailto:hello@yeastmaster.com?subject=Feature%20Request" style="flex: 1; text-align: center; background: rgba(140, 198, 63, 0.1); border: 1px solid var(--accent-color); color: var(--accent-color); padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.75rem; transition: 0.2s;">
-                💡 <span data-i18n="settings.btn_idea">SUGGEST IDEA</span>
-            </a>
-        </div>
+        <button onclick="window.location.href='mailto:hello@yeastmaster.com?subject=Feature%20Request'" style="flex: 1; text-align: center; background: rgba(140, 198, 63, 0.1); border: 1px solid var(--accent-color); color: var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; font-size: 0.75rem; cursor: pointer; transition: 0.2s;">
+            💡 <span data-i18n="settings.btn_idea">SUGGEST IDEA</span>
+        </button>
     </div>
+</div>
         
     <div style="margin-top: 40px; text-align: center;">
         <button id="btn-logout" style="background: transparent; color: #ff4444; border: 1px solid #ff4444; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer;" data-i18n="settings.btn_logout">
