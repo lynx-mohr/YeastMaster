@@ -851,44 +851,40 @@
         <h3 style="color: var(--accent-color); margin-bottom: 5px;" data-i18n="add_strain.title">House Bank</h3>
         <p class="lab-description" style="margin-bottom: 20px;" data-i18n="add_strain.desc">Catalog your wild captures, house blends, or local yeast strains.</p>
 
-    <div class="ym-input-group" style="margin-bottom: 15px;">
-    <label data-i18n="add_strain.name">Strain Name</label>
-    <input type="text" id="hs-name" class="ym-input-field" 
-           placeholder="e.g. Backyard Apple Wild" 
-           data-i18n-placeholder="add_strain.name_placeholder" 
-           maxlength="22">
-</div>
+        <div class="ym-input-group" style="margin-bottom: 15px;">
+            <label data-i18n="add_strain.name">Strain Name</label>
+            <input type="text" id="hs-name" class="ym-input-field" placeholder="e.g. Backyard Apple Wild" data-i18n-placeholder="add_strain.name_placeholder" maxlength="22">
+        </div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
             <div class="ym-input-group">
                 <label data-i18n="add_strain.origin">Origin / Source</label>
-                <input type="text" id="hs-origin" placeholder="e.g. My Garden" data-i18n-placeholder="add_strain.origin_placeholder" maxlength="15" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                <input type="text" id="hs-origin" class="ym-input-field" placeholder="e.g. My Garden" data-i18n-placeholder="add_strain.origin_placeholder" maxlength="15">
             </div>
             <div class="ym-input-group">
                 <label data-i18n="add_strain.date">Capture Date</label>
-                <input type="date" id="hs-date" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                <input type="date" id="hs-date" class="ym-input-field">
             </div>
         </div>
 
         <div class="ym-input-group" style="margin-bottom: 15px;">
             <label data-i18n="add_strain.temp">Temp Range</label>
-            <input type="text" id="hs-temp" placeholder="e.g. 18-25°C" data-i18n-placeholder="add_strain.temp_placeholder" maxlength="15" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+            <input type="text" id="hs-temp" class="ym-input-field" placeholder="e.g. 18-25°C" data-i18n-placeholder="add_strain.temp_placeholder" maxlength="15">
         </div>
 
         <div class="ym-input-group" style="margin-bottom: 15px;">
             <label data-i18n="add_strain.tags">Tags (comma separated)</label>
-            <input type="text" id="hs-tags" placeholder="e.g. Sour, Funky, Farmhouse" data-i18n-placeholder="add_strain.tags_placeholder" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+            <input type="text" id="hs-tags" class="ym-input-field" placeholder="e.g. Sour, Funky, Farmhouse" data-i18n-placeholder="add_strain.tags_placeholder">
         </div>
 
         <div class="ym-input-group" style="margin-bottom: 20px;">
             <label data-i18n="add_strain.notes">Description / Notes</label>
-            <textarea id="hs-desc" rows="3" placeholder="Notes on flavor, attenuation, history..." data-i18n-placeholder="add_strain.notes_placeholder" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 400; resize: vertical;"></textarea>
+            <textarea id="hs-desc" class="ym-input-field" rows="3" placeholder="Notes on flavor, attenuation, history..." data-i18n-placeholder="add_strain.notes_placeholder"></textarea>
         </div>
 
         <button class="ym-btn-primary" onclick="saveHouseStrain()" style="width: 100%;" data-i18n="add_strain.btn_save">Save to Library</button>
     </div>
 </div>
-
 <script src="academy.js"></script>
 <script src="i18n.js"></script>
 <script src="app.js"></script>
