@@ -202,23 +202,28 @@ if ('scrollRestoration' in history) {
 let currentActiveView = 'soul'; 
 
 function showView(viewName, pushToHistory = true, forceOverride = false) { 
-    // --- DÖRRVAKT 1: Blockera flikbyten om touren är aktiv ---
-    const tourOverlay = document.getElementById('demo-overlay');
-    if (!forceOverride && tourOverlay && (tourOverlay.style.display === 'block' || tourOverlay.classList.contains('active'))) {
-        console.log("Navigering blockerad: Guidad tour pågår!");
-        return; 
-    }
+    // --- DÖRRVAKT: Blockera navigering om någon av dessa är aktiv ---
+    if (!forceOverride) {
+        const tourOverlay = document.getElementById('demo-overlay');
+        const addStrainModal = document.getElementById('add-strain-modal');
+        const pitchModal = document.getElementById('pitch-calc-modal');
+        const academyModule = document.getElementById('academy-module-view');
 
-    // --- DÖRRVAKT 2: Blockera flikbyten om House Bank-modalen är öppen ---
-    const addStrainModal = document.getElementById('add-strain-modal');
-    if (!forceOverride && addStrainModal && addStrainModal.style.display === 'flex') {
-        console.log("Navigering blockerad: House Bank-modal är öppen!");
-        return; 
+        const isTourActive = tourOverlay && (tourOverlay.style.display === 'block' || tourOverlay.classList.contains('active'));
+        const isStrainModalOpen = addStrainModal && addStrainModal.style.display === 'flex';
+        const isPitchModalOpen = pitchModal && pitchModal.style.display === 'flex';
+        const isAcademyOpen = academyModule && academyModule.style.display === 'block';
+
+        if (isTourActive || isStrainModalOpen || isPitchModalOpen || isAcademyOpen) {
+            console.log("Navigering blockerad: En modal eller tour är aktiv!");
+            return; // Avbryt här, användaren får inte byta flik
+        }
     }
     // -------------------------------------------------------
 
     const views = {
         login: document.getElementById('login-container'),
+        // ... (resten av din views-lista)
         claim: document.getElementById('claim-container'),
         soul: document.getElementById('view-soul'),
         library: document.getElementById('view-library'),
