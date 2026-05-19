@@ -5532,7 +5532,7 @@ async function sendSupportMessage(event) {
     const successMsg = document.getElementById('support-success');
     
     // HÄR: Ersätt YOUR_ID med ditt Formspree-ID sen
-    const formspreeUrl = "https://formspree.io/f/mqldaqwx"; 
+    const formspreeUrl = "https://formspree.io/f/xvzyzpqj"; 
 
     btn.disabled = true;
     btn.innerText = "...";
