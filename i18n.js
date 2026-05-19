@@ -3370,7 +3370,13 @@ const translations = {
             btn_add_dump: "+ RACK / DUMP",
             schedule_hop: "Dry Hop scheduled on Day",
             schedule_dump: "Rack / Dump scheduled on Day",
-            btn_save: "SAVE PROFILE"
+            btn_save: "SAVE PROFILE",
+            fullscreen: "FULLSCREEN",
+btn_remove_hops: "- REMOVE DRY HOPS",
+btn_remove_dump: "- REMOVE ACTION",
+chart_dry_hop: "DRY HOP",
+chart_rack: "RACK/DUMP"
+            
         },
         
         soul: {
@@ -3399,7 +3405,9 @@ const translations = {
     loading_devices: "Loading devices...",
     btn_sync: "SYNC TO SELECTED DEVICE",
     btn_edit: "EDIT DETAILS",
-    btn_delete: "DELETE"
+    btn_delete: "DELETE",
+    included_profiles: "INCLUDED HARDWARE PROFILES:",
+btn_edit_profiler: "EDIT IN PROFILER",
 },
 
 calc: {
@@ -3648,7 +3656,12 @@ calc: {
             btn_add_dump: "+ TAPPA OM / DUMPA",
             schedule_hop: "Torrhumling schemalagd till Dag",
             schedule_dump: "Omtappning schemalagd till Dag",
-            btn_save: "SPARA PROFIL"
+            btn_save: "SPARA PROFIL",
+            fullscreen: "HELSKÄRM",
+btn_remove_hops: "- TA BORT TORRHUMLING",
+btn_remove_dump: "- TA BORT ÅTGÄRD",
+chart_dry_hop: "TORRHUMLING",
+chart_rack: "OMTAPPNING"
         },
 
         soul: {
@@ -3677,7 +3690,9 @@ calc: {
     loading_devices: "Laddar enheter...",
     btn_sync: "SYNKA TILL VALD ENHET",
     btn_edit: "REDIGERA DETALJER",
-    btn_delete: "TA BORT"
+    btn_delete: "TA BORT",
+    included_profiles: "INKLUDERADE HÅRDVARUPROFILER:",
+btn_edit_profiler: "REDIGERA I PROFILERARE",
 },
 
 calc: {
@@ -3926,7 +3941,12 @@ libTour: {
             btn_add_dump: "+ UMSCHLAUCHEN",
             schedule_hop: "Kalthopfung geplant für Tag",
             schedule_dump: "Umschlauchen geplant für Tag",
-            btn_save: "PROFIL SPEICHERN"
+            btn_save: "PROFIL SPEICHERN",
+            fullscreen: "VOLLBILD",
+btn_remove_hops: "- KALTHOPFUNG ENTFERNEN",
+btn_remove_dump: "- UMSCHLAUCHEN ENTFERNEN",
+chart_dry_hop: "KALTHOPFUNG",
+chart_rack: "UMSCHLAUCHEN"
         },
 
         soul: {
@@ -3955,7 +3975,9 @@ libTour: {
     loading_devices: "Geräte werden geladen...",
     btn_sync: "MIT AUSGEWÄHLTEM GERÄT SYNCHRONISIEREN",
     btn_edit: "DETAILS BEARBEITEN",
-    btn_delete: "LÖSCHEN"
+    btn_delete: "LÖSCHEN",
+    included_profiles: "ENTHALTENE HARDWARE-PROFILE:",
+btn_edit_profiler: "IM PROFILER BEARBEITEN",
 },
 
 calc: {

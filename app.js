@@ -1048,7 +1048,7 @@ let dryHopData = {
     color: '#8CC63F'
 };
 
-// --- CHART.JS PLUGIN: Torrhumlingslinjen ---
+/ --- CHART.JS PLUGIN: Torrhumlingslinjen ---
 const dryHopPlugin = {
     id: 'dryHopLine',
     afterDraw: (chart) => {
@@ -1078,7 +1078,11 @@ const dryHopPlugin = {
         ctx.fillStyle = dryHopData.color;
         ctx.font = 'bold 10px Lexend';
         ctx.textAlign = 'center';
-        ctx.fillText('DRY HOP', xPix, top - 5);
+
+        // --- HÄMTA SPRÅK OCH RITA ÖVERSATT TEXT ---
+        const lang = window.currentLang || 'en';
+        const textDryHop = window.translations[lang]?.lab?.chart_dry_hop || 'DRY HOP';
+        ctx.fillText(textDryHop, xPix, top - 5);
 
         ctx.beginPath();
         ctx.arc(xPix, (top + bottom) / 2, 6, 0, 2 * Math.PI);
@@ -1094,9 +1098,9 @@ const dryHopPlugin = {
 // --- DATA-TILLSTÅND FÖR RACK/DUMP ---
 let rackDumpData = {
     enabled: false,
-    day: 9.0, // <-- Ändrad till 9.0 (1 dag in i Condition)
+    day: 9.0, 
     isDragging: false,
-    color: '#F2994A' // Sekundär färg (Orange/Guld)
+    color: '#F2994A' 
 };
 
 // --- CHART.JS PLUGIN: Rack/Dump-linjen ---
@@ -1114,7 +1118,7 @@ const rackDumpPlugin = {
         ctx.save();
         ctx.strokeStyle = rackDumpData.color;
         ctx.lineWidth = 2;
-        ctx.setLineDash([4, 4]); // Tätare streck än torrhumling
+        ctx.setLineDash([4, 4]); 
         ctx.beginPath();
         ctx.moveTo(xPix, top);
         ctx.lineTo(xPix, bottom);
@@ -1124,10 +1128,14 @@ const rackDumpPlugin = {
         ctx.fillStyle = rackDumpData.color;
         ctx.font = 'bold 10px Lexend';
         ctx.textAlign = 'center';
-        ctx.fillText('RACK/DUMP', xPix, top - 5);
+
+        // --- HÄMTA SPRÅK OCH RITA ÖVERSATT TEXT ---
+        const lang = window.currentLang || 'en';
+        const textRackDump = window.translations[lang]?.lab?.chart_rack || 'RACK/DUMP';
+        ctx.fillText(textRackDump, xPix, top - 5);
 
         ctx.beginPath();
-        ctx.arc(xPix, ((top + bottom) / 2) - 30, 6, 0, 2 * Math.PI); // Förskjuten Y-axel
+        ctx.arc(xPix, ((top + bottom) / 2) - 30, 6, 0, 2 * Math.PI); 
         ctx.fill();
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 1;
@@ -1143,15 +1151,20 @@ function toggleRackDumpLine() {
     const btn = document.getElementById('btn-add-dump');
     const textInfo = document.getElementById('dump-schedule-text');
     
+    // 1. Hämta det aktuella språket
+    const lang = window.currentLang || 'en';
+    
     if (rackDumpData.enabled) {
-        btn.innerText = "- REMOVE ACTION";
+        // 2. Använd det översatta ordet!
+        btn.innerText = window.translations[lang]?.lab?.btn_remove_dump || "- REMOVE ACTION";
         btn.classList.add('active');
         btn.style.color = rackDumpData.color;
         btn.style.borderColor = rackDumpData.color;
         btn.style.backgroundColor = 'rgba(242, 153, 74, 0.1)';
         if(textInfo) textInfo.style.display = 'block';
     } else {
-        btn.innerText = "+ RACK / DUMP";
+        // 2. Använd det översatta ordet!
+        btn.innerText = window.translations[lang]?.lab?.btn_add_dump || "+ RACK / DUMP";
         btn.classList.remove('active');
         btn.style.color = '';
         btn.style.borderColor = '';
@@ -1170,13 +1183,18 @@ function toggleDryHopLine() {
     const btn = document.getElementById('btn-add-hops');
     const textInfo = document.getElementById('hop-schedule-text');
     
+    // 1. Hämta det aktuella språket
+    const lang = window.currentLang || 'en';
+    
     if (dryHopData.enabled) {
-        btn.innerText = "- REMOVE DRY HOPS";
+        // 2. Använd det översatta ordet!
+        btn.innerText = window.translations[lang]?.lab?.btn_remove_hops || "- REMOVE DRY HOPS";
         btn.classList.add('active');
         textInfo.style.display = 'block';
         updateSummaryText();
     } else {
-        btn.innerText = "+ ADD DRY HOPS";
+        // 2. Använd det översatta ordet!
+        btn.innerText = window.translations[lang]?.lab?.btn_add_hops || "+ ADD DRY HOPS";
         btn.classList.remove('active');
         textInfo.style.display = 'none';
         if(labChart) labChart.canvas.style.cursor = 'default';
@@ -1401,23 +1419,22 @@ function initLabChart() {
                     ctx.fillText(text, midX, midY);
                 }
 
-                // --- ÖVERSÄTTNINGSLOGIKEN ---
-                let textPrim = 'PRIM';
-                let textClean = 'CLEAN';
-                let textCrash = 'COLD CRASH';
-                let textCond = 'COND';
+           // --- ÖVERSÄTTNINGSLOGIKEN (Nu via vår i18n-motor!) ---
+                const lang = window.currentLang || 'en';
+                // Vi hämtar från profiler-sektionen i i18n
+                const t = window.translations[lang]?.profiler || window.translations['en'].profiler;
 
-                if (window.currentLang === 'sv') {
-                    textPrim = 'PRIMÄR';
-                    textClean = 'D-RAST';
-                    textCrash = 'KALLKRASCH';
-                    textCond = 'LAGRING';
-                } else if (window.currentLang === 'de') {
-                    textPrim = 'HAUPTGÄRUNG';
-                    textClean = 'D-RAST';
-                    textCrash = 'COLD CRASH'; // Ofta engelska i tysk bryggning, annars KÜHLUNG
-                    textCond = 'REIFUNG';
-                }
+                // Vi konverterar orden till VERSALER (uppercase) för att det ser snyggast ut i grafen
+                const textPrim = (t.primary || 'PRIMARY').toUpperCase();
+                const textClean = (t.cleanup || 'CLEANUP').toUpperCase();
+                const textCrash = (t.cold_crash || 'COLD CRASH').toUpperCase();
+                const textCond = (t.condition || 'CONDITION').toUpperCase();
+
+                // Rita ut de översatta orden!
+                drawText(textPrim, 0, 1);    
+                drawText(textClean, 2, 3);   
+                drawText(textCrash, 3, 4, 15, 5);      
+                drawText(textCond, 4, 5);
 
                 // Rita ut de översatta orden!
                 drawText(textPrim, 0, 1);    
