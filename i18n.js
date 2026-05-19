@@ -3611,7 +3611,7 @@ calc: {
     
 
         },
-        
+
        libTour: {
             noYeast: "Select or add some yeast first to see the tour!",
             exitConfirm: "EXIT TOUR?",
@@ -3919,7 +3919,7 @@ house_bank: {
         support: {
 
         title_bug: "Rapportera Bugg",
-        title_idea: "Föreslå Idé",
+        title_idea: "Förslagslåda",
         desc: "Dina idéer och buggrapporter hjälper oss att brygga en bättre app!",
         email: "Din e-post",
         subject: "Ämne",
