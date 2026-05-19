@@ -2097,25 +2097,78 @@ function openYeastModal(yeast) {
             detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:20px; color: #fff;">Passar till:</h3><p>${yeast.styles}</p>`;
         }
 
-        const targetStrainName = hwStrainNames[yeast.id];
+ const targetStrainName = hwStrainNames[yeast.id];
         if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
             const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
             if (matchingProfiles.length > 0) {
-                let profileListHtml = `<div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;"><h4 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Included Hardware Profiles:</h4>`;
+                
+                // --- HÄMTA ÖVERSÄTTNINGARNA FÖR MODALEN ---
+                const lang = window.currentLang || 'en';
+                const libT = window.translations?.[lang]?.library || window.translations?.['en']?.library || {};
+                const profT = window.translations?.[lang]?.profiler || window.translations?.['en']?.profiler || {};
+
+                // Titlar & Knappar (De nya vi la till i i18n)
+                const t_included = libT.included_profiles || "INCLUDED HARDWARE PROFILES:";
+                const t_edit_btn = libT.btn_edit_profiler || "EDIT IN PROFILER";
+
+                // Tabell-termer
+                const t_summary = profT.summary || "PROFILE SUMMARY";
+                const t_pitch   = profT.pitch || "Pitch";
+                const t_prim    = profT.primary || "Primary";
+                const t_clean   = profT.cleanup || "Cleanup";
+                const t_crash   = profT.cold_crash || "Cold Crash";
+                const t_cond    = profT.condition || "Condition";
+
+                const t_day     = profT.day || "Day";
+                const t_hold    = profT.hold_until || "Hold until Day";
+                const t_rise    = profT.rise_to || "Rise to";
+                const t_drop    = profT.drop_to || "Drop to";
+                const t_reach   = profT.reach || "Reach";
+                const t_by      = profT.by_day || "by Day";
+                // ------------------------------------------
+
+                let profileListHtml = `<div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;"><h4 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">${t_included}</h4>`;
+                
                 matchingProfiles.forEach((prof, index) => {
                     const startTemp = prof.steps[0][1];
                     const uniqueId = `hw-profile-summary-${yeast.id}-${index}`; 
                     const steps = prof.steps;
+                    
                     profileListHtml += `<button class="hw-profile-btn" onclick="toggleHwProfile('${uniqueId}', this)"><strong>${prof.p}</strong><span style="color: #888; font-size: 0.85em;">(Starts @ ${startTemp.toFixed(1)}°C)</span></button>`;
-                    profileListHtml += `<div class="hw-profile-summary" id="${uniqueId}"><div class="summary-header">PROFILE SUMMARY</div>`;
-                    profileListHtml += `<div class="summary-row"><span class="label">Pitch</span><span class="value">Day ${steps[0][0]} @ ${steps[0][1].toFixed(1)}°C</span></div>`;
-                    if (steps[1][1] === steps[0][1]) { profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Hold until Day ${steps[1][0]}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Primary</span><span class="value">Reach ${steps[1][1].toFixed(1)}°C by Day ${steps[1][0]}</span></div>`; }
-                    if (steps[2][1] >= steps[1][1]) { let text = steps[2][1] > steps[1][1] ? `Rise to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}` : `Hold until Day ${steps[2][0]}`; profileListHtml += `<div class="summary-row"><span class="label">Cleanup</span><span class="value">${text}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}</span></div>`; }
-                    if (steps[3][1] < steps[2][1]) { profileListHtml += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">Drop to ${steps[3][1].toFixed(1)}°C by Day ${steps[3][0]}</span></div>`; } else { profileListHtml += `<div class="summary-row"><span class="label">Condition</span><span class="value">Hold until Day ${steps[3][0]}</span></div>`; }
-                    profileListHtml += `<button class="btn-secondary" style="width: 100%; margin-top: 15px; border-color: var(--accent-color); color: var(--accent-color);" onclick="loadProfileIntoLab('${targetStrainName}', '${prof.p}', '${yeast.name}')">✏️ EDIT IN PROFILER</button>`;
+                    profileListHtml += `<div class="hw-profile-summary" id="${uniqueId}"><div class="summary-header">${t_summary}</div>`;
+                    
+                    // Pitch
+                    profileListHtml += `<div class="summary-row"><span class="label">${t_pitch}</span><span class="value">${t_day} ${steps[0][0]} @ ${steps[0][1].toFixed(1)}°C</span></div>`;
+                    
+                    // Primary
+                    if (steps[1][1] === steps[0][1]) { 
+                        profileListHtml += `<div class="summary-row"><span class="label">${t_prim}</span><span class="value">${t_hold} ${steps[1][0]}</span></div>`; 
+                    } else { 
+                        profileListHtml += `<div class="summary-row"><span class="label">${t_prim}</span><span class="value">${t_reach} ${steps[1][1].toFixed(1)}°C ${t_by} ${steps[1][0]}</span></div>`; 
+                    }
+                    
+                    // Cleanup / Crash
+                    if (steps[2][1] >= steps[1][1]) { 
+                        let text = steps[2][1] > steps[1][1] ? `${t_rise} ${steps[2][1].toFixed(1)}°C ${t_by} ${steps[2][0]}` : `${t_hold} ${steps[2][0]}`; 
+                        profileListHtml += `<div class="summary-row"><span class="label">${t_clean}</span><span class="value">${text}</span></div>`; 
+                    } else { 
+                        profileListHtml += `<div class="summary-row"><span class="label">${t_crash}</span><span class="value">${t_drop} ${steps[2][1].toFixed(1)}°C ${t_by} ${steps[2][0]}</span></div>`; 
+                    }
+                    
+                    // Crash / Condition
+                    if (steps[3][1] < steps[2][1]) { 
+                        profileListHtml += `<div class="summary-row"><span class="label">${t_crash}</span><span class="value">${t_drop} ${steps[3][1].toFixed(1)}°C ${t_by} ${steps[3][0]}</span></div>`; 
+                    } else { 
+                        profileListHtml += `<div class="summary-row"><span class="label">${t_cond}</span><span class="value">${t_hold} ${steps[3][0]}</span></div>`; 
+                    }
+                    
+                    // Knappen längst ner!
+                    profileListHtml += `<button class="btn-secondary" style="width: 100%; margin-top: 15px; border-color: var(--accent-color); color: var(--accent-color);" onclick="loadProfileIntoLab('${targetStrainName}', '${prof.p}', '${yeast.name}')">✏️ ${t_edit_btn}</button>`;
                     profileListHtml += `</div>`; 
                 });
-                profileListHtml += `</div>`; detailedText += profileListHtml; 
+                
+                profileListHtml += `</div>`; 
+                detailedText += profileListHtml; 
             }
         }
     }
