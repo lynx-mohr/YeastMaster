@@ -873,6 +873,31 @@ if(document.getElementById('btn-logout')) {
     });
 }
 
+function checkAddDeviceAccess() {
+    // Kolla om vi har en inloggad användare
+    const user = auth.currentUser;
+
+    if (!user) {
+        // --- GÄST: Visa ett meddelande! ---
+        const lang = window.currentLang || 'en';
+        // Hämtar från ordboken, eller använder en engelsk fallback
+        const alertMsg = window.translations?.[lang]?.alerts?.login_add_device || "Please log in to add a YeastMaster device.";
+        
+        alert(alertMsg);
+        
+        // (Valfritt) Om du vill vara extra smidig kan du skicka dem raka vägen till inloggningen efter de klickat OK:
+        // showView('login'); 
+        
+        return; // Avbryt här, gå inte vidare till rutan!
+    }
+
+    // --- INLOGGAD: Släpp förbi! ---
+    // Beroende på hur din app är uppbyggd, anropar du funktionen som öppnar vyn.
+    // Förmodligen är det någon av dessa två:
+    showAddDevice(); 
+    // eller: showView('claim');
+}
+
 let selectedStrains = []; // Här sparar vi ID:n på de 10 utvalda
 
 function renderYeastLibrary(filter = "") {

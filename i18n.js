@@ -3590,7 +3590,9 @@ calc: {
             dump: "🧪 TIME TO DUMP YEAST!",
             crash: "❄️ TIME TO COLD CRASH!",
             power: "⚠️ CONNECTION LOST! Check power/WiFi.",
-            temp: "🔥 TEMP DEVIATION! >2.0°C difference."
+            temp: "🔥 TEMP DEVIATION! >2.0°C difference.",
+            login_add_device: "You need to log in to connect a YeastMaster device to your account."
+
         },
        libTour: {
             noYeast: "Select or add some yeast first to see the tour!",
@@ -3892,7 +3894,8 @@ house_bank: {
             dump: "🧪 DAGS ATT TÖMMA JÄST!",
             crash: "❄️ DAGS FÖR COLD CRASH!",
             power: "⚠️ ANSLUTNING BRUTEN! Kolla ström/WiFi.",
-            temp: "🔥 TEMP-AVVIKELSE! >2.0°C skillnad."
+            temp: "🔥 TEMP-AVVIKELSE! >2.0°C skillnad.",
+            login_add_device: "Du måste logga in för att kunna koppla en YeastMaster-enhet till ditt konto."
         },
 libTour: {
             noYeast: "Välj eller lägg till några jäster först för att se touren!",
@@ -4194,7 +4197,9 @@ about: {
             dump: "🧪 HEFE ABLASSEN!",
             crash: "❄️ ZEIT FÜR COLD CRASH!",
             power: "⚠️ VERBINDUNG UNTERBROCHEN!",
-            temp: "🔥 TEMP-ABWEICHUNG! >2.0°C diff."
+            temp: "🔥 TEMP-ABWEICHUNG! >2.0°C diff.",
+            login_add_device: "Sie müssen sich anmelden, um ein YeastMaster-Gerät mit Ihrem Konto zu verbinden."
+
         },
 libTour: {
             noYeast: "Wähle oder füge zuerst einige Hefen hinzu, um die Tour zu sehen!",
