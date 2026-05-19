@@ -1204,32 +1204,16 @@ function toggleDryHopLine() {
 
 function updateSummaryText() {
     const summaryBox = document.getElementById('profile-summary');
-    if (!summaryBox) return; // Finns inte rutan, avbryt snyggt.
+    if (!summaryBox) return;
 
-    // Om grafen inte har laddat sina punkter än, avbryt.
     if (typeof profilePoints === 'undefined' || profilePoints.length < 6) return;
 
     const p = profilePoints;
     const unit = '°' + currentTempUnit;
 
-    // --- SKOTTSÄKER ORDBOK (Reservhjul) ---
-    // Letar upp dina nya ord i i18n.js. Hittar den inget använder den engelska i reserv.
-    let langObj = {};
-    if (typeof translations !== 'undefined' && translations[window.currentLang] && translations[window.currentLang].profiler) {
-        langObj = translations[window.currentLang].profiler;
-    }
-
-    const t_day = langObj.day || "Day";
-    const t_hold = langObj.hold_until || "Hold until Day";
-    const t_rise = langObj.free_rise || "Free rise to";
-    const t_drop = langObj.drop_to || "Drop to";
-    const t_reach = langObj.reach || "Reach";
-    const t_rise_to = langObj.rise_to || "Rise to";
-    const t_by = langObj.by_day || "by Day";
-
- // --- HÄMTA ÖVERSÄTTNINGAR FÖR DYNAMISK TEXT ---
+    // --- HÄMTA ÖVERSÄTTNINGAR FÖR DYNAMISK TEXT ---
     const lang = window.currentLang || 'en';
-    const profilerT = window.translations[lang]?.profiler || window.translations['en'].profiler;
+    const profilerT = window.translations?.[lang]?.profiler || window.translations?.['en']?.profiler || {};
 
     const t_day     = profilerT.day || "Day";
     const t_hold    = profilerT.hold_until || "Hold until Day";
@@ -1242,7 +1226,7 @@ function updateSummaryText() {
     // ------------------------------------------------
 
     // 1. PITCH
-    const pitchText = `${t_day} 0 @ ${p[0].y.toFixed(1)}${unit}`; // (Tips: Pitch är alltid dag 0)
+    const pitchText = `${t_day} 0 @ ${p[0].y.toFixed(1)}${unit}`; 
 
     // 2. PRIMARY
     let primText = `${t_hold} ${Math.round(p[1].x)}`;
@@ -1269,17 +1253,15 @@ function updateSummaryText() {
     const condText = `${t_hold} ${Math.round(p[5].x)}`;
 
     // --- BYGG IHOP HELA LÅDAN FRÅN BÖRJAN ---
-    // Här skapar vi de snygga raderna och trycker in översättningarna direkt!
     summaryBox.innerHTML = `
-        <div class="summary-header" data-i18n="profiler.summary">${langObj.summary || "PROFILE SUMMARY"}</div>
-        <div class="summary-row"><span class="label" data-i18n="profiler.pitch">${langObj.pitch || "Pitch"}</span><span class="value">${pitchText}</span></div>
-        <div class="summary-row"><span class="label" data-i18n="profiler.primary">${langObj.primary || "Primary"}</span><span class="value">${primText}</span></div>
-        <div class="summary-row"><span class="label" data-i18n="profiler.cleanup">${langObj.cleanup || "Cleanup"}</span><span class="value">${cleanText}</span></div>
-        <div class="summary-row"><span class="label" data-i18n="profiler.cold_crash">${langObj.cold_crash || "Cold Crash"}</span><span class="value">${crashText}</span></div>
-        <div class="summary-row"><span class="label" data-i18n="profiler.condition">${langObj.condition || "Condition"}</span><span class="value">${condText}</span></div>
+        <div class="summary-header" data-i18n="profiler.summary">${profilerT.summary || "PROFILE SUMMARY"}</div>
+        <div class="summary-row"><span class="label" data-i18n="profiler.pitch">${profilerT.pitch || "Pitch"}</span><span class="value">${pitchText}</span></div>
+        <div class="summary-row"><span class="label" data-i18n="profiler.primary">${profilerT.primary || "Primary"}</span><span class="value">${primText}</span></div>
+        <div class="summary-row"><span class="label" data-i18n="profiler.cleanup">${profilerT.cleanup || "Cleanup"}</span><span class="value">${cleanText}</span></div>
+        <div class="summary-row"><span class="label" data-i18n="profiler.cold_crash">${profilerT.cold_crash || "Cold Crash"}</span><span class="value">${crashText}</span></div>
+        <div class="summary-row"><span class="label" data-i18n="profiler.condition">${profilerT.condition || "Condition"}</span><span class="value">${condText}</span></div>
     `;
 
-    // (Valfritt) Uppdatera humle-siffran om du har den synlig någonstans
     if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
         const hopVal = document.getElementById('hop-day-val');
         if (hopVal) hopVal.innerText = dryHopData.day.toFixed(1);
@@ -1450,12 +1432,7 @@ function initLabChart() {
                 drawText(textCrash, 3, 4, 15, 5);      
                 drawText(textCond, 4, 5);
 
-                // Rita ut de översatta orden!
-                drawText(textPrim, 0, 1);    
-                drawText(textClean, 2, 3);   
-                drawText(textCrash, 3, 4, 15, 5);      
-                drawText(textCond, 4, 5);
-
+             
                 ctx.restore();
             }
         }]
