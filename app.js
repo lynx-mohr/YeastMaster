@@ -3096,7 +3096,7 @@ window.startLibraryTour = function() {
         { selector: '#tour-fake-custom-card', i18nKey: 'step7', action: () => {
             if (typeof dryHopData !== 'undefined' && dryHopData.enabled && typeof toggleDryHopLine === 'function') toggleDryHopLine();
             if (typeof rackDumpData !== 'undefined' && rackDumpData.enabled && typeof toggleRackDumpLine === 'function') toggleRackDumpLine();
-            if (typeof showView === 'function') showView('library');
+           if (typeof showView === 'function') showView('library', false, true);
             let fakeCard = document.getElementById('tour-fake-custom-card');
             if (!fakeCard) {
                 fakeCard = document.createElement('div');
