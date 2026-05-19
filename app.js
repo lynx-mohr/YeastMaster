@@ -1020,32 +1020,50 @@ document.getElementById('yeast-search').addEventListener('input', (e) => {
 renderYeastLibrary();
 
 window.onpopstate = function(event) {
-    // 1. Kolla om vi har en "pop-up" öppen (Detaljvyn eller Info-modalen)
-    const detail = document.getElementById('yeast-detail-view');
-    const modal = document.getElementById('yeast-info-modal');
-    
-    // Stäng detaljvyn om den är öppen
+    // 1. Lista alla modaler vi vill kunna stänga med bakåtknappen
+    const academy = document.getElementById('academy-module-view');
+    const pitch = document.getElementById('pitch-calc-modal');
+    const strain = document.getElementById('add-strain-modal');
+    const claim = document.getElementById('claim-container');
+    const info = document.getElementById('yeast-info-modal');
+    const support = document.getElementById('support-modal');
+    const detail = document.getElementById('yeast-detail-view'); // Om du använder den
+
+    // 2. Kolla vilken som är öppen och stäng den
+    if (academy && academy.style.display === 'block') {
+        closeAcademyModule();
+        return; 
+    }
+    if (pitch && pitch.style.display === 'flex') {
+        closePitchCalcModal();
+        return;
+    }
+    if (strain && strain.style.display === 'flex') {
+        closeAddStrainModal();
+        return;
+    }
+    if (info && info.style.display === 'flex') {
+        closeYeastModal();
+        return;
+    }
+    if (support && support.style.display === 'flex') {
+        closeSupportModal();
+        return;
+    }
+    if (claim && claim.style.display === 'flex') {
+        showView('settings');
+        return;
+    }
     if (detail && detail.style.display === "block") {
         detail.style.display = "none";
-        return; // Stoppa koden här så vi inte byter flik i bakgrunden
-    }
-    
-    // Stäng modaler (inforutor) om de är öppna
-    if (modal && modal.style.display === "flex") {
-        modal.style.display = "none";
-        document.body.style.overflow = ''; 
-        return; // Stoppa koden här
+        return;
     }
 
-    // 2. Vilken huvudflik ska vi backa till? (Läs historiken/brödsmulan)
+    // 3. Om ingen modal var öppen, byt flik baserat på historik
     if (event.state && event.state.view) {
-        // Eftersom vi hanterar 'yeast-detail' ovanför, vill vi inte skicka det till showView
-        if (event.state.view !== 'yeast-detail') {
-            // False betyder: "Gör ingen NY brödsmula, vi backar ju!"
-            showView(event.state.view, false);
-        }
+        showView(event.state.view, false);
     } else {
-        // Om användaren på något sätt backar förbi den allra första sidan, tvinga dem till Home
+        // Fallback: Gå till startvyn
         showView('soul', false);
     }
 };
