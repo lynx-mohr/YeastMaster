@@ -3743,7 +3743,7 @@ calc: {
 about: {
             back: "← TILLBAKA",
             title: "YEASTMASTER",
-            desc: "Ta absolut kontroll över din jäsning. YeastMaster är en dedikerad hårdvaruenhet och ett molnekosystem designat för den moderna hembryggaren, som överbryggar klyftan mellan bryggningens biologiska konst och exakt datakontroll.",
+            desc: "Ta absolut kontroll över din jäsning. YeastMaster är en dedikerad hårdvaruenhet och ett molnekosystem designat för den moderna hembryggaren, som överbryggar klyftan mellan bryggningens biologiska konst och exakt temperaturkontroll.",
             hw_title: "📟 Hårdvaran",
             hw_desc: "En dedikerad fysisk kontroller med en skarp OLED-skärm. Klicka för att se hur den styr din kyl och värmekälla.",
             cloud_title: "☁️ Molnappen",

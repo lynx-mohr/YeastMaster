@@ -3834,3 +3834,19 @@ body.light-mode .modal-body [style*="F2994A"] {
     line-height: 1.4; /* Gör radavståndet lite luftigare när det blir två rader */
 }
 
+/* Standard (Dark mode) */
+.ym-input-field {
+    width: 100%;
+    background: #000; 
+    border: 1px solid #333; 
+    color: #fff; 
+    padding: 12px; 
+    border-radius: 8px;
+}
+
+/* När light-mode är på */
+.light-mode .ym-input-field {
+    background: #ffffff !important;
+    border: 1px solid #cccccc !important;
+    color: #333333 !important;
+}
