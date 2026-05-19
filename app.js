@@ -3931,50 +3931,70 @@ let totalWizardSteps = 0;
 let stepActiveItems = {}; 
 
 // Körs när man trycker Next eller Back
-function changeWizardStep(direction) {
-    currentWizardStep += direction;
+function changeWizardStep(direction, isFromPopState = false) {
+    // --- MAGIN: Om vi klickar "Back" i appens UI, låt mobilen sköta det! ---
+    if (direction === -1 && !isFromPopState) {
+        history.back(); // Detta triggar din window.onpopstate automatiskt
+        return;
+    }
 
-    if (currentWizardStep < 0) currentWizardStep = 0;
-    
-    if (currentWizardStep >= totalWizardSteps) {
-        closeAcademyModule();
-        return;
-    }
+    let nextStep = currentWizardStep + direction;
 
-    // 1. Uppdatera Wizarden (Text och Prickar)
-    document.querySelectorAll('.wizard-step').forEach(step => {
-        step.classList.remove('active');
-        if (parseInt(step.getAttribute('data-step')) === currentWizardStep) {
-            step.classList.add('active');
-        }
-    });
+    if (nextStep < 0) {
+        closeAcademyModule();
+        return;
+    }
+    
+    if (nextStep >= totalWizardSteps) {
+        closeAcademyModule();
+        return;
+    }
 
-    document.querySelectorAll('.wizard-dot').forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentWizardStep);
-    });
+    // --- MAGIN 2: Om vi klickar "Next", lägg till steget i mobilens historik ---
+    if (direction === 1 && !isFromPopState) {
+        history.pushState({ page: 'academy', step: nextStep }, null, "");
+    }
 
-    const prevBtn = document.getElementById('wiz-prev');
-    const nextBtn = document.getElementById('wiz-next');
+    currentWizardStep = nextStep;
+    updateWizardUI(); // Anropa rit-funktionen
+}
 
-    if (prevBtn && nextBtn) {
-        prevBtn.disabled = currentWizardStep === 0;
-        nextBtn.innerText = currentWizardStep === totalWizardSteps - 1 ? "Finish! ✓" : "Next ➔";
-    }
+// --- NY FUNKTION: Sköter bara utseendet så att den kan återanvändas ---
+function updateWizardUI() {
+    // 1. Uppdatera Wizarden (Text och Prickar)
+    document.querySelectorAll('.wizard-step').forEach(step => {
+        step.classList.remove('active');
+        if (parseInt(step.getAttribute('data-step')) === currentWizardStep) {
+            step.classList.add('active');
+        }
+    });
 
-    // 2. Den Levande Checklistan!
-    document.querySelectorAll('.wizard-checklist li').forEach(li => {
-        li.classList.remove('active-item');
-    });
+    document.querySelectorAll('.wizard-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentWizardStep);
+    });
 
-    const itemsToHighlight = stepActiveItems[currentWizardStep];
-    if (itemsToHighlight) {
-        itemsToHighlight.forEach(itemId => {
-            const element = document.getElementById(itemId);
-            if (element) {
-                element.classList.add('active-item');
-            }
-        });
-    }
+    const prevBtn = document.getElementById('wiz-prev');
+    const nextBtn = document.getElementById('wiz-next');
+
+    if (prevBtn && nextBtn) {
+        prevBtn.disabled = currentWizardStep === 0;
+        nextBtn.innerText = currentWizardStep === totalWizardSteps - 1 ? "Finish! ✓" : "Next ➔";
+    }
+
+    // 2. Den Levande Checklistan!
+    document.querySelectorAll('.wizard-checklist li').forEach(li => {
+        li.classList.remove('active-item');
+    });
+
+    const itemsToHighlight = stepActiveItems[currentWizardStep];
+    if (itemsToHighlight) {
+        itemsToHighlight.forEach(itemId => {
+            const element = document.getElementById(itemId);
+            if (element) {
+                element.classList.add('active-item');
+            }
+        });
+    }
 }
 
 // ==========================================
