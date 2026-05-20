@@ -1133,10 +1133,21 @@ let profilePoints = [
 // Data-tillstånd för torrhumlingen
 let dryHopData = {
     enabled: false,
-    day: 5.0,
+    day: 2.5,
     isDragging: false,
     color: '#8CC63F'
 };
+
+// --- NYTT: Data-tillstånd för Remove Dry Hops ---
+let removeHopData = {
+    enabled: false,
+    day: 5.0,
+    isDragging: false,
+    color: '#ff6b6b' // Den snygga, dämpade röda färgen
+};
+
+// Flagga för att veta om vi ska instruera användaren att lyfta ur en korg eller dumpa i konen
+let hopActionType = 'remove'; // 'remove' eller 'dump'
 
 // --- CHART.JS PLUGIN: Torrhumlingslinjen ---
 const dryHopPlugin = {
@@ -1184,6 +1195,49 @@ const dryHopPlugin = {
         ctx.restore();
     }
 };
+
+// --- CHART.JS PLUGIN: Remove Dry Hops-linjen ---
+const removeHopPlugin = {
+    id: 'removeHopLine',
+    afterDraw: (chart) => {
+        if (chart.canvas.closest('#view-dashboard')) return;
+        if (!removeHopData.enabled) return;
+
+        const {ctx, chartArea: {top, bottom, left, right}, scales: {x}} = chart;
+        const xPix = x.getPixelForValue(removeHopData.day);
+
+        if (xPix < left || xPix > right) return;
+
+        ctx.save();
+        ctx.strokeStyle = removeHopData.color;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(xPix, top);
+        ctx.lineTo(xPix, bottom);
+        ctx.stroke();
+        
+        ctx.setLineDash([]);
+        ctx.fillStyle = removeHopData.color;
+        ctx.font = 'bold 10px Lexend';
+        ctx.textAlign = 'center';
+
+        const lang = window.currentLang || 'en';
+        const textRemoveHop = window.translations?.[lang]?.lab?.chart_remove_hop || 'REMOVE DRY HOPS 🔔';
+        ctx.fillText(textRemoveHop, xPix, top - 5);
+
+        ctx.beginPath();
+        ctx.arc(xPix, (top + bottom) / 2, 6, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.restore();
+    }
+};
+
+Chart.register(removeHopPlugin);
 
 // --- DATA-TILLSTÅND FÖR RACK/DUMP ---
 let rackDumpData = {
@@ -1292,6 +1346,54 @@ function toggleDryHopLine() {
     if (labChart) labChart.update('none');
 }
 
+// --- NYTT: Toggle-funktion för larm-linjen ---
+window.toggleRemoveHopsLine = function() {
+    removeHopData.enabled = !removeHopData.enabled;
+    const btn = document.getElementById('btn-toggle-remove-hops');
+    
+    const lang = window.currentLang || 'en';
+    
+    if (removeHopData.enabled) {
+        // Om torrhumling inte är påslagen än, slå på den automatiskt 2.5 dagar tidigare!
+        if (!dryHopData.enabled) {
+            dryHopData.day = Math.max(0, removeHopData.day - 2.5);
+            toggleDryHopLine();
+        }
+        
+        btn.innerText = window.translations?.[lang]?.lab?.btn_remove_action || "- REMOVE ACTION";
+        btn.classList.add('active');
+        btn.style.color = removeHopData.color;
+        btn.style.borderColor = removeHopData.color;
+        btn.style.backgroundColor = 'rgba(255, 107, 107, 0.1)';
+    } else {
+        btn.innerText = window.translations?.[lang]?.lab?.btn_add_remove_hops || "+ ADD REMOVE ALARM";
+        btn.classList.remove('active');
+        btn.style.color = '';
+        btn.style.borderColor = '';
+        btn.style.backgroundColor = 'transparent';
+        if(labChart) labChart.canvas.style.cursor = 'default';
+    }
+    
+    if (typeof updateSummaryText === 'function') updateSummaryText();
+    if (labChart) labChart.update('none');
+};
+
+// --- NYTT: Funktion för bottenventilen ---
+window.setDumpHopsOnly = function() {
+    hopActionType = 'dump';
+    
+    const btn = document.getElementById('btn-dump-hops-only');
+    btn.style.backgroundColor = 'rgba(255, 146, 43, 0.2)';
+    btn.innerText = "✓ DUMP FROM CONE";
+    
+    setTimeout(() => {
+        btn.style.backgroundColor = 'transparent';
+        btn.innerText = "- DUMP HOPS ONLY";
+    }, 2000);
+    
+    alert("YeastMaster kommer nu larma om att DUMPA humlen via bottenventilen istället för att plocka ut den!");
+};
+
 function updateSummaryText() {
     const summaryBox = document.getElementById('profile-summary');
     if (!summaryBox) return;
@@ -1352,9 +1454,18 @@ function updateSummaryText() {
         <div class="summary-row"><span class="label" data-i18n="profiler.condition">${profilerT.condition || "Condition"}</span><span class="value">${condText}</span></div>
     `;
 
+   // --- NYTT: Dry Hop Duration Summary ---
+    let extraLinesHTML = "";
+    
     if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
-        const hopVal = document.getElementById('hop-day-val');
-        if (hopVal) hopVal.innerText = dryHopData.day.toFixed(1);
+        if (typeof removeHopData !== 'undefined' && removeHopData.enabled) {
+            // Om BÅDA är aktiva, räkna ut duration!
+            const duration = (removeHopData.day - dryHopData.day).toFixed(1);
+            extraLinesHTML += `<div class="summary-row"><span class="label" style="color: #8CC63F;">Dry Hop Contact</span><span class="value">Day ${dryHopData.day.toFixed(1)} to Day ${removeHopData.day.toFixed(1)} <strong style="color:#fff;">(${duration} days)</strong></span></div>`;
+        } else {
+            // Om bara Dry Hop är aktiv
+            extraLinesHTML += `<div class="summary-row"><span class="label" style="color: #8CC63F;">Dry Hop</span><span class="value">Scheduled for Day ${dryHopData.day.toFixed(1)}</span></div>`;
+        }
     }
 }
 
@@ -1531,7 +1642,8 @@ function initLabChart() {
     let isDragging = false;
     let dragIndex = -1;
     let isDraggingDryHop = false; 
-    let isDraggingRackDump = false; // <-- NY VARIABEL FÖR RACK/DUMP
+    let isDraggingRackDump = false; 
+    let isDraggingRemoveHop = false;
 
     canvas.addEventListener('pointerdown', (e) => {
         const rect = canvas.getBoundingClientRect();
@@ -1553,6 +1665,15 @@ function initLabChart() {
         if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
             if (Math.abs(xVal - dryHopData.day) < actionMagnet) {
                 isDraggingDryHop = true;
+                canvas.style.cursor = 'ew-resize'; 
+                return; 
+            }
+        }
+
+        // KOLLA REMOVE DRY HOPS
+        if (typeof removeHopData !== 'undefined' && removeHopData.enabled) {
+            if (Math.abs(xVal - removeHopData.day) < actionMagnet) {
+                isDraggingRemoveHop = true;
                 canvas.style.cursor = 'ew-resize'; 
                 return; 
             }
@@ -1594,6 +1715,24 @@ function initLabChart() {
             let xVal = labChart.scales.x.getValueForPixel(xPos);
             xVal = Math.max(0, Math.round(xVal * 2) / 2);
             dryHopData.day = xVal;
+            labChart.update('none');
+            if (typeof updateSummaryText === 'function') updateSummaryText();
+            return; 
+        }
+
+        // --- DRA REMOVE DRY HOPS ---
+        if (isDraggingRemoveHop) {
+            const rect = canvas.getBoundingClientRect();
+            const xPos = e.clientX - rect.left;
+            let xVal = labChart.scales.x.getValueForPixel(xPos);
+            xVal = Math.max(0, Math.round(xVal * 2) / 2);
+            
+            // Säkerhetsspärr: Du kan inte ta bort humlen innan du lagt i den!
+            if (dryHopData.enabled && xVal <= dryHopData.day) {
+                xVal = dryHopData.day + 0.5;
+            }
+            
+            removeHopData.day = xVal;
             labChart.update('none');
             if (typeof updateSummaryText === 'function') updateSummaryText();
             return; 
@@ -1658,6 +1797,14 @@ function initLabChart() {
             canvas.style.cursor = 'default';
             if (typeof updateSummaryText === 'function') updateSummaryText();
         }
+
+        // --- SLÄPP REMOVE DRY HOPS ---
+        if (isDraggingRemoveHop) {
+            isDraggingRemoveHop = false;
+            canvas.style.cursor = 'default';
+            if (typeof updateSummaryText === 'function') updateSummaryText();
+        }
+
         // --- SLÄPP VANLIG GRAFPUNKT ---
         if (isDragging) {
             isDragging = false;
@@ -3593,8 +3740,10 @@ function saveProfileToLibrary() {
         s: profileName,             
         p: `Custom (${baseYeast})`, 
         // --- HÄR SPARAS BÅDA ACTION MARKERS ---
-        dryHopDay: (typeof dryHopData !== 'undefined' && dryHopData.enabled) ? dryHopData.day : null, 
-        rackDumpDay: (typeof rackDumpData !== 'undefined' && rackDumpData.enabled) ? rackDumpData.day : null, 
+       dryHopDay: (typeof dryHopData !== 'undefined' && dryHopData.enabled) ? dryHopData.day : null, 
+        removeHopDay: (typeof removeHopData !== 'undefined' && removeHopData.enabled) ? removeHopData.day : null, // <-- NY!
+        hopActionType: hopActionType, // <-- NY!
+        rackDumpDay: (typeof rackDumpData !== 'undefined' && rackDumpData.enabled) ? rackDumpData.day : null,
         steps: [
             [profilePoints[0].x, parseFloat(toCelsius(profilePoints[0].y).toFixed(1))],
             [profilePoints[1].x, parseFloat(toCelsius(profilePoints[1].y).toFixed(1))],
