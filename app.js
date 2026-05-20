@@ -476,6 +476,10 @@ async function updateDashboard() {
                 if (syncElement) {
                     syncElement.innerText = timeString;
                 }
+                // --- MAGISKA SYNK-RADEN: Uppdatera även hjärtat i Settings samtidigt! ---
+    if (typeof updateHeartbeatDisplay === 'function') {
+        updateHeartbeatDisplay(latest.time);
+    }
             }
 
             // 1. Temperaturer (Med inbyggd spärr för urkopplade sensorer)
