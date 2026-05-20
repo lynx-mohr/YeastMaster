@@ -1444,7 +1444,7 @@ function updateSummaryText() {
     // 5. CONDITION
     const condText = `${t_hold} ${Math.round(p[5].x)}`;
 
-    // --- BYGG IHOP HELA LÅDAN FRÅN BÖRJAN ---
+   // --- BYGG IHOP HELA LÅDAN FRÅN BÖRJAN ---
     summaryBox.innerHTML = `
         <div class="summary-header" data-i18n="profiler.summary">${profilerT.summary || "PROFILE SUMMARY"}</div>
         <div class="summary-row"><span class="label" data-i18n="profiler.pitch">${profilerT.pitch || "Pitch"}</span><span class="value">${pitchText}</span></div>
@@ -1452,20 +1452,45 @@ function updateSummaryText() {
         <div class="summary-row"><span class="label" data-i18n="profiler.cleanup">${profilerT.cleanup || "Cleanup"}</span><span class="value">${cleanText}</span></div>
         <div class="summary-row"><span class="label" data-i18n="profiler.cold_crash">${profilerT.cold_crash || "Cold Crash"}</span><span class="value">${crashText}</span></div>
         <div class="summary-row"><span class="label" data-i18n="profiler.condition">${profilerT.condition || "Condition"}</span><span class="value">${condText}</span></div>
+        <div id="summary-action-lines"></div>
     `;
 
-   // --- NYTT: Dry Hop Duration Summary ---
+    // --- RITA ACTION LINES (Den nya logiken för Dry Hop Duration) ---
+    const actionLinesBox = document.getElementById('summary-action-lines');
     let extraLinesHTML = "";
-    
+
+    // Om Dry Hop är aktiverat
     if (typeof dryHopData !== 'undefined' && dryHopData.enabled) {
+        // Uppdatera texten under grafen
+        const hopVal = document.getElementById('hop-day-val');
+        if (hopVal) hopVal.innerText = dryHopData.day.toFixed(1);
+        
+        // Kolla om REMOVE är aktiverat
         if (typeof removeHopData !== 'undefined' && removeHopData.enabled) {
-            // Om BÅDA är aktiva, räkna ut duration!
             const duration = (removeHopData.day - dryHopData.day).toFixed(1);
-            extraLinesHTML += `<div class="summary-row"><span class="label" style="color: #8CC63F;">Dry Hop Contact</span><span class="value">Day ${dryHopData.day.toFixed(1)} to Day ${removeHopData.day.toFixed(1)} <strong style="color:#fff;">(${duration} days)</strong></span></div>`;
+            extraLinesHTML += `<div class="summary-row" style="margin-top: 5px; border-top: 1px dashed #333; padding-top: 5px;"><span class="label" style="color: #8CC63F;">Dry Hop Contact</span><span class="value">Day ${dryHopData.day.toFixed(1)} to Day ${removeHopData.day.toFixed(1)} <strong style="color:#fff;">(${duration} days)</strong></span></div>`;
+            
+            // Uppdatera texten under grafen
+            const removeVal = document.getElementById('remove-day-val');
+            const removeText = document.getElementById('remove-schedule-text');
+            if (removeVal) removeVal.innerText = removeHopData.day.toFixed(1);
+            if (removeText) removeText.style.display = 'block';
+            
         } else {
             // Om bara Dry Hop är aktiv
-            extraLinesHTML += `<div class="summary-row"><span class="label" style="color: #8CC63F;">Dry Hop</span><span class="value">Scheduled for Day ${dryHopData.day.toFixed(1)}</span></div>`;
+            extraLinesHTML += `<div class="summary-row" style="margin-top: 5px; border-top: 1px dashed #333; padding-top: 5px;"><span class="label" style="color: #8CC63F;">Dry Hop</span><span class="value">Scheduled for Day ${dryHopData.day.toFixed(1)}</span></div>`;
+            
+            const removeText = document.getElementById('remove-schedule-text');
+            if (removeText) removeText.style.display = 'none';
         }
+    } else {
+        // Göm Remove-texten om Dry Hop stängs av
+        const removeText = document.getElementById('remove-schedule-text');
+        if (removeText) removeText.style.display = 'none';
+    }
+
+    if (actionLinesBox) {
+        actionLinesBox.innerHTML = extraLinesHTML;
     }
 }
 

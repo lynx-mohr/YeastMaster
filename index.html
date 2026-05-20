@@ -242,21 +242,36 @@
         <span class="label" data-i18n="lab.phase_condition">Condition</span>
         <span class="value"><span data-i18n="lab.hold_until">Hold until Day</span> <span id="val-d5">14</span></span>
     </div>
+    <div id="summary-action-lines"></div>
 </div>
 
-       <div class="lab-actions" style="margin: 20px; text-align: center; border-top: 1px solid #333; padding-top: 20px;">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-                <button id="btn-add-hops" class="btn-secondary" style="padding: 10px; font-size: 0.85rem;" onclick="toggleDryHopLine()" data-i18n="lab.btn_add_hops">+ ADD DRY HOPS</button>
-                <button id="btn-add-dump" class="btn-secondary" style="padding: 10px; font-size: 0.85rem;" onclick="toggleRackDumpLine()" data-i18n="lab.btn_add_dump">+ RACK / DUMP</button>
-            </div>
-            
-            <div id="hop-schedule-text" style="font-size: 0.85rem; color: #888; display: none; margin-bottom: 5px;">
-                <span data-i18n="lab.schedule_hop">Dry Hop scheduled on Day</span> <span id="hop-day-val" style="color: var(--accent-color); font-weight: 800;">5.0</span>
-            </div>
-            <div id="dump-schedule-text" style="font-size: 0.85rem; color: #888; display: none;">
-                <span data-i18n="lab.schedule_dump">Rack / Dump scheduled on Day</span> <span id="dump-day-val" style="color: var(--accent-secondary, #F2994A); font-weight: 800;">8.0</span>
-            </div>
-        </div>
+   <div class="lab-actions" style="margin: 20px; text-align: center; border-top: 1px solid #333; padding-top: 20px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+        
+        <button id="btn-add-hops" class="btn-secondary" style="padding: 10px; font-size: 0.75rem;" onclick="toggleDryHopLine()" data-i18n="lab.btn_add_hops">+ ADD DRY HOPS</button>
+        
+        <button id="btn-toggle-remove-hops" class="btn-secondary" style="padding: 10px; font-size: 0.75rem; border-color: #ff6b6b; color: #ff6b6b;" onclick="toggleRemoveHopsLine()">+ REMOVE ALARM</button>
+
+        <button id="btn-add-dump" class="btn-secondary" style="padding: 10px; font-size: 0.75rem;" onclick="toggleRackDumpLine()" data-i18n="lab.btn_add_dump">+ RACK / DUMP</button>
+
+    </div>
+
+    <button id="btn-dump-hops-only" onclick="setDumpHopsOnly()" class="btn-secondary" style="width: 100%; margin-bottom: 15px; padding: 10px; font-size: 0.8rem; border: 1px dashed #ff922b; color: #ff922b;">
+        ⚙️ MODIFIER: DUMP FROM CONE
+    </button>
+    
+    <div id="hop-schedule-text" style="font-size: 0.85rem; color: #888; display: none; margin-bottom: 5px;">
+        <span data-i18n="lab.schedule_hop">Dry Hop scheduled on Day</span> <span id="hop-day-val" style="color: var(--accent-color); font-weight: 800;">2.5</span>
+    </div>
+    
+    <div id="remove-schedule-text" style="font-size: 0.85rem; color: #888; display: none; margin-bottom: 5px;">
+        Remove Hops scheduled on Day <span id="remove-day-val" style="color: #ff6b6b; font-weight: 800;">5.0</span>
+    </div>
+
+    <div id="dump-schedule-text" style="font-size: 0.85rem; color: #888; display: none;">
+        <span data-i18n="lab.schedule_dump">Rack / Dump scheduled on Day</span> <span id="dump-day-val" style="color: var(--accent-secondary, #F2994A); font-weight: 800;">8.0</span>
+    </div>
+</div>
 
         <div style="margin: 20px;">
            <button type="button" id="btn-save-profile" class="btn-primary" onclick="saveProfileToLibrary()" data-i18n="lab.btn_save">SAVE PROFILE</button>
@@ -326,8 +341,8 @@
     <div class="settings-row" onclick="toggleSettingsDetails()">
         <span class="settings-label" data-i18n="settings.active_device">Active Device</span>
         <div style="display: flex; align-items: center; gap: 8px;">
-           <select id="setting-active-device" style="max-width: 150px; background: transparent; border: none; text-align: right; font-weight: 800; font-family: 'Lexend'; outline: none; cursor: pointer;">
-</select>
+            <select id="setting-active-device" style="max-width: 150px; background: transparent; border: none; text-align: right; font-weight: 800; font-family: 'Lexend'; outline: none; cursor: pointer; color: #fff;">
+            </select>
             <span id="settings-arrow" style="font-size: 0.8rem; color: #666; transition: transform 0.2s;">▼</span>
         </div>
     </div>
