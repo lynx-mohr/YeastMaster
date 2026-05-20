@@ -202,28 +202,36 @@ if ('scrollRestoration' in history) {
 let currentActiveView = 'soul'; 
 
 function showView(viewName, pushToHistory = true, forceOverride = false) { 
-    // --- DÖRRVAKT: Blockera navigering om någon av dessa är aktiv ---
+    // --- STÄDGUMMA: Hantera öppna popups och lektioner vid flikbyte ---
     if (!forceOverride) {
         const tourOverlay = document.getElementById('demo-overlay');
+        const isTourActive = tourOverlay && (tourOverlay.style.display === 'block' || tourOverlay.classList.contains('active'));
+
+        // 1. Touren är fortfarande helig – den blockerar flikbyten om vi inte tvingar (forceOverride)
+        if (isTourActive) {
+            console.log("Navigering blockerad: Guidad tour pågår!");
+            return; 
+        }
+
+        // 2. Om användaren klickar på huvudmenyn, stäng ner alla öppna vyer/modaler automatiskt
         const addStrainModal = document.getElementById('add-strain-modal');
         const pitchModal = document.getElementById('pitch-calc-modal');
         const academyModule = document.getElementById('academy-module-view');
+        const infoModal = document.getElementById('yeast-info-modal');
+        const supportModal = document.getElementById('support-modal');
 
-        const isTourActive = tourOverlay && (tourOverlay.style.display === 'block' || tourOverlay.classList.contains('active'));
-        const isStrainModalOpen = addStrainModal && addStrainModal.style.display === 'flex';
-        const isPitchModalOpen = pitchModal && pitchModal.style.display === 'flex';
-        const isAcademyOpen = academyModule && academyModule.style.display === 'block';
-
-        if (isTourActive || isStrainModalOpen || isPitchModalOpen || isAcademyOpen) {
-            console.log("Navigering blockerad: En modal eller tour är aktiv!");
-            return; // Avbryt här, användaren får inte byta flik
+        if (academyModule && academyModule.style.display === 'block') {
+            closeAcademyModule(false); // Stäng lektionen i bakgrunden utan extra history.back()
         }
+        if (pitchModal && pitchModal.style.display === 'flex') closePitchCalcModal();
+        if (addStrainModal && addStrainModal.style.display === 'flex') closeAddStrainModal();
+        if (infoModal && infoModal.style.display === 'flex') closeYeastModal();
+        if (supportModal && supportModal.style.display === 'flex') closeSupportModal();
     }
     // -------------------------------------------------------
 
     const views = {
         login: document.getElementById('login-container'),
-        // ... (resten av din views-lista)
         claim: document.getElementById('claim-container'),
         soul: document.getElementById('view-soul'),
         library: document.getElementById('view-library'),
@@ -278,7 +286,7 @@ function showView(viewName, pushToHistory = true, forceOverride = false) {
         }
     });
 
-    // --- MAGI: FYLL PÅ GLASET AUTOMATISKT NÄR VI GÅR TILL HOME ---
+    // --- MAGI: FYLL PÅ GLASET AUTOMATISKT NÄR WI GÅR TILL HOME ---
     if (viewName === 'soul') {
         const glass = document.getElementById('interactive-beer-glass');
         if (glass) {
