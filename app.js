@@ -3969,48 +3969,10 @@ function changeWizardStep(direction, isFromPopState = false) {
     updateWizardUI();
 }
 
+// Sköter bara utseendet så att den kan återanvändas säkert
 function updateWizardUI() {
-    // Uppdatera Wizarden (Text och Prickar)
-    document.querySelectorAll('.wizard-step').forEach(step => {
-        step.classList.remove('active');
-        if (parseInt(step.getAttribute('data-step')) === currentWizardStep) {
-            step.classList.add('active');
-        }
-    });
+    if (typeof currentWizardStep === 'undefined') return;
 
-    document.querySelectorAll('.wizard-dot').forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentWizardStep);
-    });
-
-    const prevBtn = document.getElementById('wiz-prev');
-    const nextBtn = document.getElementById('wiz-next');
-
-  if (prevBtn && nextBtn) {
-        prevBtn.disabled = currentWizardStep === 0;
-
-        // --- HÄMTA ÖVERSÄTTNINGAR ---
-        const lang = window.currentLang || 'en';
-        const t = window.translations?.[lang]?.academy || window.translations?.['en']?.academy || {};
-        
-        const textNext = t.btn_next || "Next ➔";
-        const textFinish = t.btn_finish || "Finish! ✓";
-
-        // Välj rätt text beroende på om vi är på sista steget eller inte
-        nextBtn.innerText = currentWizardStep === totalWizardSteps - 1 ? textFinish : textNext;
-
-    // Den Levande Checklistan
-    document.querySelectorAll('.wizard-checklist li').forEach(li => li.classList.remove('active-item'));
-    const itemsToHighlight = stepActiveItems[currentWizardStep];
-    if (itemsToHighlight) {
-        itemsToHighlight.forEach(itemId => {
-            const element = document.getElementById(itemId);
-            if (element) element.classList.add('active-item');
-        });
-    }
-}
-
-// --- NY FUNKTION: Sköter bara utseendet så att den kan återanvändas ---
-function updateWizardUI() {
     // 1. Uppdatera Wizarden (Text och Prickar)
     document.querySelectorAll('.wizard-step').forEach(step => {
         step.classList.remove('active');
@@ -4023,21 +3985,31 @@ function updateWizardUI() {
         dot.classList.toggle('active', index === currentWizardStep);
     });
 
+    // 2. Uppdatera Knappar och Översättningar
     const prevBtn = document.getElementById('wiz-prev');
     const nextBtn = document.getElementById('wiz-next');
 
     if (prevBtn && nextBtn) {
         prevBtn.disabled = currentWizardStep === 0;
-        nextBtn.innerText = currentWizardStep === totalWizardSteps - 1 ? "Finish! ✓" : "Next ➔";
-    }
 
-    // 2. Den Levande Checklistan!
+        // --- HÄMTA ÖVERSÄTTNINGAR (Kraschsäkert) ---
+        const lang = window.currentLang || 'en';
+        const t = window.translations?.[lang]?.academy || window.translations?.['en']?.academy || {};
+        
+        const textNext = t.btn_next || "Next ➔";
+        const textFinish = t.btn_finish || "Finish! ✓";
+
+        // Välj rätt text beroende på om vi är på sista steget eller inte
+        nextBtn.innerText = currentWizardStep === totalWizardSteps - 1 ? textFinish : textNext;
+    } // <-- HÄR SATT DEN SAKNADE MÅSVINGEN SOM KRASCHADE APPEN!
+
+    // 3. Den Levande Checklistan!
     document.querySelectorAll('.wizard-checklist li').forEach(li => {
         li.classList.remove('active-item');
     });
 
-    const itemsToHighlight = stepActiveItems[currentWizardStep];
-    if (itemsToHighlight) {
+    if (typeof stepActiveItems !== 'undefined' && stepActiveItems[currentWizardStep]) {
+        const itemsToHighlight = stepActiveItems[currentWizardStep];
         itemsToHighlight.forEach(itemId => {
             const element = document.getElementById(itemId);
             if (element) {
