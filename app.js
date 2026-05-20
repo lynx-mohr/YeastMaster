@@ -1360,13 +1360,15 @@ window.toggleRemoveHopsLine = function() {
             toggleDryHopLine();
         }
         
-        btn.innerText = window.translations?.[lang]?.lab?.btn_remove_action || "- REMOVE ACTION";
+        // Hämtar den nya översättningsnyckeln
+        btn.innerText = window.translations?.[lang]?.lab?.btn_remove_remove_hops || "- REMOVE HOPS";
         btn.classList.add('active');
         btn.style.color = removeHopData.color;
         btn.style.borderColor = removeHopData.color;
         btn.style.backgroundColor = 'rgba(255, 107, 107, 0.1)';
     } else {
-        btn.innerText = window.translations?.[lang]?.lab?.btn_add_remove_hops || "+ ADD REMOVE ALARM";
+        // Hämtar den nya översättningsnyckeln
+        btn.innerText = window.translations?.[lang]?.lab?.btn_add_remove_hops || "+ REMOVE HOPS";
         btn.classList.remove('active');
         btn.style.color = '';
         btn.style.borderColor = '';

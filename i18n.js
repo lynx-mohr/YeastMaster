@@ -3375,7 +3375,11 @@ const translations = {
 btn_remove_hops: "- REMOVE DRY HOPS",
 btn_remove_dump: "- REMOVE ACTION",
 chart_dry_hop: "DRY HOP",
-chart_rack: "RACK/DUMP"
+chart_rack: "RACK/DUMP",
+btn_add_remove_hops: "+ REMOVE HOPS",
+btn_remove_remove_hops: "- REMOVE HOPS",
+schedule_remove_hop: "Remove Hops scheduled on Day",
+chart_remove_hop: "REMOVE HOPS 🔔"
             
         },
         
@@ -3700,7 +3704,11 @@ calc: {
 btn_remove_hops: "- TA BORT TORRHUMLING",
 btn_remove_dump: "- TA BORT ÅTGÄRD",
 chart_dry_hop: "TORRHUMLING",
-chart_rack: "OMTAPPNING"
+chart_rack: "OMTAPPNING",
+btn_add_remove_hops: "+ TA BORT HUMLE",
+btn_remove_remove_hops: "- TA BORT HUMLE",
+schedule_remove_hop: "Borttagning av humle inplanerad dag",
+chart_remove_hop: "TA BORT HUMLE 🔔"
         },
 
         soul: {
@@ -4022,7 +4030,11 @@ libTour: {
 btn_remove_hops: "- KALTHOPFUNG ENTFERNEN",
 btn_remove_dump: "- UMSCHLAUCHEN ENTFERNEN",
 chart_dry_hop: "KALTHOPFUNG",
-chart_rack: "UMSCHLAUCHEN"
+chart_rack: "UMSCHLAUCHEN",
+btn_add_remove_hops: "+ HOPFEN ENTFERNEN",
+btn_remove_remove_hops: "- HOPFEN ENTFERNEN",
+schedule_remove_hop: "Hopfenentfernung geplant an Tag",
+chart_remove_hop: "HOPFEN ENTFERNEN 🔔"
         },
 
         soul: {
