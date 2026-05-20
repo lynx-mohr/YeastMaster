@@ -3878,3 +3878,23 @@ body.light-mode .modal-body [style*="F2994A"] {
 body.light-mode .settings-details {
     background: rgba(0,0,0,0.02);
 }
+
+/* Standardfärg (Dark mode) */
+#setting-active-device {
+    color: #ffffff;
+}
+
+/* Anpassning för Light mode */
+body.light-mode #setting-active-device {
+    color: #111111; /* En snygg, mörk färg som matchar resten av din light mode-text */
+}
+
+/* Bonus: Fixa så att även alternativen inuti rullistan har rätt bakgrund i light mode */
+body.light-mode #setting-active-device option {
+    background-color: #ffffff;
+    color: #111111;
+}
+body:not(.light-mode) #setting-active-device option {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
