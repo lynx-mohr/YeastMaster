@@ -3985,10 +3985,18 @@ function updateWizardUI() {
     const prevBtn = document.getElementById('wiz-prev');
     const nextBtn = document.getElementById('wiz-next');
 
-    if (prevBtn && nextBtn) {
+  if (prevBtn && nextBtn) {
         prevBtn.disabled = currentWizardStep === 0;
-        nextBtn.innerText = currentWizardStep === totalWizardSteps - 1 ? "Finish! ✓" : "Next ➔";
-    }
+
+        // --- HÄMTA ÖVERSÄTTNINGAR ---
+        const lang = window.currentLang || 'en';
+        const t = window.translations?.[lang]?.academy || window.translations?.['en']?.academy || {};
+        
+        const textNext = t.btn_next || "Next ➔";
+        const textFinish = t.btn_finish || "Finish! ✓";
+
+        // Välj rätt text beroende på om vi är på sista steget eller inte
+        nextBtn.innerText = currentWizardStep === totalWizardSteps - 1 ? textFinish : textNext;
 
     // Den Levande Checklistan
     document.querySelectorAll('.wizard-checklist li').forEach(li => li.classList.remove('active-item'));

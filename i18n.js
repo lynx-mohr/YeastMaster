@@ -3522,7 +3522,9 @@ calc: {
             agar_desc: "Learn to pour, streak, and isolate pure strains.",
             wild_title: "Capturing Wild Yeast",
             wild_desc: "Hunt for local microbes and brew something unique.",
-            btn_back: "← BACK TO ACADEMY"
+            btn_back: "← BACK TO ACADEMY",
+            btn_next: "Next ➔",
+            btn_finish: "Finish! ✓"
         },
 
         house_bank: {
@@ -3844,7 +3846,9 @@ about: {
             agar_desc: "Lär dig gjuta, stryka och isolera rena stammar.",
             wild_title: "Fånga Vildjäst",
             wild_desc: "Jaga lokala mikrober och brygg något unikt.",
-            btn_back: "← TILLBAKA TILL LABBET"
+            btn_back: "← TILLBAKA TILL LABBET",
+            btn_next: "Nästa ➔",
+            btn_finish: "Klar! ✓"
         },
 
 house_bank: {
@@ -4164,7 +4168,9 @@ about: {
             agar_desc: "Lernen Sie, reine Stämme zu gießen, auszustreichen und zu isolieren.",
             wild_title: "Wilde Hefe Fangen",
             wild_desc: "Jagen Sie lokale Mikroben und brauen Sie etwas Einzigartiges.",
-            btn_back: "← ZURÜCK ZUM LABOR"
+            btn_back: "← ZURÜCK ZUM LABOR",
+            btn_next: "Weiter ➔",
+            btn_finish: "Fertig! ✓"
         },
 
         house_bank: {
