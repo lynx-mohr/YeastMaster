@@ -3862,3 +3862,19 @@ body.light-mode .modal-body [style*="F2994A"] {
     border: 1px solid #cccccc !important;
     color: #333333 !important;
 }
+
+.settings-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease-out;
+    background: rgba(0,0,0,0.15); /* Gör den utfällda zonen subtilt mörkare */
+}
+
+.settings-details.open {
+    max-height: 200px; /* Tillräckligt högt för att rymma de tre raderna */
+}
+
+/* Light mode justering för den utfällda bakgrunden */
+body.light-mode .settings-details {
+    background: rgba(0,0,0,0.02);
+}

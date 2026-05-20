@@ -322,22 +322,26 @@
 
     <h3 style="color: #666; font-size: 0.8rem; margin: 30px 0 10px 10px; text-transform: uppercase; letter-spacing: 1.5px;" data-i18n="settings.device_mgmt">DEVICE MANAGEMENT</h3>
     
-    <div class="settings-group">
-        <div class="settings-row">
-            <span class="settings-label" data-i18n="settings.active_device">Active Device</span>
-            <select id="setting-active-device" style="max-width: 150px; background: transparent; border: none; text-align: right; font-weight: 800; font-family: 'Lexend'; outline: none; cursor: pointer;">
+ <div class="settings-group">
+    <div class="settings-row" onclick="toggleSettingsDetails()">
+        <span class="settings-label" data-i18n="settings.active_device">Active Device</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <select id="setting-active-device" style="max-width: 150px; background: transparent; border: none; text-align: right; font-weight: 800; font-family: 'Lexend'; outline: none; cursor: pointer; color: #fff;">
             </select>
+            <span id="settings-arrow" style="font-size: 0.8rem; color: #666; transition: transform 0.2s;">▼</span>
         </div>
-        
-        <div class="settings-row">
-            <span class="settings-label" data-i18n="settings.status">Status</span>
-            <span id="setting-device-status" style="font-size: 0.8rem; font-weight: 800; color: #888;">WAITING...</span>
-        </div>
-        
+    </div>
+
+    <div class="settings-row" style="border-bottom: 1px solid #222;">
+        <span class="settings-label" data-i18n="settings.status">Status</span>
+        <span id="setting-device-status" style="font-size: 0.8rem; font-weight: 800; color: #888;">WAITING...</span>
+    </div>
+
+    <div id="settings-details-container" class="settings-details">
         <div class="settings-row">
             <span class="settings-label" data-i18n="settings.nickname">Nickname</span>
             <input type="text" id="setting-nickname" placeholder="Name your device..." data-i18n-placeholder="settings.nickname"
-                   style="width: 150px; background: transparent; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 0.9rem; text-align: right; outline: none; transition: color 0.3s ease;">
+                   style="width: 150px; background: transparent; border: none; color: var(--accent-color); font-family: 'Lexend'; font-weight: 800; font-size: 0.9rem; text-align: right; outline: none;">
         </div>
 
         <div class="settings-row">
@@ -350,11 +354,14 @@
                 🗑️ <span data-i18n="settings.remove">Remove Active Device</span>
             </button>
         </div>
-
-       <button onclick="checkAddDeviceAccess()" class="add-new-device-btn" style="background: transparent; color: var(--accent-color); border: 2px dashed #333; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; font-family: 'Lexend'; transition: all 0.3s ease; margin-top: 15px;" data-i18n="settings.add_device">
-    + ADD NEW YEASTMASTER
-</button>
     </div>
+
+    <div style="padding: 0 20px 20px 20px;">
+        <button onclick="checkAddDeviceAccess()" class="add-new-device-btn" style="background: transparent; color: var(--accent-color); border: 2px dashed #333; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; font-family: 'Lexend'; transition: all 0.3s ease; margin-top: 15px;" data-i18n="settings.add_device">
+            + ADD NEW YEASTMASTER
+        </button>
+    </div>
+</div>
 
    <div style="margin-top: 40px; padding-top: 25px; border-top: 1px dashed #333;">
     <h4 style="color: var(--text-dim, #888); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; text-align: center;" data-i18n="settings.support">SUPPORT & FEEDBACK</h4>

@@ -5647,3 +5647,17 @@ async function sendSupportMessage(event) {
 document.getElementById('support-modal').addEventListener('click', function(e) {
     if (e.target === this) closeSupportModal();
 });
+
+function toggleSettingsDetails() {
+    const container = document.getElementById('settings-details-container');
+    const arrow = document.getElementById('settings-arrow');
+    
+    if (!container) return;
+    
+    const isOpen = container.classList.toggle('open');
+    
+    // Rotera den lilla pilen snyggt
+    if (arrow) {
+        arrow.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+}
