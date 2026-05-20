@@ -2778,25 +2778,37 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
     transition: all 0.2s ease;
 }
 
-.wizard-btn:hover:not(:disabled) {
-    background: #333;
-    border-color: #666;
-}
-
 .wizard-btn.primary {
     background: var(--accent-color);
     color: #000;
     border-color: var(--accent-color);
 }
 
-.wizard-btn.primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(140, 198, 63, 0.4);
-}
-
 .wizard-btn:disabled {
     opacity: 0.3;
     cursor: not-allowed;
+}
+
+/* Klick-effekt för mobiler (och datorer) när knappen trycks ner */
+.wizard-btn:active:not(:disabled) {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+/* --- MAGIN: Hover-effekter BARA för enheter med muspekare --- */
+@media (hover: hover) {
+    /* Tillbaka-knappen blir snyggt mörkgrå */
+    .wizard-btn:hover:not(:disabled):not(.primary) {
+        background: #333;
+        border-color: #666;
+    }
+
+    /* Next-knappen behåller sin färg, men lyfter och lyser upp lite! */
+    .wizard-btn.primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(140, 198, 63, 0.4);
+        filter: brightness(1.1); 
+    }
 }
 
 /* Framstegsmätaren (Prickarna) */
