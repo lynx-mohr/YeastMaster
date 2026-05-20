@@ -5665,3 +5665,22 @@ function toggleSettingsDetails() {
         arrow.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
     }
 }
+
+// --- VÄCKARKLOCKAN: Hämta ny data direkt när appen öppnas på mobilen ---
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        console.log("Appen vaknade! Hämtar färsk data från YeastMaster...");
+        
+        // 1. Tvinga dashboarden att hämta de absolut senaste loggarna direkt
+        if (typeof updateDashboard === 'function') {
+            updateDashboard();
+        }
+        
+        // 2. Om du är inne på inställningssidan, trigga en direktkoll av heartbeat
+        if (typeof currentActiveView !== 'undefined' && currentActiveView === 'settings') {
+            if (typeof checkPushStatusOnLoad === 'function') {
+                checkPushStatusOnLoad();
+            }
+        }
+    }
+});
