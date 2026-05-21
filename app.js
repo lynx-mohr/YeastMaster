@@ -1791,12 +1791,12 @@ function initLabChart() {
 
             const minGap = 0.5;
 
-   // --- 1. SÄTT X-POSITION (Med tydliga gränser) ---
+// --- 1. SÄTT X-POSITION (SÄKER VERSION) ---
 if (dragIndex === 0) xVal = 0;
-else if (dragIndex === 1) xVal = Math.max(0, Math.min(xVal, profilePoints[2].x - minGap));
-else if (dragIndex === 2) xVal = Math.max(profilePoints[1].x + minGap, Math.min(xVal, profilePoints[3].x - minGap));
-else if (dragIndex === 3) xVal = Math.max(profilePoints[2].x + minGap, Math.min(xVal, profilePoints[4].x - minGap));
-else if (dragIndex === 4) xVal = Math.max(profilePoints[3].x + minGap, Math.min(xVal, profilePoints[5].x - minGap));
+else if (dragIndex === 1) xVal = Math.max(0, Math.min(xVal, (profilePoints[2] ? profilePoints[2].x : 999) - minGap));
+else if (dragIndex === 2) xVal = Math.max(profilePoints[1].x + minGap, Math.min(xVal, (profilePoints[3] ? profilePoints[3].x : 999) - minGap));
+else if (dragIndex === 3) xVal = Math.max(profilePoints[2].x + minGap, Math.min(xVal, (profilePoints[4] ? profilePoints[4].x : 999) - minGap));
+else if (dragIndex === 4) xVal = Math.max(profilePoints[3].x + minGap, Math.min(xVal, (profilePoints[5] ? profilePoints[5].x : 999) - minGap));
 else if (dragIndex === 5) xVal = Math.max(profilePoints[4].x + minGap, xVal);
 
 // --- 2. SÄTT Y-POSITION ---
