@@ -2207,16 +2207,19 @@ window.loadProfileIntoLab = function(strainName, profileName, customName = null)
         return (typeof currentTempUnit !== 'undefined' && currentTempUnit === 'F') ? (valC * 9/5) + 32 : valC;
     }
 
-    // 4. Ladda in temperatur-punkterna i grafen
- const s = profileToLoad.steps.sort((a, b) => a[0] - b[0]); 
-
-if (s && s.length >= 5 && typeof profilePoints !== 'undefined') {
-    profilePoints[0] = { x: s[0][0], y: toCurrentUnit(parseFloat(s[0][1])) };
-    profilePoints[1] = { x: s[1][0], y: toCurrentUnit(parseFloat(s[1][1])) };
-    profilePoints[2] = { x: s[2][0], y: toCurrentUnit(parseFloat(s[2][1])) };
-    profilePoints[3] = { x: s[3][0], y: toCurrentUnit(parseFloat(s[3][1])) };
-    profilePoints[4] = { x: s[4][0], y: toCurrentUnit(parseFloat(s[4][1])) };
-}
+// 4. Ladda in temperatur-punkterna i grafen
+    const s = profileToLoad.steps;
+    if (s && s.length >= 5) {
+        // HÄR ÄR FIXEN: 
+        // Skapa en HELT NY array istället för att bara ändra index
+        profilePoints = [
+            { x: s[0][0], y: toCurrentUnit(parseFloat(s[0][1])) },
+            { x: s[1][0], y: toCurrentUnit(parseFloat(s[1][1])) },
+            { x: s[2][0], y: toCurrentUnit(parseFloat(s[2][1])) },
+            { x: s[3][0], y: toCurrentUnit(parseFloat(s[3][1])) },
+            { x: s[4][0], y: toCurrentUnit(parseFloat(s[4][1])) }
+        ];
+    }
 
     // =========================================================
     // 5. Ladda in larm / händelser (Humle & Dumpning)
