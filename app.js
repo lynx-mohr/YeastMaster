@@ -1348,11 +1348,20 @@ function toggleDryHopLine() {
     if (labChart) labChart.update('none');
 }
 
-// --- NYTT: Toggle-funktion för larm-linjen ---
 window.toggleRemoveHopsLine = function() {
+    // --- NY SÄKERHETSSPÄRR ---
+    if (!dryHopData.enabled && !removeHopData.enabled) {
+        // Om användaren klickar på "+ Remove Hops" men Dry Hop är AV:
+        // Slå på Dry Hop först (t.ex. på dag 2.5) och sätt Remove Hops 2.5 dagar efter det!
+        dryHopData.day = 2.5;
+        removeHopData.day = 5.0;
+        
+        toggleDryHopLine(); // Aktiverar Dry Hop-linjen och knappen
+        // Fortsätt sedan ner och aktivera Remove Hops som vanligt...
+    }
+    
     removeHopData.enabled = !removeHopData.enabled;
     const btn = document.getElementById('btn-toggle-remove-hops');
-    
     const lang = window.currentLang || 'en';
     
     if (removeHopData.enabled) {
