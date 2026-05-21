@@ -2153,12 +2153,10 @@ window.loadProfileIntoLab = function(strainName, profileName, customName = null)
     let isCustom = false;
 
     if (customName) {
-        // Leta bland dina egna sparade profiler
         const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
         profileToLoad = savedProfiles.find(p => p.s === customName);
         isCustom = true;
     } else if (typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
-        // Leta i den kommersiella databasen
         profileToLoad = yeastDatabase.yeasts.find(p => p.s === strainName && p.p === profileName);
     }
 
@@ -2167,13 +2165,36 @@ window.loadProfileIntoLab = function(strainName, profileName, customName = null)
         return;
     }
 
-    // 3. Fyll i fälten i Labbet (Dropdown och Namn)
+    // =========================================================
+    // 3. Fyll i fälten i Labbet (Skottsäker Dropdown-logik!)
+    // =========================================================
     const dropdown = document.getElementById('custom-base-yeast');
     if (dropdown) {
-        // Om det är en custom profil sparade vi bashumlen i namnet, typ "Custom (W-34/70)"
         let baseVal = isCustom ? profileToLoad.p.replace('Custom (', '').replace(')', '') : strainName;
+        
+        // A) Försök sätta värdet direkt (Exakt matchning)
         dropdown.value = baseVal;
-        dropdown.dispatchEvent(new Event('change')); // Triggar grafen att ritas upp!
+        
+        // B) Om det misslyckas (värdet är tomt), gör en smart sökning
+        if (dropdown.value === "") {
+            for (let i = 0; i < dropdown.options.length; i++) {
+                if (dropdown.options[i].text.toLowerCase().includes(baseVal.toLowerCase()) || 
+                    dropdown.options[i].value.toLowerCase().includes(baseVal.toLowerCase())) {
+                    dropdown.value = dropdown.options[i].value;
+                    break;
+                }
+            }
+        }
+        
+        // C) Om den fortfarande är tom, tvinga in den så vi inte kraschar vyn!
+        if (dropdown.value === "") {
+            const newOpt = new Option(baseVal, baseVal);
+            dropdown.add(newOpt);
+            dropdown.value = baseVal;
+        }
+
+        // Nu när vi VET att ett värde är satt, triggar vi eventet som visar grafen!
+        dropdown.dispatchEvent(new Event('change'));
     }
 
     const nameInput = document.getElementById('custom-profile-name');
@@ -2199,13 +2220,10 @@ window.loadProfileIntoLab = function(strainName, profileName, customName = null)
     // =========================================================
     // 5. Ladda in larm / händelser (Humle & Dumpning)
     // =========================================================
-    
-    // Nollställ gamla händelser först (om du precis editerade en annan profil)
     if (typeof dryHopData !== 'undefined') dryHopData.enabled = false;
     if (typeof removeHopData !== 'undefined') removeHopData.enabled = false;
     if (typeof rackDumpData !== 'undefined') rackDumpData.enabled = false;
 
-    // Om profilen vi laddar har sparade händelser, hämta dagarna!
     if (profileToLoad.dryHopDay) {
         dryHopData.enabled = true;
         dryHopData.day = parseFloat(profileToLoad.dryHopDay);
@@ -2220,14 +2238,14 @@ window.loadProfileIntoLab = function(strainName, profileName, customName = null)
     }
 
     // =========================================================
-
     // 6. Uppdatera gränssnittet (Graf + Knappar)
+    // =========================================================
     if (typeof updateSummaryText === 'function') updateSummaryText();
     if (typeof labChart !== 'undefined' && labChart !== null) labChart.update('none');
 
-    // Återställ knapparna så att de lyser om händelserna är aktiva
+    // Tvinga knapparna att ritas upp korrekt
     if (typeof toggleDryHopLine === 'function' && dryHopData.enabled) {
-        dryHopData.enabled = false; // Tvingar funktionen att slå "PÅ" den
+        dryHopData.enabled = false;
         toggleDryHopLine();
     }
     if (typeof toggleRemoveHopsLine === 'function' && removeHopData.enabled) {
