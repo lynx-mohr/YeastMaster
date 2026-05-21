@@ -1652,7 +1652,7 @@ if (profilePoints && profilePoints.length < 6) {
            // --- ÖVERSÄTTNINGSLOGIKEN (Nu via vår i18n-motor!) ---
                 const lang = window.currentLang || 'en';
                 // Vi hämtar från profiler-sektionen i i18n
-                const t = window.translations[lang]?.profiler || window.translations['en'].profiler;
+               const t = window.translations?.[lang]?.profiler || window.translations?.['en']?.profiler || {};
 
                 // Vi konverterar orden till VERSALER (uppercase) för att det ser snyggast ut i grafen
                 const textPrim = (t.primary || 'PRIMARY').toUpperCase();
