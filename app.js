@@ -2240,6 +2240,7 @@ function openYeastModal(yeast) {
 
     modalTitle.innerText = yeast.name;
     let detailedText = "";
+   
     // ====================================================================
     // 1. KOLLA OM DET ÄR EN EGEN PROFIL FRÅN PROFILER
     // ====================================================================
@@ -2251,63 +2252,84 @@ function openYeastModal(yeast) {
             const s = profileData.steps;
             const baseYeast = profileData.p.replace('Custom (', '').replace(')', '');
             
-            // --- SÄKERHETS-KOLL: Förhindrar krasch om en profil har färre än 5 steg ---
             const d0 = s[0] ? s[0][0] : 0, t0 = s[0] ? parseFloat(s[0][1]) : 0;
             const d1 = s[1] ? s[1][0] : 0, t1 = s[1] ? parseFloat(s[1][1]) : 0;
             const d2 = s[2] ? s[2][0] : 0, t2 = s[2] ? parseFloat(s[2][1]) : 0;
             const d3 = s[3] ? s[3][0] : 0, t3 = s[3] ? parseFloat(s[3][1]) : 0;
             const d4 = s[4] ? s[4][0] : 0, t4 = s[4] ? parseFloat(s[4][1]) : 0;
 
-            // 1. Pitch
+            // --- HÄMTA ÖVERSÄTTNINGAR FÖR MODALEN ---
+            const lang = window.currentLang || 'en';
+            const tProf = window.translations?.[lang]?.profiler || window.translations?.['en']?.profiler || {};
+            const tLab = window.translations?.[lang]?.lab || window.translations?.['en']?.lab || {};
+            
+            // Hämta de nya texterna vi precis la in i ordboken
+            const txtCreatedBy = tProf.created_by_you || "Created by you!";
+            const txtBasedOn = tProf.used_with || "This profile is used with";
+            const txtAndSteps = tProf.profile_steps_are || "and these are the profile steps:";
+            const txtStartAt = tProf.start_at || "Start at";
+            const txtFreeRise = tProf.free_rise_to || "Free rise to";
+            const labelContact = tProf.dry_hop_contact || "Dry Hop Contact";
+            const labelDays = tProf.days_plural || "days";
+            
+            // Befintliga steg-översättningar
+            const t_pitch = tProf.pitch || "Pitch";
+            const t_prim = tProf.primary || "Primary";
+            const t_clean = tProf.cleanup || "Cleanup";
+            const t_crash = tProf.cold_crash || "Cold Crash";
+            const t_cond = tProf.condition || "Condition";
+            const t_hold = tProf.hold_until || "Hold until Day";
+            const t_reach = tProf.reach || "Reach";
+            const t_by = tProf.by_day || "by Day";
+            const t_drop = tProf.drop_to || "Drop to";
+            const t_day_word = tLab.day || "Day"; // Plockar upp ordet för "Dag"
+
             const pitchTemp = t0.toFixed(1);
             
-            // 2. Primary
-            let primaryText = `Hold until Day ${d1}`;
-            if (t1 > t0) primaryText = `Free rise to ${t1.toFixed(1)}°C by Day ${d1}`;
-            else if (t1 < t0) primaryText = `Drop to ${t1.toFixed(1)}°C by Day ${d1}`;
+            // Bygg stegen dynamiskt
+            let primaryText = `${t_hold} ${d1}`;
+            if (t1 > t0) primaryText = `${txtFreeRise} ${t1.toFixed(1)}°C ${t_by} ${d1}`;
+            else if (t1 < t0) primaryText = `${t_drop} ${t1.toFixed(1)}°C ${t_by} ${d1}`;
             
-            // 3. Cleanup
-            let cleanupText = `Hold until Day ${d2}`;
-            if (t2 > t1) cleanupText = `Reach ${t2.toFixed(1)}°C by Day ${d2}`;
-            else if (t2 < t1) cleanupText = `Drop to ${t2.toFixed(1)}°C by Day ${d2}`;
+            let cleanupText = `${t_hold} ${d2}`;
+            if (t2 > t1) cleanupText = `${t_reach} ${t2.toFixed(1)}°C ${t_by} ${d2}`;
+            else if (t2 < t1) cleanupText = `${t_drop} ${t2.toFixed(1)}°C ${t_by} ${d2}`;
 
-            // 4. Hold Warm
-            let holdText = `Hold until Day ${d3}`;
-            if (t3 > t2) holdText = `Reach ${t3.toFixed(1)}°C by Day ${d3}`;
-            else if (t3 < t2) holdText = `Drop to ${t3.toFixed(1)}°C by Day ${d3}`;
+            let holdText = `${t_hold} ${d3}`;
+            if (t3 > t2) holdText = `${t_reach} ${t3.toFixed(1)}°C ${t_by} ${d3}`;
+            else if (t3 < t2) holdText = `${t_drop} ${t3.toFixed(1)}°C ${t_by} ${d3}`;
 
-            // 5. Cold Crash
-            let crashText = `Hold until Day ${d4}`;
-            if (t4 < t3) crashText = `Drop to ${t4.toFixed(1)}°C by Day ${d4}`;
-            else if (t4 > t3) crashText = `Rise to ${t4.toFixed(1)}°C by Day ${d4}`;
+            let crashText = `${t_hold} ${d4}`;
+            if (t4 < t3) crashText = `${t_drop} ${t4.toFixed(1)}°C ${t_by} ${d4}`;
 
-   // 1. Skapa HTML för torrhumlingen med uträknad duration
+            // Skapa humle-texten
             let dryHopHTML = "";
             if (profileData.dryHopDay) {
                 if (profileData.removeHopDay) {
                     const duration = (profileData.removeHopDay - profileData.dryHopDay).toFixed(1);
-                    dryHopHTML = `<p style="margin: 0 0 8px 0; color: #8CC63F; font-size: 1.05em;"><strong>Dry Hop Contact:</strong> Day ${profileData.dryHopDay} to Day ${profileData.removeHopDay} <strong style="color: #fff; font-size: 0.95em;">(${duration} days)</strong></p>`;
+                    dryHopHTML = `<p style="margin: 0 0 8px 0; color: #8CC63F; font-size: 1.05em;"><strong>${labelContact}:</strong> ${t_day_word} ${profileData.dryHopDay} — ${t_day_word} ${profileData.removeHopDay} <strong style="color: #fff; font-size: 0.95em;">(${duration} ${labelDays})</strong></p>`;
                 } else {
-                    dryHopHTML = `<p style="margin: 0 0 8px 0; color: #8CC63F; font-size: 1.05em;"><strong>Dry Hop:</strong> Scheduled for Day ${profileData.dryHopDay}</p>`;
+                    const labelSch = tLab.schedule_hop || "Dry Hop scheduled on Day";
+                    dryHopHTML = `<p style="margin: 0 0 8px 0; color: #8CC63F; font-size: 1.05em;"><strong>${labelSch} ${profileData.dryHopDay}</strong></p>`;
                 }
             }
 
-            // 2. Formaterar texten snyggare och injicerar vår nya dryHopHTML
+            // Bygg ihop hela den nya lådan
             detailedText = `
                 <div style="line-height: 1.6;">
-                    <p style="color: var(--accent-color); font-weight: 800; margin-bottom: 15px;">Created by you!</p>
-                    <p>This profile is used with <strong>${baseYeast}</strong> and these are the profile steps:</p>
+                    <p style="color: var(--accent-color); font-weight: 800; margin-bottom: 15px;">${txtCreatedBy}</p>
+                    <p>${txtBasedOn} <strong>${baseYeast}</strong> ${txtAndSteps}</p>
                     <ul style="list-style: none; padding: 0; margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
-                        <li><strong style="color: #fff;">Pitch:</strong> Start at ${pitchTemp}°C.</li>
-                        <li><strong style="color: #fff;">Primary:</strong> ${primaryText}.</li>
-                        <li><strong style="color: #fff;">Cleanup:</strong> ${cleanupText}.</li>
+                        <li><strong style="color: #fff;">${t_pitch}:</strong> ${txtStartAt} ${pitchTemp}°C.</li>
+                        <li><strong style="color: #fff;">${t_prim}:</strong> ${primaryText}.</li>
+                        <li><strong style="color: #fff;">${t_clean}:</strong> ${cleanupText}.</li>
                         <li><strong style="color: #fff;">Hold Warm:</strong> ${holdText}.</li>
-                        <li><strong style="color: #fff;">Cold Crash:</strong> ${crashText}.</li>
+                        <li><strong style="color: #fff;">${t_crash}:</strong> ${crashText}.</li>
                     </ul>
                     
                     <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #333;">
                         ${dryHopHTML}
-                        ${profileData.rackDumpDay ? `<p style="margin: 0; color: #F2994A; font-size: 1.05em;"><strong>Rack / Dump:</strong> Scheduled for Day ${profileData.rackDumpDay}</p>` : ''}
+                        ${profileData.rackDumpDay ? `<p style="margin: 0; color: #F2994A; font-size: 1.05em;"><strong>${tLab.schedule_dump || 'Rack / Dump scheduled on Day'} ${profileData.rackDumpDay}</strong></p>` : ''}
                     </div>
                 </div>
             `;
@@ -2315,6 +2337,7 @@ function openYeastModal(yeast) {
             detailedText = `<p>Custom profile data not found.</p>`;
         }
     }
+    
     // ====================================================================
     // 2. KOLLA OM DET ÄR DIN EGEN HUSJÄST (House Bank)
     // ====================================================================

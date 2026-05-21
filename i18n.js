@@ -3342,6 +3342,13 @@ const translations = {
             cleanup: "Cleanup",
             cold_crash: "Cold Crash",
             condition: "Condition",
+            created_by_you: "Created by you!",
+            used_with: "This profile is used with",
+            profile_steps_are: "and these are the profile steps:",
+            start_at: "Start at",
+            free_rise_to: "Free rise to",
+            dry_hop_contact: "Dry Hop Contact",
+            days_plural: "days"
         },
 
         lab: {
@@ -3671,6 +3678,13 @@ calc: {
             cleanup: "Diacetylrast",
             cold_crash: "Kallkrasch",
             condition: "Konditionering",
+            created_by_you: "Skapad av dig!",
+            used_with: "Denna profil används med",
+            profile_steps_are: "och detta är stegen i profilen:",
+            start_at: "Starta vid",
+            free_rise_to: "Fri temperaturhöjning till",
+            dry_hop_contact: "Humlekontakt",
+            days_plural: "dagar"
         },
 
         lab: {
@@ -3741,6 +3755,8 @@ chart_remove_hop: "TA BORT HUMLE 🔔"
     included_profiles: "INKLUDERADE HÅRDVARUPROFILER:",
 btn_edit_profiler: "REDIGERA I PROFILERARE",
 },
+
+
 
 calc: {
             title: "Pitchkalkylator",
@@ -3997,6 +4013,13 @@ libTour: {
             cleanup: "Diacetylrast",
             cold_crash: "Cold Crash",
             condition: "Konditionierung",
+            created_by_you: "Von dir erstellt!",
+            used_with: "Dieses Profil wird verwendet mit",
+            profile_steps_are: "und das sind die Profilschritte:",
+            start_at: "Start bei",
+            free_rise_to: "Freier Temperaturanstieg auf",
+            dry_hop_contact: "Hopfenkontakt",
+            days_plural: "Tage"
         },
 
         lab: {
