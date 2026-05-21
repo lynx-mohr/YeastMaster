@@ -1812,19 +1812,20 @@ if (dragIndex === 0 || dragIndex === 1) {
 // --- 3. UPPDATERA HUVUDPUNKTEN ---
 profilePoints[dragIndex] = { x: xVal, y: yVal };
 
-// --- 4. "KNUFF-LOGIK" (Här löser vi krockarna för sista punkterna) ---
-// Synka par som hör ihop
-if (dragIndex === 2) profilePoints[3].y = yVal;
-if (dragIndex === 3) profilePoints[2].y = yVal;
-if (dragIndex === 4) profilePoints[5].y = yVal;
-if (dragIndex === 5) profilePoints[4].y = yVal;
+// --- 4. "KNUFF-LOGIK" (SÄKER VERSION) ---
+// Vi kollar med && att punkten finns innan vi försöker sätta .y
+if (dragIndex === 2 && profilePoints[3]) profilePoints[3].y = yVal;
+if (dragIndex === 3 && profilePoints[2]) profilePoints[2].y = yVal;
+if (dragIndex === 4 && profilePoints[5]) profilePoints[5].y = yVal;
+if (dragIndex === 5 && profilePoints[4]) profilePoints[4].y = yVal;
 
+// --- KNUFF-LOGIK FÖR X (SÄKER VERSION) ---
 // Om vi drar i 4:an och den krockar med 5:an, knuffa 5:an åt höger
-if (dragIndex === 4 && profilePoints[5].x < profilePoints[4].x + minGap) {
+if (dragIndex === 4 && profilePoints[5] && profilePoints[5].x < profilePoints[4].x + minGap) {
     profilePoints[5].x = profilePoints[4].x + minGap;
 }
 // Om vi drar i 5:an och den krockar med 4:an, knuffa 4:an åt vänster
-if (dragIndex === 5 && profilePoints[4].x > profilePoints[5].x - minGap) {
+if (dragIndex === 5 && profilePoints[4] && profilePoints[4].x > profilePoints[5].x - minGap) {
     profilePoints[4].x = profilePoints[5].x - minGap;
 }
 
