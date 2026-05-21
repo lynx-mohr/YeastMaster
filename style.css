@@ -3898,3 +3898,18 @@ body:not(.light-mode) #setting-active-device option {
     background-color: #1a1a1a;
     color: #ffffff;
 }
+
+/* ==========================================
+   FIX FÖR SAVE PROFILE I LIGHT MODE
+   ========================================== */
+body.light-mode #btn-save-profile {
+    background-color: #111111; /* En snygg, mörk kontrastfärg */
+    color: #ffffff; /* Vit text */
+    border: 1px solid #111111;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Liten skugga för att lyfta den från sidan */
+}
+
+body.light-mode #btn-save-profile:hover {
+    background-color: #333333;
+    border-color: #333333;
+}
