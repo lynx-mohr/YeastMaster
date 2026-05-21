@@ -170,21 +170,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let editingProfileName = null; // Håller koll på om vi editerar
 
-function startEditingProfile(profileName) {
-    editingProfileName = profileName; // Sätt flaggan
-    // Stäng modalen
-    closeYeastModal();
-    // Ladda in profilen i labbet
-    // Vi måste hämta profildatan först för att kunna skicka med den
+window.startEditingProfile = function(profileName) {
+    window.editingProfileName = profileName; // <-- Använd window. här!
+    if (typeof closeYeastModal === 'function') closeYeastModal();
+    
     const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
     const profileData = savedProfiles.find(p => p.s === profileName);
     
-    if (profileData) {
-        // Vi återanvänder din befintliga lastning, men vi behöver trigga den på rätt sätt
-        // Eftersom du har loadProfileIntoLab, anropa den med profildatan
+    if (profileData && typeof loadProfileIntoLab === 'function') {
         loadProfileIntoLab(profileData.p.replace('Custom (', '').replace(')', ''), profileData.s, profileData.s);
     }
-}
+};
 
 });
 // --- KONFIGURATION ---
@@ -3811,95 +3807,109 @@ function resetProfiler() {
     }
 }
 
-// ==============================================================
-// --- DEN ENDA SANNA SPARFUNKTIONEN (Med Moln & Celsius-koll) ---
-// ==============================================================
-function saveProfileToLibrary() {
-    let rawName = document.getElementById('custom-profile-name').value.trim().toUpperCase();
-    const profileName = rawName !== "" ? rawName : "CUSTOM_1";
-    
-    let baseYeast = document.getElementById('custom-base-yeast').value;
-    if(baseYeast === "") baseYeast = "Unknown Base";
+window.saveProfileToLibrary = function() {
+    try {
+        let rawName = document.getElementById('custom-profile-name').value.trim().toUpperCase();
+        const profileName = rawName !== "" ? rawName : "CUSTOM_1";
+        
+        let baseYeast = document.getElementById('custom-base-yeast').value;
+        if(baseYeast === "") baseYeast = "Unknown Base";
 
-    // Intern hjälpfunktion för att tvinga ner värdet till Celsius innan lagring
-    function toCelsius(val) {
-        return currentTempUnit === 'F' ? (val - 32) * 5/9 : val;
-    }
-
-    const profileData = {
-        s: profileName,             
-        p: `Custom (${baseYeast})`, 
-        // Vi sparar bara dagarna, inte längre någon hopActionType
-        dryHopDay: (typeof dryHopData !== 'undefined' && dryHopData.enabled) ? dryHopData.day : null, 
-        removeHopDay: (typeof removeHopData !== 'undefined' && removeHopData.enabled) ? removeHopData.day : null,
-        rackDumpDay: (typeof rackDumpData !== 'undefined' && rackDumpData.enabled) ? rackDumpData.day : null,
-        steps: [
-            [profilePoints[0].x, parseFloat(toCelsius(profilePoints[0].y).toFixed(1))],
-            [profilePoints[1].x, parseFloat(toCelsius(profilePoints[1].y).toFixed(1))],
-            [profilePoints[2].x, parseFloat(toCelsius(profilePoints[2].y).toFixed(1))],
-            [profilePoints[3].x, parseFloat(toCelsius(profilePoints[3].y).toFixed(1))],
-            [profilePoints[4].x, parseFloat(toCelsius(profilePoints[4].y).toFixed(1))]
-        ]
-    };
-
-    // 1. Spara ner det i enhetens lokala minne
-    let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
-
-        if (editingProfileName) {
-        // EDIT MODE: Hitta och ersätt
-        const index = savedProfiles.findIndex(p => p.s === editingProfileName);
-        if (index > -1) {
-            savedProfiles[index] = profileData;
+        // Säker C/F-konvertering (kraschar inte om currentTempUnit saknas)
+        function toCelsius(val) {
+            const isFahrenheit = (typeof currentTempUnit !== 'undefined' && currentTempUnit === 'F');
+            return isFahrenheit ? (val - 32) * 5/9 : val;
         }
-        editingProfileName = null; // Reset
-    } else {
-        // NEW MODE: Push
-        savedProfiles.push(profileData);
-    }
 
-    localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
+        // Säkerhetsspärr: Har vi ens några grafpunkter?
+        if (typeof profilePoints === 'undefined' || profilePoints.length < 5) {
+            alert("Kunde inte spara: Grafens data (profilePoints) saknas i minnet!");
+            return;
+        }
 
-    // 2. SKICKA TILL MOLNET DIREKT!
-    if (typeof pushLibraryToCloud === 'function') {
-        pushLibraryToCloud();
-    }
+        const profileData = {
+            s: profileName,             
+            p: `Custom (${baseYeast})`, 
+            dryHopDay: (typeof dryHopData !== 'undefined' && dryHopData.enabled) ? parseFloat(dryHopData.day) : null, 
+            removeHopDay: (typeof removeHopData !== 'undefined' && removeHopData.enabled) ? parseFloat(removeHopData.day) : null,
+            rackDumpDay: (typeof rackDumpData !== 'undefined' && rackDumpData.enabled) ? parseFloat(rackDumpData.day) : null,
+            steps: [
+                [parseFloat(profilePoints[0].x), parseFloat(toCelsius(profilePoints[0].y).toFixed(1))],
+                [parseFloat(profilePoints[1].x), parseFloat(toCelsius(profilePoints[1].y).toFixed(1))],
+                [parseFloat(profilePoints[2].x), parseFloat(toCelsius(profilePoints[2].y).toFixed(1))],
+                [parseFloat(profilePoints[3].x), parseFloat(toCelsius(profilePoints[3].y).toFixed(1))],
+                [parseFloat(profilePoints[4].x), parseFloat(toCelsius(profilePoints[4].y).toFixed(1))]
+            ]
+        };
 
-    // 3. Magisk Knapp-animation
-    const btn = document.getElementById('btn-save-profile');
-    const originalText = btn.innerText;
+        // 1. Hämta tidigare sparade profiler
+        let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
 
-    // HÄR: Hämta översättningen för "SAVED! ✓"
-    const lang = window.currentLang || 'en';
-    const tLab = window.translations?.[lang]?.lab || {};
-    btn.innerText = tLab.btn_saved_success || "SAVED! ✓";
+        // 2. Skottsäker check för edit-läget (Kollar både globalt och lokalt)
+        if (typeof window.editingProfileName !== 'undefined' && window.editingProfileName) {
+            const index = savedProfiles.findIndex(p => p.s === window.editingProfileName);
+            if (index > -1) savedProfiles[index] = profileData;
+            else savedProfiles.push(profileData);
+            window.editingProfileName = null; // Nollställ när vi är klara
+        } 
+        else if (typeof editingProfileName !== 'undefined' && editingProfileName) {
+            const index = savedProfiles.findIndex(p => p.s === editingProfileName);
+            if (index > -1) savedProfiles[index] = profileData;
+            else savedProfiles.push(profileData);
+            editingProfileName = null; // Nollställ när vi är klara
+        } 
+        else {
+            // Helt ny profil
+            savedProfiles.push(profileData);
+        }
 
-    btn.style.backgroundColor = "#b142ff"; 
-    btn.style.borderColor = "#b142ff";
-    btn.style.color = "#fff";
+        // Spara i webbläsaren
+        localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
 
-    // 4. Byt vy snyggt utan omladdning
-    setTimeout(() => {
-        loadCustomProfiles();
-        showView('library');
+        // Skicka till molnet
+        if (typeof pushLibraryToCloud === 'function') pushLibraryToCloud();
+
+        // 3. Magisk Knapp-animation
+        const btn = document.getElementById('btn-save-profile');
+        if (!btn) return; // Krascha inte om knappen inte hittas
         
-        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-        const libIcon = document.querySelector('.nav-item[onclick*="library"]');
-        if (libIcon) libIcon.classList.add('active');
-        
-        btn.innerText = originalText;
-        btn.style.backgroundColor = ""; 
-        btn.style.borderColor = "";
-        btn.style.color = "";
+        const originalText = btn.innerText;
+        const lang = window.currentLang || 'en';
+        const tLab = window.translations?.[lang]?.lab || {};
+        btn.innerText = tLab.btn_saved_success || "SAVED! ✓";
 
-        resetProfiler();
+        btn.style.backgroundColor = "#b142ff"; 
+        btn.style.borderColor = "#b142ff";
+        btn.style.color = "#fff";
 
-        // Scrolla ner till botten
+        // 4. Byt vy snyggt
         setTimeout(() => {
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        }, 100);
+            if (typeof loadCustomProfiles === 'function') loadCustomProfiles();
+            if (typeof showView === 'function') showView('library');
+            
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            const libIcon = document.querySelector('.nav-item[onclick*="library"]');
+            if (libIcon) libIcon.classList.add('active');
+            
+            btn.innerText = originalText;
+            btn.style.backgroundColor = ""; 
+            btn.style.borderColor = "";
+            btn.style.color = "";
 
-    }, 1200);
-}
+            if (typeof resetProfiler === 'function') resetProfiler();
+
+            setTimeout(() => {
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }, 100);
+
+        }, 1200);
+
+    } catch (error) {
+        // Om NÅGOT går fel, fånga det och meddela direkt på skärmen!
+        console.error("Krasch i saveProfileToLibrary:", error);
+        alert("Aj då! Något gick snett när profilen skulle sparas:\n\n" + error.message);
+    }
+};
 
 // Slutligen: Kör en initiering av enheten vid start
 window.addEventListener('DOMContentLoaded', () => {
