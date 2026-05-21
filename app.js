@@ -2304,16 +2304,6 @@ window.loadProfileIntoLab = function(strainName, profileName, customName = null)
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-    // 7. Byt vy och hoppa över till Lab-skärmen!
-    if (typeof showView === 'function') showView('lab');
-    
-    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-    const labIcon = document.querySelector('.nav-item[onclick*="lab"]');
-    if (labIcon) labIcon.classList.add('active');
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
 function openYeastModal(yeast) {
     const modal = document.getElementById('yeast-info-modal');
     const modalTitle = document.getElementById('modal-yeast-name');
