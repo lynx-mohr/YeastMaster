@@ -2479,7 +2479,7 @@ function openYeastModal(yeast) {
                     }
                     
                     // Knappen längst ner!
-                    profileListHtml += `<button class="btn-secondary" style="width: 100%; margin-top: 15px; border-color: var(--accent-color); color: var(--accent-color);" onclick="loadProfileIntoLab('${targetStrainName}', '${prof.p}', '${yeast.name}')">✏️ ${t_edit_btn}</button>`;
+                  profileListHtml += `<button class="btn-secondary" style="width: 100%; margin-top: 15px; border-color: var(--accent-color); color: var(--accent-color);" onclick="loadProfileIntoLab('${targetStrainName}', '${prof.p}')">✏️ ${t_edit_btn}</button>`;
                     profileListHtml += `</div>`; 
                 });
                 
