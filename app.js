@@ -1380,21 +1380,6 @@ window.toggleRemoveHopsLine = function() {
     if (labChart) labChart.update('none');
 };
 
-// --- NYTT: Funktion för bottenventilen ---
-window.setDumpHopsOnly = function() {
-    hopActionType = 'dump';
-    
-    const btn = document.getElementById('btn-dump-hops-only');
-    btn.style.backgroundColor = 'rgba(255, 146, 43, 0.2)';
-    btn.innerText = "✓ DUMP FROM CONE";
-    
-    setTimeout(() => {
-        btn.style.backgroundColor = 'transparent';
-        btn.innerText = "- DUMP HOPS ONLY";
-    }, 2000);
-    
-    alert("YeastMaster kommer nu larma om att DUMPA humlen via bottenventilen istället för att plocka ut den!");
-};
 
 function updateSummaryText() {
     const summaryBox = document.getElementById('profile-summary');
