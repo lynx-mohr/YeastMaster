@@ -168,6 +168,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    let editingProfileName = null; // Håller koll på om vi editerar
+
+function startEditingProfile(profileName) {
+    editingProfileName = profileName; // Sätt flaggan
+    // Stäng modalen
+    closeYeastModal();
+    // Ladda in profilen i labbet
+    // Vi måste hämta profildatan först för att kunna skicka med den
+    const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
+    const profileData = savedProfiles.find(p => p.s === profileName);
+    
+    if (profileData) {
+        // Vi återanvänder din befintliga lastning, men vi behöver trigga den på rätt sätt
+        // Eftersom du har loadProfileIntoLab, anropa den med profildatan
+        loadProfileIntoLab(profileData.p.replace('Custom (', '').replace(')', ''), profileData.s, profileData.s);
+    }
+}
+
 });
 // --- KONFIGURATION ---
 let activeDeviceId = null;
@@ -2130,108 +2148,108 @@ window.toggleHwProfile = function(uniqueId, btnElement) {
 // =======================================================
 // --- LOAD TEMPLATE INTO PROFILER (VÄG 1) ---
 // =======================================================
-window.loadProfileIntoLab = function(strainName, profileName, fullYeastName) {
-    // 1. Hitta den valda standardprofilen i databasen
-    if (typeof yeastDatabase === 'undefined' || !yeastDatabase.yeasts) return;
-    const profile = yeastDatabase.yeasts.find(p => p.s === strainName && p.p === profileName);
-    
-    if (!profile) {
-        console.error("Kunde inte hitta profilen i databasen!", strainName, profileName);
+window.loadProfileIntoLab = function(strainName, profileName, customName = null) {
+    // 1. Stäng informationsrutan om den är öppen
+    if (typeof closeYeastModal === 'function') closeYeastModal();
+
+    // 2. Hitta rätt profil att ladda (antingen i databasen eller lokalt)
+    let profileToLoad = null;
+    let isCustom = false;
+
+    if (customName) {
+        // Leta bland dina egna sparade profiler
+        const savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
+        profileToLoad = savedProfiles.find(p => p.s === customName);
+        isCustom = true;
+    } else if (typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
+        // Leta i den kommersiella databasen
+        profileToLoad = yeastDatabase.yeasts.find(p => p.s === strainName && p.p === profileName);
+    }
+
+    if (!profileToLoad) {
+        console.error("Kunde inte hitta profilen att ladda!");
         return;
     }
 
-    // 2. Fyll i inmatningsfälten i The Profiler
+    // 3. Fyll i fälten i Labbet (Dropdown och Namn)
+    const dropdown = document.getElementById('custom-base-yeast');
+    if (dropdown) {
+        // Om det är en custom profil sparade vi bashumlen i namnet, typ "Custom (W-34/70)"
+        let baseVal = isCustom ? profileToLoad.p.replace('Custom (', '').replace(')', '') : strainName;
+        dropdown.value = baseVal;
+        dropdown.dispatchEvent(new Event('change')); // Triggar grafen att ritas upp!
+    }
+
     const nameInput = document.getElementById('custom-profile-name');
-    const yeastInput = document.getElementById('custom-base-yeast');
+    if (nameInput) {
+        nameInput.value = isCustom ? customName : profileName;
+    }
+
+    // Intern hjälpfunktion för C/F-konvertering
+    function toCurrentUnit(valC) {
+        return (typeof currentTempUnit !== 'undefined' && currentTempUnit === 'F') ? (valC * 9/5) + 32 : valC;
+    }
+
+    // 4. Ladda in temperatur-punkterna i grafen
+    const s = profileToLoad.steps;
+    if (s && s.length >= 5 && typeof profilePoints !== 'undefined') {
+        profilePoints[0] = { x: s[0][0], y: toCurrentUnit(parseFloat(s[0][1])) };
+        profilePoints[1] = { x: s[1][0], y: toCurrentUnit(parseFloat(s[1][1])) };
+        profilePoints[2] = { x: s[2][0], y: toCurrentUnit(parseFloat(s[2][1])) };
+        profilePoints[3] = { x: s[3][0], y: toCurrentUnit(parseFloat(s[3][1])) };
+        profilePoints[4] = { x: s[4][0], y: toCurrentUnit(parseFloat(s[4][1])) };
+    }
+
+    // =========================================================
+    // 5. Ladda in larm / händelser (Humle & Dumpning)
+    // =========================================================
     
-    let shortName = profileName.replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '_').substring(0, 12).toUpperCase();
-    if(nameInput) nameInput.value = shortName;
+    // Nollställ gamla händelser först (om du precis editerade en annan profil)
+    if (typeof dryHopData !== 'undefined') dryHopData.enabled = false;
+    if (typeof removeHopData !== 'undefined') removeHopData.enabled = false;
+    if (typeof rackDumpData !== 'undefined') rackDumpData.enabled = false;
 
-    // Leta upp rätt jäst i rullistan
-    if (yeastInput) {
-        let targetSearch = (fullYeastName || strainName).toUpperCase();
-        for (let i = 0; i < yeastInput.options.length; i++) {
-            let optText = yeastInput.options[i].text.toUpperCase();
-            
-            // Matchar exakt namn ELLER det gamla korta namnet
-            if (optText === targetSearch || optText.includes(strainName.toUpperCase()) || strainName.toUpperCase().includes(optText)) {
-                yeastInput.selectedIndex = i;
-                break;
-            }
-        }
-        yeastInput.dispatchEvent(new Event('change'));
+    // Om profilen vi laddar har sparade händelser, hämta dagarna!
+    if (profileToLoad.dryHopDay) {
+        dryHopData.enabled = true;
+        dryHopData.day = parseFloat(profileToLoad.dryHopDay);
+    }
+    if (profileToLoad.removeHopDay) {
+        removeHopData.enabled = true;
+        removeHopData.day = parseFloat(profileToLoad.removeHopDay);
+    }
+    if (profileToLoad.rackDumpDay) {
+        rackDumpData.enabled = true;
+        rackDumpData.day = parseFloat(profileToLoad.rackDumpDay);
     }
 
-    // 3. Översätt databasens steg till grafens punkter
-    const s = profile.steps;
-    
-    function fromCelsius(c) {
-        return currentTempUnit === 'F' ? (c * 9/5) + 32 : c;
-    }
+    // =========================================================
 
-    if (s.length > 1) {
-        // 1. Pitch och Primary (steg 0 och 1 är alltid samma)
-        profilePoints[0] = { x: 0, y: fromCelsius(s[0][1]) };
-        profilePoints[1] = { x: s[1][0], y: fromCelsius(s[1][1]) };
-
-        // 2. Leta efter Cold Crash (Första steget efter primary som är under 10°C)
-        let crashIndex = s.findIndex((step, idx) => idx > 1 && step[1] < 10.0);
-
-        if (crashIndex !== -1) {
-            let crashStep = s[crashIndex];
-            
-            // Räkna hur många steg som ligger mellan Primary och Krasch
-            let stepsBetween = crashIndex - 1; 
-
-            if (stepsBetween === 1) {
-                // T.ex. 4-stegs profil (Går direkt från Primary till Crash)
-                profilePoints[2] = { x: s[1][0] + ((crashStep[0] - s[1][0]) * 0.25), y: fromCelsius(s[1][1]) };
-                profilePoints[3] = { x: crashStep[0] - 0.5, y: fromCelsius(s[1][1]) };
-            } 
-            else if (stepsBetween === 2) {
-                // T.ex. 5-stegs profil (Vanlig Free rise, sen platå, sen krasch)
-                let cleanStart = s[2];
-                profilePoints[2] = { x: s[1][0] + ((cleanStart[0] - s[1][0]) * 0.25), y: fromCelsius(cleanStart[1]) };
-                profilePoints[3] = { x: cleanStart[0], y: fromCelsius(cleanStart[1]) };
-            }
-            else if (stepsBetween >= 3) {
-                // T.ex. 6-stegs profil (Hardcore: Spikrak primary, ramp upp, platå, krasch)
-                profilePoints[2] = { x: s[2][0], y: fromCelsius(s[2][1]) };
-                profilePoints[3] = { x: s[3][0], y: fromCelsius(s[3][1]) };
-            }
-
-            // Sätt själva kraschen och konditioneringen
-            profilePoints[4] = { x: crashStep[0], y: fromCelsius(crashStep[1]) };
-            let lastStep = s[s.length - 1];
-            profilePoints[5] = { x: lastStep[0], y: fromCelsius(lastStep[1]) };
-
-        } else {
-            // FALLBACK: Om profilen helt saknar Cold Crash
-            let lastStep = s[s.length - 1] || s[1];
-            profilePoints[2] = { x: s[1][0] + 1, y: fromCelsius(lastStep[1]) };
-            profilePoints[3] = { x: lastStep[0] - 0.5, y: fromCelsius(lastStep[1]) };
-            profilePoints[4] = { x: lastStep[0], y: fromCelsius(lastStep[1]) };
-            profilePoints[5] = { x: lastStep[0] + 5, y: fromCelsius(lastStep[1]) };
-        }
-    }
-
-    // 4. Stäng rutan och hoppa till The Profiler
-    if (typeof closeYeastModal === 'function') closeYeastModal();
-    showView('lab');
-
-    // Nollställ eventuella gamla Action Markers som låg kvar sedan tidigare
-    if (typeof rackDumpData !== 'undefined' && rackDumpData.enabled) toggleRackDumpLine();
-    if (typeof dryHopData !== 'undefined' && dryHopData.enabled) toggleDryHopLine();
-
-    // 5. Uppdatera UI och rita om grafen!
-    if (typeof labChart !== 'undefined' && labChart) {
-        const lastPointX = profilePoints[5].x;
-        labChart.options.scales.x.max = Math.max(16, lastPointX + 1);
-        labChart.update('none');
-    }
+    // 6. Uppdatera gränssnittet (Graf + Knappar)
     if (typeof updateSummaryText === 'function') updateSummaryText();
+    if (typeof labChart !== 'undefined' && labChart !== null) labChart.update('none');
+
+    // Återställ knapparna så att de lyser om händelserna är aktiva
+    if (typeof toggleDryHopLine === 'function' && dryHopData.enabled) {
+        dryHopData.enabled = false; // Tvingar funktionen att slå "PÅ" den
+        toggleDryHopLine();
+    }
+    if (typeof toggleRemoveHopsLine === 'function' && removeHopData.enabled) {
+        removeHopData.enabled = false;
+        toggleRemoveHopsLine();
+    }
+    if (typeof toggleRackDumpLine === 'function' && rackDumpData.enabled) {
+        rackDumpData.enabled = false;
+        toggleRackDumpLine();
+    }
+
+    // 7. Byt vy och hoppa över till Lab-skärmen!
+    if (typeof showView === 'function') showView('lab');
     
-    // Scrolla upp till toppen så man ser vad man gör
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    const labIcon = document.querySelector('.nav-item[onclick*="lab"]');
+    if (labIcon) labIcon.classList.add('active');
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
@@ -2395,7 +2413,7 @@ function openYeastModal(yeast) {
             detailedText = `<p>${yeast.desc}</p><h3 style="margin-top:20px; color: #fff;">Passar till:</h3><p>${yeast.styles}</p>`;
         }
 
- const targetStrainName = hwStrainNames[yeast.id];
+        const targetStrainName = hwStrainNames[yeast.id];
         if (targetStrainName && typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
             const matchingProfiles = yeastDatabase.yeasts.filter(p => p.s === targetStrainName);
             if (matchingProfiles.length > 0) {
@@ -2480,10 +2498,13 @@ function openYeastModal(yeast) {
     // --- STYR KNAPPARNA FÖR EDIT OCH DELETE ---
     const editBtn = document.getElementById('modal-edit-btn');
     const deleteBtn = document.getElementById('modal-delete-btn');
+    const lang = window.currentLang || 'en';
+    const libT = window.translations?.[lang]?.library || window.translations?.['en']?.library || {};
     
     if (yeast.isHouseStrain) {
         if(editBtn) { 
             editBtn.style.display = 'block'; 
+            editBtn.innerText = libT.btn_edit_profiler || "EDIT PROFILE";
             editBtn.onclick = (e) => { 
                 e.preventDefault();
                 if(typeof closeYeastModal === 'function') closeYeastModal(); 
@@ -2498,7 +2519,15 @@ function openYeastModal(yeast) {
             }; 
         }
     } else if (yeast.isCustom) {
-        if(editBtn) editBtn.style.display = 'none';
+        // --- HÄR ÄR DEN NYA EDIT-KNAPPEN FÖR CUSTOM PROFILER ---
+        if(editBtn) {
+            editBtn.style.display = 'block'; 
+            editBtn.innerText = libT.btn_edit_profiler || "EDIT PROFILE"; // Sätt översatt text
+            editBtn.onclick = (e) => { 
+                e.preventDefault();
+                startEditingProfile(yeast.name); 
+            };
+        }
         if(deleteBtn) { 
             deleteBtn.style.display = 'block'; 
             deleteBtn.onclick = () => { 
@@ -3815,7 +3844,19 @@ function saveProfileToLibrary() {
 
     // 1. Spara ner det i enhetens lokala minne
     let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
-    savedProfiles.push(profileData);
+
+        if (editingProfileName) {
+        // EDIT MODE: Hitta och ersätt
+        const index = savedProfiles.findIndex(p => p.s === editingProfileName);
+        if (index > -1) {
+            savedProfiles[index] = profileData;
+        }
+        editingProfileName = null; // Reset
+    } else {
+        // NEW MODE: Push
+        savedProfiles.push(profileData);
+    }
+
     localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
 
     // 2. SKICKA TILL MOLNET DIREKT!
