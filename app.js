@@ -1508,21 +1508,17 @@ function updateSummaryText() {
 
 // --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
 function initLabChart() {
-    if (profilePoints && profilePoints.length < 6) {
-        const p0 = profilePoints[0] || {x: 0, y: 19};
-        const p1 = profilePoints[1] || {x: 5, y: 22};
-        const p2 = profilePoints[2] || {x: 8, y: 3};
-        const p3 = profilePoints[3] || {x: 14, y: 3};
-
-        profilePoints = [
-            { x: p0.x, y: p0.y },
-            { x: Math.max(p0.x + 0.5, p1.x - 1.5), y: p0.y },
-            { x: p1.x, y: p1.y },
-            { x: Math.max(p1.x + 0.5, p2.x - 1.0), y: p1.y },
-            { x: p2.x, y: p2.y },
-            { x: p3.x, y: p3.y }
-        ];
+// --- SÄKER PÅFYLLNAD AV GRAFEN ---
+if (profilePoints && profilePoints.length < 6) {
+    // Hämta sista giltiga punkten vi fick från databasen
+    let lastP = profilePoints[profilePoints.length - 1] || { x: 0, y: 20 };
+    
+    // Fyll på med platta linjer (samma Y-värde) tills vi når exakt 6 punkter
+    while (profilePoints.length < 6) {
+        profilePoints.push({ x: lastP.x + 2, y: lastP.y });
+        lastP = profilePoints[profilePoints.length - 1];
     }
+}
 
     const canvas = document.getElementById('lab-chart');
     if (!canvas) return;
