@@ -1855,31 +1855,35 @@ function populateBaseYeastDropdown() {
     });
 
     // --- NY LOGIK: Lyssna på när du väljer en jäst ---
-    dropdown.addEventListener('change', function() {
+   dropdown.addEventListener('change', function() {
         const placeholder = document.getElementById('chart-placeholder');
         const chartArea = document.getElementById('chart-scroll-area');
         const zoomBtn = document.getElementById('btn-zoom');
         
         if (this.value !== "") {
-            // En jäst är vald -> Göm texten och tona in grafen!
+            // Visa grafen
             if (placeholder) placeholder.style.display = 'none';
             if (chartArea) {
                 chartArea.style.opacity = '1';
-                chartArea.style.pointerEvents = 'auto'; // Slå på drag-funktionen
+                chartArea.style.pointerEvents = 'auto';
             }
             if (zoomBtn) zoomBtn.style.display = 'block';
+
+            // --- HÄR ÄR FIXEN: Trigga sammanfattningen direkt! ---
+            if (typeof updateSummaryText === 'function') {
+                updateSummaryText();
+            }
         } else {
-            // Inget är valt (eller man ångrade sig) -> Visa texten igen
+            // Visa "Välj en basjäst..."-texten
             if (placeholder) placeholder.style.display = 'flex';
             if (chartArea) {
                 chartArea.style.opacity = '0';
-                chartArea.style.pointerEvents = 'none'; // Stäng av drag-funktionen
+                chartArea.style.pointerEvents = 'none';
             }
             if (zoomBtn) zoomBtn.style.display = 'none';
         }
     });
 }
-
 
 // --- 3. LADDA IN DINA EGNA JÄSTER I BÅDA DATABASERNA ---
 function loadCustomProfiles() {
