@@ -2270,7 +2270,18 @@ function openYeastModal(yeast) {
             if (t4 < t3) crashText = `Drop to ${t4.toFixed(1)}°C by Day ${d4}`;
             else if (t4 > t3) crashText = `Rise to ${t4.toFixed(1)}°C by Day ${d4}`;
 
-            // Formaterar texten snyggare och kollar om Action Markers finns
+   // 1. Skapa HTML för torrhumlingen med uträknad duration
+            let dryHopHTML = "";
+            if (profileData.dryHopDay) {
+                if (profileData.removeHopDay) {
+                    const duration = (profileData.removeHopDay - profileData.dryHopDay).toFixed(1);
+                    dryHopHTML = `<p style="margin: 0 0 8px 0; color: #8CC63F; font-size: 1.05em;"><strong>Dry Hop Contact:</strong> Day ${profileData.dryHopDay} to Day ${profileData.removeHopDay} <strong style="color: #fff; font-size: 0.95em;">(${duration} days)</strong></p>`;
+                } else {
+                    dryHopHTML = `<p style="margin: 0 0 8px 0; color: #8CC63F; font-size: 1.05em;"><strong>Dry Hop:</strong> Scheduled for Day ${profileData.dryHopDay}</p>`;
+                }
+            }
+
+            // 2. Formaterar texten snyggare och injicerar vår nya dryHopHTML
             detailedText = `
                 <div style="line-height: 1.6;">
                     <p style="color: var(--accent-color); font-weight: 800; margin-bottom: 15px;">Created by you!</p>
@@ -2284,7 +2295,7 @@ function openYeastModal(yeast) {
                     </ul>
                     
                     <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #333;">
-                        ${profileData.dryHopDay ? `<p style="margin: 0 0 8px 0; color: #8CC63F; font-size: 1.05em;"><strong>Dry Hop:</strong> Scheduled for Day ${profileData.dryHopDay}</p>` : ''}
+                        ${dryHopHTML}
                         ${profileData.rackDumpDay ? `<p style="margin: 0; color: #F2994A; font-size: 1.05em;"><strong>Rack / Dump:</strong> Scheduled for Day ${profileData.rackDumpDay}</p>` : ''}
                     </div>
                 </div>
