@@ -1508,19 +1508,20 @@ function updateSummaryText() {
 
 // --- INITIALISERAR GRAFEN OCH DRAG-LOGIKEN ---
 function initLabChart() {
-// --- SÄKER PÅFYLLNAD AV GRAFEN ---
-if (profilePoints && profilePoints.length < 6) {
-    // Hämta sista giltiga punkten vi fick från databasen
-    let lastP = profilePoints[profilePoints.length - 1] || { x: 0, y: 20 };
-    
-    // Fyll på med platta linjer (samma Y-värde) tills vi når exakt 6 punkter
-    while (profilePoints.length < 6) {
-        profilePoints.push({ x: lastP.x + 2, y: lastP.y });
-        lastP = profilePoints[profilePoints.length - 1];
+    // --- SÄKER PÅFYLLNAD AV GRAFEN ---
+    if (profilePoints && profilePoints.length < 6) {
+        // Hämta sista giltiga punkten vi fick från databasen
+        let lastP = profilePoints[profilePoints.length - 1] || { x: 0, y: 20 };
+        
+        // Fyll på med platta linjer (samma Y-värde) tills vi når exakt 6 punkter
+        while (profilePoints.length < 6) {
+            profilePoints.push({ x: lastP.x + 2, y: lastP.y });
+            lastP = profilePoints[profilePoints.length - 1];
+        }
     }
-}
 
     const canvas = document.getElementById('lab-chart');
+    
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
