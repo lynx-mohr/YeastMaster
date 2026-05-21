@@ -2221,13 +2221,13 @@ window.loadProfileIntoLab = function(strainName, profileName, customName = null)
     }
 
 // 4. Ladda in temperatur-punkterna i grafen
-const s = profileToLoad.steps.sort((a, b) => a[0] - b[0]); // Sortera här!
+const s = profileToLoad.steps.sort((a, b) => a[0] - b[0]);
 
 if (s && s.length >= 5 && typeof profilePoints !== 'undefined') {
     // 1. Töm arrayen UTAN att byta ut den (behåll minnesadressen)
     profilePoints.length = 0; 
     
-    // 2. Tryck in den sorterade datan i den existerande arrayen
+    // 2. Tryck in den sorterade datan i den existerande arrayen (Alla 6 punkter!)
     profilePoints.push(
         { x: s[0][0], y: toCurrentUnit(parseFloat(s[0][1])) },
         { x: s[1][0], y: toCurrentUnit(parseFloat(s[1][1])) },
@@ -2235,47 +2235,15 @@ if (s && s.length >= 5 && typeof profilePoints !== 'undefined') {
         { x: s[3][0], y: toCurrentUnit(parseFloat(s[3][1])) },
         { x: s[4][0], y: toCurrentUnit(parseFloat(s[4][1])) }
     );
+    
+    // Om 6:e punkten finns i databasen, ladda den! (Den saknades tidigare)
+    if (s[5]) {
+        profilePoints.push({ x: s[5][0], y: toCurrentUnit(parseFloat(s[5][1])) });
+    } else {
+        // Om den mot förmodan bara har 5, förläng sista linjen som säkerhet
+        profilePoints.push({ x: s[4][0] + 4, y: toCurrentUnit(parseFloat(s[4][1])) });
+    }
 }
-
-    // =========================================================
-    // 5. Ladda in larm / händelser (Humle & Dumpning)
-    // =========================================================
-    if (typeof dryHopData !== 'undefined') dryHopData.enabled = false;
-    if (typeof removeHopData !== 'undefined') removeHopData.enabled = false;
-    if (typeof rackDumpData !== 'undefined') rackDumpData.enabled = false;
-
-    if (profileToLoad.dryHopDay) {
-        dryHopData.enabled = true;
-        dryHopData.day = parseFloat(profileToLoad.dryHopDay);
-    }
-    if (profileToLoad.removeHopDay) {
-        removeHopData.enabled = true;
-        removeHopData.day = parseFloat(profileToLoad.removeHopDay);
-    }
-    if (profileToLoad.rackDumpDay) {
-        rackDumpData.enabled = true;
-        rackDumpData.day = parseFloat(profileToLoad.rackDumpDay);
-    }
-
-    // =========================================================
-    // 6. Uppdatera gränssnittet (Graf + Knappar)
-    // =========================================================
-    if (typeof updateSummaryText === 'function') updateSummaryText();
-    if (typeof labChart !== 'undefined' && labChart !== null) labChart.update('none');
-
-    // Tvinga knapparna att ritas upp korrekt
-    if (typeof toggleDryHopLine === 'function' && dryHopData.enabled) {
-        dryHopData.enabled = false;
-        toggleDryHopLine();
-    }
-    if (typeof toggleRemoveHopsLine === 'function' && removeHopData.enabled) {
-        removeHopData.enabled = false;
-        toggleRemoveHopsLine();
-    }
-    if (typeof toggleRackDumpLine === 'function' && rackDumpData.enabled) {
-        rackDumpData.enabled = false;
-        toggleRackDumpLine();
-    }
 
     // 7. Byt vy och hoppa över till Lab-skärmen!
     if (typeof showView === 'function') showView('lab');
@@ -3876,7 +3844,8 @@ window.saveProfileToLibrary = function() {
                 [parseFloat(profilePoints[1].x), parseFloat(toCelsius(profilePoints[1].y).toFixed(1))],
                 [parseFloat(profilePoints[2].x), parseFloat(toCelsius(profilePoints[2].y).toFixed(1))],
                 [parseFloat(profilePoints[3].x), parseFloat(toCelsius(profilePoints[3].y).toFixed(1))],
-                [parseFloat(profilePoints[4].x), parseFloat(toCelsius(profilePoints[4].y).toFixed(1))]
+                [parseFloat(profilePoints[4].x), parseFloat(toCelsius(profilePoints[4].y).toFixed(1))],
+                [parseFloat(profilePoints[5].x), parseFloat(toCelsius(profilePoints[5].y).toFixed(1))] // <--- NY RAD HÄR!
             ]
         };
 
