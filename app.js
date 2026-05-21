@@ -2208,18 +2208,21 @@ window.loadProfileIntoLab = function(strainName, profileName, customName = null)
     }
 
 // 4. Ladda in temperatur-punkterna i grafen
-    const s = profileToLoad.steps;
-    if (s && s.length >= 5) {
-        // HÄR ÄR FIXEN: 
-        // Skapa en HELT NY array istället för att bara ändra index
-        profilePoints = [
-            { x: s[0][0], y: toCurrentUnit(parseFloat(s[0][1])) },
-            { x: s[1][0], y: toCurrentUnit(parseFloat(s[1][1])) },
-            { x: s[2][0], y: toCurrentUnit(parseFloat(s[2][1])) },
-            { x: s[3][0], y: toCurrentUnit(parseFloat(s[3][1])) },
-            { x: s[4][0], y: toCurrentUnit(parseFloat(s[4][1])) }
-        ];
-    }
+const s = profileToLoad.steps.sort((a, b) => a[0] - b[0]); // Sortera här!
+
+if (s && s.length >= 5 && typeof profilePoints !== 'undefined') {
+    // 1. Töm arrayen UTAN att byta ut den (behåll minnesadressen)
+    profilePoints.length = 0; 
+    
+    // 2. Tryck in den sorterade datan i den existerande arrayen
+    profilePoints.push(
+        { x: s[0][0], y: toCurrentUnit(parseFloat(s[0][1])) },
+        { x: s[1][0], y: toCurrentUnit(parseFloat(s[1][1])) },
+        { x: s[2][0], y: toCurrentUnit(parseFloat(s[2][1])) },
+        { x: s[3][0], y: toCurrentUnit(parseFloat(s[3][1])) },
+        { x: s[4][0], y: toCurrentUnit(parseFloat(s[4][1])) }
+    );
+}
 
     // =========================================================
     // 5. Ladda in larm / händelser (Humle & Dumpning)
