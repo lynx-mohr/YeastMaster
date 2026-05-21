@@ -2486,7 +2486,7 @@ function openYeastModal(yeast) {
 
                 let profileListHtml = `<div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;"><h4 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">${t_included}</h4>`;
                 
-                matchingProfiles.forEach((prof, index) => {
+            matchingProfiles.forEach((prof, index) => {
                     const startTemp = prof.steps[0][1];
                     const uniqueId = `hw-profile-summary-${yeast.id}-${index}`; 
                     const steps = prof.steps;
@@ -2494,7 +2494,40 @@ function openYeastModal(yeast) {
                     profileListHtml += `<button class="hw-profile-btn" onclick="toggleHwProfile('${uniqueId}', this)"><strong>${prof.p}</strong><span style="color: #888; font-size: 0.85em;">(Starts @ ${startTemp.toFixed(1)}°C)</span></button>`;
                     profileListHtml += `<div class="hw-profile-summary" id="${uniqueId}"><div class="summary-header">${t_summary}</div>`;
                     
-                  3. VANLIG KOMMERSIELL JÄST F
+                    // Pitch
+                    profileListHtml += `<div class="summary-row"><span class="label">${t_pitch}</span><span class="value">${t_day} ${steps[0][0]} @ ${steps[0][1].toFixed(1)}°C</span></div>`;
+                    
+                    // Primary
+                    let primText = `${t_hold} ${steps[1][0]}`;
+                    if (Math.abs(steps[1][1] - steps[0][1]) >= 0.2) {
+                        const action = steps[1][1] > steps[0][1] ? t_rise : t_drop;
+                        primText = `${action} ${steps[1][1].toFixed(1)}°C ${t_by} ${steps[1][0]}`;
+                    }
+                    profileListHtml += `<div class="summary-row"><span class="label">${t_prim}</span><span class="value">${primText}</span></div>`;
+                    
+                    // Cleanup
+                    let cleanText = `${t_hold} ${steps[2][0]}`;
+                    if (Math.abs(steps[2][1] - steps[1][1]) >= 0.2) {
+                        const action = steps[2][1] > steps[1][1] ? t_reach : t_drop;
+                        cleanText = `${action} ${steps[2][1].toFixed(1)}°C ${t_by} ${steps[2][0]}`;
+                    }
+                    profileListHtml += `<div class="summary-row"><span class="label">${t_clean}</span><span class="value">${cleanText}</span></div>`;
+                    
+                    // Cold Crash & Condition (Nu med stöd för 6 punkter!)
+                    if (steps.length >= 6) {
+                        let crashText = `${t_hold} ${steps[4][0]}`;
+                        if (Math.abs(steps[4][1] - steps[3][1]) >= 0.2) {
+                            const action = steps[4][1] > steps[3][1] ? t_rise : t_drop;
+                            crashText = `${action} ${steps[4][1].toFixed(1)}°C ${t_by} ${steps[4][0]}`;
+                        }
+                        profileListHtml += `<div class="summary-row"><span class="label">${t_crash}</span><span class="value">${crashText}</span></div>`;
+                        
+                        profileListHtml += `<div class="summary-row"><span class="label">${t_cond}</span><span class="value">${t_hold} ${steps[5][0]}</span></div>`;
+                    }
+                    
+                    // Knappen längst ner!
+                    profileListHtml += `<button class="btn-secondary" style="width: 100%; margin-top: 15px; border-color: var(--accent-color); color: var(--accent-color);" onclick="loadProfileIntoLab('${targetStrainName}', '${prof.p}')">✏️ ${t_edit_btn}</button>`;
+                    profileListHtml += `</div>`; 
                 });
                 
                 profileListHtml += `</div>`; 
