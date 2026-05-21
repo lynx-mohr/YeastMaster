@@ -438,11 +438,13 @@ async function updateDashboard() {
             if (alertToDisplay !== "") {
                 let displayMsg = alertToDisplay; 
                 
-                // Formatera texten snyggt baserat på larmtyp och översätt (om ordboken finns)
+        // Formatera texten snyggt baserat på larmtyp och översätt (om ordboken finns)
                 if (alertToDisplay === "POWER_OUTAGE") {
                     displayMsg = translations?.[currentLang]?.alerts?.power || "⚠️ CONNECTION LOST! Check power/WiFi.";
                 } else if (alertToDisplay === "TEMP_WARNING") {
                     displayMsg = translations?.[currentLang]?.alerts?.temp || "🔥 TEMP DEVIATION! >2.0°C difference.";
+                } else if (alertToDisplay.includes("REMOVE HOP")) { // <-- NY!
+                    displayMsg = translations?.[currentLang]?.alerts?.remove_hop || "🔔 TIME TO REMOVE HOPS!";
                 } else if (alertToDisplay.includes("DRY HOP")) {
                     displayMsg = translations?.[currentLang]?.alerts?.dry_hop || "🌿 TIME TO DRY HOP!";
                 } else if (alertToDisplay.includes("DUMP") || alertToDisplay.includes("RACK")) {
@@ -3789,7 +3791,7 @@ function saveProfileToLibrary() {
     // 3. Magisk Knapp-animation
     const btn = document.getElementById('btn-save-profile');
     const originalText = btn.innerText;
-    btn.innerText = "SAVED TO LIBRARY! ✓";
+    btn.innerText = "SAVED! ✓";
     btn.style.backgroundColor = "#b142ff"; // Lila succéfärg
     btn.style.borderColor = "#b142ff";
     btn.style.color = "#fff";
@@ -5256,6 +5258,15 @@ function checkActionAlerts(currentDay, strainName, profileName) {
             alertBanner.style.boxShadow = "0 4px 15px rgba(140, 198, 63, 0.4)";
             alertBanner.style.display = 'block';
         }
+
+        // Kolla Remove Hops
+        else if (activeProfile.removeHopDay && currentDay >= activeProfile.removeHopDay && currentDay < (activeProfile.removeHopDay + alertWindow)) {
+            alertText.innerText = "REMOVE HOPS";
+            alertBanner.style.background = "#ff6b6b"; // Snyggt röd
+            alertBanner.style.boxShadow = "0 4px 15px rgba(255, 107, 107, 0.4)";
+            alertBanner.style.display = 'block';
+        }
+
     } catch (err) {
         console.error("Larm-detektiven förhindrade en krasch: ", err);
     }
