@@ -2337,7 +2337,7 @@ function openYeastModal(yeast) {
             detailedText = `<p>Custom profile data not found.</p>`;
         }
     }
-    
+
     // ====================================================================
     // 2. KOLLA OM DET ÄR DIN EGEN HUSJÄST (House Bank)
     // ====================================================================
@@ -3788,7 +3788,7 @@ function saveProfileToLibrary() {
     let baseYeast = document.getElementById('custom-base-yeast').value;
     if(baseYeast === "") baseYeast = "Unknown Base";
 
-    // Intern hjälpfunktion för att tvinga ner värdet till Celsius innan lagring i databasen
+    // Intern hjälpfunktion för att tvinga ner värdet till Celsius innan lagring
     function toCelsius(val) {
         return currentTempUnit === 'F' ? (val - 32) * 5/9 : val;
     }
@@ -3796,10 +3796,9 @@ function saveProfileToLibrary() {
     const profileData = {
         s: profileName,             
         p: `Custom (${baseYeast})`, 
-        // --- HÄR SPARAS BÅDA ACTION MARKERS ---
-       dryHopDay: (typeof dryHopData !== 'undefined' && dryHopData.enabled) ? dryHopData.day : null, 
-        removeHopDay: (typeof removeHopData !== 'undefined' && removeHopData.enabled) ? removeHopData.day : null, // <-- NY!
-        hopActionType: hopActionType, // <-- NY!
+        // Vi sparar bara dagarna, inte längre någon hopActionType
+        dryHopDay: (typeof dryHopData !== 'undefined' && dryHopData.enabled) ? dryHopData.day : null, 
+        removeHopDay: (typeof removeHopData !== 'undefined' && removeHopData.enabled) ? removeHopData.day : null,
         rackDumpDay: (typeof rackDumpData !== 'undefined' && rackDumpData.enabled) ? rackDumpData.day : null,
         steps: [
             [profilePoints[0].x, parseFloat(toCelsius(profilePoints[0].y).toFixed(1))],
@@ -3810,7 +3809,7 @@ function saveProfileToLibrary() {
         ]
     };
 
-    // 1. Spara ner det i enhetens lokala minne (localStorage)
+    // 1. Spara ner det i enhetens lokala minne
     let savedProfiles = JSON.parse(localStorage.getItem('customYeastProfiles') || '[]');
     savedProfiles.push(profileData);
     localStorage.setItem('customYeastProfiles', JSON.stringify(savedProfiles));
@@ -3823,8 +3822,13 @@ function saveProfileToLibrary() {
     // 3. Magisk Knapp-animation
     const btn = document.getElementById('btn-save-profile');
     const originalText = btn.innerText;
-    btn.innerText = "SAVED! ✓";
-    btn.style.backgroundColor = "#b142ff"; // Lila succéfärg
+
+    // HÄR: Hämta översättningen för "SAVED! ✓"
+    const lang = window.currentLang || 'en';
+    const tLab = window.translations?.[lang]?.lab || {};
+    btn.innerText = tLab.btn_saved_success || "SAVED! ✓";
+
+    btn.style.backgroundColor = "#b142ff"; 
     btn.style.borderColor = "#b142ff";
     btn.style.color = "#fff";
 
@@ -3844,7 +3848,7 @@ function saveProfileToLibrary() {
 
         resetProfiler();
 
-        // Scrolla ner till botten när vi landar i biblioteket!
+        // Scrolla ner till botten
         setTimeout(() => {
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }, 100);

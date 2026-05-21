@@ -3379,14 +3379,16 @@ const translations = {
             schedule_dump: "Rack / Dump scheduled on Day",
             btn_save: "SAVE PROFILE",
             fullscreen: "FULLSCREEN",
-btn_remove_hops: "- REMOVE DRY HOPS",
-btn_remove_dump: "- REMOVE ACTION",
-chart_dry_hop: "DRY HOP",
-chart_rack: "RACK/DUMP",
-btn_add_remove_hops: "+ REMOVE HOPS",
-btn_remove_remove_hops: "- REMOVE HOPS",
-schedule_remove_hop: "Remove Hops scheduled on Day",
-chart_remove_hop: "REMOVE HOPS 🔔"
+            btn_remove_hops: "- REMOVE DRY HOPS",
+            btn_remove_dump: "- REMOVE ACTION",
+            chart_dry_hop: "DRY HOP",
+            chart_rack: "RACK/DUMP",
+            btn_add_remove_hops: "+ REMOVE HOPS",
+            btn_remove_remove_hops: "- REMOVE HOPS",
+            schedule_remove_hop: "Remove Hops scheduled on Day",
+            chart_remove_hop: "REMOVE HOPS 🔔",
+            btn_save: "SAVE PROFILE",
+            btn_saved_success: "SAVED! ✓"
             
         },
         
@@ -3715,14 +3717,16 @@ calc: {
             schedule_dump: "Omtappning schemalagd till Dag",
             btn_save: "SPARA PROFIL",
             fullscreen: "HELSKÄRM",
-btn_remove_hops: "- TA BORT TORRHUMLING",
-btn_remove_dump: "- TA BORT ÅTGÄRD",
-chart_dry_hop: "TORRHUMLING",
-chart_rack: "OMTAPPNING",
-btn_add_remove_hops: "+ TA BORT HUMLE",
-btn_remove_remove_hops: "- TA BORT HUMLE",
-schedule_remove_hop: "Borttagning av humle inplanerad dag",
-chart_remove_hop: "TA BORT HUMLE 🔔"
+            btn_remove_hops: "- TA BORT TORRHUMLING",
+            btn_remove_dump: "- TA BORT ÅTGÄRD",
+            chart_dry_hop: "TORRHUMLING",
+            chart_rack: "OMTAPPNING",
+            btn_add_remove_hops: "+ TA BORT HUMLE",
+            btn_remove_remove_hops: "- TA BORT HUMLE",
+            schedule_remove_hop: "Borttagning av humle inplanerad dag",
+            chart_remove_hop: "TA BORT HUMLE 🔔",
+            btn_save: "SPARA PROFIL",
+            btn_saved_success: "SPARAD! ✓"
         },
 
         soul: {
@@ -4050,14 +4054,16 @@ libTour: {
             schedule_dump: "Umschlauchen geplant für Tag",
             btn_save: "PROFIL SPEICHERN",
             fullscreen: "VOLLBILD",
-btn_remove_hops: "- KALTHOPFUNG ENTFERNEN",
-btn_remove_dump: "- UMSCHLAUCHEN ENTFERNEN",
-chart_dry_hop: "KALTHOPFUNG",
-chart_rack: "UMSCHLAUCHEN",
-btn_add_remove_hops: "+ HOPFEN ENTFERNEN",
-btn_remove_remove_hops: "- HOPFEN ENTFERNEN",
-schedule_remove_hop: "Hopfenentfernung geplant an Tag",
-chart_remove_hop: "HOPFEN ENTFERNEN 🔔"
+          btn_remove_hops: "- KALTHOPFUNG ENTFERNEN",
+            btn_remove_dump: "- UMSCHLAUCHEN ENTFERNEN",
+            chart_dry_hop: "KALTHOPFUNG",
+            chart_rack: "UMSCHLAUCHEN",
+            btn_add_remove_hops: "+ HOPFEN ENTFERNEN",
+            btn_remove_remove_hops: "- HOPFEN ENTFERNEN",
+            schedule_remove_hop: "Hopfenentfernung geplant an Tag",
+            chart_remove_hop: "HOPFEN ENTFERNEN 🔔",
+            btn_save: "PROFIL SPEICHERN",
+            btn_saved_success: "GESPEICHERT! ✓" // Tyska
         },
 
         soul: {
