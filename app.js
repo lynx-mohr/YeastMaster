@@ -1791,33 +1791,49 @@ function initLabChart() {
 
             const minGap = 0.5;
 
-            if (dragIndex === 0) xVal = 0; 
-            else if (dragIndex === 1) xVal = Math.max(0, Math.min(xVal, profilePoints[2].x - minGap));
-            else if (dragIndex === 2) xVal = Math.max(profilePoints[1].x + minGap, Math.min(xVal, profilePoints[3].x));
-            else if (dragIndex === 3) xVal = Math.max(profilePoints[2].x, Math.min(xVal, profilePoints[4].x - minGap));
-            else if (dragIndex === 4) xVal = Math.max(profilePoints[3].x + minGap, Math.min(xVal, profilePoints[5].x));
-            else if (dragIndex === 5) xVal = Math.max(profilePoints[4].x, xVal);
+   // --- 1. SÄTT X-POSITION (Med tydliga gränser) ---
+if (dragIndex === 0) xVal = 0;
+else if (dragIndex === 1) xVal = Math.max(0, Math.min(xVal, profilePoints[2].x - minGap));
+else if (dragIndex === 2) xVal = Math.max(profilePoints[1].x + minGap, Math.min(xVal, profilePoints[3].x - minGap));
+else if (dragIndex === 3) xVal = Math.max(profilePoints[2].x + minGap, Math.min(xVal, profilePoints[4].x - minGap));
+else if (dragIndex === 4) xVal = Math.max(profilePoints[3].x + minGap, Math.min(xVal, profilePoints[5].x - minGap));
+else if (dragIndex === 5) xVal = Math.max(profilePoints[4].x + minGap, xVal);
 
-            if (dragIndex === 0 || dragIndex === 1) {
-                yVal = Math.min(yVal, profilePoints[2].y);
-                yVal = Math.max(yVal, profilePoints[4].y);
-            } 
-            else if (dragIndex === 2 || dragIndex === 3) yVal = Math.max(yVal, profilePoints[0].y);
-            else if (dragIndex === 4 || dragIndex === 5) yVal = Math.min(yVal, profilePoints[0].y);
+// --- 2. SÄTT Y-POSITION ---
+if (dragIndex === 0 || dragIndex === 1) {
+    yVal = Math.min(yVal, profilePoints[2].y);
+    yVal = Math.max(yVal, profilePoints[4].y);
+} else if (dragIndex === 2 || dragIndex === 3) {
+    yVal = Math.max(yVal, profilePoints[0].y);
+} else if (dragIndex === 4 || dragIndex === 5) {
+    yVal = Math.min(yVal, profilePoints[0].y);
+}
 
-            profilePoints[dragIndex] = { x: xVal, y: yVal };
+// --- 3. UPPDATERA HUVUDPUNKTEN ---
+profilePoints[dragIndex] = { x: xVal, y: yVal };
 
-         // Punkt 0 och 1 (Pitch/Primary) får nu ha olika Y-värden!
-            if (dragIndex === 2) profilePoints[3].y = yVal;
-            if (dragIndex === 3) profilePoints[2].y = yVal;
-            if (dragIndex === 4) profilePoints[5].y = yVal;
-            if (dragIndex === 5) profilePoints[4].y = yVal;
+// --- 4. "KNUFF-LOGIK" (Här löser vi krockarna för sista punkterna) ---
+// Synka par som hör ihop
+if (dragIndex === 2) profilePoints[3].y = yVal;
+if (dragIndex === 3) profilePoints[2].y = yVal;
+if (dragIndex === 4) profilePoints[5].y = yVal;
+if (dragIndex === 5) profilePoints[4].y = yVal;
 
-            const lastPointX = profilePoints[profilePoints.length - 1].x;
-            labChart.options.scales.x.max = Math.max(16, lastPointX + 1);
+// Om vi drar i 4:an och den krockar med 5:an, knuffa 5:an åt höger
+if (dragIndex === 4 && profilePoints[5].x < profilePoints[4].x + minGap) {
+    profilePoints[5].x = profilePoints[4].x + minGap;
+}
+// Om vi drar i 5:an och den krockar med 4:an, knuffa 4:an åt vänster
+if (dragIndex === 5 && profilePoints[4].x > profilePoints[5].x - minGap) {
+    profilePoints[4].x = profilePoints[5].x - minGap;
+}
 
-            labChart.update('none'); 
-            if (typeof updateSummaryText === 'function') updateSummaryText();
+// --- 5. SLUTLIG RENDERING ---
+const lastPointX = profilePoints[profilePoints.length - 1].x;
+labChart.options.scales.x.max = Math.max(16, lastPointX + 1);
+
+labChart.update('none');
+if (typeof updateSummaryText === 'function') updateSummaryText();
         }
     });
 
