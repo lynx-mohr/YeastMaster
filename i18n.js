@@ -4293,7 +4293,7 @@ about: {
             nick_placeholder: "z.B. Kühlschrank 1 / Großer Konus",
             btn_activate: "NEUES GERÄT AKTIVIEREN",
             hint: "Action-Menü -> Device ID"
-}
+},
 
         action: {
             COOLING: "KÜHLT",
