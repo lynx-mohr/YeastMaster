@@ -3579,7 +3579,10 @@ calc: {
             support: "SUPPORT & FEEDBACK",
             btn_bug: "REPORT BUG",
             btn_idea: "SUGGEST IDEA",
-            btn_logout: "LOG OUT"
+            btn_logout: "LOG OUT",
+            connected: "CONNECTED",
+            offline: "OFFLINE",
+            ago: "ago"
         },
         action: {
             COOLING: "COOLING",
@@ -3918,7 +3921,10 @@ house_bank: {
             support: "SUPPORT & FEEDBACK",
             btn_bug: "RAPPORTERA BUGG",
             btn_idea: "FÖRSLAGSLÅDA",
-            btn_logout: "LOGGA UT"
+            btn_logout: "LOGGA UT",
+            connected: "ANSLUTEN",
+            offline: "FRÅNKOPPLAD",
+            ago: "sedan"
         },
         action: {
             COOLING: "KYLER",
@@ -4253,7 +4259,10 @@ about: {
             support: "HILFE & FEEDBACK",
             btn_bug: "FEHLER MELDEN",
             btn_idea: "IDEE VORSCHLAGEN",
-            btn_logout: "ABMELDEN"
+            btn_logout: "ABMELDEN",
+            connected: "VERBUNDEN",
+            offline: "GETRENNT",
+            ago: "vor" // "vor" används för "för... sedan" på tyska
         },
         action: {
             COOLING: "KÜHLT",

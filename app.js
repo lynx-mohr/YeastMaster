@@ -5538,13 +5538,18 @@ function updateHeartbeatDisplay(lastSeenTimestamp) {
     const statusSpan = document.getElementById('setting-device-status');
     if (!statusSpan || !lastSeenTimestamp) return;
 
-    const lastSeen = new Date(lastSeenTimestamp);
-    const now = new Date();
-    const diffMs = now - lastSeen;
+    const diffMs = new Date() - new Date(lastSeenTimestamp);
     
-    // Om diffen är negativ (klockfel), visa 0
-    if (diffMs < 0) {
-        statusSpan.innerText = "CONNECTED";
+    // Hämta översättningar från den globala translation-objektet
+    const lang = window.currentLang || 'en';
+    const t = window.translations?.[lang]?.settings || { 
+        connected: "CONNECTED", 
+        offline: "OFFLINE", 
+        ago: "ago" 
+    };
+
+    if (diffMs < 0 || (diffMs / 60000) < 15) {
+        statusSpan.innerText = t.connected;
         statusSpan.style.color = "#8CC63F";
         return;
     }
@@ -5554,26 +5559,16 @@ function updateHeartbeatDisplay(lastSeenTimestamp) {
     const diffDays = Math.floor(diffHours / 24);
 
     let statusText = "";
-    let statusColor = "#ff4444"; // Röd som default
-
-    if (diffMins < 15) {
-        statusText = "CONNECTED";
-        statusColor = "#8CC63F"; // Grön
-    } else if (diffDays > 0) {
-        // Ex: "OFFLINE (2d, 4h ago)"
-        const remHours = diffHours % 24;
-        statusText = `OFFLINE (${diffDays}d, ${remHours}h ago)`;
+    if (diffDays > 0) {
+        statusText = `${t.offline} (${diffDays}d, ${diffHours % 24}h ${t.ago})`;
     } else if (diffHours > 0) {
-        // Ex: "OFFLINE (3h, 12m ago)"
-        const remMins = diffMins % 60;
-        statusText = `OFFLINE (${diffHours}h, ${remMins}m ago)`;
+        statusText = `${t.offline} (${diffHours}h, ${diffMins % 60}m ${t.ago})`;
     } else {
-        // Ex: "OFFLINE (45m ago)"
-        statusText = `OFFLINE (${diffMins}m ago)`;
+        statusText = `${t.offline} (${diffMins}m ${t.ago})`;
     }
 
     statusSpan.innerText = statusText;
-    statusSpan.style.color = statusColor;
+    statusSpan.style.color = "#ff4444";
 }
 
 // Körs i bakgrunden varje 30:e sekund för att hålla statusen färsk i Settings
