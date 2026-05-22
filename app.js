@@ -340,20 +340,30 @@ function showView(viewName, pushToHistory = true, forceOverride = false) {
 }
 
 
-// --- VISA CLAIM-RUTAN FÖR NYA ENHETER ---
 function showAddDevice() {
-    // Gömmer alla vanliga vyer (Dashboard, Lab, Settings etc)
+    // Gömmer alla vanliga vyer
     document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
     
     // Visar Claim-rutan
     const claimContainer = document.getElementById('claim-container');
     if (claimContainer) claimContainer.style.display = 'flex';
     
-    // Sätter en avvikande färg på knappen som en liten detalj
+    // --- HÄR ÄR ÖVERSÄTTNINGEN ---
+    const lang = window.currentLang || 'en';
+    const t = window.translations?.[lang]?.device_modal || {};
+
+    // Uppdatera texterna i modalen
+    const modalTitle = document.querySelector('#claim-container h3'); // Justera selektorn om ID är annorlunda
+    const instruction = document.querySelector('#claim-container p');
+    const inputMac = document.getElementById('input-mac'); // ID för Mac-input
+    const inputNick = document.getElementById('input-nickname');
     const claimBtn = document.getElementById('btn-claim');
-    if (claimBtn) {
-        claimBtn.innerText = "AKTIVERA NY ENHET";
-    }
+
+    if (modalTitle) modalTitle.innerText = t.title || "CONNECT DEVICE";
+    if (instruction) instruction.innerText = t.instruction || "Enter ID from the OLED menu";
+    if (inputMac) inputMac.placeholder = t.device_id || "Device ID";
+    if (inputNick) inputNick.placeholder = t.nickname_placeholder || "e.g., Fridge 1 / Large Conical";
+    if (claimBtn) claimBtn.innerText = t.btn_activate || "ACTIVATE NEW DEVICE";
 }
 
 // Och se till att denna finns för att tända ikonerna!

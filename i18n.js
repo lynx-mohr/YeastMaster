@@ -3584,6 +3584,16 @@ calc: {
             offline: "OFFLINE",
             ago: "ago"
         },
+
+        device_modal: {
+        title: "CONNECT DEVICE",
+        instruction: "Enter ID from the OLED menu",
+        device_id: "Device ID",
+        nickname: "Nickname",
+        nickname_placeholder: "e.g., Fridge 1 / Large Conical",
+        btn_activate: "ACTIVATE NEW DEVICE"
+    },
+    
         action: {
             COOLING: "COOLING",
             HEATING: "HEATING",
@@ -3925,7 +3935,18 @@ house_bank: {
             connected: "ANSLUTEN",
             offline: "FRÅNKOPPLAD",
             ago: "sedan"
+
         },
+
+            device_modal: {
+            title: "ANSLUT ENHET",
+            instruction: "Ange ID från OLED-menyn",
+            device_id: "Enhets-ID",
+            nickname: "Smeknamn",
+            nickname_placeholder: "t.ex. Kyl 1 / Stor konisk",
+            btn_activate: "AKTIVERA NY ENHET"
+        },
+
         action: {
             COOLING: "KYLER",
             HEATING: "VÄRMER",
@@ -4264,6 +4285,16 @@ about: {
             offline: "GETRENNT",
             ago: "vor" // "vor" används för "för... sedan" på tyska
         },
+
+device_modal: {
+            title: "GERÄT VERBINDEN",
+            instruction: "ID aus dem OLED-Menü eingeben",
+            device_id: "Geräte-ID",
+            nickname: "Spitzname",
+            nickname_placeholder: "z.B. Kühlschrank 1 / Großer Konus",
+            btn_activate: "NEUES GERÄT AKTIVIEREN"
+        },
+
         action: {
             COOLING: "KÜHLT",
             HEATING: "HEIZT",
