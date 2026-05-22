@@ -341,29 +341,14 @@ function showView(viewName, pushToHistory = true, forceOverride = false) {
 
 
 function showAddDevice() {
-    // Gömmer alla vanliga vyer
     document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
     
-    // Visar Claim-rutan
     const claimContainer = document.getElementById('claim-container');
-    if (claimContainer) claimContainer.style.display = 'flex';
-    
-    // --- HÄR ÄR ÖVERSÄTTNINGEN ---
-    const lang = window.currentLang || 'en';
-    const t = window.translations?.[lang]?.device_modal || {};
-
-    // Uppdatera texterna i modalen
-    const modalTitle = document.querySelector('#claim-container h3'); // Justera selektorn om ID är annorlunda
-    const instruction = document.querySelector('#claim-container p');
-    const inputMac = document.getElementById('input-mac'); // ID för Mac-input
-    const inputNick = document.getElementById('input-nickname');
-    const claimBtn = document.getElementById('btn-claim');
-
-    if (modalTitle) modalTitle.innerText = t.title || "CONNECT DEVICE";
-    if (instruction) instruction.innerText = t.instruction || "Enter ID from the OLED menu";
-    if (inputMac) inputMac.placeholder = t.device_id || "Device ID";
-    if (inputNick) inputNick.placeholder = t.nickname_placeholder || "e.g., Fridge 1 / Large Conical";
-    if (claimBtn) claimBtn.innerText = t.btn_activate || "ACTIVATE NEW DEVICE";
+    if (claimContainer) {
+        claimContainer.style.display = 'flex';
+        // Anropa vår nya automatiska översättare
+        applyTranslations();
+    }
 }
 
 // Och se till att denna finns för att tända ikonerna!
@@ -6053,3 +6038,29 @@ document.addEventListener('visibilitychange', () => {
         }
     }
 });
+
+function applyTranslations() {
+    const lang = window.currentLang || 'en';
+    const t = window.translations?.[lang] || window.translations?.['en'];
+
+    // Hitta alla element som har data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        // Plocka ut nyckeln (t.ex. "claim.title" -> t["claim"]["title"])
+        const keys = key.split('.');
+        let translation = t;
+        keys.forEach(k => translation = translation?.[k]);
+        
+        if (translation) el.innerText = translation;
+    });
+
+    // Hitta alla element som har data-i18n-placeholder
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        const keys = key.split('.');
+        let translation = t;
+        keys.forEach(k => translation = translation?.[k]);
+        
+        if (translation) el.placeholder = translation;
+    });
+}

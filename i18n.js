@@ -3585,15 +3585,15 @@ calc: {
             ago: "ago"
         },
 
-        device_modal: {
-        title: "CONNECT DEVICE",
-        instruction: "Enter ID from the OLED menu",
-        device_id: "Device ID",
-        nickname: "Nickname",
-        nickname_placeholder: "e.g., Fridge 1 / Large Conical",
-        btn_activate: "ACTIVATE NEW DEVICE"
-    },
-    
+           claim: {
+         title: "CONNECT DEVICE",
+    desc: "Enter ID from the OLED menu",
+    device_id: "Device ID",
+    nick_placeholder: "Nickname (e.g., Fridge 1 / Large Conical)",
+    btn_activate: "ACTIVATE NEW DEVICE",
+    hint: "Action-menu -> Device ID"
+},
+
         action: {
             COOLING: "COOLING",
             HEATING: "HEATING",
@@ -3938,14 +3938,14 @@ house_bank: {
 
         },
 
-            device_modal: {
-            title: "ANSLUT ENHET",
-            instruction: "Ange ID från OLED-menyn",
-            device_id: "Enhets-ID",
-            nickname: "Smeknamn",
-            nickname_placeholder: "t.ex. Kyl 1 / Stor konisk",
-            btn_activate: "AKTIVERA NY ENHET"
-        },
+            claim: {
+    title: "ANSLUT ENHET",
+    desc: "Ange ID från OLED-menyn",
+    device_id: "Enhets-ID",
+    nick_placeholder: "t.ex. Kyl 1 / Stor konisk",
+    btn_activate: "AKTIVERA NY ENHET",
+    hint: "Action-meny -> Device ID"
+},
 
         action: {
             COOLING: "KYLER",
@@ -4286,14 +4286,14 @@ about: {
             ago: "vor" // "vor" används för "för... sedan" på tyska
         },
 
-device_modal: {
+            claim: {
             title: "GERÄT VERBINDEN",
-            instruction: "ID aus dem OLED-Menü eingeben",
+            desc: "ID aus dem OLED-Menü eingeben",
             device_id: "Geräte-ID",
-            nickname: "Spitzname",
-            nickname_placeholder: "z.B. Kühlschrank 1 / Großer Konus",
-            btn_activate: "NEUES GERÄT AKTIVIEREN"
-        },
+            nick_placeholder: "z.B. Kühlschrank 1 / Großer Konus",
+            btn_activate: "NEUES GERÄT AKTIVIEREN",
+            hint: "Action-Menü -> Device ID"
+}
 
         action: {
             COOLING: "KÜHLT",
