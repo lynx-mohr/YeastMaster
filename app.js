@@ -5535,23 +5535,45 @@ function createTourMagic() {
 }
 
 function updateHeartbeatDisplay(lastSeenTimestamp) {
-    const statusSpan = document.getElementById('setting-device-status'); // Se till att du har detta ID i din HTML
+    const statusSpan = document.getElementById('setting-device-status');
     if (!statusSpan || !lastSeenTimestamp) return;
 
     const lastSeen = new Date(lastSeenTimestamp);
     const now = new Date();
-    
-    // Räkna ut skillnaden i minuter
     const diffMs = now - lastSeen;
-    const diffMins = Math.floor(diffMs / 60000);
-
-    if (diffMins < 16) {
+    
+    // Om diffen är negativ (klockfel), visa 0
+    if (diffMs < 0) {
         statusSpan.innerText = "CONNECTED";
-        statusSpan.style.color = "#8CC63F"; // YeastMaster Grön
-    } else {
-        statusSpan.innerText = `OFFLINE (${diffMins}m ago)`;
-        statusSpan.style.color = "#ff4444"; // Röd
+        statusSpan.style.color = "#8CC63F";
+        return;
     }
+
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    let statusText = "";
+    let statusColor = "#ff4444"; // Röd som default
+
+    if (diffMins < 15) {
+        statusText = "CONNECTED";
+        statusColor = "#8CC63F"; // Grön
+    } else if (diffDays > 0) {
+        // Ex: "OFFLINE (2d, 4h ago)"
+        const remHours = diffHours % 24;
+        statusText = `OFFLINE (${diffDays}d, ${remHours}h ago)`;
+    } else if (diffHours > 0) {
+        // Ex: "OFFLINE (3h, 12m ago)"
+        const remMins = diffMins % 60;
+        statusText = `OFFLINE (${diffHours}h, ${remMins}m ago)`;
+    } else {
+        // Ex: "OFFLINE (45m ago)"
+        statusText = `OFFLINE (${diffMins}m ago)`;
+    }
+
+    statusSpan.innerText = statusText;
+    statusSpan.style.color = statusColor;
 }
 
 // Körs i bakgrunden varje 30:e sekund för att hålla statusen färsk i Settings
