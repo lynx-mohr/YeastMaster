@@ -5538,19 +5538,23 @@ function updateHeartbeatDisplay(lastSeenTimestamp) {
     const statusSpan = document.getElementById('setting-device-status');
     if (!statusSpan || !lastSeenTimestamp) return;
 
-    const diffMs = new Date() - new Date(lastSeenTimestamp);
+    const lastSeen = new Date(lastSeenTimestamp);
+    const now = new Date();
+    const diffMs = now - lastSeen;
     
-    // Hämta översättningar från den globala translation-objektet
+    // --- HÄMTA SPRÅK OCH ÖVERSÄTTNINGAR ---
     const lang = window.currentLang || 'en';
+    // Fallback om settings saknas:
     const t = window.translations?.[lang]?.settings || { 
         connected: "CONNECTED", 
         offline: "OFFLINE", 
         ago: "ago" 
     };
 
+    // Om diffen är negativ (klockfel), eller om den är väldigt nyligen synkad
     if (diffMs < 0 || (diffMs / 60000) < 15) {
         statusSpan.innerText = t.connected;
-        statusSpan.style.color = "#8CC63F";
+        statusSpan.style.color = "#8CC63F"; // Grön
         return;
     }
 
@@ -5559,16 +5563,28 @@ function updateHeartbeatDisplay(lastSeenTimestamp) {
     const diffDays = Math.floor(diffHours / 24);
 
     let statusText = "";
+    const statusColor = "#ff4444"; // Röd
+
+    // Enheter (d/h/m är universellt, men du kan flytta in dessa i i18n-filen om du vill vara extremt noga)
+    const d = "d"; 
+    const h = "h";
+    const m = "m";
+
     if (diffDays > 0) {
-        statusText = `${t.offline} (${diffDays}d, ${diffHours % 24}h ${t.ago})`;
+        // Ex: "FRÅNKOPPLAD (2d, 4h sedan)"
+        const remHours = diffHours % 24;
+        statusText = `${t.offline} (${diffDays}${d}, ${remHours}${h} ${t.ago})`;
     } else if (diffHours > 0) {
-        statusText = `${t.offline} (${diffHours}h, ${diffMins % 60}m ${t.ago})`;
+        // Ex: "FRÅNKOPPLAD (3h, 12m sedan)"
+        const remMins = diffMins % 60;
+        statusText = `${t.offline} (${diffHours}${h}, ${remMins}${m} ${t.ago})`;
     } else {
-        statusText = `${t.offline} (${diffMins}m ${t.ago})`;
+        // Ex: "FRÅNKOPPLAD (45m sedan)"
+        statusText = `${t.offline} (${diffMins}${m} ${t.ago})`;
     }
 
     statusSpan.innerText = statusText;
-    statusSpan.style.color = "#ff4444";
+    statusSpan.style.color = statusColor;
 }
 
 // Körs i bakgrunden varje 30:e sekund för att hålla statusen färsk i Settings
