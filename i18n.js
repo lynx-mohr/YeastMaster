@@ -3492,7 +3492,7 @@ calc: {
         },
         about_cloud: {
             title: "THE CLOUD APP",
-            desc: "Your digital command center. YeastMaster isn't just a smart thermometer; it's a complete ecosystem for managing your fermentation from anywhere in the world.",
+            desc: "Full control of your fermenter, wherever you are. YeastMaster acts as your digital eye inside the fermenter, providing real-time monitoring of temperature and status, so you can always feel confident about your brew.",
             card1_title: "📡 Global Monitoring",
             card1_p1: "Whether you're at work, on the couch, or on vacation, the Live Dashboard keeps you connected to your brew. Watch the temperature curve draw itself in real-time, check the ambient air in your fridge, and get ultimate peace of mind knowing exactly what phase your yeast is currently working through.",
             card2_title: "📈 The Profiler",
@@ -3810,7 +3810,7 @@ calc: {
 about: {
             back: "← TILLBAKA",
             title: "YEASTMASTER",
-            desc: "Ta absolut kontroll över din jäsning. YeastMaster är en dedikerad hårdvaruenhet och ett molnekosystem designat för den moderna hembryggaren, som överbryggar klyftan mellan bryggningens biologiska konst och exakt temperaturkontroll.",
+            desc: "Ta kontroll över din jäsning. YeastMaster är en dedikerad hårdvaruenhet med ett molnekosystem designat för den moderna hembryggaren, som överbryggar klyftan mellan bryggningens ädla konst och exakt temperaturkontroll.",
             hw_title: "📟 Hårdvaran",
             hw_desc: "En dedikerad fysisk kontroller med en skarp OLED-skärm. Klicka för att se hur den styr din kyl och värmekälla.",
             cloud_title: "☁️ Molnappen",
@@ -3826,12 +3826,12 @@ about: {
             card1_p1: "Om du är ny inom bryggning kan namn som <strong>WLP001</strong> eller <strong>Wyeast 1056</strong> se ut som hemliga lösenord. Här är översättningen:",
             card1_p2: "<strong>WLP</strong> står för White Labs, och <strong>Wyeast</strong> är ett annat legendariskt laboratorium. Båda producerar <em>flytande</em> jäst av högsta klass. Namn som <strong>SafAle</strong>, <strong>Fermentis</strong> och <strong>Lallemand</strong> är kända tillverkare av <em>torrjäst</em>. Vi har handplockat de absolut bästa och mest intressanta kommersiella stammarna från dem alla och samlat deras data på ett och samma ställe.",
             card2_title: "🌡️ Varför temperatur är allt",
-            card2_p1: "Vilken jäst som helst kan jäsa socker till alkohol. Men <em>hur</em> ölet smakar beror helt på temperaturen. En belgisk jäst som jäser vid 18°C kan smaka som ren päron, men låter du den stiga till 25°C exploderar den av kryddig svartpeppar och tuggummi.",
+            card2_p1: "Vilken jäst som helst kan jäsa socker till alkohol. Men <em>hur</em> ölet smakar beror mycket på temperaturen. En belgisk jäst som jäser vid 18°C kan smaka som ren päron, men låter du den stiga till 25°C exploderar den av kryddig svartpeppar och tuggummi.",
             card2_p2: "Vårt bibliotek ger dig detaljerade guider till hur du hanterar varje specifik stam för att locka fram de perfekta smakerna (estrar och fenoler), inklusive när du ska höja värmen för en 'Diacetylrast' för att städa upp smöriga bismaker."
         },
         about_cloud: {
             title: "MOLNAPPEN",
-            desc: "Din digitala kommandocentral. YeastMaster är inte bara en smart termometer; det är ett komplett ekosystem för att hantera din jäsning oavsett var du befinner dig.",
+            desc: "Full koll på jäskärlet, var du än är. YeastMaster fungerar som ditt digitala öga i jäshinken och ger dig realtidsövervakning av temperatur och status, så att du alltid kan känna dig trygg med din brygd.",
             card1_title: "📡 Global Övervakning",
             card1_p1: "Oavsett om du är på jobbet, i soffan eller på semester, håller Live Dashboard dig uppkopplad till din brygd. Se temperaturkurvan ritas upp i realtid, håll koll på luften i kylen och få ultimat sinnesro genom att veta exakt vilken fas din jäst befinner sig i.",
             card2_title: "📈 Profileraren",
@@ -4145,7 +4145,7 @@ calc: {
 about: {
             back: "← ZURÜCK",
             title: "YEASTMASTER",
-            desc: "Übernehmen Sie die absolute Kontrolle über Ihre Gärung. YeastMaster ist eine dedizierte Hardwareeinheit und ein Cloud-Ökosystem für den modernen Heimbrauer, das die Lücke zwischen der biologischen Kunst des Brauens und präziser Datenkontrolle schließt.",
+            desc: "Volle Kontrolle über deinen Gärtank, wo immer du auch bist. YeastMaster fungiert als dein digitales Auge im Gärbehälter und bietet eine Echtzeitüberwachung von Temperatur und Status, damit du dich jederzeit sicher bei deinem Sud fühlen kannst.",
             hw_title: "📟 Die Hardware",
             hw_desc: "Ein physischer Controller mit einem klaren OLED-Display. Klicken Sie, um zu sehen, wie er Ihren Kühlschrank und Ihre Heizung steuert.",
             cloud_title: "☁️ Die Cloud-App",
