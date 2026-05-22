@@ -4941,7 +4941,7 @@ function selectCalc(type, clickedBtn) {
 
     const subOptions = document.getElementById('bank-sub-options');
     if (subOptions) {
-        subOptions.style.display = 'none'; // Gömmer det gamla spöket för alltid!
+        subOptions.style.display = 'none';
     }
 
     document.getElementById('calc-input-section').style.display = 'block';
@@ -4950,86 +4950,88 @@ function selectCalc(type, clickedBtn) {
     const dynamicSection = document.getElementById('dynamic-extra-fields');
     dynamicSection.innerHTML = ''; 
 
-    // MAGIN: Hämta kalkylator-orden för det aktuella språket!
-    const currentLang = window.currentLang || 'en';
-    const t = translations[currentLang].calc;
-
     if (type === 'dry') {
         dynamicSection.innerHTML = `
             <div class="ym-input-group" style="margin-bottom: 20px;">
-                <label>Cells per gram (Billions)</label>
+                <label data-i18n="calc.cells_per_gram">Cells per gram (Billions)</label>
                 <input type="number" id="calc-dry-density" value="10" step="1">
             </div>
         `;
     } 
- if (type === 'liquid') {
-    const today = new Date().toISOString().split('T')[0];
-    dynamicSection.innerHTML = `
-        <div id="liquid-packs-container">
-            <div class="liquid-pack-row yeast-package-box">
-                <div class="ym-input-group">
-                    <label data-i18n="calc.cells_in_pack">Cells per pack</label>
-                    <input type="number" class="calc-liquid-pack" value="100" step="10">
+    else if (type === 'liquid') {
+        const today = new Date().toISOString().split('T')[0];
+        dynamicSection.innerHTML = `
+            <div id="liquid-packs-container">
+                <div class="liquid-pack-row yeast-package-box">
+                    <div class="ym-input-group">
+                        <label data-i18n="calc.cells_in_pack">Cells per pack</label>
+                        <input type="number" class="calc-liquid-pack" value="100" step="10">
+                    </div>
+                    <div class="ym-input-group">
+                        <label data-i18n="calc.mfg_date">Manufacturing date</label>
+                        <input type="date" class="calc-liquid-date" value="${today}">
+                    </div>
+                    <button onclick="removeLiquidPack(this)" class="remove-pack-btn">&times;</button>
                 </div>
-                <div class="ym-input-group">
-                    <label data-i18n="calc.mfg_date">Manufacturing date</label>
-                    <input type="date" class="calc-liquid-date" value="${today}">
-                </div>
-                <button onclick="removeLiquidPack(this)" class="remove-pack-btn">&times;</button>
             </div>
-        </div>
-        <button onclick="addLiquidPack()" data-i18n="calc.add_package">+ Add another package</button>
-    `;
-    // VIKTIGT: Kör översättaren här!
-    applyTranslations();
-}
+            <button onclick="addLiquidPack()" data-i18n="calc.add_package">+ Add another package</button>
+        `;
+    }
     else if (type === 'slurry') {
         const today = new Date().toISOString().split('T')[0];
         dynamicSection.innerHTML = `
             <div class="ym-input-group" style="margin-bottom: 15px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                    <label style="margin: 0;">Slurry Density (Thickness)</label>
+                    <label style="margin: 0;" data-i18n="calc.slurry_density">Slurry Density (Thickness)</label>
                     <button onclick="toggleSlurryInfo(this)" style="background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: bold; line-height: 1; cursor: pointer; display: flex; justify-content: center; align-items: center; padding: 0; transition: all 0.2s;">?</button>
                 </div>
                 
                 <select id="calc-slurry-density" style="width: 100%; background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 6px; font-family: 'Lexend'; font-size: 1em; outline: none;">
-                    <option value="1.0">Thin (~1.0 B cells/mL)</option>
-                    <option value="2.0" selected>Medium (~2.0 B cells/mL)</option>
-                    <option value="3.0">Thick (~3.0 B cells/mL)</option>
+                    <option value="1.0" data-i18n="calc.slurry_thin">Thin (~1.0 B cells/mL)</option>
+                    <option value="2.0" selected data-i18n="calc.slurry_med">Medium (~2.0 B cells/mL)</option>
+                    <option value="3.0" data-i18n="calc.slurry_thick">Thick (~3.0 B cells/mL)</option>
                 </select>
 
                 <div id="slurry-info-box" style="display: none; margin-top: 12px; background: #111; border: 1px dashed #444; padding: 15px; border-radius: 8px; font-size: 0.85rem; line-height: 1.5; color: #aaa;">
-                    <strong style="color: var(--accent-color);">💧 Thin (Watery):</strong><br>Looks like dirty dishwater. Sloshes easily. Happens when not settled enough.<br><br>
-                    <strong style="color: var(--accent-color);">🥞 Medium (Pancake Batter):</strong><br>Opaque, creamy, pours slowly. The standard after washing and cold crashing.<br><br>
-                    <strong style="color: var(--accent-color);">🧱 Thick (Clay/Putty):</strong><br>Hard to pour, needs a spoon. Very compacted yeast from the bottom of a conical tank.<br><br>
-                    <span style="color: #ffcc00; font-size: 0.9em;"><em>Pro-tip: If unsure, choose "Thin". Pitching slightly more slurry is safer than underpitching!</em></span>
+                    <strong style="color: var(--accent-color);" data-i18n="calc.slurry_info_thin">💧 Thin (Watery):</strong><br>
+                    <span data-i18n="calc.slurry_info_thin_desc">Looks like dirty dishwater. Sloshes easily. Happens when not settled enough.</span><br><br>
+                    
+                    <strong style="color: var(--accent-color);" data-i18n="calc.slurry_info_med">🥞 Medium (Pancake Batter):</strong><br>
+                    <span data-i18n="calc.slurry_info_med_desc">Opaque, creamy, pours slowly. The standard after washing and cold crashing.</span><br><br>
+                    
+                    <strong style="color: var(--accent-color);" data-i18n="calc.slurry_info_thick">🧱 Thick (Clay/Putty):</strong><br>
+                    <span data-i18n="calc.slurry_info_thick_desc">Hard to pour, needs a spoon. Very compacted yeast from the bottom of a conical tank.</span><br><br>
+                    
+                    <span style="color: #ffcc00; font-size: 0.9em;"><em data-i18n="calc.slurry_info_tip">Pro-tip: If unsure, choose "Thin". Pitching slightly more slurry is safer than underpitching!</em></span>
                 </div>
             </div>
 
             <div class="ym-input-group" style="margin-bottom: 20px;">
-                <label>Harvest Date</label>
+                <label data-i18n="calc.harvest_date">Harvest Date</label>
                 <input type="date" id="calc-slurry-date" value="${today}" style="width: 100%; background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 6px; font-family: 'Lexend'; font-size: 1em; outline: none;">
             </div>
         `;
     }
-
     else if (type === 'bank') {
         currentBankMethod = 'loop'; 
         
         dynamicSection.innerHTML = `
             <div class="ym-input-group" style="margin-bottom: 20px;">
-                <label style="margin-bottom: 10px; display: block; color: var(--accent-color); font-weight: 800; letter-spacing: 1px; font-size: 0.8rem; text-transform: uppercase;">${t.inoculation}</label>
+                <label style="margin-bottom: 10px; display: block; color: var(--accent-color); font-weight: 800; letter-spacing: 1px; font-size: 0.8rem; text-transform: uppercase;" data-i18n="calc.inoculation">Inoculation Method</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <button onclick="setBankMethod('loop', this)" class="bank-method-btn" style="background: var(--accent-color); color: #000; border: 1px solid var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; cursor: pointer; transition: all 0.2s;">
-                        ${t.btn_loop}
+                    <button onclick="setBankMethod('loop', this)" class="bank-method-btn" style="background: var(--accent-color); color: #000; border: 1px solid var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; cursor: pointer; transition: all 0.2s;" data-i18n="calc.btn_loop">
+                        Single Loop
                     </button>
-                    <button onclick="setBankMethod('slant', this)" class="bank-method-btn" style="background: transparent; color: var(--accent-color); border: 1px solid var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; cursor: pointer; transition: all 0.2s;">
-                        ${t.btn_wash}
+                    <button onclick="setBankMethod('slant', this)" class="bank-method-btn" style="background: transparent; color: var(--accent-color); border: 1px solid var(--accent-color); padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: bold; cursor: pointer; transition: all 0.2s;" data-i18n="calc.btn_wash">
+                        Whole Slant Wash
                     </button>
                 </div>
             </div>
         `;
     }
+
+    // MAGIN: Anropet som faktiskt körs oavsett vilken flik vi är på!
+    applyTranslations();
 }
 
 function resetCalcSelection() {

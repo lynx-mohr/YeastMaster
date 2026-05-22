@@ -3452,7 +3452,18 @@ calc: {
             mfg_date: "Manufacturing date",
             add_package: "+ Add another package",
             cells_per_gram: "Cells per gram (billions)",
-            harvest_date: "Harvest date"
+            harvest_date: "Harvest date",
+            slurry_density: "Slurry Density (Thickness)",
+slurry_thin: "Thin (~1.0 B cells/mL)",
+slurry_med: "Medium (~2.0 B cells/mL)",
+slurry_thick: "Thick (~3.0 B cells/mL)",
+slurry_info_thin: "💧 Thin (Watery):",
+slurry_info_thin_desc: "Looks like dirty dishwater. Sloshes easily. Happens when not settled enough.",
+slurry_info_med: "🥞 Medium (Pancake Batter):",
+slurry_info_med_desc: "Opaque, creamy, pours slowly. The standard after washing and cold crashing.",
+slurry_info_thick: "🧱 Thick (Clay/Putty):",
+slurry_info_thick_desc: "Hard to pour, needs a spoon. Very compacted yeast from the bottom of a conical tank.",
+slurry_info_tip: "Pro-tip: If unsure, choose \"Thin\". Pitching slightly more slurry is safer than underpitching!"
         },
 
         tour: {
@@ -3809,7 +3820,18 @@ calc: {
             mfg_date: "Tillverkningsdatum",
             add_package: "+ Lägg till fler paket",
             cells_per_gram: "Cellmängd per gram (miljarder)",
-            harvest_date: "Skördedatum"
+            harvest_date: "Skördedatum",
+            slurry_density: "Slurry-densitet (Tjocklek)",
+slurry_thin: "Tunn (~1.0 miljarder celler/mL)",
+slurry_med: "Medium (~2.0 miljarder celler/mL)",
+slurry_thick: "Tjock (~3.0 miljarder celler/mL)",
+slurry_info_thin: "💧 Tunn (Vattnig):",
+slurry_info_thin_desc: "Ser ut som smutsigt diskvatten. Skvalpar lätt. Uppstår när jästen inte sedimenterat ordentligt.",
+slurry_info_med: "🥞 Medium (Pannkakssmet):",
+slurry_info_med_desc: "Ogenomskinlig, krämig, hälls långsamt. Standard efter tvätt och kallkrasch.",
+slurry_info_thick: "🧱 Tjock (Lera/Spackel):",
+slurry_info_thick_desc: "Svår att hälla, kräver sked. Mycket kompakt jäst från botten av en konisk tank.",
+slurry_info_tip: "Pro-tip: Om du är osäker, välj \"Tunn\". Att pitcha lite för mycket slurry är säkrare än för lite!"
         },
 
         tour: {
@@ -4163,7 +4185,18 @@ calc: {
             mfg_date: "Herstellungsdatum",
             add_package: "+ Weiteres Paket hinzufügen",
             cells_per_gram: "Zellen pro Gramm (Milliarden)",
-            harvest_date: "Erntedatum"
+            harvest_date: "Erntedatum",
+            slurry_density: "Slurry-Dichte (Dicke)",
+slurry_thin: "Dünn (~1.0 Mrd. Zellen/mL)",
+slurry_med: "Mittel (~2.0 Mrd. Zellen/mL)",
+slurry_thick: "Dick (~3.0 Mrd. Zellen/mL)",
+slurry_info_thin: "💧 Dünn (Wässrig):",
+slurry_info_thin_desc: "Sieht aus wie schmutziges Spülwasser. Schwappt leicht. Passiert, wenn sich die Hefe nicht genug abgesetzt hat.",
+slurry_info_med: "🥞 Mittel (Pfannkuchenteig):",
+slurry_info_med_desc: "Undurchsichtig, cremig, gießt sich langsam. Der Standard nach dem Waschen und Cold Crash.",
+slurry_info_thick: "🧱 Dick (Ton/Spachtel):",
+slurry_info_thick_desc: "Schwer zu gießen, erfordert einen Löffel. Sehr kompakte Hefe vom Boden eines konischen Tanks.",
+slurry_info_tip: "Pro-Tipp: Wenn unsicher, wählen Sie \"Dünn\". Etwas mehr Slurry zu pitchen ist sicherer als zu wenig!"
         },
 
         tour: {
