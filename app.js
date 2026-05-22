@@ -4962,28 +4962,27 @@ function selectCalc(type, clickedBtn) {
             </div>
         `;
     } 
-    else if (type === 'liquid') {
-        const today = new Date().toISOString().split('T')[0];
-        // HÄR ANVÄNDER VI ÖVERSÄTTNINGARNA (${t.cells_in_pack} osv)
-        dynamicSection.innerHTML = `
-            <div id="liquid-packs-container">
-                <div class="liquid-pack-row yeast-package-box">
-                    <div class="ym-input-group">
-                        <label>${t.cells_in_pack}</label>
-                        <input type="number" class="calc-liquid-pack" value="100" step="10">
-                    </div>
-                    <div class="ym-input-group">
-                        <label>${t.mfg_date}</label>
-                        <input type="date" class="calc-liquid-date" value="${today}">
-                    </div>
-                    <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
+ if (type === 'liquid') {
+    const today = new Date().toISOString().split('T')[0];
+    dynamicSection.innerHTML = `
+        <div id="liquid-packs-container">
+            <div class="liquid-pack-row yeast-package-box">
+                <div class="ym-input-group">
+                    <label data-i18n="calc.cells_in_pack">Cells per pack</label>
+                    <input type="number" class="calc-liquid-pack" value="100" step="10">
                 </div>
+                <div class="ym-input-group">
+                    <label data-i18n="calc.mfg_date">Manufacturing date</label>
+                    <input type="date" class="calc-liquid-date" value="${today}">
+                </div>
+                <button onclick="removeLiquidPack(this)" class="remove-pack-btn">&times;</button>
             </div>
-            <button onclick="addLiquidPack()" style="background: none; border: 1px dashed #8CC63F; color: #8CC63F; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; margin-bottom: 20px; font-size: 0.9em; font-weight: bold;">
-                ${t.add_package}
-            </button>
-        `;
-    }
+        </div>
+        <button onclick="addLiquidPack()" data-i18n="calc.add_package">+ Add another package</button>
+    `;
+    // VIKTIGT: Kör översättaren här!
+    applyTranslations();
+}
     else if (type === 'slurry') {
         const today = new Date().toISOString().split('T')[0];
         dynamicSection.innerHTML = `
@@ -5051,26 +5050,24 @@ function addLiquidPack() {
     const container = document.getElementById('liquid-packs-container');
     const today = new Date().toISOString().split('T')[0];
     
-    // MAGIN IGEN: Vi måste hämta orden här också, eftersom detta anropas när man klickar på "+ Lägg till förpackning"
-    const currentLang = window.currentLang || 'en';
-    const t = translations[currentLang].calc;
-    
     const newPack = document.createElement('div');
     newPack.className = 'liquid-pack-row yeast-package-box';
     
     newPack.innerHTML = `
         <div class="ym-input-group">
-            <label>${t.cells_in_pack}</label>
+            <label data-i18n="calc.cells_in_pack">Cells per pack</label>
             <input type="number" class="calc-liquid-pack" value="100" step="10">
         </div>
         <div class="ym-input-group">
-            <label>${t.mfg_date}</label>
+            <label data-i18n="calc.mfg_date">Manufacturing date</label>
             <input type="date" class="calc-liquid-date" value="${today}">
         </div>
-        <button onclick="removeLiquidPack(this)" class="remove-pack-btn" title="Remove pack">&times;</button>
+        <button onclick="removeLiquidPack(this)" class="remove-pack-btn">&times;</button>
     `;
     
     container.appendChild(newPack);
+    // VIKTIGT: Kör översättaren här också!
+    applyTranslations();
 }
 
 function removeLiquidPack(btn) {
