@@ -3591,7 +3591,7 @@ calc: {
     device_id: "Device ID",
     nick_placeholder: "Nickname (e.g., Fridge 1 / Large Conical)",
     btn_activate: "ACTIVATE NEW DEVICE",
-    hint: "Action-menu -> Device ID"
+   hint: "Main Menu -> Settings -> MAC-ID"
 },
 
         action: {
@@ -3944,7 +3944,7 @@ house_bank: {
     device_id: "Enhets-ID",
     nick_placeholder: "t.ex. Kyl 1 / Stor konisk",
     btn_activate: "AKTIVERA NY ENHET",
-    hint: "Action-meny -> Device ID"
+    hint: "Huvudmeny -> Inställningar -> MAC-ID"
 },
 
         action: {
@@ -4292,7 +4292,7 @@ about: {
             device_id: "Geräte-ID",
             nick_placeholder: "z.B. Kühlschrank 1 / Großer Konus",
             btn_activate: "NEUES GERÄT AKTIVIEREN",
-            hint: "Action-Menü -> Device ID"
+            hint: "Hauptmenü -> Einstellungen -> MAC-ID"
 },
 
         action: {
