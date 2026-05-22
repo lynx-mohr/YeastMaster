@@ -3587,7 +3587,7 @@ calc: {
 
            claim: {
          title: "CONNECT DEVICE",
-    desc: "Enter ID from the OLED menu",
+    desc: "Enter MAC-ID from the device's settings menu",
     device_id: "Device ID",
     nick_placeholder: "Nickname (e.g., Fridge 1 / Large Conical)",
     btn_activate: "ACTIVATE NEW DEVICE",
@@ -3940,7 +3940,7 @@ house_bank: {
 
             claim: {
     title: "ANSLUT ENHET",
-    desc: "Ange ID från OLED-menyn",
+    desc: "Ange MAC-ID från enhetens inställningsmeny",
     device_id: "Enhets-ID",
     nick_placeholder: "t.ex. Kyl 1 / Stor konisk",
     btn_activate: "AKTIVERA NY ENHET",
@@ -4288,7 +4288,7 @@ about: {
 
             claim: {
             title: "GERÄT VERBINDEN",
-            desc: "ID aus dem OLED-Menü eingeben",
+            desc: "MAC-ID aus dem Einstellungsmenü des Geräts eingeben",
             device_id: "Geräte-ID",
             nick_placeholder: "z.B. Kühlschrank 1 / Großer Konus",
             btn_activate: "NEUES GERÄT AKTIVIEREN",
