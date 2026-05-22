@@ -3448,6 +3448,11 @@ calc: {
             cells_in_pack: "Cells in Pack",
             mfg_date: "Mfg Date",
             add_package: "+ Add another package",
+            cells_in_pack: "Cells per pack",
+            mfg_date: "Manufacturing date",
+            add_package: "+ Add another package",
+            cells_per_gram: "Cells per gram (billions)",
+            harvest_date: "Harvest date"
         },
 
         tour: {
@@ -3800,6 +3805,11 @@ calc: {
          cells_in_pack: "Celler per förpackning",
             mfg_date: "Tillverkningsdatum",
             add_package: "+ Lägg till förpackning",
+            cells_in_pack: "Cellmängd per paket",
+            mfg_date: "Tillverkningsdatum",
+            add_package: "+ Lägg till fler paket",
+            cells_per_gram: "Cellmängd per gram (miljarder)",
+            harvest_date: "Skördedatum"
         },
 
         tour: {
@@ -4149,6 +4159,11 @@ calc: {
           cells_in_pack: "Zellen pro Packung",
             mfg_date: "Herstellungsdatum",
             add_package: "+ Weiteres Paket hinzufügen",
+            cells_in_pack: "Zellen pro Packung",
+            mfg_date: "Herstellungsdatum",
+            add_package: "+ Weiteres Paket hinzufügen",
+            cells_per_gram: "Zellen pro Gramm (Milliarden)",
+            harvest_date: "Erntedatum"
         },
 
         tour: {
