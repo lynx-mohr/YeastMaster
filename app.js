@@ -933,7 +933,7 @@ function checkAddDeviceAccess() {
     // --- INLOGGAD: Släpp förbi! ---
     // Beroende på hur din app är uppbyggd, anropar du funktionen som öppnar vyn.
     // Förmodligen är det någon av dessa två:
-    showAddDevice(); 
+   showView('claim');
     // eller: showView('claim');
 }
 

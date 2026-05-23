@@ -1,3 +1,5 @@
+
+const crypto = require('crypto');
 const express = require('express');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
@@ -60,12 +62,18 @@ app.post('/api/update', async (req, res) => {
   
 const { device_id, temp, air_temp, day, phase_day, status, action, token, strain, profile, target_temp, active_alert } = req.body;
 
-    if (token !== "YeastMaster-Super-Secret-2024") {
-        return res.status(401).send({ error: "Obehörig!" });
-    }
     if (!device_id) {
         return res.status(400).send({ error: "Saknar device_id!" });
     }
+
+       const device = await userDevicesCollection.findOne({ 
+    device_id: device_id,
+    token: token 
+});
+
+if (!device) {
+    return res.status(401).send({ error: "Obehörig!" });
+}
 
     const newEntry = {
         time: new Date(),
@@ -126,14 +134,40 @@ app.post('/api/claim-device', async (req, res) => {
     }
 
     try {
+        // Generera unik token för just denna enhet
+        const uniqueToken = crypto.randomBytes(16).toString('hex'); // 32 tecken, lagom långt
+
         await userDevicesCollection.updateOne(
             { device_id: device_id },
-            { $set: { uid: uid, name: name || "Min YeastMaster", claimed_at: new Date() } },
+            { $set: { 
+                uid: uid, 
+                name: name || "Min YeastMaster", 
+                token: uniqueToken,
+                claimed_at: new Date() 
+            }},
             { upsert: true }
         );
-        res.status(200).send({ message: "Enhet tillagd!" });
+        res.status(200).send({ message: "Enhet tillagd!", token: uniqueToken });
     } catch (e) {
         res.status(500).send({ error: "Kunde inte spara enheten" });
+    }
+});
+
+app.get('/api/get-token/:mac', async (req, res) => {
+    const mac = req.params.mac;
+
+    try {
+        const device = await userDevicesCollection.findOne({ device_id: mac });
+
+        if (device && device.token) {
+            // Enheten är aktiverad, skicka token
+            res.status(200).json({ token: device.token });
+        } else {
+            // Enheten finns inte eller är inte aktiverad än
+            res.status(404).json({ error: "Ej aktiverad" });
+        }
+    } catch (e) {
+        res.status(500).send({ error: "Databasfel" });
     }
 });
 

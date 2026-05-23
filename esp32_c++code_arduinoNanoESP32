@@ -1,0 +1,2071 @@
+#include <Arduino.h>
+#include <U8g2lib.h>
+#include <Wire.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include <WiFi.h>
+#include <Preferences.h>
+#include <WiFiManager.h>
+#include <LittleFS.h>
+#include <FFat.h>
+#include <ArduinoJson.h>
+#include <HTTPClient.h>
+#include <esp_wifi.h>  //ta bort den här sen!
+#include <WiFiClientSecure.h>
+
+// ==========================================
+// --- DEBUG MODE (Förhindrar Error 74) ---
+// ==========================================
+#define DEBUG_MODE false  // <--- Ändra till true när du felsöker via USB!
+
+#if DEBUG_MODE
+  #define DEBUG_PRINT(x) Serial.print(x)
+  #define DEBUG_PRINTLN(x) Serial.println(x)
+#else
+  #define DEBUG_PRINT(x)
+  #define DEBUG_PRINTLN(x)
+#endif
+// ==========================================
+
+// Din nya moln-adress (Se till att det är https och att :3000 är borta)
+const char* serverUrl = "https://soulofbeer-live.onrender.com/api/update";
+
+const String myAuthToken = "YeastMaster-Super-Secret-2024";
+
+Preferences preferences;
+
+WiFiClientSecure globalCloudClient; // Skapas en gång, sparar massor av minne!
+
+DynamicJsonDocument* yeastDataPtr;
+#define yeastData (*yeastDataPtr)
+
+int dynamicTotalYeasts = 0;
+
+U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
+
+#define ENCODER_CLK D5
+#define ENCODER_DT  D6
+#define ENCODER_SW  D7
+#define TX_PIN D10
+#define BUZZ_PIN D8
+
+// --- SCHRÖDINGERS PINNE (Lösningen på allt) ---
+#define ONEWIRE_ARDUINO D2 // Används bara när vi tvingar omstart (pinMode)
+#define ONEWIRE_RAW 5      // Används bara av biblioteket (OneWire)
+
+
+/*#if defined(ARDUINO_NANO_ESP32)
+  #define ONE_WIRE_PIN 5  
+#else
+  #define ONE_WIRE_PIN 5
+#endif
+*/
+#define TIME_MULTIPLIER 5  //720 => Ett simulerat dygn är 2 minuter i verklig tid
+
+unsigned int coolerRecipient = 0;
+unsigned int heaterRecipient = 1;
+bool heaterActive = false;
+
+bool shouldSaveConfig = false;
+
+void saveConfigCallback() {
+  Serial.println("Should save config");
+  shouldSaveConfig = true;
+}
+
+// ==========================================
+// --- NYA GLOBALA VARIABLER FÖR SETTINGS ---
+// ==========================================
+int mainMenuIndex = 0;
+int settingsCursor = 0;
+bool useFahrenheit = false;
+bool soundEnabled = true;
+int screenSleepMin = 5;
+float tempOffset = 0.0;
+unsigned long lastActivity = 0;
+bool screenIsOff = false;
+
+// --- STATE MACHINE ---
+// NYTT: MAIN_MENU och SETTINGS_MENU är tillagda. SHOW_MAC är borttagen (den flyttar in i Settings).
+enum State { MAIN_MENU,
+             SELECT_YEAST,
+             SELECT_PROFILE,
+             POURING,
+             RUNNING,
+             CONFIRM_ACTION,
+             SET_MANUAL_TEMP,
+             SETTINGS_MENU,
+             SET_OFFSET };
+State currentState = MAIN_MENU;  // Maskinen startar nu på Huvudmenyn!
+
+State stateBeforeSettings = MAIN_MENU;  // <--- NY RAD: Minns var vi kom ifrån!
+
+int yeastIndex = 0;
+int profileIndex = 0;
+int dashboardPage = 0;
+int lastClkState;
+unsigned long brewStartTime = 0;
+unsigned long realBrewStartTime = 0;  // <--- Den faktiska klockan
+float t1 = -127.0, t2 = -127.0;
+float lowLimit, highLimit;
+bool coolerActive = false;
+char selectedStrainName[32] = "";
+unsigned long lastCoolerStopTime = 0;           // Minns när kylen stängdes av
+const unsigned long COMPRESSOR_DELAY = 300000;  // 5 minuter i millisekunder (5 * 60 * 1000)
+bool isCompressorResting = false;               // Lås-flaggan
+
+bool cloudSyncRequested = false;
+unsigned long lastCloudSyncTime = 0;
+
+float fillLevel = 54;
+float foamHeight = 0;
+const float targetFoam = 12.0;
+
+int menuSelection = 0;
+int confirmYesNo = 0;
+float manualTargetTemp = 18.0;
+bool isManualMode = false;
+
+TaskHandle_t cloudTaskHandle = NULL;  // Ett hänglås för att hålla koll på bakgrundsarbetet
+
+// ==========================================
+// --- LARM-VARIABLER OCH DETEKTIV ---
+// ==========================================
+String activeAlertMsg = "";
+bool alertAcknowledged = false;
+
+void updateActionAlerts(float d) {
+  if (!yeastData.containsKey("yeasts")) return;
+
+  // --- SÄKERHETSSPÄRR 1: Kolla så vi inte letar utanför listan ---
+  JsonArray yeasts = yeastData["yeasts"].as<JsonArray>();
+  if (yeastIndex < 0 || yeastIndex >= yeasts.size()) return;
+
+  // --- SÄKERHETSSPÄRR 2: Kolla så profilen faktiskt är giltig ---
+  JsonObject profile = yeasts[yeastIndex].as<JsonObject>();
+  if (profile.isNull()) return;
+
+  float dryHopD = -1.0;
+  float removeHopD = -1.0; // <-- NYTT: Variabel för borttagning av humle
+  float rackD = -1.0;
+
+  if (profile.containsKey("dryHopDay") && !profile["dryHopDay"].isNull()) {
+    dryHopD = profile["dryHopDay"].as<float>();
+  }
+  // --- NYTT: Hämta removeHopDay från JSON-objektet ---
+  if (profile.containsKey("removeHopDay") && !profile["removeHopDay"].isNull()) {
+    removeHopD = profile["removeHopDay"].as<float>();
+  }
+  if (profile.containsKey("rackDumpDay") && !profile["rackDumpDay"].isNull()) {
+    rackD = profile["rackDumpDay"].as<float>();
+  }
+
+  activeAlertMsg = "";
+
+  // Larm-prioritering i kronologisk ordning
+  if (rackD >= 0 && d >= rackD && d < (rackD + 1.0)) {
+    if (!alertAcknowledged) activeAlertMsg = "DUMP YEAST!";
+  } 
+  // --- NYTT: Aktivera larmet när jäsningen når removeHopDay ---
+  else if (removeHopD >= 0 && d >= removeHopD && d < (removeHopD + 1.0)) {
+    if (!alertAcknowledged) activeAlertMsg = "REMOVE HOPS"; // Matchar frontend exakt!
+  } 
+  else if (dryHopD >= 0 && d >= dryHopD && d < (dryHopD + 1.0)) {
+    if (!alertAcknowledged) activeAlertMsg = "DRY HOP!";
+  } 
+  else {
+    // Om vi är mellan två larmfönster (t.ex. efter Dry Hop men före Remove Hops),
+    // nollställer vi hänglåset så att nästa larm kan triggas igång!
+    alertAcknowledged = false;
+  }
+}
+
+OneWire* oneWire;
+DallasTemperature* sensors;
+unsigned long lastMeasure = 0;
+struct Bubble {
+  float x, y, spd, off;
+};
+Bubble b[10];
+
+
+// --- SKÄRMSLÄCKARE: BUBBEL-LOGIK ---
+struct SSBubble {
+  float x;
+  float y;
+  float speed;
+  bool active;
+  int radius;
+};
+
+const int MAX_SS_BUBBLES = 30;  // Max antal bubblor på skärmen samtidigt
+SSBubble screensaverBubbles[MAX_SS_BUBBLES];
+unsigned long lastSSBubbleSpawn = 0;
+
+
+// Deklaration av funktion för att slippa kompilatorvarningar
+bool loadDataFromFS();
+void showSplashScreen();
+void handleScreensaverAnimation();
+
+void playNote(int freq, int duration) {
+  if (!soundEnabled) return;
+  tone(BUZZ_PIN, freq);
+  delay(duration);
+  noTone(BUZZ_PIN);
+}
+
+void triggerSound(int type) {
+  if (!soundEnabled) return;
+
+  if (type == 0) {
+    playNote(523, 80);
+    delay(40);
+    playNote(659, 80);
+    delay(40);
+    playNote(784, 150);
+  } else if (type == 1) {
+    playNote(440, 60);
+    delay(30);
+    playNote(880, 100);
+  } else if (type == 2) {
+    playNote(880, 60);
+    delay(30);
+    playNote(440, 100);
+  } else if (type == 3) {
+    int freq = map(fillLevel, 54, 20, 400, 1200);
+    tone(BUZZ_PIN, freq, 10);
+  } else if (type == 4) {
+    tone(BUZZ_PIN, 1800, 3);
+  } else if (type == 5) {
+    tone(BUZZ_PIN, 600, 20);
+    delay(20);
+    tone(BUZZ_PIN, 800, 20);
+  } else if (type == 6) {  // NYTT: WIFI CONNECTED (Två snabba, ljusa toner)
+    playNote(1047, 50);
+    delay(30);            // Högt C
+    playNote(1319, 100);  // Högt E
+    playNote(1568, 100);  // Högt G
+  }
+}
+
+void sendPhysicalBit(bool high) {
+  digitalWrite(TX_PIN, HIGH);
+  delayMicroseconds(275);
+  digitalWrite(TX_PIN, LOW);
+  if (high) delayMicroseconds(1225);
+  else delayMicroseconds(275);
+}
+
+void sendLogicalBit(bool bit) {
+  if (bit) {
+    sendPhysicalBit(true);
+    sendPhysicalBit(false);
+  } else {
+    sendPhysicalBit(false);
+    sendPhysicalBit(true);
+  }
+}
+
+bool idKyl[26] = { 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0 };
+bool idVarme[26] = { 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1 };
+
+void sendNexaMessage(bool on, int target) {
+  for (int r = 0; r < 8; r++) {
+    yield();
+    digitalWrite(TX_PIN, HIGH);
+    delayMicroseconds(275);
+    digitalWrite(TX_PIN, LOW);
+    delayMicroseconds(2750);
+
+    for (int i = 0; i < 26; i++) {
+      if (target == 0) sendLogicalBit(idKyl[i]);
+      else sendLogicalBit(idVarme[i]);
+    }
+
+    sendLogicalBit(false);
+    sendLogicalBit(on);
+
+    sendLogicalBit(false);
+    sendLogicalBit(false);
+    sendLogicalBit(false);
+    sendLogicalBit(false);
+
+    digitalWrite(TX_PIN, HIGH);
+    delayMicroseconds(275);
+    digitalWrite(TX_PIN, LOW);
+    delayMicroseconds(10000);
+  }
+}
+
+void resetBubble(int i, bool firstTime) {
+  b[i].y = firstTime ? random(15, 46) : 46;
+  b[i].spd = (float)random(3, 8) / 10.0;
+}
+
+float getDisplayGoalTemp(float days) {
+  if (isManualMode) return manualTargetTemp;
+  if (!yeastData.containsKey("yeasts")) return 20.0;
+
+  JsonArray steps = yeastData["yeasts"][yeastIndex]["steps"];
+  if (steps.isNull() || steps.size() == 0) return 20.0;
+
+  for (int i = 0; i < steps.size(); i++) {
+    if (days <= steps[i][0].as<float>()) {
+      return steps[i][1].as<float>();
+    }
+  }
+  return steps[steps.size() - 1][1].as<float>();
+}
+
+// --- ÅTERSTÄLLD TERMOSTAT-FUNKTION (GLIDANDE RAMP) ---
+// --- UPPDATERAD: KÖR BARA RAMP UPPÅT, DROPPAR DIREKT NERÅT ---
+// --- ÅTERSTÄLLD TERMOSTAT-FUNKTION (GLIDANDE RAMP) ---
+float getTargetTemp(float days) {
+  if (isManualMode) return manualTargetTemp;
+  if (!yeastData.containsKey("yeasts")) return 20.0;
+
+  JsonArray steps = yeastData["yeasts"][yeastIndex]["steps"];
+  if (steps.isNull() || steps.size() < 2) return 20.0;  // FIX: Måste klara profiler med bara 2 steg
+
+  if (days <= steps[0][0].as<float>()) return steps[0][1].as<float>();
+
+  for (int i = 1; i < steps.size(); i++) {
+    if (days <= steps[i][0].as<float>()) {
+      float dStart = steps[i - 1][0].as<float>();
+      float dEnd = steps[i][0].as<float>();
+      float tStart = steps[i - 1][1].as<float>();
+      float tEnd = steps[i][1].as<float>();
+
+      // ==========================================
+      // --- FIX: FÖRHINDRA "DIVIDE BY ZERO" CRASH ---
+      // ==========================================
+      if (dEnd - dStart == 0.0) {
+        return tEnd;  // Punkterna ligger på samma sekund, hoppa direkt till nya tempen!
+      }
+
+      // Nu rampar vi mjuka övergångar oavsett om vi värmer eller kyler!
+      return tStart + (tEnd - tStart) * ((days - dStart) / (dEnd - dStart));
+    }
+  }
+  return steps[steps.size() - 1][1].as<float>();
+}
+
+// --- UPPDATERAD getStatus (Dag 0-säker) ---
+const char* getStatus(float days) {
+  if (isManualMode) {
+    if (manualTargetTemp <= 6.5) return "COLD CRASH";
+    return "MANUAL";
+  }
+
+  if (!yeastData.containsKey("yeasts")) return "READY TO SYNC";
+
+  JsonArray steps = yeastData["yeasts"][yeastIndex]["steps"];
+  if (steps.isNull() || steps.size() == 0) return "NO PROFILE";
+
+  for (int i = 0; i < steps.size(); i++) {
+    if (days <= steps[i][0].as<float>()) {
+      float goalTemp = steps[i][1].as<float>();
+
+      if (goalTemp <= 6.5) return "COLD CRASH";
+
+      // --- FIX 2: KOLLA PRIMARY FÖRST ---
+      bool isPrimary = false;
+      if (i == 0) isPrimary = true;
+      else if (i == 1 && steps[0][0].as<float>() < 0.1) isPrimary = true;
+
+      if (isPrimary) return "PRIMARY";  // Även om temperaturen inte är nere på 20 än!
+
+      // Är det INTE Primary, kolla om vi rampar
+      if (i > 0 && t1 > -100.0) {
+        if (abs(t1 - goalTemp) > 0.5) return "RAMPING";
+      }
+
+  if (steps[i].size() > 2) {
+        const char* phaseName = steps[i][2].as<const char*>();
+        if (phaseName != nullptr) return phaseName;
+      }
+      return "CLEANING UP";
+    }
+  }
+  return "FINISHED";
+}
+
+// --- MINNESFUNKTIONERNA ---
+void saveBrewState() {
+  if (dynamicTotalYeasts < 2 && String(selectedStrainName) == "Sync") {
+    Serial.println("-> Skippar sparande: Ingen riktig data laddad än.");
+    return;
+  }
+
+  preferences.begin("brewmaster", false);
+  float days = (float)(millis() - brewStartTime) / 86400000.0 * TIME_MULTIPLIER;
+  bool isDone = (strcmp(getStatus(days), "FINISHED") == 0);
+  bool shouldResume = (currentState == RUNNING || currentState == POURING) && !isDone;
+
+  preferences.putBool("running", shouldResume);
+  preferences.putInt("yeast", yeastIndex);
+  preferences.putInt("profile", profileIndex);
+  preferences.putBool("manual", isManualMode);
+  preferences.putFloat("manTemp", manualTargetTemp);
+
+  unsigned long elapsed = millis() - brewStartTime;
+  unsigned long realElapsed = millis() - realBrewStartTime;
+  preferences.putULong("elapsed", elapsed);
+  preferences.putULong("realElapsed", realElapsed);
+  preferences.end();
+
+  //if (shouldResume) Serial.println("-> State saved to Flash");
+  // else if (isDone) Serial.println("-> Batch finished: Not saving resume-state");
+}
+
+void clearSavedState() {
+  preferences.begin("brewmaster", false);
+  preferences.clear(); // <--- RENSAR BORT ALLT GAMMALT SKRÄP!
+  preferences.putBool("running", false);
+  preferences.end();
+  Serial.println("-> Persistent state cleared completely!");
+}
+
+void loadBrewState() {
+  preferences.begin("brewmaster", true);
+  bool wasRunning = preferences.getBool("running", false);
+
+  if (wasRunning) {
+    yeastIndex = preferences.getInt("yeast", 0);
+    profileIndex = preferences.getInt("profile", 0);
+    isManualMode = preferences.getBool("manual", false);
+    manualTargetTemp = preferences.getFloat("manTemp", 18.0);
+
+    unsigned long savedElapsed = preferences.getULong("elapsed", 0);
+    unsigned long savedRealElapsed = preferences.getULong("realElapsed", savedElapsed);
+    brewStartTime = millis() - savedElapsed;
+    realBrewStartTime = millis() - savedRealElapsed;  // <--- NY RAD
+
+    currentState = RUNNING;
+    dashboardPage = 0;
+    Serial.println("-> RECOVERED: Resuming fermentation!");
+  }
+  preferences.end();
+}
+
+/*
+void showSplashScreen() {
+  u8g2.setContrast(255); 
+  u8g2.clearBuffer();
+  
+  for (int i = 0; i <= 50; i++) {
+    u8g2.clearBuffer();
+    u8g2.drawLine(50, 40, 50 + (64-50)*i/50.0, 40 - (40-15)*i/50.0);
+    if (i > 25) { 
+      float f = (i-25)/25.0;
+      u8g2.drawLine(64, 15, 64 + (78-64)*f, 15 + (40-15)*f);
+      u8g2.drawLine(55, 30, 55 + (73-55)*f, 30);
+      u8g2.drawLine(64, 25, 64, 25 + (20)*f); 
+    }
+    u8g2.sendBuffer();
+    delay(15);
+  }
+
+  u8g2.setFont(u8g2_font_6x12_tf);
+  u8g2.drawStr(32, 60, "A Y   S Y S");
+  u8g2.sendBuffer();
+  
+  delay(1500); 
+
+  for (int v = 255; v >= 0; v -= 2) { 
+    u8g2.setContrast(v); 
+    delay(15); 
+  }
+
+  u8g2.clearBuffer();   
+  u8g2.sendBuffer();
+  u8g2.setContrast(255); 
+  u8g2.setPowerSave(0);  
+}
+*/
+
+bool portalWasUsed = false;
+
+void configModeCallback(WiFiManager* myWiFiManager) {
+  portalWasUsed = true;
+
+  u8g2.clearBuffer();
+  u8g2.setFont(u8g2_font_6x12_tf);
+  u8g2.drawStr(5, 12, "WIFI SETUP MODE");
+  u8g2.drawLine(0, 15, 128, 15);
+  u8g2.drawStr(5, 28, "1. Connect phone to:");
+  u8g2.setFont(u8g2_font_6x10_tf);
+  u8g2.drawStr(5, 40, "BrewMaster_Setup");
+  u8g2.setFont(u8g2_font_6x12_tf);
+  u8g2.drawStr(5, 52, "2. Go to address:");
+  u8g2.setFont(u8g2_font_7x14B_tf);
+  u8g2.drawStr(5, 64, "192.168.4.1");
+  u8g2.sendBuffer();
+}
+
+void drawWifiIcon(int x, int y, bool isInBox) {
+  if (WiFi.SSID() == "") return;
+  bool connected = (WiFi.status() == WL_CONNECTED);
+  bool blink = (millis() % 1000 < 500);
+
+  if (isInBox) u8g2.setDrawColor(0);
+  else u8g2.setDrawColor(1);
+
+  if (connected || blink) {
+    u8g2.drawBox(x, y + 1, 2, 2);
+    if (connected) {
+      u8g2.drawBox(x + 3, y - 1, 2, 4);
+      u8g2.drawBox(x + 6, y - 3, 2, 6);
+    }
+  }
+  u8g2.setDrawColor(1);
+}
+
+void syncWithCloud() {
+
+  // ==========================================
+  // --- NYTT: HÅRDVARULÅS FÖR AKTIV JÄSNING ---
+  // ==========================================
+  // Vi kollar om maskinen är i läge RUNNING eller POURING
+  if (currentState == RUNNING || currentState == POURING) {
+    Serial.println("❌ SYNK AVBRUTEN: Jäsning pågår!");
+
+    u8g2.clearBuffer();
+    u8g2.setFont(u8g2_font_6x10_tf);
+    u8g2.drawStr(5, 15, "SYNC BLOCKED:");
+    u8g2.drawStr(5, 30, "FERMENTATION");
+    u8g2.drawStr(5, 45, "IS ACTIVE!");
+    u8g2.sendBuffer();
+
+    delay(4000);  // Låt användaren hinna läsa varningen
+    return;       // Avbryt och gå tillbaka till menyn utan att göra något mer
+  }
+  // ==========================================
+
+  u8g2.clearBuffer();
+  u8g2.setFont(u8g2_font_6x10_tf);
+  u8g2.drawStr(5, 15, "SYNCING WITH...");
+  u8g2.drawStr(5, 30, "SOULOF.BEER");
+  u8g2.sendBuffer();
+
+  // 1. Skapa en säker klient för HTTPS
+  WiFiClientSecure client;
+  client.setInsecure();  // Gör att vi slipper ladda upp certifikat-filer
+
+  HTTPClient http;
+
+  Serial.println("Ansluter till molnet för personlig synk...");
+
+  // --- NYTT: BYGG DYNAMISK URL MED MAC-ADRESS ---
+  String macStr = WiFi.macAddress();
+  String dynamicUrl = "https://soulofbeer-live.onrender.com/api/device-sync/" + macStr;
+
+  Serial.print("Hämtar data från: ");
+  Serial.println(dynamicUrl);
+
+  // 2. Påbörja anslutningen med den säkra klienten och den dynamiska URL:en
+  if (http.begin(client, dynamicUrl.c_str())) {
+    int httpCode = http.GET();
+
+    if (httpCode == HTTP_CODE_OK) {
+
+      // Öppna filen i det interna minnet (FFat) för skrivning
+      File file = FFat.open("/yeastdata.json", "w");
+      if (file) {
+
+        // --- MAGIN: Streama datan direkt till filen istället för att krascha RAM-minnet! ---
+        http.writeToStream(&file);
+        file.close();
+
+        Serial.println("SYNC LYCKADES!");
+
+        // Bekräftelse på skärmen
+        u8g2.clearBuffer();
+        u8g2.drawStr(5, 25, "Yeast Library:");
+        u8g2.drawStr(5, 40, "UPDATED!");
+        u8g2.sendBuffer();
+
+        delay(2000);
+
+        u8g2.clearBuffer();
+        u8g2.drawStr(5, 30, "REBOOTING...");
+        u8g2.sendBuffer();
+
+        delay(1000);
+        ESP.restart();  // Starta om för att ladda den nya jäst-datan
+      } else {
+        Serial.println("Kunde inte skriva till FFat.");
+        u8g2.drawStr(5, 45, "DISK ERROR");
+        u8g2.sendBuffer();
+      }
+    } else {
+      // Om t.ex. Render svarar med 404 eller 500
+      Serial.print("Anslutningsfel, kod: ");
+      Serial.println(httpCode);
+      u8g2.clearBuffer();
+      u8g2.drawStr(5, 25, "SYNC FAILED");
+      u8g2.setCursor(5, 45);
+      u8g2.print("ERROR: ");
+      u8g2.print(httpCode);
+      u8g2.sendBuffer();
+    }
+    http.end();
+  } else {
+    Serial.println("Kunde inte initiera anslutning.");
+    u8g2.drawStr(5, 45, "CONN ERROR");
+    u8g2.sendBuffer();
+  }
+
+  delay(3000);  // Låt meddelandet ligga kvar en stund innan vi går vidare
+}
+
+
+// ==========================================
+// --- SPARA OCH LADDA INSTÄLLNINGAR ---
+// ==========================================
+void saveSystemSettings() {
+  preferences.begin("sys", false);
+  preferences.putBool("useF", useFahrenheit);
+  preferences.putInt("sleep", screenSleepMin);
+  preferences.putFloat("offset", tempOffset);
+  preferences.putBool("sound", soundEnabled);
+  preferences.end();
+}
+
+void loadSystemSettings() {
+  preferences.begin("sys", true);
+  // Laddar värden, om de inte finns används standardvärden (false, 5, 0.0)
+  useFahrenheit = preferences.getBool("useF", false);
+  screenSleepMin = preferences.getInt("sleep", 5);
+  tempOffset = preferences.getFloat("offset", 0.0);
+  soundEnabled = preferences.getBool("sound", true);
+  preferences.end();
+}
+
+// ==========================================
+// --- UTILITY: RITA TEMP PÅ OLED ---
+// ==========================================
+void printTempWithUnit(float tempC) {
+  if (tempC <= -100.0) {
+    u8g2.print("---");
+  } else {
+    if (useFahrenheit) {
+      u8g2.print((tempC * 9.0 / 5.0) + 32.0, 1);
+      u8g2.print("F");
+    } else {
+      u8g2.print(tempC, 1);
+      u8g2.print("C");
+    }
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  // ==========================================
+  // --- DEN SANNA DS18B20-FIXEN ---
+  // ==========================================
+ 
+ pinMode(ONEWIRE_ARDUINO, INPUT);
+
+  // 2. Låt sensorn vila i absolut tystnad i 4 sekunder så den startar om
+  Serial.println("Väntar ut DS18B20-sensorn...");
+  delay(4000);
+
+// Använd det RÅA namnet när vi startar biblioteket
+  oneWire = new OneWire(ONEWIRE_RAW);
+  sensors = new DallasTemperature(oneWire);
+  sensors->begin();
+  sensors->setWaitForConversion(true);
+  // ==========================================
+
+  // ==========================================
+  // --- FIX: AKTIVERA KNAPPARNAS PULLUP ---
+  // ==========================================
+  pinMode(ENCODER_CLK, INPUT_PULLUP);
+  pinMode(ENCODER_DT, INPUT_PULLUP);
+  pinMode(ENCODER_SW, INPUT_PULLUP);
+  pinMode(TX_PIN, OUTPUT);
+  pinMode(BUZZ_PIN, OUTPUT);
+  // ==========================================
+  /*
+// 1. Tvinga en absolut fabriksåterställning av pinnen i ESP32:ans kärna
+  // (Detta simulerar att du har "bytt bort" pinnen i koden)
+  gpio_reset_pin((gpio_num_t)ONE_WIRE_PIN); 
+
+  // 2. Stryp bussen helt (tvingar DS18B20-sensorerna att ge upp vad de än höll på med)
+  pinMode(ONE_WIRE_PIN, OUTPUT);
+  digitalWrite(ONE_WIRE_PIN, LOW);
+  delay(1000); // Håll strypt i en hel sekund
+
+  // 3. Släpp bussen fri och låt sensorerna vakna på nytt
+  pinMode(ONE_WIRE_PIN, INPUT_PULLUP);
+*/
+
+  //delay(4000); 
+
+  // Vänta max 5 sekunder på att Serial ska vakna
+  unsigned long serialWait = millis();
+  while (!Serial && millis() - serialWait < 5000)
+    ;
+
+  Serial.println("\n--- YEASTMASTER BOOTING ---");
+
+  loadSystemSettings();
+
+  yeastDataPtr = new DynamicJsonDocument(32768);
+
+  u8g2.begin();
+  showSplashScreen();
+  u8g2.setPowerSave(0);
+  u8g2.setContrast(255);
+  u8g2.clearBuffer();
+  u8g2.setFont(u8g2_font_6x12_tf);
+  u8g2.sendBuffer();
+
+  if (digitalRead(ENCODER_SW) == LOW) {
+    u8g2.clearBuffer();
+    u8g2.drawStr(5, 20, "OPENING PORTAL...");
+    u8g2.sendBuffer();
+    delay(1000);
+    runWiFiPortal();
+  }
+
+  Serial.print("Väcker FFat... ");
+  if (FFat.begin(true)) {
+    Serial.println("ONLINE!");
+  } else {
+    Serial.println("FAILURE!");
+    u8g2.drawStr(5, 35, "FS: ERROR");
+  }
+  u8g2.sendBuffer();
+
+  currentState = SELECT_YEAST;
+
+  WiFi.disconnect(true);
+  delay(100);
+  WiFi.mode(WIFI_STA);
+  // --- VITTNESSKYDDSPROGRAMMET ---
+  // Vi ger ESP32:an en ny, permanent MAC-adress (slutar på 25 istället för 24)
+  // för att Zyxel-routern ska tro att det är en helt ny enhet.
+  uint8_t newMac[] = { 0xE4, 0xB0, 0x63, 0xAE, 0x1C, 0x25 };
+  esp_wifi_set_mac(WIFI_IF_STA, &newMac[0]);
+  WiFi.begin();
+
+  WiFi.setTxPower(WIFI_POWER_8_5dBm);  // Sänker antennens strömförbrukning drastiskt!
+
+  Serial.print("Min sanna MAC-adress är: ");
+  Serial.println(WiFi.macAddress());
+  // -------------------------------------
+
+  // Läs in datan från filsystemet FÖRST
+  loadDataFromFS();
+
+  // Kolla SEN om vi ska återuppta ett brygg
+  loadBrewState();
+
+  if (currentState == RUNNING || currentState == POURING) {
+    u8g2.clearBuffer();
+    u8g2.drawStr(15, 35, "RESUMING...");
+    u8g2.sendBuffer();
+    delay(1000);
+  }
+
+  /*
+sensors.begin();
+  sensors.setWaitForConversion(true); 
+  sensors.requestTemperatures();
+*/
+
+  for (int i = 0; i < 10; i++) resetBubble(i, false);
+  lastClkState = digitalRead(ENCODER_CLK);
+
+  Serial.println("--- SYSTEM READY ---");
+
+  lastActivity = millis();
+}
+
+void drawMainMenu() {
+  u8g2.setFont(u8g2_font_6x12_tf);
+  u8g2.drawStr(4, 9, "MAIN MENU");
+  u8g2.drawLine(0, 11, 128, 11);
+
+  if (mainMenuIndex == 0) {
+    u8g2.setDrawColor(1);
+    u8g2.drawBox(0, 15, 128, 13);
+    u8g2.setDrawColor(0);
+  }
+  u8g2.drawStr(4, 25, "1. Pick Yeast");
+  u8g2.setDrawColor(1);
+
+  if (mainMenuIndex == 1) {
+    u8g2.setDrawColor(1);
+    u8g2.drawBox(0, 28, 128, 13);
+    u8g2.setDrawColor(0);
+  }
+  u8g2.drawStr(4, 38, "2. Settings");
+  u8g2.setDrawColor(1);
+}
+
+void drawSettingsMenu() {
+  u8g2.setFont(u8g2_font_6x12_tf);
+  u8g2.drawStr(0, 9, "--- SETTINGS ---");
+  u8g2.drawLine(0, 11, 128, 11);
+
+  int visibleLines = 4;
+  int startIdx = settingsCursor - (visibleLines / 2);
+  if (startIdx < 0) startIdx = 0;
+  if (startIdx > 8 - visibleLines) startIdx = 8 - visibleLines;  // 8 inställningar totalt
+
+  for (int i = 0; i < visibleLines; i++) {
+    int itemIdx = startIdx + i;
+    int yPos = 24 + (i * 13);
+    if (itemIdx == settingsCursor) {
+      u8g2.setDrawColor(1);
+      u8g2.drawBox(0, yPos - 10, 128, 13);
+      u8g2.setDrawColor(0);
+    }
+    String text = "";
+    if (itemIdx == 0) text = "Unit: " + String(useFahrenheit ? "Fahrenheit" : "Celsius");
+    else if (itemIdx == 1) text = "Sync from Cloud";
+    else if (itemIdx == 2) text = "Sleep: " + String(screenSleepMin == 0 ? "Always On" : String(screenSleepMin) + " min");
+    else if (itemIdx == 3) text = "Beer Offset: " + String(tempOffset > 0 ? "+" : "") + String(tempOffset, 1) + "C";
+    else if (itemIdx == 4) text = "Sound: " + String(soundEnabled ? "ON" : "OFF");  // <--- NYTT MENYVAL!
+    else if (itemIdx == 5) text = "Reset WiFi";
+    else if (itemIdx == 6) text = WiFi.macAddress();
+    else if (itemIdx == 7) text = "<- Back";  // <-- Knuffad till index 7
+
+    u8g2.drawStr(4, yPos, text.c_str());
+    u8g2.setDrawColor(1);
+  }
+}
+
+void drawYeastMenu() {
+  u8g2.setFont(u8g2_font_6x12_tf);
+  u8g2.drawStr(4, 9, "Select Yeast");
+  u8g2.drawLine(0, 11, 128, 11);
+
+// SÄKERHETSSPÄRR: Om minnet är tomt eller trasigt
+  if (dynamicTotalYeasts <= 0 || !yeastData.containsKey("yeasts")) {
+      u8g2.drawStr(4, 30, "No data found!");
+      u8g2.drawStr(4, 45, "Try Syncing...");
+      return; // Avbryt här!
+  }
+
+  int count = 0;
+  String lastS = "";
+  int drawCount = 0;
+  for (int i = 0; i < dynamicTotalYeasts; i++) {
+    const char* s = yeastData["yeasts"][i]["s"];
+    if (s == nullptr) continue;
+
+    if (String(s) != lastS) {
+      if (count >= yeastIndex - 1 && drawCount < 4) {
+        int yP = 24 + (drawCount * 13);
+        if (count == yeastIndex) {
+          u8g2.setDrawColor(1);
+          u8g2.drawBox(0, yP - 10, 128, 13);
+          u8g2.setDrawColor(0);
+          u8g2.drawStr(4, yP, s);
+          u8g2.setDrawColor(1);
+        } else u8g2.drawStr(4, yP, s);
+        drawCount++;
+      }
+      count++;
+      lastS = String(s);
+    }
+  }
+
+  // --- NYTT: RITA UT BAKÅT-KNAPPEN ---
+  if (count >= yeastIndex - 1 && drawCount < 4) {
+    int yP = 24 + (drawCount * 13);
+    if (count == yeastIndex) {
+      u8g2.setDrawColor(1);
+      u8g2.drawBox(0, yP - 10, 128, 13);
+      u8g2.setDrawColor(0);
+      u8g2.drawStr(4, yP, "<- Back");
+      u8g2.setDrawColor(1);
+    } else u8g2.drawStr(4, yP, "<- Back");
+  }
+}
+
+void runWiFiPortal() {
+  WiFiManager wm;
+  wm.setConfigPortalTimeout(120);
+  wm.setConfigPortalBlocking(false);
+  wm.setConnectTimeout(1);
+  wm.setSaveConnect(false);
+
+  // Callback när användaren sparar sina nya WiFi-uppgifter
+  auto onSave = [&]() {
+    u8g2.clearBuffer();
+    u8g2.setFont(u8g2_font_6x12_tf);
+    u8g2.drawStr(10, 30, "WIFI SAVED!");
+    u8g2.drawStr(10, 45, "REBOOTING...");
+    u8g2.sendBuffer();
+
+    Serial.println("!!! Nya WiFi-uppgifter sparade. Startar om...");
+    delay(2000);
+    ESP.restart();  // Startar om för att ansluta direkt
+  };
+
+  wm.setSaveConfigCallback(onSave);
+  wm.startConfigPortal("YeastMaster_Setup");
+  unsigned long startTime = millis();
+
+  while (millis() - startTime < 120000) {
+    wm.process();
+
+    // --- RITA SKÄRMEN (Uppdateras 1 gång per sekund) ---
+    static unsigned long lastUpdate = 0;
+    if (millis() - lastUpdate > 1000) {
+      lastUpdate = millis();
+      int remaining = 120 - (int)((millis() - startTime) / 1000);
+      if (remaining < 0) remaining = 0;
+
+      u8g2.clearBuffer();
+
+      // 1. TOPPRAD: Rubrik och Timer
+      u8g2.setFont(u8g2_font_5x7_tf);
+      u8g2.drawStr(0, 8, "WIFI SETUP");
+      u8g2.setCursor(95, 8);
+      u8g2.print(remaining / 60);
+      u8g2.print(":");
+      if ((remaining % 60) < 10) u8g2.print("0");
+      u8g2.print(remaining % 60);
+
+      // 2. STEG 1: Nätverk att ansluta till
+      u8g2.drawStr(0, 22, "1. Connect to WiFi:");
+      u8g2.setFont(u8g2_font_6x10_tf);  // Större text för SSID
+      u8g2.drawStr(5, 34, "YeastMaster_Setup");
+
+      // 3. STEG 2: Webbadress (IP) att surfa till
+      u8g2.setFont(u8g2_font_5x7_tf);
+      u8g2.drawStr(0, 48, "2. Go to browser:");
+      u8g2.setFont(u8g2_font_6x10_tf);  // Större text för IP-adressen
+      u8g2.drawStr(5, 59, "192.168.4.1");
+
+      // 4. PROGRESS BAR: Längst ner på skärmen
+      int barWidth = map(remaining, 0, 120, 0, 128);
+      u8g2.drawBox(0, 62, barWidth, 2);
+
+      u8g2.sendBuffer();
+    }
+    yield();
+  }
+
+  // Tiden gick ut utan sparade uppgifter
+  wm.stopConfigPortal();
+  WiFi.mode(WIFI_STA);
+}
+
+
+// ==============================================================
+// --- SKICKA STATUS TILL MOLNET (Enkelt och Säkert) ---
+// ==============================================================
+// ==============================================================
+// --- SKICKA STATUS TILL MOLNET (Enkelt och Säkert) ---
+// ==============================================================
+void performCloudSync() {
+  if (WiFi.status() != WL_CONNECTED) {
+    DEBUG_PRINTLN("-> Nätverk: WiFi offline. Kan inte synka.");
+    return;
+  }
+
+  // Vi lägger krypteringen i ett eget litet skal för att säkra RAM-minnet
+  {
+    WiFiClientSecure *client = new WiFiClientSecure();
+    client->setInsecure();
+    HTTPClient http;
+
+    http.setTimeout(5000); 
+
+    if (http.begin(*client, serverUrl)) { 
+      http.addHeader("Content-Type", "application/json");
+
+      StaticJsonDocument<512> sendDoc; 
+      
+      sendDoc["device_id"] = WiFi.macAddress();
+      sendDoc["temp"] = t1;
+      sendDoc["air_temp"] = t2;
+      sendDoc["token"] = myAuthToken;
+
+      // Bara RUNNING och POURING behövs här!
+      if (currentState == RUNNING || currentState == POURING) {
+        float d = (float)(millis() - brewStartTime) / 86400000.0 * TIME_MULTIPLIER;
+        float realDaysPassed = (float)(millis() - realBrewStartTime) / 86400000.0 * TIME_MULTIPLIER;
+        
+        const char* currentStrain = "Unknown";
+        const char* currentProfile = "Unknown";
+        float phaseDay = 0.0;
+        
+        // Plocka säkert fram data
+        if (yeastData.containsKey("yeasts") && yeastIndex < yeastData["yeasts"].size()) {
+           currentStrain = yeastData["yeasts"][yeastIndex]["s"] | "Unknown";
+           currentProfile = yeastData["yeasts"][yeastIndex]["p"] | "Unknown";
+           JsonArray steps = yeastData["yeasts"][yeastIndex]["steps"];
+
+            if (isManualMode) {
+              if (steps.size() > 0) {
+                float lastStepStart = steps[steps.size() - 2][0].as<float>();
+                phaseDay = d - lastStepStart;
+              }
+            } else if (steps.size() > 0) {
+              float currentPhaseStartDay = 0.0;
+              for (int i = 0; i < steps.size(); i++) {
+                if (d <= steps[i][0].as<float>()) {
+                  currentPhaseStartDay = (i > 0) ? steps[i - 1][0].as<float>() : 0.0;
+                  break;
+                }
+              }
+              phaseDay = d - currentPhaseStartDay;
+            }
+            if (phaseDay < 0.0) phaseDay = 0.0;
+        }
+
+        sendDoc["day"] = realDaysPassed;
+        sendDoc["profile_day"] = d;
+        sendDoc["phase_day"] = phaseDay;
+        
+        // Den här funktionen räknar redan ut Cold Crash och Manual helt perfekt!
+        sendDoc["status"] = String(getStatus(d));
+
+        sendDoc["action"] = coolerActive ? "COOLING" : (heaterActive ? "HEATING" : "IDLE");
+        sendDoc["active_alert"] = activeAlertMsg;
+        sendDoc["strain"] = currentStrain;
+        sendDoc["profile"] = currentProfile;
+        sendDoc["target_temp"] = isManualMode ? manualTargetTemp : getDisplayGoalTemp(d);
+      }
+      else {
+        sendDoc["day"] = 0.0;
+        sendDoc["phase_day"] = 0.0;
+        sendDoc["status"] = "IDLE";
+        sendDoc["action"] = "IDLE";
+        sendDoc["strain"] = "-";
+        sendDoc["profile"] = "-";
+        sendDoc["target_temp"] = 0.0;
+      }
+
+      String jsonPayload;
+      serializeJson(sendDoc, jsonPayload);
+      http.addHeader("Connection", "close");
+
+      int httpResponseCode = http.POST(jsonPayload);
+      if (httpResponseCode > 0) {
+        DEBUG_PRINTLN("-> Render Cloud: Status synkad direkt!");
+      } else {
+        DEBUG_PRINT("-> Render Cloud: FEL (");
+        DEBUG_PRINT(httpResponseCode);
+        DEBUG_PRINTLN(")");
+      }
+      
+      http.end();
+    } else {
+      DEBUG_PRINTLN("-> Render Cloud: Kunde inte ansluta.");
+    }
+
+    delete client; 
+  } 
+}
+
+
+void loop() {
+
+yield();
+
+// =======================================================
+  // ---> DEN MAGISKA KÖN (SMART & SÄKER) <---
+  // =======================================================
+  if (cloudSyncRequested) {
+    // Vi väntar tills vi BÅDE har internet OCH det har gått 10 sekunder sedan sist
+    if (WiFi.status() == WL_CONNECTED && (millis() - lastCloudSyncTime > 10000)) {
+      Serial.println("-> KÖN: Öppnar luckan och skickar till molnet!");
+      performCloudSync();            
+      cloudSyncRequested = false;    // Töm kön först NÄR vi faktiskt skickat!
+      lastCloudSyncTime = millis();  
+    }
+  }
+  
+
+  // --- VÄCK LARM-DETEKTIVEN ---
+  float currentProfileDay = (float)(millis() - brewStartTime) / 86400000.0 * TIME_MULTIPLIER;
+  if (currentState == RUNNING) updateActionAlerts(currentProfileDay);
+
+  // =======================================================
+  // ---> NYTT: BLIXTSNABB SYNK VID LARM <---
+  // =======================================================
+  static String lastSentAlertMsg = "";
+ if (activeAlertMsg != lastSentAlertMsg) {
+  cloudSyncRequested = true;                 // Tyst larm-synk
+  lastSentAlertMsg = activeAlertMsg;  // Kom ihåg vad vi just skickade
+}
+
+  // --- LARM-LJUD ---
+  static unsigned long lastAlertSound = 0;
+  if (activeAlertMsg != "" && !alertAcknowledged) {
+    if (millis() - lastAlertSound > 10000) {  // Piper var 10:e sekund (10000 ms)
+      triggerSound(5);                        // Ger ifrån sig ett uppmärksammande dubbel-pip
+      lastAlertSound = millis();
+    }
+  }
+
+  int clkState = digitalRead(ENCODER_CLK);
+
+  static unsigned long lastMove = 0;  // Tidpunkt för förra hacket
+
+  if (clkState != lastClkState && clkState == LOW) {
+    unsigned long now = millis();
+
+    // Om det går för fort (under 50ms mellan hacken) är det förmodligen brus!
+    if (now - lastMove > 50) {
+      lastMove = now;
+      lastActivity = millis();
+
+      if (screenIsOff) {
+        u8g2.setPowerSave(0);
+        screenIsOff = false;
+      } else {
+        triggerSound(4);
+        bool clockwise = (digitalRead(ENCODER_DT) != clkState);
+
+        if (currentState == MAIN_MENU) {
+          mainMenuIndex = (mainMenuIndex + (clockwise ? 1 : -1) + 2) % 2;
+        } else if (currentState == SETTINGS_MENU) {
+          settingsCursor = (settingsCursor + (clockwise ? 1 : -1) + 8) % 8;
+        } else if (currentState == SET_OFFSET) {
+          tempOffset = constrain(tempOffset + (clockwise ? 0.1 : -0.1), -1.0, 1.0);
+        } else if (currentState == SELECT_YEAST) {
+          int uniqueCount = 0;
+          String lastS = "";
+          for (int i = 0; i < dynamicTotalYeasts; i++) {
+            const char* s = yeastData["yeasts"][i]["s"];
+            if (s && String(s) != lastS) {
+              uniqueCount++;
+              lastS = String(s);
+            }
+          }
+          int totalOptions = uniqueCount > 0 ? uniqueCount + 1 : 1;
+          yeastIndex = (yeastIndex + (clockwise ? 1 : -1) + totalOptions) % totalOptions;
+        } else if (currentState == SELECT_PROFILE) {
+          int pCount = 0;
+          for (int i = 0; i < dynamicTotalYeasts; i++) {
+            const char* s = yeastData["yeasts"][i]["s"];
+            if (s && strcmp(s, selectedStrainName) == 0) pCount++;
+          }
+          if (pCount > 0) profileIndex = (profileIndex + (clockwise ? 1 : -1) + pCount) % pCount;
+        } else if (currentState == RUNNING) {
+          if (dashboardPage < 2) dashboardPage = (dashboardPage + (clockwise ? 1 : -1) + 3) % 3;
+          else menuSelection = (menuSelection + (clockwise ? 1 : -1) + 6) % 6;
+        } else if (currentState == CONFIRM_ACTION) {
+          confirmYesNo = (confirmYesNo + 1) % 2;
+        } else if (currentState == SET_MANUAL_TEMP) {
+          if (useFahrenheit) {
+            manualTargetTemp += (clockwise ? 0.555 : -0.555);
+          } else {
+            manualTargetTemp += (clockwise ? 0.5 : -0.5);
+          }
+        }  // Stänger SET_MANUAL_TEMP
+      }    // Stänger ELSE (skärm vaken)
+    }      // Stänger IF (now - lastMove > 50)
+  }        // <--- DENNA SAKNADES! (Stänger if clkState != lastClkState)
+
+  lastClkState = clkState;
+
+
+
+  // --- KLICKA PÅ RATTEN ---
+  static bool lastBtnState = HIGH;
+  bool currentBtnState = digitalRead(ENCODER_SW);
+  if (lastBtnState == HIGH && currentBtnState == LOW) {
+    delay(50);  // Debounce
+    if (digitalRead(ENCODER_SW) == LOW) {
+      lastActivity = millis();  // Nollställ skärmsläckaren!
+
+      if (screenIsOff) {
+        // Om skärmen sover, väck den bara. Utför inget klick i menyerna.
+        u8g2.setPowerSave(0);
+        screenIsOff = false;
+      } else {
+        // Skärmen är vaken -> Utför klick-logiken som vanligt!
+
+        // --- 1. KOLLA OM VI MÅSTE KVITTERA ETT LARM ---
+        if (currentState == RUNNING && activeAlertMsg != "") {
+          alertAcknowledged = true;
+          activeAlertMsg = "";
+          triggerSound(0);  // Spela en glad "Success"-ton som bekräftelse!
+        }
+        // --- 2. ANNARS VANLIG MENYHANTERING ---
+        else {
+          triggerSound(5);
+          if (currentState == MAIN_MENU) {
+            if (mainMenuIndex == 0) currentState = SELECT_YEAST;
+            else {
+              stateBeforeSettings = MAIN_MENU;
+              currentState = SETTINGS_MENU;
+            }
+          } else if (currentState == SETTINGS_MENU) {
+            switch (settingsCursor) {
+              case 0:
+                useFahrenheit = !useFahrenheit;
+                saveSystemSettings();
+                break;
+              case 1:
+                syncWithCloud();
+                currentState = MAIN_MENU;
+                break;
+              case 2:
+                if (screenSleepMin == 0) screenSleepMin = 5;
+                else if (screenSleepMin == 5) screenSleepMin = 15;
+                else if (screenSleepMin == 15) screenSleepMin = 30;
+                else screenSleepMin = 0;
+                saveSystemSettings();
+                break;
+              case 3: currentState = SET_OFFSET; break;
+              case 4:
+                soundEnabled = !soundEnabled;
+                saveSystemSettings();
+                break;  // <-- NY RAD
+              case 5:
+                u8g2.clearBuffer();
+                u8g2.setCursor(0, 20);
+                u8g2.println("Clearing WiFi...");
+                u8g2.sendBuffer();
+                delay(1500);
+                {
+                  WiFiManager wm;
+                  wm.resetSettings();
+                  ESP.restart();
+                }
+                break;
+              case 6: break;  // Mac-adress, gör ingenting
+              case 7:
+                currentState = stateBeforeSettings;  // Gå tillbaka till där vi kom ifrån!
+                settingsCursor = 0;
+                if (currentState == RUNNING) {
+                  dashboardPage = 2;  // Stanna på action-menyn
+                  menuSelection = 5;  // <--- NYTT: Hoppa direkt ner till "<- Back" i Action-menyn!
+                }
+                break;
+            }
+          } else if (currentState == SET_OFFSET) {
+            saveSystemSettings();
+            currentState = SETTINGS_MENU;
+          } else if (currentState == SELECT_YEAST) {
+            if (dynamicTotalYeasts <= 0 || !yeastData.containsKey("yeasts") || yeastData["yeasts"][0]["s"] == nullptr) {
+              syncWithCloud();
+            } else {
+              int uniqueCount = 0;
+              String lastS = "";
+              for (int i = 0; i < dynamicTotalYeasts; i++) {
+                const char* s = yeastData["yeasts"][i]["s"];
+                if (s && String(s) != lastS) {
+                  uniqueCount++;
+                  lastS = String(s);
+                }
+              }
+
+              if (yeastIndex == uniqueCount) {
+                currentState = MAIN_MENU;
+                yeastIndex = 0;
+              } else {
+                int count = 0;
+                lastS = "";
+                const char* foundPtr = nullptr;
+                for (int i = 0; i < dynamicTotalYeasts; i++) {
+                  const char* s = yeastData["yeasts"][i]["s"];
+                  if (s == nullptr) continue;
+                  if (String(s) != lastS) {
+                    if (count == yeastIndex) {
+                      foundPtr = s;
+                      break;
+                    }
+                    count++;
+                    lastS = String(s);
+                  }
+                }
+                if (foundPtr != nullptr) {
+                  memset(selectedStrainName, 0, sizeof(selectedStrainName));
+                  strncpy(selectedStrainName, foundPtr, sizeof(selectedStrainName) - 1);
+                  profileIndex = 0;
+                  currentState = SELECT_PROFILE;
+                }
+              }
+            }
+          } else if (currentState == SELECT_PROFILE) {
+            int pMatch = 0;
+            bool found = false;
+            for (int i = 0; i < dynamicTotalYeasts; i++) {
+              const char* jsonS = yeastData["yeasts"][i]["s"];
+              if (jsonS && strcmp(jsonS, selectedStrainName) == 0) {
+                if (pMatch == profileIndex) {
+                  yeastIndex = i;
+                  found = true;
+                  break;
+                }
+                pMatch++;
+              }
+            }
+            if (found) {
+              brewStartTime = millis();
+              realBrewStartTime = millis();
+              fillLevel = 53;
+              foamHeight = 0;
+              currentState = POURING;
+              saveBrewState();
+             cloudSyncRequested = true;
+            }
+          } else if (currentState == RUNNING && dashboardPage == 2) {
+            if (menuSelection == 4) {  // SETTINGS
+              stateBeforeSettings = RUNNING;
+              currentState = SETTINGS_MENU;
+              settingsCursor = 0;
+            } else if (menuSelection == 5) {  // BACK
+              dashboardPage = 0;              // Gå tillbaka till damejeang-vyn
+              menuSelection = 0;              // Nollställ markören till nästa gång
+            } else {
+              currentState = CONFIRM_ACTION;
+              confirmYesNo = 0;
+            }
+          } else if (currentState == CONFIRM_ACTION) {
+            if (confirmYesNo == 1) {
+              if (menuSelection == 0) {
+                JsonArray steps = yeastData["yeasts"][yeastIndex]["steps"];
+                float primaryEnd = 0.0;
+                for (int i = 0; i < steps.size(); i++) {
+                  if (steps[i][0].as<float>() > 0.1) {
+                    primaryEnd = steps[i][0].as<float>();
+                    break;
+                  }
+                }
+                brewStartTime = millis() - (unsigned long)((primaryEnd + 0.01) * 86400000.0 / TIME_MULTIPLIER);
+                isManualMode = false;
+                currentState = RUNNING;
+                dashboardPage = 0;
+                saveBrewState();
+                cloudSyncRequested = true;
+                lastCloudSyncTime = millis();
+                
+              } else if (menuSelection == 1) {
+                JsonArray steps = yeastData["yeasts"][yeastIndex]["steps"];
+                bool foundCrash = false;
+                for (int i = 0; i < steps.size(); i++) {
+                  if (steps[i][1].as<float>() <= 6.5) {
+                    float prevEnd = (i > 0) ? steps[i - 1][0].as<float>() : 0.0;
+                    brewStartTime = millis() - (unsigned long)((prevEnd + 0.01) * 86400000.0 / TIME_MULTIPLIER);
+                    foundCrash = true;
+                    break;
+                  }
+                }
+                if (!foundCrash) {
+                  isManualMode = true;
+                  manualTargetTemp = 4.0;
+                } else {
+                  isManualMode = false;
+                }
+                currentState = RUNNING;
+                dashboardPage = 0;
+                saveBrewState();
+                cloudSyncRequested = true;
+                lastCloudSyncTime = millis();
+               
+              } else if (menuSelection == 2) {
+                currentState = SET_MANUAL_TEMP;
+              } else if (menuSelection == 3) {
+                // 1. Direkt feedback på skärmen!
+                u8g2.clearBuffer();
+                u8g2.setFont(u8g2_font_6x12_tf);
+                u8g2.drawStr(20, 30, "Resetting...");
+                u8g2.sendBuffer();
+
+                // 2. Stäng av hårdvaran och nollställ minnet
+                sendNexaMessage(false, coolerRecipient);
+                coolerActive = false;
+                sendNexaMessage(false, heaterRecipient);
+                heaterActive = false;
+                clearSavedState();
+                brewStartTime = 0;
+                yeastIndex = 0;
+                profileIndex = 0;
+                isManualMode = false;
+                fillLevel = 53;
+                foamHeight = 0;
+
+                // --- FIX 1: LÅS UPP KOMPRESSORN ---
+                isCompressorResting = false;
+                lastCoolerStopTime = 0;
+
+                // 3. Skicka uppdatering till molnet (Detta sker nu tyst i bakgrunden!)
+               cloudSyncRequested = true;
+
+                // 4. Ge användaren 1 sekund att se "Resetting..." innan vi hoppar tillbaka
+                delay(1000);
+
+                // 5. Hoppa tillbaka till huvudmenyn
+                currentState = MAIN_MENU;
+                mainMenuIndex = 0;
+                triggerSound(0);
+              }
+            } else {
+              currentState = RUNNING;
+              dashboardPage = 0;
+            }
+          } else if (currentState == SET_MANUAL_TEMP) {
+            isManualMode = true;
+            currentState = RUNNING;
+            dashboardPage = 0;
+            saveBrewState();
+            cloudSyncRequested = true;
+            lastCloudSyncTime = millis();
+          }
+        }
+      }  // Slut på else (skärmen var vaken)
+
+      while (digitalRead(ENCODER_SW) == LOW)
+        ;
+    }
+  }
+  lastBtnState = currentBtnState;
+
+  // =======================================================
+  // --- DEN LAGGFRI TEMPERATUR-LÄSAREN ---
+  // =======================================================
+  static unsigned long lastTempRequest = 0;
+  static bool isWaitingForTemp = false;
+
+  // STEG 1: Ropa på sensorn var 5:e sekund ("Börja mäta!")
+  if (millis() - lastMeasure > 5000 && !isWaitingForTemp && currentState != POURING) {
+
+    // ---> NYTT: Rå OneWire-signal som rundar parasit-buggen! <---
+    oneWire->reset();
+    oneWire->skip();          // Prata med alla sensorer samtidigt
+    oneWire->write(0x44, 0);  // 0x44 = Starta mätning. 0 = INGEN tvångs-delay!
+
+    lastTempRequest = millis();  // Starta äggklockan
+    isWaitingForTemp = true;     // Kom ihåg att vi väntar på svar
+  }
+
+  // STEG 2: Hämta svaret 800 millisekunder senare (När sensorn garanterat tänkt klart)
+  if (isWaitingForTemp && (millis() - lastTempRequest > 800)) {
+
+    float rawT1 = sensors->getTempCByIndex(0);
+    float rawT2 = sensors->getTempCByIndex(1);
+
+    // ==========================================
+    // --- DATATVÄTT & AUTOMATISK VOODOO-FIX ---
+    // ==========================================
+    static int errorCount = 0;
+
+    if (rawT1 <= -50.0 || rawT1 == 85.0) {
+      errorCount++;
+      Serial.println("Sensorglapp upptäckt! Döljer spiken...");
+
+      // Om den misslyckas 4 gånger i rad (20 sekunder), kör vi omstarten!
+      if (errorCount > 3) {
+        t1 = -127.0;
+        Serial.println("-> Sensorn har hängt sig. Utför Voodoo-återställning!");
+
+        // 1. Stryp bussen fysiskt
+       pinMode(ONEWIRE_ARDUINO, OUTPUT);
+       digitalWrite(ONEWIRE_ARDUINO, LOW);
+        delay(500);
+
+        // 2. Släpp upp bussen och låt strömmen stabilisera sig
+        pinMode(ONEWIRE_ARDUINO, INPUT_PULLUP);
+        delay(200);
+
+        // 3. Radera de gamla objekten i processorns minne
+        delete sensors;
+        delete oneWire;
+
+        // 4. Skapa helt nya objekt (Samma sak som när du flashar ny kod!)
+       oneWire = new OneWire(ONEWIRE_RAW);
+        sensors = new DallasTemperature(oneWire);
+        sensors->begin();
+        sensors->setWaitForConversion(true);
+
+        Serial.println("-> Sensor omstartad i farten!");
+        errorCount = 0;  // Nollställ räknaren
+      }
+    } else {
+      errorCount = 0;
+      t1 = rawT1 + tempOffset;
+
+      DEBUG_PRINTLN("SUCCESS! Temp är: ");
+      DEBUG_PRINT(t1);
+    
+    }
+    // ==========================================
+
+    if (rawT2 > -50.0 && rawT2 != 85.0) {
+      t2 = rawT2;
+    }
+
+    lastMeasure = millis();    // Återställ 5-sekunders-timern
+    isWaitingForTemp = false;  // Vi är klara, sluta vänta!
+  }
+
+// =======================================================
+      // --- DIAGNOSTISK TERMOSTAT-LOGIK ---
+      // =======================================================
+      
+      // 1. ABSOLUT SÄKERHETSSPÄRR: Har vi en giltig temperatur?
+      // (-127.0 betyder att sensorn inte vaknat än, eller är trasig)
+      if (t1 <= -100.0) {
+        
+        // Nödstopp / Vänteläge: Stäng av allt tills vi vet hur varmt ölet är!
+        if (heaterActive) { sendNexaMessage(false, heaterRecipient); heaterActive = false; }
+        if (coolerActive) { sendNexaMessage(false, coolerRecipient); coolerActive = false; }
+        
+      } 
+      // 2. DEN RIKTIGA TERMOSTATEN (Körs BARA om vi har en bra temperatur)
+      else if (currentState == RUNNING) {
+        
+        float d = (float)(millis() - brewStartTime) / 86400000.0 * TIME_MULTIPLIER;
+        
+        // Beräkna målen
+        float rampGoal = isManualMode ? manualTargetTemp : getTargetTemp(d);
+        float finalGoal = isManualMode ? manualTargetTemp : getDisplayGoalTemp(d);
+
+        // --- SMARTA TAK OCH GOLV (Free Rise & Free Fall) ---
+        bool isHeatingPhase = (!isManualMode && finalGoal > rampGoal);
+        bool isCoolingPhase = (!isManualMode && finalGoal < rampGoal);
+        
+        float coolTarget = isHeatingPhase ? finalGoal : rampGoal;
+        float heatTarget = isCoolingPhase ? finalGoal : rampGoal;
+
+        // KOMPRESSORSKYDD-CHECK
+        if (isCompressorResting && (millis() - lastCoolerStopTime >= COMPRESSOR_DELAY)) {
+          isCompressorResting = false;
+        }
+
+        // KYL-LOGIK (Slår den i taket?)
+        if (t1 > coolTarget + 0.5) {
+          if (!coolerActive && !isCompressorResting) {
+            if (heaterActive) { 
+              sendNexaMessage(false, heaterRecipient); 
+              heaterActive = false; 
+            }
+            sendNexaMessage(true, coolerRecipient);
+            coolerActive = true;
+            triggerSound(1);
+            
+            Serial.println("-> TERMOSTAT: Ändrad till COOLING!");
+            cloudSyncRequested = true;
+            lastCloudSyncTime = millis(); 
+          }
+        } 
+        else if (t1 <= coolTarget) {
+          if (coolerActive) {
+            sendNexaMessage(false, coolerRecipient);
+            coolerActive = false;
+            triggerSound(2);
+            lastCoolerStopTime = millis();
+            isCompressorResting = true;
+            
+            Serial.println("-> TERMOSTAT: Ändrad till IDLE (Kylning avslutad)");
+            cloudSyncRequested = true; 
+            lastCloudSyncTime = millis(); 
+          }
+        }
+
+        // VÄRME-LOGIK (Faller den genom golvet?)
+        if (t1 < heatTarget - 0.5) {
+          if (!heaterActive && !coolerActive) {
+            sendNexaMessage(true, heaterRecipient);
+            heaterActive = true;
+            
+            Serial.println("-> TERMOSTAT: Ändrad till HEATING!");
+            cloudSyncRequested = true;
+            lastCloudSyncTime = millis(); 
+          }
+        } 
+        else if (t1 >= heatTarget) {
+          if (heaterActive) {
+            sendNexaMessage(false, heaterRecipient);
+            heaterActive = false;
+            
+            Serial.println("-> TERMOSTAT: Ändrad till IDLE (Värme avslutad)");
+            cloudSyncRequested = true;
+            lastCloudSyncTime = millis(); 
+          }
+        }
+      
+    } else if (t1 <= -100.0) {
+      // Nödstopp om sensorn dör helt
+      if (heaterActive) { sendNexaMessage(false, heaterRecipient); heaterActive = false; }
+      if (coolerActive) { sendNexaMessage(false, coolerRecipient); coolerActive = false; }
+    }
+
+  static unsigned long lastDraw = 0;
+  if (millis() - lastDraw > 50) {
+    lastDraw = millis();
+    u8g2.clearBuffer();
+    u8g2.setDrawColor(1);  // Tvinga vit färg!
+
+    // ---------------------------------------------------------
+    // --- 🚨 TOTAL ÖVERKÖRNING: FULLSCREEN LARM 🚨 ---
+    // ---------------------------------------------------------
+    if (currentState == RUNNING && activeAlertMsg != "") {
+      if (millis() % 2000 < 1000) {
+        // Stor, tjock font för själva larmtexten
+        u8g2.setFont(u8g2_font_9x15B_tf);
+        int tW = u8g2.getStrWidth(activeAlertMsg.c_str());
+        u8g2.setCursor(64 - (tW / 2), 32);
+        u8g2.print(activeAlertMsg);
+
+        // Liten undertitel i botten
+        u8g2.setFont(u8g2_font_5x7_tf);
+        int subW = u8g2.getStrWidth("CLICK TO DISMISS");
+        u8g2.drawStr(64 - (subW / 2), 52, "CLICK TO DISMISS");
+      }
+
+      // Skicka larm-skärmen till displayen och stanna här!
+      u8g2.sendBuffer();
+      return;
+    }
+
+    // --- NYTT: OM SKÄRMEN SOVER, RITA BARA BUBBLOR! ---
+    if (screenIsOff) {
+      handleScreensaverAnimation();
+      u8g2.sendBuffer();
+      return;  // AVBRYT! Gå inte vidare och rita menyerna under.
+    }
+
+    float daysPassed = (float)(millis() - brewStartTime) / 86400000.0 * TIME_MULTIPLIER;
+    float realDaysPassed = (float)(millis() - realBrewStartTime) / 86400000.0 * TIME_MULTIPLIER;
+
+    if (currentState == MAIN_MENU) {
+      drawMainMenu();
+    } else if (currentState == SETTINGS_MENU) {
+      drawSettingsMenu();
+    } else if (currentState == SELECT_YEAST) {
+      drawYeastMenu();
+    } else if (currentState == SELECT_PROFILE) {
+      u8g2.setFont(u8g2_font_6x12_tf);
+      u8g2.drawStr(4, 9, "2. Select Profile");
+      u8g2.drawLine(0, 11, 128, 11);
+      int pM = 0;
+      int dC = 0;
+      for (int i = 0; i < dynamicTotalYeasts; i++) {
+        const char* s = yeastData["yeasts"][i]["s"];
+        if (s && strcmp(s, selectedStrainName) == 0) {
+          if (pM >= profileIndex - 1 && dC < 4) {
+            int yP = 24 + (dC * 13);
+            const char* pN = yeastData["yeasts"][i]["p"];
+            if (pM == profileIndex) {
+              u8g2.setDrawColor(1);
+              u8g2.drawBox(0, yP - 10, 128, 13);
+              u8g2.setDrawColor(0);
+              u8g2.drawStr(4, yP, pN ? pN : "Std");
+              u8g2.setDrawColor(1);
+            } else u8g2.drawStr(4, yP, pN ? pN : "Std");
+            dC++;
+          }
+          pM++;
+        }
+      }
+    } else if (currentState == POURING) {
+      u8g2.drawLine(10, 20, 10, 42);
+      u8g2.drawLine(34, 20, 34, 42);
+      u8g2.drawLine(10, 20, 34, 20);
+      u8g2.drawCircle(22, 42, 12, U8G2_DRAW_LOWER_LEFT | U8G2_DRAW_LOWER_RIGHT);
+      u8g2.drawLine(20, 54, 24, 54);
+      u8g2.drawLine(22, 54, 22, 57);
+      u8g2.drawLine(16, 58, 28, 58);
+
+      if (fillLevel > 20) fillLevel -= 0.4;
+      static int sF = 0;
+      if (sF++ % 4 == 0 && fillLevel > 21) triggerSound(3);
+
+      if (foamHeight < 12.0) foamHeight += 0.2;
+
+      for (int y = 53; y >= (int)fillLevel; y--) {
+        int xS, xE;
+        if (y <= 42) {
+          xS = 11;
+          xE = 33;
+        } else {
+          float dy = y - 42;
+          float w = sqrt(max(0.0f, 144.0f - dy * dy));
+          xS = 22 - (int)w + 1;
+          xE = 22 + (int)w - 1;
+        }
+        for (int x = xS; x <= xE; x++) {
+          if ((x + y) % 2 == 0) u8g2.drawPixel(x, y);
+        }
+      }
+
+      if (foamHeight > 1 && fillLevel < 50) {
+        int sy = (int)fillLevel;
+        float fH = foamHeight;
+        u8g2.drawDisc(13, sy - (int)(fH / 3), (int)(fH / 3));
+        u8g2.drawDisc(19, sy - (int)(fH / 2), (int)(fH / 2));
+        u8g2.drawDisc(25, sy - (int)(fH / 1.8), (int)(fH / 1.8));
+        u8g2.drawDisc(31, sy - (int)(fH / 3), (int)(fH / 3));
+      }
+
+      u8g2.setFont(u8g2_font_6x12_tf);
+      u8g2.drawBox(53, 0, 75, 14);
+      u8g2.setDrawColor(0);
+
+      const char* yN = yeastData["yeasts"][yeastIndex]["s"];
+      const char* safeYN = yN ? yN : "Sync";
+      u8g2.drawStr(53 + (75 - u8g2.getStrWidth(safeYN)) / 2, 11, safeYN);
+      u8g2.setDrawColor(1);
+
+      drawWifiIcon(2, 5, false);
+
+      u8g2.setFont(u8g2_font_5x7_tf);
+      u8g2.drawStr(53, 26, "PROFILE:");
+      u8g2.setFont(u8g2_font_6x10_tf);
+
+      const char* pN = yeastData["yeasts"][yeastIndex]["p"];
+      u8g2.drawStr(53, 37, pN ? pN : "Std");
+
+      u8g2.setFont(u8g2_font_5x7_tf);
+      u8g2.drawStr(53, 48, "INOCULATING:");
+      u8g2.setFont(u8g2_font_6x10_tf);
+      u8g2.drawStr(53, 59, safeYN);
+
+      for (int i = 0; i < 8; i++) {
+        if (b[i].y > fillLevel) {
+          u8g2.drawPixel((int)(22 + sin(b[i].y * 0.4) * 2), (int)b[i].y);
+        }
+        b[i].y -= b[i].spd;
+        if (b[i].y < 21) resetBubble(i, false);
+      }
+
+      if (millis() - brewStartTime > 7000) {
+        currentState = RUNNING;
+        dashboardPage = 0;
+      }
+    } else if (currentState == CONFIRM_ACTION) {
+      u8g2.setFont(u8g2_font_6x12_tf);
+      u8g2.drawStr(10, 20, "Are you sure?");
+      u8g2.setFont(u8g2_font_5x7_tf);
+      const char* ns[] = { "Induce Clean", "Induce Crash", "Manual Temp", "Fresh Start" };
+      u8g2.drawStr(10, 31, ns[menuSelection]);
+      u8g2.setFont(u8g2_font_6x12_tf);
+      u8g2.drawStr(30, 50, "NO");
+      u8g2.drawStr(80, 50, "YES");
+      u8g2.drawFrame(confirmYesNo == 0 ? 25 : 75, 38, 35, 16);
+    } else if (currentState == RUNNING) {
+      if (dashboardPage == 0) {
+        drawWifiIcon(2, 5, false);
+        u8g2.setFont(u8g2_font_6x12_tf);
+        u8g2.drawCircle(30, 29, 19);
+        u8g2.drawBox(26, 5, 9, 6);
+        u8g2.drawLine(24, 5, 36, 5);
+
+        // --- FIX: LARM ELLER CENTRERAD TEMP ---
+        u8g2.setFont(u8g2_font_6x10_tf);
+
+        // Om larm är aktivt, blinka varannan sekund mellan Larm och Temperatur!
+        if (activeAlertMsg != "" && (millis() % 2000 < 1000)) {
+          int tW = u8g2.getStrWidth(activeAlertMsg.c_str());
+          u8g2.setCursor(30 - (tW / 2), 33);
+          u8g2.print(activeAlertMsg);
+        } else {
+          String tStr = (t1 <= -100.0) ? "---" : (useFahrenheit ? String((t1 * 9.0 / 5.0) + 32.0, 1) + "F" : String(t1, 1) + "C");
+          int tW = u8g2.getStrWidth(tStr.c_str());
+          u8g2.setCursor(30 - (tW / 2), 33);
+          u8g2.print(tStr);
+        }
+        u8g2.setFont(u8g2_font_6x12_tf);
+        // ------------------------------------------------------------
+
+        u8g2.drawBox(53, 0, 75, 14);
+        u8g2.setDrawColor(0);
+        const char* sN = yeastData["yeasts"][yeastIndex]["s"];
+        u8g2.drawStr(56, 11, sN ? sN : "Brew");
+        u8g2.setDrawColor(1);
+        u8g2.setFont(u8g2_font_5x7_tf);
+        const char* pN = yeastData["yeasts"][yeastIndex]["p"];
+        u8g2.drawStr(126 - u8g2.getStrWidth(pN ? pN : "Std"), 25, pN ? pN : "Std");
+        bool blk = (millis() % 1000 < 500);
+        const char* st = coolerActive ? "COOLING" : (heaterActive ? "HEATING" : "IDLE");
+        u8g2.drawStr(126 - u8g2.getStrWidth(st), 36, st);
+        if ((coolerActive || heaterActive) && blk) {
+          int ax = 126 - u8g2.getStrWidth(st) - 10;
+          if (coolerActive) u8g2.drawTriangle(ax, 30, ax + 6, 30, ax + 3, 36);
+          else u8g2.drawTriangle(ax, 36, ax + 6, 36, ax + 3, 30);
+        }
+
+        u8g2.setCursor(56, 47);
+        u8g2.print("Air: ");
+        printTempWithUnit(t2);
+
+        for (int i = 0; i < 8; i++) {
+          b[i].y -= b[i].spd;
+          if (b[i].y < 12) resetBubble(i, true);
+          u8g2.drawPixel((int)(30 + sin(b[i].y * 0.4) * 3), (int)b[i].y);
+        }
+     
+} else if (dashboardPage == 1) {
+        u8g2.setFont(u8g2_font_6x12_tf);
+        u8g2.drawStr(4, 12, "FERM. DATA");
+        u8g2.drawLine(0, 15, 128, 15);
+        u8g2.setCursor(4, 32);
+        u8g2.print("Day:  ");
+        u8g2.print(realDaysPassed, 1);
+        u8g2.setCursor(4, 47);
+        u8g2.print("Goal: ");
+        printTempWithUnit(isManualMode ? manualTargetTemp : getDisplayGoalTemp(daysPassed));
+      } else {
+        u8g2.setFont(u8g2_font_6x12_tf);
+        u8g2.drawStr(4, 12, "ACTION MENU");
+        u8g2.drawLine(0, 15, 128, 15);
+
+        // Uppdaterad lista med 6 alternativ
+        const char* m[] = { "Induce Clean", "Induce C Crash", "Manual Temp", "Fresh Start", "Settings", "<- Back" };
+
+        // Vi räknar ut scroll-offset så att vi ser 4 rader åt gången
+        int off = 0;
+        if (menuSelection >= 4) off = menuSelection - 3;
+
+        for (int i = 0; i < 4; i++) {
+          int idx = i + off;
+          if (idx > 5) break;  // Stoppa vid sista elementet (index 5)
+
+          if (menuSelection == idx) {
+            u8g2.setDrawColor(1);
+            u8g2.drawBox(0, 16 + (i * 12), 128, 12);
+            u8g2.setDrawColor(0);
+          }
+          u8g2.drawStr(4, 25 + (i * 12), m[idx]);
+          u8g2.setDrawColor(1);
+        }
+      }
+      if (dashboardPage != 2) {
+        u8g2.drawLine(0, 51, 128, 51);
+        u8g2.setFont(u8g2_font_6x10_tf);
+        u8g2.setCursor(4, 61);
+        u8g2.print("Status: ");
+
+        if (activeAlertMsg != "") {
+          u8g2.print("ACTION REQUIRED");  // Ändrar status-texten till en varning!
+        } else {
+          u8g2.print(getStatus(daysPassed));
+        }
+      }
+    } else if (currentState == SET_MANUAL_TEMP) {
+      u8g2.setFont(u8g2_font_6x12_tf);
+      u8g2.drawStr(10, 20, "Set Manual Temp:");
+      u8g2.setCursor(40, 45);
+      printTempWithUnit(manualTargetTemp);
+    }
+    // --- NYTT: RITA SKÄRMEN FÖR ATT JUSTERA OFFSET ---
+    else if (currentState == SET_OFFSET) {
+      u8g2.setFont(u8g2_font_6x12_tf);
+      u8g2.drawStr(10, 20, "Set Beer Offset:");
+      u8g2.setCursor(40, 45);
+      if (tempOffset > 0) u8g2.print("+");
+      u8g2.print(tempOffset, 1);
+      u8g2.print(" C");
+    }
+
+    u8g2.sendBuffer();
+  }
+
+  // --- SCREEN SAVER KONTROLL ---
+  if (screenSleepMin > 0) {
+    unsigned long timeout = screenSleepMin * 840000UL;
+    if (millis() - lastActivity > timeout && !screenIsOff) {
+      // Aktivera skärmsläckar-läget (men stäng INTE av strömmen till skärmen!)
+      screenIsOff = true;
+    }
+  }
+
+
+  // --- WIFI STATUS-LYSSNARE ---
+  static bool wasConnected = false;
+  bool isConnected = (WiFi.status() == WL_CONNECTED);
+  if (isConnected && !wasConnected) {
+    triggerSound(6);
+    Serial.println("-> WiFi anslutet!");
+  }
+  wasConnected = isConnected;
+
+  static unsigned long lastWiFiReconnect = 0;
+  if (!isConnected && (millis() - lastWiFiReconnect > 30000)) {
+    Serial.println("-> Offline. Försöker återansluta till WiFi...");
+    WiFi.disconnect();
+    WiFi.reconnect();
+    lastWiFiReconnect = millis();
+  }
+
+  // --- KONTINUERLIG SPARNING och sändning ---
+  static unsigned long lastPeriodicTask = 0;
+  if (millis() - lastPeriodicTask > 840000) {
+    lastPeriodicTask = millis();
+
+    if (currentState == RUNNING || currentState == POURING) {
+      saveBrewState();
+    }
+
+// Kalla på motorn tyst!
+cloudSyncRequested = true;
+}
+
+
+}  // <--- Slut på void loop()
+
+
+// --- FILSYSTEM & JSON ---
+bool loadDataFromFS() {
+  File file = FFat.open("/yeastdata.json", "r");
+  if (!file) {
+    deserializeJson(yeastData, "{\"yeasts\":[{\"n\":\"SYNC ERROR\",\"s\":\"Sync\"}]}");
+    dynamicTotalYeasts = 1;
+    return false;
+  }
+  
+  DeserializationError error = deserializeJson(yeastData, file);
+  if (error) {
+    DEBUG_PRINT("-> JSON LÄSFEL: ");
+    DEBUG_PRINTLN(error.c_str()); // Om hinken är för liten kommer det stå "NoMemory" här!
+    file.close();
+    return false;
+  }
+  
+  dynamicTotalYeasts = yeastData["yeasts"].size();
+  file.close();
+  return true;
+}
+
+void showSplashScreen() {
+  u8g2.setContrast(255);
+  u8g2.clearBuffer();
+
+  // Blixtsnabb hastighet (0 paus, snabbast möjliga uppritning)
+  const int animSpeed = 0;
+
+  // *** FAS 1: RITA 'Y' (Basen) ***
+  for (int i = 0; i <= 18; i += 2) {
+    u8g2.drawLine(64, 40, 64, 40 - i);
+    u8g2.drawLine(65, 40, 65, 40 - i);  // +1 pixel tjocklek
+    u8g2.sendBuffer();
+    delay(animSpeed);
+  }
+  for (int i = 0; i <= 16; i += 2) {
+    u8g2.drawLine(64, 22, 64 - i, 22 - i);
+    u8g2.drawLine(65, 22, 65 - i, 22 - i);  // +1 pixel tjocklek
+    u8g2.sendBuffer();
+    delay(animSpeed);
+  }
+  for (int i = 0; i <= 16; i += 2) {
+    u8g2.drawLine(64, 22, 64 + i, 22 - i);
+    u8g2.drawLine(65, 22, 65 + i, 22 - i);  // +1 pixel tjocklek
+    u8g2.sendBuffer();
+    delay(animSpeed);
+  }
+
+  delay(100);
+
+  // *** FAS 2: RITA 'M' OCH FÖRSTÄRK Y ***
+  for (int i = 0; i <= 34; i += 2) {
+    u8g2.drawLine(48, 40, 48, 40 - i);
+    u8g2.drawLine(49, 40, 49, 40 - i);  // +1 pixel tjocklek
+    u8g2.sendBuffer();
+    delay(animSpeed);
+  }
+  for (int i = 0; i <= 16; i += 2) {
+    u8g2.drawLine(49, 6, 49 + i, 6 + i);
+    u8g2.drawLine(50, 6, 50 + i, 6 + i);  // +1 pixel tjocklek
+    u8g2.sendBuffer();
+    delay(animSpeed);
+  }
+  for (int i = 0; i <= 16; i += 2) {
+    u8g2.drawLine(63, 22, 63 + i, 22 - i);
+    u8g2.drawLine(64, 22, 64 + i, 22 - i);  // +1 pixel tjocklek
+    u8g2.sendBuffer();
+    delay(animSpeed);
+  }
+  for (int i = 0; i <= 34; i += 2) {
+    u8g2.drawLine(80, 6, 80, 6 + i);
+    u8g2.drawLine(81, 6, 81, 6 + i);  // +1 pixel tjocklek
+    u8g2.sendBuffer();
+    delay(animSpeed);
+  }
+
+  delay(100);  // Kort spänningspaus innan sista strecket!
+
+  // *** FAS 3: THE ALGIZ RUNE (Mittlinjen upp genom klykan) ***
+  for (int i = 0; i <= 34; i += 2) {
+    u8g2.drawLine(64, 40, 64, 40 - i);
+    u8g2.drawLine(65, 40, 65, 40 - i);  // Behåller 2px tjocklek här med
+    u8g2.sendBuffer();
+    delay(animSpeed);
+  }
+
+  delay(1000);  // Låt den episka run-symbolen vila lite
+
+  // *** FAS 4: THE BRAND REVEAL ***
+  u8g2.setFont(u8g2_font_8x13B_tf);
+  u8g2.drawStr(20, 56, "YEASTMASTER");
+  u8g2.sendBuffer();
+  delay(800);
+
+  // *** FAS 5: SYSTEM VERSION ***
+  u8g2.setFont(u8g2_font_5x7_tf);
+  u8g2.drawStr(54, 64, "v2.1");
+  u8g2.sendBuffer();
+  delay(1200);
+
+  // *** FAS 6: THE GRAND EXIT (Fade Out) ***
+  for (int v = 255; v >= 0; v -= 10) {
+    u8g2.setContrast(v);
+    delay(10);
+  }
+
+  // Cleanup
+  u8g2.clearBuffer();
+  u8g2.sendBuffer();
+  u8g2.setContrast(255);
+  u8g2.setPowerSave(0);
+}
+
+void handleScreensaverAnimation() {
+  int spawnInterval = 2000;  // Standard: Mycket lugnt (t.ex. när maskinen är Idle)
+  float bubbleSpeed = 1.0;
+
+  // Om vi brygger, öka bubbeltakten!
+  if (currentState == RUNNING) {
+    spawnInterval = 800;
+    bubbleSpeed = 0.7;
+  }
+
+  // 1. SKAPA NYA BUBBLOR
+  if (millis() - lastSSBubbleSpawn > spawnInterval) {
+    for (int i = 0; i < MAX_SS_BUBBLES; i++) {
+      if (!screensaverBubbles[i].active) {
+        screensaverBubbles[i].x = random(5, 123);  // Slumpa horisontellt
+        screensaverBubbles[i].y = 64;              // Starta i botten
+        screensaverBubbles[i].speed = (random(15, 35) / 10.0) * bubbleSpeed;
+
+        // BESTÄM STORLEKEN HÄR, EN GÅNG FÖR ALLA!
+        screensaverBubbles[i].radius = random(1, 3);  // Får värdet 1 eller 2
+
+        screensaverBubbles[i].active = true;
+        lastSSBubbleSpawn = millis();
+        break;
+      }
+    }
+  }
+
+  // 2. FLYTTA OCH RITA BUBBLOR
+  for (int i = 0; i < MAX_SS_BUBBLES; i++) {
+    if (screensaverBubbles[i].active) {
+      screensaverBubbles[i].y -= screensaverBubbles[i].speed;  // Flytta uppåt
+
+      // Rita bubblan med dess fasta radie istället för att slumpa varje frame
+      u8g2.drawCircle(screensaverBubbles[i].x, screensaverBubbles[i].y, screensaverBubbles[i].radius);
+
+      // Om bubblan lämnar toppen, gör den inaktiv
+      if (screensaverBubbles[i].y < -5) {
+        screensaverBubbles[i].active = false;
+      }
+    }
+  }
+}
