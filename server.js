@@ -13,6 +13,9 @@ const PORT = process.env.PORT || 3000;
 const uri = process.env.MONGO_URI; 
 const client = new MongoClient(uri);
 
+const path = require('path');
+const fs = require('fs');
+
 let db, logsCollection, userDevicesCollection, userLibrariesCollection, pushSubscriptionsCollection;
 
 async function connectDB() {
@@ -499,4 +502,25 @@ if (minutesSinceLastNotify >= 120) {
 // --- DENNA MÅSTE ALLTID LIGGA SIST ---
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server körs på port ${PORT}`);
+});
+
+// ==========================================
+// --- OTA: FIRMWARE VERSION CHECK ---
+// ==========================================
+app.get('/api/firmware/version', (req, res) => {
+    res.json({
+        version: "2.2",
+        url: "https://soulofbeer-live.onrender.com/api/firmware/download"
+    });
+});
+
+// --- OTA: SERVERA FIRMWARE-FILEN ---
+app.get('/api/firmware/download', (req, res) => {
+    const firmwarePath = path.join(__dirname, 'firmware', 'yeastmaster.bin');
+    
+    if (fs.existsSync(firmwarePath)) {
+        res.download(firmwarePath, 'yeastmaster.bin');
+    } else {
+        res.status(404).json({ error: "Ingen firmware hittades" });
+    }
 });

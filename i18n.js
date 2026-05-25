@@ -3353,8 +3353,8 @@ const translations = {
 
         lab: {
             title: "The Profiler",
-            info_1: "Pick a strain and drag the points to build your fermentation profile.",
-            info_2: "When you're done, save and find your tailored profile in the Yeast library.",
+            info_1: "Pick a strain, then grab and drag the dots to shape your fermentation curve.",
+            info_2: "Save when done — your profile lands straight in the Yeast Library..",
             info_3: "Don't forget the dry hops!",
             profile_name: "PROFILE NAME",
             profile_name_placeholder: "e.g. JUICEBMB",
@@ -4087,9 +4087,9 @@ libTour: {
 
         lab: {
             title: "Der Profiler",
-            info_1: "Wähle eine Hefe und ziehe die Punkte, um dein Gärprofil zu erstellen.",
-            info_2: "Wenn du fertig bist, speichere und finde dein Profil in der Hefebibliothek.",
-            info_3: "Vergiss das Hopfenstopfen nicht!",
+            info_1: "Wähle einen Hefestamm, dann greife die Punkte und ziehe sie, um deine Gärkurve zu formen.",
+            info_2: "Speichern wenn fertig — dein Profil landet direkt in der Hefebibliothek.",
+            info_3: "Vergiss den Trockenhopfen nicht! 🌿",
             profile_name: "PROFILNAME",
             profile_name_placeholder: "z.B. JUICEBMB",
             pick_strain: "Hefe wählen",
