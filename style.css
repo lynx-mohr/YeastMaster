@@ -2650,13 +2650,12 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 #demo-tour-tooltip::after {
     content: '';
     position: absolute;
-    top: -10px; /* Peka uppåt */
-    left: 50%;
+    top: -10px;
+    left: var(--arrow-left, 50%); /* Använder JS-värdet, faller tillbaka på 50% */
     transform: translateX(-50%);
     border-width: 0 10px 10px 10px;
     border-style: solid;
-    /* Pilen får samma lysande gröna färg som kanten */
-    border-color: transparent transparent #8bc34a transparent; 
+    border-color: transparent transparent #8bc34a transparent;
 }
 
 /* Texten inuti skylten */

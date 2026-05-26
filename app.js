@@ -3661,6 +3661,16 @@ window.nextLibraryTourStep = function(e) {
                 tooltip.style.top = topPos + 'px';
                 tooltip.style.left = leftPos + 'px';
 
+                  // NYTT: Vänta en tick så browsern hinner räkna ut tooltipens position
+    requestAnimationFrame(() => {
+        positionTooltipArrow(target, tooltip);
+    });
+
+    tooltip.style.animation = 'none';
+    void tooltip.offsetWidth;
+    tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+}, 600);
+
                 const ttWidth = tooltip.offsetWidth;
                 const screenWidth = window.innerWidth;
                 
@@ -3733,6 +3743,25 @@ window.abortLibraryTour = function(e) {
         if (typeof showView === 'function') showView('library');
     }
 };
+
+function positionTooltipArrow(target, tooltip) {
+    const targetRect = target.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    
+    // Mitten av målelementet (absolut på skärmen)
+    const targetCenterX = targetRect.left + targetRect.width / 2;
+    
+    // Pilens position relativt till tooltip-rutan
+    const arrowLeft = targetCenterX - tooltipRect.left;
+    
+    // Klämma värdet så pilen aldrig hamnar utanför tooltip-rutan
+    const minLeft = 20;
+    const maxLeft = tooltipRect.width - 20;
+    const clampedLeft = Math.max(minLeft, Math.min(maxLeft, arrowLeft));
+    
+    // Applicera på ::after via en CSS-variabel
+    tooltip.style.setProperty('--arrow-left', clampedLeft + 'px');
+}
 
 // Koppla knappen vid start
 document.addEventListener('DOMContentLoaded', () => {
