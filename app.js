@@ -3680,11 +3680,11 @@ window.nextLibraryTourStep = function(e) {
                 const ttWidth = tooltip.offsetWidth;
                 const screenWidth = window.innerWidth;
 
-                // Klämma vänsterkanten inom synligt viewport (left är vänsterkant, leftPos är center)
+                // alignLeft: leftPos är redan vänsterkant. Annars: leftPos är center → konvertera
+                const tooltipLeft = step.alignLeft ? leftPos : (leftPos - ttWidth / 2);
                 const minLeft = window.scrollX + 15;
                 const maxLeft = window.scrollX + screenWidth - ttWidth - 15;
-                const centeredLeft = leftPos - ttWidth / 2;
-                tooltip.style.left = Math.max(minLeft, Math.min(maxLeft, centeredLeft)) + 'px';
+                tooltip.style.left = Math.max(minLeft, Math.min(maxLeft, tooltipLeft)) + 'px';
 
                 tooltip.style.animation = 'none';
                 void tooltip.offsetWidth;
