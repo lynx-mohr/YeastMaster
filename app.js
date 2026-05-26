@@ -3547,7 +3547,9 @@ window.startLibraryTour = function() {
             }, 300);
         }},
         { selector: '#lab-chart', i18nKey: 'step6', action: () => {
-            if (typeof rackDumpData !== 'undefined') rackDumpData.day = 5.5;
+            if (typeof dryHopData !== 'undefined') dryHopData.day = 4.0;
+            if (typeof removeHopData !== 'undefined') removeHopData.day = 7.0;
+            if (typeof rackDumpData !== 'undefined') rackDumpData.day = 10.0;
             if (typeof dryHopData !== 'undefined' && !dryHopData.enabled && typeof toggleDryHopLine === 'function') toggleDryHopLine();
             if (typeof removeHopData !== 'undefined' && !removeHopData.enabled && typeof toggleRemoveHopsLine === 'function') toggleRemoveHopsLine();
             if (typeof rackDumpData !== 'undefined' && !rackDumpData.enabled && typeof toggleRackDumpLine === 'function') toggleRackDumpLine();
