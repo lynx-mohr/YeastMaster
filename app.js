@@ -201,6 +201,14 @@ firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth(); // Se till att Firebase är länkat i index.html!
 
+async function getAuthHeaders() {
+    const idToken = await auth.currentUser.getIdToken();
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${idToken}`
+    };
+}
+
 
 
 // --- KONFIGURATION FÖR VYER & ANIMATIONER ---
@@ -878,9 +886,8 @@ if(document.getElementById('btn-claim')) {
         try {
             const res = await fetch(`${API_BASE}/claim-device`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: await getAuthHeaders(),
                 body: JSON.stringify({
-                    uid: user.uid,
                     device_id: macInput,
                     name: nicknameInput
                 })
@@ -2750,7 +2757,7 @@ async function populateSyncDevices(uid) {
 
     try {
         // Försöker hämta dina riktiga enheter
-        const res = await fetch(`${API_BASE}/my-devices?uid=${uid}`);
+        const res = await fetch(`${API_BASE}/my-devices`, { headers: await getAuthHeaders() });
         
         if (!res.ok) throw new Error("Servern svarade inte med 200 OK");
         
@@ -2946,9 +2953,8 @@ async function syncToSelectedDevice() {
 
         const response = await fetch(`${API_BASE}/sync-profiles`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: await getAuthHeaders(),
             body: JSON.stringify({
-                uid: user.uid,
                 device_id: targetDeviceId,
                 yeastData: payloadData
             })
@@ -4017,11 +4023,8 @@ async function pushLibraryToCloud() {
     try {
         const response = await fetch(`${API_BASE}/my-library`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                uid: user.uid,
-                libraryData: libraryData
-            })
+            headers: await getAuthHeaders(),
+            body: JSON.stringify({ libraryData: libraryData })
         });
         
         if (response.ok) {
@@ -4033,9 +4036,9 @@ async function pushLibraryToCloud() {
 }
 
 // 2. Hämtar ditt bibliotek FRÅN molnet (Körs vid inloggning)
-async function fetchLibraryFromCloud(uid) {
+async function fetchLibraryFromCloud() {
     try {
-        const res = await fetch(`${API_BASE}/my-library?uid=${uid}`);
+        const res = await fetch(`${API_BASE}/my-library`, { headers: await getAuthHeaders() });
         if (res.ok) {
             const data = await res.json();
             
@@ -4177,10 +4180,10 @@ auth.onAuthStateChanged(async (user) => {
         if (soulLoginPrompt) soulLoginPrompt.style.display = 'none';
         if (logoutBtn) logoutBtn.style.display = 'block';
 
-        await fetchLibraryFromCloud(user.uid);
+        await fetchLibraryFromCloud();
 
         try {
-            const res = await fetch(`${API_BASE}/my-devices?uid=${user.uid}`);
+            const res = await fetch(`${API_BASE}/my-devices`, { headers: await getAuthHeaders() });
             const devices = await res.json();
 
             window.allFetchedDevices = devices; // Spara listan globalt
@@ -5321,11 +5324,8 @@ window.removeActiveDevice = async function() {
         // 3. Ropa på databasen och invänta svar
         const response = await fetch(`${API_BASE}/remove-device`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                uid: auth.currentUser.uid,
-                device_id: macAddress
-            })
+            headers: await getAuthHeaders(),
+            body: JSON.stringify({ device_id: macAddress })
         });
 
         // 4. Utvärdera svaret från servern
@@ -5631,13 +5631,10 @@ async function subscribeToPushNotifications() {
                 console.log('Push Subscription created!', subscription);
 
                 // 5. Skicka till servern (Nu med korrekt user.uid)
-                const response = await fetch('https://soulofbeer-live.onrender.com/api/subscribe', {
+                const response = await fetch(`${API_BASE}/subscribe`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        uid: user.uid, 
-                        sub: subscription 
-                    })
+                    headers: await getAuthHeaders(),
+                    body: JSON.stringify({ sub: subscription })
                 });
 
                 if (response.ok) {
@@ -5677,13 +5674,9 @@ async function unsubscribeFromPushNotifications() {
                     console.log('Unsubscribed from push notifications in browser.');
 
                     // 2. Säg åt servern att ta bort denna enhet från databasen
-                    const response = await fetch('https://soulofbeer-live.onrender.com/api/unsubscribe', {
+                    const response = await fetch(`${API_BASE}/unsubscribe`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            uid: user.uid, 
-                            endpoint: subscription.endpoint // Skickas med så servern vet exakt VILKEN telefon som ska tas bort
-                        })
+                        headers: await getAuthHeaders()
                     });
 
                     if (response.ok) {

@@ -3,6 +3,8 @@ const crypto = require('crypto');
 const express = require('express');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
+const mongoSanitize = require('express-mongo-sanitize');
+const rateLimit = require('express-rate-limit');
 
 // --- NYTT: Importera web-push ---
 const webpush = require('web-push');
@@ -15,6 +17,14 @@ const client = new MongoClient(uri);
 
 const path = require('path');
 const fs = require('fs');
+
+const admin = require('firebase-admin');
+if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
+    console.error("FEL: FIREBASE_SERVICE_ACCOUNT saknas i miljövariablerna!");
+}
+admin.initializeApp({
+    credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}'))
+});
 
 let db, logsCollection, userDevicesCollection, userLibrariesCollection, pushSubscriptionsCollection;
 
@@ -38,7 +48,49 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
+app.use(mongoSanitize());
 app.use(express.static('.'));
+
+// 500 req / 15 min — täcker dashboard-polling + ESP32-updates för normala användare
+const generalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 500,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'För många förfrågningar, försök igen senare.' }
+});
+
+// 10 req / 15 min — för kontomutationer som claim/remove/subscribe
+const strictLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'För många förfrågningar, försök igen senare.' }
+});
+
+app.use('/api/', generalLimiter);
+
+function isString(val) {
+    return typeof val === 'string' && val.trim().length > 0;
+}
+function isNumber(val) {
+    return typeof val === 'number' && isFinite(val);
+}
+
+async function verifyToken(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    try {
+        const decoded = await admin.auth().verifyIdToken(authHeader.split('Bearer ')[1]);
+        req.uid = decoded.uid;
+        next();
+    } catch {
+        res.status(401).json({ error: 'Invalid token' });
+    }
+}
 
 // ==========================================
 // --- NYTT: VAPID-INSTÄLLNINGAR FÖR PUSH ---
@@ -65,8 +117,11 @@ app.post('/api/update', async (req, res) => {
   
 const { device_id, temp, air_temp, day, phase_day, status, action, token, strain, profile, target_temp, active_alert } = req.body;
 
-    if (!device_id) {
-        return res.status(400).send({ error: "Saknar device_id!" });
+    if (!isString(device_id) || device_id.length > 64) {
+        return res.status(400).send({ error: "Ogiltigt device_id!" });
+    }
+    if (!isString(token)) {
+        return res.status(400).send({ error: "Ogiltigt token!" });
     }
 
        const device = await userDevicesCollection.findOne({ 
@@ -112,6 +167,9 @@ app.get('/api/data', async (req, res) => {
     const requestedDevice = req.query.device_id;
     let query = {};
     if (requestedDevice) {
+        if (!isString(requestedDevice) || requestedDevice.length > 64) {
+            return res.status(400).send({ error: "Ogiltigt device_id!" });
+        }
         query.device_id = requestedDevice;
     }
 
@@ -129,11 +187,15 @@ app.get('/api/data', async (req, res) => {
 // ==========================================
 
 // --- 3. CLAIM DEVICE (Knyt en enhet till en användare) ---
-app.post('/api/claim-device', async (req, res) => {
-    const { uid, device_id, name } = req.body;
+app.post('/api/claim-device', strictLimiter, verifyToken, async (req, res) => {
+    const { device_id, name } = req.body;
+    const uid = req.uid;
 
-    if (!uid || !device_id) {
-        return res.status(400).send({ error: "Saknar uid eller device_id" });
+    if (!isString(device_id) || device_id.length > 64) {
+        return res.status(400).send({ error: "Ogiltigt device_id" });
+    }
+    if (name !== undefined && (!isString(name) || name.length > 64)) {
+        return res.status(400).send({ error: "Ogiltigt enhetsnamn" });
     }
 
     try {
@@ -142,9 +204,9 @@ app.post('/api/claim-device', async (req, res) => {
 
         await userDevicesCollection.updateOne(
             { device_id: device_id },
-            { $set: { 
-                uid: uid, 
-                name: name || "Min YeastMaster", 
+            { $set: {
+                uid: uid,
+                name: name || "Min YeastMaster",
                 token: uniqueToken,
                 claimed_at: new Date() 
             }},
@@ -175,12 +237,8 @@ app.get('/api/get-token/:mac', async (req, res) => {
 });
 
 // --- 4. MY DEVICES (Hämta användarens enheter) ---
-app.get('/api/my-devices', async (req, res) => {
-    const { uid } = req.query;
-
-    if (!uid) {
-        return res.status(400).send({ error: "Saknar uid" });
-    }
+app.get('/api/my-devices', verifyToken, async (req, res) => {
+    const uid = req.uid;
 
     try {
         const devices = await userDevicesCollection.find({ uid: uid }).toArray();
@@ -194,10 +252,11 @@ app.get('/api/my-devices', async (req, res) => {
 // --- 6. GLOBALT BIBLIOTEK FÖR WEBBAPPEN ---
 // ==========================================
 
-app.post('/api/my-library', async (req, res) => {
-    const { uid, libraryData } = req.body;
+app.post('/api/my-library', verifyToken, async (req, res) => {
+    const { libraryData } = req.body;
+    const uid = req.uid;
 
-    if (!uid || !libraryData) {
+    if (!libraryData) {
         return res.status(400).send({ error: "Saknar data" });
     }
 
@@ -213,10 +272,8 @@ app.post('/api/my-library', async (req, res) => {
     }
 });
 
-app.get('/api/my-library', async (req, res) => {
-    const { uid } = req.query;
-
-    if (!uid) return res.status(400).send({ error: "Saknar uid" });
+app.get('/api/my-library', verifyToken, async (req, res) => {
+    const uid = req.uid;
 
     try {
         const userLib = await userLibrariesCollection.findOne({ uid: uid });
@@ -234,11 +291,15 @@ app.get('/api/my-library', async (req, res) => {
 // --- SYNK-MOTOR FÖR ESP32 ---
 // ==========================================
 
-app.post('/api/sync-profiles', async (req, res) => {
-    const { uid, device_id, yeastData } = req.body;
+app.post('/api/sync-profiles', verifyToken, async (req, res) => {
+    const { device_id, yeastData } = req.body;
+    const uid = req.uid;
 
-    if (!uid || !device_id || !yeastData) {
-        return res.status(400).send({ error: "Saknar data för synkning" });
+    if (!isString(device_id) || device_id.length > 64) {
+        return res.status(400).send({ error: "Ogiltigt device_id" });
+    }
+    if (!yeastData || typeof yeastData !== 'object') {
+        return res.status(400).send({ error: "Ogiltig yeastData" });
     }
 
     try {
@@ -282,11 +343,12 @@ app.get('/api/device-sync/:mac', async (req, res) => {
 // ==========================================
 // --- 7. TA BORT ENHET FRÅN MOLNET ---
 // ==========================================
-app.post('/api/remove-device', async (req, res) => {
-    const { uid, device_id } = req.body;
+app.post('/api/remove-device', strictLimiter, verifyToken, async (req, res) => {
+    const { device_id } = req.body;
+    const uid = req.uid;
 
-    if (!uid || !device_id) {
-        return res.status(400).send({ error: "Saknar uid eller device_id" });
+    if (!isString(device_id) || device_id.length > 64) {
+        return res.status(400).send({ error: "Ogiltigt device_id" });
     }
 
     try {
@@ -306,11 +368,12 @@ app.post('/api/remove-device', async (req, res) => {
 // ==========================================
 // --- NYTT: MOTTA OCH SPARA PRENUMERATIONER PÅ LARM ---
 // ==========================================
-app.post('/api/subscribe', async (req, res) => {
-    const { uid, sub } = req.body;
+app.post('/api/subscribe', strictLimiter, verifyToken, async (req, res) => {
+    const { sub } = req.body;
+    const uid = req.uid;
 
-    if (!uid || !sub) {
-        return res.status(400).send({ error: "Saknar uid eller prenumerationsobjekt" });
+    if (!sub) {
+        return res.status(400).send({ error: "Saknar prenumerationsobjekt" });
     }
 
     try {
@@ -341,12 +404,8 @@ app.post('/api/subscribe', async (req, res) => {
 // ==========================================
 // --- NYTT: TA BORT PRENUMERATIONER (AVAKTIVERA LARM) ---
 // ==========================================
-app.post('/api/unsubscribe', async (req, res) => {
-    const { uid, endpoint } = req.body;
-
-    if (!uid || !endpoint) {
-        return res.status(400).send({ error: "Saknar uid eller prenumerationens endpoint" });
-    }
+app.post('/api/unsubscribe', strictLimiter, verifyToken, async (req, res) => {
+    const uid = req.uid;
 
     try {
         // Eftersom vi bara sparar EN prenumeration per användare (med upsert i /subscribe),
