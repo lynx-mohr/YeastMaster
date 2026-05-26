@@ -3661,25 +3661,19 @@ window.nextLibraryTourStep = function(e) {
                 tooltip.style.top = topPos + 'px';
                 tooltip.style.left = leftPos + 'px';
 
-                  // NYTT: Vänta en tick så browsern hinner räkna ut tooltipens position
-    requestAnimationFrame(() => {
-        positionTooltipArrow(target, tooltip);
-    });
-
-    tooltip.style.animation = 'none';
-    void tooltip.offsetWidth;
-    tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-}, 600);
-
                 const ttWidth = tooltip.offsetWidth;
                 const screenWidth = window.innerWidth;
-                
+
                 if (leftPos + (ttWidth / 2) > screenWidth - 15) tooltip.style.left = (screenWidth - (ttWidth / 2) - 15) + 'px';
                 if (leftPos - (ttWidth / 2) < 15) tooltip.style.left = (ttWidth / 2) + 15 + 'px';
 
                 tooltip.style.animation = 'none';
                 void tooltip.offsetWidth;
                 tooltip.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+
+                requestAnimationFrame(() => {
+                    positionTooltipArrow(target, tooltip);
+                });
             }, 600); 
             
         } else if (attempts > 20) {
