@@ -19,12 +19,17 @@ const path = require('path');
 const fs = require('fs');
 
 const admin = require('firebase-admin');
-if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
-    console.error("FEL: FIREBASE_SERVICE_ACCOUNT saknas i miljövariablerna!");
+let firebaseReady = false;
+try {
+    if (!process.env.FIREBASE_SERVICE_ACCOUNT) throw new Error("FIREBASE_SERVICE_ACCOUNT saknas");
+    admin.initializeApp({
+        credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT))
+    });
+    firebaseReady = true;
+} catch (e) {
+    console.error("FEL: Firebase Admin kunde inte initieras:", e.message);
+    console.error("Skyddade API-endpoints kommer att returnera 503 tills miljövariabeln är satt.");
 }
-admin.initializeApp({
-    credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}'))
-});
 
 let db, logsCollection, userDevicesCollection, userLibrariesCollection, pushSubscriptionsCollection;
 
@@ -79,6 +84,9 @@ function isNumber(val) {
 }
 
 async function verifyToken(req, res, next) {
+    if (!firebaseReady) {
+        return res.status(503).json({ error: 'Servern saknar Firebase-konfiguration' });
+    }
     const authHeader = req.headers.authorization;
     if (!authHeader?.startsWith('Bearer ')) {
         return res.status(401).json({ error: 'Unauthorized' });
