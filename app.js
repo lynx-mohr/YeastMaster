@@ -3537,7 +3537,7 @@ window.startLibraryTour = function() {
                         const profiles = yeastDatabase.yeasts.filter(p => p.s === "US-05");
                         if (profiles.length > 0) firstProfileName = profiles[0].p;
                     }
-                    loadProfileIntoLab("US-05", firstProfileName, yeast.name);
+                    loadProfileIntoLab("US-05", firstProfileName);
                     if (typeof labChart !== 'undefined' && labChart !== null) { labChart.resize(); labChart.update('none'); }
                     if (typeof updateSummaryText === 'function') updateSummaryText();
                 }
