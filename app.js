@@ -3518,7 +3518,7 @@ window.startLibraryTour = function() {
             }
         }},
         { selector: '#yeast-info-modal .hw-profile-btn', i18nKey: 'step3', alignLeft: true, action: () => {} },
-        { selector: '#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]', i18nKey: 'step4', offsetY: -120, action: () => {
+        { selector: '#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]', i18nKey: 'step4', action: () => {
             const firstProfileBtn = document.querySelector('#yeast-info-modal .hw-profile-btn');
             if (firstProfileBtn && !firstProfileBtn.classList.contains('active')) firstProfileBtn.click(); 
             setTimeout(() => { const targetBtn = document.querySelector('#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]'); if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);
@@ -3667,6 +3667,14 @@ window.nextLibraryTourStep = function(e) {
 
                 tooltip.style.top = topPos + 'px';
                 tooltip.style.left = leftPos + 'px';
+
+                // Flippa tooltip uppåt om den hamnar utanför skärmens nederkant
+                const ttHeight = tooltip.offsetHeight;
+                const viewportBottom = window.scrollY + window.innerHeight;
+                if (topPos + ttHeight > viewportBottom - 15) {
+                    topPos = finalRect.top + window.scrollY - ttHeight - 10;
+                    tooltip.style.top = topPos + 'px';
+                }
 
                 const ttWidth = tooltip.offsetWidth;
                 const screenWidth = window.innerWidth;
