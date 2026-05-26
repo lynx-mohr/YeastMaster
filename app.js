@@ -3523,7 +3523,7 @@ window.startLibraryTour = function() {
             if (firstProfileBtn && !firstProfileBtn.classList.contains('active')) firstProfileBtn.click(); 
             setTimeout(() => { const targetBtn = document.querySelector('#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]'); if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);
         }},
-  { selector: '#lab-chart', i18nKey: 'step5', action: () => {
+  { selector: '#lab-chart', i18nKey: 'step5', centerViewport: true, action: () => {
             if (typeof closeYeastModal === 'function') closeYeastModal();
             document.body.style.overflow = 'hidden'; 
             // VIP-PASS FRAMVISAT: (false för pushHistory, true för forceOverride)
@@ -3543,8 +3543,8 @@ window.startLibraryTour = function() {
                 }
             }, 300); 
         }},
-        { selector: '#lab-chart', i18nKey: 'step6', action: () => {
-            if (typeof rackDumpData !== 'undefined') rackDumpData.day = 9.0;
+        { selector: '#lab-chart', i18nKey: 'step6', centerViewport: true, action: () => {
+            if (typeof rackDumpData !== 'undefined') rackDumpData.day = 5.5;
             if (typeof dryHopData !== 'undefined' && !dryHopData.enabled && typeof toggleDryHopLine === 'function') toggleDryHopLine();
             if (typeof removeHopData !== 'undefined' && !removeHopData.enabled && typeof toggleRemoveHopsLine === 'function') toggleRemoveHopsLine();
             if (typeof rackDumpData !== 'undefined' && !rackDumpData.enabled && typeof toggleRackDumpLine === 'function') toggleRackDumpLine();
@@ -3658,8 +3658,12 @@ window.nextLibraryTourStep = function(e) {
                 }
 
                 const finalRect = target.getBoundingClientRect();
-                let topPos = finalRect.bottom + window.scrollY + (step.offsetY ?? 5); 
-                let leftPos = step.alignLeft ? (finalRect.left + window.scrollX + 20) : (finalRect.left + window.scrollX + (finalRect.width / 2));
+                let topPos = finalRect.bottom + window.scrollY + (step.offsetY ?? 5);
+                let leftPos = step.centerViewport
+                    ? window.innerWidth / 2
+                    : step.alignLeft
+                        ? (finalRect.left + window.scrollX + 20)
+                        : (finalRect.left + window.scrollX + (finalRect.width / 2));
 
                 tooltip.style.top = topPos + 'px';
                 tooltip.style.left = leftPos + 'px';
