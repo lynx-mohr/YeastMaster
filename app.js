@@ -3659,11 +3659,9 @@ window.nextLibraryTourStep = function(e) {
 
                 const finalRect = target.getBoundingClientRect();
                 let topPos = finalRect.bottom + window.scrollY + (step.offsetY ?? 5);
-                let leftPos = step.centerViewport
-                    ? window.innerWidth / 2
-                    : step.alignLeft
-                        ? (finalRect.left + window.scrollX + 20)
-                        : (finalRect.left + window.scrollX + (finalRect.width / 2));
+                let leftPos = step.alignLeft
+                    ? (finalRect.left + window.scrollX + 20)
+                    : (finalRect.left + window.scrollX + (finalRect.width / 2));
 
                 tooltip.style.top = topPos + 'px';
                 tooltip.style.left = leftPos + 'px';
@@ -3679,8 +3677,13 @@ window.nextLibraryTourStep = function(e) {
                 const ttWidth = tooltip.offsetWidth;
                 const screenWidth = window.innerWidth;
 
-                if (leftPos + (ttWidth / 2) > screenWidth - 15) tooltip.style.left = (screenWidth - (ttWidth / 2) - 15) + 'px';
-                if (leftPos - (ttWidth / 2) < 15) tooltip.style.left = (ttWidth / 2) + 15 + 'px';
+                // Centrera på skärmbredd (left = vänsterkant, inte mittpunkt)
+                if (step.centerViewport) {
+                    tooltip.style.left = Math.max(15, (screenWidth - ttWidth) / 2) + 'px';
+                } else {
+                    if (leftPos + (ttWidth / 2) > screenWidth - 15) tooltip.style.left = (screenWidth - (ttWidth / 2) - 15) + 'px';
+                    if (leftPos - (ttWidth / 2) < 15) tooltip.style.left = (ttWidth / 2) + 15 + 'px';
+                }
 
                 tooltip.style.animation = 'none';
                 void tooltip.offsetWidth;
