@@ -3636,9 +3636,10 @@ window.nextLibraryTourStep = function(e) {
             window._tourFindTargetInterval = null;
             target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            setTimeout(() => {
+            window._tourShowTooltipTimeout = setTimeout(() => {
+                if (!window.isLibraryTourActive) return;
                 tooltip.style.display = 'block';
-    
+
                 let htmlContent = '';
                 // HÄMTA ÖVERSÄTTNINGEN!
                 const translatedText = window.translations[lang]?.libTour?.[step.i18nKey] || "Text missing";
@@ -3697,10 +3698,14 @@ window.confirmAbortTour = function(e) {
 window.abortLibraryTour = function(e) {
     if (e) { e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
 
-    // Stoppa pågående setInterval så tooltip inte re-visas efter abort
+    // Stoppa setInterval och setTimeout så tooltip inte re-visas efter abort
     if (window._tourFindTargetInterval) {
         clearInterval(window._tourFindTargetInterval);
         window._tourFindTargetInterval = null;
+    }
+    if (window._tourShowTooltipTimeout) {
+        clearTimeout(window._tourShowTooltipTimeout);
+        window._tourShowTooltipTimeout = null;
     }
 
     // Stäng tour-fönstren
@@ -3713,9 +3718,10 @@ window.abortLibraryTour = function(e) {
     const f1 = document.getElementById('tour-fake-custom-card'); if (f1) f1.remove();
     const f2 = document.getElementById('tour-fake-house-card'); if (f2) f2.remove();
 
-    // Återställ scroll som steg 5 låste
+    // Återställ scroll (inline-stil från steg 5 + event listeners från startLibraryTour)
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
+    if (typeof enableAllScrolling === 'function') enableAllScrolling();
 
     // Markera touren som avslutad
     window.isLibraryTourActive = false;
