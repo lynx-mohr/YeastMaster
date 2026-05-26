@@ -3680,11 +3680,8 @@ window.nextLibraryTourStep = function(e) {
                 const ttWidth = tooltip.offsetWidth;
                 const screenWidth = window.innerWidth;
 
-                // alignLeft: leftPos är redan vänsterkant. Annars: leftPos är center → konvertera
-                const tooltipLeft = step.alignLeft ? leftPos : (leftPos - ttWidth / 2);
-                const minLeft = window.scrollX + 15;
-                const maxLeft = window.scrollX + screenWidth - ttWidth - 15;
-                tooltip.style.left = Math.max(minLeft, Math.min(maxLeft, tooltipLeft)) + 'px';
+                if (leftPos + (ttWidth / 2) > screenWidth - 15) tooltip.style.left = (screenWidth - (ttWidth / 2) - 15) + 'px';
+                if (leftPos - (ttWidth / 2) < 15) tooltip.style.left = (ttWidth / 2) + 15 + 'px';
 
                 tooltip.style.animation = 'none';
                 void tooltip.offsetWidth;
