@@ -3658,7 +3658,7 @@ window.nextLibraryTourStep = function(e) {
                 }
 
                 const finalRect = target.getBoundingClientRect();
-                let topPos = finalRect.bottom + window.scrollY + 15; 
+                let topPos = finalRect.bottom + window.scrollY + 5; 
                 let leftPos = step.alignLeft ? (finalRect.left + window.scrollX + 20) : (finalRect.left + window.scrollX + (finalRect.width / 2));
 
                 tooltip.style.top = topPos + 'px';
