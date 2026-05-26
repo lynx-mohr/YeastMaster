@@ -3675,6 +3675,9 @@ window.nextLibraryTourStep = function(e) {
                 if (topPos + ttHeight > viewportBottom - 15) {
                     topPos = finalRect.top + window.scrollY - ttHeight - 10;
                     tooltip.style.top = topPos + 'px';
+                    tooltip.classList.add('tooltip-flipped');
+                } else {
+                    tooltip.classList.remove('tooltip-flipped');
                 }
 
                 const ttWidth = tooltip.offsetWidth;

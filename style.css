@@ -2658,6 +2658,14 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
     border-color: transparent transparent #8bc34a transparent;
 }
 
+/* Vänd pilen nedåt när tooltipen är ovanför elementet */
+#demo-tour-tooltip.tooltip-flipped::after {
+    top: auto;
+    bottom: -10px;
+    border-width: 10px 10px 0 10px;
+    border-color: #8bc34a transparent transparent transparent;
+}
+
 /* Texten inuti skylten */
 #demo-tour-text {
     color: #ffffff; /* Ren vit text gör att det poppar och blir lättläst! */
