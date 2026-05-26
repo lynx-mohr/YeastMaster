@@ -3913,3 +3913,24 @@ body.light-mode #btn-save-profile:hover {
     background-color: #333333;
     border-color: #333333;
 }
+
+/* =========================================
+   LIGHT MODE FIX: LAB NOTES TEXTAREA
+   ========================================= */
+
+body.light-mode .modal-body textarea,
+body.light-mode .modal-body input[type="text"],
+body.light-mode .modal-body input[type="number"] {
+    background-color: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid #ccc !important;
+}
+
+/* Specifikt för LAB NOTES-rutan */
+body.light-mode #modal-lab-notes,
+body.light-mode [id*="lab-notes"],
+body.light-mode [class*="lab-notes"] {
+    background-color: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid #ccc !important;
+}
