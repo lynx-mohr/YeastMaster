@@ -3662,7 +3662,7 @@ slurry_info_tip: "Pro-tip: If unsure, choose \"Thin\". Pitching slightly more sl
             step1: "Double-click on a card to read about the strain. Single-click to select it for your device!",
             step2: "Here are the hardware profiles. These control your fridge temperatures automatically.",
             step3: "Click to expand the profile to see the temperature steps!",
-            step4: "Want to tweak a profile? Click 'Edit in Profiler' to add Dry Hop or Racking alarms!",
+            step4: "Want to tweak a profile? Click 'Edit in Profiler' to add Dry Hops or Racking alarms!",
             step5: "Welcome to The Profiler! Here you can grab and drag the dots to shape your fermentation curve.",
             step6: "Set your alarms for Dry Hops, Remove Hops, and Racking! They will show up on your timeline and alert you when it's time.",
             step7: "When saved, your modded profile lands at the bottom of the library with a ★ star, ready to be synced!",
