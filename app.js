@@ -3627,12 +3627,13 @@ window.nextLibraryTourStep = function(e) {
     if (tooltip) tooltip.style.display = 'none';
 
     let attempts = 0;
-    const findTarget = setInterval(() => {
+    window._tourFindTargetInterval = setInterval(() => {
         attempts++;
         const target = document.querySelector(step.selector);
 
         if (target && target.offsetHeight > 0) {
-            clearInterval(findTarget); 
+            clearInterval(window._tourFindTargetInterval);
+            window._tourFindTargetInterval = null;
             target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             setTimeout(() => {
@@ -3678,7 +3679,8 @@ window.nextLibraryTourStep = function(e) {
             }, 600); 
             
         } else if (attempts > 20) {
-            clearInterval(findTarget);
+            clearInterval(window._tourFindTargetInterval);
+            window._tourFindTargetInterval = null;
             console.warn("Tour missed target:", step.selector);
             window.nextLibraryTourStep();
         }
@@ -3694,45 +3696,32 @@ window.confirmAbortTour = function(e) {
 
 window.abortLibraryTour = function(e) {
     if (e) { e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
-    window.currentLibStep = 999;
-    window.nextLibraryTourStep();
-};
 
-// --- FUNKTION FÖR ATT BEKRÄFTA AVSLUT ---
-window.confirmAbortTour = function(e) {
-    if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation(); 
+    // Stoppa pågående setInterval så tooltip inte re-visas efter abort
+    if (window._tourFindTargetInterval) {
+        clearInterval(window._tourFindTargetInterval);
+        window._tourFindTargetInterval = null;
     }
-    
-    const lang = window.currentLang || 'en';
-    const confirmMsg = window.translations[lang]?.libTour?.exitConfirm || "EXIT TOUR?";
-    
-    if (confirm(confirmMsg)) {
-        window.abortLibraryTour();
-    }
-};
 
-// --- FUNKTION FÖR ATT AVBRYTA TOUREN (Nu helt innesluten och säker!) ---
-window.abortLibraryTour = function(e) {
-    if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-    }
-    
-    // 1. Stäng ner tour-fönstren direkt
+    // Stäng tour-fönstren
     const overlay = document.getElementById('demo-overlay');
     const tooltip = document.getElementById('demo-tour-tooltip');
-    if (overlay) overlay.style.display = 'none';
+    if (overlay) { overlay.style.display = 'none'; overlay.onclick = null; }
     if (tooltip) tooltip.style.display = 'none';
-    
-    // 2. Extra städning ifall vi är mitt i en animation (Nu inuti måsvingarna!)
+
+    // Städa bort fejk-kort
     const f1 = document.getElementById('tour-fake-custom-card'); if (f1) f1.remove();
     const f2 = document.getElementById('tour-fake-house-card'); if (f2) f2.remove();
-    
-    // 3. Om användaren avbryter medan de är inne i Lab-vyn, hoppa tillbaka till biblioteket
+
+    // Återställ scroll som steg 5 låste
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+
+    // Markera touren som avslutad
+    window.isLibraryTourActive = false;
+    window.currentLibStep = 0;
+
+    // Om vi är i Lab-vyn, hoppa tillbaka till biblioteket
     const labView = document.getElementById('view-lab');
     if (labView && labView.style.display === 'block') {
         if (typeof showView === 'function') showView('library');
