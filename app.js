@@ -2416,28 +2416,28 @@ function openYeastModal(yeast) {
         detailedText = `
             <div style="line-height: 1.6;">
                 <h4 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px; font-size: 1rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">House Bank Strain 🦠</h4>
-                <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid #333; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                    
+                <div style="background: rgba(128,128,128,0.08); border: 1px solid rgba(128,128,128,0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+
                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Captured</span>
-                        <span style="color: #fff; font-weight: bold;">${displayDate}</span>
+                        <span style="color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Captured</span>
+                        <span style="color: var(--text-main); font-weight: bold;">${displayDate}</span>
                     </div>
 
                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Origin / Source</span>
-                        <span style="color: #fff; font-weight: bold;">${yeast.origin}</span>
+                        <span style="color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Origin / Source</span>
+                        <span style="color: var(--text-main); font-weight: bold;">${yeast.origin}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Temp Range</span>
-                        <span style="color: #fff; font-weight: bold;">${yeast.temp}</span>
+                        <span style="color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Temp Range</span>
+                        <span style="color: var(--text-main); font-weight: bold;">${yeast.temp}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between;">
-                        <span style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Tags</span>
+                        <span style="color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Tags</span>
                         <span style="color: var(--accent-color); font-weight: bold; text-align: right;">${yeast.tags.join(', ')}</span>
                     </div>
                 </div>
-                <h4 style="color: #888; margin-bottom: 5px; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Lab Notes</h4>
-                <p style="color: #ccc; font-size: 0.95rem; background: #000; padding: 15px; border-radius: 8px; border: 1px solid #222;">${yeast.desc}</p>
+                <h4 style="color: var(--text-dim); margin-bottom: 5px; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Lab Notes</h4>
+                <p style="color: var(--text-dim); font-size: 0.95rem; background: var(--oled-bg); padding: 15px; border-radius: 8px; border: 1px solid rgba(128,128,128,0.3);">${yeast.desc}</p>
             </div>
         `;
     }
