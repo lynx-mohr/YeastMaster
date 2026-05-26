@@ -3546,6 +3546,7 @@ window.startLibraryTour = function() {
         { selector: '#lab-chart', i18nKey: 'step6', action: () => {
             if (typeof rackDumpData !== 'undefined') rackDumpData.day = 9.0;
             if (typeof dryHopData !== 'undefined' && !dryHopData.enabled && typeof toggleDryHopLine === 'function') toggleDryHopLine();
+            if (typeof removeHopData !== 'undefined' && !removeHopData.enabled && typeof toggleRemoveHopsLine === 'function') toggleRemoveHopsLine();
             if (typeof rackDumpData !== 'undefined' && !rackDumpData.enabled && typeof toggleRackDumpLine === 'function') toggleRackDumpLine();
         }},
         { selector: '#tour-fake-custom-card', i18nKey: 'step7', action: () => {
