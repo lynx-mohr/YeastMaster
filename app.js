@@ -3518,7 +3518,7 @@ window.startLibraryTour = function() {
             }
         }},
         { selector: '#yeast-info-modal .hw-profile-btn', i18nKey: 'step3', alignLeft: true, action: () => {} },
-        { selector: '#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]', i18nKey: 'step4', action: () => {
+        { selector: '#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]', i18nKey: 'step4', offsetY: -120, action: () => {
             const firstProfileBtn = document.querySelector('#yeast-info-modal .hw-profile-btn');
             if (firstProfileBtn && !firstProfileBtn.classList.contains('active')) firstProfileBtn.click(); 
             setTimeout(() => { const targetBtn = document.querySelector('#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]'); if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);
@@ -3658,7 +3658,7 @@ window.nextLibraryTourStep = function(e) {
                 }
 
                 const finalRect = target.getBoundingClientRect();
-                let topPos = finalRect.bottom + window.scrollY + 5; 
+                let topPos = finalRect.bottom + window.scrollY + (step.offsetY ?? 5); 
                 let leftPos = step.alignLeft ? (finalRect.left + window.scrollX + 20) : (finalRect.left + window.scrollX + (finalRect.width / 2));
 
                 tooltip.style.top = topPos + 'px';
