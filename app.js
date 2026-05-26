@@ -3523,16 +3523,16 @@ window.startLibraryTour = function() {
             if (firstProfileBtn && !firstProfileBtn.classList.contains('active')) firstProfileBtn.click(); 
             setTimeout(() => { const targetBtn = document.querySelector('#yeast-info-modal .btn-secondary[onclick*="loadProfileIntoLab"]'); if (targetBtn) targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);
         }},
-  { selector: '#lab-chart', i18nKey: 'step5', centerViewport: true, action: () => {
+  { selector: '#lab-chart', i18nKey: 'step5', action: () => {
             if (typeof closeYeastModal === 'function') closeYeastModal();
-            document.body.style.overflow = 'hidden'; 
+            document.body.style.overflow = 'hidden';
             // VIP-PASS FRAMVISAT: (false för pushHistory, true för forceOverride)
-            if (typeof showView === 'function') showView('lab', false, true); 
+            if (typeof showView === 'function') showView('lab', false, true);
             window.scrollTo({ top: 0, behavior: 'instant' });
             setTimeout(() => {
                 const yeast = yeastStrains.find(y => y.id === 'us-05');
                 if (yeast && typeof loadProfileIntoLab === 'function') {
-                    let firstProfileName = "Standard / Low Ester"; 
+                    let firstProfileName = "Standard / Low Ester";
                     if (typeof yeastDatabase !== 'undefined' && yeastDatabase.yeasts) {
                         const profiles = yeastDatabase.yeasts.filter(p => p.s === "US-05");
                         if (profiles.length > 0) firstProfileName = profiles[0].p;
@@ -3541,9 +3541,12 @@ window.startLibraryTour = function() {
                     if (typeof labChart !== 'undefined' && labChart !== null) { labChart.resize(); labChart.update('none'); }
                     if (typeof updateSummaryText === 'function') updateSummaryText();
                 }
-            }, 300); 
+                // Scrolla grafen till mitten så man ser mittdelen av jäsningskurvan
+                const chartContainer = document.querySelector('#view-lab .chart-container');
+                if (chartContainer) chartContainer.scrollLeft = (chartContainer.scrollWidth - chartContainer.clientWidth) / 2;
+            }, 300);
         }},
-        { selector: '#lab-chart', i18nKey: 'step6', centerViewport: true, action: () => {
+        { selector: '#lab-chart', i18nKey: 'step6', action: () => {
             if (typeof rackDumpData !== 'undefined') rackDumpData.day = 5.5;
             if (typeof dryHopData !== 'undefined' && !dryHopData.enabled && typeof toggleDryHopLine === 'function') toggleDryHopLine();
             if (typeof removeHopData !== 'undefined' && !removeHopData.enabled && typeof toggleRemoveHopsLine === 'function') toggleRemoveHopsLine();
@@ -3677,13 +3680,11 @@ window.nextLibraryTourStep = function(e) {
                 const ttWidth = tooltip.offsetWidth;
                 const screenWidth = window.innerWidth;
 
-                // Centrera på skärmbredd (left = vänsterkant, inte mittpunkt)
-                if (step.centerViewport) {
-                    tooltip.style.left = Math.max(15, (screenWidth - ttWidth) / 2) + 'px';
-                } else {
-                    if (leftPos + (ttWidth / 2) > screenWidth - 15) tooltip.style.left = (screenWidth - (ttWidth / 2) - 15) + 'px';
-                    if (leftPos - (ttWidth / 2) < 15) tooltip.style.left = (ttWidth / 2) + 15 + 'px';
-                }
+                // Klämma vänsterkanten inom synligt viewport (left är vänsterkant, leftPos är center)
+                const minLeft = window.scrollX + 15;
+                const maxLeft = window.scrollX + screenWidth - ttWidth - 15;
+                const centeredLeft = leftPos - ttWidth / 2;
+                tooltip.style.left = Math.max(minLeft, Math.min(maxLeft, centeredLeft)) + 'px';
 
                 tooltip.style.animation = 'none';
                 void tooltip.offsetWidth;
