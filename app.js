@@ -3708,11 +3708,12 @@ window.abortLibraryTour = function(e) {
         window._tourShowTooltipTimeout = null;
     }
 
-    // Stäng tour-fönstren
+    // Stäng tour-fönstren och eventuell öppen yeast-modal
     const overlay = document.getElementById('demo-overlay');
     const tooltip = document.getElementById('demo-tour-tooltip');
     if (overlay) { overlay.style.display = 'none'; overlay.onclick = null; }
     if (tooltip) tooltip.style.display = 'none';
+    if (typeof closeYeastModal === 'function') closeYeastModal();
 
     // Städa bort fejk-kort
     const f1 = document.getElementById('tour-fake-custom-card'); if (f1) f1.remove();
