@@ -3,7 +3,6 @@ const crypto = require('crypto');
 const express = require('express');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
-const mongoSanitize = require('express-mongo-sanitize');
 const rateLimit = require('express-rate-limit');
 
 // --- NYTT: Importera web-push ---
@@ -53,8 +52,25 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
-app.use(mongoSanitize());
 app.use(express.static('.'));
+
+// Saniterar bort MongoDB-operatorer ($-prefix) från req.body och req.params.
+// Express 5 gör req.query read-only, så den hanteras per endpoint med isString-kontroller.
+function sanitizeMongo(obj) {
+    if (typeof obj !== 'object' || obj === null) return obj;
+    const result = Array.isArray(obj) ? [] : {};
+    for (const [key, value] of Object.entries(obj)) {
+        if (!key.startsWith('$')) {
+            result[key] = typeof value === 'object' ? sanitizeMongo(value) : value;
+        }
+    }
+    return result;
+}
+app.use((req, res, next) => {
+    if (req.body) req.body = sanitizeMongo(req.body);
+    if (req.params) req.params = sanitizeMongo(req.params);
+    next();
+});
 
 // 500 req / 15 min — täcker dashboard-polling + ESP32-updates för normala användare
 const generalLimiter = rateLimit({
