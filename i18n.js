@@ -4089,7 +4089,7 @@ libTour: {
             title: "Der Profiler",
             info_1: "Wähle einen Hefestamm, dann greife die Punkte und ziehe sie, um deine Gärkurve zu formen.",
             info_2: "Speichern wenn fertig — dein Profil landet direkt in der Hefebibliothek.",
-            info_3: "Vergiss den Trockenhopfen nicht! 🌿",
+            info_3: "Vergiss den Trockenhopfen nicht!",
             profile_name: "PROFILNAME",
             profile_name_placeholder: "z.B. JUICEBMB",
             pick_strain: "Hefe wählen",
