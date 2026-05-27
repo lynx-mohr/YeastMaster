@@ -1711,9 +1711,9 @@ function initLabChart() {
                             },
                             title: {
                                 display: true,
-                                text: `°${currentTempUnit}`,
+                                text: `Temp (°${currentTempUnit})`,
                                 color: textColor,
-                                font: { family: 'Lexend', weight: '800', size: 11 }
+                                font: { family: 'Lexend', weight: '800' }
                             }
                         },
                         x: {
