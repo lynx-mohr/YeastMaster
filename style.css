@@ -378,7 +378,7 @@ body.light-mode .summary-row {
 
 /* Y-axel sidebar: sticky till vänster, rullar inte med */
 #lab-yaxis-sidebar {
-    width: 50px;
+    width: 62px;
     flex-shrink: 0;
     height: 100%;
     position: relative;

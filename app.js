@@ -1709,7 +1709,12 @@ function initLabChart() {
                                 font: { family: 'Lexend', weight: '600' },
                                 padding: 4
                             },
-                            title: { display: false }
+                            title: {
+                                display: true,
+                                text: `°${currentTempUnit}`,
+                                color: textColor,
+                                font: { family: 'Lexend', weight: '800', size: 11 }
+                            }
                         },
                         x: {
                             display: false,
