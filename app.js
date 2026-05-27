@@ -4593,17 +4593,18 @@ function renderDemoDashboard() {
     if (typeof updateChart === 'function') {
         updateChart(fakeChartData); 
     }
-// --- MOBILJUSTERING FÖR i-KNAPPEN ---
+// --- VISA OCH PLACERA i-KNAPPEN ---
 const demoBtn = document.getElementById('start-demo-btn');
 if (demoBtn) {
-    const isMobile = window.innerWidth <= 768; // Känner av om det är mobil
-    
+    demoBtn.style.display = '';  // Återställ om den doldes av inloggad vy
+
+    const isMobile = window.innerWidth <= 768;
     if (isMobile) {
-        demoBtn.style.left = '55%';  // Skjuter till höger på mobilen så den slipper DEMO-MODUS
-        demoBtn.style.top = '14px';   // Flyttar ner den en millimeter extra på mobilen
+        demoBtn.style.left = '48%';
+        demoBtn.style.top = '14px';
     } else {
-        demoBtn.style.left = '42%';  // Ditt perfekta läge på datorn
-        demoBtn.style.top = '12px';   // Flyttar ner den en millimeter på datorn så den slipper taket
+        demoBtn.style.left = '42%';
+        demoBtn.style.top = '12px';
     }
 }
 }
