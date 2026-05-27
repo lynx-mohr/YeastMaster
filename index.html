@@ -209,13 +209,19 @@
     </div>
 </div>
     
-<div class="chart-container" style="height: 300px; width: 100%; position: relative; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;">
-    <div id="chart-placeholder" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; text-align: center; color: #555; font-size: 1.1rem; font-weight: 600; padding: 20px;" data-i18n="lab.chart_placeholder">
+<div class="chart-container" style="height: 300px; width: 100%; position: relative; overflow: hidden; display: flex;">
+    <div id="chart-placeholder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; display: flex; justify-content: center; align-items: center; text-align: center; color: #555; font-size: 1.1rem; font-weight: 600; padding: 20px;" data-i18n="lab.chart_placeholder">
         Pick a base yeast and name your profile above 👆
     </div>
-    
-    <div id="chart-scroll-area" style="min-width: 600px; height: 100%; opacity: 0; transition: opacity 0.5s ease;">
-        <canvas id="lab-chart"></canvas>
+
+    <div id="lab-yaxis-sidebar" style="width: 55px; flex-shrink: 0; height: 100%; position: relative; display: none; opacity: 0; transition: opacity 0.5s ease;">
+        <canvas id="lab-chart-yaxis"></canvas>
+    </div>
+
+    <div id="chart-scroll-area" style="flex: 1; min-width: 0; height: 100%; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; opacity: 0; transition: opacity 0.5s ease;">
+        <div id="chart-inner" style="min-width: 545px; height: 100%; position: relative;">
+            <canvas id="lab-chart"></canvas>
+        </div>
     </div>
 </div>
 
@@ -998,12 +1004,22 @@
     padding: 0 !important;
 }
 
-/* 4. Canvasen sitter på plats */
+/* 4. Fullscreen: Y-axis sidebar hidden, chart scroll area fills container */
+.chart-section.is-fullscreen #lab-yaxis-sidebar {
+    display: none !important;
+}
+
 .chart-section.is-fullscreen #chart-scroll-area {
-    position: absolute !important;
-    top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
-    width: 100% !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    width: auto !important;
     height: 100% !important;
+    position: relative !important;
+    overflow-x: auto !important;
+}
+
+.chart-section.is-fullscreen #chart-inner {
+    min-width: 100% !important;
 }
 </style>
     

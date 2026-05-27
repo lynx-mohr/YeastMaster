@@ -367,19 +367,44 @@ body.light-mode .summary-row {
     max-height: 150px !important;
 }
 
-/* --- 2. THE PROFILER GRAFEN (Stor och scrollbar) --- */
+/* --- 2. THE PROFILER GRAFEN (Stor och scrollbar med sticky Y-axel) --- */
 #view-lab .chart-container {
-    height: 300px; 
+    height: 300px;
     width: 100%;
     position: relative;
-    overflow-x: auto !important; 
-    overflow-y: hidden;        
-    -webkit-overflow-scrolling: touch; 
+    overflow: hidden;
+    display: flex;
 }
 
-/* Säkerställ att själva området inuti faktiskt är bredare än skärmen på mobil */
+/* Y-axel sidebar: sticky till vänster, rullar inte med */
+#lab-yaxis-sidebar {
+    width: 55px;
+    flex-shrink: 0;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+#lab-chart-yaxis {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+/* Scrollbart område: tar upp resterande bredd */
 #chart-scroll-area {
-    min-width: 600px; /* Detta tvingar fram scrollen på små skärmar */
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Inre scroll-innehåll: minsta bredd tvingar fram scrollen */
+#chart-inner {
+    min-width: 545px;
     height: 100%;
     position: relative;
 }
@@ -1796,7 +1821,6 @@ body.light-mode .theme-toggle-compact { background: #eee; border-color: #ccc; }
     /* 4. Sökfältet och grafen ska också krama vänsterkanten */
     #yeast-search,
     .chart-section,
-    #chart-scroll-area,
     #chart-placeholder {
         margin-left: 0 !important;
         width: 100% !important; /* Se till att de fyller hela sektionens bredd */

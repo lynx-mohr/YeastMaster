@@ -212,8 +212,8 @@ window.startLibraryTour = function() {
                     if (typeof updateSummaryText === 'function') updateSummaryText();
                 }
                 // Scrolla grafen till mitten så man ser mittdelen av jäsningskurvan
-                const chartContainer = document.querySelector('#view-lab .chart-container');
-                if (chartContainer) chartContainer.scrollLeft = (chartContainer.scrollWidth - chartContainer.clientWidth) / 2;
+                const chartScrollArea = document.getElementById('chart-scroll-area');
+                if (chartScrollArea) chartScrollArea.scrollLeft = (chartScrollArea.scrollWidth - chartScrollArea.clientWidth) / 2;
             }, 300);
         }},
         { selector: '#lab-chart', i18nKey: 'step6', action: () => {

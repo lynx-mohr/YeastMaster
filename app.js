@@ -1137,6 +1137,7 @@ function setActive(clickedElement) {
 // ==========================================
 
 let labChart;
+let labYAxisChart;
 
 // Vi har nu 6 punkter för att bygga perfekta platta linjer och rampar!
 let profilePoints = [
@@ -1531,10 +1532,15 @@ function initLabChart() {
     if (typeof labChart !== 'undefined' && labChart !== null) {
         labChart.destroy();
     }
+    if (typeof labYAxisChart !== 'undefined' && labYAxisChart !== null) {
+        labYAxisChart.destroy();
+        labYAxisChart = null;
+    }
 
     // --- LIVE-KOLL AV TEMAT ---
     const isLightMode = document.body.classList.contains('light-mode');
     const isMobile = window.innerWidth <= 768;
+    const useYAxisSidebar = !isChartFullscreen;
 
     // --- FÄRGER OCH VARIABLER ---
     const themeAccent = '#f4c95d'; 
@@ -1588,24 +1594,27 @@ function initLabChart() {
             responsive: true,
             maintainAspectRatio: false,
             layout: {
-                padding: { top: 30, right: 30, bottom: 10, left: 10 }
+                padding: { top: 30, right: 30, bottom: 10, left: useYAxisSidebar ? 0 : 10 }
             },
             scales: {
                 y: {
                     type: 'linear',
                     min: currentTempUnit === 'F' ? 28 : -2,
                     max: currentTempUnit === 'F' ? 104 : 40,
-                    grid: { 
+                    grid: {
                         color: 'rgba(255, 255, 255, 0.08)',
-                        borderColor: gridBorderColor,
-                        tickLength: 8 
+                        borderColor: useYAxisSidebar ? 'transparent' : gridBorderColor,
+                        drawBorder: !useYAxisSidebar,
+                        tickLength: useYAxisSidebar ? 0 : 8
                     },
-                    ticks: { 
+                    ticks: {
+                        display: !useYAxisSidebar,
                         color: '#888888',
                         font: { family: 'Lexend', weight: '600' },
-                        padding: 6 
+                        padding: 6
                     },
-                    title: { display: true, text: `Temp (°${currentTempUnit})`, color: textColor, font: { family: 'Lexend', weight: '800' } }
+                    title: { display: !useYAxisSidebar, text: `Temp (°${currentTempUnit})`, color: textColor, font: { family: 'Lexend', weight: '800' } },
+                    afterFit: useYAxisSidebar ? (scale => { scale.width = 0; }) : undefined
                 },
                 x: {
                     type: 'linear',
@@ -1674,6 +1683,56 @@ function initLabChart() {
             }
         }]
     });
+
+    // --- SKAPA Y-AXEL SIDEBAR GRAFEN ---
+    if (useYAxisSidebar) {
+        const yAxisCanvas = document.getElementById('lab-chart-yaxis');
+        if (yAxisCanvas) {
+            const yCtx = yAxisCanvas.getContext('2d');
+            labYAxisChart = new Chart(yCtx, {
+                type: 'scatter',
+                data: { datasets: [] },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 30, right: 0, bottom: 10, left: 10 }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            min: currentTempUnit === 'F' ? 28 : -2,
+                            max: currentTempUnit === 'F' ? 104 : 40,
+                            grid: { display: false },
+                            ticks: {
+                                color: '#888888',
+                                font: { family: 'Lexend', weight: '600' },
+                                padding: 6
+                            },
+                            title: {
+                                display: true,
+                                text: `Temp (°${currentTempUnit})`,
+                                color: textColor,
+                                font: { family: 'Lexend', weight: '800' }
+                            }
+                        },
+                        x: {
+                            display: false,
+                            type: 'linear',
+                            min: 0,
+                            max: 1
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    },
+                    animation: { duration: 0 }
+                }
+            });
+        }
+    }
+
     // --- DRAG LOGIKEN FORTSÄTTER HÄR NERE ---
     let isDragging = false;
     let dragIndex = -1;
@@ -1888,11 +1947,19 @@ function populateBaseYeastDropdown() {
    dropdown.addEventListener('change', function() {
         const placeholder = document.getElementById('chart-placeholder');
         const chartArea = document.getElementById('chart-scroll-area');
+        const yaxisSidebar = document.getElementById('lab-yaxis-sidebar');
         const zoomBtn = document.getElementById('btn-zoom');
-        
+
         if (this.value !== "") {
             // Visa grafen
             if (placeholder) placeholder.style.display = 'none';
+            if (yaxisSidebar) {
+                yaxisSidebar.style.display = '';
+                requestAnimationFrame(() => {
+                    yaxisSidebar.style.opacity = '1';
+                    if (typeof labYAxisChart !== 'undefined' && labYAxisChart) labYAxisChart.resize();
+                });
+            }
             if (chartArea) {
                 chartArea.style.opacity = '1';
                 chartArea.style.pointerEvents = 'auto';
@@ -1906,6 +1973,10 @@ function populateBaseYeastDropdown() {
         } else {
             // Visa "Välj en basjäst..."-texten
             if (placeholder) placeholder.style.display = 'flex';
+            if (yaxisSidebar) {
+                yaxisSidebar.style.opacity = '0';
+                setTimeout(() => { yaxisSidebar.style.display = 'none'; }, 500);
+            }
             if (chartArea) {
                 chartArea.style.opacity = '0';
                 chartArea.style.pointerEvents = 'none';
@@ -5465,12 +5536,19 @@ function toggleLandscapeChart() {
         isChartFullscreen = false;
     }
     
-    // 3. Väck Chart.js!
+    // 3. Återskapa grafen med rätt Y-axelläge för det nya läget
     setTimeout(() => {
-        if (typeof labChart !== 'undefined') {
-            labChart.options.maintainAspectRatio = !isChartFullscreen; 
-            labChart.update('none'); 
-            labChart.resize();
+        if (typeof initLabChart === 'function') initLabChart();
+        if (!isChartFullscreen) {
+            const chartArea = document.getElementById('chart-scroll-area');
+            const yaxisSidebar = document.getElementById('lab-yaxis-sidebar');
+            if (yaxisSidebar && chartArea && parseFloat(chartArea.style.opacity || '0') > 0) {
+                yaxisSidebar.style.display = '';
+                requestAnimationFrame(() => {
+                    yaxisSidebar.style.opacity = '1';
+                    if (typeof labYAxisChart !== 'undefined' && labYAxisChart) labYAxisChart.resize();
+                });
+            }
         }
     }, 300);
 }
@@ -5480,17 +5558,22 @@ document.addEventListener('fullscreenchange', () => {
     if (!document.fullscreenElement && isChartFullscreen) {
         const chartSection = document.querySelector('#view-lab .chart-section');
         if (chartSection) chartSection.classList.remove('is-fullscreen');
-        
+
         const btn = document.getElementById('btn-fullscreen');
         if (btn) btn.innerHTML = '⤢ FULLSCREEN';
         if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
         isChartFullscreen = false;
-        
+
         setTimeout(() => {
-            if (typeof labChart !== 'undefined') {
-                labChart.options.maintainAspectRatio = true;
-                labChart.update('none'); 
-                labChart.resize();
+            if (typeof initLabChart === 'function') initLabChart();
+            const chartArea = document.getElementById('chart-scroll-area');
+            const yaxisSidebar = document.getElementById('lab-yaxis-sidebar');
+            if (yaxisSidebar && chartArea && parseFloat(chartArea.style.opacity || '0') > 0) {
+                yaxisSidebar.style.display = '';
+                requestAnimationFrame(() => {
+                    yaxisSidebar.style.opacity = '1';
+                    if (typeof labYAxisChart !== 'undefined' && labYAxisChart) labYAxisChart.resize();
+                });
             }
         }, 300);
     }
