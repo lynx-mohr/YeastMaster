@@ -1714,7 +1714,8 @@ function initLabChart() {
                                 text: `Temp (°${currentTempUnit})`,
                                 color: textColor,
                                 font: { family: 'Lexend', weight: '800' }
-                            }
+                            },
+                            afterFit(scale) { scale.width = 68; }
                         },
                         x: {
                             display: false,
