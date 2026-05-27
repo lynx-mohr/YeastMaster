@@ -4601,9 +4601,9 @@ if (demoBtn) {
     const isMobile = window.innerWidth <= 768;
     if (isMobile) {
         demoBtn.style.left = '48%';
-        demoBtn.style.top = '22px';
+        demoBtn.style.top = '16px';
     } else {
-        demoBtn.style.left = '32%';
+        demoBtn.style.left = '38%';
         demoBtn.style.top = '12px';
     }
 }
