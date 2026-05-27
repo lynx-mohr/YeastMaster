@@ -1696,7 +1696,7 @@ function initLabChart() {
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 30, right: 0, bottom: 10, left: 10 }
+                        padding: { top: 30, right: 0, bottom: 10, left: 4 }
                     },
                     scales: {
                         y: {
@@ -1707,14 +1707,9 @@ function initLabChart() {
                             ticks: {
                                 color: '#888888',
                                 font: { family: 'Lexend', weight: '600' },
-                                padding: 6
+                                padding: 4
                             },
-                            title: {
-                                display: true,
-                                text: `Temp (°${currentTempUnit})`,
-                                color: textColor,
-                                font: { family: 'Lexend', weight: '800' }
-                            }
+                            title: { display: false }
                         },
                         x: {
                             display: false,
