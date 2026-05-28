@@ -776,8 +776,20 @@ canvas#beer-chart {
     50% { opacity: 0; } 
 }
 
-.blink-active { 
-    animation: blinker 1s step-start infinite !important; 
+.blink-active {
+    animation: blinker 1s step-start infinite !important;
+}
+
+@keyframes rampPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 0.25; }
+}
+.ramping-label {
+    font-size: 0.72em;
+    font-weight: 600;
+    color: #aaa;
+    animation: rampPulse 2.2s ease-in-out infinite;
+    white-space: nowrap;
 }
 
 /* --- THE ARCANE LAB --- */

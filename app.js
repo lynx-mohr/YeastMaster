@@ -604,8 +604,8 @@ if (displayStatusText === 'RAMPING' || isActivelyRamping) {
     }
     const rampWord = translations[window.currentLang]?.phase?.RAMPING || 'Ramping';
     statusEl.innerHTML = contextPhase
-        ? `${contextPhase} - <span class="blink-active">${rampWord}</span>`
-        : `<span class="blink-active">${rampWord}</span>`;
+        ? `${contextPhase} - <span class="ramping-label">${rampWord}</span>`
+        : `<span class="ramping-label">${rampWord}</span>`;
 } else {
     statusEl.innerText = translatedStatus;
 }
@@ -4596,7 +4596,7 @@ function renderDemoDashboard() {
     const contextPhase = translations[window.currentLang]?.phase?.PRIMARY || "PRIMARY";
     const rampWord = translations[window.currentLang]?.phase?.RAMPING || "Ramping";
     document.getElementById('status-text').innerHTML =
-        `${contextPhase} - <span class="blink-active">${rampWord}</span>`;
+        `${contextPhase} - <span class="ramping-label">${rampWord}</span>`;
 
     // 6. Tidsformat (Använder din universella formatDaysToHuman)
     // 4 dagar och 2 timmar = 4 + (2/24)
