@@ -3619,7 +3619,7 @@ slurry_info_tip: "Pro-tip: If unsure, choose \"Thin\". Pitching slightly more sl
             PRIMARY: "PRIMARY",
             "DIACETYL REST": "DIACETYL REST",
             "COLD CRASH": "COLD CRASH",
-            RAMPING: "Ramp"
+            RAMPING: "RAMP"
         },
         status: {
             offline: "OFFLINE",
@@ -3989,7 +3989,7 @@ house_bank: {
             PRIMARY: "PRIMÄR",
             "DIACETYL REST": "DIAKETYLRAST",
             "COLD CRASH": "KALLKRASCH",
-            RAMPING: "Ramp"
+            RAMPING: "RAMP"
         },
         status: {
             offline: "OFFLINE",
@@ -4354,7 +4354,7 @@ card2_p2: "Unsere Bibliothek bietet detaillierte Anleitungen, wie du jeden Stamm
             PRIMARY: "HAUPTGÄRUNG",
             "DIACETYL REST": "DIACETYLRAST",
             "COLD CRASH": "COLD CRASH",
-            RAMPING: "Ramp"
+            RAMPING: "RAMP"
         },
         status: {
             offline: "OFFLINE",
