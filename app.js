@@ -604,10 +604,8 @@ if (displayStatusText === 'RAMPING' || isActivelyRamping) {
         // Firmware skickar fasnamnet direkt (t.ex. COLD CRASH) medan den rampar
         contextPhase = translatedStatus;
     }
-    const rampWord = translations[window.currentLang]?.phase?.RAMPING || 'Ramping';
-    statusEl.innerHTML = contextPhase
-        ? `${contextPhase} - <span class="ramping-label">${rampWord}</span>`
-        : `<span class="ramping-label">${rampWord}</span>`;
+    const rampSpan = `<span class="ramping-label"><span class="ramp-short">Ramp</span><span class="ramp-long">Ramping</span></span>`;
+    statusEl.innerHTML = contextPhase ? `${contextPhase} - ${rampSpan}` : rampSpan;
 } else {
     statusEl.innerText = translatedStatus;
 }
@@ -4594,11 +4592,10 @@ function renderDemoDashboard() {
     
     document.getElementById('air-temp-val').innerText = currentTempUnit === 'F' ? "73.4°F" : "23.0°C";
     
-    // 5. Visa fas + blinkande "Ramping"
+    // 5. Visa fas + pulserande Ramp/Ramping
     const contextPhase = translations[window.currentLang]?.phase?.PRIMARY || "PRIMARY";
-    const rampWord = translations[window.currentLang]?.phase?.RAMPING || "Ramping";
     document.getElementById('status-text').innerHTML =
-        `${contextPhase} - <span class="ramping-label">${rampWord}</span>`;
+        `${contextPhase} - <span class="ramping-label"><span class="ramp-short">Ramp</span><span class="ramp-long">Ramping</span></span>`;
 
     // 6. Tidsformat (Använder din universella formatDaysToHuman)
     // 4 dagar och 2 timmar = 4 + (2/24)

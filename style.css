@@ -791,6 +791,11 @@ canvas#beer-chart {
     animation: rampPulse 2.2s ease-in-out infinite;
     white-space: nowrap;
 }
+.ramp-long { display: none; }
+@media (min-width: 769px) {
+    .ramp-short { display: none; }
+    .ramp-long { display: inline; }
+}
 
 /* --- THE ARCANE LAB --- */
 
