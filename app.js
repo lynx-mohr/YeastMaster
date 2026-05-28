@@ -602,7 +602,7 @@ if (displayStatusText === 'RAMPING' || isActivelyRamping) {
         // Firmware skickar fasnamnet direkt (t.ex. COLD CRASH) medan den rampar
         contextPhase = translatedStatus;
     }
-    const rampWord = translations[window.currentLang]?.phase?.RAMPING || 'Ramping';
+    const rampWord = translations[window.currentLang]?.phase?.RAMPING || 'Ramp';
     statusEl.innerHTML = contextPhase
         ? `${contextPhase} - <span class="ramping-label">${rampWord}</span>`
         : `<span class="ramping-label">${rampWord}</span>`;
