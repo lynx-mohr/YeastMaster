@@ -1684,6 +1684,15 @@ function initLabChart() {
         }]
     });
 
+    // --- SÄTT RÄTT SPRÅK PÅ DAYS-LABELN ---
+    const daysLabelEl = document.getElementById('lab-days-label');
+    if (daysLabelEl) {
+        let xLabel = "Days";
+        if (window.currentLang === 'sv') xLabel = "Dagar";
+        if (window.currentLang === 'de') xLabel = "Tage";
+        daysLabelEl.textContent = xLabel;
+    }
+
     // --- SKAPA Y-AXEL SIDEBAR GRAFEN ---
     if (useYAxisSidebar) {
         const yAxisCanvas = document.getElementById('lab-chart-yaxis');
@@ -5497,7 +5506,7 @@ window.addEventListener('languageChanged', () => {
 
     // Uppdatera den fasta Days-labeln under grafen
     const daysLabel = document.getElementById('lab-days-label');
-    if (daysLabel) daysLabel.textContent = xAxisLabel.toUpperCase();
+    if (daysLabel) daysLabel.textContent = xAxisLabel;
 
     // MAGIN: Tvinga även sammanfattningen (Profile Summary) att direkt översätta sig!
     if (typeof updateSummaryText === 'function') {
