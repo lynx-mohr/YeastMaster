@@ -416,6 +416,15 @@ window.abortLibraryTour = function(e) {
     window.isLibraryTourActive = false;
     window.currentLibStep = 0;
 
+    // Nollställ Profiler-grafen om den laddades av touren
+    if (typeof dryHopData !== 'undefined' && dryHopData.enabled && typeof toggleDryHopLine === 'function') toggleDryHopLine();
+    if (typeof removeHopData !== 'undefined' && removeHopData.enabled && typeof toggleRemoveHopsLine === 'function') toggleRemoveHopsLine();
+    if (typeof rackDumpData !== 'undefined' && rackDumpData.enabled && typeof toggleRackDumpLine === 'function') toggleRackDumpLine();
+    const strainSelect = document.getElementById('custom-base-yeast');
+    const nameInput = document.getElementById('custom-profile-name');
+    if (strainSelect) { strainSelect.value = ''; strainSelect.dispatchEvent(new Event('change')); }
+    if (nameInput) nameInput.value = '';
+
     // Om vi är i Lab-vyn, hoppa tillbaka till biblioteket
     const labView = document.getElementById('view-lab');
     if (labView && labView.style.display === 'block') {
