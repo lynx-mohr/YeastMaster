@@ -34,7 +34,7 @@ body {
 :root { 
     --oled-color: #e0e0e0; 
     --oled-bg: #000000; 
-    --accent-color: #00e5ff;
+    --accent-color: #8CC63F;
     --accent-secondary: #F2994A; /* NY: Sekundär färg (Varm Guld/Orange) */
     --text-main: #ffffff;    /* För citat och stark text */
     --text-dim: #bbbbbb;     /* För den gråa brödtexten */
@@ -788,7 +788,7 @@ canvas#beer-chart {
     font-size: 0.9em;
     font-weight: 600;
     text-transform: uppercase;
-    color: #aaa;
+    color: var(--accent-color);
     animation: rampPulse 2.2s ease-in-out infinite;
     white-space: nowrap;
 }
