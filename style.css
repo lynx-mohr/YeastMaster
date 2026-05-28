@@ -787,6 +787,7 @@ canvas#beer-chart {
 .ramping-label {
     font-size: 0.9em;
     font-weight: 600;
+    text-transform: uppercase;
     color: #aaa;
     animation: rampPulse 2.2s ease-in-out infinite;
     white-space: nowrap;
