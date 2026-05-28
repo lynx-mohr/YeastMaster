@@ -480,6 +480,8 @@ async function updateDashboard() {
 
             if (latest && latest.time && typeof updateHeartbeatDisplay === 'function') {
                 updateHeartbeatDisplay(latest.time);
+                // Håll device-objektet synkat så att timern och dropdown-klick alltid använder rätt stämpel
+                if (window.currentDeviceData) window.currentDeviceData.lastSeen = latest.time;
             }
 
             // ==========================================
@@ -602,7 +604,7 @@ if (displayStatusText === 'RAMPING' || isActivelyRamping) {
         // Firmware skickar fasnamnet direkt (t.ex. COLD CRASH) medan den rampar
         contextPhase = translatedStatus;
     }
-    const rampWord = translations[window.currentLang]?.phase?.RAMPING || 'Ramp';
+    const rampWord = translations[window.currentLang]?.phase?.RAMPING || 'Ramping';
     statusEl.innerHTML = contextPhase
         ? `${contextPhase} - <span class="ramping-label">${rampWord}</span>`
         : `<span class="ramping-label">${rampWord}</span>`;
