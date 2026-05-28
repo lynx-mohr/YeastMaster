@@ -579,10 +579,27 @@ document.getElementById('action-val').innerText = translatedAction;
             }
 
       // Kolla först i "phase"-ordboken, sen i "status"-ordboken
-const translatedStatus = translations[window.currentLang]?.phase?.[displayStatusText] 
-                      || translations[window.currentLang]?.status?.[displayStatusText] 
+const translatedStatus = translations[window.currentLang]?.phase?.[displayStatusText]
+                      || translations[window.currentLang]?.status?.[displayStatusText]
                       || displayStatusText;
-document.getElementById('status-text').innerText = translatedStatus;
+const statusEl = document.getElementById('status-text');
+if (displayStatusText === 'RAMPING') {
+    // Hitta senaste icke-RAMPING fas bakåt i historiken
+    let contextPhase = '';
+    for (let i = sortedData.length - 1; i >= 0; i--) {
+        const s = (sortedData[i].status || '').toUpperCase();
+        if (s && s !== 'RAMPING' && s !== '--' && s !== 'IDLE' && s !== 'FINISHED') {
+            contextPhase = translations[window.currentLang]?.phase?.[s] || s;
+            break;
+        }
+    }
+    const rampWord = translations[window.currentLang]?.phase?.RAMPING || 'Ramping';
+    statusEl.innerHTML = contextPhase
+        ? `${contextPhase} - <span class="blink-active">${rampWord}</span>`
+        : `<span class="blink-active">${rampWord}</span>`;
+} else {
+    statusEl.innerText = translatedStatus;
+}
 
             // --- VÄCK LARM-DETEKTIVEN ---
             const currentStrain = latest.strain || "Unknown";
@@ -4566,12 +4583,11 @@ function renderDemoDashboard() {
     
     document.getElementById('air-temp-val').innerText = currentTempUnit === 'F' ? "73.4°F" : "23.0°C";
     
-    // 5. Översätt "RAMPING"
-    const statusText = "RAMPING";
-    const translatedStatus = translations[window.currentLang]?.phase?.[statusText] 
-                          || translations[window.currentLang]?.status?.[statusText] 
-                          || statusText;
-    document.getElementById('status-text').innerText = translatedStatus;
+    // 5. Visa fas + blinkande "Ramping"
+    const contextPhase = translations[window.currentLang]?.phase?.PRIMARY || "PRIMARY";
+    const rampWord = translations[window.currentLang]?.phase?.RAMPING || "Ramping";
+    document.getElementById('status-text').innerHTML =
+        `${contextPhase} - <span class="blink-active">${rampWord}</span>`;
 
     // 6. Tidsformat (Använder din universella formatDaysToHuman)
     // 4 dagar och 2 timmar = 4 + (2/24)

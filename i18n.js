@@ -3618,7 +3618,8 @@ slurry_info_tip: "Pro-tip: If unsure, choose \"Thin\". Pitching slightly more sl
         phase: {
             PRIMARY: "PRIMARY",
             "DIACETYL REST": "DIACETYL REST",
-            "COLD CRASH": "COLD CRASH"
+            "COLD CRASH": "COLD CRASH",
+            RAMPING: "Ramping"
         },
         status: {
             offline: "OFFLINE",
@@ -3987,7 +3988,8 @@ house_bank: {
         phase: {
             PRIMARY: "PRIMÄR",
             "DIACETYL REST": "DIAKETYLRAST",
-            "COLD CRASH": "KALLKRASCH"
+            "COLD CRASH": "KALLKRASCH",
+            RAMPING: "Rampning"
         },
         status: {
             offline: "OFFLINE",
@@ -4351,7 +4353,8 @@ card2_p2: "Unsere Bibliothek bietet detaillierte Anleitungen, wie du jeden Stamm
         phase: {
             PRIMARY: "HAUPTGÄRUNG",
             "DIACETYL REST": "DIACETYLRAST",
-            "COLD CRASH": "COLD CRASH" 
+            "COLD CRASH": "COLD CRASH",
+            RAMPING: "Ramping"
         },
         status: {
             offline: "OFFLINE",
