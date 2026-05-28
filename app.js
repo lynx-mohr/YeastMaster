@@ -583,15 +583,24 @@ const translatedStatus = translations[window.currentLang]?.phase?.[displayStatus
                       || translations[window.currentLang]?.status?.[displayStatusText]
                       || displayStatusText;
 const statusEl = document.getElementById('status-text');
-if (displayStatusText === 'RAMPING') {
-    // Hitta senaste icke-RAMPING fas bakåt i historiken
+const isActivelyRamping = (action === 'HEATING' || action === 'COOLING') &&
+    (latest.target_temp || 0) > -100 &&
+    Math.abs((latest.temp || 0) - (latest.target_temp || 0)) > 1.5;
+
+if (displayStatusText === 'RAMPING' || isActivelyRamping) {
     let contextPhase = '';
-    for (let i = sortedData.length - 1; i >= 0; i--) {
-        const s = (sortedData[i].status || '').toUpperCase();
-        if (s && s !== 'RAMPING' && s !== '--' && s !== 'IDLE' && s !== 'FINISHED') {
-            contextPhase = translations[window.currentLang]?.phase?.[s] || s;
-            break;
+    if (displayStatusText === 'RAMPING') {
+        // Firmware skickar RAMPING — hitta senaste riktiga fasnamn bakåt i historiken
+        for (let i = sortedData.length - 1; i >= 0; i--) {
+            const s = (sortedData[i].status || '').toUpperCase();
+            if (s && s !== 'RAMPING' && s !== '--' && s !== 'IDLE' && s !== 'FINISHED') {
+                contextPhase = translations[window.currentLang]?.phase?.[s] || s;
+                break;
+            }
         }
+    } else {
+        // Firmware skickar fasnamnet direkt (t.ex. COLD CRASH) medan den rampar
+        contextPhase = translatedStatus;
     }
     const rampWord = translations[window.currentLang]?.phase?.RAMPING || 'Ramping';
     statusEl.innerHTML = contextPhase
