@@ -1625,7 +1625,7 @@ function initLabChart() {
                         color: '#888888',
                         font: { family: 'Lexend', weight: '600' }
                     },
-                    title: { display: true, text: 'Days', color: textColor, font: { family: 'Lexend', weight: '800' } }
+                    title: { display: !useYAxisSidebar, text: 'Days', color: textColor, font: { family: 'Lexend', weight: '800' } }
                 }
             },
             plugins: {
@@ -1949,6 +1949,7 @@ function populateBaseYeastDropdown() {
         const placeholder = document.getElementById('chart-placeholder');
         const chartArea = document.getElementById('chart-scroll-area');
         const yaxisSidebar = document.getElementById('lab-yaxis-sidebar');
+        const daysLabel = document.getElementById('lab-days-label');
         const zoomBtn = document.getElementById('btn-zoom');
 
         if (this.value !== "") {
@@ -1965,6 +1966,7 @@ function populateBaseYeastDropdown() {
                 chartArea.style.opacity = '1';
                 chartArea.style.pointerEvents = 'auto';
             }
+            if (daysLabel) daysLabel.style.display = '';
             if (zoomBtn) zoomBtn.style.display = 'block';
 
             // --- HÄR ÄR FIXEN: Trigga sammanfattningen direkt! ---
@@ -1982,6 +1984,7 @@ function populateBaseYeastDropdown() {
                 chartArea.style.opacity = '0';
                 chartArea.style.pointerEvents = 'none';
             }
+            if (daysLabel) daysLabel.style.display = 'none';
             if (zoomBtn) zoomBtn.style.display = 'none';
         }
     });
@@ -5481,16 +5484,20 @@ window.addEventListener('languageChanged', () => {
 
 // Lyssna på när språket ändras för att översätta Chart.js-grafen i Profiler
 window.addEventListener('languageChanged', () => {
+    let xAxisLabel = "Days";
+    if (window.currentLang === 'sv') xAxisLabel = "Dagar";
+    if (window.currentLang === 'de') xAxisLabel = "Tage";
+
     if (typeof labChart !== 'undefined' && labChart !== null) {
-        let xAxisLabel = "Days";
-        if (window.currentLang === 'sv') xAxisLabel = "Dagar";
-        if (window.currentLang === 'de') xAxisLabel = "Tage";
-        
         if (labChart.options.scales.x.title) {
             labChart.options.scales.x.title.text = xAxisLabel;
         }
-        labChart.update('none'); // Uppdatera grafen ljudlöst utan animation
+        labChart.update('none');
     }
+
+    // Uppdatera den fasta Days-labeln under grafen
+    const daysLabel = document.getElementById('lab-days-label');
+    if (daysLabel) daysLabel.textContent = xAxisLabel.toUpperCase();
 
     // MAGIN: Tvinga även sammanfattningen (Profile Summary) att direkt översätta sig!
     if (typeof updateSummaryText === 'function') {

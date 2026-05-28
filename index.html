@@ -225,6 +225,8 @@
     </div>
 </div>
 
+<div id="lab-days-label" style="display: none; text-align: center; font-size: 0.75rem; color: #888888; font-family: 'Lexend', sans-serif; font-weight: 800; letter-spacing: 1px; padding: 3px 0 2px 75px;">DAYS</div>
+
 <div id="profile-summary" class="phase-info">
     <div class="summary-header" data-i18n="lab.summary_title">PROFILE SUMMARY</div>
     
@@ -1004,8 +1006,9 @@
     padding: 0 !important;
 }
 
-/* 4. Fullscreen: Y-axis sidebar hidden, chart scroll area fills container */
-.chart-section.is-fullscreen #lab-yaxis-sidebar {
+/* 4. Fullscreen: Y-axis sidebar och Days-label dolda, chart scroll area fills container */
+.chart-section.is-fullscreen #lab-yaxis-sidebar,
+.chart-section.is-fullscreen #lab-days-label {
     display: none !important;
 }
 
