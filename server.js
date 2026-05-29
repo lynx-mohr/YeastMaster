@@ -1,6 +1,7 @@
 
 const crypto = require('crypto');
 const express = require('express');
+const helmet = require('helmet');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
 const rateLimit = require('express-rate-limit');
@@ -9,6 +10,7 @@ const rateLimit = require('express-rate-limit');
 const webpush = require('web-push');
 
 const app = express();
+app.use(helmet());
 const PORT = process.env.PORT || 3000;
 
 const uri = process.env.MONGO_URI; 
