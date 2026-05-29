@@ -874,11 +874,10 @@ const loginBtn = document.getElementById('btn-login');
 if (loginBtn) {
     loginBtn.addEventListener('click', () => {
         const provider = new firebase.auth.GoogleAuthProvider();
-        
-        // Försök med Popup först, men fånga upp om mobilen blockerar den
-        auth.signInWithPopup(provider).catch((error) => {
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+            return auth.signInWithPopup(provider);
+        }).catch((error) => {
             if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
-                // Om popup blockeras (vanligt på mobil), kör redirect istället
                 auth.signInWithRedirect(provider);
             } else {
                 console.error("Inloggningsfel:", error);
