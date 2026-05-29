@@ -392,6 +392,34 @@ app.post('/api/remove-device', strictLimiter, verifyToken, async (req, res) => {
 
 
 // ==========================================
+// --- ENHETENS SMEKNAMN ---
+// ==========================================
+app.patch('/api/device-nickname', verifyToken, async (req, res) => {
+    const { device_id, name } = req.body;
+
+    if (!isString(device_id) || device_id.length > 64) {
+        return res.status(400).json({ error: 'Ogiltigt device_id' });
+    }
+    if (!isString(name) || name.length > 64) {
+        return res.status(400).json({ error: 'Ogiltigt name' });
+    }
+
+    try {
+        const result = await userDevicesCollection.updateOne(
+            { uid: req.uid, device_id },
+            { $set: { name: name.trim() } }
+        );
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: 'Enheten hittades inte' });
+        }
+        res.json({ message: 'Smeknamn uppdaterat' });
+    } catch (e) {
+        res.status(500).json({ error: 'Kunde inte uppdatera smeknamnet' });
+    }
+});
+
+
+// ==========================================
 // --- GDPR: RADERA KONTO OCH ALL ANVÄNDARDATA ---
 // ==========================================
 app.delete('/api/delete-account', strictLimiter, verifyToken, async (req, res) => {

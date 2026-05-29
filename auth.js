@@ -201,14 +201,22 @@ auth.onAuthStateChanged(async (user) => {
                     if (typeof updateHeartbeatDisplay === 'function') updateHeartbeatDisplay(activeDev.lastSeen);
                 }
 
+                // Synka molnnamn till localStorage (molnet är sanningskällan)
+                devices.forEach(dev => {
+                    if (dev.name) {
+                        const nicknames = JSON.parse(localStorage.getItem('yeastmaster-nicknames') || '{}');
+                        nicknames[dev.device_id] = dev.name;
+                        localStorage.setItem('yeastmaster-nicknames', JSON.stringify(nicknames));
+                    }
+                });
+
                 // 2. FYLL RULLISTAN I SETTINGS
                 if (deviceSelect) {
                     deviceSelect.innerHTML = '';
                     devices.forEach(dev => {
                         const opt = document.createElement('option');
                         opt.value = dev.device_id;
-                        const localName = getSavedNickname(dev.device_id);
-                        opt.textContent = localName !== 'MIN YEASTMASTER' ? localName : (dev.name || dev.device_id);
+                        opt.textContent = dev.name || dev.device_id;
                         deviceSelect.appendChild(opt);
                     });
                     deviceSelect.value = activeDeviceId;
@@ -221,14 +229,14 @@ auth.onAuthStateChanged(async (user) => {
                     devices.forEach(dev => {
                         const opt = document.createElement('option');
                         opt.value = dev.device_id;
-                        const localName = getSavedNickname(dev.device_id);
-                        opt.textContent = localName !== 'MIN YEASTMASTER' ? localName : (dev.name || dev.device_id);
+                        opt.textContent = dev.name || dev.device_id;
                         syncDropdown.appendChild(opt);
                     });
                 }
 
                 // 4. LADDA NAMN TILL DASHBOARD
-                const currentNick = getSavedNickname(activeDeviceId);
+                const activeDev2 = devices.find(d => d.device_id === activeDeviceId) || devices[0];
+                const currentNick = activeDev2?.name || getSavedNickname(activeDeviceId);
                 if (nickInput) nickInput.value = currentNick !== 'MIN YEASTMASTER' ? currentNick : '';
                 updateDashboardNickname(currentNick);
 

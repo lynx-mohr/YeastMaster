@@ -101,11 +101,25 @@ function getSavedNickname(deviceId) {
     return nicknames[deviceId] || "MIN YEASTMASTER";
 }
 
-function saveNickname(deviceId, name) {
+async function saveNickname(deviceId, name) {
     if (!deviceId) return;
     const nicknames = JSON.parse(localStorage.getItem('yeastmaster-nicknames') || '{}');
     nicknames[deviceId] = name;
     localStorage.setItem('yeastmaster-nicknames', JSON.stringify(nicknames));
+
+    // Synka till molnet så namnet följer med oavsett enhet/webbläsare
+    if (auth.currentUser) {
+        try {
+            const headers = await getAuthHeaders();
+            await fetch(`${API_BASE}/device-nickname`, {
+                method: 'PATCH',
+                headers,
+                body: JSON.stringify({ device_id: deviceId, name })
+            });
+        } catch (e) {
+            console.warn('Kunde inte synka smeknamn till molnet:', e);
+        }
+    }
 }
 
 
