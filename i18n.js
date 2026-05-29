@@ -3392,6 +3392,21 @@ const translations = {
             
         },
         
+        login: {
+            btn: "Sign in with Google",
+            btn_email: "Sign in",
+            create_account: "Create account",
+            forgot: "Forgot password?",
+            or: "or",
+            create_title: "Create account",
+            password_hint: "Password (min 6 chars)",
+            confirm_hint: "Confirm password",
+            register_btn: "Create account",
+            back_login: "← Back to login",
+            reset_title: "Reset password",
+            reset_btn: "Send reset link"
+        },
+
         soul: {
             title: "YEAST",
             subtitle: "The Soul of beer",
@@ -3757,6 +3772,21 @@ slurry_info_tip: "Pro-tip: If unsure, choose \"Thin\". Pitching slightly more sl
             chart_remove_hop: "TA BORT HUMLE 🔔",
             btn_save: "SPARA PROFIL",
             btn_saved_success: "SPARAD! ✓"
+        },
+
+        login: {
+            btn: "Logga in med Google",
+            btn_email: "Logga in",
+            create_account: "Skapa konto",
+            forgot: "Glömt lösenord?",
+            or: "eller",
+            create_title: "Skapa konto",
+            password_hint: "Lösenord (minst 6 tecken)",
+            confirm_hint: "Bekräfta lösenord",
+            register_btn: "Skapa konto",
+            back_login: "← Tillbaka till inloggning",
+            reset_title: "Återställ lösenord",
+            reset_btn: "Skicka återställningslänk"
         },
 
         soul: {
@@ -4125,6 +4155,21 @@ libTour: {
             chart_remove_hop: "HOPFEN ENTFERNEN 🔔",
             btn_save: "PROFIL SPEICHERN",
             btn_saved_success: "GESPEICHERT! ✓" // Tyska
+        },
+
+        login: {
+            btn: "Mit Google anmelden",
+            btn_email: "Anmelden",
+            create_account: "Konto erstellen",
+            forgot: "Passwort vergessen?",
+            or: "oder",
+            create_title: "Konto erstellen",
+            password_hint: "Passwort (min. 6 Zeichen)",
+            confirm_hint: "Passwort bestätigen",
+            register_btn: "Konto erstellen",
+            back_login: "← Zurück zum Login",
+            reset_title: "Passwort zurücksetzen",
+            reset_btn: "Reset-Link senden"
         },
 
         soul: {

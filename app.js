@@ -887,6 +887,78 @@ if (loginBtn) {
     });
 }
 
+// --- 7. EMAIL/LÖSENORD AUTH ---
+(function() {
+    const showAuthView = (view) => {
+        ['login', 'register', 'reset'].forEach(v => {
+            const el = document.getElementById(`auth-view-${v}`);
+            if (el) el.style.display = v === view ? '' : 'none';
+        });
+        ['auth-error-login', 'auth-error-register', 'auth-msg-reset'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+    };
+
+    const showError = (id, msg) => {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = msg; el.style.display = 'block'; }
+    };
+
+    // Navigering mellan vyer
+    document.getElementById('auth-goto-register')?.addEventListener('click', () => showAuthView('register'));
+    document.getElementById('auth-goto-reset')?.addEventListener('click', () => showAuthView('reset'));
+    document.getElementById('auth-goto-login-from-reg')?.addEventListener('click', () => showAuthView('login'));
+    document.getElementById('auth-goto-login-from-reset')?.addEventListener('click', () => showAuthView('login'));
+
+    // Email-inloggning
+    document.getElementById('btn-email-login')?.addEventListener('click', () => {
+        const email = document.getElementById('auth-email').value.trim();
+        const password = document.getElementById('auth-password').value;
+        if (!email || !password) { showError('auth-error-login', 'Enter email and password.'); return; }
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() =>
+            auth.signInWithEmailAndPassword(email, password)
+        ).catch(err => {
+            const msgs = { 'auth/user-not-found': 'No account with that email.', 'auth/wrong-password': 'Wrong password.', 'auth/invalid-email': 'Invalid email.' };
+            showError('auth-error-login', msgs[err.code] || err.message);
+        });
+    });
+
+    // Registrering
+    document.getElementById('btn-register')?.addEventListener('click', () => {
+        const email = document.getElementById('auth-reg-email').value.trim();
+        const pw = document.getElementById('auth-reg-password').value;
+        const pw2 = document.getElementById('auth-reg-confirm').value;
+        if (!email || !pw) { showError('auth-error-register', 'Fill in all fields.'); return; }
+        if (pw !== pw2) { showError('auth-error-register', 'Passwords do not match.'); return; }
+        if (pw.length < 6) { showError('auth-error-register', 'Password must be at least 6 characters.'); return; }
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() =>
+            auth.createUserWithEmailAndPassword(email, pw)
+        ).catch(err => {
+            const msgs = { 'auth/email-already-in-use': 'That email is already registered.', 'auth/invalid-email': 'Invalid email.' };
+            showError('auth-error-register', msgs[err.code] || err.message);
+        });
+    });
+
+    // Glömt lösenord
+    document.getElementById('btn-reset-password')?.addEventListener('click', () => {
+        const email = document.getElementById('auth-reset-email').value.trim();
+        if (!email) { showError('auth-msg-reset', 'Enter your email.'); return; }
+        auth.sendPasswordResetEmail(email).then(() => {
+            const el = document.getElementById('auth-msg-reset');
+            if (el) { el.textContent = 'Reset link sent — check your inbox.'; el.style.color = '#8CC63F'; el.style.display = 'block'; }
+        }).catch(err => {
+            const el = document.getElementById('auth-msg-reset');
+            if (el) { el.textContent = err.message; el.style.color = '#ff4444'; el.style.display = 'block'; }
+        });
+    });
+
+    // Enter-tangent i lösenordsfältet triggar login
+    document.getElementById('auth-password')?.addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('btn-email-login')?.click();
+    });
+})();
+
 // --- 7. KOPPLA ENHET (CLAIM) ---
 if(document.getElementById('btn-claim')) {
     document.getElementById('btn-claim').addEventListener('click', async () => {

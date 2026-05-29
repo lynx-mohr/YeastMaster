@@ -30,7 +30,45 @@
     <div id="login-container">
         <div class="auth-box">
             <h1>YeastMaster</h1>
-                        <button id="btn-login" class="btn-primary" data-i18n="login.btn">Login via Google</button>
+
+            <!-- LOGIN VIEW -->
+            <div id="auth-view-login">
+                <input type="email" id="auth-email" class="ym-input-field" placeholder="Email" style="margin-bottom: 10px;">
+                <input type="password" id="auth-password" class="ym-input-field" placeholder="Password" style="margin-bottom: 14px;">
+                <button id="btn-email-login" class="btn-primary" style="width:100%; margin-bottom: 10px;" data-i18n="login.btn_email">Sign in</button>
+                <div style="display:flex; justify-content:space-between; font-size:0.78rem; margin-bottom: 18px;">
+                    <span id="auth-goto-register" style="color: var(--accent-color); cursor:pointer;" data-i18n="login.create_account">Create account</span>
+                    <span id="auth-goto-reset" style="color: #888; cursor:pointer;" data-i18n="login.forgot">Forgot password?</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:18px;">
+                    <div style="flex:1; height:1px; background:#333;"></div>
+                    <span style="color:#555; font-size:0.75rem;" data-i18n="login.or">or</span>
+                    <div style="flex:1; height:1px; background:#333;"></div>
+                </div>
+                <button id="btn-login" class="btn-secondary" style="width:100%;" data-i18n="login.btn">Sign in with Google</button>
+                <p id="auth-error-login" style="color:#ff4444; font-size:0.8rem; margin-top:10px; display:none;"></p>
+            </div>
+
+            <!-- REGISTER VIEW -->
+            <div id="auth-view-register" style="display:none;">
+                <p style="font-size:0.9rem; font-weight:800; margin-bottom:16px;" data-i18n="login.create_title">Create account</p>
+                <input type="email" id="auth-reg-email" class="ym-input-field" placeholder="Email" style="margin-bottom: 10px;">
+                <input type="password" id="auth-reg-password" class="ym-input-field" placeholder="Password (min 6 chars)" style="margin-bottom: 10px;" data-i18n-placeholder="login.password_hint">
+                <input type="password" id="auth-reg-confirm" class="ym-input-field" placeholder="Confirm password" style="margin-bottom: 14px;" data-i18n-placeholder="login.confirm_hint">
+                <button id="btn-register" class="btn-primary" style="width:100%; margin-bottom:10px;" data-i18n="login.register_btn">Create account</button>
+                <span id="auth-goto-login-from-reg" style="color:#888; font-size:0.8rem; cursor:pointer;" data-i18n="login.back_login">← Back to login</span>
+                <p id="auth-error-register" style="color:#ff4444; font-size:0.8rem; margin-top:10px; display:none;"></p>
+            </div>
+
+            <!-- RESET PASSWORD VIEW -->
+            <div id="auth-view-reset" style="display:none;">
+                <p style="font-size:0.9rem; font-weight:800; margin-bottom:16px;" data-i18n="login.reset_title">Reset password</p>
+                <input type="email" id="auth-reset-email" class="ym-input-field" placeholder="Email" style="margin-bottom: 14px;">
+                <button id="btn-reset-password" class="btn-primary" style="width:100%; margin-bottom:10px;" data-i18n="login.reset_btn">Send reset link</button>
+                <span id="auth-goto-login-from-reset" style="color:#888; font-size:0.8rem; cursor:pointer;" data-i18n="login.back_login">← Back to login</span>
+                <p id="auth-msg-reset" style="font-size:0.8rem; margin-top:10px; display:none;"></p>
+            </div>
+
         </div>
     </div>
 
