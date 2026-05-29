@@ -10,7 +10,32 @@ const rateLimit = require('express-rate-limit');
 const webpush = require('web-push');
 
 const app = express();
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc:       ["'self'"],
+            scriptSrc:        ["'self'", "cdn.jsdelivr.net", "www.gstatic.com"],
+            scriptSrcAttr:    ["'unsafe-inline'"],          // tillåter onclick="..." i HTML
+            styleSrc:         ["'self'", "https:", "'unsafe-inline'"],
+            imgSrc:           ["'self'", "data:", "blob:", "https:"],
+            fontSrc:          ["'self'", "https:", "data:"],
+            connectSrc: [
+                "'self'",
+                "https://soulofbeer-live.onrender.com",
+                "https://*.googleapis.com",
+                "https://*.firebaseapp.com",
+                "https://*.firebaseio.com",
+                "wss://*.firebaseio.com"
+            ],
+            frameSrc:         ["https://yeastmaster-cloud.firebaseapp.com", "https://accounts.google.com"],
+            objectSrc:        ["'none'"],
+            baseUri:          ["'self'"],
+            formAction:       ["'self'"],
+            frameAncestors:   ["'none'"],
+            upgradeInsecureRequests: [],
+        }
+    }
+}));
 const PORT = process.env.PORT || 3000;
 
 const uri = process.env.MONGO_URI; 
