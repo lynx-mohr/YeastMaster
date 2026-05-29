@@ -261,6 +261,7 @@ function showView(viewName, pushToHistory = true, forceOverride = false) {
         lab: document.getElementById('view-lab'),
         dashboard: document.getElementById('view-dashboard'),
         settings: document.getElementById('view-settings'),
+        privacy: document.getElementById('view-privacy'),
         about: document.getElementById('view-about'),
         hardware: document.getElementById('view-hardware'),
         'about-library': document.getElementById('view-about-library'),

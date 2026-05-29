@@ -3407,6 +3407,31 @@ const translations = {
             reset_btn: "Send reset link"
         },
 
+        privacy: {
+            link: "Privacy Policy",
+            back: "← Back",
+            title: "Privacy Policy",
+            updated: "Last updated: May 2026",
+            s1_title: "Who we are",
+            s1_body: "YeastMaster is a fermentation monitoring service operated by Klas Mohr. For questions regarding your personal data, contact:",
+            s2_title: "What data we collect",
+            s2_body: "We collect the following personal data when you use YeastMaster:",
+            s2_li1: "Your email address (via Google or email/password sign-in)",
+            s2_li2: "A unique user ID assigned by Firebase Authentication",
+            s2_li3: "Fermentation data sent by your YeastMaster device (temperature, day, phase, strain name, profile name)",
+            s2_li4: "Device identifiers (MAC address, device name)",
+            s2_li5: "Your yeast library (custom strains and fermentation profiles you create)",
+            s2_li6: "Push notification subscription (if you enable alerts)",
+            s3_title: "Why we collect it",
+            s3_body: "Your data is used solely to provide the YeastMaster service: authenticating your account, storing your devices and library in the cloud, displaying live fermentation data, and sending alerts you have opted into. We do not sell or share your data with third parties for marketing purposes.",
+            s4_title: "Where data is stored",
+            s4_body: "Account credentials are managed by Google Firebase Authentication (EU data processing agreement in place). Fermentation data, devices, and your library are stored in a MongoDB database hosted by MongoDB Atlas. Push notification subscriptions are processed via web-push.",
+            s5_title: "Your rights",
+            s5_body: "Under GDPR you have the right to access, correct, or delete your personal data at any time. You can delete your account and all associated data directly in the app under Settings → Delete account and all data. For other requests, contact us at",
+            s6_title: "Cookies and local storage",
+            s6_body: "YeastMaster uses browser local storage to remember your login session, language preference, temperature unit, and accent colour. No third-party tracking cookies are used."
+        },
+
         soul: {
             title: "YEAST",
             subtitle: "The Soul of beer",
@@ -3614,6 +3639,7 @@ slurry_info_tip: "Pro-tip: If unsure, choose \"Thin\". Pitching slightly more sl
             btn_delete_account: "Delete account and all data",
             delete_confirm_1: "This will permanently delete your account and all your data (devices, yeast library, fermentation logs). This cannot be undone.\n\nAre you sure?",
             delete_confirm_2: "Last chance — delete everything permanently?",
+            privacy_link: "Privacy Policy",
             connected: "CONNECTED",
             offline: "OFFLINE",
             ago: "ago"
@@ -3790,6 +3816,31 @@ slurry_info_tip: "Pro-tip: If unsure, choose \"Thin\". Pitching slightly more sl
             back_login: "← Tillbaka till inloggning",
             reset_title: "Återställ lösenord",
             reset_btn: "Skicka återställningslänk"
+        },
+
+        privacy: {
+            link: "Integritetspolicy",
+            back: "← Tillbaka",
+            title: "Integritetspolicy",
+            updated: "Senast uppdaterad: maj 2026",
+            s1_title: "Vem vi är",
+            s1_body: "YeastMaster är en fermenteringsövervakningstjänst driven av Klas Mohr. Vid frågor om dina personuppgifter, kontakta:",
+            s2_title: "Vilka uppgifter vi samlar in",
+            s2_body: "Vi samlar in följande personuppgifter när du använder YeastMaster:",
+            s2_li1: "Din e-postadress (via Google eller e-post/lösenord-inloggning)",
+            s2_li2: "Ett unikt användar-ID tilldelat av Firebase Authentication",
+            s2_li3: "Fermenteringsdata från din YeastMaster-enhet (temperatur, dag, fas, jäststamm, profilnamn)",
+            s2_li4: "Enhetsidentifierare (MAC-adress, enhetsnamn)",
+            s2_li5: "Ditt jästbibliotek (egna stammar och fermenteringsprofiler du skapar)",
+            s2_li6: "Push-notisprenumeration (om du aktiverar larm)",
+            s3_title: "Varför vi samlar in det",
+            s3_body: "Dina uppgifter används enbart för att tillhandahålla YeastMaster-tjänsten: autentisera ditt konto, lagra enheter och bibliotek i molnet, visa live-fermenteringsdata och skicka larm du valt att ta emot. Vi säljer eller delar inte dina uppgifter med tredje part för marknadsföringsändamål.",
+            s4_title: "Var uppgifter lagras",
+            s4_body: "Kontoinloggning hanteras av Google Firebase Authentication (avtal om EU-databehandling finns). Fermenteringsdata, enheter och ditt bibliotek lagras i en MongoDB-databas hos MongoDB Atlas. Push-notisprenumerationer hanteras via web-push.",
+            s5_title: "Dina rättigheter",
+            s5_body: "Enligt GDPR har du rätt att när som helst få tillgång till, rätta eller radera dina personuppgifter. Du kan radera ditt konto och all tillhörande data direkt i appen under Inställningar → Radera konto och all data. Vid övriga förfrågningar, kontakta oss på",
+            s6_title: "Cookies och lokal lagring",
+            s6_body: "YeastMaster använder webbläsarens lokala lagring för att komma ihåg din inloggningssession, språkval, temperaturenhet och accentfärg. Inga tredjepartscookies för spårning används."
         },
 
         soul: {
@@ -4001,6 +4052,7 @@ house_bank: {
             btn_delete_account: "Radera konto och all data",
             delete_confirm_1: "Detta raderar permanent ditt konto och all din data (enheter, jästbibliotek, jäsningsloggar). Det går inte att ångra.\n\nÄr du säker?",
             delete_confirm_2: "Sista chansen — radera allt permanent?",
+            privacy_link: "Integritetspolicy",
             connected: "ANSLUTEN",
             offline: "FRÅNKOPPLAD",
             ago: "sedan"
@@ -4176,6 +4228,31 @@ libTour: {
             back_login: "← Zurück zum Login",
             reset_title: "Passwort zurücksetzen",
             reset_btn: "Reset-Link senden"
+        },
+
+        privacy: {
+            link: "Datenschutzerklärung",
+            back: "← Zurück",
+            title: "Datenschutzerklärung",
+            updated: "Zuletzt aktualisiert: Mai 2026",
+            s1_title: "Wer wir sind",
+            s1_body: "YeastMaster ist ein Gärüberwachungsdienst, betrieben von Klas Mohr. Bei Fragen zu deinen personenbezogenen Daten wende dich an:",
+            s2_title: "Welche Daten wir erheben",
+            s2_body: "Wir erheben folgende personenbezogene Daten bei der Nutzung von YeastMaster:",
+            s2_li1: "Deine E-Mail-Adresse (über Google oder E-Mail/Passwort-Anmeldung)",
+            s2_li2: "Eine eindeutige Benutzer-ID, die von Firebase Authentication vergeben wird",
+            s2_li3: "Gärdaten deines YeastMaster-Geräts (Temperatur, Tag, Phase, Hefestamm, Profilname)",
+            s2_li4: "Gerätekennungen (MAC-Adresse, Gerätename)",
+            s2_li5: "Deine Hefebibliothek (eigene Stämme und Gärprofile, die du erstellst)",
+            s2_li6: "Push-Benachrichtigungsabonnement (wenn du Alarme aktivierst)",
+            s3_title: "Warum wir es erheben",
+            s3_body: "Deine Daten werden ausschließlich zur Bereitstellung des YeastMaster-Dienstes verwendet. Wir verkaufen oder teilen deine Daten nicht mit Dritten zu Marketingzwecken.",
+            s4_title: "Wo Daten gespeichert werden",
+            s4_body: "Anmeldedaten werden von Google Firebase Authentication verwaltet (EU-Datenverarbeitungsvertrag vorhanden). Gärdaten, Geräte und deine Bibliothek werden in einer MongoDB-Datenbank bei MongoDB Atlas gespeichert.",
+            s5_title: "Deine Rechte",
+            s5_body: "Gemäß DSGVO hast du das Recht, jederzeit auf deine personenbezogenen Daten zuzugreifen, sie zu berichtigen oder zu löschen. Du kannst dein Konto und alle zugehörigen Daten direkt in der App unter Einstellungen → Konto und alle Daten löschen löschen. Für andere Anfragen kontaktiere uns unter",
+            s6_title: "Cookies und lokaler Speicher",
+            s6_body: "YeastMaster verwendet den lokalen Browserspeicher, um deine Anmeldesitzung, Spracheinstellung, Temperatureinheit und Akzentfarbe zu speichern. Es werden keine Tracking-Cookies von Drittanbietern verwendet."
         },
 
         soul: {
@@ -4385,6 +4462,7 @@ card2_p2: "Unsere Bibliothek bietet detaillierte Anleitungen, wie du jeden Stamm
             btn_delete_account: "Konto und alle Daten löschen",
             delete_confirm_1: "Dadurch werden dein Konto und alle deine Daten (Geräte, Hefebibliothek, Gärprotokolle) dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.\n\nBist du sicher?",
             delete_confirm_2: "Letzte Chance — alles dauerhaft löschen?",
+            privacy_link: "Datenschutzerklärung",
             connected: "VERBUNDEN",
             offline: "GETRENNT",
             ago: "vor" // "vor" används för "för... sedan" på tyska

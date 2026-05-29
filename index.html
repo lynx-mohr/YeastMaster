@@ -47,6 +47,9 @@
                 </div>
                 <button id="btn-login" class="btn-secondary" style="width:100%;" data-i18n="login.btn">Sign in with Google</button>
                 <p id="auth-error-login" style="color:#ff4444; font-size:0.8rem; margin-top:10px; display:none;"></p>
+                <p style="margin-top: 16px; font-size: 0.7rem; color: #444;">
+                    <span onclick="showView('privacy')" style="cursor: pointer; text-decoration: underline;" data-i18n="privacy.link">Privacy Policy</span>
+                </p>
             </div>
 
             <!-- REGISTER VIEW -->
@@ -441,6 +444,45 @@
             Delete account and all data
         </button>
         <p style="margin-top: 15px; font-size: 0.7rem; opacity: 0.4;">YeastMaster v1.0.4 - Pro Edition</p>
+        <p style="margin-top: 6px; font-size: 0.7rem;">
+            <span onclick="showView('privacy')" style="color: #555; cursor: pointer; text-decoration: underline;" data-i18n="settings.privacy_link">Privacy Policy</span>
+        </p>
+    </div>
+</section>
+
+<section id="view-privacy" style="display: none; padding: 30px 20px; max-width: 700px; margin: 0 auto;">
+    <button onclick="history.back()" style="background: transparent; border: 1px solid #333; color: #888; padding: 8px 16px; border-radius: 8px; font-family: 'Lexend', sans-serif; font-size: 0.8rem; cursor: pointer; margin-bottom: 24px;" data-i18n="privacy.back">← Back</button>
+    <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 6px;" data-i18n="privacy.title">Privacy Policy</h2>
+    <p style="font-size: 0.75rem; color: #555; margin-bottom: 28px;" data-i18n="privacy.updated">Last updated: May 2026</p>
+
+    <div style="font-size: 0.85rem; line-height: 1.8; color: #ccc;">
+
+        <h3 style="color: #fff; font-size: 0.95rem; margin: 24px 0 8px;" data-i18n="privacy.s1_title">Who we are</h3>
+        <p data-i18n="privacy.s1_body">YeastMaster is a fermentation monitoring service operated by Klas Mohr. For questions regarding your personal data, contact: <a href="mailto:klas.mohr@gmail.com" style="color: var(--accent-color);">klas.mohr@gmail.com</a></p>
+
+        <h3 style="color: #fff; font-size: 0.95rem; margin: 24px 0 8px;" data-i18n="privacy.s2_title">What data we collect</h3>
+        <p data-i18n="privacy.s2_body">We collect the following personal data when you use YeastMaster:</p>
+        <ul style="margin: 8px 0 8px 20px; color: #aaa;">
+            <li data-i18n="privacy.s2_li1">Your email address (via Google or email/password sign-in)</li>
+            <li data-i18n="privacy.s2_li2">A unique user ID assigned by Firebase Authentication</li>
+            <li data-i18n="privacy.s2_li3">Fermentation data sent by your YeastMaster device (temperature, day, phase, strain name, profile name)</li>
+            <li data-i18n="privacy.s2_li4">Device identifiers (MAC address, device name)</li>
+            <li data-i18n="privacy.s2_li5">Your yeast library (custom strains and fermentation profiles you create)</li>
+            <li data-i18n="privacy.s2_li6">Push notification subscription (if you enable alerts)</li>
+        </ul>
+
+        <h3 style="color: #fff; font-size: 0.95rem; margin: 24px 0 8px;" data-i18n="privacy.s3_title">Why we collect it</h3>
+        <p data-i18n="privacy.s3_body">Your data is used solely to provide the YeastMaster service: authenticating your account, storing your devices and library in the cloud, displaying live fermentation data, and sending alerts you have opted into. We do not sell or share your data with third parties for marketing purposes.</p>
+
+        <h3 style="color: #fff; font-size: 0.95rem; margin: 24px 0 8px;" data-i18n="privacy.s4_title">Where data is stored</h3>
+        <p data-i18n="privacy.s4_body">Account credentials are managed by Google Firebase Authentication (EU data processing agreement in place). Fermentation data, devices, and your library are stored in a MongoDB database hosted by MongoDB Atlas. Push notification subscriptions are processed via web-push.</p>
+
+        <h3 style="color: #fff; font-size: 0.95rem; margin: 24px 0 8px;" data-i18n="privacy.s5_title">Your rights</h3>
+        <p data-i18n="privacy.s5_body">Under GDPR you have the right to access, correct, or delete your personal data at any time. You can delete your account and all associated data directly in the app under Settings → Delete account and all data. For other requests, contact us at <a href="mailto:klas.mohr@gmail.com" style="color: var(--accent-color);">klas.mohr@gmail.com</a></p>
+
+        <h3 style="color: #fff; font-size: 0.95rem; margin: 24px 0 8px;" data-i18n="privacy.s6_title">Cookies and local storage</h3>
+        <p data-i18n="privacy.s6_body">YeastMaster uses browser local storage to remember your login session, language preference, temperature unit, and accent colour. No third-party tracking cookies are used.</p>
+
     </div>
 </section>
 <section id="view-soul" style="display: none; padding: 30px 20px;">
