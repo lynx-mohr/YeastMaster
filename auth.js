@@ -1,9 +1,20 @@
 // ==========================================
 // --- AUTH.JS — Firebase Authentication ---
 // ==========================================
-// Kräver: Firebase SDK + firebase.initializeApp() (körs i app.js innan detta)
+// Kräver: Firebase SDK (laddas i index.html innan detta)
 // Exponerar globalt: auth, getAuthHeaders
 
+const firebaseConfig = {
+    apiKey: "AIzaSyBjxNijHivEY4u4bBIiXCR1hbUBdMxrq0Q",
+    authDomain: "yeastmaster-cloud.firebaseapp.com",
+    projectId: "yeastmaster-cloud",
+    storageBucket: "yeastmaster-cloud.firebasestorage.app",
+    messagingSenderId: "395831218175",
+    appId: "1:395831218175:web:66bd69450b8325c9f361ca",
+    measurementId: "G-LFNPE9EHXB"
+};
+
+firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
 async function getAuthHeaders() {

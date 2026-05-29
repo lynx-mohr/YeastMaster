@@ -187,19 +187,7 @@ window.startEditingProfile = function(profileName) {
 let activeDeviceId = null;
 let isAuthResolved = false; // Håller koll på om Firebase har vaknat än
 const API_BASE = "https://soulofbeer-live.onrender.com/api";
-const firebaseConfig = {
-  apiKey: "AIzaSyBjxNijHivEY4u4bBIiXCR1hbUBdMxrq0Q",
-  authDomain: "yeastmaster-cloud.firebaseapp.com",
-  projectId: "yeastmaster-cloud",
-  storageBucket: "yeastmaster-cloud.firebasestorage.app",
-  messagingSenderId: "395831218175",
-  appId: "1:395831218175:web:66bd69450b8325c9f361ca",
-  measurementId: "G-LFNPE9EHXB"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-// auth, getAuthHeaders — definieras i auth.js
+// Firebase-config + initializeApp + auth — definieras i auth.js
 
 
 // --- KONFIGURATION FÖR VYER & ANIMATIONER ---
