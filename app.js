@@ -1016,6 +1016,37 @@ if(document.getElementById('btn-logout')) {
     });
 }
 
+// RADERA KONTO (GDPR)
+const deleteAccountBtn = document.getElementById('btn-delete-account');
+if (deleteAccountBtn) {
+    deleteAccountBtn.addEventListener('click', async () => {
+        const lang = window.currentLang || 'en';
+        const t = window.translations?.[lang]?.settings || {};
+        const confirmMsg = t.delete_confirm_1 || "This will permanently delete your account and all your data (devices, yeast library, fermentation logs). This cannot be undone.\n\nAre you sure?";
+        if (!confirm(confirmMsg)) return;
+        const confirmMsg2 = t.delete_confirm_2 || "Last chance — delete everything permanently?";
+        if (!confirm(confirmMsg2)) return;
+
+        deleteAccountBtn.disabled = true;
+        deleteAccountBtn.textContent = '...';
+
+        try {
+            const headers = await getAuthHeaders();
+            const res = await fetch(`${API_BASE}/delete-account`, { method: 'DELETE', headers });
+            if (!res.ok) throw new Error((await res.json()).error || res.statusText);
+            await auth.signOut();
+            activeDeviceId = null;
+            selectedStrains = [];
+            showView('login');
+        } catch (err) {
+            alert('Could not delete account: ' + err.message);
+            deleteAccountBtn.disabled = false;
+            const lang2 = window.currentLang || 'en';
+            deleteAccountBtn.textContent = window.translations?.[lang2]?.settings?.btn_delete_account || 'Delete account and all data';
+        }
+    });
+}
+
 function checkAddDeviceAccess() {
     // Kolla om vi har en inloggad användare
     const user = auth.currentUser;

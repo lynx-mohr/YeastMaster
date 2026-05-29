@@ -390,6 +390,36 @@ app.post('/api/remove-device', strictLimiter, verifyToken, async (req, res) => {
 
 
 // ==========================================
+// --- GDPR: RADERA KONTO OCH ALL ANVÄNDARDATA ---
+// ==========================================
+app.delete('/api/delete-account', strictLimiter, verifyToken, async (req, res) => {
+    const uid = req.uid;
+    try {
+        // 1. Hämta alla enheters device_ids för den här användaren
+        const devices = await userDevicesCollection.find({ uid: uid }, { projection: { device_id: 1 } }).toArray();
+        const deviceIds = devices.map(d => d.device_id);
+
+        // 2. Radera alla fermentationsloggar för dessa enheter
+        if (deviceIds.length > 0) {
+            await logsCollection.deleteMany({ device_id: { $in: deviceIds } });
+        }
+
+        // 3. Radera enheter, bibliotek och push-prenumeration
+        await userDevicesCollection.deleteMany({ uid: uid });
+        await userLibrariesCollection.deleteMany({ uid: uid });
+        await pushSubscriptionsCollection.deleteMany({ uid: uid });
+
+        // 4. Radera Firebase-kontot
+        await admin.auth().deleteUser(uid);
+
+        res.status(200).send({ message: "Kontot och all data är raderat." });
+    } catch (e) {
+        console.error("Fel vid kontoborttagning:", e);
+        res.status(500).send({ error: "Kunde inte radera kontot." });
+    }
+});
+
+// ==========================================
 // --- NYTT: MOTTA OCH SPARA PRENUMERATIONER PÅ LARM ---
 // ==========================================
 app.post('/api/subscribe', strictLimiter, verifyToken, async (req, res) => {

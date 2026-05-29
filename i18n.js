@@ -3611,6 +3611,9 @@ slurry_info_tip: "Pro-tip: If unsure, choose \"Thin\". Pitching slightly more sl
             btn_bug: "REPORT BUG",
             btn_idea: "SUGGEST IDEA",
             btn_logout: "LOG OUT",
+            btn_delete_account: "Delete account and all data",
+            delete_confirm_1: "This will permanently delete your account and all your data (devices, yeast library, fermentation logs). This cannot be undone.\n\nAre you sure?",
+            delete_confirm_2: "Last chance — delete everything permanently?",
             connected: "CONNECTED",
             offline: "OFFLINE",
             ago: "ago"
@@ -3995,6 +3998,9 @@ house_bank: {
             btn_bug: "RAPPORTERA BUGG",
             btn_idea: "FÖRSLAGSLÅDA",
             btn_logout: "LOGGA UT",
+            btn_delete_account: "Radera konto och all data",
+            delete_confirm_1: "Detta raderar permanent ditt konto och all din data (enheter, jästbibliotek, jäsningsloggar). Det går inte att ångra.\n\nÄr du säker?",
+            delete_confirm_2: "Sista chansen — radera allt permanent?",
             connected: "ANSLUTEN",
             offline: "FRÅNKOPPLAD",
             ago: "sedan"
@@ -4376,6 +4382,9 @@ card2_p2: "Unsere Bibliothek bietet detaillierte Anleitungen, wie du jeden Stamm
             btn_bug: "FEHLER MELDEN",
             btn_idea: "IDEE VORSCHLAGEN",
             btn_logout: "ABMELDEN",
+            btn_delete_account: "Konto und alle Daten löschen",
+            delete_confirm_1: "Dadurch werden dein Konto und alle deine Daten (Geräte, Hefebibliothek, Gärprotokolle) dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.\n\nBist du sicher?",
+            delete_confirm_2: "Letzte Chance — alles dauerhaft löschen?",
             connected: "VERBUNDEN",
             offline: "GETRENNT",
             ago: "vor" // "vor" används för "för... sedan" på tyska
