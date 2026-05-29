@@ -247,8 +247,8 @@ document.getElementById('yeast-search').addEventListener('input', (e) => {
     renderYeastLibrary(e.target.value);
 });
 
-// Initiera biblioteket när sidan laddas
-renderYeastLibrary();
+// Initiera biblioteket efter att alla skript laddats (selectedStrains deklareras i app.js)
+document.addEventListener('DOMContentLoaded', () => renderYeastLibrary());
 
 // ==========================================
 // --- TOGGLE FÖR LIBRARY INFO ---

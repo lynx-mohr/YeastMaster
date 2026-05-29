@@ -22,6 +22,8 @@ app.use(helmet({
             connectSrc: [
                 "'self'",
                 "https://soulofbeer-live.onrender.com",
+                "https://cdn.jsdelivr.net",
+                "https://www.gstatic.com",
                 "https://*.googleapis.com",
                 "https://*.firebaseapp.com",
                 "https://*.firebaseio.com",
