@@ -452,11 +452,10 @@ function initLabChart() {
                 clip: false,
                 fill: true,
                 segment: {
-                    borderDash: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? [6, 6] : undefined,
-                    lineWidth: 1.5,
-                    borderColor: ctx => {
-                        const isLightNow = document.body.classList.contains('light-mode');
-                        return (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? (isLightNow ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.3)') : themeAccent;
+                    borderDash: ctx => {
+                        const y0 = ctx.p0.parsed?.y;
+                        const y1 = ctx.p1.parsed?.y;
+                        return (y0 !== undefined && y0 === y1) ? [6, 4] : undefined;
                     }
                 }
             }]
