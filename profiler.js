@@ -991,6 +991,49 @@ if ('serviceWorker' in navigator) {
 
 
 // ==========================================
+// --- HJÄLPFUNKTION: PROFILSAMMANFATTNING ---
+// Enda källan till sanning för fasdetektering.
+// Används av generateHardwareProfilesHTML, openYeastModal och Lab-modalen.
+// ==========================================
+function computeProfilePhases(steps, t) {
+    const s = steps;
+    const pitch = `${t.day} ${s[0][0]} @ ${s[0][1].toFixed(1)}°C`;
+
+    let primary = `${t.hold} ${s[1][0]}`;
+    if (s.length > 1 && Math.abs(s[1][1] - s[0][1]) >= 0.2)
+        primary = `${s[1][1] > s[0][1] ? t.rise : t.drop} ${s[1][1].toFixed(1)}°C ${t.by} ${s[1][0]}`;
+
+    let cleanup = s.length > 2 ? `${t.hold} ${s[2][0]}` : '';
+    if (s.length > 2 && Math.abs(s[2][1] - s[1][1]) >= 0.2)
+        cleanup = `${s[2][1] > s[1][1] ? t.reach : t.drop} ${s[2][1].toFixed(1)}°C ${t.by} ${s[2][0]}`;
+
+    let coldCrash = s.length >= 6 ? `${t.hold} ${s[4][0]}` : '';
+    if (s.length >= 6) {
+        if (Math.abs(s[3][1] - s[2][1]) >= 0.2)
+            coldCrash = `${s[3][1] < s[2][1] ? t.drop : t.rise} ${s[3][1].toFixed(1)}°C ${t.by} ${s[3][0]}`;
+        else if (Math.abs(s[4][1] - s[3][1]) >= 0.2)
+            coldCrash = `${s[4][1] < s[3][1] ? t.drop : t.rise} ${s[4][1].toFixed(1)}°C ${t.by} ${s[4][0]}`;
+    }
+
+    const condition = s.length >= 6 ? `${t.hold} ${s[5][0]}` : '';
+    return { pitch, primary, cleanup, coldCrash, condition };
+}
+
+function buildProfileSummaryRows(steps, t) {
+    const p = computeProfilePhases(steps, t);
+    const row = (lbl, val) =>
+        `<div class="summary-row"><span class="label">${lbl}</span><span class="value">${val}</span></div>`;
+    let html = row(t.pitch, p.pitch);
+    if (steps.length > 1) html += row(t.primary, p.primary);
+    if (steps.length > 2) html += row(t.cleanup, p.cleanup);
+    if (steps.length >= 6) {
+        html += row(t.coldCrash, p.coldCrash);
+        html += row(t.condition, p.condition);
+    }
+    return html;
+}
+
+// ==========================================
 // --- AUTOMAGISK GENERATOR FÖR PROFILER ---
 // ==========================================
 
@@ -1020,53 +1063,23 @@ function generateHardwareProfilesHTML(yeastName) {
         html += `<div class="hw-profile-summary" id="${uniqueId}">`;
         html += `<div class="summary-header">PROFILE SUMMARY</div>`;
         
-        // --- Översätt den kompakta datan till läsbar text (Som i Profiler) ---
         const steps = profile.steps;
-        
-        // Steg 1: Pitch
-        html += `
-            <div class="summary-row">
-                <span class="label">Pitch</span>
-                <span class="value">Day ${steps[0][0]} @ ${steps[0][1].toFixed(1)}°C</span>
-            </div>
-        `;
-        
-// Steg 2: Primary
-        if (steps.length > 1) {
-            let actionText = `Hold until Day ${steps[1][0]}`;
-            if (Math.abs(steps[1][1] - steps[0][1]) >= 0.2) {
-                const action = steps[1][1] > steps[0][1] ? "Rise to" : "Drop to";
-                actionText = `${action} ${steps[1][1].toFixed(1)}°C by Day ${steps[1][0]}`;
-            }
-            html += `<div class="summary-row"><span class="label">Primary</span><span class="value">${actionText}</span></div>`;
-        }
-        
-        // Steg 3: Cleanup
-        if (steps.length > 2) {
-             let actionText = `Hold until Day ${steps[2][0]}`;
-             if (Math.abs(steps[2][1] - steps[1][1]) >= 0.2) {
-                 const action = steps[2][1] > steps[1][1] ? "Reach" : "Drop to";
-                 actionText = `${action} ${steps[2][1].toFixed(1)}°C by Day ${steps[2][0]}`;
-             }
-             html += `<div class="summary-row"><span class="label">Cleanup</span><span class="value">${actionText}</span></div>`;
-        }
-        
-        // Sista stegen: Cold Crash & Condition
-        if (steps.length >= 6) {
-            let crashText = `Hold until Day ${steps[4][0]}`;
-            if (Math.abs(steps[3][1] - steps[2][1]) >= 0.2) {
-                // Raset sker vid steps[2]→steps[3] (ramp-first-profiler)
-                const action = steps[3][1] < steps[2][1] ? "Drop to" : "Rise to";
-                crashText = `${action} ${steps[3][1].toFixed(1)}°C by Day ${steps[3][0]}`;
-            } else if (Math.abs(steps[4][1] - steps[3][1]) >= 0.2) {
-                // Raset sker vid steps[3]→steps[4] (hold-first-profiler)
-                const action = steps[4][1] < steps[3][1] ? "Drop to" : "Rise to";
-                crashText = `${action} ${steps[4][1].toFixed(1)}°C by Day ${steps[4][0]}`;
-            }
-            html += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">${crashText}</span></div>`;
-
-            html += `<div class="summary-row"><span class="label">Condition</span><span class="value">Hold until Day ${steps[5][0]}</span></div>`;
-        }
+        const _lang = window.currentLang || 'en';
+        const _pT = window.translations?.[_lang]?.profiler || {};
+        const t = {
+            pitch:     _pT.pitch      || 'Pitch',
+            primary:   _pT.primary    || 'Primary',
+            cleanup:   _pT.cleanup    || 'Cleanup',
+            coldCrash: _pT.cold_crash || 'Cold Crash',
+            condition: _pT.condition  || 'Condition',
+            day:       _pT.day        || 'Day',
+            hold:      _pT.hold_until || 'Hold until Day',
+            rise:      _pT.rise_to    || 'Rise to',
+            drop:      _pT.drop_to    || 'Drop to',
+            reach:     _pT.reach      || 'Reach',
+            by:        _pT.by_day     || 'by Day'
+        };
+        html += buildProfileSummaryRows(steps, t);
         
         html += `</div>`; // Stäng summary-boxen
     });
@@ -1305,26 +1318,14 @@ function openYeastModal(yeast) {
             const t_day_word = tLab.day || "Day";
 
             const pitchTemp = t0.toFixed(1);
-            
-            let primaryText = `${t_hold} ${d1}`;
-            if (Math.abs(t1 - t0) >= 0.2) {
-                const action = t1 > t0 ? txtFreeRise : t_drop;
-                primaryText = `${action} ${t1.toFixed(1)}°C ${t_by} ${d1}`;
-            }
-            
-            let cleanupText = `${t_hold} ${d2}`;
-            if (Math.abs(t2 - t1) >= 0.2) {
-                const action = t2 > t1 ? t_reach : t_drop;
-                cleanupText = `${action} ${t2.toFixed(1)}°C ${t_by} ${d2}`;
-            }
-
-            let crashText = `${t_hold} ${d4}`;
-            if (Math.abs(t4 - t3) >= 0.2) {
-                const action = t4 > t3 ? t_reach : t_drop;
-                crashText = `${action} ${t4.toFixed(1)}°C ${t_by} ${d4}`;
-            }
-
-            const condText = `${t_hold} ${d5}`;
+            const _ph = computeProfilePhases(
+                [[d0, t0], [d1, t1], [d2, t2], [d3, t3], [d4, t4], [d5, t5]],
+                { hold: t_hold, rise: txtFreeRise, drop: t_drop, reach: t_reach, by: t_by, day: t_day_word }
+            );
+            const primaryText = _ph.primary;
+            const cleanupText = _ph.cleanup;
+            const crashText   = _ph.coldCrash;
+            const condText    = _ph.condition;
 
             // Skapa humle-texten
             let dryHopHTML = "";
@@ -1455,36 +1456,11 @@ function openYeastModal(yeast) {
                     profileListHtml += `<button class="hw-profile-btn" onclick="toggleHwProfile('${uniqueId}', this)"><strong>${prof.p}</strong><span style="color: #888; font-size: 0.85em;">(Starts @ ${startTemp.toFixed(1)}°C)</span></button>`;
                     profileListHtml += `<div class="hw-profile-summary" id="${uniqueId}"><div class="summary-header">${t_summary}</div>`;
                     
-                    // Pitch
-                    profileListHtml += `<div class="summary-row"><span class="label">${t_pitch}</span><span class="value">${t_day} ${steps[0][0]} @ ${steps[0][1].toFixed(1)}°C</span></div>`;
-                    
-                    // Primary
-                    let primText = `${t_hold} ${steps[1][0]}`;
-                    if (Math.abs(steps[1][1] - steps[0][1]) >= 0.2) {
-                        const action = steps[1][1] > steps[0][1] ? t_rise : t_drop;
-                        primText = `${action} ${steps[1][1].toFixed(1)}°C ${t_by} ${steps[1][0]}`;
-                    }
-                    profileListHtml += `<div class="summary-row"><span class="label">${t_prim}</span><span class="value">${primText}</span></div>`;
-                    
-                    // Cleanup
-                    let cleanText = `${t_hold} ${steps[2][0]}`;
-                    if (Math.abs(steps[2][1] - steps[1][1]) >= 0.2) {
-                        const action = steps[2][1] > steps[1][1] ? t_reach : t_drop;
-                        cleanText = `${action} ${steps[2][1].toFixed(1)}°C ${t_by} ${steps[2][0]}`;
-                    }
-                    profileListHtml += `<div class="summary-row"><span class="label">${t_clean}</span><span class="value">${cleanText}</span></div>`;
-                    
-                    // Cold Crash & Condition (Nu med stöd för 6 punkter!)
-                    if (steps.length >= 6) {
-                        let crashText = `${t_hold} ${steps[4][0]}`;
-                        if (Math.abs(steps[4][1] - steps[3][1]) >= 0.2) {
-                            const action = steps[4][1] > steps[3][1] ? t_rise : t_drop;
-                            crashText = `${action} ${steps[4][1].toFixed(1)}°C ${t_by} ${steps[4][0]}`;
-                        }
-                        profileListHtml += `<div class="summary-row"><span class="label">${t_crash}</span><span class="value">${crashText}</span></div>`;
-                        
-                        profileListHtml += `<div class="summary-row"><span class="label">${t_cond}</span><span class="value">${t_hold} ${steps[5][0]}</span></div>`;
-                    }
+                    profileListHtml += buildProfileSummaryRows(steps, {
+                        pitch: t_pitch, primary: t_prim, cleanup: t_clean,
+                        coldCrash: t_crash, condition: t_cond,
+                        day: t_day, hold: t_hold, rise: t_rise, drop: t_drop, reach: t_reach, by: t_by
+                    });
                     
                     // Knappen längst ner!
                     profileListHtml += `<button class="btn-secondary" style="width: 100%; margin-top: 15px; border-color: var(--accent-color); color: var(--accent-color);" onclick="loadProfileIntoLab('${targetStrainName}', '${prof.p}')">✏️ ${t_edit_btn}</button>`;
