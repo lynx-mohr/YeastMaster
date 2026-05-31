@@ -85,12 +85,16 @@ function showView(viewName, pushToHistory = true, forceOverride = false) {
             views[key].classList.remove('slide-in-right', 'slide-in-left');
             
             if (key === viewName) {
+                // Nollställ scroll INNAN vyn visas så animationen inte börjar nedifrån
+                views[key].scrollTop = 0;
+                window.scrollTo(0, 0);
+
                 const isFlexView = (key === 'login' || key === 'claim');
                 views[key].style.display = isFlexView ? 'flex' : 'block';
-                
+
                 // 2. DET MAGISKA HACKET: Tvinga fram en "Reflow"
-                void views[key].offsetWidth; 
-                
+                void views[key].offsetWidth;
+
                 // 3. Lägg på animationen igen
                 if (animClass) {
                     views[key].classList.add(animClass);
