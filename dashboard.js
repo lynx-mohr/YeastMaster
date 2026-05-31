@@ -714,8 +714,14 @@ function updateHeartbeatDisplay(lastSeenTimestamp) {
 
 // Körs i bakgrunden varje 30:e sekund för att hålla statusen färsk i Settings
 setInterval(() => {
-    // Kollar om vi har en vald enhet och om den har en senast-sedd-stämpel
     if (window.currentDeviceData && window.currentDeviceData.lastSeen) {
         updateHeartbeatDisplay(window.currentDeviceData.lastSeen);
     }
 }, 30000);
+
+// Auto-refresh: hämtar ny data var 5:e minut (ESP32 skickar var 14:e)
+// Pausar automatiskt när appen är i bakgrunden — visibilitychange hanterar uppvakning
+setInterval(() => {
+    if (document.hidden) return;
+    if (typeof updateDashboard === 'function') updateDashboard();
+}, 5 * 60 * 1000);
