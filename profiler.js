@@ -1054,12 +1054,17 @@ function generateHardwareProfilesHTML(yeastName) {
         // Sista stegen: Cold Crash & Condition
         if (steps.length >= 6) {
             let crashText = `Hold until Day ${steps[4][0]}`;
-            if (Math.abs(steps[4][1] - steps[3][1]) >= 0.2) {
-                const action = steps[4][1] > steps[3][1] ? "Rise to" : "Drop to";
+            if (Math.abs(steps[3][1] - steps[2][1]) >= 0.2) {
+                // Raset sker vid steps[2]→steps[3] (ramp-first-profiler)
+                const action = steps[3][1] < steps[2][1] ? "Drop to" : "Rise to";
+                crashText = `${action} ${steps[3][1].toFixed(1)}°C by Day ${steps[3][0]}`;
+            } else if (Math.abs(steps[4][1] - steps[3][1]) >= 0.2) {
+                // Raset sker vid steps[3]→steps[4] (hold-first-profiler)
+                const action = steps[4][1] < steps[3][1] ? "Drop to" : "Rise to";
                 crashText = `${action} ${steps[4][1].toFixed(1)}°C by Day ${steps[4][0]}`;
             }
             html += `<div class="summary-row"><span class="label">Cold Crash</span><span class="value">${crashText}</span></div>`;
-            
+
             html += `<div class="summary-row"><span class="label">Condition</span><span class="value">Hold until Day ${steps[5][0]}</span></div>`;
         }
         
