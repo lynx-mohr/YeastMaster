@@ -1675,12 +1675,13 @@ body .sync-button:hover {
 }
 
 .slide-in-right {
-    /* Lite mjukare "studs" på slutet med denna cubic-bezier */
     animation: slideInFromRight 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
+    transform-origin: top center;
 }
 
 .slide-in-left {
     animation: slideInFromLeft 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
+    transform-origin: top center;
 }
 
 /* ========================================= */
