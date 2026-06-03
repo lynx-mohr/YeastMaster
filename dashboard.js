@@ -524,6 +524,7 @@ function renderDemoDashboard() {
     let demoModeText = "DEMO MODE";
     if (window.currentLang === 'sv') demoModeText = "DEMOLÄGE";
     if (window.currentLang === 'de') demoModeText = "DEMO-MODUS";
+    if (window.currentLang === 'fr') demoModeText = "MODE DÉMO";
 
     const displayElement = document.querySelector('.device-name-display');
     if (displayElement) displayElement.innerHTML = `<span style='color:#ff4444;'>${demoModeText}</span>`;

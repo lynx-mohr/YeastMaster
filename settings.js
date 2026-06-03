@@ -505,6 +505,7 @@ window.addEventListener('languageChanged', () => {
     let xAxisLabel = "Days";
     if (window.currentLang === 'sv') xAxisLabel = "Dagar";
     if (window.currentLang === 'de') xAxisLabel = "Tage";
+    if (window.currentLang === 'fr') xAxisLabel = "Jours";
 
     if (typeof labChart !== 'undefined' && labChart !== null) {
         if (labChart.options.scales.x.title) {

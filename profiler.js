@@ -556,6 +556,7 @@ function initLabChart() {
         let xLabel = "Days";
         if (window.currentLang === 'sv') xLabel = "Dagar";
         if (window.currentLang === 'de') xLabel = "Tage";
+        if (window.currentLang === 'fr') xLabel = "Jours";
         daysLabelEl.textContent = xLabel;
     }
 
