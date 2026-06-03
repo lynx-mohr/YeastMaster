@@ -2444,11 +2444,12 @@ body.light-mode .academy-librarian-bg {
 /* --- INTERAKTIVT KUPIGT ÖLGLAS (HOME) --- */
 /* ========================================= */
 .glass-container {
-    width: 80px; 
+    width: 80px;
     height: 105px;
+    flex-shrink: 0; /* Glaset får aldrig krympas av flexbox när titeln är lång (t.ex. franska "LEVURE") */
     cursor: pointer;
     position: relative;
-    margin: 0; 
+    margin: 0;
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
@@ -2527,9 +2528,10 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 @media (max-width: 600px) {
     .home-title-section { gap: 15px !important; }
 
-    /* Fixat mellanslaget i 7.0rem! Nu kommer den växa! */
+    /* Skalar med skärmbredden så långa ord (franska "LEVURE") får plats bredvid glaset,
+       men förblir stor på bredare telefoner. Cap på 4.2rem som tidigare. */
     .yeast-title {
-        font-size: 4.2rem !important; 
+        font-size: clamp(3.2rem, 16vw, 4.2rem) !important;
     }
     .yeast-subtitle {
         font-size: 1.1rem !important;
