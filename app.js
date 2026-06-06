@@ -56,6 +56,19 @@ auth.getRedirectResult().catch((error) => {
     console.error("Redirect-fel:", error);
 });
 
+// SÄKERHETSNÄT: På vissa webbläsare (t.ex. Chrome på iOS med strikt lagring) kan
+// Firebase-auth dröja länge eller aldrig svara via onAuthStateChanged. Då sattes
+// aldrig isAuthResolved → updateDashboard avbröt direkt → dashboarden visade "--"
+// överallt. Om auth inte hunnit svara inom 5s antar vi gäst-läge och ritar demon.
+// Svarar auth senare tar onAuthStateChanged över och ritar rätt vy.
+setTimeout(() => {
+    if (!isAuthResolved) {
+        console.warn("Auth ej klar inom 5s — visar demo-läge som fallback.");
+        isAuthResolved = true;
+        if (typeof updateDashboard === 'function') updateDashboard();
+    }
+}, 5000);
+
 // --- 6. KOPPLA ENHET (CLAIM) ---
 if(document.getElementById('btn-claim')) {
     document.getElementById('btn-claim').addEventListener('click', async () => {

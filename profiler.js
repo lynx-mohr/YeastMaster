@@ -2192,30 +2192,45 @@ function toggleLandscapeChart() {
     // MAGIN: Vi plockar ut BARA graf-sektionen, inte hela appen!
     const chartSection = document.querySelector('#view-lab .chart-section'); 
     
-    if (!document.fullscreenElement) {
-        // 1. Sätt ENBART sektionen i Fullscreen
-        if (chartSection.requestFullscreen) {
-            chartSection.requestFullscreen().then(() => {
-                if (screen.orientation && screen.orientation.lock) {
-                    screen.orientation.lock('landscape').catch(e => console.log("Lås stöds ej."));
+    // VIKTIGT: Vi använder vår EGEN flagga (isChartFullscreen) som sanningskälla, INTE
+    // document.fullscreenElement. På iOS Safari saknas element-fullscreen helt, så
+    // document.fullscreenElement är alltid null — då fastnade CLOSE i "enter"-läget.
+    if (!isChartFullscreen) {
+        // 1. Försök med äkta fullscreen (best-effort; stöds ej på iOS — då räcker CSS-läget)
+        const reqFS = chartSection.requestFullscreen
+                   || chartSection.webkitRequestFullscreen
+                   || chartSection.webkitRequestFullScreen;
+        if (reqFS) {
+            try {
+                const p = reqFS.call(chartSection);
+                if (p && p.then) {
+                    p.then(() => {
+                        if (screen.orientation && screen.orientation.lock) {
+                            screen.orientation.lock('landscape').catch(e => console.log("Orienterings-lås stöds ej (t.ex. iOS)."));
+                        }
+                    }).catch(err => console.log(err));
                 }
-            }).catch(err => console.log(err));
+            } catch (e) {
+                console.log("Element-fullscreen stöds ej (t.ex. iOS) — kör CSS-läge.");
+            }
         }
-        
-        // Lägg till vår flagga
+
+        // CSS-fullscreen fungerar på ALLA enheter (även iPhone)
         chartSection.classList.add('is-fullscreen');
         if (btn) btn.innerHTML = '✖ CLOSE';
         isChartFullscreen = true;
 
     } else {
         // 2. Gå ur Fullscreen
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
+        if (document.fullscreenElement && document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+        } else if (document.webkitFullscreenElement && document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
         }
         if (screen.orientation && screen.orientation.unlock) {
-            screen.orientation.unlock();
+            try { screen.orientation.unlock(); } catch (e) {}
         }
-        
+
         chartSection.classList.remove('is-fullscreen');
         if (btn) btn.innerHTML = '⤢ FULLSCREEN';
         isChartFullscreen = false;
