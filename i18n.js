@@ -4884,7 +4884,7 @@ libTour: {
         },
 
         action: {
-            COOLING: "REFROIDISSEMENT",
+            COOLING: "REFROIDIT",
             HEATING: "CHAUFFAGE",
             IDLE: "REPOS"
         },
@@ -4899,7 +4899,7 @@ libTour: {
             min_ago: "min",
             idle: "REPOS",
             running: "EN COURS",
-            cooling: "REFROIDISSEMENT",
+            cooling: "REFROIDIT",
             heating: "CHAUFFAGE",
             finished: "TERMINÉ"
         },
