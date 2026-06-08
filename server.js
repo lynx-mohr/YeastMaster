@@ -14,7 +14,7 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc:       ["'self'"],
-            scriptSrc:        ["'self'", "cdn.jsdelivr.net", "www.gstatic.com"],
+            scriptSrc:        ["'self'", "cdn.jsdelivr.net", "www.gstatic.com", "www.google.com", "apis.google.com"],
             scriptSrcAttr:    ["'unsafe-inline'"],          // tillåter onclick="..." i HTML
             styleSrc:         ["'self'", "https:", "'unsafe-inline'"],
             imgSrc:           ["'self'", "data:", "blob:", "https:"],
@@ -24,12 +24,15 @@ app.use(helmet({
                 "https://soulofbeer-live.onrender.com",
                 "https://cdn.jsdelivr.net",
                 "https://www.gstatic.com",
+                "https://www.google.com",        // reCAPTCHA (Firebase Auth)
+                "https://apis.google.com",       // Googles OAuth/gapi-bibliotek
                 "https://*.googleapis.com",
                 "https://*.firebaseapp.com",
                 "https://*.firebaseio.com",
                 "wss://*.firebaseio.com"
             ],
-            frameSrc:         ["https://yeastmaster-cloud.firebaseapp.com", "https://accounts.google.com"],
+            // www.google.com + apis.google.com krävs för reCAPTCHA-iframe och Google-login.
+            frameSrc:         ["https://yeastmaster-cloud.firebaseapp.com", "https://accounts.google.com", "https://www.google.com", "https://apis.google.com"],
             objectSrc:        ["'none'"],
             baseUri:          ["'self'"],
             formAction:       ["'self'"],
