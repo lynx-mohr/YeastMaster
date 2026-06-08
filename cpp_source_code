@@ -1250,7 +1250,7 @@ void performCloudSync() {
   }
 }
 
-  void checkForOTAUpdate() {
+ void checkForOTAUpdate() {
     if (WiFi.status() != WL_CONNECTED) return;
 
     WiFiClientSecure client;

@@ -298,6 +298,10 @@ async function updateDashboard() {
             });
 
             updateChart(cleanChartData);
+        } else {
+            // Vald enhet saknar telemetri (t.ex. nyregistrerad enhet utan jäsning).
+            // Nollställ Live View istället för att låta föregående enhets data ligga kvar.
+            renderIdleDashboard(null);
         }
     } catch (error) {
         console.error("Kunde inte hämta data:", error);
@@ -629,6 +633,11 @@ function renderIdleDashboard(latest) {
         }
         if (typeof updateHeartbeatDisplay === 'function') updateHeartbeatDisplay(latest.time);
         if (window.currentDeviceData) window.currentDeviceData.lastSeen = latest.time;
+    } else {
+        // Ingen data alls (t.ex. nyregistrerad enhet utan jäsning) — nollställ synk + status
+        const syncEl = document.getElementById('last-sync-time');
+        if (syncEl) syncEl.innerText = dash;
+        if (typeof updateHeartbeatDisplay === 'function') updateHeartbeatDisplay(null);
     }
 
     // Dölj ev. larm-banner
@@ -739,11 +748,7 @@ function checkActionAlerts(currentDay, strainName, profileName) {
 // ==========================================
 function updateHeartbeatDisplay(lastSeenTimestamp) {
     const statusSpan = document.getElementById('setting-device-status');
-    if (!statusSpan || !lastSeenTimestamp) return;
-
-    const lastSeen = new Date(lastSeenTimestamp);
-    const now = new Date();
-    const diffMs = now - lastSeen;
+    if (!statusSpan) return;
 
     // --- HÄMTA SPRÅK OCH ÖVERSÄTTNINGAR ---
     const lang = window.currentLang || 'en';
@@ -753,6 +758,18 @@ function updateHeartbeatDisplay(lastSeenTimestamp) {
         offline: "OFFLINE",
         ago: "ago"
     };
+
+    // Ingen tidsstämpel = enheten har aldrig synkat (t.ex. nyregistrerad enhet).
+    // Visa OFFLINE — annars ligger föregående enhets status kvar i rutan.
+    if (!lastSeenTimestamp) {
+        statusSpan.innerText = t.offline;
+        statusSpan.style.color = "#ff4444";
+        return;
+    }
+
+    const lastSeen = new Date(lastSeenTimestamp);
+    const now = new Date();
+    const diffMs = now - lastSeen;
 
     // Om diffen är negativ (klockfel), eller om den är väldigt nyligen synkad
     if (diffMs < 0 || (diffMs / 60000) < 15) {
