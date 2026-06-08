@@ -45,6 +45,17 @@ async function updateDashboard() {
             console.log("Senaste sorterade datan:", latest);
 
             // ==========================================
+            // --- IDLE: enheten väntar på ny jäsning (Select Yeast efter omstart) ---
+            // Visa ett HELT nollställt kort istället för en halvt återupplivad gammal
+            // jäsning. Fångas tidigt så vi också slipper en falsk temp-varning (måltemp
+            // är 0 i idle medan kylen kan vara 24°C).
+            // ==========================================
+            if ((latest.status || "").toUpperCase() === "IDLE") {
+                renderIdleDashboard(latest);
+                return;
+            }
+
+            // ==========================================
             // --- NYTT: SMART BANNER-LOGIK (Inklusive Temp & Strömavbrott) ---
             // ==========================================
             const banner = document.getElementById('top-banner-alert');
@@ -599,6 +610,72 @@ function renderDemoDashboard() {
             demoBtn.style.top = '12px';
         }
     }
+}
+
+// ==========================================
+// --- IDLE-DASHBOARD (Enheten väntar på ny jäsning) ---
+// Nollställer hela kortet så det inte visar en halvt återupplivad gammal jäsning.
+// ==========================================
+function renderIdleDashboard(latest) {
+    const dash = "--";
+
+    // "Last sync" + hjärtslag uppdateras (enheten är ju online och synkar)
+    if (latest && latest.time) {
+        const syncEl = document.getElementById('last-sync-time');
+        if (syncEl) {
+            syncEl.innerText = new Date(latest.time).toLocaleTimeString('sv-SE', {
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+        }
+        if (typeof updateHeartbeatDisplay === 'function') updateHeartbeatDisplay(latest.time);
+        if (window.currentDeviceData) window.currentDeviceData.lastSeen = latest.time;
+    }
+
+    // Dölj ev. larm-banner
+    const banner = document.getElementById('top-banner-alert');
+    if (banner) banner.style.display = 'none';
+    window.currentActiveAlertString = "";
+
+    // Nollställ temperaturer + glasets text
+    const tempBeerEl = document.getElementById('temp-beer-val');
+    if (tempBeerEl) tempBeerEl.innerText = dash;
+    const beerTempEl = document.querySelector('.beer-temp');
+    if (beerTempEl) beerTempEl.setAttribute('data-text', dash);
+    const airTempEl = document.getElementById('air-temp-val');
+    if (airTempEl) airTempEl.innerText = dash;
+
+    // Nollställ strain & profil
+    const strainEl = document.getElementById('strain-val');
+    if (strainEl) { strainEl.innerText = "---"; strainEl.style.fontSize = ""; }
+    const profileEl = document.getElementById('profile-val');
+    if (profileEl) profileEl.innerText = "---";
+
+    // Status: IDLE (översatt om möjligt), dölj pilen
+    const idleText = translations[window.currentLang]?.status?.idle
+                  || translations[window.currentLang]?.action?.IDLE || "IDLE";
+    const actionEl = document.getElementById('action-val');
+    if (actionEl) actionEl.innerText = idleText;
+    const statusEl = document.getElementById('status-text');
+    if (statusEl) statusEl.innerText = idleText;
+    const arrow = document.getElementById('status-arrow');
+    if (arrow) { arrow.style.visibility = "hidden"; arrow.classList.remove('blink-active'); }
+
+    // Nollställ tider och måltemp
+    const dayEl = document.getElementById('day-val');
+    if (dayEl) dayEl.innerText = dash;
+    const phaseDayEl = document.getElementById('phase-day-val');
+    if (phaseDayEl) phaseDayEl.innerText = dash;
+    const targetEl = document.getElementById('target-temp-val');
+    if (targetEl) targetEl.innerText = dash;
+
+    // Nollställ progress-baren
+    const pctEl = document.getElementById('progress-percent');
+    if (pctEl) pctEl.innerText = "0%";
+    const fillEl = document.getElementById('progress-fill');
+    if (fillEl) fillEl.style.width = "0%";
+
+    // Töm grafen
+    if (typeof updateChart === 'function') updateChart([]);
 }
 
 // ==========================================
