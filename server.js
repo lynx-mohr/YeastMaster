@@ -39,7 +39,11 @@ app.use(helmet({
             frameAncestors:   ["'none'"],
             upgradeInsecureRequests: [],
         }
-    }
+    },
+    // Helmets standard är "same-origin" vilket kapar kontakten mellan sidan och
+    // Google-inloggningens popup (postMessage blockeras) → auth/popup-closed-by-user.
+    // "same-origin-allow-popups" behåller skyddet men låter popupen svara tillbaka.
+    crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" }
 }));
 const PORT = process.env.PORT || 3000;
 
