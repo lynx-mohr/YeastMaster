@@ -1,13 +1,21 @@
 // En minimal Service Worker för YeastMaster
 self.addEventListener('install', (event) => {
   console.log('YeastMaster Service Worker installerad!');
+  self.skipWaiting(); // Aktivera nya versionen direkt istället för att vänta
 });
 
-self.addEventListener('fetch', (event) => {
-  // Här kan vi lägga till offline-stöd senare om vi vill,
-  // men just nu låter vi den bara skicka vidare anropen.
-  event.respondWith(fetch(event.request));
+self.addEventListener('activate', (event) => {
+  // Ta kontroll över öppna flikar direkt så den gamla (trasiga) workern släpper taget
+  event.waitUntil(self.clients.claim());
 });
+
+// OBS: Ingen 'fetch'-handler.
+// Tidigare fanns event.respondWith(fetch(event.request)) här — en ren genomsläppning
+// som inte gjorde någon nytta men som dirigerade ALLA resurser (skript, typsnitt,
+// reCAPTCHA) genom service workern. Då styrdes de av CSP:ns connect-src istället för
+// sina rätta direktiv, vilket blockerade bl.a. Firebase Auths reCAPTCHA (www.google.com)
+// → auth/internal-error vid inloggning. Utan handlern hanterar webbläsaren anropen
+// nativt och allt fungerar som innan service workern fanns.
 
 // --- NYTT: Lyssna efter Push-notiser från molnet ---
 self.addEventListener('push', (event) => {
