@@ -143,8 +143,12 @@ if (nickInput) {
 const deviceSelect = document.getElementById('setting-active-device');
 if (deviceSelect) {
     deviceSelect.addEventListener('change', (e) => {
-        activeDeviceId = e.target.value; 
-        
+        activeDeviceId = e.target.value;
+
+        // Kom ihåg valet så det överlever en sidladdning (annars hoppar man tillbaka
+        // till första enheten vid refresh)
+        if (activeDeviceId) localStorage.setItem('ym-active-device', activeDeviceId);
+
         // Uppdatera Namnfältet
         const currentNick = getSavedNickname(activeDeviceId);
         if (nickInput) nickInput.value = currentNick !== "MIN YEASTMASTER" ? currentNick : "";

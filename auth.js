@@ -186,8 +186,14 @@ auth.onAuthStateChanged(async (user) => {
             window.allFetchedDevices = devices; // Spara listan globalt
 
             if (devices.length > 0) {
-                // 1. Sätt aktiv enhet om den saknas
-                if (!activeDeviceId) activeDeviceId = devices[0].device_id;
+                // 1. Sätt aktiv enhet om den saknas. Återställ tidigare val från localStorage
+                //    (om enheten fortfarande finns kvar), annars första enheten.
+                if (!activeDeviceId) {
+                    const savedDeviceId = localStorage.getItem('ym-active-device');
+                    activeDeviceId = (savedDeviceId && devices.some(d => d.device_id === savedDeviceId))
+                        ? savedDeviceId
+                        : devices[0].device_id;
+                }
 
                 const removeRow = document.getElementById('row-remove-device');
                 if (removeRow) removeRow.style.display = 'flex'; // Använd flex för att behålla din snygga layout
