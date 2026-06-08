@@ -685,8 +685,11 @@ app.listen(PORT, '0.0.0.0', () => {
 // --- OTA: FIRMWARE VERSION CHECK ---
 // ==========================================
 app.get('/api/firmware/version', (req, res) => {
+    // OBS: Detta versionsnummer MÅSTE matcha FIRMWARE_VERSION i den .bin som faktiskt
+    // ligger i firmware/yeastmaster.bin. Annonsera ALDRIG en version utan att en matchande
+    // binär finns uppladdad — då hamnar enheterna i en evig uppdaterings-/omstartsloop.
     res.json({
-        version: "2.2",
+        version: "2.1",
         url: "https://soulofbeer-live.onrender.com/api/firmware/download"
     });
 });

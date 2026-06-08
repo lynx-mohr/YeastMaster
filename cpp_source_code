@@ -1275,22 +1275,47 @@ void performCloudSync() {
         Serial.print("-> OTA: Nuvarande version: ");
         Serial.println(FIRMWARE_VERSION);
 
-        if (latestVersion != FIRMWARE_VERSION) {
-          // Ny version finns!
-          if (currentState == RUNNING || currentState == POURING) {
+        String current = FIRMWARE_VERSION;
+
+        if (latestVersion.length() == 0) {
+          // Tomt/ogiltigt svar — gör ingenting (annars tolkas "" som ny version → loop)
+          Serial.println("-> OTA: Tomt versionssvar, hoppar över.");
+
+        } else if (latestVersion == current) {
+          Serial.println("-> OTA: Firmware är uppdaterad!");
+          // Vi är i fas — rensa ev. gammal försöks-flagga
+          preferences.begin("sys", false);
+          preferences.remove("otaTried");
+          preferences.end();
+
+        } else {
+          // En annan version annonseras. LOOP-SKYDD: har vi redan försökt just den här
+          // versionen men kör fortfarande den gamla? Då matchar inte binären sitt eget
+          // versionsnummer (eller saknas) — sluta jaga den, annars blir det omstartsloop.
+          preferences.begin("sys", true);
+          String alreadyTried = preferences.getString("otaTried", "");
+          preferences.end();
+
+          if (alreadyTried == latestVersion) {
+            Serial.println("-> OTA: Version " + latestVersion + " annonseras men vi kör fortfarande " +
+                           current + ". Redan försökt — hoppar över (binär matchar ej versionsnumret, eller saknas).");
+          } else if (firmwareUrl.length() == 0) {
+            Serial.println("-> OTA: Uppdatering tillgänglig men URL saknas. Hoppar över.");
+          } else if (currentState == RUNNING || currentState == POURING) {
             // Jäsning pågår - vänta!
             Serial.println("-> OTA: Uppdatering tillgänglig men jäsning pågår. Väntar...");
-            // Visa diskret meddelande på skärmen
-            // (Skärmen ritas om var 50ms av handleDisplay så vi sätter bara en flagga)
             otaUpdateAvailable = true;
             otaFirmwareUrl = firmwareUrl;
           } else {
-            // Ingen jäsning - installera direkt!
-            Serial.println("-> OTA: Installerar uppdatering!");
+            // Markera vilken version vi försöker (överlever omstart) INNAN vi installerar.
+            // Om installationen inte tar (binär = gammal version) ser vi det vid nästa boot
+            // och hoppar över istället för att loopa.
+            preferences.begin("sys", false);
+            preferences.putString("otaTried", latestVersion);
+            preferences.end();
+            Serial.println("-> OTA: Installerar uppdatering till " + latestVersion + "!");
             installOTAUpdate(firmwareUrl);
           }
-        } else {
-          Serial.println("-> OTA: Firmware är uppdaterad!");
         }
       }
       http.end();
