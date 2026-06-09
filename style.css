@@ -2553,7 +2553,8 @@ body.light-mode .glass-outline { stroke: rgba(0,0,0,0.3); }
 /* --- RESPONSIVA JUSTERINGAR (MOBIL) --- */
 /* ========================================= */
 @media (max-width: 600px) {
-    .home-title-section { gap: 15px !important; }
+    /* Mindre rubrik på mobil → dra in avståndet ner till första stycket så det inte gapar */
+    .home-title-section { gap: 15px !important; margin-bottom: 24px !important; }
 
     /* Skalar med skärmbredden så även det längsta ordet (spanska "LEVADURA", 8 tecken)
        får plats bredvid glaset på smala telefoner, men förblir stort på bredare skärmar.
