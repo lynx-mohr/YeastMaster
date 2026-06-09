@@ -291,9 +291,11 @@ async function updateDashboard() {
             // ==========================================
 
             // DATATVÄTT 2.0: KASTA UT SPIKARNA
+            // OBS: filtrera BARA på öl-temperaturen (det enda grafen ritar). En frånkopplad
+            // luftgivare (air_temp <= -50) ska INTE blanka hela grafen — det gjorde tidigare
+            // att enheter med trasig/saknad luftgivare fick en helt tom temphistorik.
             const cleanChartData = sortedData.filter(log => {
                 if (log.temp !== undefined && log.temp <= -50) return false;
-                if (log.air_temp !== undefined && log.air_temp <= -50) return false;
                 return true;
             });
 
