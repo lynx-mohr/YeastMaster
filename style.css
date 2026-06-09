@@ -1295,6 +1295,31 @@ body.light-mode #setting-active-device option {
     color: #111111;
 }
 
+/* Språkväljare (dropdown) i Settings — ersatte de gamla EN/SV/DE/FR-knapparna */
+.lang-select {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    border: 1px solid var(--accent-color);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'Lexend', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    min-width: 130px;
+}
+.lang-select option {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+body.light-mode .lang-select {
+    background-color: #ffffff;
+    color: #111111;
+}
+body.light-mode .lang-select option {
+    background-color: #ffffff;
+    color: #111111;
+}
+
 body.light-mode #setting-mac-display {
     color: #666666 !important;
 }

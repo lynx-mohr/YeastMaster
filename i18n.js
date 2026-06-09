@@ -4942,6 +4942,410 @@ libTour: {
             step10: "Tes captures sauvages vivent en sécurité tout en bas de ta bibliothèque, juste à côté de tes profils modifiés !",
             step11: "Visite terminée ! Tu es maintenant prêt à maîtriser la bibliothèque de levures. 🍻 Clique n'importe où pour terminer."
         },
+    },
+
+    es: {
+        nav: { home: "INICIO", library: "LEVADURAS", lab: "LAB", profiler: "PERFILADOR", live: "EN VIVO", settings: "AJUSTES" },
+        dashboard: {
+            progress: "PROGRESO",
+            since_start: "Desde el inicio",
+            time_phase: "Tiempo en la fase",
+            goal_temp: "Temp. objetivo de la fase",
+            history: "HISTORIAL TEMP.",
+            fridge: "NEVERA",
+            last_sync: "ÚLTIMA SINCRO",
+            start: "INICIO",
+            ready: "LISTA",
+            air: "Aire:",
+            phase_label: "Fase:",
+            days: "d"
+        },
+
+        profiler: {
+            profile_name: "NOMBRE DEL PERFIL",
+            profile_builder: "EDITOR DE PERFIL",
+            overview: "VISTA GENERAL",
+            summary: "RESUMEN DEL PERFIL",
+            name_placeholder: "Mi Lager...",
+            pick_yeast: "Elige una levadura base...",
+            save: "GUARDAR EN LA BIBLIOTECA",
+            day: "Día",
+            hold_until: "Mantener hasta el día",
+            free_rise: "Subida libre a",
+            drop_to: "Bajar a",
+            reach: "Alcanzar",
+            rise_to: "Subir a",
+            by_day: "para el día",
+            pitch: "Siembra",
+            primary: "Primaria",
+            cleanup: "Limpieza",
+            cold_crash: "Choque frío",
+            condition: "Maduración",
+            created_by_you: "¡Creado por ti!",
+            used_with: "Este perfil se usa con",
+            profile_steps_are: "y estos son los pasos del perfil:",
+            start_at: "Empezar a",
+            free_rise_to: "Subida libre a",
+            dry_hop_contact: "Contacto lupulado en seco",
+            days_plural: "días"
+        },
+
+        lab: {
+            title: "El Perfilador",
+            info_1: "Elige una cepa y luego agarra y arrastra los puntos para dar forma a tu curva de fermentación.",
+            info_2: "Guarda cuando termines — tu perfil va directo a la Biblioteca de Levaduras.",
+            info_3: "¡No olvides el lupulado en seco!",
+            profile_name: "NOMBRE DEL PERFIL",
+            profile_name_placeholder: "p. ej. JUICEBMB",
+            pick_strain: "Elige cepa",
+            builder_title: "EDITOR DE PERFIL",
+            btn_overview: "🔍 VISTA GENERAL",
+            chart_placeholder: "Elige una levadura base y nombra tu perfil arriba 👆",
+            summary_title: "RESUMEN DEL PERFIL",
+            phase_pitch: "Siembra",
+            phase_primary: "Primaria",
+            phase_cleanup: "Limpieza",
+            phase_crash: "Choque frío",
+            phase_condition: "Maduración",
+            day: "Día ",
+            hold_until: "Mantener hasta el día",
+            reach: "Alcanzar",
+            drop_to: "Bajar a",
+            by_day: "para el día",
+            btn_add_hops: "+ AÑADIR LUPULADO EN SECO",
+            btn_add_dump: "+ TRASIEGO / PURGA",
+            schedule_hop: "Lupulado en seco programado el día",
+            schedule_dump: "Trasiego / Purga programado el día",
+            fullscreen: "PANTALLA COMPLETA",
+            btn_remove_hops: "- QUITAR LUPULADO EN SECO",
+            btn_remove_dump: "- QUITAR ACCIÓN",
+            chart_dry_hop: "LÚPULO SECO",
+            chart_rack: "TRASIEGO/PURGA",
+            btn_add_remove_hops: "+ QUITAR LÚPULOS",
+            btn_remove_remove_hops: "- QUITAR LÚPULOS",
+            schedule_remove_hop: "Retirada de lúpulos programada el día",
+            chart_remove_hop: "QUITAR LÚPULOS 🔔",
+            btn_save: "GUARDAR PERFIL",
+            btn_saved_success: "¡GUARDADO! ✓"
+        },
+
+        login: {
+            btn: "Iniciar sesión con Google",
+            btn_email: "Iniciar sesión",
+            create_account: "Crear cuenta",
+            forgot: "¿Olvidaste la contraseña?",
+            or: "o",
+            create_title: "Crear cuenta",
+            password_hint: "Contraseña (mín. 6 caracteres)",
+            confirm_hint: "Confirmar contraseña",
+            register_btn: "Crear cuenta",
+            back_login: "← Volver a iniciar sesión",
+            reset_title: "Restablecer contraseña",
+            reset_btn: "Enviar enlace de restablecimiento"
+        },
+
+        privacy: {
+            link: "Política de privacidad",
+            back: "← Volver",
+            title: "Política de privacidad",
+            updated: "Última actualización: mayo de 2026",
+            s1_title: "Quiénes somos",
+            s1_body: "YeastMaster es un servicio de monitorización de fermentación gestionado por AY Tech. Para cualquier duda sobre tus datos personales, escribe a:",
+            s2_title: "Qué datos recogemos",
+            s2_body: "Recogemos los siguientes datos personales cuando usas YeastMaster:",
+            s2_li1: "Tu dirección de correo electrónico (mediante Google o inicio de sesión con correo/contraseña)",
+            s2_li2: "Un identificador de usuario único asignado por Firebase Authentication",
+            s2_li3: "Los datos de fermentación enviados por tu dispositivo YeastMaster (temperatura, día, fase, nombre de la cepa, nombre del perfil)",
+            s2_li4: "Identificadores del dispositivo (dirección MAC, nombre del dispositivo)",
+            s2_li5: "Tu biblioteca de levaduras (cepas personalizadas y perfiles de fermentación que creas)",
+            s2_li6: "La suscripción a notificaciones push (si activas las alertas)",
+            s3_title: "Por qué los recogemos",
+            s3_body: "Tus datos se usan únicamente para ofrecer el servicio YeastMaster: autenticar tu cuenta, guardar tus dispositivos y tu biblioteca en la nube, mostrar los datos de fermentación en tiempo real y enviar las alertas que has activado. No vendemos ni compartimos tus datos con terceros con fines de marketing.",
+            s4_title: "Dónde se almacenan los datos",
+            s4_body: "Las credenciales de la cuenta las gestiona Google Firebase Authentication (con acuerdo de tratamiento de datos de la UE en vigor). Los datos de fermentación, los dispositivos y tu biblioteca se almacenan en una base de datos MongoDB alojada en MongoDB Atlas. Las suscripciones a notificaciones push se procesan mediante web-push.",
+            s5_title: "Tus derechos",
+            s5_body: "Conforme al RGPD, tienes derecho a acceder a tus datos personales, corregirlos o eliminarlos en cualquier momento. Puedes eliminar tu cuenta y todos los datos asociados directamente en la app, en Ajustes → Eliminar cuenta y todos los datos. Para otras solicitudes, escríbenos a",
+            s6_title: "Cookies y almacenamiento local",
+            s6_body: "YeastMaster usa el almacenamiento local del navegador para recordar tu sesión, tu preferencia de idioma, tu unidad de temperatura y tu color de acento. No se usan cookies de seguimiento de terceros."
+        },
+
+        soul: {
+            title: "LEVADURA",
+            subtitle: "El alma de la cerveza",
+            desc1_a: "Creemos que el alma verdadera de la cerveza vive en la levadura. Como dice el viejo refrán cervecero: ",
+            desc1_quote: "«El cervecero hace el mosto, pero la levadura hace la cerveza.»",
+            desc1_b: " Hay una maravilla profunda en cómo estos artesanos microscópicos transforman un simple líquido dulce en el elixir infinitamente complejo y lleno de alma que llamamos cerveza.",
+            desc2: "Soulof.beer es un homenaje a esta magia biológica. Tanto si estás aquí para explorar nuestra biblioteca de cepas históricas como para tomar el control total de tu fermentación, este es tu laboratorio. Monitoriza tu cerveza en tiempo real, sincroniza perfiles personalizados a tu unidad YeastMaster y domina el arte de la fermentación.",
+            what_is: "¿Qué es YeastMaster?",
+            what_desc: "Descubre el hardware y las funciones de la app.",
+            prompt: "¿Listo para gestionar tu biblioteca o monitorizar tu unidad?",
+            btn_login: "IR A INICIAR SESIÓN"
+        },
+
+        library: {
+            title: "Biblioteca de Levaduras",
+            info_1: "Explora la colección de cepas de levadura.",
+            info_2: "<strong>Haz doble clic</strong> (o mantén pulsado) en una tarjeta para leer sobre la cepa y los perfiles de Yeastmaster.",
+            info_3: "¡Selecciona hasta 10 favoritas y sincronízalas directamente a tu unidad YeastMaster!",
+            btn_tour: "✨ HAZ UN TOUR RÁPIDO",
+            selected: "Seleccionadas:",
+            search_placeholder: "Buscar (p. ej. «WLP», «IPA», «Stout»)...",
+            btn_add_strain: "+ AÑADIR CEPA DE LA CASA / CAPTURA SALVAJE",
+            target_device: "DISPOSITIVO DESTINO",
+            loading_devices: "Cargando dispositivos...",
+            btn_sync: "SINCRONIZAR AL DISPOSITIVO SELECCIONADO",
+            btn_edit: "EDITAR DETALLES",
+            btn_delete: "ELIMINAR",
+            included_profiles: "PERFILES DE HARDWARE INCLUIDOS:",
+            btn_edit_profiler: "EDITAR EN EL PERFILADOR"
+        },
+
+        calc: {
+            title: "Calculadoras de siembra",
+            choose: "Elige tu fuente de levadura:",
+            selected: "Seleccionada:",
+            btn_change: "Cambiar",
+            btn_dry: "Levadura seca",
+            btn_liquid: "Levadura líquida",
+            btn_slurry: "Barro de levadura",
+            btn_bank: "Desde el banco de levaduras",
+            inoculation: "Método de inoculación",
+            btn_loop: "Asa simple",
+            btn_wash: "Lavado de placa completa",
+            batch_size: "Volumen del lote (litros)",
+            og: "Densidad inicial (DI)",
+            pitch_rate: "Tasa de siembra objetivo",
+            rate_low: "0,35 (Baja / recomendación del fabricante)",
+            rate_std: "0,50 (Ale estándar)",
+            rate_pro: "0,75 (Siembra ale pro)",
+            rate_high: "1,00 (Ale de alta densidad)",
+            rate_lager: "1,50 (Lager estándar)",
+            btn_calc: "Calcular",
+            results: "Resultados",
+            cells_in_pack: "Células por sobre",
+            mfg_date: "Fecha de fabricación",
+            add_package: "+ Añadir otro sobre",
+            cells_per_gram: "Células por gramo (miles de millones)",
+            harvest_date: "Fecha de cosecha",
+            slurry_density: "Densidad del barro (espesor)",
+            slurry_thin: "Líquido (~1,0 mil mill. células/mL)",
+            slurry_med: "Medio (~2,0 mil mill. células/mL)",
+            slurry_thick: "Espeso (~3,0 mil mill. células/mL)",
+            slurry_info_thin: "💧 Líquido (acuoso):",
+            slurry_info_thin_desc: "Parece agua sucia de fregar. Se mueve con facilidad. Pasa cuando no ha decantado lo suficiente.",
+            slurry_info_med: "🥞 Medio (masa de tortitas):",
+            slurry_info_med_desc: "Opaco, cremoso, cae despacio. Lo normal tras lavar y hacer el choque frío.",
+            slurry_info_thick: "🧱 Espeso (arcilla/masilla):",
+            slurry_info_thick_desc: "Difícil de verter, necesitas cuchara. Levadura muy compactada del fondo de un tanque cónico.",
+            slurry_info_tip: "Consejo pro: si dudas, elige «Líquido». ¡Sembrar un poco más de barro es más seguro que quedarte corto!"
+        },
+
+        tour: {
+            welcome: "¡Bienvenido a la VISTA EN VIVO!",
+            p1: "Este es tu centro de mando digital. Una vez conectado tu YeastMaster, puedes monitorizar tu fermentación activa en tiempo real, desde cualquier parte del mundo.",
+            p2: "Todas las estadísticas vitales se transmiten directamente a este panel, dándote control total y tranquilidad.",
+            p3: "¿Quieres un tour rápido de la interfaz?",
+            btn_exit: "Salir de la demo",
+            btn_start: "Continuar",
+            step_beer: "Temp. dentro del recipiente",
+            step_air: "Temp. ambiente",
+            step_strain: "Cepa de levadura",
+            step_profile: "Perfil de fermentación",
+            step_action: "Acción",
+            step_progress: "Avance de la fermentación",
+            step_phase: "Detalles de la fase actual",
+            step_chart: "Cambio de temp. en el tiempo"
+        },
+
+        about: {
+            back: "← VOLVER",
+            title: "YEASTMASTER",
+            desc: "Toma el control absoluto de tu fermentación. YeastMaster es una unidad de hardware dedicada y un ecosistema en la nube diseñados para el cervecero casero moderno, uniendo el arte biológico de elaborar cerveza con el control preciso de los datos.",
+            hw_title: "📟 La unidad de hardware",
+            hw_desc: "Un controlador físico dedicado con una pantalla OLED nítida. Haz clic para descubrir cómo controla tu nevera y tu elemento calefactor.",
+            cloud_title: "☁️ La app en la nube",
+            free: "GRATIS",
+            cloud_desc: "Monitoriza tu fermentación desde cualquier parte del mundo. Crea perfiles de temperatura personalizados en el Perfilador, gestiona tus calendarios de lupulado en seco y sincroniza todo sin esfuerzo.",
+            lib_title: "🔬 La biblioteca de levaduras",
+            lib_desc: "Deja de adivinar. Descubre nuestra guía en constante crecimiento de las cepas de levadura más populares del mundo y aprende a sacar los sabores perfectos para tu cerveza."
+        },
+        about_lib: {
+            title: "LA BIBLIOTECA DE LEVADURAS",
+            desc: "Un descodificador para el mundo de la microbiología cervecera. No vendemos levadura — te ayudamos a dominarla.",
+            card1_title: "🕵️‍♂️ Descifrar el código",
+            card1_p1: "Si eres nuevo en la elaboración, nombres como <strong>WLP001</strong> o <strong>Wyeast 1056</strong> pueden parecer contraseñas secretas. Aquí va la traducción:",
+            card1_p2: "<strong>WLP</strong> significa White Labs, y <strong>Wyeast</strong> es otro laboratorio legendario. Ambos producen levadura <em>líquida</em> de primera. Nombres como <strong>SafAle</strong>, <strong>Fermentis</strong> y <strong>Lallemand</strong> son famosos productores de levadura <em>seca</em>. Hemos elegido a mano las mejores y más interesantes cepas comerciales de todos ellos y reunido sus datos en un solo sitio.",
+            card2_title: "🌡️ Por qué la temperatura lo es todo",
+            card2_p1: "Cualquier levadura puede convertir el azúcar en alcohol. Pero <em>cómo</em> sabe la cerveza depende por completo de la temperatura. Una levadura belga fermentada a 18 °C puede saber a pera limpia, pero si la dejas subir a 25 °C explota en pimienta negra especiada y chicle.",
+            card2_p2: "Nuestra biblioteca ofrece guías detalladas de cómo tratar cada cepa concreta para sacar los sabores perfectos (ésteres y fenoles), incluido cuándo subir la temperatura para un «reposo de diacetilo» que limpie los off-flavors mantecosos."
+        },
+        about_cloud: {
+            title: "LA APP EN LA NUBE",
+            desc: "Control total de tu fermentador, estés donde estés. YeastMaster es tu ojo digital dentro del fermentador, con monitorización en tiempo real de temperatura y estado, para que siempre estés tranquilo con tu cerveza.",
+            card1_title: "📡 Monitorización global",
+            card1_p1: "Ya estés en el trabajo, en el sofá o de vacaciones, el panel en vivo te mantiene conectado a tu cerveza. Mira cómo se dibuja la curva de temperatura en tiempo real, comprueba el aire ambiente de tu nevera y disfruta de la tranquilidad de saber exactamente en qué fase trabaja tu levadura ahora mismo.",
+            card2_title: "📈 El Perfilador",
+            card2_p1: "Los cerveceros profesionales rara vez mantienen sus tanques a una temperatura fija. La fermentación es un viaje.",
+            card2_p2: "En <strong>el Perfilador</strong>, puedes arrastrar y soltar puntos de datos para crear curvas de temperatura personalizadas. ¿Quieres sembrar la levadura en frío, dejar que la temperatura suba de forma natural durante la fermentación activa y disparar automáticamente un choque frío el día 10? Solo dibuja la curva, guárdala y sincronízala con tu nevera.",
+            card3_title: "🎓 El Lab y la Academia",
+            card3_p1: "La app en la nube no es solo para monitorizar. Pásate por <strong>el Lab</strong> para usar calculadoras de siembra profesionales, o explora <strong>la Academia</strong> con lecciones interactivas, paso a paso, que te llevarán de principiante total a domador de levaduras con confianza en un abrir y cerrar de ojos."
+        },
+        about_hw: {
+            title: "EL HARDWARE",
+            desc: "YeastMaster está construido en torno a un cerebro ESP32 a medida, diseñado para colocarse perfectamente en tu cámara de fermentación. Funciona 100 % en local, lo que significa que tu cerveza está a salvo aunque se caiga el WiFi.",
+            card1_title: "📺 Interfaz OLED retro",
+            card1_p1: "Una pantalla OLED de alto contraste junto con un codificador rotatorio táctil te dan una interfaz clásica, de calidad de laboratorio. Ajusta los offsets, cambia el perfil de levadura o dispara un choque frío directamente en la nevera.",
+            card2_title: "🌡️ Doble sonda de temperatura",
+            card2_p1: "La precisión exige datos. YeastMaster usa dos sensores desmontables y resistentes al agua. Uno mide el aire ambiente de la nevera, mientras que el otro va directamente en la cerveza (o pegado al fermentador), permitiendo que la lógica PID evite grandes oscilaciones de temperatura.",
+            card3_title: "⚡ Relés inalámbricos",
+            card3_p1: "Sin cableado peligroso de alta tensión. YeastMaster envía señales de radio de 433 MHz directamente a enchufes inteligentes inalámbricos. Uno para tu nevera (enfriar) y otro para una manta calefactora (calentar). Control total, cero riesgos eléctricos."
+        },
+
+        academy: {
+            title: "En el laboratorio",
+            info_title: "Academia de gestión de levaduras",
+            info_1: "¡Arremángate y conviértete en microbiólogo!",
+            info_2: "Entra en el Lab y descubre el fascinante mundo de la gestión de levaduras.",
+            hero_tag: "Empieza aquí",
+            hero_title: "Bienvenido al Lab",
+            hero_desc: "Ya eres microbiólogo. Vamos a montar tu laboratorio de cocina y a empezar a cosechar oro líquido.",
+            hero_btn: "EMPEZAR ➔",
+            calc_title: "Calculadoras de siembra",
+            calc_desc: "Calcula tasas de siembra óptimas y los pasos del starter.",
+            washing_title: "Lavado de levadura 101",
+            washing_desc: "Lava la torta de levadura y cosecha el «oro líquido» (barro).",
+            starters_title: "Starters 101",
+            starters_desc: "Despierta tu levadura y asegura una fermentación sana.",
+            stirplate_title: "Agitadores magnéticos 101",
+            stirplate_desc: "Por qué los vórtices magnéticos son el mejor amigo del cervecero.",
+            counting_title: "Recuento celular pro",
+            counting_desc: "Usar microscopios y hemocitómetros como un profesional.",
+            agar_title: "Dominar las placas de agar",
+            agar_desc: "Aprende a verter, sembrar en estría y aislar cepas puras.",
+            wild_title: "Capturar levadura salvaje",
+            wild_desc: "Caza microbios locales y elabora algo único.",
+            btn_back: "← VOLVER A LA ACADEMIA",
+            btn_next: "Siguiente ➔",
+            btn_finish: "¡Terminar! ✓"
+        },
+
+        house_bank: {
+            title: "Banco de la casa",
+            desc: "Cataloga tus capturas salvajes, tus mezclas de la casa o tus cepas de levadura locales.",
+            strain_name: "Nombre de la cepa",
+            strain_placeholder: "p. ej. Manzana salvaje del jardín",
+            origin: "Origen / Fuente",
+            origin_placeholder: "p. ej. Mi jardín",
+            date: "Fecha de captura",
+            temp: "Rango de temperatura",
+            temp_placeholder: "p. ej. 18-25 °C",
+            tags: "Etiquetas (separadas por comas)",
+            tags_placeholder: "p. ej. Ácida, Funky, Granja",
+            notes: "Descripción / Notas",
+            notes_placeholder: "Notas sobre sabor, atenuación, historia...",
+            save_btn: "Guardar en la biblioteca"
+        },
+
+        settings: {
+            title: "AJUSTES",
+            theme: "Tema",
+            dark: "OSCURO",
+            light: "CLARO",
+            temp_unit: "Unidad de temperatura",
+            accent: "Color de acento",
+            language_label: "Idioma",
+            notifications_title: "NOTIFICACIONES",
+            push: "Notificaciones push",
+            push_desc: "Activa las notificaciones push para recibir alertas en tu móvil sobre cambios de temperatura, cortes de luz o cuándo toca el lupulado en seco.",
+            device_mgmt: "Gestión de dispositivos",
+            active_device: "Dispositivo activo",
+            status: "Estado",
+            status_connected: "CONECTADO",
+            nickname: "Apodo",
+            device_id: "ID del dispositivo (MAC)",
+            remove: "Quitar dispositivo activo",
+            add_device: "+ AÑADIR NUEVO YEASTMASTER",
+            support: "SOPORTE Y SUGERENCIAS",
+            btn_bug: "REPORTAR FALLO",
+            btn_idea: "SUGERIR IDEA",
+            btn_logout: "CERRAR SESIÓN",
+            btn_delete_account: "Eliminar cuenta y todos los datos",
+            delete_confirm_1: "Esto eliminará permanentemente tu cuenta y todos tus datos (dispositivos, biblioteca de levaduras, registros de fermentación). No se puede deshacer.\n\n¿Seguro?",
+            delete_confirm_2: "Última oportunidad — ¿eliminar todo permanentemente?",
+            privacy_link: "Política de privacidad",
+            connected: "CONECTADO",
+            offline: "DESCONECTADO",
+            ago: "atrás"
+        },
+
+        claim: {
+            title: "CONECTAR DISPOSITIVO",
+            desc: "Introduce el ID MAC desde el menú de ajustes del dispositivo",
+            device_id: "ID del dispositivo",
+            nick_placeholder: "Apodo (p. ej. Nevera 1 / Cónico grande)",
+            btn_activate: "ACTIVAR NUEVO DISPOSITIVO",
+            hint: "Menú principal -> Ajustes -> ID MAC"
+        },
+
+        action: {
+            COOLING: "ENFRIANDO",
+            HEATING: "CALENTANDO",
+            IDLE: "REPOSO"
+        },
+        phase: {
+            PRIMARY: "PRIMARIA",
+            "DIACETYL REST": "REPOSO DIACETILO",
+            "COLD CRASH": "CHOQUE FRÍO",
+            RAMPING: "RAMPA"
+        },
+        status: {
+            offline: "DESCONECTADO",
+            min_ago: "min",
+            idle: "REPOSO",
+            running: "EN MARCHA",
+            cooling: "ENFRIANDO",
+            heating: "CALENTANDO",
+            finished: "TERMINADO"
+        },
+        alerts: {
+            dry_hop: "🌿 ¡HORA DEL LUPULADO EN SECO!",
+            dump: "🧪 ¡HORA DE PURGAR LA LEVADURA!",
+            crash: "❄️ ¡HORA DEL CHOQUE FRÍO!",
+            power: "⚠️ ¡CONEXIÓN PERDIDA! Revisa la corriente/WiFi.",
+            temp: "🔥 ¡DESVIACIÓN DE TEMP.! Diferencia > 2,0 °C.",
+            login_add_device: "Tienes que iniciar sesión para vincular un dispositivo YeastMaster a tu cuenta."
+        },
+
+        support: {
+            title_bug: "Reportar fallo",
+            title_idea: "Sugerir idea",
+            desc: "¡Tus ideas y reportes de fallos nos ayudan a elaborar una app mejor!",
+            email: "Tu correo",
+            subject: "Asunto",
+            message: "Mensaje",
+            btn_send: "Enviar mensaje",
+            success_title: "¡Enviado!",
+            success_desc: "Gracias por tu feedback. ¡Estaremos en contacto!",
+            sub_bug: "Reporte de fallo - YeastMaster",
+            sub_idea: "Petición de función - YeastMaster",
+            message_placeholder: "Cuéntanos qué pasó o comparte tu idea..."
+        },
+
+        libTour: {
+            noYeast: "¡Selecciona o añade primero alguna levadura para ver el tour!",
+            exitConfirm: "¿SALIR DEL TOUR?",
+            step1: "Haz doble clic en una tarjeta para leer sobre la cepa. ¡Un solo clic para seleccionarla para tu dispositivo!",
+            step2: "Aquí están los perfiles de hardware. Controlan automáticamente las temperaturas de tu nevera.",
+            step3: "¡Haz clic para desplegar el perfil y ver los pasos de temperatura!",
+            step4: "¿Quieres ajustar un perfil? ¡Haz clic en «Editar en el Perfilador» para añadir lupulados en seco o alarmas de trasiego!",
+            step5: "¡Bienvenido al Perfilador! Aquí puedes agarrar y arrastrar los puntos para dar forma a tu curva de fermentación.",
+            step6: "¡Configura tus alarmas para el lupulado en seco, la retirada de lúpulos y el trasiego! Aparecerán en tu cronología y te avisarán cuando toque.",
+            step7: "Una vez guardado, tu perfil modificado aparece al final de la biblioteca con una estrella ★, ¡listo para sincronizar!",
+            step8: "En la biblioteca tienes la opción de añadir tus propias capturas únicas y levaduras salvajes.",
+            step9: "¡Puedes registrar fechas de captura, orígenes y llevar notas de laboratorio personales para cada levadura salvaje que encuentres!",
+            step10: "¡Tus capturas salvajes viven a salvo al final de tu biblioteca, justo al lado de tus perfiles modificados!",
+            step11: "¡Tour terminado! Ya estás listo para dominar la Biblioteca de Levaduras. 🍻 Haz clic en cualquier sitio para terminar."
+        },
     }
 };
 
@@ -4977,7 +5381,12 @@ function setLanguage(lang) {
     window.currentLang = lang;
     localStorage.setItem('ym_language', lang);
     updateTexts();
-    
+
+    // Synka dropdown-värdet (om språkväljaren är en <select>)
+    const langSelect = document.getElementById('lang-select');
+    if (langSelect && langSelect.value !== lang) langSelect.value = lang;
+
+    // Bakåtkompatibelt: markera ev. gamla knappar som aktiva (om de finns kvar)
     document.querySelectorAll('.lang-btn').forEach(btn => {
         const onclickAttr = btn.getAttribute('onclick');
         if (onclickAttr) {
@@ -4985,7 +5394,7 @@ function setLanguage(lang) {
             btn.classList.toggle('active', isActive);
         }
     });
-    
+
     window.dispatchEvent(new Event('languageChanged'));
 }
 
