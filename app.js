@@ -590,9 +590,12 @@ function openAcademyModule(moduleId) {
 
     // MAGIN: Hämta "boken" från rätt språk-hylla på den globala anslagstavlan!
     const langDict = window.academyModules[window.currentLang] || window.academyModules['en'];
+    const enDict = window.academyModules['en'];
 
-    // Tryck in texten
-    contentArea.innerHTML = langDict[moduleId] || '<p style="color: #ff4444;">Module not found.</p>';
+    // Tryck in texten. Fallback PER MODUL till engelska — så ett delvis översatt språk
+    // (t.ex. fr/es där bara vissa moduler är klara) visar engelska för resten istället
+    // för "Module not found".
+    contentArea.innerHTML = langDict[moduleId] || enDict[moduleId] || '<p style="color: #ff4444;">Module not found.</p>';
 
     overview.style.display = 'none';
     moduleView.style.display = 'block';

@@ -1234,6 +1234,74 @@ const academyModules = {
                 </div>
             </div>
         `
+    },
+
+    fr: {
+        'intro': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Bienvenue au Labo</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>Ton chemin vers la maîtrise :</h4>
+                    <ul class="wizard-checklist">
+                        <li id="intro-mindset">1. L'état d'esprit</li>
+                        <li id="intro-gear">2. Le labo de cuisine</li>
+                        <li id="intro-rewards">3. Les récompenses</li>
+                        <li id="intro-roadmap">4. La feuille de route</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" id="module-wizard">
+                    <div class="wizard-dots" id="wizard-dots">
+                        <div class="wizard-dot active"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                    </div>
+                    <div class="wizard-step active" data-step="0">
+                        <div class="wizard-icon">🧠✨</div>
+                        <h3>1. L'état d'esprit du microbiologiste</h3>
+                        <p>La gestion des levures semble intimidante. Les gens parlent de labos stériles, de hottes à flux laminaire et de microscopes hors de prix.</p>
+                        <p style="color: var(--accent-color); font-weight: bold; margin: 15px 0;">Oublie tout ça pour l'instant.</p>
+                        <p>Si tu sais brasser une cuvée sans la contaminer, tu as déjà les compétences d'hygiène nécessaires pour récolter et réutiliser ta levure. Une bonne désinfection, c'est 95 % du travail !</p>
+                    </div>
+                    <div class="wizard-step" data-step="1">
+                        <div class="wizard-icon">🫙🧽</div>
+                        <h3>2. Le labo de cuisine</h3>
+                        <p>Tu n'as pas besoin d'un laboratoire pour commencer. Le plan de travail de ta cuisine est parfait. Les outils de base pour ta toute première récolte de levure sont incroyablement simples :</p>
+                        <ul style="color: #aaa; margin-top: 15px; line-height: 1.6; padding-left: 20px;">
+                            <li>Un vaporisateur de <strong>Star San</strong> (ou un désinfectant similaire).</li>
+                            <li>Quelques <strong>bocaux en verre</strong> propres avec couvercles.</li>
+                            <li>Un peu d'<strong>extrait de malt sec (DME)</strong> pour nourrir la levure.</li>
+                            <li>Une casserole ordinaire pour faire bouillir de l'eau stérile.</li>
+                        </ul>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="wizard-icon">💰🍺</div>
+                        <h3>3. Les récompenses</h3>
+                        <p>Pourquoi se donner la peine de récupérer et de laver sa propre levure ?</p>
+                        <ul style="color: #aaa; margin-top: 15px; line-height: 1.6; padding-left: 20px;">
+                            <li><strong style="color: #fff;">Économiser :</strong> La levure liquide coûte cher. Achète un pack premium une fois, lave-le et utilise-le pour tes 5 à 10 prochaines cuvées !</li>
+                            <li><strong style="color: #fff;">Une meilleure bière :</strong> Ensemencer une grande quantité de levure saine bien à toi donne des fermentations plus rapides et plus propres, sans temps de latence.</li>
+                            <li><strong style="color: #fff;">L'indépendance :</strong> Réveille-toi un samedi et brasse spontanément, en sachant que tu as une levure de classe mondiale prête au frigo.</li>
+                        </ul>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-icon">🗺️🚀</div>
+                        <h3>4. La feuille de route</h3>
+                        <p>N'essaie pas de tout apprendre d'un coup. Suis ce chemin à ton rythme :</p>
+                        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-color); margin-top: 15px; font-size: 0.9rem; line-height: 1.6;">
+                            <strong style="color: #fff;">Niveau 1 :</strong> Achète un erlenmeyer et apprends les <em>pieds de cuve</em>.<br>
+                            <strong style="color: #fff;">Niveau 2 :</strong> Maîtrise le <em>lavage de levure</em> à partir d'une bière finie.<br>
+                            <strong style="color: #fff;">Niveau 3 :</strong> Fabrique ou achète un <em>agitateur magnétique</em> pour une forte croissance cellulaire.<br>
+                            <strong style="color: #fff;">Niveau 4 :</strong> Le boss final. Les <em>boîtes de gélose</em> et le <em>comptage cellulaire</em>.
+                        </div>
+                    </div>
+                    <div class="wizard-controls">
+                        <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Retour</button>
+                        <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Suivant ➔</button>
+                    </div>
+                </div>
+            </div>
+        `
     }
 };
 

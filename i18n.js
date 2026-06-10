@@ -3681,6 +3681,11 @@ slurry_info_tip: "Pro-tip: If unsure, choose \"Thin\". Pitching slightly more sl
             power: "⚠️ CONNECTION LOST! Check power/WiFi.",
             temp: "🔥 TEMP DEVIATION! >2.0°C difference.",
             login_add_device: "You need to log in to connect a YeastMaster device to your account.",
+            no_device: "Please select a target device from the dropdown above the button!",
+            no_strains: "You must select at least one yeast/profile (mark it with the ★ star) to sync!",
+            login_sync: "You must be logged in to sync to the cloud.",
+            sync_blocked: "⚠️ SYNC ABORTED!\n\nYour YeastMaster is currently running an active fermentation. Syncing a new library now could overwrite the running profile and ruin the fermentation.\n\nPause or finish the fermentation on the device first.",
+            sync_empty: "Could not pack the profiles! Double-check that the names match the database.",
 
             },
 
@@ -4094,7 +4099,12 @@ house_bank: {
             crash: "❄️ DAGS FÖR COLD CRASH!",
             power: "⚠️ ANSLUTNING BRUTEN! Kolla ström/WiFi.",
             temp: "🔥 TEMP-AVVIKELSE! >2.0°C skillnad.",
-            login_add_device: "Du måste logga in för att kunna koppla en YeastMaster-enhet till ditt konto."
+            login_add_device: "Du måste logga in för att kunna koppla en YeastMaster-enhet till ditt konto.",
+            no_device: "Vänligen välj en målenhet i rullistan ovanför knappen!",
+            no_strains: "Du måste välja minst en jäst/profil (markera med stjärnan ★) för att kunna synka!",
+            login_sync: "Du måste vara inloggad för att kunna synka till molnet.",
+            sync_blocked: "⚠️ SYNKNING AVBRUTEN!\n\nDin YeastMaster kör just nu en aktiv jäsning. Att synka ett nytt bibliotek nu kan skriva över den pågående profilen och förstöra jäsningen.\n\nPausa eller avsluta jäsningen på enheten först.",
+            sync_empty: "Kunde inte packa profilerna! Dubbelkolla att namnen matchar databasen."
         },
 
         support: {
@@ -4503,7 +4513,12 @@ card2_p2: "Unsere Bibliothek bietet detaillierte Anleitungen, wie du jeden Stamm
             crash: "❄️ ZEIT FÜR COLD CRASH!",
             power: "⚠️ VERBINDUNG UNTERBROCHEN!",
             temp: "🔥 TEMP-ABWEICHUNG! >2.0°C diff.",
-            login_add_device: "Du musst dich anmelden, um ein YeastMaster-Gerät mit deinem Konto zu verbinden."
+            login_add_device: "Du musst dich anmelden, um ein YeastMaster-Gerät mit deinem Konto zu verbinden.",
+            no_device: "Bitte wähle ein Zielgerät aus der Liste über dem Knopf!",
+            no_strains: "Du musst mindestens eine Hefe/ein Profil auswählen (mit dem Stern ★ markieren), um zu synchronisieren!",
+            login_sync: "Du musst angemeldet sein, um in die Cloud zu synchronisieren.",
+            sync_blocked: "⚠️ SYNCHRONISIERUNG ABGEBROCHEN!\n\nDein YeastMaster führt gerade eine aktive Gärung durch. Eine neue Bibliothek jetzt zu synchronisieren könnte das laufende Profil überschreiben und die Gärung ruinieren.\n\nPausiere oder beende zuerst die Gärung am Gerät.",
+            sync_empty: "Die Profile konnten nicht gepackt werden! Prüfe, ob die Namen mit der Datenbank übereinstimmen."
 
         },
 
@@ -4909,7 +4924,12 @@ libTour: {
             crash: "❄️ C'EST L'HEURE DU CHOC À FROID !",
             power: "⚠️ CONNEXION PERDUE ! Vérifie l'alimentation/le WiFi.",
             temp: "🔥 ÉCART DE TEMPÉRATURE ! Différence > 2,0 °C.",
-            login_add_device: "Tu dois te connecter pour associer un appareil YeastMaster à ton compte."
+            login_add_device: "Tu dois te connecter pour associer un appareil YeastMaster à ton compte.",
+            no_device: "Choisis d'abord un appareil cible dans la liste au-dessus du bouton !",
+            no_strains: "Tu dois sélectionner au moins une levure/un profil (marque-le avec l'étoile ★) pour synchroniser !",
+            login_sync: "Tu dois être connecté pour synchroniser vers le cloud.",
+            sync_blocked: "⚠️ SYNCHRONISATION ANNULÉE !\n\nTon YeastMaster est en pleine fermentation active. Synchroniser une nouvelle bibliothèque maintenant pourrait écraser le profil en cours et ruiner la fermentation.\n\nMets en pause ou termine d'abord la fermentation sur l'appareil.",
+            sync_empty: "Impossible d'emballer les profils ! Vérifie que les noms correspondent à la base de données."
         },
 
         support: {
@@ -5313,7 +5333,12 @@ libTour: {
             crash: "❄️ ¡HORA DEL CHOQUE FRÍO!",
             power: "⚠️ ¡CONEXIÓN PERDIDA! Revisa la corriente/WiFi.",
             temp: "🔥 ¡DESVIACIÓN DE TEMP.! Diferencia > 2,0 °C.",
-            login_add_device: "Tienes que iniciar sesión para vincular un dispositivo YeastMaster a tu cuenta."
+            login_add_device: "Tienes que iniciar sesión para vincular un dispositivo YeastMaster a tu cuenta.",
+            no_device: "¡Elige primero un dispositivo destino en la lista de encima del botón!",
+            no_strains: "¡Tienes que seleccionar al menos una levadura/un perfil (márcalo con la estrella ★) para sincronizar!",
+            login_sync: "Tienes que haber iniciado sesión para sincronizar con la nube.",
+            sync_blocked: "⚠️ ¡SINCRONIZACIÓN CANCELADA!\n\nTu YeastMaster está ahora mismo en plena fermentación activa. Sincronizar una nueva biblioteca ahora podría sobrescribir el perfil en curso y arruinar la fermentación.\n\nPausa o termina primero la fermentación en el dispositivo.",
+            sync_empty: "¡No se pudieron empaquetar los perfiles! Comprueba que los nombres coinciden con la base de datos."
         },
 
         support: {
