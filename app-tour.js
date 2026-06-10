@@ -290,8 +290,12 @@ window.nextLibraryTourStep = function(e) {
         const fakeHouseCard = document.getElementById('tour-fake-house-card'); if (fakeHouseCard) fakeHouseCard.remove();
         
         if (typeof closeYeastModal === 'function') closeYeastModal();
-        if (typeof enableAllScrolling === 'function') enableAllScrolling(); 
-        window.isLibraryTourActive = false; 
+        if (typeof enableAllScrolling === 'function') enableAllScrolling();
+
+        // Nollställ Profiler så US-05 (som touren laddade för demo) inte ligger kvar
+        if (typeof window.resetTourProfiler === 'function') window.resetTourProfiler();
+
+        window.isLibraryTourActive = false;
         overlay.onclick = null;
         return;
     }
@@ -376,6 +380,19 @@ window.nextLibraryTourStep = function(e) {
     }, 100);
 };
 
+// Nollställer Profiler-grafen om touren laddade in en jäst (t.ex. US-05) för demo.
+// Delas av BÅDE normal-slut och abort-vägen så de inte divergerar (annars låg US-05 kvar
+// när touren spelades klart).
+window.resetTourProfiler = function() {
+    if (typeof dryHopData !== 'undefined' && dryHopData.enabled && typeof toggleDryHopLine === 'function') toggleDryHopLine();
+    if (typeof removeHopData !== 'undefined' && removeHopData.enabled && typeof toggleRemoveHopsLine === 'function') toggleRemoveHopsLine();
+    if (typeof rackDumpData !== 'undefined' && rackDumpData.enabled && typeof toggleRackDumpLine === 'function') toggleRackDumpLine();
+    const strainSelect = document.getElementById('custom-base-yeast');
+    const nameInput = document.getElementById('custom-profile-name');
+    if (strainSelect) { strainSelect.value = ''; strainSelect.dispatchEvent(new Event('change')); }
+    if (nameInput) nameInput.value = '';
+};
+
 window.confirmAbortTour = function(e) {
     if (e) { e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
     const lang = window.currentLang || 'en';
@@ -416,14 +433,8 @@ window.abortLibraryTour = function(e) {
     window.isLibraryTourActive = false;
     window.currentLibStep = 0;
 
-    // Nollställ Profiler-grafen om den laddades av touren
-    if (typeof dryHopData !== 'undefined' && dryHopData.enabled && typeof toggleDryHopLine === 'function') toggleDryHopLine();
-    if (typeof removeHopData !== 'undefined' && removeHopData.enabled && typeof toggleRemoveHopsLine === 'function') toggleRemoveHopsLine();
-    if (typeof rackDumpData !== 'undefined' && rackDumpData.enabled && typeof toggleRackDumpLine === 'function') toggleRackDumpLine();
-    const strainSelect = document.getElementById('custom-base-yeast');
-    const nameInput = document.getElementById('custom-profile-name');
-    if (strainSelect) { strainSelect.value = ''; strainSelect.dispatchEvent(new Event('change')); }
-    if (nameInput) nameInput.value = '';
+    // Nollställ Profiler-grafen om den laddades av touren (delad hjälpfunktion)
+    if (typeof window.resetTourProfiler === 'function') window.resetTourProfiler();
 
     // Om vi är i Lab-vyn, hoppa tillbaka till biblioteket
     const labView = document.getElementById('view-lab');
