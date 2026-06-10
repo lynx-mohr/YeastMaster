@@ -1301,6 +1301,764 @@ const academyModules = {
                     </div>
                 </div>
             </div>
+        `,
+        'calc': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Calculateur d'ensemencement</h2>
+            <div class="calc-container" style="margin: 0; padding: 0; background: transparent; border: none;">
+                <div class="calc-inputs">
+                    <div class="input-group">
+                        <label>Volume du lot (L)</label>
+                        <input type="number" id="pitch-vol" value="20" oninput="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                    </div>
+                    <div class="input-group">
+                        <label>Densité (DI)</label>
+                        <input type="number" id="pitch-og" value="1.050" step="0.001" oninput="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                    </div>
+                    <div class="input-group">
+                        <label>Taux d'ensemencement (M/ml/°P)</label>
+                        <select id="pitch-rate" onchange="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                            <option value="0.75">0,75 (Ale standard)</option>
+                            <option value="1.0">1,0 (Ale haute densité)</option>
+                            <option value="1.5">1,5 (Lager standard)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Date de récolte</label>
+                        <input type="date" id="pitch-date" onchange="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                    </div>
+                </div>
+                <div class="calc-results" style="display: flex; gap: 15px; margin-top: 20px;">
+                    <div class="res-card" style="flex: 1; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #333;">
+                        <span class="res-label" style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">CELLULES REQUISES</span>
+                        <span class="res-val" id="res-needed" style="display: block; font-size: 2rem; font-weight: 800; color: #fff;">--</span>
+                        <span class="res-unit" style="font-size: 0.8rem; color: #666;">Milliards de cellules</span>
+                    </div>
+                    <div class="res-card accent" style="flex: 1; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #333; border-left: 4px solid var(--accent-color);">
+                        <span class="res-label" style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">VIABILITÉ EST.</span>
+                        <span class="res-val" id="res-viability" style="display: block; font-size: 2rem; font-weight: 800; color: #fff;">--</span>
+                        <span class="res-unit" id="res-days-old" style="font-size: 0.8rem; color: #666;">Neuve</span>
+                    </div>
+                </div>
+                <div id="pitch-warning" class="warning-box" style="display:none; margin-top: 20px; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 15px; border-radius: 8px; font-size: 0.9rem; text-align: center; font-weight: 600;">
+                    ⚠️ Attention : sous-ensemencement détecté. Pense à préparer un pied de cuve !
+                </div>
+            </div>
+        `,
+        'starters': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Pieds de cuve 101</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>Il te faut :</h4>
+                    <ul class="wizard-checklist" id="wizard-checklist">
+                        <li id="item-flask">Erlenmeyer</li>
+                        <li id="item-scale">Balance de précision</li>
+                        <li id="item-dme">DME clair</li>
+                        <li id="item-water">Eau propre</li>
+                        <li id="item-heat">Source de chaleur</li>
+                        <li id="item-yeast">Pack de levure</li>
+                        <li id="item-stirbar">Barreau aimanté</li>
+                        <li id="item-stirplate">Agitateur magnétique</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" id="module-wizard">
+                    <div class="wizard-dots" id="wizard-dots">
+                        <div class="wizard-dot active"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                    </div>
+                    <div class="wizard-step active" data-step="0">
+                        <div class="wizard-icon">🧽🧪</div>
+                        <h3>1. Nettoyer & préparer</h3>
+                        <p>Avant de commencer, l'hygiène est primordiale. Assure-toi que ton erlenmeyer est parfaitement propre et désinfecté.</p>
+                    </div>
+                    <div class="wizard-step" data-step="1">
+                        <div class="wizard-icon">⚖️🌾</div>
+                        <h3>2. Le ratio d'or</h3>
+                        <p>Pose l'erlenmeyer sur la balance. Pèse exactement <strong>100 g de DME</strong> pour chaque <strong>litre d'eau</strong>. Ça donne une densité parfaite de 1.036.</p>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="wizard-icon">🔥🌡️</div>
+                        <h3>3. Bouillir & stériliser</h3>
+                        <p>Mets l'erlenmeyer sur ta source de chaleur. Fais bouillir doucement 10-15 minutes pour stériliser le moût. <br><br><em>Astuce de pro : ajoute une goutte de Fermcap-S pour éviter les débordements !</em></p>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-icon">❄️🌪️</div>
+                        <h3>4. Refroidir, ensemencer & faire tourner</h3>
+                        <p>Refroidis l'erlenmeyer à 20 °C. Ensemence ta levure, mets le barreau aimanté et place le tout sur l'agitateur pendant 24-48 heures. Regarde les cellules se multiplier !</p>
+                    </div>
+                    <div class="wizard-controls">
+                        <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Retour</button>
+                        <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Suivant ➔</button>
+                    </div>
+                </div>
+            </div>
+        `,
+        'washing': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Lavage de levure 101</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>Il te faut :</h4>
+                    <ul class="wizard-checklist" id="wizard-checklist">
+                        <li id="item-jars">Bocaux en verre</li>
+                        <li id="item-starsan">Star San</li>
+                        <li id="item-water">Eau stérile (refroidie)</li>
+                        <li id="item-cake">Gâteau de levure</li>
+                        <li id="item-fridge">Place au frigo</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" id="module-wizard">
+                    <div class="wizard-dots" id="wizard-dots">
+                        <div class="wizard-dot active"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                    </div>
+                    <div class="wizard-step active" data-step="0">
+                        <div class="wizard-icon">🧽💧</div>
+                        <h3>1. Préparer & diluer</h3>
+                        <p>Désinfecte tout au Star San. Verse ton eau pré-bouillie et refroidie (stérile) directement dans le fermenteur, juste sur le gâteau de levure sale.</p>
+                    </div>
+                    <div class="wizard-step" data-step="1">
+                        <div class="wizard-icon">🌪️💦</div>
+                        <h3>2. Secoue bien</h3>
+                        <p>Remets le couvercle sur le fermenteur et fais tourbillonner vigoureusement ! Casse complètement le gâteau de levure jusqu'à ce que l'eau ressemble à une boue épaisse.</p>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="wizard-icon">⏳🕰️</div>
+                        <h3>3. Laisse la gravité agir</h3>
+                        <p>Laisse le fermenteur totalement immobile pendant <strong>20-30 minutes</strong>. Le trub lourd et sombre et les résidus de houblon coulent vite, laissant la levure saine en suspension dans le liquide laiteux au-dessus.</p>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-icon">🫗✨</div>
+                        <h3>4. Récolte l'or</h3>
+                        <p>Transvase délicatement le liquide laiteux dans tes bocaux désinfectés. Arrête de verser dès que tu vois le trub sombre du fond essayer de suivre.</p>
+                    </div>
+                    <div class="wizard-step" data-step="4">
+                        <div class="wizard-icon">🧊🧮</div>
+                        <h3>5. Choc à froid & ensemencement</h3>
+                        <p>Mets les bocaux au frigo. En quelques jours, la levure se compacte en une couche blanche propre. Le jour du brassage, décante l'eau, laisse revenir à température et mesure la boue dans notre Calculateur d'ensemencement !</p>
+                    </div>
+                    <div class="wizard-controls">
+                        <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Retour</button>
+                        <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Suivant ➔</button>
+                    </div>
+                </div>
+            </div>
+        `,
+        'agar': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Maîtriser les boîtes de gélose</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>Le kit de labo :</h4>
+                    <ul class="wizard-checklist">
+                        <li id="agar-powder">Poudre d'agar-agar</li>
+                        <li id="agar-dme">DME clair</li>
+                        <li id="agar-dishes">Boîtes de Petri</li>
+                        <li id="agar-loop">Anse d'inoculation</li>
+                        <li id="agar-flame">Flamme (bec Bunsen/chalumeau)</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" id="module-wizard">
+                    <div class="wizard-dots" id="wizard-dots">
+                        <div class="wizard-dot active"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                    </div>
+                    <div class="wizard-step active" data-step="0">
+                        <div class="wizard-icon">🥣🔥</div>
+                        <h3>1. Le gel magique</h3>
+                        <p>L'agar est simplement une substance gélatineuse faite à partir d'algues. En la mélangeant à du moût de pied de cuve classique (DME et eau) et en la faisant bouillir, on crée une surface nutritive solide et stérile pour faire pousser la levure.</p>
+                    </div>
+                    <div class="wizard-step" data-step="1">
+                        <div class="wizard-icon">🧫✨</div>
+                        <h3>2. Couler les boîtes</h3>
+                        <p>Dans une pièce sans courant d'air (à côté d'une flamme nue qui crée un courant ascendant stérile repoussant la poussière), verse délicatement le liquide chaud dans des boîtes de Petri stériles. Laisse-les refroidir et se solidifier.</p>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="wizard-icon">〰️🦠</div>
+                        <h3>3. Strier pour isoler</h3>
+                        <p>Trempe ton anse stérilisée dans un échantillon de levure. Traîne-la doucement sur la surface de la gélose en zig-zag. Stérilise l'anse, repasse-la dans tes premières lignes et fais de nouveaux zig-zags. Ça étale les cellules de plus en plus finement.</p>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-icon">⚪🔍</div>
+                        <h3>4. Récolter une colonie</h3>
+                        <p>Incube les boîtes à l'obscurité, à température ambiante. Après quelques jours, tu verras des points blancs individuels. Chaque point est une colonie pure issue d'une <strong>seule cellule de levure</strong> ! Préleve-en une et ensemence-la dans un petit pied de cuve en tube à essai.</p>
+                    </div>
+                    <div class="wizard-controls">
+                        <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Retour</button>
+                        <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Suivant ➔</button>
+                    </div>
+                </div>
+            </div>
+        `,
+        'wild': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Capturer la levure sauvage</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>Le kit du chasseur :</h4>
+                    <ul class="wizard-checklist">
+                        <li id="wild-jars">Bocaux en verre</li>
+                        <li id="wild-wort">Moût de faible densité</li>
+                        <li id="wild-hops">Quelques pellets de houblon</li>
+                        <li id="wild-cloth">Étamine</li>
+                        <li id="wild-fruit">Fruits / fleurs</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" id="module-wizard">
+                    <div class="wizard-dots" id="wizard-dots">
+                        <div class="wizard-dot active"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                    </div>
+                    <div class="wizard-step active" data-step="0">
+                        <div class="wizard-icon">🍯🛡️</div>
+                        <h3>1. L'appât</h3>
+                        <p>Prépare un moût faible (1.020) et fais-le bouillir avec quelques pellets de houblon. Le houblon est crucial ici — il agit comme un bouclier contre les bactéries indésirables (comme les lactobacilles), donnant à la levure sauvage une longueur d'avance pour coloniser le bocal.</p>
+                    </div>
+                    <div class="wizard-step" data-step="1">
+                        <div class="wizard-icon">🍎🌿</div>
+                        <h3>2. La capture</h3>
+                        <p>Plonge des fruits bio non lavés (pommes, raisins, baies) ou des fleurs locales dans ton bocal de moût refroidi. Ou bien couvre le bocal d'une étamine et laisse-le une nuit sous un arbre fruitier pour attraper les levures portées par la brise.</p>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="wizard-icon">👃⚠️</div>
+                        <h3>3. Le test du nez</h3>
+                        <p>Couvre de papier alu et attends 3-5 jours. Si ça fermente et que ça sent le vomi, les pieds ou le fromage — jette (les bactéries ont gagné). Si ça sent le pain, le fruit ou l'épice belge — félicitations, tu as attrapé de la levure sauvage !</p>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-icon">🧫👑</div>
+                        <h3>4. Dompter la bête</h3>
+                        <p>Les captures sauvages sont toujours un mélange de différentes souches de levure et parfois de moisissures sauvages. Pour en tirer une levure de brassage fiable, utilise la <em>méthode de striage sur boîte de gélose</em> pour isoler une seule colonie pure qui sent bon !</p>
+                    </div>
+                    <div class="wizard-controls">
+                        <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Retour</button>
+                        <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Suivant ➔</button>
+                    </div>
+                </div>
+            </div>
+        `,
+        'stirplate': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">La magie des agitateurs magnétiques</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>Pourquoi en utiliser un ?</h4>
+                    <ul class="wizard-checklist">
+                        <li class="active-item" style="border-bottom: 1px dashed #333;">Oxygénation constante</li>
+                        <li class="active-item" style="border-bottom: 1px dashed #333;">Chasse le CO2 toxique</li>
+                        <li class="active-item" style="border-bottom: 1px dashed #333;">Maintient la levure en suspension</li>
+                        <li class="active-item" style="color: var(--accent-color) !important;">Croissance cellulaire ×10 !</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" style="display: block !important;">
+                    <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 20px;">
+                        <div style="font-size: 3rem; line-height: 1;">🌪️</div>
+                        <div>
+                            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px;">Le vortex</h3>
+                            <p style="color: #ccc; line-height: 1.6; font-size: 0.95rem;">Un agitateur magnétique crée un vortex continu dans ton erlenmeyer. Ce mouvement constant augmente énormément la surface de liquide exposée à l'air, ce qui capte l'oxygène, crucial pour la reproduction de la levure.</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 20px; align-items: flex-start;">
+                        <div style="font-size: 3rem; line-height: 1;">🧲</div>
+                        <div>
+                            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px;">Comment ça marche</h3>
+                            <p style="color: #ccc; line-height: 1.6; font-size: 0.95rem;">Dans le boîtier, un moteur tourne avec un aimant fixé dessus. Tu places un « barreau aimanté » recouvert de Téflon (qui est aussi un aimant) dans ton erlenmeyer. Quand le moteur tourne, le barreau s'accroche au champ magnétique et tourne avec lui.</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 30px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; border-left: 4px solid #f39c12;">
+                        <strong style="color: #f39c12;">Astuce de pro :</strong> Pas besoin d'une tornade géante ! Un petit creux à la surface du liquide suffit pour garder la levure en suspension et échanger les gaz parfaitement.
+                    </div>
+                </div>
+            </div>
+        `,
+        'counting': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Comptage cellulaire pro</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>Le matériel pro :</h4>
+                    <ul class="wizard-checklist">
+                        <li id="item-hemo">Hémocytomètre</li>
+                        <li id="item-microscope">Microscope (400x)</li>
+                        <li id="item-blue">Bleu de méthylène</li>
+                        <li id="item-pipette">Pipettes de précision</li>
+                        <li id="item-counter">Compteur manuel</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" id="module-wizard">
+                    <div class="wizard-dots" id="wizard-dots">
+                        <div class="wizard-dot active"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                    </div>
+                    <div class="wizard-step active" data-step="0">
+                        <div class="wizard-icon">🧪💧</div>
+                        <h3>1. Diluer & colorer</h3>
+                        <p>La boue de levure est bien trop dense pour être comptée. Il faut la diluer précisément ! Mélange 1 part de boue avec 99 parts d'eau distillée (une <strong>dilution 1:100</strong>).</p>
+                        <p style="font-size: 0.9em; color: #aaa;">Ajoute une goutte de <strong>bleu de méthylène</strong> à l'échantillon. Attends 1-2 minutes. Les cellules vivantes rejettent le colorant et restent claires. Les cellules mortes se colorent en bleu !</p>
+                    </div>
+                    <div class="wizard-step" data-step="1">
+                        <div class="wizard-icon">🔬🩸</div>
+                        <h3>2. Charger la chambre</h3>
+                        <p>Un hémocytomètre est une lame de verre épaisse avec une grille microscopique gravée au laser. Place la lamelle spéciale sur la grille.</p>
+                        <p style="font-size: 0.9em; color: #aaa;">Touche le bord de la lamelle avec ta pipette. La <em>capillarité</em> aspire le liquide directement. Laisse reposer 3 minutes pour que les cellules se déposent sur le verre.</p>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <h3 style="margin-bottom: 10px;">3. Les 5 carrés</h3>
+                        <p style="font-size: 0.9em; margin-bottom: 15px;">Repère la grille centrale au grossissement 400x. Elle a 25 carrés moyens. Pour gagner du temps, on ne compte que les <strong>4 coins</strong> et le carré du <strong>centre</strong> (surlignés ci-dessous).</p>
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; background: #444; width: 140px; height: 140px; margin: 0 auto 15px; border: 2px solid #666; padding: 2px;">
+                            <div style="background: var(--accent-color);"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: var(--accent-color);"></div>
+                            <div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div>
+                            <div style="background: #111;"></div><div style="background: #111;"></div><div style="background: var(--accent-color);"></div><div style="background: #111;"></div><div style="background: #111;"></div>
+                            <div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div>
+                            <div style="background: var(--accent-color);"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: var(--accent-color);"></div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-icon">📐🛑</div>
+                        <h3>4. La règle en L</h3>
+                        <p>Certaines cellules se trouvent pile sur les lignes de séparation. Si tu les comptes dans un carré, tu risques de les recompter dans le suivant !</p>
+                        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-color); margin-top: 15px; text-align: left;">
+                            <strong style="color: #fff;">La règle universelle :</strong><br>
+                            Compte les cellules qui touchent les lignes du <strong>haut</strong> et de <strong>droite</strong>.<br>
+                            <em>Ignore</em> les cellules qui touchent les lignes du <strong>bas</strong> et de <strong>gauche</strong>.
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-step="4">
+                        <div class="wizard-icon">🧮✖️</div>
+                        <h3>5. La formule magique</h3>
+                        <p>Additionne toutes les cellules vivantes (claires) trouvées dans ces 5 carrés. Insère le résultat dans la formule pour savoir combien de cellules il y a dans un millilitre de ta boue !</p>
+                        <div style="background: #111; padding: 15px; border-radius: 8px; border: 1px dashed #444; margin-top: 15px; font-family: monospace; font-size: 0.95rem; color: var(--accent-color);">
+                            (Cellules comptées / 5) <br>
+                            × 25 <br>
+                            × facteur de dilution (100) <br>
+                            × 10 000 <br>
+                            = Cellules par mL
+                        </div>
+                    </div>
+                    <div class="wizard-controls">
+                        <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Retour</button>
+                        <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Suivant ➔</button>
+                    </div>
+                </div>
+            </div>
+        `
+    },
+
+    es: {
+        'intro': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Bienvenido al Lab</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>Tu camino hacia la maestría:</h4>
+                    <ul class="wizard-checklist">
+                        <li id="intro-mindset">1. La mentalidad</li>
+                        <li id="intro-gear">2. El laboratorio de cocina</li>
+                        <li id="intro-rewards">3. Las recompensas</li>
+                        <li id="intro-roadmap">4. La hoja de ruta</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" id="module-wizard">
+                    <div class="wizard-dots" id="wizard-dots">
+                        <div class="wizard-dot active"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                    </div>
+                    <div class="wizard-step active" data-step="0">
+                        <div class="wizard-icon">🧠✨</div>
+                        <h3>1. La mentalidad del microbiólogo</h3>
+                        <p>La gestión de levaduras suena intimidante. La gente habla de laboratorios estériles, campanas de flujo laminar y microscopios carísimos.</p>
+                        <p style="color: var(--accent-color); font-weight: bold; margin: 15px 0;">Olvídate de todo eso por ahora.</p>
+                        <p>Si sabes elaborar un lote de cerveza sin contaminarlo, ya tienes las habilidades de higiene necesarias para cosechar y reutilizar tu levadura. ¡Una buena desinfección es el 95 % del trabajo!</p>
+                    </div>
+                    <div class="wizard-step" data-step="1">
+                        <div class="wizard-icon">🫙🧽</div>
+                        <h3>2. El laboratorio de cocina</h3>
+                        <p>No necesitas un laboratorio para empezar. La encimera de tu cocina es perfecta. Las herramientas básicas para tu primera cosecha de levadura son increíblemente simples:</p>
+                        <ul style="color: #aaa; margin-top: 15px; line-height: 1.6; padding-left: 20px;">
+                            <li>Un pulverizador de <strong>Star San</strong> (o un desinfectante similar).</li>
+                            <li>Unos cuantos <strong>tarros de cristal</strong> limpios con tapa.</li>
+                            <li>Un poco de <strong>extracto de malta seco (DME)</strong> para alimentar la levadura.</li>
+                            <li>Una olla normal para hervir agua estéril.</li>
+                        </ul>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="wizard-icon">💰🍺</div>
+                        <h3>3. Las recompensas</h3>
+                        <p>¿Por qué molestarte en guardar y lavar tu propia levadura?</p>
+                        <ul style="color: #aaa; margin-top: 15px; line-height: 1.6; padding-left: 20px;">
+                            <li><strong style="color: #fff;">Ahorrar dinero:</strong> La levadura líquida es cara. ¡Compra un pack premium una vez, lávalo y úsalo para tus próximos 5-10 lotes!</li>
+                            <li><strong style="color: #fff;">Mejor cerveza:</strong> Sembrar una gran cantidad de levadura sana propia da fermentaciones más rápidas y limpias, sin tiempo de latencia.</li>
+                            <li><strong style="color: #fff;">Independencia:</strong> Levántate un sábado y elabora de forma espontánea, sabiendo que tienes levadura de primera lista en la nevera.</li>
+                        </ul>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-icon">🗺️🚀</div>
+                        <h3>4. La hoja de ruta</h3>
+                        <p>No intentes aprenderlo todo de golpe. Sigue este camino a tu ritmo:</p>
+                        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-color); margin-top: 15px; font-size: 0.9rem; line-height: 1.6;">
+                            <strong style="color: #fff;">Nivel 1:</strong> Compra un matraz Erlenmeyer y aprende los <em>pies de cuba</em>.<br>
+                            <strong style="color: #fff;">Nivel 2:</strong> Domina el <em>lavado de levadura</em> a partir de una cerveza terminada.<br>
+                            <strong style="color: #fff;">Nivel 3:</strong> Fabrica o compra un <em>agitador magnético</em> para un gran crecimiento celular.<br>
+                            <strong style="color: #fff;">Nivel 4:</strong> El jefe final. Las <em>placas de agar</em> y el <em>recuento celular</em>.
+                        </div>
+                    </div>
+                    <div class="wizard-controls">
+                        <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Atrás</button>
+                        <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Siguiente ➔</button>
+                    </div>
+                </div>
+            </div>
+        `,
+        'calc': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Calculadora de siembra</h2>
+            <div class="calc-container" style="margin: 0; padding: 0; background: transparent; border: none;">
+                <div class="calc-inputs">
+                    <div class="input-group">
+                        <label>Volumen del lote (L)</label>
+                        <input type="number" id="pitch-vol" value="20" oninput="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                    </div>
+                    <div class="input-group">
+                        <label>Densidad (DI)</label>
+                        <input type="number" id="pitch-og" value="1.050" step="0.001" oninput="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                    </div>
+                    <div class="input-group">
+                        <label>Tasa de siembra (M/ml/°P)</label>
+                        <select id="pitch-rate" onchange="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                            <option value="0.75">0,75 (Ale estándar)</option>
+                            <option value="1.0">1,0 (Ale de alta densidad)</option>
+                            <option value="1.5">1,5 (Lager estándar)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Fecha de cosecha</label>
+                        <input type="date" id="pitch-date" onchange="calculatePitch()" style="width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Lexend'; font-weight: 600;">
+                    </div>
+                </div>
+                <div class="calc-results" style="display: flex; gap: 15px; margin-top: 20px;">
+                    <div class="res-card" style="flex: 1; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #333;">
+                        <span class="res-label" style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">CÉLULAS NECESARIAS</span>
+                        <span class="res-val" id="res-needed" style="display: block; font-size: 2rem; font-weight: 800; color: #fff;">--</span>
+                        <span class="res-unit" style="font-size: 0.8rem; color: #666;">Miles de millones de células</span>
+                    </div>
+                    <div class="res-card accent" style="flex: 1; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #333; border-left: 4px solid var(--accent-color);">
+                        <span class="res-label" style="display: block; font-size: 0.7rem; color: #888; font-weight: 800; margin-bottom: 5px;">VIABILIDAD EST.</span>
+                        <span class="res-val" id="res-viability" style="display: block; font-size: 2rem; font-weight: 800; color: #fff;">--</span>
+                        <span class="res-unit" id="res-days-old" style="font-size: 0.8rem; color: #666;">Nueva</span>
+                    </div>
+                </div>
+                <div id="pitch-warning" class="warning-box" style="display:none; margin-top: 20px; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 15px; border-radius: 8px; font-size: 0.9rem; text-align: center; font-weight: 600;">
+                    ⚠️ Aviso: se ha detectado subsiembra. ¡Considera preparar un starter!
+                </div>
+            </div>
+        `,
+        'starters': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Starters 101</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>Necesitarás:</h4>
+                    <ul class="wizard-checklist" id="wizard-checklist">
+                        <li id="item-flask">Matraz Erlenmeyer</li>
+                        <li id="item-scale">Báscula de precisión</li>
+                        <li id="item-dme">DME claro</li>
+                        <li id="item-water">Agua limpia</li>
+                        <li id="item-heat">Fuente de calor</li>
+                        <li id="item-yeast">Pack de levadura</li>
+                        <li id="item-stirbar">Barra agitadora</li>
+                        <li id="item-stirplate">Agitador magnético</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" id="module-wizard">
+                    <div class="wizard-dots" id="wizard-dots">
+                        <div class="wizard-dot active"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                    </div>
+                    <div class="wizard-step active" data-step="0">
+                        <div class="wizard-icon">🧽🧪</div>
+                        <h3>1. Limpiar y preparar</h3>
+                        <p>Antes de empezar, la higiene lo es todo. Asegúrate de que tu matraz Erlenmeyer esté completamente limpio y desinfectado.</p>
+                    </div>
+                    <div class="wizard-step" data-step="1">
+                        <div class="wizard-icon">⚖️🌾</div>
+                        <h3>2. La proporción de oro</h3>
+                        <p>Pon el matraz en la báscula. Pesa exactamente <strong>100 g de DME</strong> por cada <strong>litro de agua</strong>. Esto crea una densidad perfecta de 1.036.</p>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="wizard-icon">🔥🌡️</div>
+                        <h3>3. Hervir y esterilizar</h3>
+                        <p>Lleva el matraz a tu fuente de calor. Hierve suavemente 10-15 minutos para esterilizar el mosto. <br><br><em>Consejo pro: ¡añade una gota de Fermcap-S para evitar que rebose!</em></p>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-icon">❄️🌪️</div>
+                        <h3>4. Enfriar, sembrar y girar</h3>
+                        <p>Enfría el matraz a 20 °C. Siembra tu levadura, mete la barra agitadora y ponlo en el agitador 24-48 horas. ¡Mira cómo se multiplican las células!</p>
+                    </div>
+                    <div class="wizard-controls">
+                        <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Atrás</button>
+                        <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Siguiente ➔</button>
+                    </div>
+                </div>
+            </div>
+        `,
+        'washing': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Lavado de levadura 101</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>Necesitarás:</h4>
+                    <ul class="wizard-checklist" id="wizard-checklist">
+                        <li id="item-jars">Tarros de cristal</li>
+                        <li id="item-starsan">Star San</li>
+                        <li id="item-water">Agua estéril (enfriada)</li>
+                        <li id="item-cake">Torta de levadura</li>
+                        <li id="item-fridge">Sitio en la nevera</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" id="module-wizard">
+                    <div class="wizard-dots" id="wizard-dots">
+                        <div class="wizard-dot active"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                    </div>
+                    <div class="wizard-step active" data-step="0">
+                        <div class="wizard-icon">🧽💧</div>
+                        <h3>1. Preparar y diluir</h3>
+                        <p>Desinfecta todo con Star San. Vierte tu agua prehervida y enfriada (estéril) directamente en el fermentador, justo encima de la torta de levadura sucia.</p>
+                    </div>
+                    <div class="wizard-step" data-step="1">
+                        <div class="wizard-icon">🌪️💦</div>
+                        <h3>2. Agítalo bien</h3>
+                        <p>¡Vuelve a poner la tapa del fermentador y agítalo con fuerza! Rompe la torta de levadura por completo hasta que el agua parezca un barro espeso.</p>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="wizard-icon">⏳🕰️</div>
+                        <h3>3. Deja actuar a la gravedad</h3>
+                        <p>Deja el fermentador totalmente quieto durante <strong>20-30 minutos</strong>. El trub pesado y oscuro y los restos de lúpulo se hundirán rápido, dejando la levadura sana en suspensión en el líquido lechoso de arriba.</p>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-icon">🫗✨</div>
+                        <h3>4. Cosecha el oro</h3>
+                        <p>Decanta con cuidado el líquido lechoso en tus tarros desinfectados. Deja de verter en cuanto veas que el trub oscuro del fondo intenta seguirte.</p>
+                    </div>
+                    <div class="wizard-step" data-step="4">
+                        <div class="wizard-icon">🧊🧮</div>
+                        <h3>5. Choque frío y siembra</h3>
+                        <p>Mete los tarros en la nevera. En unos días, la levadura se compactará en una capa blanca limpia. El día de elaboración, decanta el agua, deja que se temple y mide el barro en nuestra Calculadora de siembra.</p>
+                    </div>
+                    <div class="wizard-controls">
+                        <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Atrás</button>
+                        <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Siguiente ➔</button>
+                    </div>
+                </div>
+            </div>
+        `,
+        'agar': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Dominar las placas de agar</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>El kit de laboratorio:</h4>
+                    <ul class="wizard-checklist">
+                        <li id="agar-powder">Agar-agar en polvo</li>
+                        <li id="agar-dme">DME claro</li>
+                        <li id="agar-dishes">Placas de Petri</li>
+                        <li id="agar-loop">Asa de inoculación</li>
+                        <li id="agar-flame">Llama (mechero Bunsen/soplete)</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" id="module-wizard">
+                    <div class="wizard-dots" id="wizard-dots">
+                        <div class="wizard-dot active"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                    </div>
+                    <div class="wizard-step active" data-step="0">
+                        <div class="wizard-icon">🥣🔥</div>
+                        <h3>1. El gel mágico</h3>
+                        <p>El agar es simplemente una sustancia gelatinosa hecha a partir de algas. Al mezclarla con mosto de starter normal (DME y agua) y hervirla, creamos una superficie nutritiva sólida y estéril sobre la que crece la levadura.</p>
+                    </div>
+                    <div class="wizard-step" data-step="1">
+                        <div class="wizard-icon">🧫✨</div>
+                        <h3>2. Verter las placas</h3>
+                        <p>En una habitación sin corrientes (junto a una llama abierta que crea una corriente ascendente estéril que aleja el polvo), vierte con cuidado el líquido caliente en placas de Petri estériles. Deja que se enfríen y solidifiquen.</p>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="wizard-icon">〰️🦠</div>
+                        <h3>3. Sembrar en estría para aislar</h3>
+                        <p>Moja tu asa esterilizada en una muestra de levadura. Arrástrala suavemente por la superficie del agar en zigzag. Esteriliza el asa, pásala por tus primeras líneas y haz nuevos zigzags. Esto reparte las células cada vez más finas.</p>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-icon">⚪🔍</div>
+                        <h3>4. Cosechar una colonia</h3>
+                        <p>Incuba las placas a oscuras, a temperatura ambiente. Tras unos días, verás puntos blancos individuales. ¡Cada punto es una colonia pura crecida a partir de una <strong>sola célula de levadura</strong>! Recoge una y siémbrala en un pequeño starter en tubo de ensayo.</p>
+                    </div>
+                    <div class="wizard-controls">
+                        <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Atrás</button>
+                        <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Siguiente ➔</button>
+                    </div>
+                </div>
+            </div>
+        `,
+        'wild': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Capturar levadura salvaje</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>El kit del cazador:</h4>
+                    <ul class="wizard-checklist">
+                        <li id="wild-jars">Tarros de cristal</li>
+                        <li id="wild-wort">Mosto de baja densidad</li>
+                        <li id="wild-hops">Unos pellets de lúpulo</li>
+                        <li id="wild-cloth">Gasa/estameña</li>
+                        <li id="wild-fruit">Fruta / flores</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" id="module-wizard">
+                    <div class="wizard-dots" id="wizard-dots">
+                        <div class="wizard-dot active"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                    </div>
+                    <div class="wizard-step active" data-step="0">
+                        <div class="wizard-icon">🍯🛡️</div>
+                        <h3>1. El cebo</h3>
+                        <p>Prepara un mosto flojo (1.020) y hiérvelo con unos pellets de lúpulo. El lúpulo es crucial aquí: actúa como escudo contra bacterias indeseadas (como los lactobacilos), dando a la levadura salvaje ventaja para colonizar el tarro.</p>
+                    </div>
+                    <div class="wizard-step" data-step="1">
+                        <div class="wizard-icon">🍎🌿</div>
+                        <h3>2. La captura</h3>
+                        <p>Echa fruta ecológica sin lavar (manzanas, uvas, bayas) o flores locales en tu tarro de mosto enfriado. O bien cubre el tarro con una gasa y déjalo una noche bajo un árbol frutal para atrapar levaduras que viajan en la brisa.</p>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="wizard-icon">👃⚠️</div>
+                        <h3>3. La prueba del olfato</h3>
+                        <p>Cubre con papel de aluminio y espera 3-5 días. Si fermenta y huele a vómito, a pies o a queso, tíralo (ganaron las bacterias). Si huele a pan, a fruta o a especia belga, ¡enhorabuena, has cazado levadura salvaje!</p>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-icon">🧫👑</div>
+                        <h3>4. Domar a la bestia</h3>
+                        <p>Las capturas salvajes son siempre una mezcla de distintas cepas de levadura y quizá algo de moho salvaje. Para sacar de aquí una levadura de elaboración fiable, usa el <em>método de estría en placa de agar</em> para aislar una sola colonia pura que huela bien.</p>
+                    </div>
+                    <div class="wizard-controls">
+                        <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Atrás</button>
+                        <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Siguiente ➔</button>
+                    </div>
+                </div>
+            </div>
+        `,
+        'stirplate': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">La magia de los agitadores magnéticos</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>¿Por qué usar uno?</h4>
+                    <ul class="wizard-checklist">
+                        <li class="active-item" style="border-bottom: 1px dashed #333;">Oxigenación constante</li>
+                        <li class="active-item" style="border-bottom: 1px dashed #333;">Expulsa el CO2 tóxico</li>
+                        <li class="active-item" style="border-bottom: 1px dashed #333;">Mantiene la levadura en suspensión</li>
+                        <li class="active-item" style="color: var(--accent-color) !important;">¡Crecimiento celular ×10!</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" style="display: block !important;">
+                    <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 20px;">
+                        <div style="font-size: 3rem; line-height: 1;">🌪️</div>
+                        <div>
+                            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px;">El vórtice</h3>
+                            <p style="color: #ccc; line-height: 1.6; font-size: 0.95rem;">Un agitador magnético crea un vórtice continuo en tu matraz Erlenmeyer. Este movimiento constante aumenta muchísimo la superficie de líquido expuesta al aire, captando oxígeno, crucial para la reproducción de la levadura.</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 20px; align-items: flex-start;">
+                        <div style="font-size: 3rem; line-height: 1;">🧲</div>
+                        <div>
+                            <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 10px;">Cómo funciona</h3>
+                            <p style="color: #ccc; line-height: 1.6; font-size: 0.95rem;">Dentro de la caja hay un motor que gira con un imán pegado. Metes una «barra agitadora» recubierta de teflón (que también es un imán) en tu matraz. Cuando el motor gira, la barra se acopla al campo magnético y gira con él.</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 30px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; border-left: 4px solid #f39c12;">
+                        <strong style="color: #f39c12;">Consejo pro:</strong> ¡No necesitas un tornado enorme! Un pequeño hoyuelo en la superficie del líquido basta para mantener la levadura en suspensión e intercambiar gases perfectamente.
+                    </div>
+                </div>
+            </div>
+        `,
+        'counting': `
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 25px; font-weight: 900; letter-spacing: -1px;">Recuento celular pro</h2>
+            <div class="ym-academy-layout">
+                <div class="ym-academy-sidebar">
+                    <h4>El equipo pro:</h4>
+                    <ul class="wizard-checklist">
+                        <li id="item-hemo">Hemocitómetro</li>
+                        <li id="item-microscope">Microscopio (400x)</li>
+                        <li id="item-blue">Azul de metileno</li>
+                        <li id="item-pipette">Pipetas de precisión</li>
+                        <li id="item-counter">Contador manual</li>
+                    </ul>
+                </div>
+                <div class="ym-academy-content" id="module-wizard">
+                    <div class="wizard-dots" id="wizard-dots">
+                        <div class="wizard-dot active"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                        <div class="wizard-dot"></div>
+                    </div>
+                    <div class="wizard-step active" data-step="0">
+                        <div class="wizard-icon">🧪💧</div>
+                        <h3>1. Diluir y teñir</h3>
+                        <p>El barro de levadura está demasiado denso para contarlo. ¡Hay que diluirlo con precisión! Mezcla 1 parte de barro con 99 partes de agua destilada (una <strong>dilución 1:100</strong>).</p>
+                        <p style="font-size: 0.9em; color: #aaa;">Añade una gota de <strong>azul de metileno</strong> a la muestra. Espera 1-2 minutos. Las células vivas expulsan el tinte y se ven claras. ¡Las células muertas se tiñen de azul!</p>
+                    </div>
+                    <div class="wizard-step" data-step="1">
+                        <div class="wizard-icon">🔬🩸</div>
+                        <h3>2. Cargar la cámara</h3>
+                        <p>Un hemocitómetro es un portaobjetos de vidrio grueso con una cuadrícula microscópica grabada con láser. Coloca el cubreobjetos especial sobre la cuadrícula.</p>
+                        <p style="font-size: 0.9em; color: #aaa;">Toca el borde del cubreobjetos con tu pipeta. La <em>capilaridad</em> absorbe el líquido directamente. Deja reposar 3 minutos para que las células se asienten en el vidrio.</p>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <h3 style="margin-bottom: 10px;">3. Los 5 cuadrados</h3>
+                        <p style="font-size: 0.9em; margin-bottom: 15px;">Localiza la cuadrícula central a 400x de aumento. Tiene 25 cuadrados medianos. Para ahorrar tiempo, solo contamos las <strong>4 esquinas</strong> y el cuadrado del <strong>centro</strong> (resaltados abajo).</p>
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; background: #444; width: 140px; height: 140px; margin: 0 auto 15px; border: 2px solid #666; padding: 2px;">
+                            <div style="background: var(--accent-color);"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: var(--accent-color);"></div>
+                            <div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div>
+                            <div style="background: #111;"></div><div style="background: #111;"></div><div style="background: var(--accent-color);"></div><div style="background: #111;"></div><div style="background: #111;"></div>
+                            <div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div>
+                            <div style="background: var(--accent-color);"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: #111;"></div><div style="background: var(--accent-color);"></div>
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-icon">📐🛑</div>
+                        <h3>4. La regla en L</h3>
+                        <p>Algunas células quedan justo sobre las líneas de separación. ¡Si las cuentas en un cuadrado, podrías contarlas otra vez en el siguiente!</p>
+                        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-color); margin-top: 15px; text-align: left;">
+                            <strong style="color: #fff;">La regla universal:</strong><br>
+                            Cuenta las células que tocan las líneas de <strong>arriba</strong> y de la <strong>derecha</strong>.<br>
+                            <em>Ignora</em> las células que tocan las líneas de <strong>abajo</strong> y de la <strong>izquierda</strong>.
+                        </div>
+                    </div>
+                    <div class="wizard-step" data-step="4">
+                        <div class="wizard-icon">🧮✖️</div>
+                        <h3>5. La fórmula mágica</h3>
+                        <p>Suma todas las células vivas (claras) que encontraste en esos 5 cuadrados. ¡Ahora mételo en la fórmula para saber cuántas células hay en un mililitro de tu barro!</p>
+                        <div style="background: #111; padding: 15px; border-radius: 8px; border: 1px dashed #444; margin-top: 15px; font-family: monospace; font-size: 0.95rem; color: var(--accent-color);">
+                            (Células contadas / 5) <br>
+                            × 25 <br>
+                            × factor de dilución (100) <br>
+                            × 10 000 <br>
+                            = Células por mL
+                        </div>
+                    </div>
+                    <div class="wizard-controls">
+                        <button class="wizard-btn" id="wiz-prev" onclick="changeWizardStep(-1)" disabled>Atrás</button>
+                        <button class="wizard-btn primary" id="wiz-next" onclick="changeWizardStep(1)">Siguiente ➔</button>
+                    </div>
+                </div>
+            </div>
         `
     }
 };
