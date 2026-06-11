@@ -254,6 +254,13 @@ auth.onAuthStateChanged(async (user) => {
                 showView('dashboard');
                 updateDashboard();
             } else {
+                // Inloggad men har inga enheter än — visa "inga enheter" istället för
+                // den utloggade "Log in to see devices"-texten (som annars låg kvar).
+                const lang = window.currentLang || 'en';
+                const noDevicesTxt = window.translations?.[lang]?.settings?.no_devices || 'No devices yet';
+                if (deviceSelect) deviceSelect.innerHTML = `<option value="">${noDevicesTxt}</option>`;
+                const syncDropdown = document.getElementById('sync-target-device');
+                if (syncDropdown) syncDropdown.innerHTML = `<option value="">${noDevicesTxt}</option>`;
                 showView('claim');
             }
         } catch (err) {
