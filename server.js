@@ -14,7 +14,7 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc:       ["'self'"],
-            scriptSrc:        ["'self'", "cdn.jsdelivr.net", "www.gstatic.com", "www.google.com", "apis.google.com"],
+            scriptSrc:        ["'self'", "cdn.jsdelivr.net", "www.gstatic.com", "www.google.com", "apis.google.com", "https://www.googletagmanager.com"],
             scriptSrcAttr:    ["'unsafe-inline'"],          // tillåter onclick="..." i HTML
             styleSrc:         ["'self'", "https:", "'unsafe-inline'"],
             imgSrc:           ["'self'", "data:", "blob:", "https:"],
@@ -29,7 +29,8 @@ app.use(helmet({
                 "https://*.googleapis.com",
                 "https://*.firebaseapp.com",
                 "https://*.firebaseio.com",
-                "wss://*.firebaseio.com"
+                "wss://*.firebaseio.com",
+                "https://*.google-analytics.com"
             ],
             // www.google.com + apis.google.com krävs för reCAPTCHA-iframe och Google-login.
             frameSrc:         ["https://yeastmaster-cloud.firebaseapp.com", "https://accounts.google.com", "https://www.google.com", "https://apis.google.com"],
