@@ -55,6 +55,10 @@ async function updateDashboard() {
                 return;
             }
 
+            // Vi har riktig data från enheten → dölj ev. "ingen data mottagen"-tips
+            const noDataHintEl = document.getElementById('no-data-hint');
+            if (noDataHintEl) noDataHintEl.style.display = 'none';
+
             // ==========================================
             // --- NYTT: SMART BANNER-LOGIK (Inklusive Temp & Strömavbrott) ---
             // ==========================================
@@ -547,6 +551,10 @@ function renderDemoDashboard() {
     const displayElement = document.querySelector('.device-name-display');
     if (displayElement) displayElement.innerHTML = `<span style='color:#ff4444;'>${demoModeText}</span>`;
 
+    // Demo-läge har alltid data → dölj "ingen data mottagen"-tipset
+    const noDataHintDemo = document.getElementById('no-data-hint');
+    if (noDataHintDemo) noDataHintDemo.style.display = 'none';
+
     // 2. Namn och profil (Dessa är egennamn och behöver inte översättas)
     document.getElementById('strain-val').innerText = "OLD BAVARIAN";
     document.getElementById('profile-val').innerText = "Brulosophy";
@@ -647,6 +655,12 @@ function renderIdleDashboard(latest) {
     const banner = document.getElementById('top-banner-alert');
     if (banner) banner.style.display = 'none';
     window.currentActiveAlertString = "";
+
+    // "Ingen data mottagen än"-tips: visas BARA när enheten aldrig skickat något
+    // (latest saknas helt) — t.ex. felinslagen MAC eller enhet som inte startats än.
+    // Försvinner av sig självt så fort första datan kommer (då går vi inte hit med null).
+    const noDataHint = document.getElementById('no-data-hint');
+    if (noDataHint) noDataHint.style.display = latest ? 'none' : 'block';
 
     // Nollställ temperaturer + glasets text
     const tempBeerEl = document.getElementById('temp-beer-val');

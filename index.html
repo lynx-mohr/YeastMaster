@@ -102,7 +102,11 @@
             <div style="font-size: 0.65rem; color: #888; font-weight: 600; text-transform: uppercase; margin-top: -10px; margin-bottom: 15px; position: relative; z-index: 10;">
     <span data-i18n="dashboard.last_sync">Last sync:</span> <span id="last-sync-time" style="color: #aaa;" data-i18n="dashboard.waiting">Waiting...</span>
 </div>
-            
+
+            <div id="no-data-hint" style="display: none; background: rgba(243, 156, 18, 0.12); border: 1px solid #f39c12; color: #f39c12; padding: 12px 14px; border-radius: 8px; font-size: 0.78rem; line-height: 1.5; margin: 0 0 15px; position: relative; z-index: 10;" data-i18n="dashboard.no_data_hint">
+                No data received yet. Make sure the device is powered on and connected to WiFi — and double-check that the MAC address is correct.
+            </div>
+
             <div class="main-display">
                 <div class="left-col"> 
                     <div class="carboy-wrapper">
