@@ -1320,6 +1320,19 @@ body.light-mode .lang-select option {
     color: #111111;
 }
 
+/* Privacy Policy i light mode: rubrikerna har inline color:#fff (osynligt mot ljus
+   bakgrund) och brödtexten är ljusgrå. Tvinga mörk text. Länkar (accentfärg) lämnas. */
+body.light-mode #view-privacy h2,
+body.light-mode #view-privacy h3 {
+    color: #111111 !important;
+}
+body.light-mode #view-privacy div,
+body.light-mode #view-privacy p,
+body.light-mode #view-privacy ul,
+body.light-mode #view-privacy li {
+    color: #333333 !important;
+}
+
 body.light-mode #setting-mac-display {
     color: #666666 !important;
 }
