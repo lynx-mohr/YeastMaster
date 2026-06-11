@@ -41,7 +41,7 @@ async function updateDashboard() {
             const sortedData = data.sort((a, b) => new Date(a.time) - new Date(b.time));
 
             // Använd sortedData för att plocka ut det SENASTE värdet
-            const latest = sortedData[sortedData.length - 1];
+            let latest = sortedData[sortedData.length - 1];
             console.log("Senaste sorterade datan:", latest);
 
             // ==========================================
@@ -49,10 +49,30 @@ async function updateDashboard() {
             // Visa ett HELT nollställt kort istället för en halvt återupplivad gammal
             // jäsning. Fångas tidigt så vi också slipper en falsk temp-varning (måltemp
             // är 0 i idle medan kylen kan vara 24°C).
+            //
+            // ROBUSTHET: En enhet kan posta EN enstaka "IDLE" mitt under en pågående
+            // jäsning (t.ex. en kort omstart där den hinner synka i Select Yeast innan
+            // brew-staten laddats om). Kräv därför minst 2 IDLE I RAD innan vi nollställer
+            // — annars behandlar vi den ensamma IDLE:n som en blink och visar senaste
+            // KÖRANDE post, så hela Live View inte töms i onödan.
             // ==========================================
             if ((latest.status || "").toUpperCase() === "IDLE") {
-                renderIdleDashboard(latest);
-                return;
+                const prev = sortedData[sortedData.length - 2];
+                const prevIsIdle = !prev || (prev.status || "").toUpperCase() === "IDLE";
+
+                if (prevIsIdle) {
+                    // Ihållande idle (Select Yeast) → nollställ kortet
+                    renderIdleDashboard(latest);
+                    return;
+                }
+
+                // Enstaka IDLE-blink → hoppa över den och rendera senaste icke-idle post
+                for (let i = sortedData.length - 2; i >= 0; i--) {
+                    if ((sortedData[i].status || "").toUpperCase() !== "IDLE") {
+                        latest = sortedData[i];
+                        break;
+                    }
+                }
             }
 
             // Vi har riktig data från enheten → dölj ev. "ingen data mottagen"-tips
