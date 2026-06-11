@@ -1180,7 +1180,11 @@ void performCloudSync() {
       sendDoc["air_temp"] = t2;
       sendDoc["token"] = deviceToken;
 
-      if (currentState == RUNNING || currentState == POURING) {
+      // Rapportera jäsningsdata om en jäsning är AKTIV (brewStartTime != 0) — inte bara
+      // när skärmen råkar visa RUNNING. Annars postades en hårdkodad "IDLE" om en synk
+      // fyrade medan man var inne i en meny/inställning under pågående jäsning, vilket
+      // tömde Live View. brewStartTime nollställs vid avslut/avbrott, så ingen risk där.
+      if (currentState == RUNNING || currentState == POURING || brewStartTime != 0) {
         float d = (float)(millis() - brewStartTime) / MS_PER_DAY * TIME_MULTIPLIER;
         float realDaysPassed = (float)(millis() - realBrewStartTime) / MS_PER_DAY * TIME_MULTIPLIER;
 
