@@ -16,6 +16,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const analytics = firebase.analytics(); // <-- DENNA RAD VÄCKER ANALYTICS TILL LIV!
 
 async function getAuthHeaders() {
     const idToken = await auth.currentUser.getIdToken();

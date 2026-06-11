@@ -693,11 +693,6 @@ if (minutesSinceLastNotify >= 120) {
 }, 1 * 60 * 1000); // 1 * 60 * 1000 ms = Körs exakt var 1:a minut.
 
 
-// --- DENNA MÅSTE ALLTID LIGGA SIST ---
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server körs på port ${PORT}`);
-});
-
 // ==========================================
 // --- OTA: FIRMWARE VERSION CHECK ---
 // ==========================================
@@ -720,4 +715,9 @@ app.get('/api/firmware/download', (req, res) => {
     } else {
         res.status(404).json({ error: "Ingen firmware hittades" });
     }
+});
+
+// --- DENNA MÅSTE ALLTID LIGGA SIST ---
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server körs på port ${PORT}`);
 });
