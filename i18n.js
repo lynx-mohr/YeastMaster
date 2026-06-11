@@ -3430,7 +3430,7 @@ const translations = {
             s5_title: "Your rights",
             s5_body: "Under GDPR you have the right to access, correct, or delete your personal data at any time. You can delete your account and all associated data directly in the app under Settings → Delete account and all data. For other requests, contact us at <a href='mailto:yeastmaster101@gmail.com' style='color: var(--accent-color);'>yeastmaster101@gmail.com</a>",
             s6_title: "Cookies and local storage",
-            s6_body: "YeastMaster uses browser local storage to remember your login session, language preference, temperature unit, and accent colour. No third-party tracking cookies are used."
+            s6_body: "YeastMaster uses browser local storage to remember your login session, language preference, temperature unit, and accent colour. We also use Google Analytics (a Google service) to understand how the app is used and which countries visitors come from. This sets cookies and collects data such as approximate location (derived from your IP address), device and browser type, and in-app events. This analytics data is processed by Google. We do not use cookies for advertising and we do not sell your data. Analytics only runs if you accept it, and you can change your choice at any time under Settings."
         },
 
         soul: {
@@ -3625,6 +3625,9 @@ slurry_info_tip: "Pro-tip: If unsure, choose \"Thin\". Pitching slightly more sl
             notifications_title: "NOTIFICATIONS",
             push: "Push Notifications",
             push_desc: "Enable push notifications to receive alerts on your phone regarding temperature fluctuations, power outages, or when it's time to dry hop.",
+            privacy_title: "PRIVACY",
+            analytics: "Usage analytics",
+            analytics_desc: "Analytics helps us see how the app is used (e.g. which countries visitors come from). You can turn it on or off at any time.",
             device_mgmt: "Device Management",
             active_device: "Active Device",
             no_devices: "No devices yet",
@@ -3848,7 +3851,7 @@ slurry_info_tip: "Pro-tip: If unsure, choose \"Thin\". Pitching slightly more sl
             s5_title: "Dina rättigheter",
             s5_body: "Enligt GDPR har du rätt att när som helst få tillgång till, rätta eller radera dina personuppgifter. Du kan radera ditt konto och all tillhörande data direkt i appen under Inställningar → Radera konto och all data. Vid övriga förfrågningar, kontakta oss på <a href='mailto:yeastmaster101@gmail.com' style='color: var(--accent-color);'>yeastmaster101@gmail.com</a>",
             s6_title: "Cookies och lokal lagring",
-            s6_body: "YeastMaster använder webbläsarens lokala lagring för att komma ihåg din inloggningssession, språkval, temperaturenhet och accentfärg. Inga tredjepartscookies för spårning används."
+            s6_body: "YeastMaster använder webbläsarens lokala lagring för att komma ihåg din inloggningssession, språkval, temperaturenhet och accentfärg. Vi använder även Google Analytics (en Google-tjänst) för att förstå hur appen används och vilka länder besökarna kommer ifrån. Det sätter cookies och samlar in data som ungefärlig plats (härledd från din IP-adress), enhets- och webbläsartyp samt händelser i appen. Denna analysdata behandlas av Google. Vi använder inga cookies för annonser och säljer inte dina data. Analys körs bara om du accepterar, och du kan ändra ditt val när som helst under Inställningar."
         },
 
         soul: {
@@ -4045,6 +4048,9 @@ house_bank: {
             notifications_title: "NOTISER",
             push: "Push-notiser",
             push_desc: "Aktivera push-notiser för att få larm i mobilen om temperaturavvikelser, strömavbrott eller när det är dags att torrhumla.",
+            privacy_title: "INTEGRITET",
+            analytics: "Användningsanalys",
+            analytics_desc: "Analys hjälper oss att se hur appen används (t.ex. vilka länder besökarna kommer ifrån). Du kan slå på eller av den när som helst.",
             device_mgmt: "Hantera enheter",
             active_device: "Aktiv enhet",
             no_devices: "Inga enheter än",
@@ -4267,7 +4273,7 @@ libTour: {
             s5_title: "Deine Rechte",
             s5_body: "Gemäß DSGVO hast du das Recht, jederzeit auf deine personenbezogenen Daten zuzugreifen, sie zu berichtigen oder zu löschen. Du kannst dein Konto und alle zugehörigen Daten direkt in der App unter Einstellungen → Konto und alle Daten löschen löschen. Für andere Anfragen kontaktiere uns unter <a href='mailto:yeastmaster101@gmail.com' style='color: var(--accent-color);'>yeastmaster101@gmail.com</a>",
             s6_title: "Cookies und lokaler Speicher",
-            s6_body: "YeastMaster verwendet den lokalen Browserspeicher, um deine Anmeldesitzung, Spracheinstellung, Temperatureinheit und Akzentfarbe zu speichern. Es werden keine Tracking-Cookies von Drittanbietern verwendet."
+            s6_body: "YeastMaster verwendet den lokalen Browserspeicher, um deine Anmeldesitzung, Spracheinstellung, Temperatureinheit und Akzentfarbe zu speichern. Wir verwenden außerdem Google Analytics (einen Google-Dienst), um zu verstehen, wie die App genutzt wird und aus welchen Ländern die Besucher kommen. Dabei werden Cookies gesetzt und Daten wie der ungefähre Standort (aus deiner IP-Adresse abgeleitet), Geräte- und Browsertyp sowie In-App-Ereignisse erfasst. Diese Analysedaten werden von Google verarbeitet. Wir verwenden keine Cookies für Werbung und verkaufen deine Daten nicht. Analytics läuft nur, wenn du zustimmst, und du kannst deine Wahl jederzeit unter Einstellungen ändern."
         },
 
         soul: {
@@ -4462,6 +4468,9 @@ card2_p2: "Unsere Bibliothek bietet detaillierte Anleitungen, wie du jeden Stamm
             notifications_title: "BENACHRICHTIGUNGEN",
             push: "Push-Benachrichtigungen",
             push_desc: "Aktiviere Push-Benachrichtigungen, um Alarme bei Temperaturabweichungen, Stromausfällen oder Hopfenstopfen zu erhalten.",
+            privacy_title: "DATENSCHUTZ",
+            analytics: "Nutzungsanalyse",
+            analytics_desc: "Analytics hilft uns zu sehen, wie die App genutzt wird (z. B. aus welchen Ländern die Besucher kommen). Du kannst sie jederzeit ein- oder ausschalten.",
             device_mgmt: "Geräteverwaltung",
             active_device: "Aktives Gerät",
             no_devices: "Noch keine Geräte",
@@ -4684,7 +4693,7 @@ libTour: {
             s5_title: "Tes droits",
             s5_body: "Conformément au RGPD, tu as le droit d'accéder à tes données personnelles, de les corriger ou de les supprimer à tout moment. Tu peux supprimer ton compte et toutes les données associées directement dans l'application sous Réglages → Supprimer le compte et toutes les données. Pour toute autre demande, contacte-nous à <a href='mailto:yeastmaster101@gmail.com' style='color: var(--accent-color);'>yeastmaster101@gmail.com</a>",
             s6_title: "Cookies et stockage local",
-            s6_body: "YeastMaster utilise le stockage local du navigateur pour mémoriser ta session de connexion, ta préférence linguistique, ton unité de température et ta couleur d'accent. Aucun cookie de suivi tiers n'est utilisé."
+            s6_body: "YeastMaster utilise le stockage local du navigateur pour mémoriser ta session de connexion, ta préférence linguistique, ton unité de température et ta couleur d'accent. Nous utilisons aussi Google Analytics (un service de Google) pour comprendre comment l'application est utilisée et de quels pays viennent les visiteurs. Cela dépose des cookies et collecte des données telles que la localisation approximative (déduite de ton adresse IP), le type d'appareil et de navigateur, ainsi que les événements dans l'application. Ces données d'analyse sont traitées par Google. Nous n'utilisons pas de cookies à des fins publicitaires et ne vendons pas tes données. L'analyse ne fonctionne que si tu l'acceptes, et tu peux modifier ton choix à tout moment dans les Réglages."
         },
 
         soul: {
@@ -4875,6 +4884,9 @@ libTour: {
             notifications_title: "NOTIFICATIONS",
             push: "Notifications push",
             push_desc: "Active les notifications push pour recevoir des alertes sur ton téléphone concernant les variations de température, les coupures de courant ou le moment du houblonnage à cru.",
+            privacy_title: "CONFIDENTIALITÉ",
+            analytics: "Analyse d'usage",
+            analytics_desc: "L'analyse nous aide à voir comment l'application est utilisée (par ex. de quels pays viennent les visiteurs). Tu peux l'activer ou la désactiver à tout moment.",
             device_mgmt: "Gestion des appareils",
             active_device: "Appareil actif",
             no_devices: "Aucun appareil pour l'instant",
@@ -5095,7 +5107,7 @@ libTour: {
             s5_title: "Tus derechos",
             s5_body: "Conforme al RGPD, tienes derecho a acceder a tus datos personales, corregirlos o eliminarlos en cualquier momento. Puedes eliminar tu cuenta y todos los datos asociados directamente en la app, en Ajustes → Eliminar cuenta y todos los datos. Para otras solicitudes, escríbenos a <a href='mailto:yeastmaster101@gmail.com' style='color: var(--accent-color);'>yeastmaster101@gmail.com</a>",
             s6_title: "Cookies y almacenamiento local",
-            s6_body: "YeastMaster usa el almacenamiento local del navegador para recordar tu sesión, tu preferencia de idioma, tu unidad de temperatura y tu color de acento. No se usan cookies de seguimiento de terceros."
+            s6_body: "YeastMaster usa el almacenamiento local del navegador para recordar tu sesión, tu preferencia de idioma, tu unidad de temperatura y tu color de acento. También usamos Google Analytics (un servicio de Google) para entender cómo se usa la app y de qué países vienen los visitantes. Esto instala cookies y recopila datos como la ubicación aproximada (deducida de tu dirección IP), el tipo de dispositivo y navegador, y los eventos dentro de la app. Estos datos analíticos los procesa Google. No usamos cookies con fines publicitarios ni vendemos tus datos. La analítica solo funciona si la aceptas, y puedes cambiar tu elección en cualquier momento en Ajustes."
         },
 
         soul: {
@@ -5286,6 +5298,9 @@ libTour: {
             notifications_title: "NOTIFICACIONES",
             push: "Notificaciones push",
             push_desc: "Activa las notificaciones push para recibir alertas en tu móvil sobre cambios de temperatura, cortes de luz o cuándo toca el lupulado en seco.",
+            privacy_title: "PRIVACIDAD",
+            analytics: "Analítica de uso",
+            analytics_desc: "La analítica nos ayuda a ver cómo se usa la app (por ej. de qué países vienen los visitantes). Puedes activarla o desactivarla en cualquier momento.",
             device_mgmt: "Gestión de dispositivos",
             active_device: "Dispositivo activo",
             no_devices: "Sin dispositivos aún",

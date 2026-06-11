@@ -16,7 +16,103 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-const analytics = firebase.analytics(); // <-- DENNA RAD VÄCKER ANALYTICS TILL LIV!
+
+// ==========================================
+// --- GOOGLE ANALYTICS MED SAMTYCKE (GDPR) ---
+// Analytics (och dess cookies) laddas BARA efter att användaren klickat "Acceptera"
+// i cookie-bannern. Valet sparas i localStorage så bannern bara visas en gång.
+// ==========================================
+let _analyticsStarted = false;
+function startAnalytics() {
+    try {
+        firebase.analytics().setAnalyticsCollectionEnabled(true);  // initierar + slår på insamling
+        _analyticsStarted = true;
+    } catch (e) {
+        console.warn("Kunde inte starta Analytics:", e);
+    }
+}
+function stopAnalytics() {
+    if (!_analyticsStarted) return;   // aldrig startad → inget att stänga av
+    try {
+        firebase.analytics().setAnalyticsCollectionEnabled(false);
+    } catch (e) {
+        console.warn("Kunde inte stoppa Analytics:", e);
+    }
+}
+// Speglar lagrat val till av/på-knappen i Settings
+function syncAnalyticsToggle() {
+    const tgl = document.getElementById('analyticsToggle');
+    if (tgl) tgl.checked = (localStorage.getItem('ym-analytics-consent') === 'granted');
+}
+
+(function setupCookieConsent() {
+    const STORAGE_KEY = 'ym-analytics-consent';
+    const choice = localStorage.getItem(STORAGE_KEY);
+
+    if (choice === 'granted') { startAnalytics(); return; }  // redan ja → starta, ingen banner
+    if (choice === 'denied') return;                          // redan nej → gör inget, ingen banner
+
+    // Inget val gjort än → visa bannern på rätt språk
+    const texts = {
+        en: { msg: "We use cookies for Google Analytics to see how the app is used (e.g. which countries visitors come from). You can accept or decline — see the Privacy Policy in Settings for details.", accept: "Accept", decline: "Decline" },
+        sv: { msg: "Vi använder cookies för Google Analytics för att se hur appen används (t.ex. vilka länder besökarna kommer ifrån). Du kan acceptera eller avböja — se integritetspolicyn under Inställningar för detaljer.", accept: "Acceptera", decline: "Avböj" },
+        de: { msg: "Wir verwenden Cookies für Google Analytics, um zu sehen, wie die App genutzt wird (z. B. aus welchen Ländern die Besucher kommen). Du kannst zustimmen oder ablehnen — Details in der Datenschutzerklärung unter Einstellungen.", accept: "Zustimmen", decline: "Ablehnen" },
+        fr: { msg: "Nous utilisons des cookies pour Google Analytics afin de voir comment l'application est utilisée (par ex. de quels pays viennent les visiteurs). Tu peux accepter ou refuser — voir la politique de confidentialité dans les Réglages.", accept: "Accepter", decline: "Refuser" },
+        es: { msg: "Usamos cookies para Google Analytics y ver cómo se usa la app (por ej. de qué países vienen los visitantes). Puedes aceptar o rechazar — consulta la política de privacidad en Ajustes.", accept: "Aceptar", decline: "Rechazar" }
+    };
+
+    const showBanner = () => {
+        const lang = window.currentLang || 'en';
+        const t = texts[lang] || texts.en;
+        const banner = document.getElementById('cookie-consent');
+        if (!banner) return;
+        const msgEl = document.getElementById('cookie-consent-msg');
+        const acceptEl = document.getElementById('cookie-consent-accept');
+        const declineEl = document.getElementById('cookie-consent-decline');
+        if (msgEl) msgEl.textContent = t.msg;
+        if (acceptEl) acceptEl.textContent = t.accept;
+        if (declineEl) declineEl.textContent = t.decline;
+        banner.style.display = 'flex';
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', showBanner);
+    } else {
+        showBanner();
+    }
+})();
+
+window.acceptAnalytics = function() {
+    localStorage.setItem('ym-analytics-consent', 'granted');
+    startAnalytics();
+    syncAnalyticsToggle();
+    const b = document.getElementById('cookie-consent');
+    if (b) b.style.display = 'none';
+};
+window.declineAnalytics = function() {
+    localStorage.setItem('ym-analytics-consent', 'denied');
+    syncAnalyticsToggle();
+    const b = document.getElementById('cookie-consent');
+    if (b) b.style.display = 'none';
+};
+
+// Av/på-knappen i Settings → ändra (eller återkalla) samtycke när som helst
+window.toggleAnalyticsConsent = function(checkbox) {
+    if (checkbox.checked) {
+        localStorage.setItem('ym-analytics-consent', 'granted');
+        startAnalytics();
+    } else {
+        localStorage.setItem('ym-analytics-consent', 'denied');
+        stopAnalytics();
+    }
+};
+
+// Sätt knappens läge enligt sparat val vid sidladdning
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', syncAnalyticsToggle);
+} else {
+    syncAnalyticsToggle();
+}
 
 async function getAuthHeaders() {
     const idToken = await auth.currentUser.getIdToken();
