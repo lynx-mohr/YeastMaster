@@ -211,11 +211,13 @@ if (!device) {
     try {
         await logsCollection.insertOne(newEntry);
 
-        await userDevicesCollection.updateOne(
+        // updateMany: en enhet kan ha flera ägare (delad enhet) — alla deras dokument
+        // ska få färsk lastSeen, annars visar de andra ägarna en gammal heartbeat.
+        await userDevicesCollection.updateMany(
             { device_id: device_id },
             { $set: { lastSeen: new Date() } }
         );
-        
+
         res.status(200).send({ message: "Data sparad med device_id!" });
     } catch (e) {
         res.status(500).send({ error: "Kunde inte spara i databasen" });
@@ -259,20 +261,29 @@ app.post('/api/claim-device', strictLimiter, verifyToken, async (req, res) => {
     }
 
     try {
-        // Generera unik token för just denna enhet
-        const uniqueToken = crypto.randomBytes(16).toString('hex'); // 32 tecken, lagom långt
+        // ÖPPEN FLERANVÄNDARMODELL: flera användare kan claima samma enhet (t.ex. en
+        // bryggarklubb). Återanvänd enhetens BEFINTLIGA token om någon redan claimat den —
+        // bara första claimaren genererar en ny. Annars skulle token bytas och slå ut
+        // enheten för de övriga ägarna (ESP32:n autentiserar med token).
+        const existing = await userDevicesCollection.findOne({ device_id: device_id });
+        const deviceToken = (existing && existing.token)
+            ? existing.token
+            : crypto.randomBytes(16).toString('hex'); // 32 tecken, lagom långt
 
+        // Nyckla på paret { uid, device_id } så varje användare får sitt eget "medlemskap"
+        // (och kan ha sitt eget smeknamn) till samma fysiska enhet.
         await userDevicesCollection.updateOne(
-            { device_id: device_id },
+            { uid: uid, device_id: device_id },
             { $set: {
                 uid: uid,
+                device_id: device_id,
                 name: name || "Min YeastMaster",
-                token: uniqueToken,
-                claimed_at: new Date() 
+                token: deviceToken,
+                claimed_at: new Date()
             }},
             { upsert: true }
         );
-        res.status(200).send({ message: "Enhet tillagd!", token: uniqueToken });
+        res.status(200).send({ message: "Enhet tillagd!", token: deviceToken });
     } catch (e) {
         res.status(500).send({ error: "Kunde inte spara enheten" });
     }
@@ -463,15 +474,21 @@ app.delete('/api/delete-account', strictLimiter, verifyToken, async (req, res) =
         const devices = await userDevicesCollection.find({ uid: uid }, { projection: { device_id: 1 } }).toArray();
         const deviceIds = devices.map(d => d.device_id);
 
-        // 2. Radera alla fermentationsloggar för dessa enheter
-        if (deviceIds.length > 0) {
-            await logsCollection.deleteMany({ device_id: { $in: deviceIds } });
-        }
-
-        // 3. Radera enheter, bibliotek och push-prenumeration
+        // 2. Ta bort den här användarens enhetskopplingar, bibliotek och push-prenumeration
         await userDevicesCollection.deleteMany({ uid: uid });
         await userLibrariesCollection.deleteMany({ uid: uid });
         await pushSubscriptionsCollection.deleteMany({ uid: uid });
+
+        // 3. Radera fermentationsloggar BARA för enheter som ingen annan användare
+        //    längre delar. Annars torkar en klubbmedlem som raderar sitt konto ut den
+        //    delade jäsningshistoriken för resten av klubben. (Kopplingarna är borttagna
+        //    ovan, så om findOne inte hittar något är användaren sista ägaren.)
+        for (const did of deviceIds) {
+            const stillClaimed = await userDevicesCollection.findOne({ device_id: did });
+            if (!stillClaimed) {
+                await logsCollection.deleteMany({ device_id: did });
+            }
+        }
 
         // 4. Radera Firebase-kontot
         await admin.auth().deleteUser(uid);
