@@ -395,22 +395,6 @@
         </div>
     </div>
 
-    <h3 style="color: #666; font-size: 0.8rem; margin: 30px 0 10px 10px; text-transform: uppercase; letter-spacing: 1.5px;" data-i18n="settings.privacy_title">PRIVACY</h3>
-
-    <div class="settings-group" style="padding-bottom: 15px;">
-        <p style="font-size: 0.85rem; color: var(--text-dim, #888); margin-bottom: 15px; line-height: 1.4; padding: 0 5px;" data-i18n="settings.analytics_desc">
-            Analytics helps us see how the app is used (e.g. which countries visitors come from). You can turn it on or off at any time.
-        </p>
-
-        <div class="settings-row" style="margin-bottom: 0;">
-            <span class="settings-label" style="font-size: 0.9rem;">📊 <span data-i18n="settings.analytics">Usage analytics</span></span>
-            <label class="toggle-switch">
-                <input type="checkbox" id="analyticsToggle" onchange="toggleAnalyticsConsent(this)">
-                <span class="slider"></span>
-            </label>
-        </div>
-    </div>
-
     <h3 style="color: #666; font-size: 0.8rem; margin: 30px 0 10px 10px; text-transform: uppercase; letter-spacing: 1.5px;" data-i18n="settings.device_mgmt">DEVICE MANAGEMENT</h3>
     
  <div class="settings-group">
@@ -468,6 +452,16 @@
 
         
     <div style="margin-top: 40px; text-align: center;">
+
+        <!-- Diskret analys-toggle, nära konto & integritet -->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 22px; font-size: 0.78rem; color: #777;">
+            <span data-i18n="settings.analytics">Usage analytics</span>
+            <label class="toggle-switch" style="transform: scale(0.78);">
+                <input type="checkbox" id="analyticsToggle" onchange="toggleAnalyticsConsent(this)">
+                <span class="slider"></span>
+            </label>
+        </div>
+
         <button id="btn-logout" style="background: transparent; color: #ff4444; border: 1px solid #ff4444; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer;" data-i18n="settings.btn_logout">
             LOG OUT
         </button>
