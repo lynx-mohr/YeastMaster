@@ -39,9 +39,9 @@ int dynamicTotalYeasts = 0;
 
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 
-#define ENCODER_CLK D5
+#define ENCODER_CLK D4  // Fysiskt lödd till D4
 #define ENCODER_DT D6
-#define ENCODER_SW D7
+#define ENCODER_SW D5  // Var D7 - nu korrekt knapp
 #define TX_PIN D10
 #define BUZZ_PIN D8
 
@@ -110,6 +110,7 @@ char selectedStrainName[32] = "";
 unsigned long lastCoolerStopTime = 0;           // Minns när kylen stängdes av
 const unsigned long COMPRESSOR_DELAY = 300000;  // 5 minuter i millisekunder (5 * 60 * 1000)
 bool isCompressorResting = false;               // Lås-flaggan
+unsigned long lastButtonTime = 0;
 
 bool cloudSyncRequested = false;
 unsigned long lastCloudSyncTime = 0;
@@ -942,9 +943,9 @@ void setup() {
     Serial.println("-> Token OK!");
 
     // Kolla OTA vid boot (bara om ingen jäsning pågår)
-if (WiFi.status() == WL_CONNECTED) {
-    checkForOTAUpdate();
-}
+    if (WiFi.status() == WL_CONNECTED) {
+      checkForOTAUpdate();
+    }
   }
 
   // Läs in datan från filsystemet FÖRST
@@ -996,9 +997,10 @@ void drawSettingsMenu() {
   u8g2.drawLine(0, 11, 128, 11);
 
   int visibleLines = 4;
+  int totalItems = 10;
   int startIdx = settingsCursor - (visibleLines / 2);
   if (startIdx < 0) startIdx = 0;
-  if (startIdx > 8 - visibleLines) startIdx = 8 - visibleLines;  // 8 inställningar totalt
+  if (startIdx > totalItems - visibleLines) startIdx = totalItems - visibleLines;
 
   for (int i = 0; i < visibleLines; i++) {
     int itemIdx = startIdx + i;
@@ -1013,10 +1015,12 @@ void drawSettingsMenu() {
     else if (itemIdx == 1) text = "Sync from Cloud";
     else if (itemIdx == 2) text = "Sleep: " + String(screenSleepMin == 0 ? "Always On" : String(screenSleepMin) + " min");
     else if (itemIdx == 3) text = "Beer Offset: " + String(tempOffset > 0 ? "+" : "") + String(tempOffset, 1) + "C";
-    else if (itemIdx == 4) text = "Sound: " + String(soundEnabled ? "ON" : "OFF");  // <--- NYTT MENYVAL!
-    else if (itemIdx == 5) text = "WiFi Setup";
-    else if (itemIdx == 6) text = WiFi.macAddress();
-    else if (itemIdx == 7) text = "<- Back";  // <-- Knuffad till index 7
+    else if (itemIdx == 4) text = "Sound: " + String(soundEnabled ? "ON" : "OFF");
+    else if (itemIdx == 5) text = "Pair Cooler Plug";
+    else if (itemIdx == 6) text = "Pair Heater Plug";
+    else if (itemIdx == 7) text = "WiFi Setup";
+    else if (itemIdx == 8) text = WiFi.macAddress();
+    else if (itemIdx == 9) text = "<- Back";
 
     u8g2.drawStr(4, yPos, text.c_str());
     u8g2.setDrawColor(1);
@@ -1086,7 +1090,9 @@ void runWiFiPortal() {
   // hunnit skrivas till NVS (ett par process()-cykler), utan att vänta på anslutning.
   static volatile bool wifiSaved = false;
   wifiSaved = false;
-  auto onSave = [&]() { wifiSaved = true; };
+  auto onSave = [&]() {
+    wifiSaved = true;
+  };
   wm.setSaveConfigCallback(onSave);
 
   wm.startConfigPortal("YeastMaster_Setup");
@@ -1103,7 +1109,10 @@ void runWiFiPortal() {
       u8g2.sendBuffer();
       // Ge WiFiManager några cykler att anropa WiFi.begin() (skriver SSID/lösen till NVS).
       // Vi inväntar INTE WL_CONNECTED — anslutningen fortsätter efter omstart.
-      for (int i = 0; i < 6; i++) { wm.process(); delay(150); }
+      for (int i = 0; i < 6; i++) {
+        wm.process();
+        delay(150);
+      }
       Serial.println("!!! Uppgifter sparade. Startar om (ansluter i bakgrunden).");
       delay(500);
       ESP.restart();
@@ -1180,11 +1189,7 @@ void performCloudSync() {
       sendDoc["air_temp"] = t2;
       sendDoc["token"] = deviceToken;
 
-      // Rapportera jäsningsdata om en jäsning är AKTIV (brewStartTime != 0) — inte bara
-      // när skärmen råkar visa RUNNING. Annars postades en hårdkodad "IDLE" om en synk
-      // fyrade medan man var inne i en meny/inställning under pågående jäsning, vilket
-      // tömde Live View. brewStartTime nollställs vid avslut/avbrott, så ingen risk där.
-      if (currentState == RUNNING || currentState == POURING || brewStartTime != 0) {
+      if (currentState == RUNNING || currentState == POURING) {
         float d = (float)(millis() - brewStartTime) / MS_PER_DAY * TIME_MULTIPLIER;
         float realDaysPassed = (float)(millis() - realBrewStartTime) / MS_PER_DAY * TIME_MULTIPLIER;
 
@@ -1254,125 +1259,124 @@ void performCloudSync() {
   }
 }
 
- void checkForOTAUpdate() {
-    if (WiFi.status() != WL_CONNECTED) return;
+void checkForOTAUpdate() {
+  if (WiFi.status() != WL_CONNECTED) return;
 
-    WiFiClientSecure client;
-    client.setInsecure();
-    HTTPClient http;
+  WiFiClientSecure client;
+  client.setInsecure();
+  HTTPClient http;
 
-    Serial.println("-> OTA: Kollar efter uppdatering...");
+  Serial.println("-> OTA: Kollar efter uppdatering...");
 
-    if (http.begin(client, "https://soulofbeer-live.onrender.com/api/firmware/version")) {
-      int code = http.GET();
+  if (http.begin(client, "https://soulofbeer-live.onrender.com/api/firmware/version")) {
+    int code = http.GET();
 
-      if (code == 200) {
-        String payload = http.getString();
-        StaticJsonDocument<128> doc;
-        deserializeJson(doc, payload);
+    if (code == 200) {
+      String payload = http.getString();
+      StaticJsonDocument<128> doc;
+      deserializeJson(doc, payload);
 
-        String latestVersion = doc["version"].as<String>();
-        String firmwareUrl = doc["url"].as<String>();
+      String latestVersion = doc["version"].as<String>();
+      String firmwareUrl = doc["url"].as<String>();
 
-        Serial.print("-> OTA: Senaste version: ");
-        Serial.println(latestVersion);
-        Serial.print("-> OTA: Nuvarande version: ");
-        Serial.println(FIRMWARE_VERSION);
+      Serial.print("-> OTA: Senaste version: ");
+      Serial.println(latestVersion);
+      Serial.print("-> OTA: Nuvarande version: ");
+      Serial.println(FIRMWARE_VERSION);
 
-        String current = FIRMWARE_VERSION;
+      String current = FIRMWARE_VERSION;
 
-        if (latestVersion.length() == 0) {
-          // Tomt/ogiltigt svar — gör ingenting (annars tolkas "" som ny version → loop)
-          Serial.println("-> OTA: Tomt versionssvar, hoppar över.");
+      if (latestVersion.length() == 0) {
+        // Tomt/ogiltigt svar — gör ingenting (annars tolkas "" som ny version → loop)
+        Serial.println("-> OTA: Tomt versionssvar, hoppar över.");
 
-        } else if (latestVersion == current) {
-          Serial.println("-> OTA: Firmware är uppdaterad!");
-          // Vi är i fas — rensa ev. gammal försöks-flagga
-          preferences.begin("sys", false);
-          preferences.remove("otaTried");
-          preferences.end();
+      } else if (latestVersion == current) {
+        Serial.println("-> OTA: Firmware är uppdaterad!");
+        // Vi är i fas — rensa ev. gammal försöks-flagga
+        preferences.begin("sys", false);
+        preferences.remove("otaTried");
+        preferences.end();
 
+      } else {
+        // En annan version annonseras. LOOP-SKYDD: har vi redan försökt just den här
+        // versionen men kör fortfarande den gamla? Då matchar inte binären sitt eget
+        // versionsnummer (eller saknas) — sluta jaga den, annars blir det omstartsloop.
+        preferences.begin("sys", true);
+        String alreadyTried = preferences.getString("otaTried", "");
+        preferences.end();
+
+        if (alreadyTried == latestVersion) {
+          Serial.println("-> OTA: Version " + latestVersion + " annonseras men vi kör fortfarande " + current + ". Redan försökt — hoppar över (binär matchar ej versionsnumret, eller saknas).");
+        } else if (firmwareUrl.length() == 0) {
+          Serial.println("-> OTA: Uppdatering tillgänglig men URL saknas. Hoppar över.");
+        } else if (currentState == RUNNING || currentState == POURING) {
+          // Jäsning pågår - vänta!
+          Serial.println("-> OTA: Uppdatering tillgänglig men jäsning pågår. Väntar...");
+          otaUpdateAvailable = true;
+          otaFirmwareUrl = firmwareUrl;
         } else {
-          // En annan version annonseras. LOOP-SKYDD: har vi redan försökt just den här
-          // versionen men kör fortfarande den gamla? Då matchar inte binären sitt eget
-          // versionsnummer (eller saknas) — sluta jaga den, annars blir det omstartsloop.
-          preferences.begin("sys", true);
-          String alreadyTried = preferences.getString("otaTried", "");
+          // Markera vilken version vi försöker (överlever omstart) INNAN vi installerar.
+          // Om installationen inte tar (binär = gammal version) ser vi det vid nästa boot
+          // och hoppar över istället för att loopa.
+          preferences.begin("sys", false);
+          preferences.putString("otaTried", latestVersion);
           preferences.end();
-
-          if (alreadyTried == latestVersion) {
-            Serial.println("-> OTA: Version " + latestVersion + " annonseras men vi kör fortfarande " +
-                           current + ". Redan försökt — hoppar över (binär matchar ej versionsnumret, eller saknas).");
-          } else if (firmwareUrl.length() == 0) {
-            Serial.println("-> OTA: Uppdatering tillgänglig men URL saknas. Hoppar över.");
-          } else if (currentState == RUNNING || currentState == POURING) {
-            // Jäsning pågår - vänta!
-            Serial.println("-> OTA: Uppdatering tillgänglig men jäsning pågår. Väntar...");
-            otaUpdateAvailable = true;
-            otaFirmwareUrl = firmwareUrl;
-          } else {
-            // Markera vilken version vi försöker (överlever omstart) INNAN vi installerar.
-            // Om installationen inte tar (binär = gammal version) ser vi det vid nästa boot
-            // och hoppar över istället för att loopa.
-            preferences.begin("sys", false);
-            preferences.putString("otaTried", latestVersion);
-            preferences.end();
-            Serial.println("-> OTA: Installerar uppdatering till " + latestVersion + "!");
-            installOTAUpdate(firmwareUrl);
-          }
+          Serial.println("-> OTA: Installerar uppdatering till " + latestVersion + "!");
+          installOTAUpdate(firmwareUrl);
         }
       }
-      http.end();
     }
+    http.end();
+  }
+}
+
+void installOTAUpdate(String url) {
+  // Visa på skärmen att uppdatering pågår
+  u8g2.clearBuffer();
+  u8g2.setFont(u8g2_font_6x12_tf);
+  u8g2.drawStr(5, 15, "UPDATING...");
+  u8g2.drawStr(5, 30, "Do not power off!");
+  u8g2.drawStr(5, 45, "Version:");
+  u8g2.drawStr(5, 58, FIRMWARE_VERSION);
+  u8g2.sendBuffer();
+
+  // Stäng av kyl och värme för säkerhets skull
+  if (coolerActive) {
+    sendNexaMessage(false, coolerRecipient);
+    coolerActive = false;
+  }
+  if (heaterActive) {
+    sendNexaMessage(false, heaterRecipient);
+    heaterActive = false;
   }
 
-  void installOTAUpdate(String url) {
-    // Visa på skärmen att uppdatering pågår
-    u8g2.clearBuffer();
-    u8g2.setFont(u8g2_font_6x12_tf);
-    u8g2.drawStr(5, 15, "UPDATING...");
-    u8g2.drawStr(5, 30, "Do not power off!");
-    u8g2.drawStr(5, 45, "Version:");
-    u8g2.drawStr(5, 58, FIRMWARE_VERSION);
-    u8g2.sendBuffer();
+  WiFiClientSecure client;
+  client.setInsecure();
 
-    // Stäng av kyl och värme för säkerhets skull
-    if (coolerActive) {
-      sendNexaMessage(false, coolerRecipient);
-      coolerActive = false;
-    }
-    if (heaterActive) {
-      sendNexaMessage(false, heaterRecipient);
-      heaterActive = false;
-    }
+  // Starta nedladdningen!
+  t_httpUpdate_return ret = httpUpdate.update(client, url);
 
-    WiFiClientSecure client;
-    client.setInsecure();
+  switch (ret) {
+    case HTTP_UPDATE_FAILED:
+      Serial.print("-> OTA MISSLYCKADES: ");
+      Serial.println(httpUpdate.getLastErrorString());
+      u8g2.clearBuffer();
+      u8g2.drawStr(5, 20, "UPDATE FAILED!");
+      u8g2.drawStr(5, 35, "Will retry later.");
+      u8g2.sendBuffer();
+      delay(3000);
+      break;
 
-    // Starta nedladdningen!
-    t_httpUpdate_return ret = httpUpdate.update(client, url);
+    case HTTP_UPDATE_NO_UPDATES:
+      Serial.println("-> OTA: Ingen uppdatering hittades.");
+      break;
 
-    switch (ret) {
-      case HTTP_UPDATE_FAILED:
-        Serial.print("-> OTA MISSLYCKADES: ");
-        Serial.println(httpUpdate.getLastErrorString());
-        u8g2.clearBuffer();
-        u8g2.drawStr(5, 20, "UPDATE FAILED!");
-        u8g2.drawStr(5, 35, "Will retry later.");
-        u8g2.sendBuffer();
-        delay(3000);
-        break;
-
-      case HTTP_UPDATE_NO_UPDATES:
-        Serial.println("-> OTA: Ingen uppdatering hittades.");
-        break;
-
-      case HTTP_UPDATE_OK:
-        Serial.println("-> OTA: Uppdatering lyckades! Startar om...");
-        // ESP32 startar om automatiskt efter lyckad OTA!
-        break;
-    }
+    case HTTP_UPDATE_OK:
+      Serial.println("-> OTA: Uppdatering lyckades! Startar om...");
+      // ESP32 startar om automatiskt efter lyckad OTA!
+      break;
   }
+}
 
 void handleCloudSync() {
 
@@ -1417,12 +1421,17 @@ void handleAlerts() {
 void handleEncoder() {
   int clkState = digitalRead(ENCODER_CLK);
   static unsigned long lastMove = 0;
+  static unsigned long lastButtonTime = 0;  // NY: Tidsstämpel för senaste knapptryck
+
+  // NY: Ignorera vridning 200ms efter ett knapptryck
+  if (millis() - lastButtonTime < 200) {
+    lastClkState = clkState;
+    return;
+  }
 
   if (clkState != lastClkState && clkState == LOW) {
     unsigned long now = millis();
-
-    // Om det går för fort (under 50ms mellan hacken) är det förmodligen brus!
-    if (now - lastMove > 50) {
+    if (now - lastMove > 150) {  // Ökad från 50 till 150ms
       lastMove = now;
       lastActivity = millis();
 
@@ -1436,7 +1445,7 @@ void handleEncoder() {
         if (currentState == MAIN_MENU) {
           mainMenuIndex = (mainMenuIndex + (clockwise ? 1 : -1) + 2) % 2;
         } else if (currentState == SETTINGS_MENU) {
-          settingsCursor = (settingsCursor + (clockwise ? 1 : -1) + 8) % 8;
+          settingsCursor = (settingsCursor + (clockwise ? 1 : -1) + 10) % 10;
         } else if (currentState == SET_OFFSET) {
           tempOffset = constrain(tempOffset + (clockwise ? 0.1 : -0.1), -1.0, 1.0);
         } else if (currentState == SELECT_YEAST) {
@@ -1477,13 +1486,15 @@ void handleEncoder() {
 }
 
 void handleButton() {
+  extern unsigned long lastButtonTime;  // Referera till variabeln i handleEncoder
 
-  // --- KLICKA PÅ RATTEN ---
   static bool lastBtnState = HIGH;
   bool currentBtnState = digitalRead(ENCODER_SW);
 
   if (lastBtnState == HIGH && currentBtnState == LOW) {
-    delay(50);  //debounce
+    lastButtonTime = millis();  // NY: Markera att knappen trycktes
+    delay(50);
+
     if (digitalRead(ENCODER_SW) == LOW) {
       lastActivity = millis();  // Nollställ skärmsläckaren!
 
@@ -1510,41 +1521,85 @@ void handleButton() {
               stateBeforeSettings = MAIN_MENU;
               currentState = SETTINGS_MENU;
             }
-          } else if (currentState == SETTINGS_MENU) {
-            switch (settingsCursor) {
-              case 0:
-                useFahrenheit = !useFahrenheit;
-                saveSystemSettings();
-                break;
-              case 1:
-                syncWithCloud();
-                currentState = MAIN_MENU;
-                break;
-              case 2:
-                if (screenSleepMin == 0) screenSleepMin = 5;
-                else if (screenSleepMin == 5) screenSleepMin = 15;
-                else if (screenSleepMin == 15) screenSleepMin = 30;
-                else screenSleepMin = 0;
-                saveSystemSettings();
-                break;
-              case 3: currentState = SET_OFFSET; break;
-              case 4:
-                soundEnabled = !soundEnabled;
-                saveSystemSettings();
-                break;
-              case 5:
-                runWiFiPortal();
-                break;
-              case 6: break;  // Mac-adress, gör ingenting
-              case 7:
-                currentState = stateBeforeSettings;  // Gå tillbaka till där vi kom ifrån!
-                settingsCursor = 0;
-                if (currentState == RUNNING) {
-                  dashboardPage = 2;  // Stanna på action-menyn
-                  menuSelection = 5;  // <--- NYTT: Hoppa direkt ner till "<- Back" i Action-menyn!
-                }
-                break;
-            }
+          } 
+            else if (currentState == SETTINGS_MENU) {
+              switch (settingsCursor) {
+                case 0:
+                  useFahrenheit = !useFahrenheit;
+                  saveSystemSettings();
+                  break;
+                case 1:
+                  syncWithCloud();
+                  currentState = MAIN_MENU;
+                  break;
+                case 2:
+                  if (screenSleepMin == 0) screenSleepMin = 5;
+                  else if (screenSleepMin == 5) screenSleepMin = 15;
+                  else if (screenSleepMin == 15) screenSleepMin = 30;
+                  else screenSleepMin = 0;
+                  saveSystemSettings();
+                  break;
+                case 3: currentState = SET_OFFSET; break;
+                case 4:
+                  soundEnabled = !soundEnabled;
+                  saveSystemSettings();
+                  break;
+                case 5:  // Pair Cooler
+                  u8g2.clearBuffer();
+                  u8g2.setFont(u8g2_font_6x12_tf);
+                  u8g2.drawStr(5, 25, "Unplug cooler,");
+                  u8g2.drawStr(5, 40, "plug back in,");
+                  u8g2.drawStr(5, 55, "then CLICK...");
+                  u8g2.sendBuffer();
+                  while (digitalRead(ENCODER_SW) == HIGH) { yield(); }
+                  delay(50);
+                  u8g2.clearBuffer();
+                  u8g2.drawStr(5, 30, "PAIRING COOLER...");
+                  u8g2.sendBuffer();
+                  sendNexaMessage(true, coolerRecipient);
+                  u8g2.clearBuffer();
+                  u8g2.setFont(u8g2_font_9x15B_tf);
+                  u8g2.drawStr(15, 35, "COOLER PAIRED!");
+                  u8g2.sendBuffer();
+                  triggerSound(0);
+                  delay(2000);
+                  while (digitalRead(ENCODER_SW) == LOW) { yield(); }
+                  break;
+                case 6:  // Pair Heater
+                  u8g2.clearBuffer();
+                  u8g2.setFont(u8g2_font_6x12_tf);
+                  u8g2.drawStr(5, 25, "Unplug heater,");
+                  u8g2.drawStr(5, 40, "plug back in,");
+                  u8g2.drawStr(5, 55, "then CLICK...");
+                  u8g2.sendBuffer();
+                  while (digitalRead(ENCODER_SW) == HIGH) { yield(); }
+                  delay(50);
+                  u8g2.clearBuffer();
+                  u8g2.drawStr(5, 30, "PAIRING HEATER...");
+                  u8g2.sendBuffer();
+                  sendNexaMessage(true, heaterRecipient);
+                  u8g2.clearBuffer();
+                  u8g2.setFont(u8g2_font_9x15B_tf);
+                  u8g2.drawStr(15, 35, "HEATER PAIRED!");
+                  u8g2.sendBuffer();
+                  triggerSound(0);
+                  delay(2000);
+                  while (digitalRead(ENCODER_SW) == LOW) { yield(); }
+                  break;
+                case 7:
+                  runWiFiPortal();
+                  break;
+                case 8: break;  // MAC-adress, gör ingenting
+                case 9:
+                  currentState = stateBeforeSettings;
+                  settingsCursor = 0;
+                  if (currentState == RUNNING) {
+                    dashboardPage = 2;
+                    menuSelection = 5;
+                  }
+                  break;
+              }
+            
           } else if (currentState == SET_OFFSET) {
             saveSystemSettings();
             currentState = SETTINGS_MENU;
@@ -1803,36 +1858,61 @@ void handleTemperature() {
   }
 }
 
+// ==========================================
+// --- PERIODISK PLUG-BEKRÄFTELSE ---
+// ==========================================
+void reinforcePlugState() {
+  static unsigned long lastReinforce = 0;
+  if (millis() - lastReinforce < 60000) return;  // Var 60:e sekund
+  lastReinforce = millis();
+
+  // Stäng av det som SKA vara av (dubbelt!)
+  if (!coolerActive) {
+    sendNexaMessage(false, coolerRecipient);
+    delay(300);
+    sendNexaMessage(false, coolerRecipient);
+  }
+  if (!heaterActive) {
+    sendNexaMessage(false, heaterRecipient);
+    delay(300);
+    sendNexaMessage(false, heaterRecipient);
+  }
+
+  // Bekräfta det som SKA vara på
+  if (coolerActive) sendNexaMessage(true, coolerRecipient);
+  if (heaterActive) sendNexaMessage(true, heaterRecipient);
+
+  Serial.println("-> REINFORCE: Plug-tillstånd bekräftat via RF.");
+}
+
 void handleThermostat() {
-  // =======================================================
-  // --- DIAGNOSTISK TERMOSTAT-LOGIK ---
-  // =======================================================
+  // 0. PERIODISK PLUG-BEKRÄFTELSE: körs i ALLA states (vila, sensorfel, RUNNING)
+  // så ett missat AV-kommando läker sig självt även när vi inte aktivt reglerar.
+  reinforcePlugState();
 
   // 1. ABSOLUT SÄKERHETSSPÄRR: Har vi en giltig temperatur?
-  // (-127.0 betyder att sensorn inte vaknat än, eller är trasig)
   if (t1 <= -100.0) {
-
-    // Nödstopp / Vänteläge: Stäng av allt tills vi vet hur varmt ölet är!
     if (heaterActive) {
+      sendNexaMessage(false, heaterRecipient);
+      delay(300);
       sendNexaMessage(false, heaterRecipient);
       heaterActive = false;
     }
     if (coolerActive) {
       sendNexaMessage(false, coolerRecipient);
+      delay(300);
+      sendNexaMessage(false, coolerRecipient);
       coolerActive = false;
     }
-
   }
-  // 2. DEN RIKTIGA TERMOSTATEN (Körs BARA om vi har en bra temperatur)
+  // 2. DEN RIKTIGA TERMOSTATEN
   else if (currentState == RUNNING) {
 
     float d = (float)(millis() - brewStartTime) / MS_PER_DAY * TIME_MULTIPLIER;
 
-    // Beräkna målen
     float rampGoal = isManualMode ? manualTargetTemp : getTargetTemp(d);
     float finalGoal = isManualMode ? manualTargetTemp : getDisplayGoalTemp(d);
 
-    // --- SMARTA TAK OCH GOLV (Free Rise & Free Fall) ---
     bool isHeatingPhase = (!isManualMode && finalGoal > rampGoal);
     bool isCoolingPhase = (!isManualMode && finalGoal < rampGoal);
 
@@ -1844,55 +1924,76 @@ void handleThermostat() {
       isCompressorResting = false;
     }
 
-    // KYL-LOGIK (Slår den i taket?)
+    // === KYL-LOGIK ===
     if (t1 > coolTarget + 0.5) {
       if (!coolerActive && !isCompressorResting) {
+        // Stäng av värmaren FÖRST (dubbel signal!)
         if (heaterActive) {
           sendNexaMessage(false, heaterRecipient);
+          delay(500);
+          sendNexaMessage(false, heaterRecipient);
           heaterActive = false;
+          delay(500);  // Ge pluggen tid att reagera innan vi slår på kylen
         }
+        // Slå PÅ kylen
         sendNexaMessage(true, coolerRecipient);
+        delay(300);
+        sendNexaMessage(true, coolerRecipient);  // Dubbel bekräftelse
         coolerActive = true;
         triggerSound(1);
 
-        Serial.println("-> TERMOSTAT: Ändrad till COOLING!");
+        Serial.println("-> TERMOSTAT: COOLING (dubbel signal)");
         cloudSyncRequested = true;
         lastCloudSyncTime = millis();
       }
     } else if (t1 <= coolTarget) {
       if (coolerActive) {
+        // Stäng av kylen (dubbel signal!)
+        sendNexaMessage(false, coolerRecipient);
+        delay(300);
         sendNexaMessage(false, coolerRecipient);
         coolerActive = false;
         triggerSound(2);
         lastCoolerStopTime = millis();
         isCompressorResting = true;
 
-        Serial.println("-> TERMOSTAT: Ändrad till IDLE (Kylning avslutad)");
+        Serial.println("-> TERMOSTAT: IDLE (kylning avslutad, dubbel signal)");
         cloudSyncRequested = true;
         lastCloudSyncTime = millis();
       }
     }
 
-    // VÄRME-LOGIK (Faller den genom golvet?)
+    // === VÄRME-LOGIK ===
     if (t1 < heatTarget - 0.5) {
       if (!heaterActive && !coolerActive) {
+        // Säkerhet: bekräfta att kylen verkligen är AV innan vi värmer
+        sendNexaMessage(false, coolerRecipient);
+        delay(300);
+
+        // Slå PÅ värmaren (dubbel signal!)
+        sendNexaMessage(true, heaterRecipient);
+        delay(300);
         sendNexaMessage(true, heaterRecipient);
         heaterActive = true;
 
-        Serial.println("-> TERMOSTAT: Ändrad till HEATING!");
+        Serial.println("-> TERMOSTAT: HEATING (dubbel signal)");
         cloudSyncRequested = true;
         lastCloudSyncTime = millis();
       }
     } else if (t1 >= heatTarget) {
       if (heaterActive) {
+        // Stäng av värmaren (dubbel signal!)
+        sendNexaMessage(false, heaterRecipient);
+        delay(300);
         sendNexaMessage(false, heaterRecipient);
         heaterActive = false;
 
-        Serial.println("-> TERMOSTAT: Ändrad till IDLE (Värme avslutad)");
+        Serial.println("-> TERMOSTAT: IDLE (värme avslutad, dubbel signal)");
         cloudSyncRequested = true;
         lastCloudSyncTime = millis();
       }
     }
+
   }
 }
 
