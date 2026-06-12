@@ -320,10 +320,15 @@ function updateSummaryText() {
         cleanText = `${action} ${p[2].y.toFixed(1)}${unit} ${t_by} ${Math.round(p[2].x)}`;
     }
 
-    // 4. COLD CRASH
+    // 4. COLD CRASH — raset kan ske vid p[2]→p[3] (ramp-first) ELLER p[3]→p[4]
+    // (hold-first). Kolla det första först, annars hamnar texten fel ("Hold until..."
+    // istället för "Drop to ...°C").
     let crashText = `${t_hold} ${Math.round(p[4].x)}`;
-    if (Math.abs(p[4].y - p[3].y) >= 0.2) {
-        const action = p[4].y > p[3].y ? t_rise_to : t_drop;
+    if (Math.abs(p[3].y - p[2].y) >= 0.2) {
+        const action = p[3].y < p[2].y ? t_drop : t_rise_to;
+        crashText = `${action} ${p[3].y.toFixed(1)}${unit} ${t_by} ${Math.round(p[3].x)}`;
+    } else if (Math.abs(p[4].y - p[3].y) >= 0.2) {
+        const action = p[4].y < p[3].y ? t_drop : t_rise_to;
         crashText = `${action} ${p[4].y.toFixed(1)}${unit} ${t_by} ${Math.round(p[4].x)}`;
     }
 
