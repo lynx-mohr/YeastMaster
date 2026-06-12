@@ -556,10 +556,21 @@ function initLabChart() {
                 const textCrash = (t.cold_crash || 'COLD CRASH').toUpperCase();
                 const textCond = (t.condition || 'CONDITION').toUpperCase();
 
+                // Hitta var cold crash-raset faktiskt sker (2→3 vid free-rise-profil,
+                // annars 3→4) så etiketterna hamnar rätt oavsett profilform — precis som
+                // streckningen och sammanfattningen. Annars sitter "CLEANUP" på raset och
+                // "COLD CRASH" på en platt linje (som för German Bock).
+                let crashStart = 3; // standard: raset sker vid punkt 3→4
+                if (typeof profilePoints !== 'undefined' && profilePoints.length >= 6 &&
+                    (profilePoints[2].y - profilePoints[3].y) >= 0.2) {
+                    crashStart = 2; // free-rise: raset sker redan vid 2→3
+                }
+                const cleanupStart = crashStart - 1;
+
                 // Rita ut de översatta orden!
-                drawText(textPrim, 0, 1);    
-                drawText(textClean, 2, 3);   
-                drawText(textCrash, 3, 4, 15, 5);      
+                drawText(textPrim, 0, 1);
+                drawText(textClean, cleanupStart, crashStart);
+                drawText(textCrash, crashStart, crashStart + 1, 15, 5);
                 drawText(textCond, 4, 5);
 
              
