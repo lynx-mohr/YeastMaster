@@ -20,6 +20,18 @@ let profilePoints = [
     { x: 14, y: 3 }     // Punkt 5: Slut Cold Crash / Condition (Platt linje hit)
 ];
 
+// En punkt vars temp är EXAKT lika med båda grannarnas ligger mitt på en rak linje och är
+// överflödig (t.ex. mittpunkten i en lång kall fas). Då döljer vi dess handtag så linjen
+// ser ren ut — punkten finns kvar i datan (6 punkter bevaras), den går bara inte att dra.
+function isFlatMidpoint(ctx) {
+    const i = ctx.dataIndex;
+    const d = ctx.dataset && ctx.dataset.data;
+    if (!d || i <= 0 || i >= d.length - 1) return false;  // aldrig första/sista punkten
+    const prev = d[i - 1], cur = d[i], next = d[i + 1];
+    if (!prev || !cur || !next) return false;
+    return prev.y === cur.y && cur.y === next.y;
+}
+
 // Data-tillstånd för torrhumlingen
 let dryHopData = {
     enabled: false,
@@ -449,9 +461,9 @@ function initLabChart() {
                 borderWidth: lineWidth,            
                 pointBackgroundColor: pointFill,  
                 pointBorderColor: themeAccent,    
-                pointRadius: dotSize,             
-                pointHoverRadius: hoverSize,      
-                pointHitRadius: touchMagnet,      
+                pointRadius: (c) => isFlatMidpoint(c) ? 0 : dotSize,
+                pointHoverRadius: (c) => isFlatMidpoint(c) ? 0 : hoverSize,
+                pointHitRadius: (c) => isFlatMidpoint(c) ? 0 : touchMagnet,
                 showLine: true,
                 tension: 0.1, 
                 clip: false,
