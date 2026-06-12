@@ -256,6 +256,9 @@ let touchEndX = 0;
 let touchEndY = 0;
 
 function handleSwipe() {
+    // Delad read-only vy (?share=token): låst till dashboarden — ingen flik-navigering
+    if (window.sharedToken) return;
+
     const swipeThreshold = 50; // Hur många pixlar du måste svepa för att det ska "gälla"
     const deltaX = touchEndX - touchStartX;
     const deltaY = touchEndY - touchStartY;
