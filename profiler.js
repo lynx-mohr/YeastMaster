@@ -457,7 +457,20 @@ function initLabChart() {
                 clip: false,
                 fill: true,
                 segment: {
-                    borderDash: ctx => (ctx.p0DataIndex === 1 || ctx.p0DataIndex === 3) ? [6, 4] : undefined
+                    // Streckning oberoende av profilform: streckad = temperaturen ÄNDRAS
+                    // (diacetyl-ramp / cold crash-ras), heldragen = platt hållning.
+                    // Undantag: den INLEDANDE primary-stigningen (sammanhängande stigande
+                    // segment från start) hålls heldragen — annars ser primary "tokig" ut.
+                    borderDash: ctx => {
+                        const y0 = ctx.p0?.parsed?.y, y1 = ctx.p1?.parsed?.y;
+                        if (y0 == null || y1 == null || y0 === y1) return undefined; // platt → heldragen
+                        const pts = ctx.chart.data.datasets[0].data;
+                        for (let k = 0; k <= ctx.p0DataIndex; k++) {
+                            const a = pts[k] && pts[k].y, b = pts[k + 1] && pts[k + 1].y;
+                            if (a == null || b == null || b <= a) return [6, 4]; // stigningen bröts → streckad
+                        }
+                        return undefined; // hela vägen stigande hit = primary → heldragen
+                    }
                 }
             }]
         },
