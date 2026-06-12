@@ -266,6 +266,10 @@ if (deleteAccountBtn) {
 auth.onAuthStateChanged(async (user) => {
     isAuthResolved = true;
 
+    // Delad read-only vy (?share=token): ignorera besökarens inloggningsstatus helt.
+    // Vyn drivs av delningstoken, inte av konto — annars skulle gäst-/login-UI:t störa.
+    if (window.sharedToken) return;
+
     const soulLoginPrompt = document.getElementById('soul-login-prompt');
     const logoutBtn = document.getElementById('btn-logout');
 

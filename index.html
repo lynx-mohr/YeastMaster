@@ -29,6 +29,23 @@
             </div>
         </div>
 
+        <!-- Read-only-banner för delad jäsningsvy (texten sätts av dashboard.js) -->
+        <div id="shared-readonly-banner" style="display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 100001; background: var(--accent-color); color: #111; text-align: center; padding: 8px; font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 0.8rem;">Shared fermentation (read-only)</div>
+
+        <!-- Dela-modal (texter sätts av dashboard.js på rätt språk) -->
+        <div id="share-modal" style="display: none; position: fixed; inset: 0; z-index: 100002; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; padding: 20px;">
+            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 16px; padding: 24px; max-width: 420px; width: 100%; box-sizing: border-box; font-family: 'Lexend', sans-serif;">
+                <h3 id="share-modal-title" style="margin: 0 0 8px; color: #fff; font-size: 1.1rem;">Share this fermentation</h3>
+                <p id="share-modal-desc" style="margin: 0 0 16px; color: #aaa; font-size: 0.82rem; line-height: 1.5;">Anyone with this link can view this fermentation (read-only). No account needed.</p>
+                <input id="share-link-input" type="text" readonly style="width: 100%; background: #000; border: 1px solid #333; color: #8CC63F; padding: 10px; border-radius: 8px; font-family: monospace; font-size: 0.72rem; box-sizing: border-box;">
+                <div style="display: flex; gap: 10px; margin-top: 16px;">
+                    <button id="share-copy-btn" onclick="copyShareLink()" style="flex: 1; background: var(--accent-color); border: none; color: #111; padding: 10px; border-radius: 8px; font-family: 'Lexend', sans-serif; font-weight: 800; cursor: pointer;">Copy link</button>
+                    <button id="share-stop-btn" onclick="stopSharing()" style="background: transparent; border: 1px solid #ff4444; color: #ff4444; padding: 10px 14px; border-radius: 8px; font-family: 'Lexend', sans-serif; font-weight: 700; cursor: pointer;">Stop sharing</button>
+                </div>
+                <button id="share-close-btn" onclick="closeShareModal()" style="width: 100%; margin-top: 10px; background: transparent; border: none; color: #777; padding: 6px; cursor: pointer; font-family: 'Lexend', sans-serif; font-size: 0.8rem;">Close</button>
+            </div>
+        </div>
+
         <style>
             @keyframes slideDown {
                 from { transform: translate(-50%, -20px); opacity: 0; }
@@ -99,7 +116,12 @@
 </div>
 
  <section id="view-dashboard" style="display: none;">
-    
+
+    <!-- Dela-knapp (visas bara för inloggad ägare med en riktig enhet; styrs i dashboard.js) -->
+    <div id="share-fermentation-row" style="display: none; justify-content: flex-end; padding: 0 5px 10px; margin-top: -5px;">
+        <button id="btn-share-fermentation" onclick="openShareModal()" style="background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 6px 14px; border-radius: 20px; font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 0.75rem; cursor: pointer;">🔗 <span id="share-btn-label">Share</span></button>
+    </div>
+
  <div class="oled-screen" style="position: relative; padding-top: 15px;">
 
    <div id="start-demo-btn" class="info-circle-btn" style="position: absolute; top: 10px; left: 40%; z-index: 100;">i</div>

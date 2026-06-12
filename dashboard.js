@@ -11,30 +11,36 @@
 // ==========================================
 async function updateDashboard() {
     const demoBtn = document.getElementById('start-demo-btn');
+    const sharedToken = window.sharedToken;  // satt i delad, read-only vy (ingen inloggning)
 
-    // Om Firebase fortfarande funderar, avbryt och rita ingenting!
-    if (!isAuthResolved) return;
-
-    const user = auth.currentUser;
-
-    if (!user && !activeDeviceId) {
-        renderDemoDashboard();
-        return;
-    }
-
-    if (user === undefined) return;
-
-    // Om vi INTE är inloggade alls, DÅ kör vi demo direkt
-    if (!user && !activeDeviceId) {
-        renderDemoDashboard();
-        return;
+    if (!sharedToken) {
+        // Normalt läge: kräver att Firebase vaknat + en aktiv enhet, annars demo
+        if (!isAuthResolved) return;
+        const user = auth.currentUser;
+        if (!user && !activeDeviceId) { renderDemoDashboard(); return; }
+        if (user === undefined) return;
     }
 
     if (demoBtn) demoBtn.style.display = 'none';
 
+    // Visa dela-knappen bara för inloggad ägare med en riktig enhet (ej demo/delad vy)
+    const shareRow = document.getElementById('share-fermentation-row');
+    if (shareRow) shareRow.style.display = (!sharedToken && activeDeviceId) ? 'flex' : 'none';
+
     try {
-        const response = await fetch(`${API_BASE}/data?device_id=${activeDeviceId}`);
-        const data = await response.json();
+        const url = sharedToken
+            ? `${API_BASE}/shared/${sharedToken}`
+            : `${API_BASE}/data?device_id=${activeDeviceId}`;
+        const response = await fetch(url);
+        const payload = await response.json();
+
+        // Delad vy returnerar { name, logs }; vanlig vy returnerar en logg-array direkt.
+        let data = payload;
+        if (sharedToken) {
+            data = Array.isArray(payload) ? payload : (payload.logs || []);
+            const nameEl = document.querySelector('.device-name-display');
+            if (nameEl && payload.name) nameEl.innerText = String(payload.name).toUpperCase();
+        }
 
         if (data && data.length > 0) {
             // --- KRITISK FIX: Sortera datan efter tid direkt ---
@@ -575,6 +581,10 @@ function renderDemoDashboard() {
     const noDataHintDemo = document.getElementById('no-data-hint');
     if (noDataHintDemo) noDataHintDemo.style.display = 'none';
 
+    // Demo/gäst kan inte dela → dölj dela-knappen
+    const shareRowDemo = document.getElementById('share-fermentation-row');
+    if (shareRowDemo) shareRowDemo.style.display = 'none';
+
     // 2. Namn och profil (Dessa är egennamn och behöver inte översättas)
     document.getElementById('strain-val').innerText = "OLD BAVARIAN";
     document.getElementById('profile-val').innerText = "Brulosophy";
@@ -857,3 +867,114 @@ setInterval(() => {
     if (document.hidden) return;
     if (typeof updateDashboard === 'function') updateDashboard();
 }, 5 * 60 * 1000);
+
+// ==========================================
+// --- DELA JÄSNING MED EN VÄN (share-länk) ---
+// ==========================================
+const shareTexts = {
+    en: { btn: "Share", title: "Share this fermentation", desc: "Anyone with this link can view this fermentation (read-only). No account needed.", copy: "Copy link", copied: "Copied!", stop: "Stop sharing", close: "Close", banner: "You're viewing a shared fermentation (read-only)", failed: "Could not create the link. Try again." },
+    sv: { btn: "Dela", title: "Dela den här jäsningen", desc: "Alla med den här länken kan se jäsningen (skrivskyddat). Inget konto behövs.", copy: "Kopiera länk", copied: "Kopierad!", stop: "Sluta dela", close: "Stäng", banner: "Du tittar på en delad jäsning (skrivskyddat)", failed: "Kunde inte skapa länken. Försök igen." },
+    de: { btn: "Teilen", title: "Diese Gärung teilen", desc: "Jeder mit diesem Link kann diese Gärung sehen (schreibgeschützt). Kein Konto nötig.", copy: "Link kopieren", copied: "Kopiert!", stop: "Teilen beenden", close: "Schließen", banner: "Du siehst eine geteilte Gärung (schreibgeschützt)", failed: "Link konnte nicht erstellt werden. Versuch es erneut." },
+    fr: { btn: "Partager", title: "Partager cette fermentation", desc: "Toute personne ayant ce lien peut voir cette fermentation (lecture seule). Aucun compte requis.", copy: "Copier le lien", copied: "Copié !", stop: "Arrêter le partage", close: "Fermer", banner: "Tu regardes une fermentation partagée (lecture seule)", failed: "Impossible de créer le lien. Réessaie." },
+    es: { btn: "Compartir", title: "Comparte esta fermentación", desc: "Cualquiera con este enlace puede ver esta fermentación (solo lectura). No hace falta cuenta.", copy: "Copiar enlace", copied: "¡Copiado!", stop: "Dejar de compartir", close: "Cerrar", banner: "Estás viendo una fermentación compartida (solo lectura)", failed: "No se pudo crear el enlace. Inténtalo de nuevo." }
+};
+function st() { return shareTexts[window.currentLang] || shareTexts.en; }
+
+// Sätter statiska texter (knappetikett, banner, modalknappar) på rätt språk
+function applyShareTexts() {
+    const t = st();
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+    set('share-btn-label', t.btn);
+    set('share-close-btn', t.close);
+    const banner = document.getElementById('shared-readonly-banner');
+    if (banner) banner.innerText = t.banner;
+}
+window.addEventListener('languageChanged', applyShareTexts);
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyShareTexts);
+else applyShareTexts();
+
+window.openShareModal = async function() {
+    const t = st();
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+    set('share-modal-title', t.title);
+    set('share-modal-desc', t.desc);
+    set('share-copy-btn', t.copy);
+    set('share-stop-btn', t.stop);
+
+    const input = document.getElementById('share-link-input');
+    if (input) input.value = '…';
+    const modal = document.getElementById('share-modal');
+    if (modal) modal.style.display = 'flex';
+
+    try {
+        const headers = await getAuthHeaders();
+        const res = await fetch(`${API_BASE}/create-share`, {
+            method: 'POST', headers, body: JSON.stringify({ device_id: activeDeviceId })
+        });
+        const d = await res.json();
+        if (input) input.value = (res.ok && d.token) ? `${location.origin}/?share=${d.token}` : t.failed;
+    } catch (e) {
+        if (input) input.value = t.failed;
+    }
+};
+
+window.copyShareLink = function() {
+    const input = document.getElementById('share-link-input');
+    if (!input) return;
+    input.select();
+    const done = () => {
+        const btn = document.getElementById('share-copy-btn');
+        if (btn) { const orig = st().copy; btn.innerText = st().copied; setTimeout(() => { btn.innerText = orig; }, 1500); }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(input.value).then(done).catch(() => { try { document.execCommand('copy'); done(); } catch (e) {} });
+    } else {
+        try { document.execCommand('copy'); done(); } catch (e) {}
+    }
+};
+
+window.stopSharing = async function() {
+    try {
+        const headers = await getAuthHeaders();
+        await fetch(`${API_BASE}/revoke-share`, {
+            method: 'POST', headers, body: JSON.stringify({ device_id: activeDeviceId })
+        });
+    } catch (e) { /* tyst */ }
+    closeShareModal();
+};
+
+window.closeShareModal = function() {
+    const m = document.getElementById('share-modal');
+    if (m) m.style.display = 'none';
+};
+
+// ==========================================
+// --- PUBLIK, READ-ONLY DELAD VY (?share=token) ---
+// ==========================================
+(function initSharedView() {
+    const token = new URLSearchParams(location.search).get('share');
+    if (!token) return;
+    window.sharedToken = token;   // → updateDashboard hämtar från /api/shared/:token utan inloggning
+
+    const enter = () => {
+        const nav = document.querySelector('.main-nav'); if (nav) nav.style.display = 'none';
+        const prompt = document.getElementById('soul-login-prompt'); if (prompt) prompt.style.display = 'none';
+        const shareRow = document.getElementById('share-fermentation-row'); if (shareRow) shareRow.style.display = 'none';
+        const banner = document.getElementById('shared-readonly-banner');
+        if (banner) {
+            banner.innerText = (typeof st === 'function') ? st().banner : 'Shared fermentation (read-only)';
+            banner.style.display = 'block';
+            document.body.style.paddingTop = '36px';
+        }
+        if (typeof showView === 'function') showView('dashboard', false);
+        if (typeof updateDashboard === 'function') updateDashboard();
+        setInterval(() => { if (typeof updateDashboard === 'function') updateDashboard(); }, 30000);
+    };
+
+    // Kör EFTER appens vanliga init (setTimeout skjuter förbi övriga DOMContentLoaded-handlers)
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => setTimeout(enter, 60));
+    } else {
+        setTimeout(enter, 60);
+    }
+})();

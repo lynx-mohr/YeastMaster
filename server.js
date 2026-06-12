@@ -67,19 +67,22 @@ try {
     console.error("Skyddade API-endpoints kommer att returnera 503 tills miljövariabeln är satt.");
 }
 
-let db, logsCollection, userDevicesCollection, userLibrariesCollection, pushSubscriptionsCollection;
+let db, logsCollection, userDevicesCollection, userLibrariesCollection, pushSubscriptionsCollection, deviceSharesCollection;
 
 async function connectDB() {
     try {
         await client.connect();
         db = client.db('yeastMasterDB');
         logsCollection = db.collection('fermentationLogs');
-        userDevicesCollection = db.collection('userDevices'); 
-        userLibrariesCollection = db.collection('userLibraries'); 
-        
+        userDevicesCollection = db.collection('userDevices');
+        userLibrariesCollection = db.collection('userLibraries');
+
         // --- NYTT: Samlingen för Push-prenumerationer ---
         pushSubscriptionsCollection = db.collection('pushSubscriptions');
-        
+
+        // --- NYTT: Samlingen för delningslänkar (share with a friend) ---
+        deviceSharesCollection = db.collection('deviceShares');
+
         console.log("Ansluten till MongoDB!");
     } catch (e) {
         console.error("Kunde inte ansluta till MongoDB:", e);
@@ -461,6 +464,70 @@ app.patch('/api/device-nickname', verifyToken, async (req, res) => {
         res.json({ message: 'Smeknamn uppdaterat' });
     } catch (e) {
         res.status(500).json({ error: 'Kunde inte uppdatera smeknamnet' });
+    }
+});
+
+// ==========================================
+// --- DELA JÄSNING MED EN VÄN (read-only länk) ---
+// ==========================================
+
+// Skapa (eller hämta befintlig) delningslänk för en enhet man äger. Idempotent.
+app.post('/api/create-share', strictLimiter, verifyToken, async (req, res) => {
+    const { device_id } = req.body;
+    const uid = req.uid;
+    if (!isString(device_id) || device_id.length > 64) {
+        return res.status(400).json({ error: 'Ogiltigt device_id' });
+    }
+    try {
+        // Bara den som faktiskt claimat enheten får dela den
+        const owns = await userDevicesCollection.findOne({ uid, device_id });
+        if (!owns) return res.status(403).json({ error: 'Du har inte den enheten' });
+
+        // Återanvänd befintlig aktiv länk → stabil URL
+        let share = await deviceSharesCollection.findOne({ created_by: uid, device_id, revoked: { $ne: true } });
+        if (!share) {
+            const shareToken = crypto.randomBytes(24).toString('hex'); // 48 tecken, ogissningsbar
+            share = { shareToken, device_id, created_by: uid, created_at: new Date(), revoked: false };
+            await deviceSharesCollection.insertOne(share);
+        }
+        res.json({ token: share.shareToken });
+    } catch (e) {
+        res.status(500).json({ error: 'Kunde inte skapa delningslänk' });
+    }
+});
+
+// Avsluta delning (raderar länken → den slutar fungera direkt)
+app.post('/api/revoke-share', strictLimiter, verifyToken, async (req, res) => {
+    const { device_id } = req.body;
+    const uid = req.uid;
+    if (!isString(device_id) || device_id.length > 64) {
+        return res.status(400).json({ error: 'Ogiltigt device_id' });
+    }
+    try {
+        await deviceSharesCollection.deleteMany({ created_by: uid, device_id });
+        res.json({ message: 'Delning avslutad' });
+    } catch (e) {
+        res.status(500).json({ error: 'Kunde inte avsluta delningen' });
+    }
+});
+
+// Publik, read-only: hämta jäsningsdata via en delningstoken (ingen inloggning)
+app.get('/api/shared/:token', async (req, res) => {
+    const token = req.params.token;
+    if (!isString(token) || token.length > 64) {
+        return res.status(400).json({ error: 'Ogiltig länk' });
+    }
+    try {
+        const share = await deviceSharesCollection.findOne({ shareToken: token, revoked: { $ne: true } });
+        if (!share) return res.status(404).json({ error: 'Länken finns inte eller har avslutats' });
+
+        const device_id = share.device_id;
+        const ownerDevice = await userDevicesCollection.findOne({ uid: share.created_by, device_id });
+        const name = (ownerDevice && ownerDevice.name) ? ownerDevice.name : 'YeastMaster';
+        const logs = await logsCollection.find({ device_id }).sort({ time: -1 }).limit(1000).toArray();
+        res.json({ name, logs: logs.reverse() });
+    } catch (e) {
+        res.status(500).json({ error: 'Kunde inte hämta delad data' });
     }
 });
 
