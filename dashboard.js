@@ -262,6 +262,7 @@ async function updateDashboard() {
                                   || translations[window.currentLang]?.status?.[displayStatusText]
                                   || displayStatusText;
             const statusEl = document.getElementById('status-text');
+            const rawStatusKey = (latest.status || '').toUpperCase();
             const isActivelyRamping = (action === 'HEATING' || action === 'COOLING') &&
                 (latest.target_temp || 0) > -100 &&
                 Math.abs((latest.temp || 0) - (latest.target_temp || 0)) > 1.5;
@@ -286,6 +287,11 @@ async function updateDashboard() {
             } else {
                 statusEl.innerText = translatedStatus;
             }
+
+            if (statusEl) {
+                statusEl.dataset.statusKey = rawStatusKey;
+            }
+            window.currentLiveStatusKey = rawStatusKey || '';
 
             // --- VÄCK LARM-DETEKTIVEN ---
             const currentStrain = latest.strain || "Unknown";
@@ -462,7 +468,9 @@ function startBubbles() {
 
     function animate(timestamp) {
         const statusElement = document.getElementById('status-text');
+        const statusKey = (window.currentLiveStatusKey || (statusElement && statusElement.dataset.statusKey) || '').toUpperCase();
         const statusText = statusElement ? statusElement.innerText.toUpperCase() : '';
+        const phaseLabel = statusKey || statusText;
 
         // Hämta hur länge vi varit i den aktuella fasen (avläst från din mätare)
         const phaseDayElement = document.getElementById('phase-day-val');
@@ -472,20 +480,20 @@ function startBubbles() {
         let spawnInterval = 250;
         let spawnCount = 1; // Standard: 1 bubbla åt gången
 
-        if (statusText.includes('CRASH')) {
+        if (phaseLabel.includes('CRASH')) {
             // COLD CRASH: 2 bubblor var 15:e sekund
             spawnInterval = 10000;
             spawnCount = 2;
         }
-        else if (statusText.includes('CONDITIONING') || statusText === 'FINISHED') {
+        else if (phaseLabel.includes('CONDITIONING') || phaseLabel === 'FINISHED') {
             // CONDITIONING: Helt dött
             spawnInterval = 9999999;
         }
-        else if (statusText.includes('CLEAN')) {
+        else if (phaseLabel.includes('CLEAN')) {
             // CLEANING UP: Mycket aktivt (som det var förut)
             spawnInterval = 250;
         }
-        else if (statusText.includes('PRIMARY') || statusText === '--' || statusText.includes('FERM')) {
+        else if (phaseLabel.includes('PRIMARY') || phaseLabel === '--' || phaseLabel.includes('FERM')) {
             // PRIMARY / DEFAULT: Stegrande aktivitet!
             // 6 timmar = 0.25 dagar. 12 timmar = 0.5 dagar.
 
