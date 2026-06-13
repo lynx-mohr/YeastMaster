@@ -3667,8 +3667,12 @@ slurry_info_tip: "Pro-tip: If unsure, choose \"Thin\". Pitching slightly more sl
         phase: {
             PRIMARY: "PRIMARY",
             "DIACETYL REST": "DIACETYL REST",
+            "CLEANING UP": "CLEANING UP",
             "COLD CRASH": "COLD CRASH",
-            RAMPING: "RAMP"
+            CONDITIONING: "CONDITIONING",
+            RAMPING: "RAMP",
+            MANUAL: "MANUAL",
+            FINISHED: "FINISHED"
         },
         status: {
             offline: "OFFLINE",
@@ -4091,8 +4095,12 @@ house_bank: {
         phase: {
             PRIMARY: "PRIMÄR",
             "DIACETYL REST": "DIAKETYLRAST",
+            "CLEANING UP": "STÄDNING",
             "COLD CRASH": "KALLKRASCH",
-            RAMPING: "RAMP"
+            CONDITIONING: "KONDITIONERING",
+            RAMPING: "RAMP",
+            MANUAL: "MANUELL",
+            FINISHED: "KLAR"
         },
         status: {
             offline: "OFFLINE",
@@ -4510,8 +4518,12 @@ card2_p2: "Unsere Bibliothek bietet detaillierte Anleitungen, wie du jeden Stamm
         phase: {
             PRIMARY: "HAUPTGÄRUNG",
             "DIACETYL REST": "DIACETYLRAST",
+            "CLEANING UP": "AUFRÄUMEN",
             "COLD CRASH": "COLD CRASH",
-            RAMPING: "RAMP"
+            CONDITIONING: "KONDITIONIERUNG",
+            RAMPING: "RAMP",
+            MANUAL: "MANUELL",
+            FINISHED: "FERTIG"
         },
         status: {
             offline: "OFFLINE",
@@ -4926,8 +4938,12 @@ libTour: {
         phase: {
             PRIMARY: "PRIMAIRE",
             "DIACETYL REST": "REPOS DIACÉTYLE",
+            "CLEANING UP": "NETTOYAGE",
             "COLD CRASH": "CHOC À FROID",
-            RAMPING: "MONTÉE"
+            CONDITIONING: "MATURATION",
+            RAMPING: "MONTÉE",
+            MANUAL: "MANUEL",
+            FINISHED: "TERMINÉ"
         },
         status: {
             offline: "HORS LIGNE",
@@ -5340,8 +5356,12 @@ libTour: {
         phase: {
             PRIMARY: "PRIMARIA",
             "DIACETYL REST": "REPOSO DIACETILO",
+            "CLEANING UP": "LIMPIEZA",
             "COLD CRASH": "CHOQUE FRÍO",
-            RAMPING: "RAMPA"
+            CONDITIONING: "MADURACIÓN",
+            RAMPING: "RAMPA",
+            MANUAL: "MANUAL",
+            FINISHED: "TERMINADA"
         },
         status: {
             offline: "DESCONECTADO",

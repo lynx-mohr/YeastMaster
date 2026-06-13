@@ -260,6 +260,20 @@ async function updateDashboard() {
                 }
             }
 
+            // Slå upp profilen en gång — används både för FINISHED-override och progress-bar
+            const matchedProfile = (yeastDatabase?.yeasts || []).find(
+                y => y.s === currentStrain && y.p === currentProfileName
+            );
+            const totalProfileDays = matchedProfile
+                ? matchedProfile.steps[matchedProfile.steps.length - 1][0]
+                : null;
+
+            // Om profile_day har passerat profilens slut vet vi att den är klar,
+            // oavsett vad firmwaren rapporterar (t.ex. fastnat i COLD CRASH via isManualMode)
+            if (totalProfileDays && profileDay >= totalProfileDays && displayStatusText !== 'IDLE') {
+                displayStatusText = 'FINISHED';
+            }
+
             // Kolla först i "phase"-ordboken, sen i "status"-ordboken
             const translatedStatus = translations[window.currentLang]?.phase?.[displayStatusText]
                                   || translations[window.currentLang]?.status?.[displayStatusText]
@@ -306,12 +320,6 @@ async function updateDashboard() {
 
             // 6. Progress (Grafisk bar) — baseras på profile_day vs. profilens faktiska totallängd
             const isManualTemp = displayStatusText === 'MANUAL';
-            const matchedProfile = (yeastDatabase?.yeasts || []).find(
-                y => y.s === currentStrain && y.p === currentProfileName
-            );
-            const totalProfileDays = matchedProfile
-                ? matchedProfile.steps[matchedProfile.steps.length - 1][0]
-                : null;
             const percent = totalProfileDays
                 ? Math.min((profileDay / totalProfileDays) * 100, 100).toFixed(0)
                 : Math.min((displayDay / 14) * 100, 100).toFixed(0); // fallback om profil ej hittas
