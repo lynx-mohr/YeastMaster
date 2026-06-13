@@ -24,8 +24,11 @@ async function updateDashboard() {
     if (demoBtn) demoBtn.style.display = 'none';
 
     // Visa dela-knappen bara för inloggad ägare med en riktig enhet (ej demo/delad vy)
+    const shareVisible = (!sharedToken && activeDeviceId) ? 'flex' : 'none';
     const shareRow = document.getElementById('share-fermentation-row');
-    if (shareRow) shareRow.style.display = (!sharedToken && activeDeviceId) ? 'flex' : 'none';
+    if (shareRow) shareRow.style.display = shareVisible;
+    const shareRowMobile = document.getElementById('share-fermentation-row-mobile');
+    if (shareRowMobile) shareRowMobile.style.display = shareVisible;
 
     try {
         const url = sharedToken
