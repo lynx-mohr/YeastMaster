@@ -755,13 +755,14 @@ canvas#beer-chart {
         margin-bottom: 5px !important;
     }
 
-    .right-col { 
-        width: 50%; 
-        display: flex; 
-        flex-direction: column; 
-        align-items: flex-end; 
+    .right-col {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
         text-align: right;
-        padding-bottom: 60px !important; 
+        padding-top: 30px !important;
+        padding-bottom: 30px !important;
     }
    /* --- TEMPERATUR-TEXTEN PÅ MOBIL --- */
     .beer-temp { 
