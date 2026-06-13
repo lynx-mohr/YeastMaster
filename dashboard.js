@@ -304,9 +304,17 @@ async function updateDashboard() {
                 checkActionAlerts(profileDay, currentStrain, currentProfileName);
             }
 
-            // 6. Progress (Grafisk bar)
-            const targetDays = 14;
-            const percent = Math.min((displayDay / targetDays) * 100, 100).toFixed(0);
+            // 6. Progress (Grafisk bar) — baseras på profile_day vs. profilens faktiska totallängd
+            const isManualTemp = displayStatusText === 'MANUAL';
+            const matchedProfile = (yeastDatabase?.yeasts || []).find(
+                y => y.s === currentStrain && y.p === currentProfileName
+            );
+            const totalProfileDays = matchedProfile
+                ? matchedProfile.steps[matchedProfile.steps.length - 1][0]
+                : null;
+            const percent = totalProfileDays
+                ? Math.min((profileDay / totalProfileDays) * 100, 100).toFixed(0)
+                : Math.min((displayDay / 14) * 100, 100).toFixed(0); // fallback om profil ej hittas
 
             // 7. Skriv ut till skärmen!
             const dayValEl = document.getElementById('day-val');
@@ -319,8 +327,16 @@ async function updateDashboard() {
                 phaseDayValEl.innerText = formatDaysToHuman(displayPhaseDay);
             }
 
-            document.getElementById('progress-percent').innerText = percent + "%";
-            document.getElementById('progress-fill').style.width = percent + "%";
+            // Manuellt läge: progress är meningslös — töm baren och visa "—"
+            const progressFill = document.getElementById('progress-fill');
+            const progressPct  = document.getElementById('progress-percent');
+            if (isManualTemp) {
+                if (progressPct)  progressPct.innerText  = '—';
+                if (progressFill) { progressFill.style.width = '0%'; progressFill.style.opacity = '0.25'; }
+            } else {
+                if (progressPct)  progressPct.innerText  = percent + '%';
+                if (progressFill) { progressFill.style.width = percent + '%'; progressFill.style.opacity = ''; }
+            }
 
             const targetTemp = latest.target_temp || 0;
             const targetTempElement = document.getElementById('target-temp-val');
