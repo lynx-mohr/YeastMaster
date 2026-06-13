@@ -943,6 +943,14 @@ app.get('/og-image/:token', async (req, res) => {
     }
 });
 
+const shareOgTexts = {
+    en: { title: 'Live fermentation', desc: 'Check out my real-time fermentation progress. Cheers! /YeastMaster' },
+    sv: { title: 'Live-jäsning',      desc: 'Kolla in min jäsning i realtid. Skål! /YeastMaster' },
+    de: { title: 'Live-Gärung',       desc: 'Schau dir meine Gärung in Echtzeit an. Prost! /YeastMaster' },
+    fr: { title: 'Fermentation live',  desc: 'Découvrez ma fermentation en temps réel. Santé ! /YeastMaster' },
+    es: { title: 'Fermentación live',  desc: '¡Echa un vistazo a mi fermentación en tiempo real. Salud! /YeastMaster' },
+};
+
 // Delningssida med dynamiska OG-taggar (för meddelandeappar/bots)
 // Vanliga användare redirectas direkt till SPA:n med ?share=token
 app.get('/s/:token', async (req, res) => {
@@ -956,6 +964,10 @@ app.get('/s/:token', async (req, res) => {
         const name = (ownerDevice && ownerDevice.name) ? ownerDevice.name : 'YeastMaster';
         const base = 'https://soulofbeer-live.onrender.com';
 
+        const lang = ['en','sv','de','fr','es'].includes(req.query.lang) ? req.query.lang : 'en';
+        const txt = shareOgTexts[lang];
+        const ogTitle = `${name} – ${txt.title}`;
+
         res.setHeader('Content-Type', 'text/html; charset=utf-8');
         res.send(`<!DOCTYPE html>
 <html>
@@ -963,8 +975,8 @@ app.get('/s/:token', async (req, res) => {
 <meta charset="utf-8">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="YeastMaster">
-<meta property="og:title" content="${name} – Live fermentation">
-<meta property="og:description" content="Follow a live fermentation in YeastMaster — real-time temperature and brewing progress.">
+<meta property="og:title" content="${ogTitle}">
+<meta property="og:description" content="${txt.desc}">
 <meta property="og:image" content="${base}/og-image/${token}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
