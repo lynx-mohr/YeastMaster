@@ -261,8 +261,9 @@ async function updateDashboard() {
             }
 
             // Slå upp profilen en gång — används både för FINISHED-override och progress-bar
+            // OBS: currentStrain/currentProfileName är inte definierade än, använd latest direkt
             const matchedProfile = (yeastDatabase?.yeasts || []).find(
-                y => y.s === currentStrain && y.p === currentProfileName
+                y => y.s === (latest.strain || '') && y.p === (latest.profile || '')
             );
             const totalProfileDays = matchedProfile
                 ? matchedProfile.steps[matchedProfile.steps.length - 1][0]
