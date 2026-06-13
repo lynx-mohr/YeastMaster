@@ -785,6 +785,202 @@ app.get('/api/firmware/download', (req, res) => {
     }
 });
 
+// ==========================================
+// --- OG-BILD: DYNAMISK FÖRHANDSVISNING ---
+// ==========================================
+const { createCanvas } = require('canvas');
+
+function buildOgImage(name, latest) {
+    const W = 1200, H = 630;
+    const canvas = createCanvas(W, H);
+    const ctx = canvas.getContext('2d');
+
+    const GREEN  = '#8CC63F';
+    const BG     = '#0d0d0d';
+    const WHITE  = '#ffffff';
+    const GRAY   = '#888888';
+    const BLUE   = '#0088ff';
+    const DARK   = '#111111';
+
+    // Bakgrund
+    ctx.fillStyle = BG;
+    ctx.fillRect(0, 0, W, H);
+
+    // Subtil inre ram
+    ctx.strokeStyle = '#1e1e1e';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(1, 1, W - 2, H - 2);
+
+    // --- ÖVRE RAD ---
+    // Enhetsnamn (t.ex. "PROTOTYP") vänster
+    ctx.fillStyle = GREEN;
+    ctx.font = 'bold 26px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText((name || 'YEASTMASTER').toUpperCase(), 50, 62);
+
+    // YeastMaster branding höger
+    ctx.fillStyle = '#444';
+    ctx.font = '22px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText('YeastMaster', W - 50, 62);
+
+    // Separator
+    ctx.strokeStyle = '#222';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(50, 80);
+    ctx.lineTo(W - 50, 80);
+    ctx.stroke();
+
+    // --- VÄNSTER: STOR TEMPERATUR ---
+    const beerTemp = (latest && latest.temp != null && latest.temp > -100)
+        ? latest.temp.toFixed(1) : '--';
+    ctx.fillStyle = WHITE;
+    ctx.font = 'bold 180px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(beerTemp, 50, 380);
+
+    // °C enhet
+    const tempW = ctx.measureText(beerTemp).width;
+    ctx.fillStyle = GREEN;
+    ctx.font = 'bold 64px sans-serif';
+    ctx.fillText('°C', 50 + tempW + 8, 280);
+
+    // Air temp under
+    if (latest && latest.air_temp != null && latest.air_temp > -100) {
+        ctx.fillStyle = GRAY;
+        ctx.font = '28px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(`Air: ${latest.air_temp.toFixed(1)}°C`, 54, 430);
+    }
+
+    // --- HÖGER: STRAIN + PROFIL + STATUS ---
+    const strain  = (latest && latest.strain)  ? latest.strain.toUpperCase()  : '--';
+    const profile = (latest && latest.profile) ? latest.profile.toUpperCase() : '';
+    const action  = (latest && latest.action)  ? latest.action.toUpperCase()  : (latest && latest.status ? latest.status.toUpperCase() : '--');
+
+    const boxX = 680, boxY = 108, boxW = 470, boxH = 76;
+
+    // Strain name — vit box
+    ctx.fillStyle = WHITE;
+    ctx.fillRect(boxX, boxY, boxW, boxH);
+    ctx.fillStyle = BG;
+    ctx.font = 'bold 38px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(strain, boxX + boxW / 2, boxY + 52);
+
+    // Profil
+    ctx.fillStyle = '#aaaaaa';
+    ctx.font = '28px sans-serif';
+    ctx.fillText(profile, boxX + boxW / 2, boxY + 116);
+
+    // Status / Action
+    ctx.fillStyle = WHITE;
+    ctx.font = 'bold 40px sans-serif';
+    ctx.fillText(action, boxX + boxW / 2, boxY + 175);
+
+    // --- NEDRE HÖGER: MÅL-TEMP + PROGRESS ---
+    const targetTemp = (latest && latest.target_temp != null && latest.target_temp > -100)
+        ? `${latest.target_temp.toFixed(1)}°C` : '--';
+    const phase = (latest && latest.status) ? latest.status : '';
+
+    ctx.fillStyle = GRAY;
+    ctx.font = '24px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(`Phase: ${phase}`, boxX, 490);
+
+    ctx.fillStyle = BLUE;
+    ctx.font = 'bold 24px sans-serif';
+    ctx.fillText(`Goal: ${targetTemp}`, boxX, 525);
+
+    // Progress bar
+    const pct = (latest && latest.progress_pct != null) ? Math.min(100, Math.max(0, latest.progress_pct)) : 0;
+    const barY = 555, barH = 10;
+    ctx.fillStyle = '#222';
+    ctx.fillRect(boxX, barY, boxW, barH);
+    if (pct > 0) {
+        ctx.fillStyle = GREEN;
+        ctx.fillRect(boxX, barY, Math.round(boxW * pct / 100), barH);
+    }
+    ctx.fillStyle = GRAY;
+    ctx.font = '20px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`${Math.round(pct)}%`, boxX + boxW, barY - 6);
+
+    // LIVE-badge
+    ctx.fillStyle = GREEN;
+    ctx.beginPath();
+    ctx.arc(boxX + boxW - 14, 60, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = WHITE;
+    ctx.font = 'bold 18px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText('LIVE', boxX + boxW - 28, 66);
+
+    return canvas.toBuffer('image/png');
+}
+
+// Generera OG-bild för en delad jäsning
+app.get('/og-image/:token', async (req, res) => {
+    const token = req.params.token;
+    if (!isString(token) || token.length > 64) return res.status(400).end();
+    try {
+        const share = await deviceSharesCollection.findOne({ shareToken: token, revoked: { $ne: true } });
+        if (!share) return res.status(404).end();
+
+        const ownerDevice = await userDevicesCollection.findOne({ uid: share.created_by, device_id: share.device_id });
+        const name = (ownerDevice && ownerDevice.name) ? ownerDevice.name : 'YeastMaster';
+        const latestArr = await logsCollection.find({ device_id: share.device_id }).sort({ time: -1 }).limit(1).toArray();
+        const latest = latestArr[0] || null;
+
+        const png = buildOgImage(name, latest);
+        res.setHeader('Content-Type', 'image/png');
+        res.setHeader('Cache-Control', 'public, max-age=60');
+        res.end(png);
+    } catch (e) {
+        console.error('og-image fel:', e);
+        res.status(500).end();
+    }
+});
+
+// Delningssida med dynamiska OG-taggar (för meddelandeappar/bots)
+// Vanliga användare redirectas direkt till SPA:n med ?share=token
+app.get('/s/:token', async (req, res) => {
+    const token = req.params.token;
+    if (!isString(token) || token.length > 64) return res.status(400).end();
+    try {
+        const share = await deviceSharesCollection.findOne({ shareToken: token, revoked: { $ne: true } });
+        if (!share) return res.status(404).send('Länken finns inte eller har avslutats.');
+
+        const ownerDevice = await userDevicesCollection.findOne({ uid: share.created_by, device_id: share.device_id });
+        const name = (ownerDevice && ownerDevice.name) ? ownerDevice.name : 'YeastMaster';
+        const base = 'https://soulofbeer-live.onrender.com';
+
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.send(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="YeastMaster">
+<meta property="og:title" content="${name} – Live fermentation">
+<meta property="og:description" content="Follow a live fermentation in YeastMaster — real-time temperature and brewing progress.">
+<meta property="og:image" content="${base}/og-image/${token}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="${base}/s/${token}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${base}/og-image/${token}">
+<script>location.replace('${base}/?share=${token}');</script>
+</head>
+<body></body>
+</html>`);
+    } catch (e) {
+        console.error('share-page fel:', e);
+        res.status(500).end();
+    }
+});
+
 // --- DENNA MÅSTE ALLTID LIGGA SIST ---
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server körs på port ${PORT}`);

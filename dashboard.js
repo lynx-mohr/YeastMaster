@@ -923,7 +923,7 @@ window.openShareModal = async function() {
             method: 'POST', headers, body: JSON.stringify({ device_id: activeDeviceId })
         });
         const d = await res.json();
-        if (input) input.value = (res.ok && d.token) ? `${location.origin}/?share=${d.token}` : t.failed;
+        if (input) input.value = (res.ok && d.token) ? `${location.origin}/s/${d.token}` : t.failed;
     } catch (e) {
         if (input) input.value = t.failed;
     }
